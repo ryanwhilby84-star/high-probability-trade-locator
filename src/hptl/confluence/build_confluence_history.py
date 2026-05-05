@@ -88,7 +88,11 @@ def _discover_macro_files() -> list[Path]:
 
 def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if cot_file.suffix.lower() == ".xlsx":
-        raw = pd.read_excel(cot_file, sheet_name="Dashboard", header=None)
+        workbook = load_workbook(cot_file, read_only=True, data_only=True)
+        available_sheets = workbook.sheetnames
+        selected_sheet = "Dashboard" if "Dashboard" in available_sheets else available_sheets[0]
+        print(f"Selected COT sheet '{selected_sheet}' from {cot_file}")
+        raw = pd.read_excel(cot_file, sheet_name=selected_sheet, header=None)
         header_idx = None
         for idx, row in raw.iterrows():
             if row.astype(str).str.strip().eq("Market").any():
