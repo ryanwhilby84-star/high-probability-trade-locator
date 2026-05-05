@@ -284,30 +284,26 @@ def cot_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "CFTC H
     # The workbook labels are kept unchanged from the good template:
     #   noncommercial_* == Managed Money where disaggregated fields are present
     #   commercial_*    == Producer/Merchant where disaggregated fields are present
-    primary_long_candidates = [
-        "noncomm_positions_long_all",
-        "noncommercial_long",
-        "noncomm_long",
-        "noncommercial_positions_long_all",
-        "m_money_positions_long_all",
-        "managed_money_long",
-        "managed_money_positions_long_all",
-        "money_manager_positions_long_all",
-    ]
-    primary_short_candidates = [
-        "noncomm_positions_short_all",
-        "noncommercial_short",
-        "noncomm_short",
-        "noncommercial_positions_short_all",
-        "m_money_positions_short_all",
-        "managed_money_short",
-        "managed_money_positions_short_all",
-        "money_manager_positions_short_all",
-    ]
-    primary_long_col = _first_existing_column(cleaned, primary_long_candidates)
-    primary_short_col = _first_existing_column(cleaned, primary_short_candidates)
-    noncommercial_long = _numeric_series(cleaned, primary_long_candidates)
-    noncommercial_short = _numeric_series(cleaned, primary_short_candidates)
+    noncommercial_long = _numeric_series(
+        cleaned,
+        [
+            "noncommercial_positions_long_all",
+            "noncomm_positions_long_all",
+            "m_money_positions_long_all",
+            "managed_money_positions_long_all",
+            "money_manager_positions_long_all",
+        ],
+    )
+    noncommercial_short = _numeric_series(
+        cleaned,
+        [
+            "noncommercial_positions_short_all",
+            "noncomm_positions_short_all",
+            "m_money_positions_short_all",
+            "managed_money_positions_short_all",
+            "money_manager_positions_short_all",
+        ],
+    )
     commercial_long = _numeric_series(
         cleaned,
         [
@@ -371,8 +367,6 @@ def cot_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "CFTC H
             "weekly_change": weekly_change,
             "four_week_change": pd.NA,
             "source_report": source_report,
-            "primary_long_column_used": primary_long_col or "",
-            "primary_short_column_used": primary_short_col or "",
         }
     )
     rows["bias"] = rows["noncommercial_net"].apply(lambda value: _cot_bias(None if pd.isna(value) else int(value)))
@@ -442,12 +436,8 @@ def financial_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "
     asset_mgr_long = _financial_series(cleaned, ["asset_mgr_positions_long_all", "asset_manager_positions_long_all", "asset_mgr_long_all"])
     asset_mgr_short = _financial_series(cleaned, ["asset_mgr_positions_short_all", "asset_manager_positions_short_all", "asset_mgr_short_all"])
 
-    primary_long_candidates = ["lev_money_positions_long_all", "leveraged_money_positions_long_all", "lev_money_long_all"]
-    primary_short_candidates = ["lev_money_positions_short_all", "leveraged_money_positions_short_all", "lev_money_short_all"]
-    primary_long_col = _first_existing_column(cleaned, primary_long_candidates)
-    primary_short_col = _first_existing_column(cleaned, primary_short_candidates)
-    noncommercial_long = _financial_series(cleaned, primary_long_candidates)
-    noncommercial_short = _financial_series(cleaned, primary_short_candidates)
+    noncommercial_long = _financial_series(cleaned, ["lev_money_positions_long_all", "leveraged_money_positions_long_all", "lev_money_long_all"])
+    noncommercial_short = _financial_series(cleaned, ["lev_money_positions_short_all", "leveraged_money_positions_short_all", "lev_money_short_all"])
     commercial_long = dealer_long.fillna(0) + asset_mgr_long.fillna(0)
     commercial_short = dealer_short.fillna(0) + asset_mgr_short.fillna(0)
 
@@ -475,8 +465,6 @@ def financial_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "
             "weekly_change": weekly_change,
             "four_week_change": pd.NA,
             "source_report": source_report,
-            "primary_long_column_used": primary_long_col or "",
-            "primary_short_column_used": primary_short_col or "",
         }
     )
     rows["bias"] = rows["noncommercial_net"].apply(lambda value: _cot_bias(None if pd.isna(value) else int(value)))

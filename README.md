@@ -151,39 +151,3 @@ Run it with:
 ```bash
 python -m hptl.cot.run_update
 ```
-
-## Layer 2: Macro / Interest Rates Context
-
-Run the macro/rates layer with:
-
-```bash
-python -m hptl.macro.run_macro_update
-```
-
-The macro layer is a regime/context filter only. It does not create standalone buy/sell signals. Technicals locate the trade; macro/rates context filters, weights, or qualifies trade quality.
-
-Outputs are saved as timestamped Excel files in:
-
-```text
-data/exports/macro_output_YYYYMMDD_HHMMSS.xlsx
-```
-
-Sheets:
-
-- `Rates_History` — full recent daily FRED rates history from 2025-01-01 onward, with valid/invalid scoring rows marked.
-- `Macro_Dashboard` — latest usable complete macro snapshot, not a misleading incomplete current row.
-- `Macro_Score` — macro/rates context history with signal, score, strength, and trade-context fields.
-- `Macro_Source_Notes` — source notes, fail-closed rules, FRED/H.15 explanation, and future ratio/news placeholders.
-
-Required core series for scoring:
-
-- `DGS2`
-- `DGS10`
-- `DGS30`
-
-Supporting series:
-
-- `DFF` / `fed_funds` — historical effective federal funds rate only, not real-time policy expectations.
-- `T10Y2Y` — 10Y minus 2Y spread where available.
-
-The layer fails closed: no `macro_score` is produced unless all required yield and directional-change fields are available.

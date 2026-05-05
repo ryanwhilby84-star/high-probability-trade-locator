@@ -44,37 +44,37 @@ TRADER_REPORT_COLUMNS = [
     "Market",
     "CFTC Contract",
     "Open Interest",
-    "NonComm Long",
-    "NonComm Short",
-    "NonComm Net",
-    "NonComm 1W Chg",
-    "NonComm 4W Chg",
+    "Commercial Long",
+    "Commercial Short",
     "Commercial Net",
-    "Commercial 1W Chg",
-    "Commercial 4W Chg",
+    "Commercial Net 1W Chg",
+    "Commercial Net 4W Chg",
+    "Managed Money Long",
+    "Managed Money Short",
+    "Managed Money Net",
+    "MM Net 1W Chg",
+    "MM Net 4W Chg",
+    "Bias",
     "cot_bias",
     "cot_score",
     "cot_strength",
     "cot_summary",
-    # Context-only / compatibility columns retained after the primary signal columns.
-    "Commercial Long",
-    "Commercial Short",
-    "Legacy Bias",
 ]
 
 MARKET_BLOCK_COLUMNS = [
     "Date",
-    "NonComm Long",
-    "NonComm Short",
-    "NonComm Net",
-    "NonComm 1W Chg",
-    "NonComm 4W Chg",
+    "Commercial Long",
+    "Commercial Short",
     "Commercial Net",
-    "Commercial 1W Chg",
-    "COT Bias",
-    "COT Score",
-    "COT Strength",
-    "COT Summary",
+    "1W Chg",
+    "4W Chg",
+    "Managed Net",
+    "MM 1W Chg",
+    "Bias",
+    "cot_bias",
+    "cot_score",
+    "cot_strength",
+    "cot_summary",
 ]
 
 NAVY = "0F172A"
@@ -240,7 +240,7 @@ def _calculate_trader_master(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
     warnings: list[str] = []
     master = df.copy()
 
-    for column in required_value_cols + ["open_interest", "exchange", "cftc_contract_market_code", "source_report", "asset_class", "primary_long_column_used", "primary_short_column_used"]:
+    for column in required_value_cols + ["open_interest", "exchange", "cftc_contract_market_code", "source_report", "asset_class"]:
         if column not in master.columns:
             master[column] = pd.NA
 
@@ -266,29 +266,20 @@ def _calculate_trader_master(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
 
     # Calculate strictly inside each market after sorting. No cross-market
     # contamination is possible because groupby("market_name") is the only shift
-    # boundary used here. The primary directional signal is Non-Commercial /
-    # Managed Money, not commercial hedger positioning.
+    # boundary used here.
     group = master.groupby("market_name", sort=False, group_keys=False)
-    master["commercial_1w_change"] = group["commercial_net"].diff(1)
-    master["commercial_4w_change"] = group["commercial_net"].diff(4)
-    master["noncomm_1w_change"] = group["noncommercial_net"].diff(1)
-    master["noncomm_4w_change"] = group["noncommercial_net"].diff(4)
-
-    # Backward-compatible aliases for older output code/tests.
-    master["weekly_change"] = master["commercial_1w_change"]
-    master["four_week_change"] = master["commercial_4w_change"]
-    master["mm_weekly_change"] = master["noncomm_1w_change"]
-    master["mm_four_week_change"] = master["noncomm_4w_change"]
+    master["weekly_change"] = group["commercial_net"].diff(1)
+    master["four_week_change"] = group["commercial_net"].diff(4)
+    master["mm_weekly_change"] = group["noncommercial_net"].diff(1)
+    master["mm_four_week_change"] = group["noncommercial_net"].diff(4)
     warnings.extend(_validate_market_date_order(master))
 
-    def primary_bias_from_noncomm_change(value: object) -> str:
+    def bias_from_change(value: object) -> str:
         if pd.isna(value) or value == 0:
             return "Neutral"
         return "Bullish" if value > 0 else "Bearish"
 
-    # Legacy Bias is kept for continuity, but is now based on the primary
-    # NonComm/Managed Money 1W flow. Commercials are context only.
-    master["bias"] = master["noncomm_1w_change"].apply(primary_bias_from_noncomm_change)
+    master["bias"] = master["weekly_change"].apply(bias_from_change)
     master = _calculate_cot_scores(master)
 
     # Warn if any required source values are missing; leave calculations blank.
@@ -311,7 +302,6 @@ def _calculate_trader_master(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]
 
 
 
-
 def _cot_strength(score: object) -> str:
     if pd.isna(score):
         return "Weak"
@@ -325,175 +315,83 @@ def _cot_strength(score: object) -> str:
     return "Very Strong"
 
 
-def _is_strong_move(value: object, threshold: object) -> bool:
-    """Return whether a managed-money move is strong for that market.
-
-    The user-defined model distinguishes strong from weak/moderate movement but
-    does not hardcode a universal contract-size threshold. This uses each
-    market's own historical median absolute managed-money move as the strength
-    line, so NASDAQ is judged against NASDAQ and Coffee against Coffee.
-    """
-    if pd.isna(value) or pd.isna(threshold):
-        return False
-    threshold = abs(float(threshold))
-    if threshold == 0:
-        return False
-    return abs(float(value)) >= threshold
-
-
-def _managed_money_summary(cot_bias: str, score: float, row: pd.Series) -> str:
-    m1 = row.get("mm_weekly_change")
-    m4 = row.get("mm_four_week_change")
-    managed_net = row.get("noncommercial_net")
+def _cot_summary(cot_bias: str, score: float, row: pd.Series) -> str:
     c1 = row.get("weekly_change")
     c4 = row.get("four_week_change")
-
-    commercial_context = ""
-    if pd.notna(c1):
-        if cot_bias == "Bullish":
-            if c1 > 0:
-                commercial_context = " Commercials are also improving, supportive context."
-            elif pd.notna(c4) and c1 < 0 and c4 < 0:
-                commercial_context = " Commercials are pushing against the move, so context is weaker."
-            else:
-                commercial_context = " Commercial context is mixed."
-        elif cot_bias == "Bearish":
-            if c1 < 0:
-                commercial_context = " Commercials are also deteriorating, supportive context."
-            elif pd.notna(c4) and c1 > 0 and c4 > 0:
-                commercial_context = " Commercials are pushing against the move, so context is weaker."
-            else:
-                commercial_context = " Commercial context is mixed."
+    m1 = row.get("mm_weekly_change")
+    managed_net = row.get("noncommercial_net")
 
     if cot_bias == "Bullish":
-        if pd.notna(m1) and m1 > 0 and pd.notna(m4) and m4 > 0:
-            return "Managed money is improving over 1W and 4W, giving bullish positioning support." + commercial_context
-        if pd.notna(m1) and m1 > 0:
-            return "Managed money improved in the latest week, giving bullish positioning support." + commercial_context
-        if pd.notna(managed_net) and managed_net > 0:
-            return "Managed money remains net long, giving bullish positioning support." + commercial_context
-        return "Managed-money signals lean bullish, but confirmation is limited." + commercial_context
+        if pd.notna(c4) and c4 > 0 and pd.notna(managed_net) and managed_net < 0 and pd.notna(m1) and m1 < 0:
+            return "Commercials improving over 1W and 4W while managed money is weakening. Bullish positioning support."
+        if score >= 7:
+            return "Bullish COT pressure from commercials with supportive managed-money conditions."
+        return "Commercials improved over 1W. Bullish COT bias, but confirmation is limited."
 
     if cot_bias == "Bearish":
-        if pd.notna(m1) and m1 < 0 and pd.notna(m4) and m4 < 0:
-            return "Managed money is deteriorating over 1W and 4W, giving bearish positioning pressure." + commercial_context
-        if pd.notna(m1) and m1 < 0:
-            return "Managed money deteriorated in the latest week, giving bearish positioning pressure." + commercial_context
-        if pd.notna(managed_net) and managed_net < 0:
-            return "Managed money remains net short, giving bearish positioning pressure." + commercial_context
-        return "Managed-money signals lean bearish, but confirmation is limited." + commercial_context
+        if pd.notna(c4) and c4 < 0 and pd.notna(managed_net) and managed_net > 0 and pd.notna(m1) and m1 > 0:
+            return "Commercials weakening while managed money is strengthening. Bearish positioning pressure."
+        if score >= 7:
+            return "Bearish COT pressure from commercials with supportive managed-money conditions."
+        return "Commercials weakened over 1W. Bearish COT bias, but confirmation is limited."
 
-    return "Managed-money flow is mixed. No clear COT edge. Commercials are context only."
+    return "Neutral commercial 1W change. No COT score applied."
 
 
 def _calculate_cot_scores(master: pd.DataFrame) -> pd.DataFrame:
-    """Add managed-money-led /10 COT scoring columns to Trader_Report master.
+    """Add strict rule-based /10 COT scoring columns to Trader_Report master.
 
-    Direction comes from non-commercial / managed-money positioning first.
-    Commercials are hedger context only and cannot independently set direction.
+    Bias is driven only by commercial 1W change. Points are awarded only in
+    the direction of that bias. Neutral rows receive 0 points.
     """
     scored = master.copy()
-    scored = _sort_workbook_rows(scored)
-
-    # Market-relative thresholds used only to separate strong from weak/moderate
-    # managed-money momentum. No manual overrides and no external APIs.
-    scored["_mm_1w_strength_threshold"] = scored.groupby("market_name")["mm_weekly_change"].transform(
-        lambda s: s.abs().dropna().median()
-    )
-    scored["_mm_4w_strength_threshold"] = scored.groupby("market_name")["mm_four_week_change"].transform(
-        lambda s: s.abs().dropna().median()
-    )
-    scored["_prev_mm_1w_change"] = scored.groupby("market_name")["mm_weekly_change"].shift(1)
 
     def score_row(row: pd.Series) -> pd.Series:
-        m1 = row.get("mm_weekly_change")
-        m4 = row.get("mm_four_week_change")
-        managed_net = row.get("noncommercial_net")
         c1 = row.get("weekly_change")
         c4 = row.get("four_week_change")
-        prev_m1 = row.get("_prev_mm_1w_change")
-        m1_threshold = row.get("_mm_1w_strength_threshold")
-        m4_threshold = row.get("_mm_4w_strength_threshold")
+        managed_net = row.get("noncommercial_net")
+        m1 = row.get("mm_weekly_change")
 
-        bullish = 0
-        bearish = 0
-
-        # 1. Managed Money 1W Momentum
-        if pd.notna(m1):
-            if m1 > 0:
-                bullish += 2 if _is_strong_move(m1, m1_threshold) else 1
-            elif m1 < 0:
-                bearish += 2 if _is_strong_move(m1, m1_threshold) else 1
-
-        # 2. Managed Money 4W Momentum
-        if pd.notna(m4):
-            if m4 > 0:
-                bullish += 2 if _is_strong_move(m4, m4_threshold) else 1
-            elif m4 < 0:
-                bearish += 2 if _is_strong_move(m4, m4_threshold) else 1
-
-        # 3. Managed Money Net Position
-        if pd.notna(managed_net):
-            if managed_net > 0:
-                bullish += 2
-                if pd.notna(m1) and m1 < 0:
-                    bearish += 1  # positive but deteriorating
-            elif managed_net < 0:
-                bearish += 2
-                if pd.notna(m1) and m1 > 0:
-                    bullish += 1  # negative but improving
-
-        # 4. Commercial Context only. It adds context points when aligned or mixed,
-        # but never sets direction by itself.
-        if pd.notna(m1):
-            if m1 > 0:
-                if pd.notna(c1) and c1 > 0:
-                    bullish += 2
-                elif pd.notna(c1) and pd.notna(c4) and c1 < 0 and c4 < 0:
-                    bullish += 0
-                else:
-                    bullish += 1
-            elif m1 < 0:
-                if pd.notna(c1) and c1 < 0:
-                    bearish += 2
-                elif pd.notna(c1) and pd.notna(c4) and c1 > 0 and c4 > 0:
-                    bearish += 0
-                else:
-                    bearish += 1
-
-        # 5. Directional Consistency
-        if pd.notna(m1):
-            if m1 > 0:
-                bullish += 2 if pd.notna(prev_m1) and prev_m1 > 0 else 1
-            elif m1 < 0:
-                bearish += 2 if pd.notna(prev_m1) and prev_m1 < 0 else 1
-
-        bullish = min(int(bullish), 10)
-        bearish = min(int(bearish), 10)
-
-        if bullish > bearish:
-            cot_bias = "Bullish"
-            cot_score = bullish
-        elif bearish > bullish:
-            cot_bias = "Bearish"
-            cot_score = bearish
-        else:
+        if pd.isna(c1) or c1 == 0:
             cot_bias = "Neutral"
-            cot_score = bullish
+            cot_score = 0
+        elif c1 > 0:
+            cot_bias = "Bullish"
+            cot_score = 2
+            if pd.notna(c4) and c4 > 0:
+                cot_score += 2
+            if pd.notna(managed_net) and managed_net < 0:
+                cot_score += 2
+            if pd.notna(m1) and m1 < 0:
+                cot_score += 2
+            if pd.notna(m1) and m1 < 0:
+                cot_score += 2
+        else:
+            cot_bias = "Bearish"
+            cot_score = 2
+            if pd.notna(c4) and c4 < 0:
+                cot_score += 2
+            if pd.notna(managed_net) and managed_net > 0:
+                cot_score += 2
+            if pd.notna(m1) and m1 > 0:
+                cot_score += 2
+            if pd.notna(m1) and m1 > 0:
+                cot_score += 2
 
+        cot_score = min(int(cot_score), 10)
         return pd.Series(
             {
                 "cot_bias": cot_bias,
                 "cot_score": cot_score,
                 "cot_strength": _cot_strength(cot_score),
-                "cot_summary": _managed_money_summary(cot_bias, cot_score, row),
+                "cot_summary": _cot_summary(cot_bias, float(cot_score), row),
             }
         )
 
     score_df = scored.apply(score_row, axis=1)
     for column in score_df.columns:
         scored[column] = score_df[column]
-    return scored.drop(columns=["_mm_1w_strength_threshold", "_mm_4w_strength_threshold", "_prev_mm_1w_change"], errors="ignore")
+    return scored
 
 def _build_source_notes(source_url: str, extra_sources: list[str] | None = None, warnings: list[str] | None = None) -> pd.DataFrame:
     rows = [
@@ -504,8 +402,7 @@ def _build_source_notes(source_url: str, extra_sources: list[str] | None = None,
         {"field": "legacy_futures_only_source_template", "value": LEGACY_FUTURES_ONLY_URL_TEMPLATE},
         {"field": "notes", "value": "Financial Futures Only historical compressed data is used to backfill NASDAQ and S&P 500 CME equity-index futures."},
         {"field": "market_blocks", "value": "Market_Blocks is formatted as grouped market sections to match the historical dashboard template."},
-        {"field": "primary_cot_signal", "value": "Primary COT signal uses Non-Commercial / Managed Money positioning. Commercial positioning is context only."},
-        {"field": "scoring", "value": "Rule-based cot_bias, cot_score, cot_strength, and cot_summary are calculated from Trader_Report only using Non-Commercial / Managed Money flow first. No external AI APIs are used."},
+        {"field": "scoring", "value": "Rule-based COT Bias, COT Score, COT Strength, and COT Summary are calculated from Trader_Report only. No external AI APIs are used."},
     ]
     for item in extra_sources or []:
         rows.append({"field": "additional_source", "value": item})
@@ -552,11 +449,12 @@ def _prepare_dashboard_table(dashboard: pd.DataFrame) -> pd.DataFrame:
             {
                 "Market": _display_market(row["market_name"]),
                 "Latest Date": _clean_excel_value(row["report_date"]),
-                "NonComm Net": row.get("noncommercial_net"),
-                "NonComm 1W Chg": row.get("noncomm_1w_change"),
-                "NonComm 4W Chg": row.get("noncomm_4w_change"),
                 "Commercial Net": row.get("commercial_net"),
-                "Commercial 1W Chg": row.get("commercial_1w_change"),
+                "1W Change": row.get("weekly_change"),
+                "4W Change": row.get("four_week_change"),
+                "Managed Money Net": row.get("noncommercial_net"),
+                "MM 1W Change": row.get("mm_weekly_change"),
+                "Bias": row.get("bias"),
                 "cot_bias": row.get("cot_bias"),
                 "cot_score": row.get("cot_score"),
                 "cot_strength": row.get("cot_strength"),
@@ -577,82 +475,85 @@ def _prepare_trader_report(df: pd.DataFrame) -> pd.DataFrame:
                 "Market": _display_market(row.get("market_name")),
                 "CFTC Contract": _contract_name(row),
                 "Open Interest": row.get("open_interest"),
-                "NonComm Long": row.get("noncommercial_long"),
-                "NonComm Short": row.get("noncommercial_short"),
-                "NonComm Net": row.get("noncommercial_net"),
-                "NonComm 1W Chg": row.get("noncomm_1w_change"),
-                "NonComm 4W Chg": row.get("noncomm_4w_change"),
+                "Commercial Long": row.get("commercial_long"),
+                "Commercial Short": row.get("commercial_short"),
                 "Commercial Net": row.get("commercial_net"),
-                "Commercial 1W Chg": row.get("commercial_1w_change"),
-                "Commercial 4W Chg": row.get("commercial_4w_change"),
+                "Commercial Net 1W Chg": row.get("weekly_change"),
+                "Commercial Net 4W Chg": row.get("four_week_change"),
+                "Managed Money Long": row.get("noncommercial_long"),
+                "Managed Money Short": row.get("noncommercial_short"),
+                "Managed Money Net": row.get("noncommercial_net"),
+                "MM Net 1W Chg": row.get("mm_weekly_change"),
+                "MM Net 4W Chg": row.get("mm_four_week_change"),
+                "Bias": row.get("bias"),
                 "cot_bias": row.get("cot_bias"),
                 "cot_score": row.get("cot_score"),
                 "cot_strength": row.get("cot_strength"),
                 "cot_summary": row.get("cot_summary"),
-                "Commercial Long": row.get("commercial_long"),
-                "Commercial Short": row.get("commercial_short"),
-                "Legacy Bias": row.get("bias"),
             }
         )
     return pd.DataFrame(records, columns=TRADER_REPORT_COLUMNS)
 
 
 def _prepare_data_checks(master: pd.DataFrame) -> pd.DataFrame:
+    required = [
+        "report_date",
+        "commercial_long",
+        "commercial_short",
+        "noncommercial_long",
+        "noncommercial_short",
+        "commercial_net",
+        "noncommercial_net",
+        "weekly_change",
+        "four_week_change",
+        "mm_weekly_change",
+        "bias",
+        "cot_bias",
+        "cot_score",
+        "cot_strength",
+        "cot_summary",
+    ]
     rows = []
     for market in GOOD_WORKBOOK_MARKET_ORDER:
         subset = master[master["market_name"] == market].copy() if "market_name" in master.columns else pd.DataFrame()
+        missing = []
         if subset.empty:
-            rows.append(
-                {
-                    "market_name": GOOD_WORKBOOK_DISPLAY_NAMES.get(market, market),
-                    "source_report_type": "MISSING",
-                    "primary_long_column_used": "",
-                    "primary_short_column_used": "",
-                    "primary_net_column_used": "noncommercial_net",
-                    "commercial_net_column_used": "commercial_net",
-                    "row_count": 0,
-                    "first_date": None,
-                    "last_date": None,
-                }
-            )
-            continue
-
-        first = pd.to_datetime(subset["report_date"], errors="coerce").min()
-        last = pd.to_datetime(subset["report_date"], errors="coerce").max()
+            missing = required
+            completed = False
+            dates_strictly_increasing = False
+            first_date = None
+            last_date = None
+        else:
+            for column in required:
+                if column not in subset.columns or subset[column].isna().all():
+                    missing.append(column)
+            first = pd.to_datetime(subset["report_date"], errors="coerce").min()
+            last = pd.to_datetime(subset["report_date"], errors="coerce").max()
+            first_date = first.date() if pd.notna(first) else None
+            last_date = last.date() if pd.notna(last) else None
+            dates = pd.to_datetime(subset["report_date"], errors="coerce").dropna().reset_index(drop=True)
+            dates_strictly_increasing = bool(len(dates) <= 1 or (dates.diff().dropna() > pd.Timedelta(0)).all())
+            # First rows naturally have missing 1W/4W changes. Calculations are
+            # complete when the raw inputs and net fields exist, and at least one
+            # 1W/4W result can be produced where the history is long enough.
+            calc_cols = ["commercial_net", "noncommercial_net", "weekly_change", "four_week_change", "mm_weekly_change", "bias", "cot_bias", "cot_score", "cot_strength", "cot_summary"]
+            completed = all(col in subset.columns for col in calc_cols) and subset["commercial_net"].notna().any() and subset["noncommercial_net"].notna().any() and dates_strictly_increasing
+            if len(subset) >= 2:
+                completed = completed and subset["weekly_change"].notna().any() and subset["mm_weekly_change"].notna().any()
+            if len(subset) >= 5:
+                completed = completed and subset["four_week_change"].notna().any()
         rows.append(
             {
                 "market_name": GOOD_WORKBOOK_DISPLAY_NAMES.get(market, market),
-                "source_report_type": _most_common_or_blank(subset.get("source_report")),
-                "primary_long_column_used": _most_common_or_blank(subset.get("primary_long_column_used")) or "noncommercial_long",
-                "primary_short_column_used": _most_common_or_blank(subset.get("primary_short_column_used")) or "noncommercial_short",
-                "primary_net_column_used": "noncommercial_net",
-                "commercial_net_column_used": "commercial_net",
                 "row_count": int(len(subset)),
-                "first_date": first.date() if pd.notna(first) else None,
-                "last_date": last.date() if pd.notna(last) else None,
+                "first_date": first_date,
+                "last_date": last_date,
+                "missing_required_columns": ", ".join(missing),
+                "dates_strictly_increasing": bool(dates_strictly_increasing) if not subset.empty else False,
+                "calculations_completed": bool(completed),
             }
         )
-    return pd.DataFrame(rows, columns=[
-        "market_name",
-        "source_report_type",
-        "primary_long_column_used",
-        "primary_short_column_used",
-        "primary_net_column_used",
-        "commercial_net_column_used",
-        "row_count",
-        "first_date",
-        "last_date",
-    ])
-
-
-def _most_common_or_blank(series: object) -> str:
-    if series is None or not isinstance(series, pd.Series):
-        return ""
-    nonblank = series.dropna().astype(str)
-    nonblank = nonblank[nonblank.str.strip().ne("")]
-    if nonblank.empty:
-        return ""
-    return str(nonblank.mode().iloc[0])
+    return pd.DataFrame(rows)
 
 
 def _write_dataframe(ws, df: pd.DataFrame, start_row: int = 1, start_col: int = 1) -> None:
@@ -691,7 +592,7 @@ def _apply_bias_and_delta_formatting(ws, min_row: int, max_row: int, headers: di
     green_font = "008000"
     red_font = "C00000"
     for row in range(min_row, max_row + 1):
-        for header in ["1W Change", "4W Change", "NonComm 1W Chg", "NonComm 4W Chg", "Commercial 1W Chg", "Commercial 4W Chg", "Commercial Net 1W Chg", "Commercial Net 4W Chg", "MM 1W Change", "MM Net 1W Chg", "MM Net 4W Chg"]:
+        for header in ["1W Change", "4W Change", "Commercial Net 1W Chg", "Commercial Net 4W Chg", "MM 1W Change", "MM Net 1W Chg", "MM Net 4W Chg"]:
             col = headers.get(header)
             if not col:
                 continue
@@ -836,13 +737,14 @@ def _write_market_blocks(ws, trader_report: pd.DataFrame) -> None:
         for _, row in group.iterrows():
             values = [
                 _clean_excel_value(row.get("Date")),
-                row.get("NonComm Long"),
-                row.get("NonComm Short"),
-                row.get("NonComm Net"),
-                row.get("NonComm 1W Chg"),
-                row.get("NonComm 4W Chg"),
+                row.get("Commercial Long"),
+                row.get("Commercial Short"),
                 row.get("Commercial Net"),
-                row.get("Commercial 1W Chg"),
+                row.get("Commercial Net 1W Chg"),
+                row.get("Commercial Net 4W Chg"),
+                row.get("Managed Money Net"),
+                row.get("MM Net 1W Chg"),
+                row.get("Bias"),
                 row.get("cot_bias"),
                 row.get("cot_score"),
                 row.get("cot_strength"),
@@ -855,7 +757,7 @@ def _write_market_blocks(ws, trader_report: pd.DataFrame) -> None:
                     cell.number_format = "yyyy-mm-dd"
                 elif col in {2, 3, 4, 5, 6, 7, 8}:
                     cell.number_format = "#,##0"
-                elif col == 10:
+                elif col == 11:
                     cell.number_format = "0"
             current_row += 1
 
@@ -863,7 +765,7 @@ def _write_market_blocks(ws, trader_report: pd.DataFrame) -> None:
         _apply_bias_and_delta_formatting(ws, header_row + 1, current_row - 1, headers)
         current_row += 1
 
-    widths = [13, 16, 16, 16, 15, 15, 16, 17, 14, 11, 15, 70]
+    widths = [13, 18, 18, 18, 12, 12, 18, 13, 18, 16, 12, 15, 70]
     for col, width in enumerate(widths, 1):
         ws.column_dimensions[get_column_letter(col)].width = width
 
@@ -962,15 +864,7 @@ def export_cot_workbook(
     dashboard = _sort_workbook_rows(dashboard)
     dashboard_table = _prepare_dashboard_table(dashboard)
     trader_report = _prepare_trader_report(master_rows)
-    raw_cols = [
-        "report_date", "market_name", "exchange", "open_interest",
-        "noncommercial_long", "noncommercial_short", "noncommercial_net",
-        "noncomm_1w_change", "noncomm_4w_change",
-        "commercial_net", "commercial_1w_change", "commercial_4w_change",
-        "cot_bias", "cot_score", "cot_strength", "cot_summary",
-        "source_report", "primary_long_column_used", "primary_short_column_used",
-    ]
-    raw_data_slim = master_rows[[col for col in raw_cols if col in master_rows.columns]].copy()
+    raw_data_slim = master_rows[DASHBOARD_COLUMNS + ["mm_weekly_change", "mm_four_week_change", "cot_bias", "cot_score", "cot_strength", "cot_summary", "source_report"]].copy()
     data_checks = _prepare_data_checks(master_rows)
     source_notes = _build_source_notes(source_url, extra_sources=extra_sources, warnings=combined_warnings)
 

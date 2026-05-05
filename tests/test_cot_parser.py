@@ -335,18 +335,7 @@ def test_data_checks_reports_all_required_markets():
 
     assert list(checks["market_name"]) == [GOOD_WORKBOOK_DISPLAY_NAMES[m] for m in GOOD_WORKBOOK_MARKET_ORDER]
     assert checks["row_count"].tolist() == [1] * len(GOOD_WORKBOOK_MARKET_ORDER)
-    assert list(checks.columns) == [
-        "market_name",
-        "source_report_type",
-        "primary_long_column_used",
-        "primary_short_column_used",
-        "primary_net_column_used",
-        "commercial_net_column_used",
-        "row_count",
-        "first_date",
-        "last_date",
-    ]
-    assert set(checks["primary_net_column_used"]) == {"noncommercial_net"}
+    assert checks["calculations_completed"].all()
 
 
 def test_trader_master_sorts_and_calculates_within_same_market_after_deduplication():
@@ -377,48 +366,36 @@ def test_trader_master_sorts_and_calculates_within_same_market_after_deduplicati
     assert any("duplicate market/date" in warning for warning in warnings)
 
 
-def test_data_checks_uses_exact_primary_signal_fields():
+def test_data_checks_includes_date_order_validation_column():
     from hptl.cot.exporter import _calculate_trader_master, _prepare_data_checks
 
     sample = pd.DataFrame(
         [
-            {"report_date": "2026-01-13", "market_name": "NASDAQ", "commercial_long": 120, "commercial_short": 100, "noncommercial_long": 90, "noncommercial_short": 50, "source_report": "Financial Futures Only Historical", "primary_long_column_used": "lev_money_positions_long_all", "primary_short_column_used": "lev_money_positions_short_all"},
-            {"report_date": "2026-01-06", "market_name": "NASDAQ", "commercial_long": 110, "commercial_short": 100, "noncommercial_long": 80, "noncommercial_short": 50, "source_report": "Financial Futures Only Historical", "primary_long_column_used": "lev_money_positions_long_all", "primary_short_column_used": "lev_money_positions_short_all"},
+            {"report_date": "2026-01-13", "market_name": "NASDAQ", "commercial_long": 120, "commercial_short": 100, "noncommercial_long": 90, "noncommercial_short": 50},
+            {"report_date": "2026-01-06", "market_name": "NASDAQ", "commercial_long": 110, "commercial_short": 100, "noncommercial_long": 80, "noncommercial_short": 50},
         ]
     )
     master, _ = _calculate_trader_master(sample)
     checks = _prepare_data_checks(master)
     nasdaq = checks[checks["market_name"] == "NASDAQ"].iloc[0]
 
-    assert list(checks.columns) == [
-        "market_name",
-        "source_report_type",
-        "primary_long_column_used",
-        "primary_short_column_used",
-        "primary_net_column_used",
-        "commercial_net_column_used",
-        "row_count",
-        "first_date",
-        "last_date",
-    ]
-    assert nasdaq["primary_long_column_used"] == "lev_money_positions_long_all"
-    assert nasdaq["primary_short_column_used"] == "lev_money_positions_short_all"
-    assert nasdaq["primary_net_column_used"] == "noncommercial_net"
+    assert "dates_strictly_increasing" in checks.columns
+    assert bool(nasdaq["dates_strictly_increasing"]) is True
 
 
 
-def test_cot_scoring_engine_calculates_managed_money_led_columns():
+def test_cot_scoring_engine_calculates_rule_based_columns():
     from hptl.cot.exporter import _calculate_trader_master
 
     sample = pd.DataFrame(
         [
-            # Managed money improves for multiple weeks and becomes net long.
-            # Commercials are supportive context but are not the primary signal.
+            # Build enough GOLD rows for 4W change. Last row should score Bullish 10/10:
+            # c1 > 0, c4 > 0, managed_net < 0, mm_1w < 0, and divergence combo true.
             {"report_date": "2026-01-06", "market_name": "GOLD", "commercial_long": 100, "commercial_short": 100, "noncommercial_long": 100, "noncommercial_short": 110},
-            {"report_date": "2026-01-13", "market_name": "GOLD", "commercial_long": 105, "commercial_short": 100, "noncommercial_long": 105, "noncommercial_short": 105},
-            {"report_date": "2026-01-20", "market_name": "GOLD", "commercial_long": 110, "commercial_short": 100, "noncommercial_long": 120, "noncommercial_short": 100},
-            {"report_date": "2026-01-27", "market_name": "GOLD", "commercial_long": 115, "commercial_short": 100, "noncommercial_long": 140, "noncommercial_short": 95},
-            {"report_date": "2026-02-03", "market_name": "GOLD", "commercial_long": 120, "commercial_short": 100, "noncommercial_long": 160, "noncommercial_short": 90},
+            {"report_date": "2026-01-13", "market_name": "GOLD", "commercial_long": 105, "commercial_short": 100, "noncommercial_long": 95, "noncommercial_short": 110},
+            {"report_date": "2026-01-20", "market_name": "GOLD", "commercial_long": 110, "commercial_short": 100, "noncommercial_long": 90, "noncommercial_short": 110},
+            {"report_date": "2026-01-27", "market_name": "GOLD", "commercial_long": 115, "commercial_short": 100, "noncommercial_long": 85, "noncommercial_short": 110},
+            {"report_date": "2026-02-03", "market_name": "GOLD", "commercial_long": 120, "commercial_short": 100, "noncommercial_long": 80, "noncommercial_short": 110},
         ]
     )
 
@@ -428,8 +405,7 @@ def test_cot_scoring_engine_calculates_managed_money_led_columns():
     assert latest["cot_bias"] == "Bullish"
     assert latest["cot_score"] == 10
     assert latest["cot_strength"] == "Very Strong"
-    assert "Managed money" in latest["cot_summary"]
-    assert not latest["cot_summary"].startswith("Commercial")
+    assert "Bullish positioning support" in latest["cot_summary"]
 
 
 def test_cot_scoring_columns_flow_into_trader_report_and_dashboard():
@@ -437,8 +413,8 @@ def test_cot_scoring_columns_flow_into_trader_report_and_dashboard():
 
     sample = pd.DataFrame(
         [
-            {"report_date": "2026-01-06", "market_name": "NASDAQ", "commercial_long": 100, "commercial_short": 100, "noncommercial_long": 120, "noncommercial_short": 90},
-            {"report_date": "2026-01-13", "market_name": "NASDAQ", "commercial_long": 90, "commercial_short": 100, "noncommercial_long": 110, "noncommercial_short": 95},
+            {"report_date": "2026-01-06", "market_name": "NASDAQ", "commercial_long": 100, "commercial_short": 100, "noncommercial_long": 100, "noncommercial_short": 90},
+            {"report_date": "2026-01-13", "market_name": "NASDAQ", "commercial_long": 90, "commercial_short": 100, "noncommercial_long": 110, "noncommercial_short": 90},
         ]
     )
 
@@ -454,16 +430,16 @@ def test_cot_scoring_columns_flow_into_trader_report_and_dashboard():
     assert latest["cot_bias"] == "Bearish"
     assert latest["cot_score"] >= 2
     assert latest["cot_strength"] in {"Weak", "Moderate", "Strong", "Very Strong"}
-    assert latest["cot_summary"].startswith("Managed money")
+    assert latest["cot_summary"]
 
 
-def test_managed_money_net_position_can_score_without_commercial_bias():
+def test_strict_cot_score_neutral_is_zero_and_no_half_points():
     from hptl.cot.exporter import _calculate_trader_master
 
     sample = pd.DataFrame(
         [
             {"report_date": "2026-01-06", "market_name": "GOLD", "commercial_long": 100, "commercial_short": 90, "noncommercial_long": 100, "noncommercial_short": 80},
-            {"report_date": "2026-01-13", "market_name": "GOLD", "commercial_long": 100, "commercial_short": 90, "noncommercial_long": 100, "noncommercial_short": 80},
+            {"report_date": "2026-01-13", "market_name": "GOLD", "commercial_long": 100, "commercial_short": 90, "noncommercial_long": 120, "noncommercial_short": 80},
         ]
     )
 
@@ -471,8 +447,7 @@ def test_managed_money_net_position_can_score_without_commercial_bias():
     latest = master[master["market_name"] == "GOLD"].iloc[-1]
 
     assert latest["weekly_change"] == 0
-    assert latest["mm_weekly_change"] == 0
-    assert latest["cot_bias"] == "Bullish"
-    assert latest["cot_score"] == 2  # net long contributes to bullish, but no momentum confirms it
+    assert latest["cot_bias"] == "Neutral"
+    assert latest["cot_score"] == 0
     assert latest["cot_strength"] == "Weak"
     assert float(latest["cot_score"]).is_integer()
