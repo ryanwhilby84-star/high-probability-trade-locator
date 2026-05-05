@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "high-probability-trade-locator"
+version = "0.1.0"
+description = "Trading data automation foundation with a CFTC COT spreadsheet updater."
+requires-python = ">=3.11"
+dependencies = [
+  "pandas>=2.2.0",
+  "openpyxl>=3.1.2",
+  "requests>=2.31.0",
+  "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+hptl-cot-update = "hptl.cot.run_update:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
