@@ -5,6 +5,11 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.chart import BarChart, Reference
+from openpyxl.formatting.rule import CellIsRule, FormulaRule
+from openpyxl.styles import Font, PatternFill
+from openpyxl.utils import get_column_letter
 
 EXPORT_DIR = Path("data/exports")
 PROCESSED_DIR = Path("data/processed")
@@ -290,6 +295,87 @@ def run() -> None:
         cot.to_excel(writer, sheet_name="COT_Input", index=False)
         macro.to_excel(writer, sheet_name="Macro_Input", index=False)
         source_notes.to_excel(writer, sheet_name="Source_Notes", index=False)
+
+    wb = load_workbook(output_path)
+    dashboard_ws = wb["Confluence_Dashboard"]
+    dashboard_ws.freeze_panes = "A2"
+    dashboard_ws.auto_filter.ref = dashboard_ws.dimensions
+
+    bold_font = Font(bold=True)
+    for cell in dashboard_ws[1]:
+        cell.font = bold_font
+
+    for col_cells in dashboard_ws.columns:
+        max_len = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
+        dashboard_ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(max_len + 2, 80)
+
+    green_fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
+    amber_fill = PatternFill(start_color="FFEB9C", end_color="FFEB9C", fill_type="solid")
+    red_fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
+    max_row = dashboard_ws.max_row
+
+    trade_col = get_column_letter(confluence.columns.get_loc("trade_readiness") + 1)
+    trade_range = f"{trade_col}2:{trade_col}{max_row}"
+    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("High conviction",{trade_col}2))'], fill=green_fill))
+    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("Actionable",{trade_col}2))'], fill=green_fill))
+    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("Cautious",{trade_col}2))'], fill=amber_fill))
+    for term in ["Conflicted", "Blocked", "No Trade"]:
+        dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("{term}",{trade_col}2))'], fill=red_fill))
+
+    score_col = get_column_letter(confluence.columns.get_loc("confluence_score") + 1)
+    score_range = f"{score_col}2:{score_col}{max_row}"
+    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["8", "10"], fill=green_fill))
+    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["5", "7"], fill=amber_fill))
+    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["0", "4"], fill=red_fill))
+
+    if "Summary_Charts" in wb.sheetnames:
+        del wb["Summary_Charts"]
+    summary_ws = wb.create_sheet("Summary_Charts")
+
+    score_summary = confluence[["market", "confluence_score"]].copy()
+    readiness_counts = confluence["trade_readiness"].value_counts(dropna=False).rename_axis("trade_readiness").reset_index(name="count")
+    bias_counts = confluence["confluence_bias"].value_counts(dropna=False).rename_axis("confluence_bias").reset_index(name="count")
+
+    summary_ws["A1"] = "market"
+    summary_ws["B1"] = "confluence_score"
+    for i, row in enumerate(score_summary.itertuples(index=False), start=2):
+        summary_ws.cell(row=i, column=1, value=row.market)
+        summary_ws.cell(row=i, column=2, value=float(row.confluence_score))
+    score_chart = BarChart()
+    score_chart.title = "Confluence Score by Market"
+    score_chart.add_data(Reference(summary_ws, min_col=2, min_row=1, max_row=1 + len(score_summary)), titles_from_data=True)
+    score_chart.set_categories(Reference(summary_ws, min_col=1, min_row=2, max_row=1 + len(score_summary)))
+    summary_ws.add_chart(score_chart, "D2")
+
+    readiness_start = len(score_summary) + 4
+    summary_ws.cell(row=readiness_start, column=1, value="trade_readiness")
+    summary_ws.cell(row=readiness_start, column=2, value="count")
+    for i, row in enumerate(readiness_counts.itertuples(index=False), start=readiness_start + 1):
+        summary_ws.cell(row=i, column=1, value=row.trade_readiness)
+        summary_ws.cell(row=i, column=2, value=int(row.count))
+    readiness_chart = BarChart()
+    readiness_chart.title = "Trade Readiness Categories"
+    readiness_chart.add_data(Reference(summary_ws, min_col=2, min_row=readiness_start, max_row=readiness_start + len(readiness_counts)), titles_from_data=True)
+    readiness_chart.set_categories(Reference(summary_ws, min_col=1, min_row=readiness_start + 1, max_row=readiness_start + len(readiness_counts)))
+    summary_ws.add_chart(readiness_chart, f"D{readiness_start}")
+
+    bias_start = readiness_start + len(readiness_counts) + 3
+    summary_ws.cell(row=bias_start, column=1, value="confluence_bias")
+    summary_ws.cell(row=bias_start, column=2, value="count")
+    for i, row in enumerate(bias_counts.itertuples(index=False), start=bias_start + 1):
+        summary_ws.cell(row=i, column=1, value=row.confluence_bias)
+        summary_ws.cell(row=i, column=2, value=int(row.count))
+    bias_chart = BarChart()
+    bias_chart.title = "Confluence Bias Categories"
+    bias_chart.add_data(Reference(summary_ws, min_col=2, min_row=bias_start, max_row=bias_start + len(bias_counts)), titles_from_data=True)
+    bias_chart.set_categories(Reference(summary_ws, min_col=1, min_row=bias_start + 1, max_row=bias_start + len(bias_counts)))
+    summary_ws.add_chart(bias_chart, f"D{bias_start}")
+
+    for col_idx in range(1, 9):
+        summary_ws.column_dimensions[get_column_letter(col_idx)].width = 28 if col_idx == 1 else 16
+    for cell in summary_ws[1]:
+        cell.font = bold_font
+    wb.save(output_path)
 
     print(f"Output path saved: {output_path}")
 
