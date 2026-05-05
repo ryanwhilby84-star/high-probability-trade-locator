@@ -119,8 +119,14 @@ def _load_cot(cot_file: Path) -> pd.DataFrame:
     cleaned["cot_strength"] = data[strength_col].apply(_clean_strength) if strength_col else "Unknown"
 
     missing_score = cleaned["cot_score"].isna()
-    cleaned.loc[missing_score, "cot_score"] = cleaned.loc[missing_score, "cot_strength"].apply(_strength_to_score)
-    cleaned["cot_score"] = cleaned["cot_score"].fillna(0).clip(lower=0, upper=10)
+    fallback_scores = pd.to_numeric(
+        cleaned.loc[missing_score, "cot_strength"].apply(_strength_to_score),
+        errors="coerce",
+    )
+    cleaned.loc[missing_score, "cot_score"] = fallback_scores
+    cleaned["cot_score"] = (
+        pd.to_numeric(cleaned["cot_score"], errors="coerce").fillna(0).clip(lower=0, upper=10)
+    )
 
     return cleaned.reset_index(drop=True)
 
