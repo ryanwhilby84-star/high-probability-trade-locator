@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from hptl.cot.exporter import _cot_strength
+from hptl.cot.exporter import _calculate_cot_scores
 
 import pandas as pd
 from openpyxl import load_workbook
@@ -68,13 +68,10 @@ def _macro_alignment_adjustment(score: float) -> int:
 
 
 def _discover_cot_files() -> list[Path]:
-    files = sorted(
-        list(EXPORT_DIR.glob("cot_update_*.xlsx")) + list(PROCESSED_DIR.glob("cot_cleaned_*.csv")),
-        key=lambda p: p.stat().st_mtime,
-    )
+    files = sorted(list(PROCESSED_DIR.glob("cot_cleaned_*.csv")), key=lambda p: p.stat().st_mtime)
     if not files:
         raise FileNotFoundError(
-            "No COT history inputs found. Expected data/exports/cot_update_*.xlsx and/or data/processed/cot_cleaned_*.csv"
+            "No COT history inputs found. Expected data/processed/cot_cleaned_*.csv"
         )
     return files
 
@@ -89,13 +86,7 @@ def _discover_macro_files() -> list[Path]:
 
 
 def _load_cot_file(cot_file: Path) -> pd.DataFrame:
-    if cot_file.suffix.lower() == ".xlsx":
-        workbook = load_workbook(cot_file, read_only=True, data_only=True)
-        if "COT Cleaned" not in workbook.sheetnames:
-            raise ValueError(f"Expected sheet 'COT Cleaned' in {cot_file}. Found: {workbook.sheetnames}")
-        data = pd.read_excel(cot_file, sheet_name="COT Cleaned")
-    else:
-        data = pd.read_csv(cot_file)
+    data = pd.read_csv(cot_file)
 
     data = data.dropna(how="all")
     data = data.loc[:, ~data.columns.astype(str).str.startswith("Unnamed")]
@@ -109,50 +100,43 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if date_col is None:
         raise ValueError(f"COT data missing required column 'report_date_as_yyyy_mm_dd' in {cot_file}")
 
-    required_score_inputs = [
-        _find_column(data, "weekly_change"),
-        _find_column(data, "four_week_change"),
-        _find_column(data, "noncommercial_net"),
-        _find_column(data, "mm_weekly_change"),
+    required_inputs = [
+        _find_column(data, "commercial_long"),
+        _find_column(data, "commercial_short"),
+        _find_column(data, "noncommercial_long"),
+        _find_column(data, "noncommercial_short"),
     ]
-    if any(col is None for col in required_score_inputs):
+    if any(col is None for col in required_inputs):
         raise ValueError(
-            "Cannot compute COT scoring from raw cleaned columns in "
-            f"{cot_file}. Required scoring inputs are weekly_change, four_week_change, "
-            "noncommercial_net, and mm_weekly_change (as produced by hptl.cot.exporter._calculate_cot_scores)."
+            "Cannot compute COT scoring from cleaned CSV in "
+            f"{cot_file}. Required columns are commercial_long, commercial_short, "
+            "noncommercial_long, and noncommercial_short."
         )
 
-    weekly_change_col, four_week_change_col, noncommercial_net_col, mm_weekly_change_col = required_score_inputs
+    commercial_long_col, commercial_short_col, noncommercial_long_col, noncommercial_short_col = required_inputs
 
     cleaned = pd.DataFrame()
     cleaned["market"] = data[market_col].astype(str).str.strip()
     cleaned["cot_report_date"] = pd.to_datetime(data[date_col], errors="coerce").dt.normalize()
-
-    c1 = pd.to_numeric(data[weekly_change_col], errors="coerce")
-    c4 = pd.to_numeric(data[four_week_change_col], errors="coerce")
-    managed_net = pd.to_numeric(data[noncommercial_net_col], errors="coerce")
-    m1 = pd.to_numeric(data[mm_weekly_change_col], errors="coerce")
-
-    bullish = c1 > 0
-    bearish = c1 < 0
-    cleaned["cot_bias"] = "Neutral / Mixed"
-    cleaned.loc[bullish, "cot_bias"] = "Bullish"
-    cleaned.loc[bearish, "cot_bias"] = "Bearish"
-
-    score = pd.Series(0, index=data.index, dtype="float64")
-    score.loc[bullish | bearish] = 2
-    score.loc[bullish & (c4 > 0)] += 2
-    score.loc[bullish & (managed_net < 0)] += 2
-    score.loc[bullish & (m1 < 0)] += 4
-    score.loc[bearish & (c4 < 0)] += 2
-    score.loc[bearish & (managed_net > 0)] += 2
-    score.loc[bearish & (m1 > 0)] += 4
-
-    cleaned["cot_score"] = score.clip(0, 10)
-    cleaned["cot_strength"] = cleaned["cot_score"].apply(lambda v: _cot_strength(int(v))).apply(_clean_strength)
+    cleaned["commercial_long"] = pd.to_numeric(data[commercial_long_col], errors="coerce")
+    cleaned["commercial_short"] = pd.to_numeric(data[commercial_short_col], errors="coerce")
+    cleaned["noncommercial_long"] = pd.to_numeric(data[noncommercial_long_col], errors="coerce")
+    cleaned["noncommercial_short"] = pd.to_numeric(data[noncommercial_short_col], errors="coerce")
 
     cleaned = cleaned[cleaned["market"].ne("") & cleaned["cot_report_date"].notna()].copy()
-    return cleaned
+    cleaned = cleaned.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
+
+    grouped = cleaned.groupby("market", sort=False)
+    cleaned["commercial_net"] = cleaned["commercial_long"] - cleaned["commercial_short"]
+    cleaned["noncommercial_net"] = cleaned["noncommercial_long"] - cleaned["noncommercial_short"]
+    cleaned["weekly_change"] = grouped["commercial_net"].diff(1)
+    cleaned["four_week_change"] = grouped["commercial_net"].diff(4)
+    cleaned["mm_weekly_change"] = grouped["noncommercial_net"].diff(1)
+
+    scored = _calculate_cot_scores(cleaned)
+    scored["cot_strength"] = scored["cot_strength"].apply(_clean_strength)
+    scored["cot_bias"] = scored["cot_bias"].apply(_clean_bias)
+    return scored[["market", "cot_report_date", "cot_bias", "cot_score", "cot_strength"]]
 
 
 def _load_cot_history(cot_files: list[Path]) -> pd.DataFrame:
