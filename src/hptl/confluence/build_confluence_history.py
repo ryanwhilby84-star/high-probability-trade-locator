@@ -100,26 +100,19 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if date_col is None:
         raise ValueError(f"COT data missing required column 'report_date_as_yyyy_mm_dd' in {cot_file}")
 
-    required_inputs = [
-        _find_column(data, "commercial_long"),
-        _find_column(data, "commercial_short"),
-        _find_column(data, "noncommercial_long"),
-        _find_column(data, "noncommercial_short"),
-    ]
-    if any(col is None for col in required_inputs):
+    noncommercial_long_col = _find_column(data, "noncomm_positions_long_all")
+    noncommercial_short_col = _find_column(data, "noncomm_positions_short_all")
+
+    if noncommercial_long_col is None or noncommercial_short_col is None:
         raise ValueError(
             "Cannot compute COT scoring from cleaned CSV in "
-            f"{cot_file}. Required columns are commercial_long, commercial_short, "
-            "noncommercial_long, and noncommercial_short."
+            f"{cot_file}. Required columns are noncomm_positions_long_all and "
+            "noncomm_positions_short_all."
         )
-
-    commercial_long_col, commercial_short_col, noncommercial_long_col, noncommercial_short_col = required_inputs
 
     cleaned = pd.DataFrame()
     cleaned["market"] = data[market_col].astype(str).str.strip()
     cleaned["cot_report_date"] = pd.to_datetime(data[date_col], errors="coerce").dt.normalize()
-    cleaned["commercial_long"] = pd.to_numeric(data[commercial_long_col], errors="coerce")
-    cleaned["commercial_short"] = pd.to_numeric(data[commercial_short_col], errors="coerce")
     cleaned["noncommercial_long"] = pd.to_numeric(data[noncommercial_long_col], errors="coerce")
     cleaned["noncommercial_short"] = pd.to_numeric(data[noncommercial_short_col], errors="coerce")
 
@@ -127,10 +120,10 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     cleaned = cleaned.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
 
     grouped = cleaned.groupby("market", sort=False)
-    cleaned["commercial_net"] = cleaned["commercial_long"] - cleaned["commercial_short"]
     cleaned["noncommercial_net"] = cleaned["noncommercial_long"] - cleaned["noncommercial_short"]
-    cleaned["weekly_change"] = grouped["commercial_net"].diff(1)
-    cleaned["four_week_change"] = grouped["commercial_net"].diff(4)
+    cleaned["commercial_net"] = cleaned["noncommercial_net"]
+    cleaned["weekly_change"] = grouped["noncommercial_net"].diff(1)
+    cleaned["four_week_change"] = grouped["noncommercial_net"].diff(4)
     cleaned["mm_weekly_change"] = grouped["noncommercial_net"].diff(1)
 
     scored = _calculate_cot_scores(cleaned)
