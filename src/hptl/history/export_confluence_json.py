@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import json
 from datetime import datetime
 from pathlib import Path
@@ -39,6 +40,15 @@ def _find_latest_workbook() -> Path:
     return files[-1]
 
 
+def _resolve_workbook(input_path: str | None) -> Path:
+    if input_path:
+        workbook = Path(input_path)
+        if not workbook.exists():
+            raise FileNotFoundError(f"Input workbook not found: {workbook}")
+        return workbook
+    return _find_latest_workbook()
+
+
 def _pick_sheet(workbook: Path) -> str:
     xl = pd.ExcelFile(workbook)
     for sheet in PREFERRED_SHEETS:
@@ -52,6 +62,9 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
     df = df.dropna(how="all").copy()
     renames = {c: _normalize_column_name(c) for c in df.columns}
     df = df.rename(columns=renames)
+
+    if "cot_report_date" not in df.columns and "date" in df.columns:
+        df["cot_report_date"] = df["date"]
 
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
@@ -67,9 +80,13 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
     return df
 
 
-def run() -> Path:
-    workbook = _find_latest_workbook()
+def run(input_path: str | None = None) -> Path:
+    workbook = _resolve_workbook(input_path)
     sheet = _pick_sheet(workbook)
+
+    print(f"Selected workbook: {workbook}")
+    print(f"Selected sheet: {sheet}")
+
     data = _load_and_clean(workbook, sheet)
 
     payload = {
@@ -91,5 +108,18 @@ def run() -> Path:
     return OUTPUT_PATH
 
 
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Export confluence history workbook to JSON")
+    parser.add_argument(
+        "--input",
+        dest="input_path",
+        type=str,
+        default=None,
+        help="Path to a confluence history workbook (.xlsx)",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    run()
+    args = _parse_args()
+    run(input_path=args.input_path)
