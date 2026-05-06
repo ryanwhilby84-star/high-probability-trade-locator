@@ -7,6 +7,7 @@ from typing import Any
 
 import pandas as pd
 from openpyxl import load_workbook
+from openpyxl.chart import BarChart, Reference
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
 
@@ -17,21 +18,22 @@ from hptl.config import get_settings
 
 EXPORT_DIR = Path("data/exports")
 PROCESSED_DIR = Path("data/processed")
-TARGET_MARKET_MAP = {
-    "COCOA - ICE FUTURES U.S.": "Cocoa",
-    "COFFEE C - ICE FUTURES U.S.": "Coffee",
-    "CORN - CHICAGO BOARD OF TRADE": "Corn",
-    "WHEAT - CHICAGO BOARD OF TRADE": "Wheat",
-    "SOYBEANS - CHICAGO BOARD OF TRADE": "Soybeans",
-    "GOLD - COMMODITY EXCHANGE INC.": "Gold",
-    "SILVER - COMMODITY EXCHANGE INC.": "Silver",
-    "COPPER-GRADE #1 - COMMODITY EXCHANGE INC.": "Copper",
-    "CRUDE OIL, LIGHT SWEET - NEW YORK MERCANTILE EXCHANGE": "Crude Oil",
-    "NATURAL GAS - NEW YORK MERCANTILE EXCHANGE": "Natural Gas",
-    "NASDAQ 100 STOCK INDEX - CHICAGO MERCANTILE EXCHANGE": "NASDAQ",
-    "S&P 500 CONSOLIDATED - CHICAGO MERCANTILE EXCHANGE": "S&P 500",
+TARGET_ALIASES = {
+    "NASDAQ / NQ": ["NASDAQ MINI", "E-MINI NASDAQ", "NASDAQ-100", "NASDAQ 100", "NASDAQ 100 STOCK INDEX"],
+    "S&P 500 / ES": ["E-MINI S&P 500", "S&P 500 STOCK INDEX", "S&P 500 CONSOLIDATED", "SP 500"],
+    "Dow / YM / DJIA / S30": ["DOW JONES", "DJIA", "E-MINI DOW", "MINI DOW", "DOW JONES U.S. INDEX"],
+    "Gold / GC": ["GOLD -", "GOLD"],
+    "Silver / SI": ["SILVER -", "SILVER"],
+    "Copper / HG": ["COPPER-GRADE #1", "COPPER"],
+    "Crude Oil / CL": ["CRUDE OIL, LIGHT SWEET", "CRUDE OIL"],
+    "Natural Gas / NG": ["NATURAL GAS"],
+    "Corn / ZC": ["CORN -"],
+    "Soybeans / ZS": ["SOYBEANS -"],
+    "Wheat / ZW": ["WHEAT -"],
+    "Coffee / KC": ["COFFEE C -", "COFFEE"],
+    "Cocoa / CC": ["COCOA -", "COCOA"],
 }
-TARGET_MARKETS = list(TARGET_MARKET_MAP.values())
+TARGET_MARKETS = list(TARGET_ALIASES.keys())
 HISTORY_START_DATE = pd.Timestamp("2024-05-06")
 HISTORY_END_DATE = pd.Timestamp("2026-05-06")
 
@@ -137,6 +139,18 @@ def _discover_macro_files() -> tuple[list[Path], str, str]:
     )
 
 
+def _normalize_market_text(v: str) -> str:
+    return " ".join(v.upper().replace("_", " ").replace("/", " ").replace("-", " ").split())
+
+
+def _map_target_market(raw_market: str) -> str | None:
+    n = _normalize_market_text(raw_market)
+    for canonical, aliases in TARGET_ALIASES.items():
+        if any(_normalize_market_text(alias) in n for alias in aliases):
+            return canonical
+    return None
+
+
 def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     data = pd.read_csv(cot_file, low_memory=False)
     data = data.dropna(how="all")
@@ -173,8 +187,8 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
         & cleaned["managed_money_short"].notna()
     ].copy()
 
-    cleaned = cleaned[cleaned["market"].isin(set(TARGET_MARKET_MAP))].copy()
-    cleaned["market"] = cleaned["market"].map(TARGET_MARKET_MAP)
+    cleaned["market"] = cleaned["market"].apply(_map_target_market)
+    cleaned = cleaned[cleaned["market"].notna()].copy()
     cleaned = cleaned.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
 
     cleaned["managed_money_net"] = cleaned["managed_money_long"] - cleaned["managed_money_short"]
@@ -494,8 +508,10 @@ def run() -> Path:
     date_index = (
         out.groupby("cot_report_date", as_index=False)
         .agg(
-            number_of_markets_present=("market", "nunique"),
-            average_confluence_score=("confluence_score", "mean"),
+            markets_present=("market", lambda s: ", ".join(sorted(set(s)))),
+            avg_confluence_score=("confluence_score", "mean"),
+            actionable_count=("trade_readiness", lambda s: int((s == "Actionable").sum())),
+            high_conviction_count=("trade_readiness", lambda s: int((s == "High conviction").sum())),
         )
         .sort_values("cot_report_date")
     )
@@ -503,18 +519,18 @@ def run() -> Path:
         out[out["confluence_bias"].isin(["Long Bias", "Long (Headwind)"])]
         .sort_values(["cot_report_date", "confluence_score"], ascending=[True, False])
         .drop_duplicates("cot_report_date")[["cot_report_date", "market", "confluence_score"]]
-        .rename(columns={"market": "strongest_bullish_context", "confluence_score": "strongest_bullish_score"})
+        .rename(columns={"market": "strongest_bullish_market"})
     )
     strongest_bear = (
         out[out["confluence_bias"].isin(["Short Bias", "Short (Headwind)"])]
         .sort_values(["cot_report_date", "confluence_score"], ascending=[True, False])
         .drop_duplicates("cot_report_date")[["cot_report_date", "market", "confluence_score"]]
-        .rename(columns={"market": "strongest_bearish_context", "confluence_score": "strongest_bearish_score"})
+        .rename(columns={"market": "strongest_bearish_market"})
     )
     date_index = date_index.merge(strongest_bull, on="cot_report_date", how="left").merge(
         strongest_bear, on="cot_report_date", how="left"
     )
-    date_index["average_confluence_score"] = date_index["average_confluence_score"].round(2)
+    date_index["avg_confluence_score"] = date_index["avg_confluence_score"].round(2)
 
     for week in week_dates:
         present = set(out[out["cot_report_date"].dt.date == week]["market"].dropna().astype(str))
@@ -542,12 +558,14 @@ def run() -> Path:
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         dashboard.to_excel(writer, sheet_name="Confluence_Dashboard", index=False)
         date_index.to_excel(writer, sheet_name="Date_Index", index=False)
+        out[required_columns].to_excel(writer, sheet_name="Weekly_Blocks", index=False)
         missing_targets.to_excel(writer, sheet_name="Missing_Targets", index=False)
         source_notes.to_excel(writer, sheet_name="Source_Notes", index=False)
 
     wb = load_workbook(output_path)
     dashboard_ws = wb["Confluence_Dashboard"]
     date_index_ws = wb["Date_Index"]
+    weekly_ws = wb["Weekly_Blocks"]
     missing_targets_ws = wb["Missing_Targets"]
     source_notes_ws = wb["Source_Notes"]
 
@@ -560,8 +578,22 @@ def run() -> Path:
             width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
             ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
 
-    for ws in [dashboard_ws, date_index_ws, missing_targets_ws, source_notes_ws]:
+    for ws in [dashboard_ws, date_index_ws, weekly_ws, missing_targets_ws, source_notes_ws]:
         _format_table_sheet(ws)
+    weekly_ws.delete_rows(1, weekly_ws.max_row)
+    row_ptr = 1
+    for week in sorted(out["cot_report_date"].dropna().dt.date.unique()):
+        weekly_ws.cell(row=row_ptr, column=1, value=f"Week of {week}").font = Font(bold=True, size=14)
+        row_ptr += 1
+        for i, col in enumerate(required_columns, start=1):
+            weekly_ws.cell(row=row_ptr, column=i, value=col).font = Font(bold=True)
+        row_ptr += 1
+        week_rows = out[out["cot_report_date"].dt.date == week][required_columns].sort_values("market")
+        for _, r in week_rows.iterrows():
+            for i, col in enumerate(required_columns, start=1):
+                weekly_ws.cell(row=row_ptr, column=i, value=r[col])
+            row_ptr += 1
+        row_ptr += 1
 
     green_fill = PatternFill(fill_type="solid", fgColor="C6EFCE")
     amber_fill = PatternFill(fill_type="solid", fgColor="FFEB9C")
@@ -605,7 +637,28 @@ def run() -> Path:
                     cell.fill = red_fill
 
     _apply_confluence_colors(dashboard_ws)
+    _apply_confluence_colors(weekly_ws)
     dashboard_ws.freeze_panes = "A2"
+    latest_rows = out[out["cot_report_date"] == latest_date][["market", "confluence_score"]].sort_values("market")
+    charts_sheet = wb.create_sheet("Summary_Charts")
+    charts_sheet["A1"] = f"Latest Week Confluence ({latest_date.date()})"
+    charts_sheet["A1"].font = Font(bold=True, size=13)
+    charts_sheet["A3"] = "market"
+    charts_sheet["B3"] = "confluence_score"
+    for idx, (_, r) in enumerate(latest_rows.iterrows(), start=4):
+        charts_sheet.cell(row=idx, column=1, value=r["market"])
+        charts_sheet.cell(row=idx, column=2, value=float(r["confluence_score"]))
+    chart = BarChart()
+    chart.title = f"Confluence Scores - {latest_date.date()}"
+    chart.y_axis.title = "Confluence Score"
+    chart.x_axis.title = "Market"
+    data_ref = Reference(charts_sheet, min_col=2, min_row=3, max_row=3 + len(latest_rows))
+    cat_ref = Reference(charts_sheet, min_col=1, min_row=4, max_row=3 + len(latest_rows))
+    chart.add_data(data_ref, titles_from_data=True)
+    chart.set_categories(cat_ref)
+    chart.height = 9
+    chart.width = 18
+    charts_sheet.add_chart(chart, "D3")
 
     wb.save(output_path)
 
@@ -622,15 +675,17 @@ def run() -> Path:
     missing_target_markets = sorted(set(TARGET_MARKETS) - present_markets)
 
     print(f"Confluence date range: {out['cot_report_date'].min()} -> {out['cot_report_date'].max()}")
-    print(f"Number of weeks: {confluence_weeks}")
-    print(f"Number of markets: {confluence_markets}")
+    print(f"Weeks generated: {confluence_weeks}")
+    print(f"Instruments found: {confluence_markets}")
+    print(f"Aliases searched: {TARGET_ALIASES}")
+    print(f"Aliases matched: {sorted(out['market'].dropna().unique())}")
     print(f"Rows exported: {len(out)}")
     if missing_target_markets:
-        print("Missing target markets:")
+        print("Instruments missing:")
         for market in missing_target_markets:
             print(f"  - {market}")
     else:
-        print("Missing target markets: none")
+        print("Instruments missing: none")
     print(f"Output file path: {output_path}")
     print("=" * 70)
 
