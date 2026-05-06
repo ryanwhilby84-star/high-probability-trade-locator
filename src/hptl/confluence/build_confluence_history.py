@@ -90,16 +90,43 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if cot_file.suffix.lower() == ".xlsx":
         workbook = load_workbook(cot_file, read_only=True, data_only=True)
         available_sheets = workbook.sheetnames
-        selected_sheet = "Dashboard" if "Dashboard" in available_sheets else available_sheets[0]
-        print(f"Selected COT sheet '{selected_sheet}' from {cot_file}")
-        raw = pd.read_excel(cot_file, sheet_name=selected_sheet, header=None)
+
+        def _read_with_header(sheet_name: str) -> tuple[pd.DataFrame, int | None]:
+            sheet_raw = pd.read_excel(cot_file, sheet_name=sheet_name, header=None)
+            sheet_header_idx = None
+            for idx, row in sheet_raw.iterrows():
+                if row.astype(str).str.strip().eq("Market").any():
+                    sheet_header_idx = idx
+                    break
+            return sheet_raw, sheet_header_idx
+
+        selected_sheet = None
+        raw = None
         header_idx = None
-        for idx, row in raw.iterrows():
-            if row.astype(str).str.strip().eq("Market").any():
-                header_idx = idx
-                break
-        if header_idx is None:
-            raise ValueError(f"Could not find 'Market' header row in {cot_file}")
+
+        for preferred in ("COT Cleaned", "Markets"):
+            if preferred in available_sheets:
+                raw, header_idx = _read_with_header(preferred)
+                if header_idx is not None:
+                    selected_sheet = preferred
+                    break
+
+        if selected_sheet is None:
+            fallback_sheets = [s for s in available_sheets if s != "Summary"]
+            if "Summary" in available_sheets:
+                fallback_sheets.append("Summary")
+
+            for sheet_name in fallback_sheets:
+                raw, header_idx = _read_with_header(sheet_name)
+                if header_idx is not None:
+                    selected_sheet = sheet_name
+                    break
+
+        if selected_sheet is None or raw is None or header_idx is None:
+            raise ValueError(f"Could not find 'Market' header row in any sheet of {cot_file}")
+
+        print(f"Selected COT sheet: {selected_sheet}")
+        print(f"Header row: {header_idx}")
 
         header = raw.iloc[header_idx].astype(str).str.strip().tolist()
         data = raw.iloc[header_idx + 1 :].copy()
