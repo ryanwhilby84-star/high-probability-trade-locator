@@ -13,6 +13,22 @@ from hptl.cot.exporter import _calculate_cot_scores
 
 EXPORT_DIR = Path("data/exports")
 PROCESSED_DIR = Path("data/processed")
+HPTL_TARGET_MARKETS = {
+    "COCOA - ICE FUTURES U.S.",
+    "GOLD - COMMODITY EXCHANGE INC.",
+    "CRUDE OIL, LIGHT SWEET - NEW YORK MERCANTILE EXCHANGE",
+    "CORN - CHICAGO BOARD OF TRADE",
+    "WHEAT - CHICAGO BOARD OF TRADE",
+    "SOYBEANS - CHICAGO BOARD OF TRADE",
+    "SILVER - COMMODITY EXCHANGE INC.",
+    "COPPER-GRADE #1 - COMMODITY EXCHANGE INC.",
+    "COFFEE C - ICE FUTURES U.S.",
+    "NATURAL GAS - NEW YORK MERCANTILE EXCHANGE",
+}
+INDEX_MARKETS_TO_WARN = {
+    "NASDAQ 100 STOCK INDEX - CHICAGO MERCANTILE EXCHANGE",
+    "S&P 500 CONSOLIDATED - CHICAGO MERCANTILE EXCHANGE",
+}
 
 
 def _normalize_column_name(col: str) -> str:
@@ -83,8 +99,8 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
 
     market_col = _find_column(data, "market_and_exchange_names")
     date_col = _find_column(data, "report_date_as_yyyy_mm_dd")
-    long_col = _find_column(data, "nonrept_positions_long_other")
-    short_col = _find_column(data, "nonrept_positions_short_other")
+    long_col = _find_column(data, "m_money_positions_long_other")
+    short_col = _find_column(data, "m_money_positions_short_other")
 
     missing = []
     if market_col is None:
@@ -92,34 +108,36 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if date_col is None:
         missing.append("report_date_as_yyyy_mm_dd")
     if long_col is None:
-        missing.append("nonrept_positions_long_other")
+        missing.append("m_money_positions_long_other")
     if short_col is None:
-        missing.append("nonrept_positions_short_other")
+        missing.append("m_money_positions_short_other")
     if missing:
         raise ValueError(f"COT file {cot_file} missing required columns: {missing}")
 
     cleaned = pd.DataFrame()
     cleaned["market"] = data[market_col].astype(str).str.strip()
     cleaned["cot_report_date"] = pd.to_datetime(data[date_col], errors="coerce", dayfirst=True).dt.normalize()
-    cleaned["noncommercial_long"] = pd.to_numeric(data[long_col], errors="coerce")
-    cleaned["noncommercial_short"] = pd.to_numeric(data[short_col], errors="coerce")
+    cleaned["managed_money_long"] = pd.to_numeric(data[long_col], errors="coerce")
+    cleaned["managed_money_short"] = pd.to_numeric(data[short_col], errors="coerce")
 
     cleaned = cleaned[
         cleaned["market"].ne("")
         & cleaned["cot_report_date"].notna()
-        & cleaned["noncommercial_long"].notna()
-        & cleaned["noncommercial_short"].notna()
+        & cleaned["managed_money_long"].notna()
+        & cleaned["managed_money_short"].notna()
     ].copy()
 
+    cleaned = cleaned[cleaned["market"].isin(HPTL_TARGET_MARKETS)].copy()
     cleaned = cleaned.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
 
-    cleaned["noncommercial_net"] = cleaned["noncommercial_long"] - cleaned["noncommercial_short"]
-    cleaned["commercial_net"] = cleaned["noncommercial_net"]
+    cleaned["managed_money_net"] = cleaned["managed_money_long"] - cleaned["managed_money_short"]
+    cleaned["noncommercial_net"] = cleaned["managed_money_net"]
+    cleaned["commercial_net"] = cleaned["managed_money_net"]
 
     grouped = cleaned.groupby("market", sort=False)
-    cleaned["weekly_change"] = grouped["noncommercial_net"].diff(1)
-    cleaned["four_week_change"] = grouped["noncommercial_net"].diff(4)
-    cleaned["mm_weekly_change"] = grouped["noncommercial_net"].diff(1)
+    cleaned["weekly_change"] = grouped["managed_money_net"].diff(1)
+    cleaned["four_week_change"] = grouped["managed_money_net"].diff(4)
+    cleaned["mm_weekly_change"] = grouped["managed_money_net"].diff(1)
 
     scored = _calculate_cot_scores(cleaned)
     scored["cot_strength"] = scored["cot_strength"].apply(_clean_strength)
@@ -141,6 +159,14 @@ def _load_cot_history(cot_files: list[Path]) -> pd.DataFrame:
 
     if history.empty:
         raise ValueError("COT history is empty after parsing/deduping.")
+
+    present_markets = set(history["market"].dropna().astype(str).str.strip().unique())
+    missing_index_markets = sorted(INDEX_MARKETS_TO_WARN - present_markets)
+    if missing_index_markets:
+        print("WARNING: The following index markets were not found in cleaned COT data:")
+        for market in missing_index_markets:
+            print(f"  - {market}")
+        print("Continuing without index markets.")
 
     return history
 
