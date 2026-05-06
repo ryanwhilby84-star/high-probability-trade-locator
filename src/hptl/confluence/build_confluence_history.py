@@ -61,11 +61,18 @@ def _discover_cot_files() -> list[Path]:
     return files
 
 
-def _discover_macro_files() -> list[Path]:
-    files = sorted(EXPORT_DIR.glob("macro_output_*.xlsx"), key=lambda p: p.stat().st_mtime)
-    if not files:
-        raise FileNotFoundError("No macro history inputs found. Expected data/exports/macro_output_*.xlsx")
-    return files
+def _discover_macro_files() -> tuple[list[Path], str, str]:
+    history_files = sorted(EXPORT_DIR.glob("macro_history_*.xlsx"), key=lambda p: p.stat().st_mtime)
+    if history_files:
+        return history_files, "Macro_History", "macro_history_*.xlsx"
+
+    output_files = sorted(EXPORT_DIR.glob("macro_output_*.xlsx"), key=lambda p: p.stat().st_mtime)
+    if output_files:
+        return output_files, "Macro_Dashboard", "macro_output_*.xlsx"
+
+    raise FileNotFoundError(
+        "No macro inputs found. Expected data/exports/macro_history_*.xlsx (preferred) or macro_output_*.xlsx"
+    )
 
 
 def _load_cot_file(cot_file: Path) -> pd.DataFrame:
@@ -138,16 +145,16 @@ def _load_cot_history(cot_files: list[Path]) -> pd.DataFrame:
     return history
 
 
-def _load_macro_history(macro_files: list[Path]) -> pd.DataFrame:
+def _load_macro_history(macro_files: list[Path], sheet_name: str) -> pd.DataFrame:
     frames = []
 
     for f in macro_files:
         print(f"Loading macro file: {f}")
 
         try:
-            macro = pd.read_excel(f, sheet_name="Macro_Dashboard")
+            macro = pd.read_excel(f, sheet_name=sheet_name)
         except ValueError:
-            print("  skipped: Macro_Dashboard sheet not found")
+            print(f"  skipped: {sheet_name} sheet not found")
             continue
 
         if macro.empty:
@@ -285,25 +292,32 @@ def run() -> Path:
     print("=" * 70)
 
     cot_files = _discover_cot_files()
-    macro_files = _discover_macro_files()
+    macro_files, macro_sheet, macro_pattern = _discover_macro_files()
 
     cot = _load_cot_history(cot_files)
-    macro = _load_macro_history(macro_files)
+    macro = _load_macro_history(macro_files, macro_sheet)
 
     print(f"COT date range: {cot['cot_report_date'].min()} -> {cot['cot_report_date'].max()}")
     print(f"Macro date range: {macro['macro_snapshot_date'].min()} -> {macro['macro_snapshot_date'].max()}")
-    print("Alignment mode: nearest TEMPORARY REVIEW MODE")
-    print("NOTE: Proper historical mode needs macro history covering the COT date range.")
+    print("Alignment mode: backward (as-of historical snapshot)")
 
     aligned = pd.merge_asof(
         cot.sort_values("cot_report_date"),
         macro.sort_values("macro_snapshot_date"),
         left_on="cot_report_date",
         right_on="macro_snapshot_date",
-        direction="nearest",
+        direction="backward",
     )
 
     aligned = aligned[aligned["macro_snapshot_date"].notna()].copy()
+    aligned_rows = len(aligned)
+    dropped_rows = len(cot) - aligned_rows
+    if dropped_rows > 0:
+        print("WARNING: Macro history does not fully cover COT history.")
+        print(f"  COT date range: {cot['cot_report_date'].min()} -> {cot['cot_report_date'].max()}")
+        print(f"  Macro date range: {macro['macro_snapshot_date'].min()} -> {macro['macro_snapshot_date'].max()}")
+        print(f"  Rows aligned: {aligned_rows}")
+        print(f"  Rows dropped: {dropped_rows}")
 
     if aligned.empty:
         raise ValueError("No COT rows could be aligned to available macro snapshots.")
@@ -332,11 +346,11 @@ def run() -> Path:
         "cot_bias",
         "cot_score",
         "cot_strength",
+        "macro_snapshot_date",
         "macro_signal",
         "macro_score",
         "macro_strength",
         "macro_context_for_trades",
-        "macro_alignment_gap_days",
         "confluence_bias",
         "confluence_score",
         "confluence_strength",
@@ -370,7 +384,7 @@ def run() -> Path:
     print(f"COT input files used: {len(cot_files)}")
     for f in cot_files:
         print(f"  - {f}")
-    print(f"Macro input files used: {len(macro_files)}")
+    print(f"Macro input files used ({macro_pattern}, sheet={macro_sheet}): {len(macro_files)}")
     for f in macro_files:
         print(f"  - {f}")
     print(f"Date range covered: {out['date'].min()} -> {out['date'].max()}")
