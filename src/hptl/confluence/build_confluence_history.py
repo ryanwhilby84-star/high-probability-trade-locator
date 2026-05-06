@@ -8,7 +8,6 @@ from typing import Any
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill
-from openpyxl.chart import BarChart, Reference
 from openpyxl.utils import get_column_letter
 
 from hptl.cot.exporter import _calculate_cot_scores
@@ -33,7 +32,8 @@ TARGET_MARKET_MAP = {
     "S&P 500 CONSOLIDATED - CHICAGO MERCANTILE EXCHANGE": "S&P 500",
 }
 TARGET_MARKETS = list(TARGET_MARKET_MAP.values())
-HISTORY_START_DATE = pd.Timestamp("2025-01-01")
+HISTORY_START_DATE = pd.Timestamp("2024-05-06")
+HISTORY_END_DATE = pd.Timestamp("2026-05-06")
 
 
 def _normalize_column_name(col: str) -> str:
@@ -55,7 +55,7 @@ def _clean_bias(value: Any) -> str:
         return "Bullish"
     if "bear" in text or text in {"short", "sell"}:
         return "Bearish"
-    return "Neutral / Mixed"
+    return "Neutral"
 
 
 def _clean_strength(value: Any) -> str:
@@ -81,6 +81,16 @@ def _macro_signal_label(signal: str) -> str:
     if signal == "risk_off":
         return "risk-off"
     return "neutral"
+
+
+def _strength_from_score(score: float) -> str:
+    if score >= 8:
+        return "Very Strong"
+    if score >= 6:
+        return "Strong"
+    if score >= 3:
+        return "Moderate"
+    return "Weak"
 
 
 def _discover_cot_files() -> list[Path]:
@@ -310,7 +320,7 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
             "macro_effect_on_cot": "Blocking",
             "combined_context_score": 0,
             "combined_context_label": "Conflicted / Stand Down",
-            "confluence_bias": "Conflicted / No Trade",
+            "confluence_bias": "Conflicted",
             "confluence_score": 0,
             "confluence_strength": "Blocked",
             "trade_readiness": "Stand down",
@@ -331,7 +341,7 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
     score = max(0, min(10, score))
 
     if cot_dir == "neutral" or macro_dir == "neutral":
-        bias = "Neutral / Mixed"
+        bias = "Conflicted"
     elif cot_dir == macro_dir == "long":
         bias = "Long Bias"
     elif cot_dir == macro_dir == "short":
@@ -352,7 +362,7 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
         readiness = "Cautious"
     else:
         strength = "Weak"
-        readiness = "Low conviction"
+        readiness = "Stand down"
 
     if cot_dir == "neutral" or macro_dir == "neutral":
         cot_macro_alignment = "Neutral / Mixed"
@@ -449,23 +459,12 @@ def run() -> Path:
     )
 
     out = pd.concat([aligned, confluence_bits], axis=1)
-    out["date"] = out["cot_report_date"].dt.date
     out = out.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
-    cot_score_change = out.groupby("market", sort=False)["cot_score"].diff(1)
-    out["positioning_trend"] = "Flat / Unclear"
-    out.loc[cot_score_change.isna(), "positioning_trend"] = "New / Insufficient History"
-    out.loc[cot_score_change >= 1.0, "positioning_trend"] = "Strengthening"
-    out.loc[cot_score_change <= -1.0, "positioning_trend"] = "Weakening"
-
-    final_columns = [
-        "date",
+    out = out[(out["cot_report_date"] >= HISTORY_START_DATE) & (out["cot_report_date"] <= HISTORY_END_DATE)].copy()
+    out["confluence_strength"] = out["confluence_score"].apply(_strength_from_score)
+    required_columns = [
         "market",
-        "combined_context_label",
-        "combined_context_score",
-        "cot_macro_alignment",
-        "macro_effect_on_cot",
-        "positioning_trend",
-        "confluence_read",
+        "cot_report_date",
         "cot_bias",
         "cot_score",
         "cot_strength",
@@ -474,136 +473,83 @@ def run() -> Path:
         "macro_score",
         "macro_strength",
         "macro_context_for_trades",
-        "managed_money_net",
-        "weekly_change",
-        "four_week_change",
-        "_cot_source",
-        "_macro_source",
-        "macro_alignment_gap_days",
         "confluence_bias",
         "confluence_score",
         "confluence_strength",
         "trade_readiness",
         "summary",
     ]
-
-    out = out[final_columns].sort_values(["date", "market"]).reset_index(drop=True)
-    out = out[out["date"] >= HISTORY_START_DATE.date()].copy()
+    out = out[required_columns + ["_cot_source", "_macro_source", "macro_alignment_gap_days"]].sort_values(
+        ["cot_report_date", "market"]
+    ).reset_index(drop=True)
 
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = EXPORT_DIR / f"confluence_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
 
-    latest_date = out["date"].max()
-    week_dates = sorted(out["date"].dropna().unique())
+    latest_date = out["cot_report_date"].max()
+    week_dates = sorted(out["cot_report_date"].dropna().dt.date.unique())
     missing_targets_rows: list[dict[str, Any]] = []
-    dashboard_columns = [
-        "date",
-        "market",
-        "combined_context_label",
-        "combined_context_score",
-        "cot_macro_alignment",
-        "macro_effect_on_cot",
-        "positioning_trend",
-        "confluence_read",
-        "cot_bias",
-        "cot_score",
-        "cot_strength",
-        "macro_signal",
-        "macro_score",
-        "macro_strength",
-        "macro_context_for_trades",
-    ]
-    latest_week_data = out[out["date"] == latest_date].copy()
-    dashboard = latest_week_data[dashboard_columns].sort_values("market").reset_index(drop=True)
-
-    weekly_blocks = out[
-        [
-            "date",
-            "market",
-            "combined_context_label",
-            "combined_context_score",
-            "cot_macro_alignment",
-            "positioning_trend",
-            "confluence_read",
-        ]
-    ].copy()
+    dashboard = out[required_columns].copy()
 
     date_index = (
-        out.groupby("date", as_index=False)
+        out.groupby("cot_report_date", as_index=False)
         .agg(
-            market_count=("market", "nunique"),
-            average_combined_context_score=("combined_context_score", "mean"),
+            number_of_markets_present=("market", "nunique"),
+            average_confluence_score=("confluence_score", "mean"),
         )
-        .sort_values("date")
+        .sort_values("cot_report_date")
     )
     strongest_bull = (
-        out[out["combined_context_label"].str.contains("Bullish", na=False)]
-        .sort_values(["date", "combined_context_score"], ascending=[True, False])
-        .drop_duplicates("date")[["date", "market", "combined_context_label", "combined_context_score"]]
-        .rename(columns={"market": "strongest_bullish_market", "combined_context_score": "strongest_bullish_score"})
+        out[out["confluence_bias"].isin(["Long Bias", "Long (Headwind)"])]
+        .sort_values(["cot_report_date", "confluence_score"], ascending=[True, False])
+        .drop_duplicates("cot_report_date")[["cot_report_date", "market", "confluence_score"]]
+        .rename(columns={"market": "strongest_bullish_context", "confluence_score": "strongest_bullish_score"})
     )
     strongest_bear = (
-        out[out["combined_context_label"].str.contains("Bearish", na=False)]
-        .sort_values(["date", "combined_context_score"], ascending=[True, True])
-        .drop_duplicates("date")[["date", "market", "combined_context_label", "combined_context_score"]]
-        .rename(columns={"market": "strongest_bearish_market", "combined_context_score": "strongest_bearish_score"})
+        out[out["confluence_bias"].isin(["Short Bias", "Short (Headwind)"])]
+        .sort_values(["cot_report_date", "confluence_score"], ascending=[True, False])
+        .drop_duplicates("cot_report_date")[["cot_report_date", "market", "confluence_score"]]
+        .rename(columns={"market": "strongest_bearish_context", "confluence_score": "strongest_bearish_score"})
     )
-    date_index = date_index.merge(strongest_bull, on="date", how="left").merge(strongest_bear, on="date", how="left")
-    date_index["average_combined_context_score"] = date_index["average_combined_context_score"].round(2)
-    readiness_counts = out.pivot_table(index="date", columns="trade_readiness", values="market", aggfunc="count", fill_value=0)
-    date_index["high_conviction_count"] = readiness_counts.get("High conviction", 0).reindex(date_index["date"], fill_value=0).values
-    date_index["actionable_count"] = readiness_counts.get("Actionable", 0).reindex(date_index["date"], fill_value=0).values
-    date_index["cautious_count"] = readiness_counts.get("Cautious", 0).reindex(date_index["date"], fill_value=0).values
+    date_index = date_index.merge(strongest_bull, on="cot_report_date", how="left").merge(
+        strongest_bear, on="cot_report_date", how="left"
+    )
+    date_index["average_confluence_score"] = date_index["average_confluence_score"].round(2)
 
     for week in week_dates:
-        present = set(out[out["date"] == week]["market"].dropna().astype(str))
+        present = set(out[out["cot_report_date"].dt.date == week]["market"].dropna().astype(str))
         missing = sorted(set(TARGET_MARKETS) - present)
         for market in missing:
-            missing_targets_rows.append({"date": week, "market": market, "reason": "No COT record for target market on this week"})
-    missing_targets = pd.DataFrame(missing_targets_rows, columns=["date", "market", "reason"])
+            missing_targets_rows.append(
+                {"missing_target_market": market, "aliases_searched": market, "reason_if_known": "No COT record for this week"}
+            )
+    missing_targets = pd.DataFrame(
+        missing_targets_rows, columns=["missing_target_market", "aliases_searched", "reason_if_known"]
+    ).drop_duplicates()
 
-    cot_input_columns = [
-        "date",
-        "market",
-        "cot_bias",
-        "cot_score",
-        "cot_strength",
-        "managed_money_net",
-        "weekly_change",
-        "four_week_change",
-    ]
-    cot_input = out[cot_input_columns].copy()
-
-    macro_input_columns = [
-        "macro_snapshot_date",
-        "macro_signal",
-        "macro_score",
-        "macro_strength",
-        "macro_context_for_trades",
-    ]
-    for optional_col in ["rates_bias", "curve_context", "policy_pressure", "macro_summary"]:
-        if optional_col in macro.columns:
-            macro_input_columns.append(optional_col)
-    macro_input = macro[macro_input_columns].sort_values("macro_snapshot_date").reset_index(drop=True)
+    source_notes = pd.DataFrame(
+        [
+            ("cot_files_used", "; ".join(str(f) for f in cot_files)),
+            ("macro_files_used", "; ".join(str(f) for f in macro_files)),
+            ("macro_reconstruction_date_range", f"{macro['macro_snapshot_date'].min()} -> {macro['macro_snapshot_date'].max()}"),
+            ("confluence_date_range", f"{out['cot_report_date'].min()} -> {out['cot_report_date'].max()}"),
+            ("row_count", len(out)),
+            ("known_limitations", "Rows only emitted where both COT and as-of macro history are available."),
+        ],
+        columns=["field", "value"],
+    )
 
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
-        dashboard.to_excel(writer, sheet_name="Weekly_Dashboard", index=False)
-        weekly_blocks.to_excel(writer, sheet_name="Weekly_Blocks", index=False)
-        out.to_excel(writer, sheet_name="Confluence_History", index=False)
-        cot_input.to_excel(writer, sheet_name="COT_Input", index=False)
-        macro_input.to_excel(writer, sheet_name="Macro_Input", index=False)
+        dashboard.to_excel(writer, sheet_name="Confluence_Dashboard", index=False)
         date_index.to_excel(writer, sheet_name="Date_Index", index=False)
         missing_targets.to_excel(writer, sheet_name="Missing_Targets", index=False)
-        pd.DataFrame().to_excel(writer, sheet_name="Summary_Charts", index=False)
+        source_notes.to_excel(writer, sheet_name="Source_Notes", index=False)
 
     wb = load_workbook(output_path)
-    history_ws = wb["Confluence_History"]
-    dashboard_ws = wb["Weekly_Dashboard"]
-    weekly_blocks_ws = wb["Weekly_Blocks"]
-    cot_input_ws = wb["COT_Input"]
-    macro_input_ws = wb["Macro_Input"]
-    summary_ws = wb["Summary_Charts"]
+    dashboard_ws = wb["Confluence_Dashboard"]
+    date_index_ws = wb["Date_Index"]
     missing_targets_ws = wb["Missing_Targets"]
+    source_notes_ws = wb["Source_Notes"]
 
     def _format_table_sheet(ws) -> None:
         ws.freeze_panes = "A2"
@@ -614,7 +560,7 @@ def run() -> Path:
             width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
             ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
 
-    for ws in [dashboard_ws, history_ws, cot_input_ws, macro_input_ws, wb["Date_Index"], missing_targets_ws]:
+    for ws in [dashboard_ws, date_index_ws, missing_targets_ws, source_notes_ws]:
         _format_table_sheet(ws)
 
     green_fill = PatternFill(fill_type="solid", fgColor="C6EFCE")
@@ -623,8 +569,9 @@ def run() -> Path:
 
     def _apply_confluence_colors(ws) -> None:
         header_to_index = {cell.value: idx + 1 for idx, cell in enumerate(ws[1])}
-        score_col = header_to_index.get("combined_context_score")
-        alignment_col = header_to_index.get("cot_macro_alignment")
+        score_col = header_to_index.get("confluence_score")
+        readiness_col = header_to_index.get("trade_readiness")
+        bias_col = header_to_index.get("confluence_bias")
         if score_col:
             for row in range(2, ws.max_row + 1):
                 cell = ws.cell(row=row, column=score_col)
@@ -636,128 +583,29 @@ def run() -> Path:
                         cell.fill = amber_fill
                     else:
                         cell.fill = red_fill
-        if alignment_col:
+        if readiness_col:
             for row in range(2, ws.max_row + 1):
-                cell = ws.cell(row=row, column=alignment_col)
+                cell = ws.cell(row=row, column=readiness_col)
                 value = str(cell.value).strip()
-                if value == "Aligned":
+                if value == "High conviction":
                     cell.fill = green_fill
-                elif value == "Headwind":
+                elif value in {"Actionable", "Cautious"}:
                     cell.fill = amber_fill
-                elif value == "Hard Conflict":
+                elif value == "Stand down":
+                    cell.fill = red_fill
+        if bias_col:
+            for row in range(2, ws.max_row + 1):
+                cell = ws.cell(row=row, column=bias_col)
+                value = str(cell.value).strip()
+                if value in {"Long Bias", "Short Bias"}:
+                    cell.fill = green_fill
+                elif value in {"Long (Headwind)", "Short (Headwind)"}:
+                    cell.fill = amber_fill
+                elif value == "Conflicted":
                     cell.fill = red_fill
 
     _apply_confluence_colors(dashboard_ws)
-    _apply_confluence_colors(history_ws)
-
-    weekly_blocks_ws.delete_rows(1, weekly_blocks_ws.max_row)
-    weekly_blocks_ws["A1"] = "Weekly Blocks — All Weeks"
-    weekly_blocks_ws["A1"].font = Font(bold=True, size=14)
-    row_ptr = 3
-    for dt, grp in weekly_blocks.groupby("date", sort=True):
-        weekly_blocks_ws.cell(row=row_ptr, column=1, value=f"Week: {dt}")
-        weekly_blocks_ws.cell(row=row_ptr, column=1).font = Font(bold=True, size=13)
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=1, value="market")
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=2, value="combined_context_label")
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=3, value="combined_context_score")
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=4, value="cot_macro_alignment")
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=5, value="positioning_trend")
-        weekly_blocks_ws.cell(row=row_ptr + 1, column=6, value="confluence_read")
-        for c in range(1, 7):
-            weekly_blocks_ws.cell(row=row_ptr + 1, column=c).font = Font(bold=True)
-        row_ptr += 2
-        for _, r in grp.sort_values("market").iterrows():
-            weekly_blocks_ws.cell(row=row_ptr, column=1, value=r["market"])
-            weekly_blocks_ws.cell(row=row_ptr, column=2, value=r["combined_context_label"])
-            weekly_blocks_ws.cell(row=row_ptr, column=3, value=float(r["combined_context_score"]))
-            weekly_blocks_ws.cell(row=row_ptr, column=4, value=r["cot_macro_alignment"])
-            weekly_blocks_ws.cell(row=row_ptr, column=5, value=r["positioning_trend"])
-            weekly_blocks_ws.cell(row=row_ptr, column=6, value=r["confluence_read"])
-            score_cell = weekly_blocks_ws.cell(row=row_ptr, column=3)
-            if score_cell.value >= 8:
-                score_cell.fill = green_fill
-            elif score_cell.value >= 5:
-                score_cell.fill = amber_fill
-            else:
-                score_cell.fill = red_fill
-            row_ptr += 1
-        row_ptr += 1
-    for col_cells in weekly_blocks_ws.columns:
-        width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
-        weekly_blocks_ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
-
-    summary_ws["A1"] = f"Summary Charts — Latest Week {latest_date}"
-    summary_ws["A1"].font = Font(bold=True, size=14)
-
-    summary_ws["A3"] = "Market"
-    summary_ws["B3"] = "combined_context_score"
-    for idx, row in enumerate(dashboard.itertuples(index=False), start=4):
-        summary_ws.cell(row=idx, column=1, value=row.market)
-        summary_ws.cell(row=idx, column=2, value=row.combined_context_score)
-    for header_cell in summary_ws[3]:
-        header_cell.font = Font(bold=True)
-
-    bar_chart = BarChart()
-    bar_chart.title = f"Combined Context Score by Market ({latest_date})"
-    bar_chart.y_axis.title = "Score"
-    bar_chart.x_axis.title = "Market"
-    data = Reference(summary_ws, min_col=2, min_row=3, max_row=3 + len(dashboard))
-    categories = Reference(summary_ws, min_col=1, min_row=4, max_row=3 + len(dashboard))
-    bar_chart.add_data(data, titles_from_data=True)
-    bar_chart.set_categories(categories)
-    bar_chart.width = 12
-    bar_chart.height = 6
-    summary_ws.add_chart(bar_chart, "D3")
-
-    category_specs = [
-        ("combined_context_label", "Count by Combined Context Label", "A20", "D20"),
-        ("cot_macro_alignment", "Count by COT/Macro Alignment", "F20", "I20"),
-        ("macro_signal", "Count by Macro Signal", "A38", "D38"),
-    ]
-    for field, chart_title, start_cell, chart_cell in category_specs:
-        start_col = ord(start_cell[0]) - ord("A") + 1
-        start_row = int(start_cell[1:])
-        counts = dashboard[field].value_counts(dropna=False).sort_index()
-        summary_ws.cell(row=start_row, column=start_col, value=field)
-        summary_ws.cell(row=start_row, column=start_col + 1, value="count")
-        summary_ws.cell(row=start_row, column=start_col,).font = Font(bold=True)
-        summary_ws.cell(row=start_row, column=start_col + 1).font = Font(bold=True)
-        for r_offset, (label, cnt) in enumerate(counts.items(), start=1):
-            summary_ws.cell(row=start_row + r_offset, column=start_col, value=str(label))
-            summary_ws.cell(row=start_row + r_offset, column=start_col + 1, value=int(cnt))
-        count_chart = BarChart()
-        count_chart.title = chart_title
-        count_chart.y_axis.title = "Count"
-        count_chart.x_axis.title = field
-        count_data = Reference(
-            summary_ws, min_col=start_col + 1, min_row=start_row, max_row=start_row + len(counts)
-        )
-        count_categories = Reference(
-            summary_ws, min_col=start_col, min_row=start_row + 1, max_row=start_row + len(counts)
-        )
-        count_chart.add_data(count_data, titles_from_data=True)
-        count_chart.set_categories(count_categories)
-        count_chart.width = 10
-        count_chart.height = 6
-        summary_ws.add_chart(count_chart, chart_cell)
-
-    summary_ws["A52"] = "Chart Source Table (Latest Week)"
-    summary_ws["A52"].font = Font(bold=True)
-    source_cols = ["date", "market", "combined_context_score", "combined_context_label", "cot_macro_alignment", "macro_signal"]
-    for idx, col in enumerate(source_cols, start=1):
-        summary_ws.cell(row=53, column=idx, value=col).font = Font(bold=True)
-    for i, row in enumerate(latest_week_data[source_cols].sort_values("market").itertuples(index=False), start=54):
-        for j, value in enumerate(row, start=1):
-            summary_ws.cell(row=i, column=j, value=value)
-
-    dashboard_ws.insert_rows(1)
-    dashboard_ws["A1"] = f"Weekly Dashboard — {latest_date}"
-    dashboard_ws["A1"].font = Font(bold=True, size=14)
-    dashboard_ws.freeze_panes = "A3"
-
-    for col_cells in summary_ws.columns:
-        width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
-        summary_ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 45)
+    dashboard_ws.freeze_panes = "A2"
 
     wb.save(output_path)
 
@@ -768,12 +616,12 @@ def run() -> Path:
     print(f"Macro input files used ({macro_pattern}, sheet={macro_sheet}): {len(macro_files)}")
     for f in macro_files:
         print(f"  - {f}")
-    confluence_weeks = out["date"].nunique()
+    confluence_weeks = out["cot_report_date"].nunique()
     confluence_markets = out["market"].nunique()
     present_markets = set(out["market"].dropna().unique())
     missing_target_markets = sorted(set(TARGET_MARKETS) - present_markets)
 
-    print(f"Confluence date range: {out['date'].min()} -> {out['date'].max()}")
+    print(f"Confluence date range: {out['cot_report_date'].min()} -> {out['cot_report_date'].max()}")
     print(f"Number of weeks: {confluence_weeks}")
     print(f"Number of markets: {confluence_markets}")
     print(f"Rows exported: {len(out)}")
