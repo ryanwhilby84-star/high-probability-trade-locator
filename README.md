@@ -151,3 +151,41 @@ Run it with:
 ```bash
 python -m hptl.cot.run_update
 ```
+
+## Local historical confluence dashboard (React)
+
+A local-first, read-only historical review dashboard is available in `web-dashboard/`.
+
+### 1) Export latest confluence history to JSON
+
+This command finds the latest workbook matching `data/exports/confluence_history_*.xlsx`, reads the best-matching history sheet, and writes JSON to both:
+
+- `data/exports/confluence_history_latest.json`
+- `web-dashboard/public/data/confluence_history_latest.json`
+
+Run:
+
+```bash
+python -m hptl.history.export_confluence_json
+```
+
+### 2) Start the dashboard
+
+```bash
+cd web-dashboard
+npm install
+npm run dev
+```
+
+Then open the Vite local URL (typically `http://localhost:5173`).
+
+The dashboard includes:
+
+- Week/date selector
+- Market cards with confluence/COT/macro context
+- Market, bias, and readiness filters
+- Confluence and distribution charts
+- Per-market timeline for confluence, COT, and macro scores
+- Missing-market warning for required instruments
+
+Safety boundary remains unchanged: this dashboard is context-only and read-only (no execution features).
