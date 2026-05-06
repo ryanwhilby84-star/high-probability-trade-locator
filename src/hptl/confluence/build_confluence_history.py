@@ -4,6 +4,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from hptl.cot.exporter import _cot_strength
+
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import Font
@@ -89,48 +91,9 @@ def _discover_macro_files() -> list[Path]:
 def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     if cot_file.suffix.lower() == ".xlsx":
         workbook = load_workbook(cot_file, read_only=True, data_only=True)
-        available_sheets = workbook.sheetnames
-
-        def _read_with_header(sheet_name: str) -> tuple[pd.DataFrame, int | None]:
-            sheet_raw = pd.read_excel(cot_file, sheet_name=sheet_name, header=None)
-            sheet_header_idx = None
-            for idx, row in sheet_raw.iterrows():
-                if row.astype(str).str.strip().eq("Market").any():
-                    sheet_header_idx = idx
-                    break
-            return sheet_raw, sheet_header_idx
-
-        selected_sheet = None
-        raw = None
-        header_idx = None
-
-        for preferred in ("COT Cleaned", "Markets"):
-            if preferred in available_sheets:
-                raw, header_idx = _read_with_header(preferred)
-                if header_idx is not None:
-                    selected_sheet = preferred
-                    break
-
-        if selected_sheet is None:
-            fallback_sheets = [s for s in available_sheets if s != "Summary"]
-            if "Summary" in available_sheets:
-                fallback_sheets.append("Summary")
-
-            for sheet_name in fallback_sheets:
-                raw, header_idx = _read_with_header(sheet_name)
-                if header_idx is not None:
-                    selected_sheet = sheet_name
-                    break
-
-        if selected_sheet is None or raw is None or header_idx is None:
-            raise ValueError(f"Could not find 'Market' header row in any sheet of {cot_file}")
-
-        print(f"Selected COT sheet: {selected_sheet}")
-        print(f"Header row: {header_idx}")
-
-        header = raw.iloc[header_idx].astype(str).str.strip().tolist()
-        data = raw.iloc[header_idx + 1 :].copy()
-        data.columns = header
+        if "COT Cleaned" not in workbook.sheetnames:
+            raise ValueError(f"Expected sheet 'COT Cleaned' in {cot_file}. Found: {workbook.sheetnames}")
+        data = pd.read_excel(cot_file, sheet_name="COT Cleaned")
     else:
         data = pd.read_csv(cot_file)
 
@@ -138,32 +101,57 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     data = data.loc[:, ~data.columns.astype(str).str.startswith("Unnamed")]
     data.columns = [str(col).strip() for col in data.columns]
 
-    market_col = _find_column(data, "market")
-    date_col = _find_column(data, "cot_report_date", "report date", "date")
-    bias_col = _find_column(data, "cot_bias", "bias", "signal")
-    score_col = _find_column(data, "cot_score", "score")
-    strength_col = _find_column(data, "cot_strength", "strength")
+    market_col = _find_column(data, "market_and_exchange_names")
+    date_col = _find_column(data, "report_date_as_yyyy_mm_dd")
 
     if market_col is None:
-        raise ValueError(f"COT data missing market column in {cot_file}")
+        raise ValueError(f"COT data missing required column 'market_and_exchange_names' in {cot_file}")
     if date_col is None:
-        raise ValueError(f"COT data missing report date column in {cot_file}")
+        raise ValueError(f"COT data missing required column 'report_date_as_yyyy_mm_dd' in {cot_file}")
+
+    required_score_inputs = [
+        _find_column(data, "weekly_change"),
+        _find_column(data, "four_week_change"),
+        _find_column(data, "noncommercial_net"),
+        _find_column(data, "mm_weekly_change"),
+    ]
+    if any(col is None for col in required_score_inputs):
+        raise ValueError(
+            "Cannot compute COT scoring from raw cleaned columns in "
+            f"{cot_file}. Required scoring inputs are weekly_change, four_week_change, "
+            "noncommercial_net, and mm_weekly_change (as produced by hptl.cot.exporter._calculate_cot_scores)."
+        )
+
+    weekly_change_col, four_week_change_col, noncommercial_net_col, mm_weekly_change_col = required_score_inputs
 
     cleaned = pd.DataFrame()
     cleaned["market"] = data[market_col].astype(str).str.strip()
     cleaned["cot_report_date"] = pd.to_datetime(data[date_col], errors="coerce").dt.normalize()
-    cleaned["cot_bias"] = data[bias_col].apply(_clean_bias) if bias_col else "Neutral / Mixed"
-    cleaned["cot_score"] = pd.to_numeric(data[score_col], errors="coerce") if score_col else pd.NA
-    cleaned["cot_strength"] = data[strength_col].apply(_clean_strength) if strength_col else "Unknown"
+
+    c1 = pd.to_numeric(data[weekly_change_col], errors="coerce")
+    c4 = pd.to_numeric(data[four_week_change_col], errors="coerce")
+    managed_net = pd.to_numeric(data[noncommercial_net_col], errors="coerce")
+    m1 = pd.to_numeric(data[mm_weekly_change_col], errors="coerce")
+
+    bullish = c1 > 0
+    bearish = c1 < 0
+    cleaned["cot_bias"] = "Neutral / Mixed"
+    cleaned.loc[bullish, "cot_bias"] = "Bullish"
+    cleaned.loc[bearish, "cot_bias"] = "Bearish"
+
+    score = pd.Series(0, index=data.index, dtype="float64")
+    score.loc[bullish | bearish] = 2
+    score.loc[bullish & (c4 > 0)] += 2
+    score.loc[bullish & (managed_net < 0)] += 2
+    score.loc[bullish & (m1 < 0)] += 4
+    score.loc[bearish & (c4 < 0)] += 2
+    score.loc[bearish & (managed_net > 0)] += 2
+    score.loc[bearish & (m1 > 0)] += 4
+
+    cleaned["cot_score"] = score.clip(0, 10)
+    cleaned["cot_strength"] = cleaned["cot_score"].apply(lambda v: _cot_strength(int(v))).apply(_clean_strength)
 
     cleaned = cleaned[cleaned["market"].ne("") & cleaned["cot_report_date"].notna()].copy()
-
-    missing_score = cleaned["cot_score"].isna()
-    cleaned.loc[missing_score, "cot_score"] = pd.to_numeric(
-        cleaned.loc[missing_score, "cot_strength"].apply(_strength_to_score), errors="coerce"
-    )
-    cleaned["cot_score"] = pd.to_numeric(cleaned["cot_score"], errors="coerce").fillna(0).clip(0, 10)
-
     return cleaned
 
 
