@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill
+from openpyxl.chart import BarChart, Reference
 from openpyxl.utils import get_column_letter
 
 from hptl.cot.exporter import _calculate_cot_scores
@@ -151,7 +152,18 @@ def _load_cot_file(cot_file: Path) -> pd.DataFrame:
     scored["cot_strength"] = scored["cot_strength"].apply(_clean_strength)
     scored["cot_bias"] = scored["cot_bias"].apply(_clean_bias)
 
-    return scored[["market", "cot_report_date", "cot_bias", "cot_score", "cot_strength"]]
+    return scored[
+        [
+            "market",
+            "cot_report_date",
+            "cot_bias",
+            "cot_score",
+            "cot_strength",
+            "managed_money_net",
+            "weekly_change",
+            "four_week_change",
+        ]
+    ]
 
 
 def _load_cot_history(cot_files: list[Path]) -> pd.DataFrame:
@@ -426,10 +438,10 @@ def run() -> Path:
     final_columns = [
         "date",
         "market",
+        "combined_context_label",
+        "combined_context_score",
         "cot_macro_alignment",
         "macro_effect_on_cot",
-        "combined_context_score",
-        "combined_context_label",
         "positioning_trend",
         "confluence_read",
         "cot_bias",
@@ -440,6 +452,12 @@ def run() -> Path:
         "macro_score",
         "macro_strength",
         "macro_context_for_trades",
+        "managed_money_net",
+        "weekly_change",
+        "four_week_change",
+        "_cot_source",
+        "_macro_source",
+        "macro_alignment_gap_days",
         "confluence_bias",
         "confluence_score",
         "confluence_strength",
@@ -452,51 +470,167 @@ def run() -> Path:
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = EXPORT_DIR / f"confluence_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
 
-    out.to_excel(output_path, sheet_name="Confluence_History", index=False)
+    latest_date = out["date"].max()
+    dashboard_columns = [
+        "date",
+        "market",
+        "combined_context_label",
+        "combined_context_score",
+        "cot_macro_alignment",
+        "macro_effect_on_cot",
+        "positioning_trend",
+        "confluence_read",
+        "cot_bias",
+        "cot_score",
+        "cot_strength",
+        "macro_signal",
+        "macro_score",
+        "macro_strength",
+        "macro_context_for_trades",
+    ]
+    dashboard = out[out["date"] == latest_date][dashboard_columns].sort_values("market").reset_index(drop=True)
+
+    cot_input_columns = [
+        "date",
+        "market",
+        "cot_bias",
+        "cot_score",
+        "cot_strength",
+        "managed_money_net",
+        "weekly_change",
+        "four_week_change",
+    ]
+    cot_input = out[cot_input_columns].copy()
+
+    macro_input_columns = [
+        "macro_snapshot_date",
+        "macro_signal",
+        "macro_score",
+        "macro_strength",
+        "macro_context_for_trades",
+    ]
+    for optional_col in ["rates_bias", "curve_context", "policy_pressure", "macro_summary"]:
+        if optional_col in macro.columns:
+            macro_input_columns.append(optional_col)
+    macro_input = macro[macro_input_columns].sort_values("macro_snapshot_date").reset_index(drop=True)
+
+    with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+        dashboard.to_excel(writer, sheet_name="Confluence_Dashboard", index=False)
+        out.to_excel(writer, sheet_name="Confluence_History", index=False)
+        cot_input.to_excel(writer, sheet_name="COT_Input", index=False)
+        macro_input.to_excel(writer, sheet_name="Macro_Input", index=False)
+        pd.DataFrame().to_excel(writer, sheet_name="Summary_Charts", index=False)
 
     wb = load_workbook(output_path)
-    ws = wb["Confluence_History"]
+    history_ws = wb["Confluence_History"]
+    dashboard_ws = wb["Confluence_Dashboard"]
+    cot_input_ws = wb["COT_Input"]
+    macro_input_ws = wb["Macro_Input"]
+    summary_ws = wb["Summary_Charts"]
 
-    ws.freeze_panes = "A2"
-    ws.auto_filter.ref = ws.dimensions
+    def _format_table_sheet(ws) -> None:
+        ws.freeze_panes = "A2"
+        ws.auto_filter.ref = ws.dimensions
+        for cell in ws[1]:
+            cell.font = Font(bold=True)
+        for col_cells in ws.columns:
+            width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
+            ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
 
-    for cell in ws[1]:
-        cell.font = Font(bold=True)
-
-    for col_cells in ws.columns:
-        width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
-        ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
+    for ws in [dashboard_ws, history_ws, cot_input_ws, macro_input_ws]:
+        _format_table_sheet(ws)
 
     green_fill = PatternFill(fill_type="solid", fgColor="C6EFCE")
     amber_fill = PatternFill(fill_type="solid", fgColor="FFEB9C")
     red_fill = PatternFill(fill_type="solid", fgColor="FFC7CE")
 
-    header_to_index = {cell.value: idx + 1 for idx, cell in enumerate(ws[1])}
-    score_col = header_to_index.get("combined_context_score")
-    alignment_col = header_to_index.get("cot_macro_alignment")
-
-    if score_col:
-        for row in range(2, ws.max_row + 1):
-            cell = ws.cell(row=row, column=score_col)
-            value = cell.value
-            if isinstance(value, (int, float)):
-                if value >= 8:
+    def _apply_confluence_colors(ws) -> None:
+        header_to_index = {cell.value: idx + 1 for idx, cell in enumerate(ws[1])}
+        score_col = header_to_index.get("combined_context_score")
+        alignment_col = header_to_index.get("cot_macro_alignment")
+        if score_col:
+            for row in range(2, ws.max_row + 1):
+                cell = ws.cell(row=row, column=score_col)
+                value = cell.value
+                if isinstance(value, (int, float)):
+                    if value >= 8:
+                        cell.fill = green_fill
+                    elif value >= 5:
+                        cell.fill = amber_fill
+                    else:
+                        cell.fill = red_fill
+        if alignment_col:
+            for row in range(2, ws.max_row + 1):
+                cell = ws.cell(row=row, column=alignment_col)
+                value = str(cell.value).strip()
+                if value == "Aligned":
                     cell.fill = green_fill
-                elif value >= 5:
+                elif value == "Headwind":
                     cell.fill = amber_fill
-                else:
+                elif value == "Hard Conflict":
                     cell.fill = red_fill
 
-    if alignment_col:
-        for row in range(2, ws.max_row + 1):
-            cell = ws.cell(row=row, column=alignment_col)
-            value = str(cell.value).strip()
-            if value == "Aligned":
-                cell.fill = green_fill
-            elif value == "Headwind":
-                cell.fill = amber_fill
-            elif value == "Hard Conflict":
-                cell.fill = red_fill
+    _apply_confluence_colors(dashboard_ws)
+    _apply_confluence_colors(history_ws)
+
+    summary_ws["A1"] = "Dashboard uses latest available date. Historical rows can be filtered by date in Confluence_History."
+    summary_ws["A1"].font = Font(bold=True)
+
+    summary_ws["A3"] = "Market"
+    summary_ws["B3"] = "combined_context_score"
+    for idx, row in enumerate(dashboard.itertuples(index=False), start=4):
+        summary_ws.cell(row=idx, column=1, value=row.market)
+        summary_ws.cell(row=idx, column=2, value=row.combined_context_score)
+    for header_cell in summary_ws[3]:
+        header_cell.font = Font(bold=True)
+
+    bar_chart = BarChart()
+    bar_chart.title = f"Combined Context Score by Market ({latest_date})"
+    bar_chart.y_axis.title = "Score"
+    bar_chart.x_axis.title = "Market"
+    data = Reference(summary_ws, min_col=2, min_row=3, max_row=3 + len(dashboard))
+    categories = Reference(summary_ws, min_col=1, min_row=4, max_row=3 + len(dashboard))
+    bar_chart.add_data(data, titles_from_data=True)
+    bar_chart.set_categories(categories)
+    bar_chart.width = 12
+    bar_chart.height = 6
+    summary_ws.add_chart(bar_chart, "D3")
+
+    category_specs = [
+        ("combined_context_label", "Combined Context Label Counts", "A20", "D20"),
+        ("cot_macro_alignment", "COT/Macro Alignment Counts", "F20", "I20"),
+        ("macro_signal", "Macro Signal Counts", "A38", "D38"),
+    ]
+    for field, chart_title, start_cell, chart_cell in category_specs:
+        start_col = ord(start_cell[0]) - ord("A") + 1
+        start_row = int(start_cell[1:])
+        counts = dashboard[field].value_counts(dropna=False).sort_index()
+        summary_ws.cell(row=start_row, column=start_col, value=field)
+        summary_ws.cell(row=start_row, column=start_col + 1, value="count")
+        summary_ws.cell(row=start_row, column=start_col,).font = Font(bold=True)
+        summary_ws.cell(row=start_row, column=start_col + 1).font = Font(bold=True)
+        for r_offset, (label, cnt) in enumerate(counts.items(), start=1):
+            summary_ws.cell(row=start_row + r_offset, column=start_col, value=str(label))
+            summary_ws.cell(row=start_row + r_offset, column=start_col + 1, value=int(cnt))
+        count_chart = BarChart()
+        count_chart.title = chart_title
+        count_chart.y_axis.title = "Count"
+        count_chart.x_axis.title = field
+        count_data = Reference(
+            summary_ws, min_col=start_col + 1, min_row=start_row, max_row=start_row + len(counts)
+        )
+        count_categories = Reference(
+            summary_ws, min_col=start_col, min_row=start_row + 1, max_row=start_row + len(counts)
+        )
+        count_chart.add_data(count_data, titles_from_data=True)
+        count_chart.set_categories(count_categories)
+        count_chart.width = 10
+        count_chart.height = 6
+        summary_ws.add_chart(count_chart, chart_cell)
+
+    for col_cells in summary_ws.columns:
+        width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
+        summary_ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 45)
 
     wb.save(output_path)
 
