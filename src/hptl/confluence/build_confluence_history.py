@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,9 @@ from openpyxl.chart import BarChart, Reference
 from openpyxl.utils import get_column_letter
 
 from hptl.cot.exporter import _calculate_cot_scores
+from hptl.cot.downloader import download_latest_cot
+from hptl.cot.parser import parse_cot_file
+from hptl.config import get_settings
 
 EXPORT_DIR = Path("data/exports")
 PROCESSED_DIR = Path("data/processed")
@@ -30,6 +34,7 @@ INDEX_MARKETS_TO_WARN = {
     "NASDAQ 100 STOCK INDEX - CHICAGO MERCANTILE EXCHANGE",
     "S&P 500 CONSOLIDATED - CHICAGO MERCANTILE EXCHANGE",
 }
+HISTORY_START_DATE = pd.Timestamp("2023-01-01")
 
 
 def _normalize_column_name(col: str) -> str:
@@ -84,6 +89,29 @@ def _discover_cot_files() -> list[Path]:
     if not files:
         raise FileNotFoundError("No COT history inputs found. Expected data/processed/cot_cleaned_*.csv")
     return files
+
+
+def _ensure_cot_backfill(start_year: int = 2023) -> None:
+    """Safely ensure annual COT cleaned files exist from start_year to current year."""
+    current_year = datetime.utcnow().year
+    settings = get_settings()
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
+    for year in range(start_year, current_year + 1):
+        existing = list(PROCESSED_DIR.glob(f"cot_cleaned_{year}*.csv"))
+        if existing:
+            continue
+        year_settings = replace(settings, cot_year=year)
+        print(f"Backfill: downloading COT annual file for {year}")
+        try:
+            download = download_latest_cot(year_settings)
+            parsed = parse_cot_file(download.raw_file_path)
+            cleaned_path = PROCESSED_DIR / f"cot_cleaned_{year}_backfill.csv"
+            parsed.to_csv(cleaned_path, index=False)
+            print(f"Backfill: wrote {cleaned_path}")
+        except Exception as exc:
+            print(f"WARNING: Backfill failed for {year}: {exc}")
+            print("Continuing with already available local COT files.")
 
 
 def _discover_macro_files() -> tuple[list[Path], str, str]:
@@ -380,6 +408,7 @@ def run() -> Path:
     print("Confluence history build started")
     print("=" * 70)
 
+    _ensure_cot_backfill(start_year=2023)
     cot_files = _discover_cot_files()
     macro_files, macro_sheet, macro_pattern = _discover_macro_files()
 
@@ -466,6 +495,7 @@ def run() -> Path:
     ]
 
     out = out[final_columns].sort_values(["date", "market"]).reset_index(drop=True)
+    out = out[out["date"] >= HISTORY_START_DATE.date()].copy()
 
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = EXPORT_DIR / f"confluence_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
@@ -489,6 +519,31 @@ def run() -> Path:
         "macro_context_for_trades",
     ]
     dashboard = out[out["date"] == latest_date][dashboard_columns].sort_values("market").reset_index(drop=True)
+
+    weekly_blocks = out[["date", "market", "combined_context_label", "combined_context_score", "confluence_read"]].copy()
+
+    date_index = (
+        out.groupby("date", as_index=False)
+        .agg(
+            markets_count=("market", "nunique"),
+            average_combined_context_score=("combined_context_score", "mean"),
+        )
+        .sort_values("date")
+    )
+    strongest_bull = (
+        out[out["combined_context_label"].str.contains("Bullish", na=False)]
+        .sort_values(["date", "combined_context_score"], ascending=[True, False])
+        .drop_duplicates("date")[["date", "market", "combined_context_label", "combined_context_score"]]
+        .rename(columns={"market": "strongest_bullish_market", "combined_context_label": "strongest_bullish_context_label", "combined_context_score": "strongest_bullish_score"})
+    )
+    strongest_bear = (
+        out[out["combined_context_label"].str.contains("Bearish", na=False)]
+        .sort_values(["date", "combined_context_score"], ascending=[True, True])
+        .drop_duplicates("date")[["date", "market", "combined_context_label", "combined_context_score"]]
+        .rename(columns={"market": "strongest_bearish_market", "combined_context_label": "strongest_bearish_context_label", "combined_context_score": "strongest_bearish_score"})
+    )
+    date_index = date_index.merge(strongest_bull, on="date", how="left").merge(strongest_bear, on="date", how="left")
+    date_index["average_combined_context_score"] = date_index["average_combined_context_score"].round(2)
 
     cot_input_columns = [
         "date",
@@ -515,15 +570,18 @@ def run() -> Path:
     macro_input = macro[macro_input_columns].sort_values("macro_snapshot_date").reset_index(drop=True)
 
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
-        dashboard.to_excel(writer, sheet_name="Confluence_Dashboard", index=False)
+        dashboard.to_excel(writer, sheet_name="Weekly_Dashboard", index=False)
+        weekly_blocks.to_excel(writer, sheet_name="Weekly_Blocks", index=False)
         out.to_excel(writer, sheet_name="Confluence_History", index=False)
         cot_input.to_excel(writer, sheet_name="COT_Input", index=False)
         macro_input.to_excel(writer, sheet_name="Macro_Input", index=False)
+        date_index.to_excel(writer, sheet_name="Date_Index", index=False)
         pd.DataFrame().to_excel(writer, sheet_name="Summary_Charts", index=False)
 
     wb = load_workbook(output_path)
     history_ws = wb["Confluence_History"]
-    dashboard_ws = wb["Confluence_Dashboard"]
+    dashboard_ws = wb["Weekly_Dashboard"]
+    weekly_blocks_ws = wb["Weekly_Blocks"]
     cot_input_ws = wb["COT_Input"]
     macro_input_ws = wb["Macro_Input"]
     summary_ws = wb["Summary_Charts"]
@@ -537,7 +595,7 @@ def run() -> Path:
             width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
             ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
 
-    for ws in [dashboard_ws, history_ws, cot_input_ws, macro_input_ws]:
+    for ws in [dashboard_ws, history_ws, cot_input_ws, macro_input_ws, wb["Date_Index"]]:
         _format_table_sheet(ws)
 
     green_fill = PatternFill(fill_type="solid", fgColor="C6EFCE")
@@ -573,7 +631,39 @@ def run() -> Path:
     _apply_confluence_colors(dashboard_ws)
     _apply_confluence_colors(history_ws)
 
-    summary_ws["A1"] = "Dashboard uses latest available date. Historical rows can be filtered by date in Confluence_History."
+    weekly_blocks_ws.delete_rows(1, weekly_blocks_ws.max_row)
+    weekly_blocks_ws["A1"] = "Weekly grouped context blocks"
+    weekly_blocks_ws["A1"].font = Font(bold=True)
+    row_ptr = 3
+    for dt, grp in weekly_blocks.groupby("date", sort=True):
+        weekly_blocks_ws.cell(row=row_ptr, column=1, value=f"Week: {dt}")
+        weekly_blocks_ws.cell(row=row_ptr, column=1).font = Font(bold=True)
+        weekly_blocks_ws.cell(row=row_ptr + 1, column=1, value="market")
+        weekly_blocks_ws.cell(row=row_ptr + 1, column=2, value="combined_context_label")
+        weekly_blocks_ws.cell(row=row_ptr + 1, column=3, value="combined_context_score")
+        weekly_blocks_ws.cell(row=row_ptr + 1, column=4, value="confluence_read")
+        for c in range(1, 5):
+            weekly_blocks_ws.cell(row=row_ptr + 1, column=c).font = Font(bold=True)
+        row_ptr += 2
+        for _, r in grp.sort_values("market").iterrows():
+            weekly_blocks_ws.cell(row=row_ptr, column=1, value=r["market"])
+            weekly_blocks_ws.cell(row=row_ptr, column=2, value=r["combined_context_label"])
+            weekly_blocks_ws.cell(row=row_ptr, column=3, value=float(r["combined_context_score"]))
+            weekly_blocks_ws.cell(row=row_ptr, column=4, value=r["confluence_read"])
+            score_cell = weekly_blocks_ws.cell(row=row_ptr, column=3)
+            if score_cell.value >= 8:
+                score_cell.fill = green_fill
+            elif score_cell.value >= 5:
+                score_cell.fill = amber_fill
+            else:
+                score_cell.fill = red_fill
+            row_ptr += 1
+        row_ptr += 1
+    for col_cells in weekly_blocks_ws.columns:
+        width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
+        weekly_blocks_ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
+
+    summary_ws["A1"] = f"Summary for week: {latest_date}"
     summary_ws["A1"].font = Font(bold=True)
 
     summary_ws["A3"] = "Market"
@@ -641,8 +731,22 @@ def run() -> Path:
     print(f"Macro input files used ({macro_pattern}, sheet={macro_sheet}): {len(macro_files)}")
     for f in macro_files:
         print(f"  - {f}")
-    print(f"Date range covered: {out['date'].min()} -> {out['date'].max()}")
+    confluence_weeks = out["date"].nunique()
+    confluence_markets = out["market"].nunique()
+    present_markets = set(out["market"].dropna().unique())
+    required = HPTL_TARGET_MARKETS | INDEX_MARKETS_TO_WARN
+    missing_targets = sorted(required - present_markets)
+
+    print(f"Confluence date range: {out['date'].min()} -> {out['date'].max()}")
+    print(f"Number of weeks: {confluence_weeks}")
+    print(f"Number of markets: {confluence_markets}")
     print(f"Rows exported: {len(out)}")
+    if missing_targets:
+        print("Missing target markets:")
+        for market in missing_targets:
+            print(f"  - {market}")
+    else:
+        print("Missing target markets: none")
     print(f"Output file path: {output_path}")
     print("=" * 70)
 
