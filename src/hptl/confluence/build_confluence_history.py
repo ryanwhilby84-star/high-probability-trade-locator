@@ -6,7 +6,7 @@ from typing import Any
 
 import pandas as pd
 from openpyxl import load_workbook
-from openpyxl.styles import Font
+from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from hptl.cot.exporter import _calculate_cot_scores
@@ -68,6 +68,14 @@ def _macro_alignment_adjustment(score: float) -> int:
     if score <= 7:
         return 3
     return 4
+
+
+def _macro_signal_label(signal: str) -> str:
+    if signal == "risk_on":
+        return "risk-on"
+    if signal == "risk_off":
+        return "risk-off"
+    return "neutral"
 
 
 def _discover_cot_files() -> list[Path]:
@@ -253,6 +261,7 @@ def _load_macro_history(macro_files: list[Path], sheet_name: str) -> pd.DataFram
 def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_score: float) -> dict[str, Any]:
     cot_dir = "long" if cot_bias == "Bullish" else "short" if cot_bias == "Bearish" else "neutral"
     macro_dir = "long" if macro_signal == "risk_on" else "short" if macro_signal == "risk_off" else "neutral"
+    macro_label = _macro_signal_label(macro_signal)
 
     hard_conflict = (
         cot_dir in {"long", "short"}
@@ -264,16 +273,25 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
 
     if hard_conflict:
         return {
+            "cot_macro_alignment": "Hard Conflict",
+            "macro_effect_on_cot": "Blocking",
+            "combined_context_score": 0,
+            "combined_context_label": "Conflicted / Stand Down",
             "confluence_bias": "Conflicted / No Trade",
             "confluence_score": 0,
             "confluence_strength": "Blocked",
             "trade_readiness": "Stand down",
+            "confluence_read": (
+                f"Managed money is {cot_bias.lower()} but macro is {macro_label}, creating a hard conflict with "
+                "high-conviction context on both sides."
+            ),
             "summary": f"COT {cot_bias} ({cot_score}) conflicts with macro {macro_signal} ({macro_score}) at high conviction.",
         }
 
     score = cot_score
 
-    if cot_dir in {"long", "short"} and macro_dir in {"long", "short"}:
+    directional_macro = cot_dir in {"long", "short"} and macro_dir in {"long", "short"}
+    if directional_macro:
         delta = _macro_alignment_adjustment(macro_score)
         score = score + delta if cot_dir == macro_dir else score - delta
 
@@ -303,11 +321,44 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
         strength = "Weak"
         readiness = "Low conviction"
 
+    if cot_dir == "neutral" or macro_dir == "neutral":
+        cot_macro_alignment = "Neutral / Mixed"
+        macro_effect_on_cot = "Neutral"
+    elif cot_dir == macro_dir:
+        cot_macro_alignment = "Aligned"
+        macro_effect_on_cot = "Boosting"
+    else:
+        cot_macro_alignment = "Headwind"
+        macro_effect_on_cot = "Reducing"
+
+    if score >= 9:
+        combined_context_label = "Very Strong Bullish Context" if cot_dir == "long" else "Very Strong Bearish Context"
+    elif score >= 7:
+        combined_context_label = "Strong Bullish Context" if cot_dir == "long" else "Strong Bearish Context"
+    elif score >= 5:
+        combined_context_label = "Moderate Bullish Context" if cot_dir == "long" else "Moderate Bearish Context"
+    else:
+        combined_context_label = "Weak / Neutral Context"
+
+    if cot_dir == "neutral":
+        confluence_read = f"Managed money positioning is neutral/mixed and macro is {macro_label}, leaving unclear directional context."
+    elif cot_macro_alignment == "Aligned":
+        confluence_read = f"Managed money is {cot_bias.lower()} and macro is {macro_label}, giving supportive {cot_dir}-side context."
+    elif cot_macro_alignment == "Headwind":
+        confluence_read = f"Managed money is {cot_bias.lower()} but macro is {macro_label}, so {cot_dir}-side context faces macro headwind."
+    else:
+        confluence_read = f"Managed money is {cot_bias.lower()} while macro is {macro_label}, resulting in mixed context."
+
     return {
+        "cot_macro_alignment": cot_macro_alignment,
+        "macro_effect_on_cot": macro_effect_on_cot,
+        "combined_context_score": score,
+        "combined_context_label": combined_context_label,
         "confluence_bias": bias,
         "confluence_score": score,
         "confluence_strength": strength,
         "trade_readiness": readiness,
+        "confluence_read": confluence_read,
         "summary": f"COT {cot_bias} ({cot_score}) vs macro {macro_signal} ({macro_score}) => {bias} {score:.1f}.",
     }
 
@@ -365,10 +416,22 @@ def run() -> Path:
 
     out = pd.concat([aligned, confluence_bits], axis=1)
     out["date"] = out["cot_report_date"].dt.date
+    out = out.sort_values(["market", "cot_report_date"]).reset_index(drop=True)
+    cot_score_change = out.groupby("market", sort=False)["cot_score"].diff(1)
+    out["positioning_trend"] = "Flat / Unclear"
+    out.loc[cot_score_change.isna(), "positioning_trend"] = "New / Insufficient History"
+    out.loc[cot_score_change >= 1.0, "positioning_trend"] = "Strengthening"
+    out.loc[cot_score_change <= -1.0, "positioning_trend"] = "Weakening"
 
     final_columns = [
         "date",
         "market",
+        "cot_macro_alignment",
+        "macro_effect_on_cot",
+        "combined_context_score",
+        "combined_context_label",
+        "positioning_trend",
+        "confluence_read",
         "cot_bias",
         "cot_score",
         "cot_strength",
@@ -403,6 +466,37 @@ def run() -> Path:
     for col_cells in ws.columns:
         width = max(len(str(c.value)) if c.value is not None else 0 for c in col_cells)
         ws.column_dimensions[get_column_letter(col_cells[0].column)].width = min(width + 2, 80)
+
+    green_fill = PatternFill(fill_type="solid", fgColor="C6EFCE")
+    amber_fill = PatternFill(fill_type="solid", fgColor="FFEB9C")
+    red_fill = PatternFill(fill_type="solid", fgColor="FFC7CE")
+
+    header_to_index = {cell.value: idx + 1 for idx, cell in enumerate(ws[1])}
+    score_col = header_to_index.get("combined_context_score")
+    alignment_col = header_to_index.get("cot_macro_alignment")
+
+    if score_col:
+        for row in range(2, ws.max_row + 1):
+            cell = ws.cell(row=row, column=score_col)
+            value = cell.value
+            if isinstance(value, (int, float)):
+                if value >= 8:
+                    cell.fill = green_fill
+                elif value >= 5:
+                    cell.fill = amber_fill
+                else:
+                    cell.fill = red_fill
+
+    if alignment_col:
+        for row in range(2, ws.max_row + 1):
+            cell = ws.cell(row=row, column=alignment_col)
+            value = str(cell.value).strip()
+            if value == "Aligned":
+                cell.fill = green_fill
+            elif value == "Headwind":
+                cell.fill = amber_fill
+            elif value == "Hard Conflict":
+                cell.fill = red_fill
 
     wb.save(output_path)
 
