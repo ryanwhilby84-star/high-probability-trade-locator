@@ -70,7 +70,10 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns in {workbook.name}:{sheet_name}: {missing}")
 
-    df["cot_report_date"] = pd.to_datetime(df["cot_report_date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    date_like_columns = ["cot_report_date", "date", "macro_snapshot_date"]
+    for col in date_like_columns:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime("%Y-%m-%d")
     df["confluence_score"] = pd.to_numeric(df["confluence_score"], errors="coerce")
     df["cot_score"] = pd.to_numeric(df["cot_score"], errors="coerce")
     df["macro_score"] = pd.to_numeric(df["macro_score"], errors="coerce")
@@ -98,10 +101,10 @@ def run(input_path: str | None = None) -> Path:
     }
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
 
     PUBLIC_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
 
     print(f"Wrote {OUTPUT_PATH}")
     print(f"Wrote {PUBLIC_OUTPUT_PATH}")
