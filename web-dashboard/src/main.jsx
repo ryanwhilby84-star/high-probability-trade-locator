@@ -13,7 +13,7 @@ const canonical = (market='') => {
   for (const x of ['gold','silver','copper','crude oil','natural gas','corn','soybeans','wheat','coffee','cocoa']) if (m.includes(x)) return x.replace(/\b\w/g,c=>c.toUpperCase())
   return market
 }
-const rowDate = (r={}) => r.date || r.cot_report_date || ''
+const rowDate = (r={}) => r.date || ''
 
 function App(){
   const [data,setData]=React.useState([]); const [date,setDate]=React.useState(''); const [market,setMarket]=React.useState('');
@@ -23,14 +23,16 @@ function App(){
     fetch('/data/confluence_history_latest.json')
       .then(r=>r.json())
       .then(j=>{
-        const rows = Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : [])
+        const rows = Array.isArray(j?.records) ? j.records : []
+        console.log('Loaded rows:', rows.length)
+        console.log(rows[0])
         setData(rows)
-        const ds=[...new Set(rows.map(rowDate).filter(Boolean))].sort()
+        const ds=[...new Set(rows.map(rowDate).filter(Boolean))].sort((a,b)=>a.localeCompare(b))
         setDate(ds.at(-1)||'')
       })
   },[])
 
-  const dates=React.useMemo(()=>[...new Set(data.map(rowDate).filter(Boolean))].sort(),[data])
+  const dates=React.useMemo(()=>[...new Set(data.map(rowDate).filter(Boolean))].sort((a,b)=>a.localeCompare(b)),[data])
   const week=React.useMemo(()=>data.filter(r=>rowDate(r)===date).map(r=>({...r,market_key:canonical(r.market)})),[data,date])
   React.useEffect(()=>{if(!market && week[0]) setMarket(week[0].market)},[week,market])
 
@@ -49,7 +51,7 @@ function App(){
     <Chart title='Trade Readiness Distribution'><BarChart data={counts('trade_readiness')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#f6ad55'/></BarChart></Chart>
     <Chart title='Confluence Bias Distribution'><BarChart data={counts('confluence_bias')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#90cdf4'/></BarChart></Chart>
   </div>
-  <div className='timeline'><h2>Timeline: {market || 'Select market'}</h2><Chart title='Weekly Story'><LineChart data={series}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='cot_report_date'/><YAxis domain={[0,10]}/><Tooltip/><Legend/><Line dataKey='confluence_score' stroke='#4fd1c5'/><Line dataKey='cot_score' stroke='#f6ad55'/><Line dataKey='macro_score' stroke='#90cdf4'/></LineChart></Chart></div>
+  <div className='timeline'><h2>Timeline: {market || 'Select market'}</h2><Chart title='Weekly Story'><LineChart data={series}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='date'/><YAxis domain={[0,10]}/><Tooltip/><Legend/><Line dataKey='confluence_score' stroke='#4fd1c5'/><Line dataKey='cot_score' stroke='#f6ad55'/><Line dataKey='macro_score' stroke='#90cdf4'/></LineChart></Chart></div>
   </div>
 }
 const Chart=({title,children})=><div className='panel'><h3>{title}</h3><ResponsiveContainer width='100%' height={280}>{children}</ResponsiveContainer></div>
