@@ -80,6 +80,9 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
 
     df = df[df["cot_report_date"].notna()].copy()
     df = df.sort_values(["cot_report_date", "market"]).reset_index(drop=True)
+
+    df = df.replace([float("inf"), float("-inf")], pd.NA)
+    df = df.where(pd.notna(df), None)
     return df
 
 
@@ -101,10 +104,12 @@ def run(input_path: str | None = None) -> Path:
     }
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    json_output = json.dumps(payload, indent=2, default=str, allow_nan=False)
+
+    OUTPUT_PATH.write_text(json_output, encoding="utf-8")
 
     PUBLIC_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    PUBLIC_OUTPUT_PATH.write_text(json_output, encoding="utf-8")
 
     print(f"Wrote {OUTPUT_PATH}")
     print(f"Wrote {PUBLIC_OUTPUT_PATH}")
