@@ -10,6 +10,7 @@ from openpyxl.chart import BarChart, Reference
 from openpyxl.formatting.rule import CellIsRule, FormulaRule
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
+from hptl.history.export_confluence_json import run as export_dashboard_json
 
 EXPORT_DIR = Path("data/exports")
 PROCESSED_DIR = Path("data/processed")
@@ -415,6 +416,8 @@ def run() -> None:
     wb.save(output_path)
 
     print(f"Output path saved: {output_path}")
+    dashboard_json_path = export_dashboard_json()
+    print(f"Dashboard JSON refreshed from historical workbook: {dashboard_json_path}")
 
 
 if __name__ == "__main__":

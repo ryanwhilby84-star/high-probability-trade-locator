@@ -9,7 +9,6 @@ from pathlib import Path
 import pandas as pd
 
 EXPORTS_DIR = Path("data/exports")
-OUTPUT_PATH = EXPORTS_DIR / "confluence_history_latest.json"
 PUBLIC_OUTPUT_PATH = Path("web-dashboard/public/data/confluence_history_latest.json")
 
 
@@ -127,26 +126,32 @@ def run(input_path: str | None = None) -> Path:
 
     data = _load_and_clean(workbook, sheet)
 
+    records = data[REQUIRED_COLUMNS].copy()
+    records["macro_regime"] = records["macro_signal"]
+    records["final_bias"] = records["confluence_bias"]
+    records["final_score"] = records["confluence_score"]
+    records["readiness_label"] = records["trade_readiness"]
+    latest_report_date = records["cot_report_date"].dropna().max() if not records.empty else None
+
     payload = {
-        "generated_at_utc": datetime.utcnow().isoformat() + "Z",
-        "source_workbook": str(workbook),
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "latest_report_date": latest_report_date,
+        "total_rows": int(len(records)),
+        "source_files_used": [str(workbook)],
         "source_sheet": sheet,
-        "row_count": int(len(data)),
-        "records": data[REQUIRED_COLUMNS].to_dict(orient="records"),
+        "records": records.to_dict(orient="records"),
     }
     payload = _sanitize_json_values(payload)
-
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, allow_nan=False, default=str), encoding="utf-8")
 
     PUBLIC_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, allow_nan=False, default=str), encoding="utf-8")
 
-    print(f"Row count exported: {len(data)}")
-    print(f"Output path 1: {OUTPUT_PATH}")
-    print(f"Output path 2: {PUBLIC_OUTPUT_PATH}")
+    print("Dashboard JSON written: yes")
+    print(f"Output path: {PUBLIC_OUTPUT_PATH}")
+    print(f"Row count: {len(records)}")
+    print(f"Latest report date: {latest_report_date}")
     print("Confirm: valid JSON written")
-    return OUTPUT_PATH
+    return PUBLIC_OUTPUT_PATH
 
 
 def _parse_args() -> argparse.Namespace:
