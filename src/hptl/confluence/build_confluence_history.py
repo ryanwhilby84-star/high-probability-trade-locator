@@ -420,6 +420,37 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
     }
 
 
+
+
+def _build_market_diagnostics(cot: pd.DataFrame, out: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    by_market = (
+        cot.groupby("market", as_index=False)
+        .agg(
+            total_rows=("cot_report_date", "size"),
+            first_report_date=("cot_report_date", "min"),
+            last_report_date=("cot_report_date", "max"),
+            latest_available_report_date=("cot_report_date", "max"),
+        )
+        .sort_values("market")
+    )
+
+    date_counts = (
+        out.groupby("cot_report_date", as_index=False)
+        .agg(rows_on_date=("market", "size"), markets_present=("market", lambda s: ", ".join(sorted(set(s)))))
+        .sort_values("cot_report_date")
+    )
+
+    all_markets = sorted(set(cot["market"].dropna().astype(str)))
+    missing_rows = []
+    for week in sorted(out["cot_report_date"].dropna().dt.date.unique()):
+        present = set(out[out["cot_report_date"].dt.date == week]["market"].dropna().astype(str))
+        for market in all_markets:
+            if market not in present:
+                reason = "No COT record for this week"
+                missing_rows.append({"cot_report_date": week, "missing_market": market, "reason_if_known": reason})
+    missing_by_date = pd.DataFrame(missing_rows, columns=["cot_report_date", "missing_market", "reason_if_known"])
+    return by_market, date_counts.merge(missing_by_date.groupby("cot_report_date", as_index=False).agg(missing_markets=("missing_market", lambda s: ", ".join(sorted(set(s))))), on="cot_report_date", how="left")
+
 def run() -> Path:
     print("=" * 70)
     print("Confluence history build started")
@@ -444,18 +475,22 @@ def run() -> Path:
         direction="backward",
     )
 
-    aligned = aligned[aligned["macro_snapshot_date"].notna()].copy()
     aligned_rows = len(aligned)
-    dropped_rows = len(cot) - aligned_rows
-    if dropped_rows > 0:
+    missing_macro_rows = int(aligned["macro_snapshot_date"].isna().sum())
+    if missing_macro_rows > 0:
         print("WARNING: Macro history does not fully cover COT history.")
         print(f"  COT date range: {cot['cot_report_date'].min()} -> {cot['cot_report_date'].max()}")
         print(f"  Macro date range: {macro['macro_snapshot_date'].min()} -> {macro['macro_snapshot_date'].max()}")
         print(f"  Rows aligned: {aligned_rows}")
-        print(f"  Rows dropped: {dropped_rows}")
+        print(f"  Rows missing macro snapshot: {missing_macro_rows}")
 
     if aligned.empty:
         raise ValueError("No COT rows could be aligned to available macro snapshots.")
+
+    aligned["macro_signal"] = aligned["macro_signal"].fillna("neutral")
+    aligned["macro_score"] = pd.to_numeric(aligned["macro_score"], errors="coerce").fillna(0).clip(0, 10)
+    aligned["macro_strength"] = aligned["macro_strength"].fillna("Unknown")
+    aligned["macro_context_for_trades"] = aligned["macro_context_for_trades"].fillna("N/A")
 
     aligned["macro_alignment_gap_days"] = (
         aligned["cot_report_date"] - aligned["macro_snapshot_date"]
@@ -496,6 +531,8 @@ def run() -> Path:
     out = out[required_columns + ["_cot_source", "_macro_source", "macro_alignment_gap_days"]].sort_values(
         ["cot_report_date", "market"]
     ).reset_index(drop=True)
+
+    market_diagnostics, date_diagnostics = _build_market_diagnostics(cot, out)
 
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = EXPORT_DIR / f"confluence_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
@@ -550,7 +587,7 @@ def run() -> Path:
             ("macro_reconstruction_date_range", f"{macro['macro_snapshot_date'].min()} -> {macro['macro_snapshot_date'].max()}"),
             ("confluence_date_range", f"{out['cot_report_date'].min()} -> {out['cot_report_date'].max()}"),
             ("row_count", len(out)),
-            ("known_limitations", "Rows only emitted where both COT and as-of macro history are available."),
+            ("known_limitations", "Rows emitted for every COT market/date; missing macro snapshots are retained with neutral/0 defaults and null snapshot date."),
         ],
         columns=["field", "value"],
     )
@@ -561,6 +598,8 @@ def run() -> Path:
         out[required_columns].to_excel(writer, sheet_name="Weekly_Blocks", index=False)
         missing_targets.to_excel(writer, sheet_name="Missing_Targets", index=False)
         source_notes.to_excel(writer, sheet_name="Source_Notes", index=False)
+        market_diagnostics.to_excel(writer, sheet_name="Market_Diagnostics", index=False)
+        date_diagnostics.to_excel(writer, sheet_name="Date_Diagnostics", index=False)
 
     wb = load_workbook(output_path)
     dashboard_ws = wb["Confluence_Dashboard"]
