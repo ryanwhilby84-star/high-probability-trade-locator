@@ -95,15 +95,30 @@ def _load_cot(cot_file: Path) -> pd.DataFrame:
     data = data.dropna(how="all")
     data = data.loc[:, ~data.columns.astype(str).str.startswith("Unnamed")]
     data.columns = [str(col).strip() for col in data.columns]
+    print(f"COT columns found: {list(data.columns)}")
 
-    market_col = _find_column(data, "market")
+    market_col = _find_column(
+        data,
+        "market",
+        "market_name",
+        "instrument",
+        "symbol",
+        "contract_market_name",
+        "market_and_exchange_names",
+    )
     date_col = _find_column(data, "cot_report_date", "report date", "date")
     bias_col = _find_column(data, "cot_bias", "bias", "signal")
     score_col = _find_column(data, "cot_score", "score")
     strength_col = _find_column(data, "cot_strength", "strength")
 
     if market_col is None:
-        raise ValueError("COT data missing Market column.")
+        raise ValueError(
+            "COT data is missing a market/instrument column. "
+            "Expected one of: Market, market, market_name, Market_Name, instrument, symbol, "
+            "contract_market_name, market_and_exchange_names. "
+            f"Available columns: {list(data.columns)}"
+        )
+    print(f"Market column detected: {market_col}")
 
     cleaned = pd.DataFrame()
     cleaned["market"] = data[market_col].astype(str).str.strip()
@@ -159,6 +174,28 @@ def run() -> None:
 
     cot = _load_cot(cot_file)
     print(f"Cleaned COT rows: {len(cot)}")
+    rows_by_market = cot["market"].value_counts(dropna=False).sort_index()
+    print("rows by market:")
+    print(rows_by_market.to_string())
+    latest_report_date = pd.to_datetime(cot["cot_report_date"], errors="coerce").max()
+    if pd.isna(latest_report_date):
+        missing_markets: list[str] = []
+    else:
+        all_markets = set(
+            cot["market"].astype(str).str.strip().replace("", pd.NA).dropna().tolist()
+        )
+        latest_mask = pd.to_datetime(cot["cot_report_date"], errors="coerce") == latest_report_date
+        latest_markets = set(
+            cot.loc[latest_mask, "market"]
+            .astype(str)
+            .str.strip()
+            .replace("", pd.NA)
+            .dropna()
+            .tolist()
+        )
+        missing_markets = sorted(all_markets - latest_markets)
+    latest_label = "N/A" if pd.isna(latest_report_date) else str(latest_report_date.date())
+    print(f"missing markets by latest report date ({latest_label}): {missing_markets}")
 
     macro = pd.read_excel(macro_file, sheet_name="Macro_Dashboard")
     if macro.empty:
