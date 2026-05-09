@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -99,8 +99,22 @@ def _sanitize_json_values(value):
         return {k: _sanitize_json_values(v) for k, v in value.items()}
     if isinstance(value, list):
         return [_sanitize_json_values(v) for v in value]
+
+    if value is pd.NA or value is pd.NaT:
+        return None
+
+    if isinstance(value, (pd.Timestamp, datetime, date)):
+        return value.isoformat()
+
+    if hasattr(value, "item") and not isinstance(value, (str, bytes)):
+        try:
+            value = value.item()
+        except Exception:
+            pass
+
     if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
         return None
+
     return value
 
 
@@ -128,8 +142,10 @@ def run(input_path: str | None = None) -> Path:
     PUBLIC_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, allow_nan=False, default=str), encoding="utf-8")
 
-    print(f"Wrote {OUTPUT_PATH}")
-    print(f"Wrote {PUBLIC_OUTPUT_PATH}")
+    print(f"Row count exported: {len(data)}")
+    print(f"Output path 1: {OUTPUT_PATH}")
+    print(f"Output path 2: {PUBLIC_OUTPUT_PATH}")
+    print("Confirm: valid JSON written")
     return OUTPUT_PATH
 
 
