@@ -316,39 +316,39 @@ def _cot_strength(score: object) -> str:
 
 
 def _cot_summary(cot_bias: str, score: float, row: pd.Series) -> str:
-    c1 = row.get("weekly_change")
-    c4 = row.get("four_week_change")
+    c1 = row.get("mm_weekly_change")
+    c4 = row.get("mm_four_week_change")
     m1 = row.get("mm_weekly_change")
     managed_net = row.get("noncommercial_net")
 
     if cot_bias == "Bullish":
         if pd.notna(c4) and c4 > 0 and pd.notna(managed_net) and managed_net < 0 and pd.notna(m1) and m1 < 0:
-            return "Commercials improving over 1W and 4W while managed money is weakening. Bullish positioning support."
+            return "Managed money is strengthening over 1W and 4W from a net-short base. Bullish positioning support."
         if score >= 7:
-            return "Bullish COT pressure from commercials with supportive managed-money conditions."
-        return "Commercials improved over 1W. Bullish COT bias, but confirmation is limited."
+            return "Bullish COT pressure from managed money with supportive positioning conditions."
+        return "Managed money improved over 1W. Bullish COT bias, but confirmation is limited."
 
     if cot_bias == "Bearish":
         if pd.notna(c4) and c4 < 0 and pd.notna(managed_net) and managed_net > 0 and pd.notna(m1) and m1 > 0:
-            return "Commercials weakening while managed money is strengthening. Bearish positioning pressure."
+            return "Managed money is weakening over 1W and 4W from a net-long base. Bearish positioning pressure."
         if score >= 7:
-            return "Bearish COT pressure from commercials with supportive managed-money conditions."
-        return "Commercials weakened over 1W. Bearish COT bias, but confirmation is limited."
+            return "Bearish COT pressure from managed money with supportive positioning conditions."
+        return "Managed money weakened over 1W. Bearish COT bias, but confirmation is limited."
 
-    return "Neutral commercial 1W change. No COT score applied."
+    return "Neutral managed-money 1W change. No COT score applied."
 
 
 def _calculate_cot_scores(master: pd.DataFrame) -> pd.DataFrame:
     """Add strict rule-based /10 COT scoring columns to Trader_Report master.
 
-    Bias is driven only by commercial 1W change. Points are awarded only in
+    Bias is driven only by managed-money 1W change. Points are awarded only in
     the direction of that bias. Neutral rows receive 0 points.
     """
     scored = master.copy()
 
     def score_row(row: pd.Series) -> pd.Series:
-        c1 = row.get("weekly_change")
-        c4 = row.get("four_week_change")
+        c1 = row.get("mm_weekly_change")
+        c4 = row.get("mm_four_week_change")
         managed_net = row.get("noncommercial_net")
         m1 = row.get("mm_weekly_change")
 
