@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+import json
 from pathlib import Path
 from typing import Any
 
@@ -160,6 +161,98 @@ def _macro_alignment_adjustment(score: float) -> int:
     if score <= 7:
         return 3
     return 4
+
+
+def _to_num(series: pd.Series) -> pd.Series:
+    return pd.to_numeric(series, errors="coerce")
+
+
+def _write_audits(cot: pd.DataFrame, confluence: pd.DataFrame, dashboard_json_path: Path) -> None:
+    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+    cot2 = cot.copy()
+    cot2["cot_report_date"] = pd.to_datetime(cot2["cot_report_date"], errors="coerce")
+
+    coverage = (
+        cot2.groupby("market", dropna=False)
+        .agg(
+            first_report_date=("cot_report_date", "min"),
+            last_report_date=("cot_report_date", "max"),
+            row_count=("market", "size"),
+        )
+        .reset_index()
+    )
+    dashboard_markets = set(confluence["market"].astype(str).str.strip().tolist())
+    coverage["included_in_dashboard"] = coverage["market"].astype(str).str.strip().isin(dashboard_markets)
+    coverage["missing_reason"] = coverage["included_in_dashboard"].map(
+        lambda included: "" if included else "not present in confluence output"
+    )
+    coverage["first_report_date"] = pd.to_datetime(coverage["first_report_date"], errors="coerce").dt.date
+    coverage["last_report_date"] = pd.to_datetime(coverage["last_report_date"], errors="coerce").dt.date
+    coverage.to_csv(EXPORT_DIR / "market_coverage_audit.csv", index=False)
+
+    cocoa = confluence[confluence["market"].astype(str).str.contains("COCOA", case=False, na=False)].copy()
+    cocoa = cocoa.sort_values("cot_report_date")
+    cocoa["report_date"] = pd.to_datetime(cocoa.get("cot_report_date"), errors="coerce").dt.date
+    cocoa["managed_money_long"] = _to_num(cocoa.get("noncommercial_long", pd.Series(index=cocoa.index)))
+    cocoa["managed_money_short"] = _to_num(cocoa.get("noncommercial_short", pd.Series(index=cocoa.index)))
+    cocoa["managed_money_net"] = _to_num(cocoa.get("noncommercial_net", pd.Series(index=cocoa.index)))
+    cocoa["1w_change"] = _to_num(cocoa.get("mm_weekly_change", pd.Series(index=cocoa.index)))
+    cocoa["4w_change"] = _to_num(cocoa.get("mm_four_week_change", pd.Series(index=cocoa.index)))
+    cocoa["final_bias"] = cocoa.get("confluence_bias")
+    cocoa["final_score"] = _to_num(cocoa.get("confluence_score", pd.Series(index=cocoa.index)))
+    cocoa["dashboard_bias"] = cocoa.get("confluence_bias")
+    cocoa["dashboard_score"] = cocoa.get("confluence_score")
+
+    cols = [
+        "report_date",
+        "market",
+        "noncommercial_long",
+        "noncommercial_short",
+        "noncommercial_net",
+        "managed_money_long",
+        "managed_money_short",
+        "managed_money_net",
+        "1w_change",
+        "4w_change",
+        "cot_bias",
+        "cot_score",
+        "macro_signal",
+        "macro_score",
+        "final_bias",
+        "final_score",
+        "dashboard_bias",
+        "dashboard_score",
+    ]
+    for column in cols:
+        if column not in cocoa.columns:
+            cocoa[column] = pd.NA
+    cocoa[cols].to_csv(EXPORT_DIR / "cocoa_score_audit.csv", index=False)
+
+    json_records = json.loads(dashboard_json_path.read_text(encoding="utf-8")).get("records", [])
+    print(f"dashboard JSON row count: {len(json_records)}")
+    cot_markets = sorted(cot2["market"].dropna().astype(str).str.strip().unique().tolist())
+    dash_markets = sorted(confluence["market"].dropna().astype(str).str.strip().unique().tolist())
+    print(f"all markets found in COT input: {cot_markets}")
+    print(f"all markets written to dashboard JSON: {dash_markets}")
+
+    latest_cocoa = cocoa.dropna(subset=["report_date"]).tail(1)
+    if latest_cocoa.empty:
+        print("Cocoa latest COT score and bias: not found")
+    else:
+        row = latest_cocoa.iloc[0]
+        print(f"Cocoa latest COT score and bias: {row.get('cot_score')} / {row.get('cot_bias')}")
+        if (
+            pd.notna(row.get("final_score"))
+            and pd.notna(row.get("cot_score"))
+            and float(row.get("final_score")) != float(row.get("cot_score"))
+        ):
+            print(
+                "reason Cocoa final score differs from raw COT score, if it does: "
+                f"macro confluence adjustment using macro_signal={row.get('macro_signal')} "
+                f"and macro_score={row.get('macro_score')}"
+            )
+        else:
+            print("reason Cocoa final score differs from raw COT score, if it does: no difference (or missing values)")
 
 
 def run() -> None:
@@ -416,7 +509,8 @@ def run() -> None:
     wb.save(output_path)
 
     print(f"Output path saved: {output_path}")
-    dashboard_json_path = export_dashboard_json()
+    dashboard_json_path = export_dashboard_json(input_path=str(output_path))
+    _write_audits(cot, confluence, dashboard_json_path)
     print(f"Dashboard JSON refreshed from historical workbook: {dashboard_json_path}")
 
 
