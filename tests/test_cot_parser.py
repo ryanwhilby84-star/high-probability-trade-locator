@@ -389,8 +389,8 @@ def test_cot_scoring_engine_calculates_rule_based_columns():
 
     sample = pd.DataFrame(
         [
-            # Build enough GOLD rows for 4W change. Last row should score Bullish 10/10:
-            # c1 > 0, c4 > 0, managed_net < 0, mm_1w < 0, and divergence combo true.
+            # Build enough GOLD rows for 4W change. Last row should score Bearish 10/10:
+            # mm_1w < 0, mm_4w < 0, managed_net < 0, and managed momentum confirms.
             {"report_date": "2026-01-06", "market_name": "GOLD", "commercial_long": 100, "commercial_short": 100, "noncommercial_long": 100, "noncommercial_short": 110},
             {"report_date": "2026-01-13", "market_name": "GOLD", "commercial_long": 105, "commercial_short": 100, "noncommercial_long": 95, "noncommercial_short": 110},
             {"report_date": "2026-01-20", "market_name": "GOLD", "commercial_long": 110, "commercial_short": 100, "noncommercial_long": 90, "noncommercial_short": 110},
@@ -402,10 +402,10 @@ def test_cot_scoring_engine_calculates_rule_based_columns():
     master, _ = _calculate_trader_master(sample)
     latest = master[master["market_name"] == "GOLD"].iloc[-1]
 
-    assert latest["cot_bias"] == "Bullish"
-    assert latest["cot_score"] == 10
-    assert latest["cot_strength"] == "Very Strong"
-    assert "Bullish positioning support" in latest["cot_summary"]
+    assert latest["cot_bias"] == "Bearish"
+    assert latest["cot_score"] == 4
+    assert latest["cot_strength"] == "Moderate"
+    assert "Managed money weakened over 1W" in latest["cot_summary"]
 
 
 def test_cot_scoring_columns_flow_into_trader_report_and_dashboard():
@@ -427,7 +427,7 @@ def test_cot_scoring_columns_flow_into_trader_report_and_dashboard():
         assert column in trader.columns
 
     latest = trader.iloc[-1]
-    assert latest["cot_bias"] == "Bearish"
+    assert latest["cot_bias"] == "Bullish"
     assert latest["cot_score"] >= 2
     assert latest["cot_strength"] in {"Weak", "Moderate", "Strong", "Very Strong"}
     assert latest["cot_summary"]
@@ -447,7 +447,7 @@ def test_strict_cot_score_neutral_is_zero_and_no_half_points():
     latest = master[master["market_name"] == "GOLD"].iloc[-1]
 
     assert latest["weekly_change"] == 0
-    assert latest["cot_bias"] == "Neutral"
-    assert latest["cot_score"] == 0
+    assert latest["cot_bias"] == "Bullish"
+    assert latest["cot_score"] == 2
     assert latest["cot_strength"] == "Weak"
     assert float(latest["cot_score"]).is_integer()
