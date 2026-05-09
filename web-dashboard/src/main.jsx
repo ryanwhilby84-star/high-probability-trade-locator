@@ -3,14 +3,15 @@ import { createRoot } from 'react-dom/client'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts'
 import './styles.css'
 
-const EXPECTED = ['NASDAQ','S&P 500','Dow / S30','Gold','Silver','Copper','Crude Oil','Natural Gas','Corn','Soybeans','Wheat','Coffee','Cocoa']
+const EXPECTED = ['NASDAQ / NQ','S&P 500 / ES','Dow / YM / DJIA / S30','Gold / GC','Silver / SI','Copper / HG','Crude Oil / CL','Natural Gas / NG','Corn / ZC','Soybeans / ZS','Wheat / ZW','Coffee / KC','Cocoa / CC']
 const norm = (m='') => m.toLowerCase()
 const canonical = (market='') => {
   const m = norm(market)
-  if (m.includes('nasdaq')) return 'NASDAQ'
-  if (m.includes('s&p') || m.includes('sp 500')) return 'S&P 500'
-  if (m.includes('dow') || m.includes('s30') || m.includes('djia')) return 'Dow / S30'
-  for (const x of ['gold','silver','copper','crude oil','natural gas','corn','soybeans','wheat','coffee','cocoa']) if (m.includes(x)) return x.replace(/\b\w/g,c=>c.toUpperCase())
+  if (m.includes('nasdaq')) return 'NASDAQ / NQ'
+  if (m.includes('s&p') || m.includes('sp 500')) return 'S&P 500 / ES'
+  if (m.includes('dow') || m.includes('s30') || m.includes('djia')) return 'Dow / YM / DJIA / S30'
+  const map = {'gold':'Gold / GC','silver':'Silver / SI','copper':'Copper / HG','crude oil':'Crude Oil / CL','natural gas':'Natural Gas / NG','corn':'Corn / ZC','soybeans':'Soybeans / ZS','wheat':'Wheat / ZW','coffee':'Coffee / KC','cocoa':'Cocoa / CC'}
+  for (const x of Object.keys(map)) if (m.includes(x)) return map[x]
   return market
 }
 const rowDate = (r={}) => r.date || ''
