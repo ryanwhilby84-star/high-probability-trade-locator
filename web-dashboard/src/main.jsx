@@ -23,14 +23,16 @@ function App(){
     fetch('/data/confluence_history_latest.json')
       .then(r=>r.json())
       .then(j=>{
-        const rows = Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : [])
+        const rows = Array.isArray(j?.records) ? j.records : []
+        console.log('Loaded rows:', rows.length)
+        console.log(rows[0])
         setData(rows)
-        const ds=[...new Set(rows.map(rowDate).filter(Boolean))].sort()
+        const ds=[...new Set(rows.map(rowDate).filter(Boolean))].sort((a,b)=>a.localeCompare(b))
         setDate(ds.at(-1)||'')
       })
   },[])
 
-  const dates=React.useMemo(()=>[...new Set(data.map(rowDate).filter(Boolean))].sort(),[data])
+  const dates=React.useMemo(()=>[...new Set(data.map(rowDate).filter(Boolean))].sort((a,b)=>a.localeCompare(b)),[data])
   const week=React.useMemo(()=>data.filter(r=>rowDate(r)===date).map(r=>({...r,market_key:canonical(r.market)})),[data,date])
   React.useEffect(()=>{if(!market && week[0]) setMarket(week[0].market)},[week,market])
 
