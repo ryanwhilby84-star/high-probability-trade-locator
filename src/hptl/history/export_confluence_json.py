@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from datetime import datetime
 from pathlib import Path
 
@@ -16,15 +17,21 @@ PREFERRED_SHEETS = ["Confluence_History", "Confluence_Dashboard", "Dashboard", "
 
 
 REQUIRED_COLUMNS = [
+    "date",
     "market",
     "cot_report_date",
-    "confluence_bias",
-    "confluence_score",
-    "trade_readiness",
     "cot_bias",
     "cot_score",
+    "cot_strength",
+    "macro_snapshot_date",
     "macro_signal",
     "macro_score",
+    "macro_strength",
+    "macro_context_for_trades",
+    "confluence_bias",
+    "confluence_score",
+    "confluence_strength",
+    "trade_readiness",
     "summary",
 ]
 
@@ -65,6 +72,8 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
 
     if "cot_report_date" not in df.columns and "date" in df.columns:
         df["cot_report_date"] = df["date"]
+    if "date" not in df.columns and "cot_report_date" in df.columns:
+        df["date"] = df["cot_report_date"]
 
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
@@ -78,9 +87,21 @@ def _load_and_clean(workbook: Path, sheet_name: str) -> pd.DataFrame:
     df["cot_score"] = pd.to_numeric(df["cot_score"], errors="coerce")
     df["macro_score"] = pd.to_numeric(df["macro_score"], errors="coerce")
 
-    df = df[df["cot_report_date"].notna()].copy()
+    df["date"] = df["date"].fillna(df["cot_report_date"])
+    df["cot_report_date"] = df["cot_report_date"].fillna(df["date"])
+    df = df[df["date"].notna()].copy()
     df = df.sort_values(["cot_report_date", "market"]).reset_index(drop=True)
     return df
+
+
+def _sanitize_json_values(value):
+    if isinstance(value, dict):
+        return {k: _sanitize_json_values(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_json_values(v) for v in value]
+    if isinstance(value, float) and (math.isnan(value) or math.isinf(value)):
+        return None
+    return value
 
 
 def run(input_path: str | None = None) -> Path:
@@ -97,14 +118,15 @@ def run(input_path: str | None = None) -> Path:
         "source_workbook": str(workbook),
         "source_sheet": sheet,
         "row_count": int(len(data)),
-        "records": data.to_dict(orient="records"),
+        "records": data[REQUIRED_COLUMNS].to_dict(orient="records"),
     }
+    payload = _sanitize_json_values(payload)
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, allow_nan=False, default=str), encoding="utf-8")
 
     PUBLIC_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    PUBLIC_OUTPUT_PATH.write_text(json.dumps(payload, indent=2, allow_nan=False, default=str), encoding="utf-8")
 
     print(f"Wrote {OUTPUT_PATH}")
     print(f"Wrote {PUBLIC_OUTPUT_PATH}")
