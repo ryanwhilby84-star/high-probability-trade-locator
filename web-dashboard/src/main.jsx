@@ -14,6 +14,34 @@ const canonical = (market='') => {
   return market
 }
 const rowDate = (r={}) => r.date || ''
+const display = (v) => (v === null || v === undefined || v === '' ? 'N/A' : v)
+
+const sanitizeInvalidNumericLiterals = (text='') => text.replace(/\b(?:NaN|Infinity|-Infinity|undefined)\b/g, 'null')
+
+const sanitizeObject = (value, stats = { sanitized: false, replacements: 0 }) => {
+  if (Array.isArray(value)) return value.map((item) => sanitizeObject(item, stats))
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, sanitizeObject(v, stats)]))
+  }
+  if (value === undefined || value === null) return null
+  if (typeof value === 'number' && !Number.isFinite(value)) {
+    stats.sanitized = true
+    stats.replacements += 1
+    return null
+  }
+  return value
+}
+
+const safeJsonParse = (text='') => {
+  try {
+    return { parsed: JSON.parse(text), sanitized: false, replacements: 0 }
+  } catch (err) {
+    const repaired = sanitizeInvalidNumericLiterals(text)
+    const replacements = ((text.match(/\b(?:NaN|Infinity|-Infinity|undefined)\b/g)) || []).length
+    const parsed = JSON.parse(repaired)
+    return { parsed, sanitized: true, replacements, parseError: err }
+  }
+}
 
 function App(){
   const [data,setData]=React.useState([]); const [date,setDate]=React.useState(''); const [market,setMarket]=React.useState('');
@@ -21,12 +49,24 @@ function App(){
 
   React.useEffect(()=>{
     fetch('/data/confluence_history_latest.json')
-      .then(r=>r.json())
-      .then(j=>{
-        const rows = Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : [])
+      .then(r=>r.text())
+      .then((text)=>{
+        const parsedResult = safeJsonParse(text)
+        const stats = { sanitized: parsedResult.sanitized, replacements: parsedResult.replacements }
+        const payload = sanitizeObject(parsedResult.parsed, stats)
+        const rows = Array.isArray(payload?.records) ? payload.records : (Array.isArray(payload) ? payload : [])
         setData(rows)
         const ds=[...new Set(rows.map(rowDate).filter(Boolean))].sort()
         setDate(ds.at(-1)||'')
+        console.info('[dashboard] dashboard data loaded', {
+          rowCount: rows.length,
+          sanitized: stats.sanitized,
+          replacements: stats.replacements,
+        })
+      })
+      .catch((err)=>{
+        console.error('[dashboard] failed to load dashboard data', err)
+        setData([])
       })
   },[])
 
@@ -43,7 +83,7 @@ function App(){
   <div className='controls'><select value={date} onChange={e=>setDate(e.target.value)}>{dates.map(d=><option key={d}>{d}</option>)}</select><input placeholder='Search market' value={search} onChange={e=>setSearch(e.target.value)}/><select value={bias} onChange={e=>setBias(e.target.value)}>{['All','Long Bias','Short Bias','Headwind','Conflicted'].map(v=><option key={v}>{v}</option>)}</select><select value={readiness} onChange={e=>setReadiness(e.target.value)}>{['All','High conviction','Actionable','Cautious','Stand down'].map(v=><option key={v}>{v}</option>)}</select></div>
   <div className='debug'>Loaded rows: {data.length} | Selected date: {date || 'N/A'}</div>
   {missing.length>0 && <div className='warn'>Missing this week: {missing.join(', ')}</div>}
-  <div className='grid'>{filtered.map(r=><div key={r.market} className={`card ${String(r.trade_readiness).toLowerCase().replace(' ','-')}`} onClick={()=>setMarket(r.market)}><h3>{r.market}</h3><p>{r.confluence_bias} | {r.confluence_score}</p><p>{r.trade_readiness}</p><p>COT: {r.cot_bias} ({r.cot_score})</p><p>Macro: {r.macro_signal} ({r.macro_score})</p><small>{r.summary}</small></div>)}</div>
+  <div className='grid'>{filtered.map(r=><div key={r.market} className={`card ${String(r.trade_readiness).toLowerCase().replace(' ','-')}`} onClick={()=>setMarket(r.market)}><h3>{display(r.market)}</h3><p>{display(r.confluence_bias)} | {display(r.confluence_score)}</p><p>{display(r.trade_readiness)}</p><p>COT: {display(r.cot_bias)} ({display(r.cot_score)})</p><p>Macro: {display(r.macro_signal)} ({display(r.macro_score)})</p><small>{display(r.summary)}</small></div>)}</div>
   <div className='charts'>
     <Chart title='Confluence Score by Market'><BarChart data={filtered}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='market'/><YAxis/><Tooltip/><Bar dataKey='confluence_score' fill='#4fd1c5'/></BarChart></Chart>
     <Chart title='Trade Readiness Distribution'><BarChart data={counts('trade_readiness')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#f6ad55'/></BarChart></Chart>
