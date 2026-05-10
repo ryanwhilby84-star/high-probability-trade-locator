@@ -389,6 +389,15 @@ def run() -> None:
         "Neutral / Mixed": 2,
         "Conflicted / No Trade": 3,
     }
+    if "confluence_bias" not in confluence.columns:
+        for fallback_col in ("final_bias", "bias", "direction"):
+            if fallback_col in confluence.columns:
+                confluence["confluence_bias"] = confluence[fallback_col]
+                break
+        else:
+            confluence["confluence_bias"] = "Conflicted / No Trade"
+
+    confluence["confluence_bias"] = confluence["confluence_bias"].fillna("Conflicted / No Trade")
     confluence["_bias_rank"] = confluence["confluence_bias"].map(bias_order).fillna(4)
     confluence = confluence.sort_values(
         by=["_bias_rank", "confluence_score"], ascending=[True, False]
