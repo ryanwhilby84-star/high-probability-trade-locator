@@ -500,19 +500,53 @@ def run() -> None:
     red_fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
     max_row = dashboard_ws.max_row
 
+    def safe_add_conditional_formatting(cell_range: str, rule, description: str) -> None:
+        try:
+            dashboard_ws.conditional_formatting.add(cell_range, rule)
+        except Exception as exc:
+            print(f"Warning: skipping conditional formatting ({description}): {exc}")
+
     trade_col = get_column_letter(confluence.columns.get_loc("trade_readiness") + 1)
     trade_range = f"{trade_col}2:{trade_col}{max_row}"
-    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("High conviction",{trade_col}2))'], fill=green_fill))
-    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("Actionable",{trade_col}2))'], fill=green_fill))
-    dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("Cautious",{trade_col}2))'], fill=amber_fill))
+    safe_add_conditional_formatting(
+        trade_range,
+        FormulaRule(formula=[f'ISNUMBER(SEARCH("High conviction",{trade_col}2))'], fill=green_fill),
+        "trade readiness high conviction",
+    )
+    safe_add_conditional_formatting(
+        trade_range,
+        FormulaRule(formula=[f'ISNUMBER(SEARCH("Actionable",{trade_col}2))'], fill=green_fill),
+        "trade readiness actionable",
+    )
+    safe_add_conditional_formatting(
+        trade_range,
+        FormulaRule(formula=[f'ISNUMBER(SEARCH("Cautious",{trade_col}2))'], fill=amber_fill),
+        "trade readiness cautious",
+    )
     for term in ["Conflicted", "Blocked", "No Trade"]:
-        dashboard_ws.conditional_formatting.add(trade_range, FormulaRule(formula=[f'ISNUMBER(SEARCH("{term}",{trade_col}2))'], fill=red_fill))
+        safe_add_conditional_formatting(
+            trade_range,
+            FormulaRule(formula=[f'ISNUMBER(SEARCH("{term}",{trade_col}2))'], fill=red_fill),
+            f"trade readiness {term}",
+        )
 
     score_col = get_column_letter(confluence.columns.get_loc("confluence_score") + 1)
     score_range = f"{score_col}2:{score_col}{max_row}"
-    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["8", "10"], fill=green_fill))
-    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["5", "7"], fill=amber_fill))
-    dashboard_ws.conditional_formatting.add(score_range, CellIsRule(operator="between", formula=["0", "4"], fill=red_fill))
+    safe_add_conditional_formatting(
+        score_range,
+        CellIsRule(operator="between", formula=["8", "10"], fill=green_fill),
+        "score strong",
+    )
+    safe_add_conditional_formatting(
+        score_range,
+        CellIsRule(operator="between", formula=["5", "7"], fill=amber_fill),
+        "score moderate",
+    )
+    safe_add_conditional_formatting(
+        score_range,
+        CellIsRule(operator="between", formula=["0", "4"], fill=red_fill),
+        "score weak",
+    )
 
     if "Summary_Charts" in wb.sheetnames:
         del wb["Summary_Charts"]
