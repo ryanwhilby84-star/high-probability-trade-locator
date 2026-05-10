@@ -38,7 +38,7 @@ const canonical = (market = '') => {
   return market
 }
 
-const rowDate = (r = {}) => r.date || ''
+const rowDate = (r = {}) => r.date || r.latest_report_date || ''
 const display = (v) => (v === null || v === undefined || v === '' ? 'N/A' : v)
 
 const sanitizeInvalidNumericLiterals = (text = '') => text.replace(/\b(?:NaN|Infinity|-Infinity|undefined)\b/g, 'null')
@@ -69,6 +69,7 @@ const safeJsonParse = (text = '') => {
 function App() {
   const [data, setData] = React.useState([])
   const [date, setDate] = React.useState('')
+  const [expanded, setExpanded] = React.useState({})
 
   React.useEffect(() => {
     fetch('/data/confluence_history_latest.json')
@@ -97,14 +98,27 @@ function App() {
       const row = byMarket.get(market)
       return {
         market,
-        latest_report_date: row?.date || date,
+        latest_report_date: row?.latest_report_date || row?.date || date,
         cot_bias: row?.cot_bias,
         cot_score: row?.cot_score,
-        cot_reason: row?.cot_reasoning || row?.cot_context,
-        macro_regime: row?.macro_signal,
+        cot_reason: row?.cot_reason || row?.cot_reasoning || row?.cot_context,
+        macro_regime: row?.macro_regime || row?.macro_signal,
         macro_score: row?.macro_score,
-        final_context: row?.confluence_bias,
+        final_context: row?.final_context || row?.confluence_bias,
         technical_action_note: row?.summary || row?.technical_note || row?.trade_readiness,
+        final_context_reason: row?.final_context_reason,
+        raw_cftc_market_name: row?.raw_cftc_market_name,
+        trader_group_used: row?.trader_group_used,
+        long_value: row?.long_value,
+        short_value: row?.short_value,
+        net_value: row?.net_value,
+        previous_week_net: row?.previous_week_net,
+        one_week_net_change: row?.one_week_net_change,
+        four_week_net_change: row?.four_week_net_change,
+        bias_rule_used: row?.bias_rule_used,
+        score_rule_used: row?.score_rule_used,
+        final_calculated_cot_bias: row?.final_calculated_cot_bias,
+        final_calculated_cot_score: row?.final_calculated_cot_score,
       }
     })
   }, [week, date])
@@ -123,9 +137,21 @@ function App() {
           <th>Market</th><th>Latest report date</th><th>COT bias</th><th>COT score</th><th>COT reason</th><th>Macro regime</th><th>Macro score</th><th>Final context</th><th>Technical action note</th>
         </tr></thead>
         <tbody>
-          {marketRows.map((r) => <tr key={r.market}>
-            <td>{r.market}</td><td>{display(r.latest_report_date)}</td><td>{display(r.cot_bias)}</td><td>{display(r.cot_score)}</td><td>{display(r.cot_reason)}</td><td>{display(r.macro_regime)}</td><td>{display(r.macro_score)}</td><td>{display(r.final_context)}</td><td>{display(r.technical_action_note)}</td>
-          </tr>)}
+          {marketRows.map((r) => <React.Fragment key={r.market}>
+            <tr>
+              <td>{r.market}</td><td>{display(r.latest_report_date)}</td><td>{display(r.cot_bias)}</td><td>{display(r.cot_score)}</td><td>{display(r.cot_reason)}</td><td>{display(r.macro_regime)}</td><td>{display(r.macro_score)}</td><td>{display(r.final_context)}</td><td>{display(r.technical_action_note)}</td>
+            </tr>
+            <tr>
+              <td colSpan={9}>
+                <button onClick={() => setExpanded((s) => ({ ...s, [r.market]: !s[r.market] }))}>
+                  {expanded[r.market] ? 'Hide audit details' : 'Show audit details'}
+                </button>
+                {expanded[r.market] && <div style={{ marginTop: '8px' }}>
+                  <strong>Audit:</strong> raw_market={display(r.raw_cftc_market_name)}; trader_group={display(r.trader_group_used)}; long={display(r.long_value)}; short={display(r.short_value)}; net={display(r.net_value)}; prev_week_net={display(r.previous_week_net)}; 1w_change={display(r.one_week_net_change)}; 4w_change={display(r.four_week_net_change)}; bias_rule={display(r.bias_rule_used)}; score_rule={display(r.score_rule_used)}; final_bias={display(r.final_calculated_cot_bias)}; final_score={display(r.final_calculated_cot_score)}; final_context_reason={display(r.final_context_reason)}
+                </div>}
+              </td>
+            </tr>
+          </React.Fragment>)}
         </tbody>
       </table>
     </div>

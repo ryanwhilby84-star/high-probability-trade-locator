@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-10T20:53:38.086970+00:00",
+  "generated_at": "2026-05-10T21:07:46.463459+00:00",
   "records": [
     {
       "market": "NASDAQ / NQ",
@@ -10,7 +10,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "S&P 500 / ES",
@@ -21,7 +22,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Dow / YM",
@@ -32,7 +34,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Gold",
@@ -43,7 +46,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Silver",
@@ -54,7 +58,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Copper / HG",
@@ -65,7 +70,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Crude Oil / CL",
@@ -76,7 +82,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Natural Gas / NG",
@@ -87,7 +94,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Coffee",
@@ -98,7 +106,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Cocoa",
@@ -109,7 +118,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Corn",
@@ -120,7 +130,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Wheat",
@@ -131,7 +142,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     },
     {
       "market": "Soybeans",
@@ -142,7 +154,8 @@
       "macro_regime": "N/A",
       "macro_score": "N/A",
       "final_context": "N/A",
-      "technical_action_note": "N/A: waiting for COT data."
+      "technical_action_note": "N/A: waiting for COT data.",
+      "final_context_reason": "Cannot calculate final context without COT bias and COT score."
     }
   ]
 }
