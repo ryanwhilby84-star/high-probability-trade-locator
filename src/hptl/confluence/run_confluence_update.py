@@ -381,6 +381,16 @@ def run() -> None:
 
     confluence = pd.concat([confluence, confluence.apply(build_confluence, axis=1)], axis=1)
 
+    if confluence.columns.duplicated().any():
+        deduped = {}
+        for col_name in dict.fromkeys(confluence.columns):
+            same_name = confluence.loc[:, confluence.columns == col_name]
+            if same_name.shape[1] == 1:
+                deduped[col_name] = same_name.iloc[:, 0]
+            else:
+                deduped[col_name] = same_name.bfill(axis=1).iloc[:, 0]
+        confluence = pd.DataFrame(deduped, index=confluence.index)
+
     required_output_columns = [
         "confluence_bias",
         "confluence_score",
