@@ -437,6 +437,14 @@ def run() -> None:
     }
     confluence["_bias_rank"] = confluence["confluence_bias"].map(bias_order).fillna(4)
     confluence["confluence_score"] = pd.to_numeric(confluence["confluence_score"], errors="coerce")
+
+    if "confluence_strength" not in confluence.columns:
+        confluence["confluence_strength"] = pd.cut(
+            confluence["confluence_score"],
+            bins=[-float("inf"), 2, 5, 8, 10],
+            labels=["Weak", "Moderate", "Strong", "Very Strong"],
+        ).astype("object")
+
     confluence = confluence.sort_values(
         by=["_bias_rank", "confluence_score"], ascending=[True, False]
     ).drop(columns=["_bias_rank"])
