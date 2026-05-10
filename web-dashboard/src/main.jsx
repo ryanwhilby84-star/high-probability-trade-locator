@@ -15,7 +15,18 @@ const canonical = (market='') => {
   return market
 }
 const rowDate = (r={}) => r.date || ''
-const display = (v) => (v === null || v === undefined || v === '' ? 'N/A' : v)
+const hasValue = (v) => !(v === null || v === undefined || v === '')
+const display = (v) => (hasValue(v) ? v : 'N/A')
+
+const explainRow = (row={}) => {
+  const finalBias = display(row.confluence_bias)
+  const readinessLabel = display(row.trade_readiness)
+  const cotBias = display(row.cot_bias)
+  const macroRegime = display(row.macro_signal)
+
+  if (finalBias === 'N/A' || readinessLabel === 'N/A') return 'Insufficient data this week to classify overall context.'
+  return `COT is ${cotBias} and macro regime is ${macroRegime}, resulting in ${finalBias} context with a ${readinessLabel} readiness label.`
+}
 
 const sanitizeInvalidNumericLiterals = (text='') => text.replace(/\b(?:NaN|Infinity|-Infinity|undefined)\b/g, 'null')
 
@@ -45,8 +56,8 @@ const safeJsonParse = (text='') => {
 }
 
 function App(){
-  const [data,setData]=React.useState([]); const [date,setDate]=React.useState(''); const [market,setMarket]=React.useState('');
-  const [search,setSearch]=React.useState(''); const [bias,setBias]=React.useState('All'); const [readiness,setReadiness]=React.useState('All');
+  const [data,setData]=React.useState([]); const [date,setDate]=React.useState(''); const [market,setMarket]=React.useState('')
+  const [search,setSearch]=React.useState(''); const [bias,setBias]=React.useState('All'); const [readiness,setReadiness]=React.useState('All')
 
   React.useEffect(()=>{
     fetch('/data/confluence_history_latest.json')
@@ -72,23 +83,53 @@ function App(){
   },[])
 
   const dates=React.useMemo(()=>[...new Set(data.map(rowDate).filter(Boolean))].sort(),[data])
+  const latestDate = dates.at(-1) || ''
   const week=React.useMemo(()=>data.filter(r=>rowDate(r)===date).map(r=>({...r,market_key:canonical(r.market)})),[data,date])
   React.useEffect(()=>{if(!market && week[0]) setMarket(week[0].market)},[week,market])
 
   const filtered=week.filter(r=>(!search||String(r.market||'').toLowerCase().includes(search.toLowerCase())) && (bias==='All'||(r.confluence_bias||'').includes(bias.replace(' Bias',''))) && (readiness==='All'||r.trade_readiness===readiness))
   const missing=EXPECTED.filter(e=>!week.some(w=>canonical(w.market)===e))
-  const counts=(k)=>Object.entries(filtered.reduce((a,r)=>(a[r[k]]=(a[r[k]]||0)+1,a),{})).map(([name,value])=>({name,value}))
+  const available=EXPECTED.filter(e=>week.some(w=>canonical(w.market)===e))
+  const counts=(k)=>Object.entries(filtered.reduce((a,r)=>{
+    const key = hasValue(r[k]) ? r[k] : 'N/A'
+    a[key]=(a[key]||0)+1
+    return a
+  },{})).map(([name,value])=>({name,value}))
   const series=data.filter(r=>r.market===market).sort((a,b)=>rowDate(a).localeCompare(rowDate(b)))
 
   return <div className='app'><h1>High Probability Trade Locator</h1><p>COT + Macro Historical Context Engine</p>
   <div className='controls'><select value={date} onChange={e=>setDate(e.target.value)}>{dates.map(d=><option key={d}>{d}</option>)}</select><input placeholder='Search market' value={search} onChange={e=>setSearch(e.target.value)}/><select value={bias} onChange={e=>setBias(e.target.value)}>{['All','Long Bias','Short Bias','Headwind','Conflicted'].map(v=><option key={v}>{v}</option>)}</select><select value={readiness} onChange={e=>setReadiness(e.target.value)}>{['All','High conviction','Actionable','Cautious','Stand down'].map(v=><option key={v}>{v}</option>)}</select></div>
-  <div className='debug'>Loaded rows: {data.length} | Selected date: {date || 'N/A'}</div>
-  {missing.length>0 && <div className='warn'>Missing this week: {missing.join(', ')}</div>}
-  <div className='grid'>{filtered.map(r=><div key={r.market} className={`card ${String(r.trade_readiness).toLowerCase().replace(' ','-')}`} onClick={()=>setMarket(r.market)}><h3>{display(r.market)}</h3><p>{display(r.confluence_bias)} | {display(r.confluence_score)}</p><p>{display(r.trade_readiness)}</p><p>COT: {display(r.cot_bias)} ({display(r.cot_score)})</p><p>Macro: {display(r.macro_signal)} ({display(r.macro_score)})</p><small>{display(r.summary)}</small></div>)}</div>
+
+  <div className='panel status-panel'>
+    <h3>Weekly Status</h3>
+    <div className='status-grid'>
+      <p><strong>Selected report date:</strong> {display(date)}</p>
+      <p><strong>Latest available report date:</strong> {display(latestDate)}</p>
+      <p><strong>Loaded rows:</strong> {data.length}</p>
+      <p><strong>Markets expected this week:</strong> {EXPECTED.length}</p>
+      <p><strong>Markets available this week:</strong> {available.length}</p>
+      <p><strong>Markets missing this week:</strong> {missing.length}</p>
+    </div>
+    {missing.length>0 && <p className='missing-list'><strong>Missing markets:</strong> {missing.join(', ')}</p>}
+  </div>
+
+  <div className='warn'>This dashboard is context only. It does not generate trade entries or buy/sell signals.</div>
+
+  <div className='panel glossary'>
+    <h3>Glossary</h3>
+    <ul>
+      <li><strong>COT score</strong> = positioning strength/context from trader positioning</li>
+      <li><strong>Macro score</strong> = interest-rate/risk-regime modifier</li>
+      <li><strong>Final confluence score</strong> = combined context score</li>
+      <li><strong>Readiness label</strong> = dashboard-level interpretation, not a buy/sell signal</li>
+    </ul>
+  </div>
+
+  <div className='grid'>{filtered.map(r=><div key={r.market} className={`card ${String(r.trade_readiness).toLowerCase().replace(' ','-')}`} onClick={()=>setMarket(r.market)}><h3>{display(r.market)}</h3><p><strong>Final bias:</strong> {display(r.confluence_bias)}</p><p><strong>Final confluence score:</strong> {display(r.confluence_score)}</p><p><strong>Readiness label:</strong> {display(r.trade_readiness)}</p><p><strong>COT bias:</strong> {display(r.cot_bias)}</p><p><strong>COT score:</strong> {display(r.cot_score)}</p><p><strong>Macro regime:</strong> {display(r.macro_signal)}</p><p><strong>Macro score:</strong> {display(r.macro_score)}</p><p className='calc-line'>COT {display(r.cot_bias)} ({display(r.cot_score)}) + Macro {display(r.macro_signal)} ({display(r.macro_score)}) = Final {display(r.confluence_bias)} ({display(r.confluence_score)})</p><small>{explainRow(r)}</small></div>)}</div>
   <div className='charts'>
-    <Chart title='Confluence Score by Market'><BarChart data={filtered}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='market'/><YAxis/><Tooltip/><Bar dataKey='confluence_score' fill='#4fd1c5'/></BarChart></Chart>
-    <Chart title='Trade Readiness Distribution'><BarChart data={counts('trade_readiness')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#f6ad55'/></BarChart></Chart>
-    <Chart title='Confluence Bias Distribution'><BarChart data={counts('confluence_bias')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#90cdf4'/></BarChart></Chart>
+    <Chart title='Final Confluence Score by Market'><BarChart data={filtered}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='market'/><YAxis/><Tooltip/><Bar dataKey='confluence_score' fill='#4fd1c5'/></BarChart></Chart>
+    <Chart title='Readiness Label Count'><BarChart data={counts('trade_readiness')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#f6ad55'/></BarChart></Chart>
+    <Chart title='Final Bias Count'><BarChart data={counts('confluence_bias')}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='name'/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey='value' fill='#90cdf4'/></BarChart></Chart>
   </div>
   <div className='timeline'><h2>Timeline: {market || 'Select market'}</h2><Chart title='Weekly Story'><LineChart data={series}><CartesianGrid strokeDasharray='3 3'/><XAxis dataKey='date'/><YAxis domain={[0,10]}/><Tooltip/><Legend/><Line dataKey='confluence_score' stroke='#4fd1c5'/><Line dataKey='cot_score' stroke='#f6ad55'/><Line dataKey='macro_score' stroke='#90cdf4'/></LineChart></Chart></div>
   </div>
