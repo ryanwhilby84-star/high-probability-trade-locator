@@ -8,6 +8,7 @@ from typing import Any
 import pandas as pd
 
 from hptl.confluence.build_confluence_history import _build_confluence
+from hptl.cot.exporter import _calculate_cot_scores
 
 PROCESSED_DIR = Path("data/processed")
 EXPORT_DIR = Path("data/exports")
@@ -59,212 +60,172 @@ def _map_market(raw_market: str) -> str | None:
     return None
 
 
-def _latest_cot_file() -> Path | None:
+def _load_cot_history() -> pd.DataFrame:
     files = sorted(PROCESSED_DIR.glob("cot_cleaned_*.csv"), key=lambda p: p.stat().st_mtime)
-    return files[-1] if files else None
+    if not files:
+        return pd.DataFrame()
+
+    frames = []
+    for path in files:
+        df = pd.read_csv(path, low_memory=False)
+        if not {"market_and_exchange_names", "report_date_as_yyyy_mm_dd", "m_money_positions_long_other", "m_money_positions_short_other"}.issubset(df.columns):
+            continue
+        x = pd.DataFrame()
+        x["market"] = df["market_and_exchange_names"].astype(str).str.strip().apply(_map_market)
+        x["raw_cftc_market_name"] = df["market_and_exchange_names"].astype(str).str.strip()
+        x["cot_report_date"] = pd.to_datetime(df["report_date_as_yyyy_mm_dd"], errors="coerce", dayfirst=True).dt.normalize()
+        x["long_value"] = pd.to_numeric(df["m_money_positions_long_other"], errors="coerce")
+        x["short_value"] = pd.to_numeric(df["m_money_positions_short_other"], errors="coerce")
+        x = x.dropna(subset=["market", "cot_report_date", "long_value", "short_value"]).copy()
+        x["net_value"] = x["long_value"] - x["short_value"]
+        frames.append(x)
+
+    if not frames:
+        return pd.DataFrame()
+
+    cot = pd.concat(frames, ignore_index=True)
+    cot = cot.sort_values(["market", "cot_report_date"]).drop_duplicates(["market", "cot_report_date"], keep="last")
+    cot["weekly_change"] = cot.groupby("market")["net_value"].diff(1)
+    cot["four_week_change"] = cot.groupby("market")["net_value"].diff(4)
+    cot["managed_money_net"] = cot["net_value"]
+    cot["noncommercial_net"] = cot["net_value"]
+    cot["commercial_net"] = cot["net_value"]
+    cot["mm_weekly_change"] = cot["weekly_change"]
+    cot = _calculate_cot_scores(cot)
+    return cot
 
 
-def _latest_macro_file() -> Path | None:
+def _load_macro_history() -> pd.DataFrame:
     files = sorted(EXPORT_DIR.glob("macro_history_*.xlsx"), key=lambda p: p.stat().st_mtime)
     if not files:
         files = sorted(EXPORT_DIR.glob("macro_output_*.xlsx"), key=lambda p: p.stat().st_mtime)
-    return files[-1] if files else None
-
-
-def _load_cot_latest_by_market(path: Path) -> dict[str, dict[str, Any]]:
-    df = pd.read_csv(path, low_memory=False)
-    for col in ["market_and_exchange_names", "report_date_as_yyyy_mm_dd", "m_money_positions_long_other", "m_money_positions_short_other"]:
-        if col not in df.columns:
-            raise ValueError(f"COT file missing required column: {col}")
-
-    trader_group = "m_money_positions_*_other"
-    frame = pd.DataFrame()
-    frame["market"] = df["market_and_exchange_names"].astype(str).str.strip().apply(_map_market)
-    frame["raw_cftc_market_name"] = df["market_and_exchange_names"].astype(str).str.strip()
-    frame["report_date"] = pd.to_datetime(df["report_date_as_yyyy_mm_dd"], errors="coerce", dayfirst=True)
-    frame["long"] = pd.to_numeric(df["m_money_positions_long_other"], errors="coerce")
-    frame["short"] = pd.to_numeric(df["m_money_positions_short_other"], errors="coerce")
-    frame = frame.dropna(subset=["market", "report_date", "long", "short"]).copy()
-    frame["net"] = frame["long"] - frame["short"]
-
-    latest_rows: dict[str, dict[str, Any]] = {}
-    for market in TARGET_MARKETS:
-        m = frame[frame["market"] == market].sort_values("report_date")
-        if m.empty:
+    frames = []
+    for path in files:
+        for sheet in ["Macro_History", "Macro_Dashboard"]:
+            try:
+                m = pd.read_excel(path, sheet_name=sheet)
+                break
+            except Exception:
+                m = None
+        if m is None or m.empty or "macro_snapshot_date" not in m.columns:
             continue
-        recent = m.tail(5).copy()
-        latest = recent.iloc[-1]
-        prev = recent.iloc[-2] if len(recent) >= 2 else None
-        four_back = recent.iloc[-5] if len(recent) >= 5 else None
-        weekly_change = float(latest["net"] - prev["net"]) if prev is not None else None
-        four_week_change = float(latest["net"] - four_back["net"]) if four_back is not None else None
-
-        score = 0
-        if latest["net"] > 0:
-            score += 4
-            bias = "Bullish"
-        elif latest["net"] < 0:
-            score += 4
-            bias = "Bearish"
-        else:
-            bias = "Neutral"
-
-        if weekly_change is not None:
-            if bias == "Bullish" and weekly_change > 0:
-                score += 2
-            elif bias == "Bearish" and weekly_change < 0:
-                score += 2
-            else:
-                score += 1
-
-        if four_week_change is not None:
-            if bias == "Bullish" and four_week_change > 0:
-                score += 2
-            elif bias == "Bearish" and four_week_change < 0:
-                score += 2
-            else:
-                score += 1
-
-        if abs(float(latest["net"])) > 0:
-            score += 2
-
-        latest_rows[market] = {
-            "raw_cftc_market_name": str(latest["raw_cftc_market_name"]),
-            "latest_report_date": latest["report_date"].date().isoformat(),
-            "trader_group_used": trader_group,
-            "long_value": float(latest["long"]),
-            "short_value": float(latest["short"]),
-            "net_value": float(latest["net"]),
-            "previous_week_net": float(prev["net"]) if prev is not None else None,
-            "one_week_net_change": weekly_change,
-            "four_week_net_change": four_week_change,
-            "bias_rule_used": "net>0 => Bullish; net<0 => Bearish; net==0 => Neutral",
-            "score_rule_used": "base 4 on non-zero net + trend points (1w,4w) + conviction 2 when |net|>0; clamped 0..10",
-            "cot_bias": bias,
-            "cot_score": int(max(0, min(score, 10))),
-            "cot_reason": (
-                f"net={int(latest['net'])}; "
-                + (f"1w_change={int(weekly_change)}; " if weekly_change is not None else "1w_change=N/A; ")
-                + (f"4w_change={int(four_week_change)}" if four_week_change is not None else "4w_change=N/A")
-            ),
-        }
-    return latest_rows
-
-
-def _load_latest_macro(path: Path) -> tuple[str | None, str | None, float | None]:
-    sheets = ["Macro_History", "Macro_Dashboard"]
-    macro = None
-    for sheet in sheets:
-        try:
-            macro = pd.read_excel(path, sheet_name=sheet)
-            break
-        except ValueError:
-            continue
-    if macro is None or macro.empty:
-        return None, None, None
-
-    if "macro_snapshot_date" not in macro.columns:
-        return None, None, None
-
-    macro = macro.copy()
-    macro["macro_snapshot_date"] = pd.to_datetime(macro["macro_snapshot_date"], errors="coerce")
-    macro = macro[macro["macro_snapshot_date"].notna()].sort_values("macro_snapshot_date")
-    if macro.empty:
-        return None, None, None
-    row = macro.iloc[-1]
-    signal = str(row.get("macro_signal", "")).strip().lower() or None
-    score = pd.to_numeric(pd.Series([row.get("macro_score")]), errors="coerce").iloc[0]
-    if pd.isna(score):
-        score = None
-    else:
-        score = float(score)
-    return row["macro_snapshot_date"].date().isoformat(), signal, score
+        y = m.copy()
+        y["macro_snapshot_date"] = pd.to_datetime(y["macro_snapshot_date"], errors="coerce").dt.normalize()
+        y["macro_signal"] = y.get("macro_signal", "").astype(str).str.strip().str.lower()
+        y["macro_score"] = pd.to_numeric(y.get("macro_score"), errors="coerce")
+        y = y[y["macro_snapshot_date"].notna()].copy()
+        frames.append(y[["macro_snapshot_date", "macro_signal", "macro_score"]])
+    if not frames:
+        return pd.DataFrame(columns=["macro_snapshot_date", "macro_signal", "macro_score"])
+    return pd.concat(frames, ignore_index=True).sort_values("macro_snapshot_date").drop_duplicates("macro_snapshot_date", keep="last")
 
 
 def run() -> Path:
-    cot_path = _latest_cot_file()
-    macro_path = _latest_macro_file()
+    cot = _load_cot_history()
+    macro = _load_macro_history()
+    records: list[dict[str, Any]] = []
+    if cot.empty:
+        payload = {"generated_at": datetime.now(timezone.utc).isoformat(), "records": []}
+        OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        OUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        return OUT_PATH
 
-    cot_rows: dict[str, dict[str, Any]] = {}
-    if cot_path is not None:
-        cot_rows = _load_cot_latest_by_market(cot_path)
+    all_dates = sorted(cot["cot_report_date"].dropna().dt.strftime("%Y-%m-%d").unique())
 
-    macro_date, macro_signal, macro_score = (None, None, None)
-    if macro_path is not None:
-        macro_date, macro_signal, macro_score = _load_latest_macro(macro_path)
+    for date_str in all_dates:
+        week_date = pd.Timestamp(date_str)
+        week_rows = cot[cot["cot_report_date"] == week_date]
+        by_market = {m: g.iloc[-1] for m, g in week_rows.groupby("market")}
+        macro_row = None
+        if not macro.empty:
+            avail = macro[macro["macro_snapshot_date"] <= week_date]
+            if not avail.empty:
+                macro_row = avail.iloc[-1]
 
-    records = []
-    audit_records: list[dict[str, Any]] = []
-    for market in TARGET_MARKETS:
-        cot = cot_rows.get(market)
-        if cot is None:
-            record = {
+        for market in TARGET_MARKETS:
+            row = by_market.get(market)
+            if row is None:
+                records.append({
+                    "date": date_str,
+                    "market": market,
+                    "latest_report_date": "N/A",
+                    "cot_bias": "N/A",
+                    "cot_score": "N/A",
+                    "cot_reason": f"N/A: missing raw COT row for {market} on {date_str}.",
+                    "macro_regime": "N/A" if macro_row is None else str(macro_row.get("macro_signal") or "N/A"),
+                    "macro_score": "N/A",
+                    "final_context": "N/A",
+                    "technical_action_note": "N/A: no COT row for selected week.",
+                    "final_context_reason": "Cannot score without raw COT market/date row.",
+                })
+                continue
+
+            cot_bias = str(row["cot_bias"])
+            cot_score = float(row["cot_score"])
+            weekly = row.get("weekly_change")
+            four = row.get("four_week_change")
+            net = row.get("net_value")
+            if pd.isna(weekly):
+                weekly = None
+            if pd.isna(four):
+                four = None
+
+            cot_reason = (
+                f"Managed money net is {int(net)} (long {int(row['long_value'])}, short {int(row['short_value'])}); "
+                + (f"1w net change {int(weekly)}; " if weekly is not None else "1w net change N/A; ")
+                + (f"4w net change {int(four)}." if four is not None else "4w net change N/A.")
+            )
+
+            macro_signal = None if macro_row is None else str(macro_row.get("macro_signal") or "")
+            macro_score = None if macro_row is None else pd.to_numeric(pd.Series([macro_row.get("macro_score")]), errors="coerce").iloc[0]
+            has_macro = macro_signal not in {None, "", "nan"} and pd.notna(macro_score)
+
+            if has_macro:
+                conf = _build_confluence(cot_bias, cot_score, macro_signal, float(macro_score))
+                final_context = f"{conf['confluence_bias']} {conf['confluence_score']:.0f}"
+                technical_note = conf["trade_readiness"]
+                final_reason = conf["summary"]
+                macro_regime = macro_signal
+                macro_score_out = float(macro_score)
+            else:
+                final_context = "N/A"
+                technical_note = "N/A: macro input unavailable."
+                final_reason = "Cannot calculate final context because macro input is missing."
+                macro_regime = "N/A"
+                macro_score_out = "N/A"
+
+            records.append({
+                "date": date_str,
                 "market": market,
-                "latest_report_date": "N/A",
-                "cot_bias": "N/A",
-                "cot_score": "N/A",
-                "cot_reason": "N/A: no relevant COT rows found for this target market.",
-                "macro_regime": macro_signal or "N/A",
-                "macro_score": macro_score if macro_signal is not None and macro_score is not None else "N/A",
-                "final_context": "N/A",
-                "technical_action_note": "N/A: waiting for COT data.",
-                "final_context_reason": "Cannot calculate final context without COT bias and COT score.",
-            }
-        elif macro_signal is None or macro_score is None:
-            record = {
-                "market": market,
-                "latest_report_date": cot["latest_report_date"],
-                "cot_bias": cot["cot_bias"],
-                "cot_score": cot["cot_score"],
-                "cot_reason": cot["cot_reason"],
-                "macro_regime": "N/A",
-                "macro_score": "N/A",
-                "final_context": "N/A",
-                "technical_action_note": "N/A: macro input unavailable.",
-                "final_context_reason": "Cannot calculate final context because macro_regime/macro_score is missing.",
-            }
-        else:
-            conf = _build_confluence(cot["cot_bias"], float(cot["cot_score"]), macro_signal, float(macro_score))
-            record = {
-                "market": market,
-                "latest_report_date": cot["latest_report_date"],
-                "cot_bias": cot["cot_bias"],
-                "cot_score": cot["cot_score"],
-                "cot_reason": cot["cot_reason"],
-                "macro_regime": macro_signal,
-                "macro_score": float(macro_score),
-                "final_context": f"{conf['confluence_bias']} {conf['confluence_score']:.0f}",
-                "technical_action_note": conf["trade_readiness"],
-                "final_context_reason": conf["summary"],
-            }
-        if cot is not None:
-            record.update({
-                "raw_cftc_market_name": cot["raw_cftc_market_name"],
-                "trader_group_used": cot["trader_group_used"],
-                "long_value": cot["long_value"],
-                "short_value": cot["short_value"],
-                "net_value": cot["net_value"],
-                "previous_week_net": cot["previous_week_net"],
-                "one_week_net_change": cot["one_week_net_change"],
-                "four_week_net_change": cot["four_week_net_change"],
-                "bias_rule_used": cot["bias_rule_used"],
-                "score_rule_used": cot["score_rule_used"],
-                "final_calculated_cot_bias": cot["cot_bias"],
-                "final_calculated_cot_score": cot["cot_score"],
+                "latest_report_date": date_str,
+                "cot_bias": cot_bias,
+                "cot_score": int(round(cot_score)),
+                "cot_reason": cot_reason,
+                "macro_regime": macro_regime,
+                "macro_score": macro_score_out,
+                "final_context": final_context,
+                "technical_action_note": technical_note,
+                "final_context_reason": final_reason,
+                "raw_cftc_market_name": str(row.get("raw_cftc_market_name", "")),
+                "trader_group_used": "m_money_positions_*_other",
+                "long_value": float(row["long_value"]),
+                "short_value": float(row["short_value"]),
+                "net_value": float(net),
+                "previous_week_net": float(net - weekly) if weekly is not None else None,
+                "one_week_net_change": weekly,
+                "four_week_net_change": four,
+                "bias_rule_used": "net>0 => Bullish; net<0 => Bearish; net==0 => Neutral",
+                "score_rule_used": "_calculate_cot_scores from raw managed-money positioning",
+                "final_calculated_cot_bias": cot_bias,
+                "final_calculated_cot_score": int(round(cot_score)),
             })
-        audit_records.append(record.copy())
-        records.append(record)
 
-    payload = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "records": records,
-    }
+    payload = {"generated_at": datetime.now(timezone.utc).isoformat(), "records": records}
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     AUDIT_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(audit_records).to_csv(AUDIT_CSV_PATH, index=False)
+    pd.DataFrame(records).to_csv(AUDIT_CSV_PATH, index=False)
     print(f"Wrote {OUT_PATH} with {len(records)} rows")
-    print(f"Wrote {AUDIT_CSV_PATH} with {len(audit_records)} rows")
     return OUT_PATH
 
 
