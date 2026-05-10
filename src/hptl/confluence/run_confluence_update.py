@@ -381,6 +381,20 @@ def run() -> None:
 
     confluence = pd.concat([confluence, confluence.apply(build_confluence, axis=1)], axis=1)
 
+    print(f"Confluence columns before ranking: {list(confluence.columns)}")
+
+    bias_alias_candidates = ["confluence_bias", "final_context", "final_bias", "bias", "cot_bias"]
+    chosen_bias_column = next((col for col in bias_alias_candidates if col in confluence.columns), None)
+
+    if chosen_bias_column is None:
+        print(
+            "Warning: No confluence bias column found; skipping confluence bias ranking "
+            f"(checked: {bias_alias_candidates})."
+        )
+    elif chosen_bias_column != "confluence_bias":
+        print(f"Using '{chosen_bias_column}' as confluence bias source.")
+        confluence["confluence_bias"] = confluence[chosen_bias_column]
+
     bias_order = {
         "Long Bias": 0,
         "Short Bias": 0,
@@ -389,10 +403,15 @@ def run() -> None:
         "Neutral / Mixed": 2,
         "Conflicted / No Trade": 3,
     }
-    confluence["_bias_rank"] = confluence["confluence_bias"].map(bias_order).fillna(4)
-    confluence = confluence.sort_values(
-        by=["_bias_rank", "confluence_score"], ascending=[True, False]
-    ).drop(columns=["_bias_rank"])
+
+    if "confluence_bias" in confluence.columns:
+        confluence["_bias_rank"] = confluence["confluence_bias"].map(bias_order).fillna(4)
+        confluence = confluence.sort_values(
+            by=["_bias_rank", "confluence_score"], ascending=[True, False]
+        ).drop(columns=["_bias_rank"])
+    else:
+        print("Warning: confluence_bias unavailable; sorting by confluence_score only.")
+        confluence = confluence.sort_values(by=["confluence_score"], ascending=[False])
 
     final_columns = [
         "market",
