@@ -12,6 +12,7 @@ from hptl.confluence.build_confluence_history import _build_confluence
 PROCESSED_DIR = Path("data/processed")
 EXPORT_DIR = Path("data/exports")
 OUT_PATH = Path("web-dashboard/public/data/confluence_history_latest.json")
+AUDIT_CSV_PATH = Path("data/exports/decision_table_audit.csv")
 
 TARGET_MARKETS = [
     "NASDAQ / NQ",
@@ -76,8 +77,10 @@ def _load_cot_latest_by_market(path: Path) -> dict[str, dict[str, Any]]:
         if col not in df.columns:
             raise ValueError(f"COT file missing required column: {col}")
 
+    trader_group = "m_money_positions_*_other"
     frame = pd.DataFrame()
     frame["market"] = df["market_and_exchange_names"].astype(str).str.strip().apply(_map_market)
+    frame["raw_cftc_market_name"] = df["market_and_exchange_names"].astype(str).str.strip()
     frame["report_date"] = pd.to_datetime(df["report_date_as_yyyy_mm_dd"], errors="coerce", dayfirst=True)
     frame["long"] = pd.to_numeric(df["m_money_positions_long_other"], errors="coerce")
     frame["short"] = pd.to_numeric(df["m_money_positions_short_other"], errors="coerce")
@@ -126,7 +129,17 @@ def _load_cot_latest_by_market(path: Path) -> dict[str, dict[str, Any]]:
             score += 2
 
         latest_rows[market] = {
+            "raw_cftc_market_name": str(latest["raw_cftc_market_name"]),
             "latest_report_date": latest["report_date"].date().isoformat(),
+            "trader_group_used": trader_group,
+            "long_value": float(latest["long"]),
+            "short_value": float(latest["short"]),
+            "net_value": float(latest["net"]),
+            "previous_week_net": float(prev["net"]) if prev is not None else None,
+            "one_week_net_change": weekly_change,
+            "four_week_net_change": four_week_change,
+            "bias_rule_used": "net>0 => Bullish; net<0 => Bearish; net==0 => Neutral",
+            "score_rule_used": "base 4 on non-zero net + trend points (1w,4w) + conviction 2 when |net|>0; clamped 0..10",
             "cot_bias": bias,
             "cot_score": int(max(0, min(score, 10))),
             "cot_reason": (
@@ -181,6 +194,7 @@ def run() -> Path:
         macro_date, macro_signal, macro_score = _load_latest_macro(macro_path)
 
     records = []
+    audit_records: list[dict[str, Any]] = []
     for market in TARGET_MARKETS:
         cot = cot_rows.get(market)
         if cot is None:
@@ -191,9 +205,10 @@ def run() -> Path:
                 "cot_score": "N/A",
                 "cot_reason": "N/A: no relevant COT rows found for this target market.",
                 "macro_regime": macro_signal or "N/A",
-                "macro_score": macro_score if macro_score is not None else "N/A",
+                "macro_score": macro_score if macro_signal is not None and macro_score is not None else "N/A",
                 "final_context": "N/A",
                 "technical_action_note": "N/A: waiting for COT data.",
+                "final_context_reason": "Cannot calculate final context without COT bias and COT score.",
             }
         elif macro_signal is None or macro_score is None:
             record = {
@@ -206,6 +221,7 @@ def run() -> Path:
                 "macro_score": "N/A",
                 "final_context": "N/A",
                 "technical_action_note": "N/A: macro input unavailable.",
+                "final_context_reason": "Cannot calculate final context because macro_regime/macro_score is missing.",
             }
         else:
             conf = _build_confluence(cot["cot_bias"], float(cot["cot_score"]), macro_signal, float(macro_score))
@@ -219,9 +235,24 @@ def run() -> Path:
                 "macro_score": float(macro_score),
                 "final_context": f"{conf['confluence_bias']} {conf['confluence_score']:.0f}",
                 "technical_action_note": conf["trade_readiness"],
+                "final_context_reason": conf["summary"],
             }
-        if macro_date and record["latest_report_date"] == "N/A":
-            record["latest_report_date"] = macro_date
+        if cot is not None:
+            record.update({
+                "raw_cftc_market_name": cot["raw_cftc_market_name"],
+                "trader_group_used": cot["trader_group_used"],
+                "long_value": cot["long_value"],
+                "short_value": cot["short_value"],
+                "net_value": cot["net_value"],
+                "previous_week_net": cot["previous_week_net"],
+                "one_week_net_change": cot["one_week_net_change"],
+                "four_week_net_change": cot["four_week_net_change"],
+                "bias_rule_used": cot["bias_rule_used"],
+                "score_rule_used": cot["score_rule_used"],
+                "final_calculated_cot_bias": cot["cot_bias"],
+                "final_calculated_cot_score": cot["cot_score"],
+            })
+        audit_records.append(record.copy())
         records.append(record)
 
     payload = {
@@ -230,7 +261,10 @@ def run() -> Path:
     }
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    AUDIT_CSV_PATH.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(audit_records).to_csv(AUDIT_CSV_PATH, index=False)
     print(f"Wrote {OUT_PATH} with {len(records)} rows")
+    print(f"Wrote {AUDIT_CSV_PATH} with {len(audit_records)} rows")
     return OUT_PATH
 
 
