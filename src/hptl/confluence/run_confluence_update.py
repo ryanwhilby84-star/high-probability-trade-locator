@@ -131,7 +131,7 @@ def _load_cot(cot_file: Path) -> pd.DataFrame:
     else:
         cleaned["cot_report_date"] = pd.NaT
 
-    cleaned["cot_bias"] = data[bias_col].apply(_clean_bias) if bias_col else "Neutral / Mixed"
+    cleaned["cot_bias"] = data[bias_col].apply(_clean_bias) if bias_col else pd.NA
 
     if score_col:
         cleaned["cot_score"] = pd.to_numeric(data[score_col], errors="coerce")
@@ -146,9 +146,9 @@ def _load_cot(cot_file: Path) -> pd.DataFrame:
         errors="coerce",
     )
     cleaned.loc[missing_score, "cot_score"] = fallback_scores
-    cleaned["cot_score"] = (
-        pd.to_numeric(cleaned["cot_score"], errors="coerce").fillna(0).clip(lower=0, upper=10)
-    )
+    cleaned["cot_score"] = pd.to_numeric(cleaned["cot_score"], errors="coerce").clip(lower=0, upper=10)
+
+    cleaned = cleaned[cleaned["cot_bias"].notna() & cleaned["cot_score"].notna()].copy()
 
     return cleaned.reset_index(drop=True)
 
@@ -338,7 +338,7 @@ def run() -> None:
 
         score = max(0, min(10, score))
 
-        if cot_dir == "neutral" or macro_dir == "neutral":
+        if cot_dir == "neutral":
             bias = "Neutral / Mixed"
         elif cot_dir == macro_dir == "long":
             bias = "Long Bias"

@@ -110,7 +110,7 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
 
     score = float(max(0, min(10, score)))
 
-    if cot_dir == "neutral" or macro_dir == "neutral":
+    if cot_dir == "neutral":
         bias = "Neutral / Mixed"
     elif cot_dir == macro_dir == "long":
         bias = "Long Bias"
@@ -186,7 +186,8 @@ def _load_cot_history() -> pd.DataFrame:
     out["mm_weekly_change"] = g["managed_money_net"].diff(1)
 
     scored = _calculate_cot_scores(out)
-    scored["cot_score"] = pd.to_numeric(scored["cot_score"], errors="coerce").fillna(0).clip(0, 10)
+    scored["cot_score"] = pd.to_numeric(scored["cot_score"], errors="coerce").clip(0, 10)
+    scored = scored[scored["cot_score"].notna() & scored["cot_bias"].notna()].copy()
     scored["cot_strength"] = scored["cot_strength"].fillna("Unknown")
     return scored[["market", "cot_report_date", "cot_bias", "cot_score", "cot_strength"]]
 

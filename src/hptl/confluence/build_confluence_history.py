@@ -354,7 +354,7 @@ def _build_confluence(cot_bias: str, cot_score: float, macro_signal: str, macro_
 
     score = max(0, min(10, score))
 
-    if cot_dir == "neutral" or macro_dir == "neutral":
+    if cot_dir == "neutral":
         bias = "Neutral / Mixed"
     elif cot_dir == macro_dir == "long":
         bias = "Long Bias"
