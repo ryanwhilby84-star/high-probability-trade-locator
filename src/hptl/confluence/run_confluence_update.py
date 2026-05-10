@@ -381,6 +381,42 @@ def run() -> None:
 
     confluence = pd.concat([confluence, confluence.apply(build_confluence, axis=1)], axis=1)
 
+    required_output_columns = [
+        "confluence_bias",
+        "confluence_score",
+        "cot_bias",
+        "cot_score",
+        "macro_signal",
+        "macro_score",
+        "trade_readiness",
+        "summary",
+    ]
+
+    fallback_map = {
+        "confluence_bias": ("final_bias", "bias", "direction"),
+        "confluence_score": ("final_score", "score"),
+        "cot_bias": ("bias", "final_bias", "direction"),
+        "cot_score": ("score", "final_score"),
+        "macro_signal": ("final_context", "macro_context", "context"),
+        "macro_score": ("score", "final_score"),
+        "trade_readiness": ("readiness", "status"),
+        "summary": ("final_context", "context", "notes"),
+    }
+
+    for target_col in required_output_columns:
+        if target_col in confluence.columns:
+            continue
+        for source_col in fallback_map.get(target_col, ()):
+            if source_col in confluence.columns:
+                confluence[target_col] = confluence[source_col]
+                break
+        else:
+            confluence[target_col] = None
+
+    confluence["confluence_bias"] = confluence["confluence_bias"].fillna("Conflicted / No Trade")
+
+    print("Confluence dataframe columns before sorting:", sorted(confluence.columns.tolist()))
+
     bias_order = {
         "Long Bias": 0,
         "Short Bias": 0,
@@ -389,16 +425,8 @@ def run() -> None:
         "Neutral / Mixed": 2,
         "Conflicted / No Trade": 3,
     }
-    if "confluence_bias" not in confluence.columns:
-        for fallback_col in ("final_bias", "bias", "direction"):
-            if fallback_col in confluence.columns:
-                confluence["confluence_bias"] = confluence[fallback_col]
-                break
-        else:
-            confluence["confluence_bias"] = "Conflicted / No Trade"
-
-    confluence["confluence_bias"] = confluence["confluence_bias"].fillna("Conflicted / No Trade")
     confluence["_bias_rank"] = confluence["confluence_bias"].map(bias_order).fillna(4)
+    confluence["confluence_score"] = pd.to_numeric(confluence["confluence_score"], errors="coerce")
     confluence = confluence.sort_values(
         by=["_bias_rank", "confluence_score"], ascending=[True, False]
     ).drop(columns=["_bias_rank"])
@@ -480,7 +508,7 @@ def run() -> None:
     summary_ws["B1"] = "confluence_score"
     for i, row in enumerate(score_summary.itertuples(index=False), start=2):
         summary_ws.cell(row=i, column=1, value=row.market)
-        summary_ws.cell(row=i, column=2, value=float(row.confluence_score))
+        summary_ws.cell(row=i, column=2, value=float(row.confluence_score) if pd.notna(row.confluence_score) else None)
     score_chart = BarChart()
     score_chart.title = "Confluence Score by Market"
     score_chart.add_data(Reference(summary_ws, min_col=2, min_row=1, max_row=1 + len(score_summary)), titles_from_data=True)
