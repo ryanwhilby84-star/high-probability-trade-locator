@@ -9,6 +9,7 @@ import pandas as pd
 
 from hptl.confluence.build_confluence_history import _build_confluence
 from hptl.cot.exporter import _calculate_cot_scores
+from hptl.confluence.run_confluence_update import _find_column
 
 PROCESSED_DIR = Path("data/processed")
 EXPORT_DIR = Path("data/exports")
@@ -66,18 +67,47 @@ def _load_cot_history() -> pd.DataFrame:
         return pd.DataFrame()
 
     frames = []
+    printed_columns = False
+    candidate_long_cols = [
+        "managed_money_long",
+        "m_money_long",
+        "m_money_positions_long_other",
+        "noncommercial_long",
+        "noncomm_positions_long_all",
+        "noncommercial_positions_long_all",
+    ]
+    candidate_short_cols = [
+        "managed_money_short",
+        "m_money_short",
+        "m_money_positions_short_other",
+        "noncommercial_short",
+        "noncomm_positions_short_all",
+        "noncommercial_positions_short_all",
+    ]
     for path in files:
         df = pd.read_csv(path, low_memory=False)
-        if not {"market_and_exchange_names", "report_date_as_yyyy_mm_dd", "m_money_positions_long_other", "m_money_positions_short_other"}.issubset(df.columns):
+        if not printed_columns:
+            print(f"COT file columns ({path.name}): {list(df.columns)}")
+            printed_columns = True
+
+        market_col = _find_column(df, "market_and_exchange_names", "market", "market_name", "contract_market_name")
+        date_col = _find_column(df, "report_date_as_yyyy_mm_dd", "cot_report_date", "report_date", "date")
+        long_col = _find_column(df, *candidate_long_cols)
+        short_col = _find_column(df, *candidate_short_cols)
+        if market_col is None or date_col is None or long_col is None or short_col is None:
             continue
         x = pd.DataFrame()
-        x["market"] = df["market_and_exchange_names"].astype(str).str.strip().apply(_map_market)
-        x["raw_cftc_market_name"] = df["market_and_exchange_names"].astype(str).str.strip()
-        x["cot_report_date"] = pd.to_datetime(df["report_date_as_yyyy_mm_dd"], errors="coerce", dayfirst=True).dt.normalize()
-        x["long_value"] = pd.to_numeric(df["m_money_positions_long_other"], errors="coerce")
-        x["short_value"] = pd.to_numeric(df["m_money_positions_short_other"], errors="coerce")
-        x = x.dropna(subset=["market", "cot_report_date", "long_value", "short_value"]).copy()
+        x["market"] = df[market_col].astype(str).str.strip().apply(_map_market)
+        x["raw_cftc_market_name"] = df[market_col].astype(str).str.strip()
+        x["cot_report_date"] = pd.to_datetime(df[date_col], errors="coerce", dayfirst=True).dt.normalize()
+        x["long_value"] = pd.to_numeric(df[long_col], errors="coerce")
+        x["short_value"] = pd.to_numeric(df[short_col], errors="coerce")
+        x["long_col_used"] = long_col
+        x["short_col_used"] = short_col
+        x = x.dropna(subset=["market", "cot_report_date"]).copy()
         x["net_value"] = x["long_value"] - x["short_value"]
+        # preserve real missingness; do not coerce missing position values to 0
+        x.loc[x["long_value"].isna() | x["short_value"].isna(), "net_value"] = pd.NA
         frames.append(x)
 
     if not frames:
@@ -85,6 +115,10 @@ def _load_cot_history() -> pd.DataFrame:
 
     cot = pd.concat(frames, ignore_index=True)
     cot = cot.sort_values(["market", "cot_report_date"]).drop_duplicates(["market", "cot_report_date"], keep="last")
+    matched = cot.groupby("market")["raw_cftc_market_name"].apply(lambda s: sorted(set(s.dropna().astype(str).tolist()))).to_dict()
+    print("Matched raw market names by tracked market:")
+    for m in TARGET_MARKETS:
+        print(f"  {m}: {matched.get(m, [])}")
     cot["weekly_change"] = cot.groupby("market")["net_value"].diff(1)
     cot["four_week_change"] = cot.groupby("market")["net_value"].diff(4)
     cot["managed_money_net"] = cot["net_value"]
@@ -160,8 +194,9 @@ def run() -> Path:
                 })
                 continue
 
-            cot_bias = str(row["cot_bias"])
-            cot_score = float(row["cot_score"])
+            has_real_positions = pd.notna(row.get("long_value")) and pd.notna(row.get("short_value")) and pd.notna(row.get("net_value"))
+            cot_bias = str(row["cot_bias"]) if has_real_positions else "N/A"
+            cot_score = float(row["cot_score"]) if has_real_positions and pd.notna(row.get("cot_score")) else None
             weekly = row.get("weekly_change")
             four = row.get("four_week_change")
             net = row.get("net_value")
@@ -170,17 +205,20 @@ def run() -> Path:
             if pd.isna(four):
                 four = None
 
-            cot_reason = (
-                f"Managed money net is {int(net)} (long {int(row['long_value'])}, short {int(row['short_value'])}); "
-                + (f"1w net change {int(weekly)}; " if weekly is not None else "1w net change N/A; ")
-                + (f"4w net change {int(four)}." if four is not None else "4w net change N/A.")
-            )
+            if has_real_positions:
+                cot_reason = (
+                    f"Managed money net is {int(net)} (long {int(row['long_value'])}, short {int(row['short_value'])}); "
+                    + (f"1w net change {int(weekly)}; " if weekly is not None else "1w net change N/A; ")
+                    + (f"4w net change {int(four)}." if four is not None else "4w net change N/A.")
+                )
+            else:
+                cot_reason = "N/A: missing long/short values in source COT row; score suppressed."
 
             macro_signal = None if macro_row is None else str(macro_row.get("macro_signal") or "")
             macro_score = None if macro_row is None else pd.to_numeric(pd.Series([macro_row.get("macro_score")]), errors="coerce").iloc[0]
             has_macro = macro_signal not in {None, "", "nan"} and pd.notna(macro_score)
 
-            if has_macro:
+            if has_macro and cot_score is not None:
                 conf = _build_confluence(cot_bias, cot_score, macro_signal, float(macro_score))
                 final_context = f"{conf['confluence_bias']} {conf['confluence_score']:.0f}"
                 technical_note = conf["trade_readiness"]
@@ -190,7 +228,7 @@ def run() -> Path:
             else:
                 final_context = "N/A"
                 technical_note = "N/A: macro input unavailable."
-                final_reason = "Cannot calculate final context because macro input is missing."
+                final_reason = "Cannot calculate final context because macro input is missing." if cot_score is not None else "Cannot calculate final context because COT long/short data is missing."
                 macro_regime = "N/A"
                 macro_score_out = "N/A"
 
@@ -199,7 +237,7 @@ def run() -> Path:
                 "market": market,
                 "latest_report_date": date_str,
                 "cot_bias": cot_bias,
-                "cot_score": int(round(cot_score)),
+                "cot_score": int(round(cot_score)) if cot_score is not None else "N/A",
                 "cot_reason": cot_reason,
                 "macro_regime": macro_regime,
                 "macro_score": macro_score_out,
@@ -207,18 +245,35 @@ def run() -> Path:
                 "technical_action_note": technical_note,
                 "final_context_reason": final_reason,
                 "raw_cftc_market_name": str(row.get("raw_cftc_market_name", "")),
-                "trader_group_used": "m_money_positions_*_other",
-                "long_value": float(row["long_value"]),
-                "short_value": float(row["short_value"]),
-                "net_value": float(net),
+                "trader_group_used": f"{row.get('long_col_used','N/A')} / {row.get('short_col_used','N/A')}",
+                "long_value": float(row["long_value"]) if pd.notna(row.get("long_value")) else None,
+                "short_value": float(row["short_value"]) if pd.notna(row.get("short_value")) else None,
+                "net_value": float(net) if pd.notna(net) else None,
                 "previous_week_net": float(net - weekly) if weekly is not None else None,
                 "one_week_net_change": weekly,
                 "four_week_net_change": four,
                 "bias_rule_used": "net>0 => Bullish; net<0 => Bearish; net==0 => Neutral",
                 "score_rule_used": "_calculate_cot_scores from raw managed-money positioning",
                 "final_calculated_cot_bias": cot_bias,
-                "final_calculated_cot_score": int(round(cot_score)),
+                "final_calculated_cot_score": int(round(cot_score)) if cot_score is not None else "N/A",
             })
+            if market == "Cocoa":
+                print(
+                    "COCOA DEBUG:",
+                    {
+                        "report_date": date_str,
+                        "raw_market_name": str(row.get("raw_cftc_market_name", "")),
+                        "long_column_used": row.get("long_col_used"),
+                        "short_column_used": row.get("short_col_used"),
+                        "long_value": None if pd.isna(row.get("long_value")) else float(row.get("long_value")),
+                        "short_value": None if pd.isna(row.get("short_value")) else float(row.get("short_value")),
+                        "net": None if pd.isna(net) else float(net),
+                        "1w_change": weekly,
+                        "4w_change": four,
+                        "cot_bias": cot_bias,
+                        "cot_score": cot_score,
+                    },
+                )
 
     payload = {"generated_at": datetime.now(timezone.utc).isoformat(), "records": records}
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
