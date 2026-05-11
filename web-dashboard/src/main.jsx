@@ -19,7 +19,7 @@ const TRACKED_MARKETS = [
   'Soybeans',
 ]
 
-const norm = (m = '') => m.toLowerCase()
+const norm = (m = '') => String(m || '').toLowerCase()
 const canonical = (market = '') => {
   const m = norm(market)
   if (m.includes('nasdaq') || m.includes('/ nq')) return 'NASDAQ / NQ'
@@ -39,7 +39,36 @@ const canonical = (market = '') => {
 }
 
 const rowDate = (r = {}) => r.date || r.latest_report_date || ''
+const normalizeDate = (v = '') => String(v || '').trim()
 const display = (v) => (v === null || v === undefined || v === '' ? 'N/A' : v)
+
+const hasRealValue = (v) => {
+  if (v === null || v === undefined) return false
+  if (typeof v === 'string') {
+    const s = v.trim().toLowerCase()
+    if (!s || s === 'n/a' || s === 'nan' || s === 'null' || s === 'undefined') return false
+  }
+  return true
+}
+
+const completenessScore = (row = {}) => {
+  const fields = [
+    row.raw_cftc_market_name,
+    row.long_value,
+    row.short_value,
+    row.net_value,
+    row.one_week_net_change,
+    row.four_week_net_change,
+    row.cot_bias,
+    row.cot_score,
+    row.cot_reason,
+    row.macro_regime || row.macro_signal,
+    row.macro_score,
+    row.final_context,
+    row.final_context_reason,
+  ]
+  return fields.reduce((acc, v) => acc + (hasRealValue(v) ? 1 : 0), 0)
+}
 
 const sanitizeInvalidNumericLiterals = (text = '') => text.replace(/\b(?:NaN|Infinity|-Infinity|undefined)\b/g, 'null')
 
@@ -86,15 +115,31 @@ function App() {
       .catch(() => setData([]))
   }, [])
 
-  const dates = React.useMemo(() => [...new Set(data.map(rowDate).filter(Boolean))].sort(), [data])
-  const week = React.useMemo(() => data.filter((r) => rowDate(r) === date).map((r) => ({ ...r, market_key: canonical(r.market) })), [data, date])
+  const dates = React.useMemo(() => [...new Set(data.map((r) => normalizeDate(rowDate(r))).filter(Boolean))].sort(), [data])
+  const week = React.useMemo(
+    () => data
+      .filter((r) => normalizeDate(rowDate(r)) === normalizeDate(date))
+      .map((r) => {
+        const marketSource = r.market || r.raw_cftc_market_name || ''
+        return { ...r, market_key: canonical(marketSource) }
+      }),
+    [data, date],
+  )
 
-  const marketRows = React.useMemo(() => {
+  const { marketRows, cocoaDebug } = React.useMemo(() => {
     const byMarket = new Map()
     week.forEach((row) => {
-      if (TRACKED_MARKETS.includes(row.market_key) && !byMarket.has(row.market_key)) byMarket.set(row.market_key, row)
+      if (!TRACKED_MARKETS.includes(row.market_key)) return
+      const prev = byMarket.get(row.market_key)
+      if (!prev) {
+        byMarket.set(row.market_key, row)
+        return
+      }
+      const prevScore = completenessScore(prev)
+      const nextScore = completenessScore(row)
+      if (nextScore > prevScore) byMarket.set(row.market_key, row)
     })
-    return TRACKED_MARKETS.map((market) => {
+    const rows = TRACKED_MARKETS.map((market) => {
       const row = byMarket.get(market)
       return {
         market,
@@ -121,6 +166,16 @@ function App() {
         final_calculated_cot_score: row?.final_calculated_cot_score,
       }
     })
+    const cocoaRowsForDate = week.filter((r) => canonical(r.market || r.raw_cftc_market_name || '') === 'Cocoa')
+    const cocoaDisplayed = rows.find((r) => r.market === 'Cocoa') || null
+    return {
+      marketRows: rows,
+      cocoaDebug: {
+        selectedDate: date,
+        cocoaRowsForDateCount: cocoaRowsForDate.length,
+        cocoaDisplayedObject: cocoaDisplayed,
+      },
+    }
   }, [week, date])
 
   const tracked = marketRows.filter((r) => r.cot_score !== undefined && r.cot_score !== null)
@@ -134,12 +189,12 @@ function App() {
     <div className='table-wrap'>
       <table className='decision-table'>
         <thead><tr>
-          <th>Market</th><th>Latest report date</th><th>COT bias</th><th>COT score</th><th>COT reason</th><th>Macro regime</th><th>Macro score</th><th>Final context</th><th>Technical action note</th>
+          <th>Market</th><th>Latest report date</th><th>COT bias</th><th>COT score</th><th>COT reason</th><th>Macro regime</th><th>Macro score</th><th>Final context</th><th>Final context reason</th>
         </tr></thead>
         <tbody>
           {marketRows.map((r) => <React.Fragment key={r.market}>
             <tr>
-              <td>{r.market}</td><td>{display(r.latest_report_date)}</td><td>{display(r.cot_bias)}</td><td>{display(r.cot_score)}</td><td>{display(r.cot_reason)}</td><td>{display(r.macro_regime)}</td><td>{display(r.macro_score)}</td><td>{display(r.final_context)}</td><td>{display(r.technical_action_note)}</td>
+              <td>{r.market}</td><td>{display(r.latest_report_date)}</td><td>{display(r.cot_bias)}</td><td>{display(r.cot_score)}</td><td>{display(r.cot_reason)}</td><td>{display(r.macro_regime)}</td><td>{display(r.macro_score)}</td><td>{display(r.final_context)}</td><td>{display(r.final_context_reason)}</td>
             </tr>
             <tr>
               <td colSpan={9}>
@@ -155,6 +210,9 @@ function App() {
         </tbody>
       </table>
     </div>
+    <pre style={{ marginTop: '12px', fontSize: '12px', whiteSpace: 'pre-wrap' }}>
+      {`COCOA DEBUG | selectedDate=${cocoaDebug.selectedDate} | cocoaRowsForDate=${cocoaDebug.cocoaRowsForDateCount} | displayed=${JSON.stringify(cocoaDebug.cocoaDisplayedObject)}`}
+    </pre>
     <div className='charts'>
       <Chart title='COT Score by Tracked Market'><BarChart data={tracked}><CartesianGrid strokeDasharray='3 3' /><XAxis dataKey='market' /><YAxis domain={[0, 10]} /><Tooltip /><Bar dataKey='cot_score' fill='#f6ad55' /></BarChart></Chart>
     </div>
