@@ -61,6 +61,27 @@ def _map_market(raw_market: str) -> str | None:
     return None
 
 
+
+def _resolve_position_columns(df: pd.DataFrame, long_candidates: list[str], short_candidates: list[str]) -> tuple[str | None, str | None, str]:
+    """Resolve long/short source columns from raw COT CSV fields.
+
+    Returns (long_col, short_col, source_family) where source_family is one of
+    managed_money | noncommercial | unknown.
+    """
+    long_col = _find_column(df, *long_candidates)
+    short_col = _find_column(df, *short_candidates)
+    if long_col is None or short_col is None:
+        return long_col, short_col, "unknown"
+
+    managed_hints = {
+        "managed_money",
+        "m_money",
+        "money_manager",
+    }
+    normalized_pair = f"{long_col} {short_col}".lower()
+    source_family = "managed_money" if any(hint in normalized_pair for hint in managed_hints) else "noncommercial"
+    return long_col, short_col, source_family
+
 def _load_cot_history() -> pd.DataFrame:
     files = sorted(PROCESSED_DIR.glob("cot_cleaned_*.csv"), key=lambda p: p.stat().st_mtime)
     if not files:
@@ -71,6 +92,9 @@ def _load_cot_history() -> pd.DataFrame:
     candidate_long_cols = [
         "managed_money_long",
         "m_money_long",
+        "m_money_positions_long_all",
+        "managed_money_positions_long_all",
+        "money_manager_positions_long_all",
         "m_money_positions_long_other",
         "noncommercial_long",
         "noncomm_positions_long_all",
@@ -79,6 +103,9 @@ def _load_cot_history() -> pd.DataFrame:
     candidate_short_cols = [
         "managed_money_short",
         "m_money_short",
+        "m_money_positions_short_all",
+        "managed_money_positions_short_all",
+        "money_manager_positions_short_all",
         "m_money_positions_short_other",
         "noncommercial_short",
         "noncomm_positions_short_all",
@@ -92,8 +119,7 @@ def _load_cot_history() -> pd.DataFrame:
 
         market_col = _find_column(df, "market_and_exchange_names", "market", "market_name", "contract_market_name")
         date_col = _find_column(df, "report_date_as_yyyy_mm_dd", "cot_report_date", "report_date", "date")
-        long_col = _find_column(df, *candidate_long_cols)
-        short_col = _find_column(df, *candidate_short_cols)
+        long_col, short_col, source_family = _resolve_position_columns(df, candidate_long_cols, candidate_short_cols)
         if market_col is None or date_col is None or long_col is None or short_col is None:
             continue
         x = pd.DataFrame()
@@ -104,6 +130,7 @@ def _load_cot_history() -> pd.DataFrame:
         x["short_value"] = pd.to_numeric(df[short_col], errors="coerce")
         x["long_col_used"] = long_col
         x["short_col_used"] = short_col
+        x["position_source_family"] = source_family
         x = x.dropna(subset=["market", "cot_report_date"]).copy()
         x["net_value"] = x["long_value"] - x["short_value"]
         # preserve real missingness; do not coerce missing position values to 0
@@ -116,9 +143,15 @@ def _load_cot_history() -> pd.DataFrame:
     cot = pd.concat(frames, ignore_index=True)
     cot = cot.sort_values(["market", "cot_report_date"]).drop_duplicates(["market", "cot_report_date"], keep="last")
     matched = cot.groupby("market")["raw_cftc_market_name"].apply(lambda s: sorted(set(s.dropna().astype(str).tolist()))).to_dict()
+    col_trace = (
+        cot.groupby("market")[["long_col_used", "short_col_used", "position_source_family"]]
+        .agg(lambda s: sorted(set(s.astype(str).tolist())))
+        .to_dict("index")
+    )
     print("Matched raw market names by tracked market:")
     for m in TARGET_MARKETS:
         print(f"  {m}: {matched.get(m, [])}")
+        print(f"    columns: {col_trace.get(m, {})}")
     cot["weekly_change"] = cot.groupby("market")["net_value"].diff(1)
     cot["four_week_change"] = cot.groupby("market")["net_value"].diff(4)
     cot["managed_money_net"] = cot["net_value"]
