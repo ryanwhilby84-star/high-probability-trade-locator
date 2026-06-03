@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from .macro_dashboard_columns import augment_scored_macro_dashboard_columns
 from .macro_scoring import REQUIRED_SCORING_INPUTS, score_macro
 from .rates_downloader import download_all
 from .rates_parser import process_rates
@@ -36,6 +37,9 @@ MACRO_HISTORY_COLS = [
     "macro_strength",
     "macro_context_for_trades",
     "macro_summary",
+    "macro_rationale",
+    "curve_state",
+    "liquidity_regime",
 ]
 
 
@@ -51,6 +55,7 @@ def run() -> Path:
     print(f"Clean rates rows processed: {len(clean)}")
 
     scored = score_macro(clean)
+    scored = augment_scored_macro_dashboard_columns(scored)
     latest_available_date = scored[scored[["dgs2", "dgs10", "dgs30"]].notna().all(axis=1)]["date"].max()
 
     scored_rows = scored[scored["macro_score"].notna()].copy()

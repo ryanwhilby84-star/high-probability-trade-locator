@@ -1,0 +1,4645 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-01T08:30:54.928132+00:00",
+  "generated_from": "hptl.prices.price_coverage_audit",
+  "summary": {
+    "htpl_tradeable_instruments": 125,
+    "oanda_supported_count": 81,
+    "alpha_supported_count": 102,
+    "supported_by_both_count": 60,
+    "unsupported_count": 2,
+    "oanda_only_count": 21,
+    "alpha_only_count": 42
+  },
+  "oanda_supported": [
+    "AUD/CAD",
+    "AUD/CHF",
+    "AUD/HKD",
+    "AUD/JPY",
+    "AUD/NZD",
+    "AUD/SGD",
+    "AUD/USD",
+    "Australian Dollar / 6A",
+    "British Pound / 6B",
+    "CAD/HKD",
+    "CAD/SGD",
+    "CHF/HKD",
+    "CHF/ZAR",
+    "Canadian Dollar / 6C",
+    "EUR/AUD",
+    "EUR/CZK",
+    "EUR/DKK",
+    "EUR/HKD",
+    "EUR/HUF",
+    "EUR/NOK",
+    "EUR/NZD",
+    "EUR/SEK",
+    "EUR/SGD",
+    "EUR/TRY",
+    "EUR/ZAR",
+    "Euro FX / 6E",
+    "GBP/AUD",
+    "GBP/HKD",
+    "GBP/NZD",
+    "GBP/PLN",
+    "GBP/SGD",
+    "GBP/ZAR",
+    "Gold",
+    "Gold/AUD",
+    "Gold/CAD",
+    "Gold/CHF",
+    "Gold/EUR",
+    "Gold/GBP",
+    "Gold/HKD",
+    "Gold/JPY",
+    "Gold/NZD",
+    "Gold/SGD",
+    "Gold/Silver",
+    "HKD/JPY",
+    "Japanese Yen / 6J",
+    "NZ Dollar / 6N",
+    "NZD/CAD",
+    "NZD/CHF",
+    "NZD/HKD",
+    "NZD/JPY",
+    "NZD/SGD",
+    "NZD/USD",
+    "Natural Gas / NG",
+    "SGD/CHF",
+    "SGD/JPY",
+    "Silver",
+    "Silver/AUD",
+    "Silver/CAD",
+    "Silver/CHF",
+    "Silver/EUR",
+    "Silver/GBP",
+    "Silver/HKD",
+    "Silver/JPY",
+    "Silver/NZD",
+    "Silver/SGD",
+    "Swiss Franc / 6S",
+    "TRY/JPY",
+    "USD/CNH",
+    "USD/CZK",
+    "USD/DKK",
+    "USD/HKD",
+    "USD/HUF",
+    "USD/MXN",
+    "USD/NOK",
+    "USD/PLN",
+    "USD/SEK",
+    "USD/SGD",
+    "USD/THB",
+    "USD/TRY",
+    "USD/ZAR",
+    "ZAR/JPY"
+  ],
+  "alpha_supported": [
+    "AUD/CAD",
+    "AUD/CHF",
+    "AUD/HKD",
+    "AUD/JPY",
+    "AUD/NZD",
+    "AUD/SGD",
+    "AUD/USD",
+    "Australia 200",
+    "Australian Dollar / 6A",
+    "Bitcoin",
+    "Bitcoin Cash",
+    "Brent Crude Oil",
+    "British Pound / 6B",
+    "Bund",
+    "CAD/HKD",
+    "CAD/SGD",
+    "CHF/HKD",
+    "CHF/ZAR",
+    "Canadian Dollar / 6C",
+    "China A50",
+    "Cocoa",
+    "Coffee",
+    "Copper",
+    "Copper / HG",
+    "Corn",
+    "Crude Oil / CL",
+    "Dow / YM",
+    "EUR/AUD",
+    "EUR/CZK",
+    "EUR/DKK",
+    "EUR/HKD",
+    "EUR/HUF",
+    "EUR/NOK",
+    "EUR/NZD",
+    "EUR/SEK",
+    "EUR/SGD",
+    "EUR/TRY",
+    "EUR/ZAR",
+    "Ethereum/Ether",
+    "Euro FX / 6E",
+    "Europe 50",
+    "France 40",
+    "GBP/AUD",
+    "GBP/HKD",
+    "GBP/NZD",
+    "GBP/PLN",
+    "GBP/SGD",
+    "GBP/ZAR",
+    "Germany 30",
+    "HKD/JPY",
+    "Hong Kong 33",
+    "India 50",
+    "Japan 225",
+    "Japanese Yen / 6J",
+    "Litecoin",
+    "NASDAQ / NQ",
+    "NZ Dollar / 6N",
+    "NZD/CAD",
+    "NZD/CHF",
+    "NZD/HKD",
+    "NZD/JPY",
+    "NZD/SGD",
+    "NZD/USD",
+    "Natural Gas / NG",
+    "Netherlands 25",
+    "S&P 500 / ES",
+    "SGD/CHF",
+    "SGD/JPY",
+    "Singapore 30",
+    "Soybeans",
+    "Sugar",
+    "Swiss Franc / 6S",
+    "TRY/JPY",
+    "Taiwan Index",
+    "UK 100",
+    "UK 10Y Gilt",
+    "US 10Y T-Note",
+    "US 2Y T-Note",
+    "US 5Y T-Note",
+    "US Nas 100",
+    "US Russ 2000",
+    "US SPX 500",
+    "US T-Bond",
+    "US Wall St 30",
+    "USD/CNH",
+    "USD/CZK",
+    "USD/DKK",
+    "USD/HKD",
+    "USD/HUF",
+    "USD/INR",
+    "USD/MXN",
+    "USD/NOK",
+    "USD/PLN",
+    "USD/SAR",
+    "USD/SEK",
+    "USD/SGD",
+    "USD/THB",
+    "USD/TRY",
+    "USD/ZAR",
+    "West Texas Oil",
+    "Wheat",
+    "ZAR/JPY"
+  ],
+  "supported_by_both": [
+    "AUD/CAD",
+    "AUD/CHF",
+    "AUD/HKD",
+    "AUD/JPY",
+    "AUD/NZD",
+    "AUD/SGD",
+    "AUD/USD",
+    "Australian Dollar / 6A",
+    "British Pound / 6B",
+    "CAD/HKD",
+    "CAD/SGD",
+    "CHF/HKD",
+    "CHF/ZAR",
+    "Canadian Dollar / 6C",
+    "EUR/AUD",
+    "EUR/CZK",
+    "EUR/DKK",
+    "EUR/HKD",
+    "EUR/HUF",
+    "EUR/NOK",
+    "EUR/NZD",
+    "EUR/SEK",
+    "EUR/SGD",
+    "EUR/TRY",
+    "EUR/ZAR",
+    "Euro FX / 6E",
+    "GBP/AUD",
+    "GBP/HKD",
+    "GBP/NZD",
+    "GBP/PLN",
+    "GBP/SGD",
+    "GBP/ZAR",
+    "HKD/JPY",
+    "Japanese Yen / 6J",
+    "NZ Dollar / 6N",
+    "NZD/CAD",
+    "NZD/CHF",
+    "NZD/HKD",
+    "NZD/JPY",
+    "NZD/SGD",
+    "NZD/USD",
+    "Natural Gas / NG",
+    "SGD/CHF",
+    "SGD/JPY",
+    "Swiss Franc / 6S",
+    "TRY/JPY",
+    "USD/CNH",
+    "USD/CZK",
+    "USD/DKK",
+    "USD/HKD",
+    "USD/HUF",
+    "USD/MXN",
+    "USD/NOK",
+    "USD/PLN",
+    "USD/SEK",
+    "USD/SGD",
+    "USD/THB",
+    "USD/TRY",
+    "USD/ZAR",
+    "ZAR/JPY"
+  ],
+  "unsupported": [
+    "Palladium",
+    "Platinum"
+  ],
+  "oanda_api": {
+    "account_id": "001-004-16005033-001",
+    "api_host": "https://api-fxtrade.oanda.com",
+    "instrument_count": 123,
+    "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+    "endpoint": "/v3/accounts/{accountId}/instruments"
+  },
+  "alpha_vantage_api": {
+    "supported_categories": [
+      "fx",
+      "commodity_wti",
+      "commodity_brent",
+      "commodity_natgas",
+      "commodity_copper",
+      "commodity_wheat",
+      "commodity_corn",
+      "commodity_all",
+      "commodity_sugar",
+      "commodity_coffee",
+      "commodity_cocoa",
+      "index",
+      "crypto",
+      "rates"
+    ],
+    "verified_functions": [
+      "ALL_COMMODITIES",
+      "BRENT",
+      "COFFEE",
+      "COPPER",
+      "CORN",
+      "COTTON",
+      "CURRENCY_EXCHANGE_RATE",
+      "DIGITAL_CURRENCY_DAILY",
+      "GLOBAL_QUOTE",
+      "NATURAL_GAS",
+      "SUGAR",
+      "TREASURY_YIELD",
+      "WHEAT",
+      "WTI"
+    ],
+    "last_successful_response": "2026-06-01T08:27:45.124407+00:00",
+    "category_probes": [
+      {
+        "category": "fx",
+        "function": "CURRENCY_EXCHANGE_RATE",
+        "params": {
+          "from_currency": "EUR",
+          "to_currency": "USD"
+        },
+        "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+        "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "Realtime Currency Exchange Rate"
+        ]
+      },
+      {
+        "category": "commodity_wti",
+        "function": "WTI",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=WTI",
+        "last_successful_response": "2026-06-01T08:27:58.490182+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_brent",
+        "function": "BRENT",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=BRENT",
+        "last_successful_response": "2026-06-01T08:28:11.978446+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_natgas",
+        "function": "NATURAL_GAS",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=NATURAL_GAS",
+        "last_successful_response": "2026-06-01T08:28:25.473675+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_copper",
+        "function": "COPPER",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=COPPER",
+        "last_successful_response": "2026-06-01T08:28:38.900270+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_wheat",
+        "function": "WHEAT",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=WHEAT",
+        "last_successful_response": "2026-06-01T08:28:52.380931+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_corn",
+        "function": "CORN",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=CORN",
+        "last_successful_response": "2026-06-01T08:29:05.883249+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_all",
+        "function": "ALL_COMMODITIES",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=ALL_COMMODITIES",
+        "last_successful_response": "2026-06-01T08:29:19.390987+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_sugar",
+        "function": "SUGAR",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=SUGAR",
+        "last_successful_response": "2026-06-01T08:29:32.893566+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_coffee",
+        "function": "COFFEE",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=COFFEE",
+        "last_successful_response": "2026-06-01T08:29:46.379088+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_cocoa",
+        "function": "COTTON",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=COTTON",
+        "last_successful_response": "2026-06-01T08:29:59.859353+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      },
+      {
+        "category": "commodity_metals",
+        "function": "GOLD_SILVER_SPOT",
+        "params": {},
+        "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+        "last_successful_response": null,
+        "coverage_status": "unsupported",
+        "error": "Alpha Vantage error for GOLD_SILVER_SPOT",
+        "error_note": "Invalid API call. Please retry or visit the documentation (https://www.alphavantage.co/documentation/) for GOLD_SILVER_SPOT."
+      },
+      {
+        "category": "index",
+        "function": "GLOBAL_QUOTE",
+        "params": {
+          "symbol": "SPY"
+        },
+        "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+        "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "Global Quote"
+        ]
+      },
+      {
+        "category": "crypto",
+        "function": "DIGITAL_CURRENCY_DAILY",
+        "params": {
+          "symbol": "BTC",
+          "market": "USD"
+        },
+        "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+        "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "Meta Data",
+          "Time Series (Digital Currency Daily)"
+        ]
+      },
+      {
+        "category": "rates",
+        "function": "TREASURY_YIELD",
+        "params": {
+          "interval": "daily",
+          "maturity": "10year"
+        },
+        "endpoint": "https://www.alphavantage.co/query?function=TREASURY_YIELD",
+        "last_successful_response": "2026-06-01T08:30:54.037785+00:00",
+        "coverage_status": "supported",
+        "error": null,
+        "response_keys": [
+          "data",
+          "interval",
+          "name",
+          "unit"
+        ]
+      }
+    ]
+  },
+  "instruments": [
+    {
+      "htpl_instrument_id": "NASDAQ / NQ",
+      "friendly_name": "NASDAQ",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NAS100USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NAS100USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "QQQ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "QQQ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "S&P 500 / ES",
+      "friendly_name": "S&P 500",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "SPX500USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SPX500USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SPY",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "SPY"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Dow / YM",
+      "friendly_name": "Dow",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US30USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US30USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "DIA",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "DIA"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Euro FX / 6E",
+      "friendly_name": "Euro FX / 6E",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_USD"
+          ],
+          "oanda_display_name": "EUR/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "British Pound / 6B",
+      "friendly_name": "British Pound / 6B",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_USD"
+          ],
+          "oanda_display_name": "GBP/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Japanese Yen / 6J",
+      "friendly_name": "Japanese Yen / 6J",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_JPY"
+          ],
+          "oanda_display_name": "USD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Swiss Franc / 6S",
+      "friendly_name": "Swiss Franc / 6S",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CHF"
+          ],
+          "oanda_display_name": "USD/CHF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CHF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CHF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Australian Dollar / 6A",
+      "friendly_name": "Australian Dollar / 6A",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_USD"
+          ],
+          "oanda_display_name": "AUD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Canadian Dollar / 6C",
+      "friendly_name": "Canadian Dollar / 6C",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CAD"
+          ],
+          "oanda_display_name": "USD/CAD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CAD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CAD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZ Dollar / 6N",
+      "friendly_name": "NZ Dollar / 6N",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_USD"
+          ],
+          "oanda_display_name": "NZD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold",
+      "friendly_name": "XAU/USD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "XAU_USD"
+          ],
+          "oanda_display_name": "Gold",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver",
+      "friendly_name": "XAG/USD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "XAG_USD"
+          ],
+          "oanda_display_name": "Silver",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Copper / HG",
+      "friendly_name": "Copper / HG",
+      "asset_class": "metals",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [
+            "XCUUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COPPER",
+          "endpoint": "https://www.alphavantage.co/query?function=COPPER",
+          "function": "COPPER",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:38.900270+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Crude Oil / CL",
+      "friendly_name": "Crude Oil",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [
+            "WTICOUSD",
+            "BCOUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "WTI",
+          "endpoint": "https://www.alphavantage.co/query?function=WTI",
+          "function": "WTI",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:27:58.490182+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Natural Gas / NG",
+      "friendly_name": "NATGAS/USD",
+      "asset_class": "commodities",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NATGAS_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "NATGAS_USD"
+          ],
+          "oanda_display_name": "Natural Gas",
+          "oanda_type": "CFD",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NATURAL_GAS",
+          "endpoint": "https://www.alphavantage.co/query?function=NATURAL_GAS",
+          "function": "NATURAL_GAS",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:25.473675+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Coffee",
+      "friendly_name": "Coffee",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COFFEE",
+          "endpoint": "https://www.alphavantage.co/query?function=COFFEE",
+          "function": "COFFEE",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:46.379088+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Cocoa",
+      "friendly_name": "Cocoa",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COTTON",
+          "endpoint": "https://www.alphavantage.co/query?function=COTTON",
+          "function": "COTTON",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:59.859353+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Corn",
+      "friendly_name": "Corn",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CORN",
+          "endpoint": "https://www.alphavantage.co/query?function=CORN",
+          "function": "CORN",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:05.883249+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Wheat",
+      "friendly_name": "Wheat",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "WHEAT",
+          "endpoint": "https://www.alphavantage.co/query?function=WHEAT",
+          "function": "WHEAT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:52.380931+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Soybeans",
+      "friendly_name": "Soybeans",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CORN",
+          "endpoint": "https://www.alphavantage.co/query?function=CORN",
+          "function": "CORN",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:05.883249+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Sugar",
+      "friendly_name": "Sugar",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SUGAR",
+          "endpoint": "https://www.alphavantage.co/query?function=SUGAR",
+          "function": "SUGAR",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:32.893566+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Platinum",
+      "friendly_name": "Platinum",
+      "asset_class": "metals",
+      "coverage_status": "unsupported",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Palladium",
+      "friendly_name": "Palladium",
+      "asset_class": "metals",
+      "coverage_status": "unsupported",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/CAD",
+      "friendly_name": "AUD/CAD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_CAD"
+          ],
+          "oanda_display_name": "AUD/CAD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/CAD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "CAD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/CHF",
+      "friendly_name": "AUD/CHF",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_CHF"
+          ],
+          "oanda_display_name": "AUD/CHF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/CHF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "CHF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/HKD",
+      "friendly_name": "AUD/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_HKD"
+          ],
+          "oanda_display_name": "AUD/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/JPY",
+      "friendly_name": "AUD/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_JPY"
+          ],
+          "oanda_display_name": "AUD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/NZD",
+      "friendly_name": "AUD/NZD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_NZD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_NZD"
+          ],
+          "oanda_display_name": "AUD/NZD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/NZD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "NZD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/SGD",
+      "friendly_name": "AUD/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_SGD"
+          ],
+          "oanda_display_name": "AUD/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "AUD/USD",
+      "friendly_name": "AUD/USD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_USD"
+          ],
+          "oanda_display_name": "AUD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Australia 200",
+      "friendly_name": "Australia 200",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "AU200AUD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AU200AUD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWA",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWA"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Bitcoin",
+      "friendly_name": "Bitcoin",
+      "asset_class": "crypto",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "BTCUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "BTCUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "BTC/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+          "function": "DIGITAL_CURRENCY_DAILY",
+          "params": {
+            "symbol": "BTC",
+            "market": "USD"
+          },
+          "category": "crypto",
+          "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Bitcoin Cash",
+      "friendly_name": "Bitcoin Cash",
+      "asset_class": "crypto",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "BCHUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "BCHUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "BCH/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+          "function": "DIGITAL_CURRENCY_DAILY",
+          "params": {
+            "symbol": "BCH",
+            "market": "USD"
+          },
+          "category": "crypto",
+          "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Brent Crude Oil",
+      "friendly_name": "Brent Crude Oil",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "BCOUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "BCOUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "BRENT",
+          "endpoint": "https://www.alphavantage.co/query?function=BRENT",
+          "function": "BRENT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:11.978446+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Bund",
+      "friendly_name": "Bund",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "DE10YBEUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "DE10YBEUR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "BUND",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "VGK"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "CAD/HKD",
+      "friendly_name": "CAD/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "CAD_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "CAD_HKD"
+          ],
+          "oanda_display_name": "CAD/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CAD/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "CAD",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "CAD/SGD",
+      "friendly_name": "CAD/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "CAD_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "CAD_SGD"
+          ],
+          "oanda_display_name": "CAD/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CAD/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "CAD",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "CHF/HKD",
+      "friendly_name": "CHF/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "CHF_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "CHF_HKD"
+          ],
+          "oanda_display_name": "CHF/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CHF/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "CHF",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "CHF/ZAR",
+      "friendly_name": "CHF/ZAR",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "CHF_ZAR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "CHF_ZAR"
+          ],
+          "oanda_display_name": "CHF/ZAR",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CHF/ZAR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "CHF",
+            "to_currency": "ZAR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "China A50",
+      "friendly_name": "China A50",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "CN50USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "CN50USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "FXI",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "FXI"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Copper",
+      "friendly_name": "Copper",
+      "asset_class": "metals",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XCUUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XCUUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COPPER",
+          "endpoint": "https://www.alphavantage.co/query?function=COPPER",
+          "function": "COPPER",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:38.900270+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/AUD",
+      "friendly_name": "EUR/AUD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_AUD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_AUD"
+          ],
+          "oanda_display_name": "EUR/AUD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/AUD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "AUD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/CZK",
+      "friendly_name": "EUR/CZK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_CZK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_CZK"
+          ],
+          "oanda_display_name": "EUR/CZK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/CZK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "CZK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/DKK",
+      "friendly_name": "EUR/DKK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_DKK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_DKK"
+          ],
+          "oanda_display_name": "EUR/DKK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/DKK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "DKK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/HKD",
+      "friendly_name": "EUR/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_HKD"
+          ],
+          "oanda_display_name": "EUR/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/HUF",
+      "friendly_name": "EUR/HUF",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_HUF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_HUF"
+          ],
+          "oanda_display_name": "EUR/HUF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/HUF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "HUF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/NOK",
+      "friendly_name": "EUR/NOK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_NOK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_NOK"
+          ],
+          "oanda_display_name": "EUR/NOK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/NOK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "NOK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/NZD",
+      "friendly_name": "EUR/NZD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_NZD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_NZD"
+          ],
+          "oanda_display_name": "EUR/NZD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/NZD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "NZD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/SEK",
+      "friendly_name": "EUR/SEK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_SEK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_SEK"
+          ],
+          "oanda_display_name": "EUR/SEK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/SEK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "SEK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/SGD",
+      "friendly_name": "EUR/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_SGD"
+          ],
+          "oanda_display_name": "EUR/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/TRY",
+      "friendly_name": "EUR/TRY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_TRY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_TRY"
+          ],
+          "oanda_display_name": "EUR/TRY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/TRY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "TRY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "EUR/ZAR",
+      "friendly_name": "EUR/ZAR",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_ZAR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_ZAR"
+          ],
+          "oanda_display_name": "EUR/ZAR",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/ZAR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "ZAR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Ethereum/Ether",
+      "friendly_name": "Ethereum/Ether",
+      "asset_class": "crypto",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "ETHUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "ETHUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "ETH/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+          "function": "DIGITAL_CURRENCY_DAILY",
+          "params": {
+            "symbol": "ETH",
+            "market": "USD"
+          },
+          "category": "crypto",
+          "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Europe 50",
+      "friendly_name": "Europe 50",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "EU50EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EU50EUR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "FEZ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "FEZ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "France 40",
+      "friendly_name": "France 40",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "FR40EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "FR40EUR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWQ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWQ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/AUD",
+      "friendly_name": "GBP/AUD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_AUD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_AUD"
+          ],
+          "oanda_display_name": "GBP/AUD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/AUD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "AUD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/HKD",
+      "friendly_name": "GBP/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_HKD"
+          ],
+          "oanda_display_name": "GBP/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/NZD",
+      "friendly_name": "GBP/NZD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_NZD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_NZD"
+          ],
+          "oanda_display_name": "GBP/NZD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/NZD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "NZD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/PLN",
+      "friendly_name": "GBP/PLN",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_PLN",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_PLN"
+          ],
+          "oanda_display_name": "GBP/PLN",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/PLN",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "PLN"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/SGD",
+      "friendly_name": "GBP/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_SGD"
+          ],
+          "oanda_display_name": "GBP/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "GBP/ZAR",
+      "friendly_name": "GBP/ZAR",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_ZAR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_ZAR"
+          ],
+          "oanda_display_name": "GBP/ZAR",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/ZAR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "ZAR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Germany 30",
+      "friendly_name": "Germany 30",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "DE30EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "DE30EUR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWG",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWG"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/AUD",
+      "friendly_name": "XAU/AUD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_AUD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_AUD"
+          ],
+          "oanda_display_name": "Gold/AUD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/CAD",
+      "friendly_name": "XAU/CAD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_CAD"
+          ],
+          "oanda_display_name": "Gold/CAD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/CHF",
+      "friendly_name": "XAU/CHF",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_CHF"
+          ],
+          "oanda_display_name": "Gold/CHF",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/EUR",
+      "friendly_name": "XAU/EUR",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_EUR"
+          ],
+          "oanda_display_name": "Gold/EUR",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/GBP",
+      "friendly_name": "XAU/GBP",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_GBP",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_GBP"
+          ],
+          "oanda_display_name": "Gold/GBP",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/HKD",
+      "friendly_name": "XAU/HKD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_HKD"
+          ],
+          "oanda_display_name": "Gold/HKD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/JPY",
+      "friendly_name": "XAU/JPY",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_JPY"
+          ],
+          "oanda_display_name": "Gold/JPY",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/NZD",
+      "friendly_name": "XAU/NZD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_NZD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_NZD"
+          ],
+          "oanda_display_name": "Gold/NZD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/SGD",
+      "friendly_name": "XAU/SGD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_SGD"
+          ],
+          "oanda_display_name": "Gold/SGD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Gold/Silver",
+      "friendly_name": "XAU/XAG",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_XAG",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAU_XAG"
+          ],
+          "oanda_display_name": "Gold/Silver",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAU",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "HKD/JPY",
+      "friendly_name": "HKD/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "HKD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "HKD_JPY"
+          ],
+          "oanda_display_name": "HKD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "HKD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "HKD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Hong Kong 33",
+      "friendly_name": "Hong Kong 33",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "HK33HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "HK33HKD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWH",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWH"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "India 50",
+      "friendly_name": "India 50",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "IN50USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "IN50USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "INDA",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "INDA"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Japan 225",
+      "friendly_name": "Japan 225",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "JP225USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "JP225USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWJ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWJ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Litecoin",
+      "friendly_name": "Litecoin",
+      "asset_class": "crypto",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "LTCUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "LTCUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "LTC/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+          "function": "DIGITAL_CURRENCY_DAILY",
+          "params": {
+            "symbol": "LTC",
+            "market": "USD"
+          },
+          "category": "crypto",
+          "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/CAD",
+      "friendly_name": "NZD/CAD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_CAD"
+          ],
+          "oanda_display_name": "NZD/CAD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/CAD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "CAD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/CHF",
+      "friendly_name": "NZD/CHF",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_CHF"
+          ],
+          "oanda_display_name": "NZD/CHF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/CHF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "CHF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/HKD",
+      "friendly_name": "NZD/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_HKD"
+          ],
+          "oanda_display_name": "NZD/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/JPY",
+      "friendly_name": "NZD/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_JPY"
+          ],
+          "oanda_display_name": "NZD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/SGD",
+      "friendly_name": "NZD/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_SGD"
+          ],
+          "oanda_display_name": "NZD/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "NZD/USD",
+      "friendly_name": "NZD/USD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_USD"
+          ],
+          "oanda_display_name": "NZD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Netherlands 25",
+      "friendly_name": "Netherlands 25",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NL25EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NL25EUR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWN",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWN"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "SGD/CHF",
+      "friendly_name": "SGD/CHF",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "SGD_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SGD_CHF"
+          ],
+          "oanda_display_name": "SGD/CHF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SGD/CHF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "SGD",
+            "to_currency": "CHF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "SGD/JPY",
+      "friendly_name": "SGD/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "SGD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SGD_JPY"
+          ],
+          "oanda_display_name": "SGD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SGD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "SGD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/AUD",
+      "friendly_name": "XAG/AUD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_AUD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_AUD"
+          ],
+          "oanda_display_name": "Silver/AUD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/CAD",
+      "friendly_name": "XAG/CAD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_CAD"
+          ],
+          "oanda_display_name": "Silver/CAD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/CHF",
+      "friendly_name": "XAG/CHF",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_CHF"
+          ],
+          "oanda_display_name": "Silver/CHF",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/EUR",
+      "friendly_name": "XAG/EUR",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_EUR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_EUR"
+          ],
+          "oanda_display_name": "Silver/EUR",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/GBP",
+      "friendly_name": "XAG/GBP",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_GBP",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_GBP"
+          ],
+          "oanda_display_name": "Silver/GBP",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/HKD",
+      "friendly_name": "XAG/HKD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_HKD"
+          ],
+          "oanda_display_name": "Silver/HKD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/JPY",
+      "friendly_name": "XAG/JPY",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_JPY"
+          ],
+          "oanda_display_name": "Silver/JPY",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/NZD",
+      "friendly_name": "XAG/NZD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_NZD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_NZD"
+          ],
+          "oanda_display_name": "Silver/NZD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Silver/SGD",
+      "friendly_name": "XAG/SGD",
+      "asset_class": "metals",
+      "coverage_status": "oanda_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "XAG_SGD"
+          ],
+          "oanda_display_name": "Silver/SGD",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "XAG",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Singapore 30",
+      "friendly_name": "Singapore 30",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "SG30SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SG30SGD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWS",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWS"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "TRY/JPY",
+      "friendly_name": "TRY/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "TRY_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "TRY_JPY"
+          ],
+          "oanda_display_name": "TRY/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "TRY/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "TRY",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "Taiwan Index",
+      "friendly_name": "Taiwan Index",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "TWIXUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "TWIXUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWT",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWT"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "UK 100",
+      "friendly_name": "UK 100",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "UK100GBP",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "UK100GBP"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWU",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWU"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "UK 10Y Gilt",
+      "friendly_name": "UK 10Y Gilt",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "UK10YBGBP",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "UK10YBGBP"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EWU",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "EWU"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US 10Y T-Note",
+      "friendly_name": "US 10Y T-Note",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US10YUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US10YUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "10year",
+          "endpoint": "https://www.alphavantage.co/query?function=TREASURY_YIELD",
+          "function": "TREASURY_YIELD",
+          "params": {
+            "interval": "daily",
+            "maturity": "10year"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:54.037785+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US 2Y T-Note",
+      "friendly_name": "US 2Y T-Note",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US2YUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US2YUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "2year",
+          "endpoint": "https://www.alphavantage.co/query?function=TREASURY_YIELD",
+          "function": "TREASURY_YIELD",
+          "params": {
+            "interval": "daily",
+            "maturity": "2year"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:54.037785+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US 5Y T-Note",
+      "friendly_name": "US 5Y T-Note",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US5YUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US5YUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "5year",
+          "endpoint": "https://www.alphavantage.co/query?function=TREASURY_YIELD",
+          "function": "TREASURY_YIELD",
+          "params": {
+            "interval": "daily",
+            "maturity": "5year"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:54.037785+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US Nas 100",
+      "friendly_name": "NASDAQ",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "NAS100USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NAS100USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "QQQ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "QQQ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US Russ 2000",
+      "friendly_name": "US Russ 2000",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US2000USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US2000USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "IWM",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "IWM"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US SPX 500",
+      "friendly_name": "S&P 500",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "SPX500USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SPX500USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SPY",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "SPY"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US T-Bond",
+      "friendly_name": "US T-Bond",
+      "asset_class": "bonds",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USBONDUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USBONDUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "30year",
+          "endpoint": "https://www.alphavantage.co/query?function=TREASURY_YIELD",
+          "function": "TREASURY_YIELD",
+          "params": {
+            "interval": "daily",
+            "maturity": "30year"
+          },
+          "category": "rates",
+          "last_successful_response": "2026-06-01T08:30:54.037785+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "US Wall St 30",
+      "friendly_name": "Dow",
+      "asset_class": "indices",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "US30USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US30USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "DIA",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "DIA"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/CNH",
+      "friendly_name": "USD/CNH",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CNH",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CNH"
+          ],
+          "oanda_display_name": "USD/CNH",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CNH",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CNH"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/CZK",
+      "friendly_name": "USD/CZK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CZK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CZK"
+          ],
+          "oanda_display_name": "USD/CZK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CZK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CZK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/DKK",
+      "friendly_name": "USD/DKK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_DKK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_DKK"
+          ],
+          "oanda_display_name": "USD/DKK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/DKK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "DKK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/HKD",
+      "friendly_name": "USD/HKD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_HKD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_HKD"
+          ],
+          "oanda_display_name": "USD/HKD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/HKD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "HKD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/HUF",
+      "friendly_name": "USD/HUF",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_HUF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_HUF"
+          ],
+          "oanda_display_name": "USD/HUF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/HUF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "HUF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/INR",
+      "friendly_name": "USD/INR",
+      "asset_class": "fx",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_INR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_INR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/INR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "INR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/MXN",
+      "friendly_name": "USD/MXN",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_MXN",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_MXN"
+          ],
+          "oanda_display_name": "USD/MXN",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/MXN",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "MXN"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/NOK",
+      "friendly_name": "USD/NOK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_NOK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_NOK"
+          ],
+          "oanda_display_name": "USD/NOK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/NOK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "NOK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/PLN",
+      "friendly_name": "USD/PLN",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_PLN",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_PLN"
+          ],
+          "oanda_display_name": "USD/PLN",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/PLN",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "PLN"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/SAR",
+      "friendly_name": "USD/SAR",
+      "asset_class": "fx",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_SAR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_SAR"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/SAR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "SAR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/SEK",
+      "friendly_name": "USD/SEK",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_SEK",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_SEK"
+          ],
+          "oanda_display_name": "USD/SEK",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/SEK",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "SEK"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/SGD",
+      "friendly_name": "USD/SGD",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_SGD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_SGD"
+          ],
+          "oanda_display_name": "USD/SGD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/SGD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "SGD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/THB",
+      "friendly_name": "USD/THB",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_THB",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_THB"
+          ],
+          "oanda_display_name": "USD/THB",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/THB",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "THB"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/TRY",
+      "friendly_name": "USD/TRY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_TRY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_TRY"
+          ],
+          "oanda_display_name": "USD/TRY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/TRY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "TRY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "USD/ZAR",
+      "friendly_name": "USD/ZAR",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_ZAR",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_ZAR"
+          ],
+          "oanda_display_name": "USD/ZAR",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/ZAR",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "ZAR"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "West Texas Oil",
+      "friendly_name": "Crude Oil (WTI)",
+      "asset_class": "commodities",
+      "coverage_status": "alpha_only",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "WTICOUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "WTICOUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "WTI",
+          "endpoint": "https://www.alphavantage.co/query?function=WTI",
+          "function": "WTI",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:27:58.490182+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    },
+    {
+      "htpl_instrument_id": "ZAR/JPY",
+      "friendly_name": "ZAR/JPY",
+      "asset_class": "fx",
+      "coverage_status": "supported_by_both",
+      "sources": [
+        {
+          "source": "oanda",
+          "symbol": "ZAR_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "ZAR_JPY"
+          ],
+          "oanda_display_name": "ZAR/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "ZAR/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "ZAR",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ]
+    }
+  ]
+}

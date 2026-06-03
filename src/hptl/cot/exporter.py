@@ -12,6 +12,7 @@ from openpyxl.utils import get_column_letter
 from hptl.config import Settings
 from hptl.cot.contracts import CME_FUTURES_ONLY_URL, FINANCIAL_FUTURES_ONLY_URL_TEMPLATE, GOOD_WORKBOOK_DISPLAY_NAMES, GOOD_WORKBOOK_MARKET_ORDER, LEGACY_FUTURES_ONLY_URL_TEMPLATE
 from hptl.cot.parser import markets_included
+from hptl.cot.scoring_engine import apply_probabilistic_cot_scoring
 from hptl.shared.file_utils import ensure_dir
 
 
@@ -339,59 +340,23 @@ def _cot_summary(cot_bias: str, score: float, row: pd.Series) -> str:
 
 
 def _calculate_cot_scores(master: pd.DataFrame) -> pd.DataFrame:
-    """Add strict rule-based /10 COT scoring columns to Trader_Report master.
-
-    Bias is driven only by managed-money 1W change. Points are awarded only in
-    the direction of that bias. Neutral rows receive 0 points.
-    """
+    """Probabilistic COT scoring for workbook export (same engine as confluence)."""
     scored = master.copy()
-
-    def score_row(row: pd.Series) -> pd.Series:
-        c1 = row.get("mm_weekly_change")
-        c4 = row.get("mm_four_week_change")
-        managed_net = row.get("noncommercial_net")
-        m1 = row.get("mm_weekly_change")
-
-        if pd.isna(c1) or c1 == 0:
-            cot_bias = "Neutral"
-            cot_score = 0
-        elif c1 > 0:
-            cot_bias = "Bullish"
-            cot_score = 2
-            if pd.notna(c4) and c4 > 0:
-                cot_score += 2
-            if pd.notna(managed_net) and managed_net < 0:
-                cot_score += 2
-            if pd.notna(m1) and m1 < 0:
-                cot_score += 2
-            if pd.notna(m1) and m1 < 0:
-                cot_score += 2
-        else:
-            cot_bias = "Bearish"
-            cot_score = 2
-            if pd.notna(c4) and c4 < 0:
-                cot_score += 2
-            if pd.notna(managed_net) and managed_net > 0:
-                cot_score += 2
-            if pd.notna(m1) and m1 > 0:
-                cot_score += 2
-            if pd.notna(m1) and m1 > 0:
-                cot_score += 2
-
-        cot_score = min(int(cot_score), 10)
-        return pd.Series(
-            {
-                "cot_bias": cot_bias,
-                "cot_score": cot_score,
-                "cot_strength": _cot_strength(cot_score),
-                "cot_summary": _cot_summary(cot_bias, float(cot_score), row),
-            }
-        )
-
-    score_df = scored.apply(score_row, axis=1)
-    for column in score_df.columns:
-        scored[column] = score_df[column]
-    return scored
+    if "report_date" in scored.columns and "cot_report_date" not in scored.columns:
+        scored["cot_report_date"] = pd.to_datetime(scored["report_date"], errors="coerce")
+    if "net_value" not in scored.columns and "noncommercial_net" in scored.columns:
+        scored["net_value"] = scored["noncommercial_net"]
+    if "weekly_change" not in scored.columns and "mm_weekly_change" in scored.columns:
+        scored["weekly_change"] = scored["mm_weekly_change"]
+    if "four_week_change" not in scored.columns and "mm_four_week_change" in scored.columns:
+        scored["four_week_change"] = scored["mm_four_week_change"]
+    if "long_weekly_change" not in scored.columns and "long_value" in scored.columns:
+        scored = scored.sort_values(["market_name", "cot_report_date"])
+        scored["long_weekly_change"] = scored.groupby("market_name")["long_value"].diff(1)
+        scored["short_weekly_change"] = scored.groupby("market_name")["short_value"].diff(1)
+    if "market" not in scored.columns and "market_name" in scored.columns:
+        scored["market"] = scored["market_name"]
+    return apply_probabilistic_cot_scoring(scored)
 
 def _build_source_notes(source_url: str, extra_sources: list[str] | None = None, warnings: list[str] | None = None) -> pd.DataFrame:
     rows = [

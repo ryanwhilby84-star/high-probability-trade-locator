@@ -23,12 +23,29 @@ CME_INDEX_CONTRACT_NAMES = {
     "E-MINI NASDAQ 100 - CHICAGO MERCANTILE EXCHANGE",
     "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
     "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
+    "DJIA X $5 - CHICAGO BOARD OF TRADE",
 }
 
 CME_INDEX_NAME_TO_DASHBOARD = {
     "E-MINI NASDAQ 100 - CHICAGO MERCANTILE EXCHANGE": "NASDAQ",
     "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE": "NASDAQ",
     "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE": "S&P 500",
+    "DJIA X $5 - CHICAGO BOARD OF TRADE": "DOW",
+}
+
+# CFTC Traders in Financial Futures (fut_fin_txt) → dashboard TARGET_MARKETS labels.
+# Equity indices + outright FX futures (CME); excludes cross-rate pairs.
+FINANCIAL_INDEX_CODE_TO_TARGET: dict[str, str] = {
+    "209742": "NASDAQ / NQ",
+    "13874A": "S&P 500 / ES",
+    "124603": "Dow / YM",
+    "099741": "Euro FX / 6E",
+    "096742": "British Pound / 6B",
+    "097741": "Japanese Yen / 6J",
+    "092741": "Swiss Franc / 6S",
+    "232741": "Australian Dollar / 6A",
+    "090741": "Canadian Dollar / 6C",
+    "112741": "NZ Dollar / 6N",
 }
 
 CME_INDEX_MAPPINGS: dict[str, CotMarketMapping] = {
@@ -46,6 +63,13 @@ CME_INDEX_MAPPINGS: dict[str, CotMarketMapping] = {
         code="13874A",
         asset_class="Equity Index",
     ),
+    "124603": CotMarketMapping(
+        dashboard_name="DOW",
+        cftc_market_name="DJIA X $5 - CHICAGO BOARD OF TRADE",
+        exchange="CHICAGO BOARD OF TRADE",
+        code="124603",
+        asset_class="Equity Index",
+    ),
 }
 
 # The first/good workbook is intentionally limited to these dashboard markets.
@@ -54,6 +78,7 @@ CME_INDEX_MAPPINGS: dict[str, CotMarketMapping] = {
 GOOD_WORKBOOK_MARKET_ORDER = [
     "NASDAQ",
     "S&P 500",
+    "DOW",
     "GOLD",
     "SILVER",
     "COPPER",
@@ -69,6 +94,7 @@ GOOD_WORKBOOK_MARKET_ORDER = [
 GOOD_WORKBOOK_DISPLAY_NAMES = {
     "NASDAQ": "NASDAQ",
     "S&P 500": "S&P 500",
+    "DOW": "Dow",
     "GOLD": "Gold",
     "SILVER": "Silver",
     "COPPER": "Copper",
@@ -98,6 +124,9 @@ COMMODITY_NAME_TO_DASHBOARD = {
     "CORN - CHICAGO BOARD OF TRADE": "CORN",
     "WHEAT-SRW - CHICAGO BOARD OF TRADE": "WHEAT",
     "SOYBEANS - CHICAGO BOARD OF TRADE": "SOYBEANS",
+    "SUGAR NO. 11 - ICE FUTURES U.S.": "SUGAR",
+    "PLATINUM - NEW YORK MERCANTILE EXCHANGE": "PLATINUM",
+    "PALLADIUM - NEW YORK MERCANTILE EXCHANGE": "PALLADIUM",
 }
 
 # Short/partial market aliases after ``market_and_exchange_names`` has been split
@@ -121,6 +150,10 @@ COMMODITY_SHORT_NAME_TO_DASHBOARD = {
     "WHEAT-SRW": "WHEAT",
     "WHEAT": "WHEAT",
     "SOYBEANS": "SOYBEANS",
+    "SUGAR NO. 11": "SUGAR",
+    "SUGAR NO 11": "SUGAR",
+    "PLATINUM": "PLATINUM",
+    "PALLADIUM": "PALLADIUM",
 }
 
 # Optional code-level safety net for common Disaggregated Futures Only contracts.
@@ -136,4 +169,7 @@ COMMODITY_CODE_TO_DASHBOARD = {
     "002602": "CORN",
     "001602": "WHEAT",
     "005602": "SOYBEANS",
+    "080732": "SUGAR",
+    "076651": "PLATINUM",
+    "075651": "PALLADIUM",
 }

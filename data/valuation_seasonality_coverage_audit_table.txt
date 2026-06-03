@@ -1,0 +1,127 @@
+| Instrument | Valuation | Seasonality | Issue | Fix Required |
+|------------|-----------|-------------|-------|-------------|
+| NASDAQ / NQ | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| S&P 500 / ES | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Dow / YM | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Euro FX / 6E | ACTIVE | ACTIVE | None | None | N/A |
+| British Pound / 6B | ACTIVE | ACTIVE | None | None | N/A |
+| Japanese Yen / 6J | ACTIVE | ACTIVE | None | None | N/A |
+| Swiss Franc / 6S | ACTIVE | ACTIVE | None | None | N/A |
+| Australian Dollar / 6A | ACTIVE | ACTIVE | None | None | N/A |
+| Canadian Dollar / 6C | ACTIVE | ACTIVE | None | None | N/A |
+| NZ Dollar / 6N | ACTIVE | ACTIVE | None | None | N/A |
+| Gold | ACTIVE | ACTIVE | None | None | N/A |
+| Silver | ACTIVE | ACTIVE | None | None | N/A |
+| Copper / HG | ACTIVE | ACTIVE | None | None | N/A |
+| Crude Oil / CL | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for WTI // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for WTI | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Natural Gas / NG | ACTIVE | ACTIVE | None | None | N/A |
+| Coffee | ACTIVE | ACTIVE | None | None | N/A |
+| Cocoa | ACTIVE | ACTIVE | None | None | N/A |
+| Corn | ACTIVE | ACTIVE | None | None | N/A |
+| Wheat | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for WHEAT // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for WHEAT | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Soybeans | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for CORN // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for CORN | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Sugar | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for SUGAR // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for SUGAR | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Platinum | MAPPING FAILURE | MAPPING FAILURE | Valuation: No price store file; not in oanda_supported or alpha_supported (price_coverage_audit coverage_status=unsupported) // Seasonality: No price store file; no mapped price source | Add OANDA or Alpha Vantage mapping in price_coverage_audit.json / instrument_registry; run python -m hptl.prices.run_price_refresh | MEDIUM |
+| Palladium | MAPPING FAILURE | MAPPING FAILURE | Valuation: No price store file; not in oanda_supported or alpha_supported (price_coverage_audit coverage_status=unsupported) // Seasonality: No price store file; no mapped price source | Add OANDA or Alpha Vantage mapping in price_coverage_audit.json / instrument_registry; run python -m hptl.prices.run_price_refresh | MEDIUM |
+| AUD/CAD | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/CHF | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/NZD | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| AUD/USD | ACTIVE | ACTIVE | None | None | N/A |
+| Australia 200 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Bitcoin | ACTIVE | MISSING DATA | Seasonality: Only 1 historical weeks for month 6 (need 3+).; total_weeks=38; MIN_MONTH_SAMPLES=3 | Extend weekly history depth (more years) so current calendar month has >=3 weekly return samples | LOW |
+| Bitcoin Cash | ACTIVE | MISSING DATA | Seasonality: Only 1 historical weeks for month 6 (need 3+).; total_weeks=38; MIN_MONTH_SAMPLES=3 | Extend weekly history depth (more years) so current calendar month has >=3 weekly return samples | LOW |
+| Brent Crude Oil | ACTIVE | ACTIVE | None | None | N/A |
+| Bund | MISSING DATA | MISSING DATA | Valuation: weekly_bars=0; select_price_source=oanda; oanda_symbol=DE10YBEUR // Seasonality: weekly_bars=0 (cannot build month return buckets) | Populate daily/weekly OHLC via unified_adapter into prices_latest.json | MEDIUM |
+| CAD/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| CAD/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| CHF/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| CHF/ZAR | ACTIVE | ACTIVE | None | None | N/A |
+| China A50 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Copper | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/AUD | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/CZK | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/DKK | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/HUF | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/NOK | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/NZD | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/SEK | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/TRY | ACTIVE | ACTIVE | None | None | N/A |
+| EUR/ZAR | ACTIVE | ACTIVE | None | None | N/A |
+| Ethereum/Ether | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for DIGITAL_CURRENCY_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for DIGITAL_CURRENCY_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Europe 50 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| France 40 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| GBP/AUD | ACTIVE | ACTIVE | None | None | N/A |
+| GBP/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| GBP/NZD | ACTIVE | ACTIVE | None | None | N/A |
+| GBP/PLN | ACTIVE | ACTIVE | None | None | N/A |
+| GBP/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| GBP/ZAR | ACTIVE | ACTIVE | None | None | N/A |
+| Germany 30 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Gold/AUD | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/CAD | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/CHF | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/EUR | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/GBP | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/NZD | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| Gold/Silver | ACTIVE | ACTIVE | None | None | N/A |
+| HKD/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| Hong Kong 33 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| India 50 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Japan 225 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| Litecoin | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for DIGITAL_CURRENCY_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for DIGITAL_CURRENCY_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| NZD/CAD | ACTIVE | ACTIVE | None | None | N/A |
+| NZD/CHF | ACTIVE | ACTIVE | None | None | N/A |
+| NZD/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| NZD/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| NZD/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| NZD/USD | ACTIVE | ACTIVE | None | None | N/A |
+| Netherlands 25 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| SGD/CHF | ACTIVE | ACTIVE | None | None | N/A |
+| SGD/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/AUD | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/CAD | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/CHF | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/EUR | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/GBP | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/NZD | ACTIVE | ACTIVE | None | None | N/A |
+| Silver/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| Singapore 30 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| TRY/JPY | ACTIVE | ACTIVE | None | None | N/A |
+| Taiwan Index | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| UK 100 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| UK 10Y Gilt | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for GLOBAL_QUOTE // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for GLOBAL_QUOTE | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US 10Y T-Note | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US 2Y T-Note | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US 5Y T-Note | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US Nas 100 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US Russ 2000 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US SPX 500 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US T-Bond | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TREASURY_YIELD | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| US Wall St 30 | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for TIME_SERIES_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| USD/CNH | ACTIVE | ACTIVE | None | None | N/A |
+| USD/CZK | ACTIVE | ACTIVE | None | None | N/A |
+| USD/DKK | ACTIVE | ACTIVE | None | None | N/A |
+| USD/HKD | ACTIVE | ACTIVE | None | None | N/A |
+| USD/HUF | ACTIVE | ACTIVE | None | None | N/A |
+| USD/INR | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for FX_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for FX_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| USD/MXN | ACTIVE | ACTIVE | None | None | N/A |
+| USD/NOK | ACTIVE | ACTIVE | None | None | N/A |
+| USD/PLN | ACTIVE | ACTIVE | None | None | N/A |
+| USD/SAR | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for FX_DAILY // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for FX_DAILY | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| USD/SEK | ACTIVE | ACTIVE | None | None | N/A |
+| USD/SGD | ACTIVE | ACTIVE | None | None | N/A |
+| USD/THB | ACTIVE | ACTIVE | None | None | N/A |
+| USD/TRY | ACTIVE | ACTIVE | None | None | N/A |
+| USD/ZAR | ACTIVE | ACTIVE | None | None | N/A |
+| West Texas Oil | DATA SOURCE FAILURE | DATA SOURCE FAILURE | Valuation: AlphaVantageApiError: Alpha Vantage informational response for WTI // Seasonality: AlphaVantageApiError: Alpha Vantage informational response for WTI | Resolve Alpha Vantage API response (rate limit, premium endpoint, or invalid function for symbol) | LOW |
+| ZAR/JPY | ACTIVE | ACTIVE | None | None | N/A |

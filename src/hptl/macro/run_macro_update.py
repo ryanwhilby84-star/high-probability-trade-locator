@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from .macro_dashboard_columns import augment_scored_macro_dashboard_columns
 from .macro_scoring import REQUIRED_SCORING_INPUTS, score_macro
 from .rates_downloader import START_DATE, download_all
 from .rates_parser import process_rates
@@ -37,6 +38,9 @@ DASHBOARD_COLS = [
     "macro_context_for_trades",
     "technical_trade_filter",
     "macro_summary",
+    "macro_rationale",
+    "curve_state",
+    "liquidity_regime",
 ]
 
 
@@ -92,6 +96,7 @@ def run() -> Path:
         print(f"Clean row count: {len(clean)}")
 
         scored = score_macro(clean)
+        scored = augment_scored_macro_dashboard_columns(scored)
         print(f"Scored row count: {scored['macro_score'].notna().sum()}")
 
         # Fail-closed invariant: required directional inputs must be present wherever score exists.

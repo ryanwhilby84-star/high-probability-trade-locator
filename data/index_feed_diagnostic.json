@@ -1,0 +1,140 @@
+[
+  {
+    "instrument": "NASDAQ / NQ",
+    "selected_source": "alpha_vantage",
+    "etf_symbol": "QQQ",
+    "probes": [
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "QQQ",
+        "outputsize": "full",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=QQQ&outputsize=full",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! The outputsize=full parameter value is a premium feature for the TIME_SERIES_DAILY endpoint. You may subscribe to any of the premium plans at https://www.alphavantag",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "QQQ",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=QQQ&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_WEEKLY",
+        "symbol": "QQQ",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=QQQ&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_WEEKLY"
+      }
+    ],
+    "current_store": {
+      "daily_bars": 52,
+      "weekly_bars": 52,
+      "error": null,
+      "_fetched_via": "alpha_vantage"
+    }
+  },
+  {
+    "instrument": "S&P 500 / ES",
+    "selected_source": "alpha_vantage",
+    "etf_symbol": "SPY",
+    "probes": [
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "SPY",
+        "outputsize": "full",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SPY&outputsize=full",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! The outputsize=full parameter value is a premium feature for the TIME_SERIES_DAILY endpoint. You may subscribe to any of the premium plans at https://www.alphavantag",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "SPY",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SPY&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_WEEKLY",
+        "symbol": "SPY",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=SPY&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_WEEKLY"
+      }
+    ],
+    "current_store": {
+      "daily_bars": 52,
+      "weekly_bars": 52,
+      "error": null,
+      "_fetched_via": "alpha_vantage"
+    }
+  },
+  {
+    "instrument": "Dow / YM",
+    "selected_source": "alpha_vantage",
+    "etf_symbol": "DIA",
+    "probes": [
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "DIA",
+        "outputsize": "full",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=DIA&outputsize=full",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! The outputsize=full parameter value is a premium feature for the TIME_SERIES_DAILY endpoint. You may subscribe to any of the premium plans at https://www.alphavantag",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": "DIA",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=DIA&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_DAILY"
+      },
+      {
+        "function": "TIME_SERIES_WEEKLY",
+        "symbol": "DIA",
+        "outputsize": "compact",
+        "endpoint": "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=DIA&outputsize=compact",
+        "response_keys": [],
+        "information": "Thank you for using Alpha Vantage! Please consider spreading out your free API requests more sparingly (1 request per second). You may subscribe to any of the premium plans at https://www.alphavantage",
+        "parser_bars": 0,
+        "stored": false,
+        "failure_reason": "Alpha Vantage rate limit for TIME_SERIES_WEEKLY"
+      }
+    ],
+    "current_store": {
+      "daily_bars": 52,
+      "weekly_bars": 52,
+      "error": null,
+      "_fetched_via": "alpha_vantage"
+    }
+  }
+]

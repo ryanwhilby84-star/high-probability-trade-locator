@@ -174,6 +174,7 @@ def test_good_workbook_market_order_is_exact_required_set():
     assert GOOD_WORKBOOK_MARKET_ORDER == [
         "NASDAQ",
         "S&P 500",
+        "DOW",
         "GOLD",
         "SILVER",
         "COPPER",

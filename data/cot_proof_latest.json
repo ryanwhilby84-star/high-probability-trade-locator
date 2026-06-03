@@ -1,0 +1,3981 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-01T14:36:05.433668+00:00",
+  "parser": "hptl.cot.cot_proof",
+  "canonical_dashboard_source": "data/legacy_cot_latest.json",
+  "raw_cftc_source": "CFTC Legacy Futures Only (deacot annual.txt)",
+  "confluence_export_path": "web-dashboard\\public\\data\\confluence_history_latest.json",
+  "latest_report_date": "2026-05-26",
+  "summary": {
+    "total_instruments_checked": 23,
+    "pass_count": 23,
+    "fail_count": 0,
+    "needs_review_count": 0,
+    "all_pass": true,
+    "failed_instruments": [],
+    "needs_review_instruments": [],
+    "mismatch_reasons_sample": []
+  },
+  "gate": {
+    "trusted": true,
+    "message": "All COT-supported instruments PASS \u2014 safe to resume valuation/seasonality/scoring."
+  },
+  "instruments": {
+    "NASDAQ / NQ": {
+      "instrument_id": "NASDAQ / NQ",
+      "report_date": "2026-05-26",
+      "cftc_code": "209742",
+      "market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 6942,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 85248.0,
+              "raw_cftc_value": 85248.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 91333.0,
+              "raw_cftc_value": 91333.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -6085.0,
+              "raw_cftc_value": -6085.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 85248.0,
+              "raw_cftc_value": 85248.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 91333.0,
+              "raw_cftc_value": 91333.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -6085.0,
+              "raw_cftc_value": -6085.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 85248.0,
+            "short": 91333.0,
+            "net": -6085.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 167094.0,
+              "raw_cftc_value": 167094.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 167656.0,
+              "raw_cftc_value": 167656.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -562.0,
+              "raw_cftc_value": -562.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 167094.0,
+              "raw_cftc_value": 167094.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 167656.0,
+              "raw_cftc_value": 167656.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -562.0,
+              "raw_cftc_value": -562.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 167094.0,
+            "short": 167656.0,
+            "net": -562.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 41004.0,
+              "raw_cftc_value": 41004.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 34357.0,
+              "raw_cftc_value": 34357.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 6647.0,
+              "raw_cftc_value": 6647.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 41004.0,
+              "raw_cftc_value": 41004.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 34357.0,
+              "raw_cftc_value": 34357.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 6647.0,
+              "raw_cftc_value": 6647.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 41004.0,
+            "short": 34357.0,
+            "net": 6647.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "S&P 500 / ES": {
+      "instrument_id": "S&P 500 / ES",
+      "report_date": "2026-05-26",
+      "cftc_code": "13874A",
+      "market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 6142,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 254188.0,
+              "raw_cftc_value": 254188.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 420019.0,
+              "raw_cftc_value": 420019.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -165831.0,
+              "raw_cftc_value": -165831.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 254188.0,
+              "raw_cftc_value": 254188.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 420019.0,
+              "raw_cftc_value": 420019.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -165831.0,
+              "raw_cftc_value": -165831.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 254188.0,
+            "short": 420019.0,
+            "net": -165831.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 1532352.0,
+              "raw_cftc_value": 1532352.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1477423.0,
+              "raw_cftc_value": 1477423.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 54929.0,
+              "raw_cftc_value": 54929.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 1532352.0,
+              "raw_cftc_value": 1532352.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1477423.0,
+              "raw_cftc_value": 1477423.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 54929.0,
+              "raw_cftc_value": 54929.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 1532352.0,
+            "short": 1477423.0,
+            "net": 54929.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 268642.0,
+              "raw_cftc_value": 268642.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 157740.0,
+              "raw_cftc_value": 157740.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 110902.0,
+              "raw_cftc_value": 110902.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 268642.0,
+              "raw_cftc_value": 268642.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 157740.0,
+              "raw_cftc_value": 157740.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 110902.0,
+              "raw_cftc_value": 110902.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 268642.0,
+            "short": 157740.0,
+            "net": 110902.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Dow / YM": {
+      "instrument_id": "Dow / YM",
+      "report_date": "2026-05-26",
+      "cftc_code": "124603",
+      "market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5869,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 9500.0,
+              "raw_cftc_value": 9500.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 17262.0,
+              "raw_cftc_value": 17262.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -7762.0,
+              "raw_cftc_value": -7762.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 9500.0,
+              "raw_cftc_value": 9500.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 17262.0,
+              "raw_cftc_value": 17262.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -7762.0,
+              "raw_cftc_value": -7762.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 9500.0,
+            "short": 17262.0,
+            "net": -7762.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 55446.0,
+              "raw_cftc_value": 55446.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 53042.0,
+              "raw_cftc_value": 53042.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 2404.0,
+              "raw_cftc_value": 2404.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 55446.0,
+              "raw_cftc_value": 55446.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 53042.0,
+              "raw_cftc_value": 53042.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 2404.0,
+              "raw_cftc_value": 2404.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 55446.0,
+            "short": 53042.0,
+            "net": 2404.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 14716.0,
+              "raw_cftc_value": 14716.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9358.0,
+              "raw_cftc_value": 9358.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 5358.0,
+              "raw_cftc_value": 5358.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 14716.0,
+              "raw_cftc_value": 14716.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9358.0,
+              "raw_cftc_value": 9358.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 5358.0,
+              "raw_cftc_value": 5358.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 14716.0,
+            "short": 9358.0,
+            "net": 5358.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Euro FX / 6E": {
+      "instrument_id": "Euro FX / 6E",
+      "report_date": "2026-05-26",
+      "cftc_code": "099741",
+      "market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5682,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 223055.0,
+              "raw_cftc_value": 223055.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 193629.0,
+              "raw_cftc_value": 193629.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 29426.0,
+              "raw_cftc_value": 29426.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 223055.0,
+              "raw_cftc_value": 223055.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 193629.0,
+              "raw_cftc_value": 193629.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 29426.0,
+              "raw_cftc_value": 29426.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 223055.0,
+            "short": 193629.0,
+            "net": 29426.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 469886.0,
+              "raw_cftc_value": 469886.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 535410.0,
+              "raw_cftc_value": 535410.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -65524.0,
+              "raw_cftc_value": -65524.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 469886.0,
+              "raw_cftc_value": 469886.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 535410.0,
+              "raw_cftc_value": 535410.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -65524.0,
+              "raw_cftc_value": -65524.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 469886.0,
+            "short": 535410.0,
+            "net": -65524.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 88813.0,
+              "raw_cftc_value": 88813.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 52715.0,
+              "raw_cftc_value": 52715.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 36098.0,
+              "raw_cftc_value": 36098.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 88813.0,
+              "raw_cftc_value": 88813.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 52715.0,
+              "raw_cftc_value": 52715.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 36098.0,
+              "raw_cftc_value": 36098.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 88813.0,
+            "short": 52715.0,
+            "net": 36098.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "British Pound / 6B": {
+      "instrument_id": "British Pound / 6B",
+      "report_date": "2026-05-26",
+      "cftc_code": "096742",
+      "market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5619,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 57978.0,
+              "raw_cftc_value": 57978.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 119376.0,
+              "raw_cftc_value": 119376.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -61398.0,
+              "raw_cftc_value": -61398.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 57978.0,
+              "raw_cftc_value": 57978.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 119376.0,
+              "raw_cftc_value": 119376.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -61398.0,
+              "raw_cftc_value": -61398.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 57978.0,
+            "short": 119376.0,
+            "net": -61398.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 191611.0,
+              "raw_cftc_value": 191611.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 128063.0,
+              "raw_cftc_value": 128063.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 63548.0,
+              "raw_cftc_value": 63548.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 191611.0,
+              "raw_cftc_value": 191611.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 128063.0,
+              "raw_cftc_value": 128063.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 63548.0,
+              "raw_cftc_value": 63548.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 191611.0,
+            "short": 128063.0,
+            "net": 63548.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 28467.0,
+              "raw_cftc_value": 28467.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 30617.0,
+              "raw_cftc_value": 30617.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2150.0,
+              "raw_cftc_value": -2150.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 28467.0,
+              "raw_cftc_value": 28467.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 30617.0,
+              "raw_cftc_value": 30617.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2150.0,
+              "raw_cftc_value": -2150.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 28467.0,
+            "short": 30617.0,
+            "net": -2150.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Japanese Yen / 6J": {
+      "instrument_id": "Japanese Yen / 6J",
+      "report_date": "2026-05-26",
+      "cftc_code": "097741",
+      "market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5640,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 112993.0,
+              "raw_cftc_value": 112993.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 227660.0,
+              "raw_cftc_value": 227660.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -114667.0,
+              "raw_cftc_value": -114667.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 112993.0,
+              "raw_cftc_value": 112993.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 227660.0,
+              "raw_cftc_value": 227660.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -114667.0,
+              "raw_cftc_value": -114667.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 112993.0,
+            "short": 227660.0,
+            "net": -114667.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 244888.0,
+              "raw_cftc_value": 244888.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 137196.0,
+              "raw_cftc_value": 137196.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 107692.0,
+              "raw_cftc_value": 107692.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 244888.0,
+              "raw_cftc_value": 244888.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 137196.0,
+              "raw_cftc_value": 137196.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 107692.0,
+              "raw_cftc_value": 107692.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 244888.0,
+            "short": 137196.0,
+            "net": 107692.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 46540.0,
+              "raw_cftc_value": 46540.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 39565.0,
+              "raw_cftc_value": 39565.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 6975.0,
+              "raw_cftc_value": 6975.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 46540.0,
+              "raw_cftc_value": 46540.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 39565.0,
+              "raw_cftc_value": 39565.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 6975.0,
+              "raw_cftc_value": 6975.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 46540.0,
+            "short": 39565.0,
+            "net": 6975.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Swiss Franc / 6S": {
+      "instrument_id": "Swiss Franc / 6S",
+      "report_date": "2026-05-26",
+      "cftc_code": "092741",
+      "market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5577,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 7118.0,
+              "raw_cftc_value": 7118.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 42258.0,
+              "raw_cftc_value": 42258.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -35140.0,
+              "raw_cftc_value": -35140.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 7118.0,
+              "raw_cftc_value": 7118.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 42258.0,
+              "raw_cftc_value": 42258.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -35140.0,
+              "raw_cftc_value": -35140.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 7118.0,
+            "short": 42258.0,
+            "net": -35140.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 87063.0,
+              "raw_cftc_value": 87063.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 41892.0,
+              "raw_cftc_value": 41892.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 45171.0,
+              "raw_cftc_value": 45171.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 87063.0,
+              "raw_cftc_value": 87063.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 41892.0,
+              "raw_cftc_value": 41892.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 45171.0,
+              "raw_cftc_value": 45171.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 87063.0,
+            "short": 41892.0,
+            "net": 45171.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 11286.0,
+              "raw_cftc_value": 11286.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 21317.0,
+              "raw_cftc_value": 21317.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -10031.0,
+              "raw_cftc_value": -10031.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 11286.0,
+              "raw_cftc_value": 11286.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 21317.0,
+              "raw_cftc_value": 21317.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -10031.0,
+              "raw_cftc_value": -10031.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 11286.0,
+            "short": 21317.0,
+            "net": -10031.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Australian Dollar / 6A": {
+      "instrument_id": "Australian Dollar / 6A",
+      "report_date": "2026-05-26",
+      "cftc_code": "232741",
+      "market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 7017,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 129129.0,
+              "raw_cftc_value": 129129.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 68974.0,
+              "raw_cftc_value": 68974.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 60155.0,
+              "raw_cftc_value": 60155.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 129129.0,
+              "raw_cftc_value": 129129.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 68974.0,
+              "raw_cftc_value": 68974.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 60155.0,
+              "raw_cftc_value": 60155.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 129129.0,
+            "short": 68974.0,
+            "net": 60155.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 122598.0,
+              "raw_cftc_value": 122598.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 203030.0,
+              "raw_cftc_value": 203030.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -80432.0,
+              "raw_cftc_value": -80432.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 122598.0,
+              "raw_cftc_value": 122598.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 203030.0,
+              "raw_cftc_value": 203030.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -80432.0,
+              "raw_cftc_value": -80432.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 122598.0,
+            "short": 203030.0,
+            "net": -80432.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 39822.0,
+              "raw_cftc_value": 39822.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 19545.0,
+              "raw_cftc_value": 19545.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 20277.0,
+              "raw_cftc_value": 20277.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 39822.0,
+              "raw_cftc_value": 39822.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 19545.0,
+              "raw_cftc_value": 19545.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 20277.0,
+              "raw_cftc_value": 20277.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 39822.0,
+            "short": 19545.0,
+            "net": 20277.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Canadian Dollar / 6C": {
+      "instrument_id": "Canadian Dollar / 6C",
+      "report_date": "2026-05-26",
+      "cftc_code": "090741",
+      "market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5556,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 53676.0,
+              "raw_cftc_value": 53676.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 122558.0,
+              "raw_cftc_value": 122558.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -68882.0,
+              "raw_cftc_value": -68882.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 53676.0,
+              "raw_cftc_value": 53676.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 122558.0,
+              "raw_cftc_value": 122558.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -68882.0,
+              "raw_cftc_value": -68882.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 53676.0,
+            "short": 122558.0,
+            "net": -68882.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 195307.0,
+              "raw_cftc_value": 195307.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 123462.0,
+              "raw_cftc_value": 123462.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 71845.0,
+              "raw_cftc_value": 71845.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 195307.0,
+              "raw_cftc_value": 195307.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 123462.0,
+              "raw_cftc_value": 123462.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 71845.0,
+              "raw_cftc_value": 71845.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 195307.0,
+            "short": 123462.0,
+            "net": 71845.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 31797.0,
+              "raw_cftc_value": 31797.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 34760.0,
+              "raw_cftc_value": 34760.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2963.0,
+              "raw_cftc_value": -2963.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 31797.0,
+              "raw_cftc_value": 31797.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 34760.0,
+              "raw_cftc_value": 34760.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2963.0,
+              "raw_cftc_value": -2963.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 31797.0,
+            "short": 34760.0,
+            "net": -2963.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "NZ Dollar / 6N": {
+      "instrument_id": "NZ Dollar / 6N",
+      "report_date": "2026-05-26",
+      "cftc_code": "112741",
+      "market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5785,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 11721.0,
+              "raw_cftc_value": 11721.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 45900.0,
+              "raw_cftc_value": 45900.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -34179.0,
+              "raw_cftc_value": -34179.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 11721.0,
+              "raw_cftc_value": 11721.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 45900.0,
+              "raw_cftc_value": 45900.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -34179.0,
+              "raw_cftc_value": -34179.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 11721.0,
+            "short": 45900.0,
+            "net": -34179.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 75380.0,
+              "raw_cftc_value": 75380.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 38390.0,
+              "raw_cftc_value": 38390.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 36990.0,
+              "raw_cftc_value": 36990.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 75380.0,
+              "raw_cftc_value": 75380.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 38390.0,
+              "raw_cftc_value": 38390.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 36990.0,
+              "raw_cftc_value": 36990.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 75380.0,
+            "short": 38390.0,
+            "net": 36990.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 3570.0,
+              "raw_cftc_value": 3570.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 6381.0,
+              "raw_cftc_value": 6381.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2811.0,
+              "raw_cftc_value": -2811.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 3570.0,
+              "raw_cftc_value": 3570.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 6381.0,
+              "raw_cftc_value": 6381.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2811.0,
+              "raw_cftc_value": -2811.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 3570.0,
+            "short": 6381.0,
+            "net": -2811.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Gold": {
+      "instrument_id": "Gold",
+      "report_date": "2026-05-26",
+      "cftc_code": "088691",
+      "market_name": "GOLD - COMMODITY EXCHANGE INC.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5511,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 200704.0,
+              "raw_cftc_value": 200704.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 46444.0,
+              "raw_cftc_value": 46444.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 154260.0,
+              "raw_cftc_value": 154260.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 200704.0,
+              "raw_cftc_value": 200704.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 46444.0,
+              "raw_cftc_value": 46444.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 154260.0,
+              "raw_cftc_value": 154260.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 200704.0,
+            "short": 46444.0,
+            "net": 154260.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 74641.0,
+              "raw_cftc_value": 74641.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 260407.0,
+              "raw_cftc_value": 260407.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -185766.0,
+              "raw_cftc_value": -185766.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 74641.0,
+              "raw_cftc_value": 74641.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 260407.0,
+              "raw_cftc_value": 260407.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -185766.0,
+              "raw_cftc_value": -185766.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 74641.0,
+            "short": 260407.0,
+            "net": -185766.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 47149.0,
+              "raw_cftc_value": 47149.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 15643.0,
+              "raw_cftc_value": 15643.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 31506.0,
+              "raw_cftc_value": 31506.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 47149.0,
+              "raw_cftc_value": 47149.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 15643.0,
+              "raw_cftc_value": 15643.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 31506.0,
+              "raw_cftc_value": 31506.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 47149.0,
+            "short": 15643.0,
+            "net": 31506.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Silver": {
+      "instrument_id": "Silver",
+      "report_date": "2026-05-26",
+      "cftc_code": "084691",
+      "market_name": "SILVER - COMMODITY EXCHANGE INC.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5461,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 32758.0,
+              "raw_cftc_value": 32758.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 10535.0,
+              "raw_cftc_value": 10535.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 22223.0,
+              "raw_cftc_value": 22223.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 32758.0,
+              "raw_cftc_value": 32758.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 10535.0,
+              "raw_cftc_value": 10535.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 22223.0,
+              "raw_cftc_value": 22223.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 32758.0,
+            "short": 10535.0,
+            "net": 22223.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 27605.0,
+              "raw_cftc_value": 27605.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 68498.0,
+              "raw_cftc_value": 68498.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -40893.0,
+              "raw_cftc_value": -40893.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 27605.0,
+              "raw_cftc_value": 27605.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 68498.0,
+              "raw_cftc_value": 68498.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -40893.0,
+              "raw_cftc_value": -40893.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 27605.0,
+            "short": 68498.0,
+            "net": -40893.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 27301.0,
+              "raw_cftc_value": 27301.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 8631.0,
+              "raw_cftc_value": 8631.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 18670.0,
+              "raw_cftc_value": 18670.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 27301.0,
+              "raw_cftc_value": 27301.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 8631.0,
+              "raw_cftc_value": 8631.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 18670.0,
+              "raw_cftc_value": 18670.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 27301.0,
+            "short": 8631.0,
+            "net": 18670.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Copper / HG": {
+      "instrument_id": "Copper / HG",
+      "report_date": "2026-05-26",
+      "cftc_code": "085692",
+      "market_name": "COPPER- #1 - COMMODITY EXCHANGE INC.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5487,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 105673.0,
+              "raw_cftc_value": 105673.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 32633.0,
+              "raw_cftc_value": 32633.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 73040.0,
+              "raw_cftc_value": 73040.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 105673.0,
+              "raw_cftc_value": 105673.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 32633.0,
+              "raw_cftc_value": 32633.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 73040.0,
+              "raw_cftc_value": 73040.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 105673.0,
+            "short": 32633.0,
+            "net": 73040.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 88083.0,
+              "raw_cftc_value": 88083.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 171795.0,
+              "raw_cftc_value": 171795.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -83712.0,
+              "raw_cftc_value": -83712.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 88083.0,
+              "raw_cftc_value": 88083.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 171795.0,
+              "raw_cftc_value": 171795.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -83712.0,
+              "raw_cftc_value": -83712.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 88083.0,
+            "short": 171795.0,
+            "net": -83712.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 20574.0,
+              "raw_cftc_value": 20574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9902.0,
+              "raw_cftc_value": 9902.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 10672.0,
+              "raw_cftc_value": 10672.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 20574.0,
+              "raw_cftc_value": 20574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9902.0,
+              "raw_cftc_value": 9902.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 10672.0,
+              "raw_cftc_value": 10672.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 20574.0,
+            "short": 9902.0,
+            "net": 10672.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Crude Oil / CL": {
+      "instrument_id": "Crude Oil / CL",
+      "report_date": "2026-05-26",
+      "cftc_code": "067651",
+      "market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5220,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 378088.0,
+              "raw_cftc_value": 378088.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 217090.0,
+              "raw_cftc_value": 217090.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 160998.0,
+              "raw_cftc_value": 160998.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 378088.0,
+              "raw_cftc_value": 378088.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 217090.0,
+              "raw_cftc_value": 217090.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 160998.0,
+              "raw_cftc_value": 160998.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 378088.0,
+            "short": 217090.0,
+            "net": 160998.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 900997.0,
+              "raw_cftc_value": 900997.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1096470.0,
+              "raw_cftc_value": 1096470.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -195473.0,
+              "raw_cftc_value": -195473.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 900997.0,
+              "raw_cftc_value": 900997.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1096470.0,
+              "raw_cftc_value": 1096470.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -195473.0,
+              "raw_cftc_value": -195473.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 900997.0,
+            "short": 1096470.0,
+            "net": -195473.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 82778.0,
+              "raw_cftc_value": 82778.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 48303.0,
+              "raw_cftc_value": 48303.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 34475.0,
+              "raw_cftc_value": 34475.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 82778.0,
+              "raw_cftc_value": 82778.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 48303.0,
+              "raw_cftc_value": 48303.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 34475.0,
+              "raw_cftc_value": 34475.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 82778.0,
+            "short": 48303.0,
+            "net": 34475.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Natural Gas / NG": {
+      "instrument_id": "Natural Gas / NG",
+      "report_date": "2026-05-26",
+      "cftc_code": "023651",
+      "market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 2046,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 230515.0,
+              "raw_cftc_value": 230515.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 433696.0,
+              "raw_cftc_value": 433696.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -203181.0,
+              "raw_cftc_value": -203181.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 230515.0,
+              "raw_cftc_value": 230515.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 433696.0,
+              "raw_cftc_value": 433696.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -203181.0,
+              "raw_cftc_value": -203181.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 230515.0,
+            "short": 433696.0,
+            "net": -203181.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 598594.0,
+              "raw_cftc_value": 598594.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 408416.0,
+              "raw_cftc_value": 408416.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 190178.0,
+              "raw_cftc_value": 190178.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 598594.0,
+              "raw_cftc_value": 598594.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 408416.0,
+              "raw_cftc_value": 408416.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 190178.0,
+              "raw_cftc_value": 190178.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 598594.0,
+            "short": 408416.0,
+            "net": 190178.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 51581.0,
+              "raw_cftc_value": 51581.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 38578.0,
+              "raw_cftc_value": 38578.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 13003.0,
+              "raw_cftc_value": 13003.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 51581.0,
+              "raw_cftc_value": 51581.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 38578.0,
+              "raw_cftc_value": 38578.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 13003.0,
+              "raw_cftc_value": 13003.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 51581.0,
+            "short": 38578.0,
+            "net": 13003.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Coffee": {
+      "instrument_id": "Coffee",
+      "report_date": "2026-05-26",
+      "cftc_code": "083731",
+      "market_name": "COFFEE C - ICE FUTURES U.S.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5440,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 53574.0,
+              "raw_cftc_value": 53574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 36943.0,
+              "raw_cftc_value": 36943.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 16631.0,
+              "raw_cftc_value": 16631.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 53574.0,
+              "raw_cftc_value": 53574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 36943.0,
+              "raw_cftc_value": 36943.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 16631.0,
+              "raw_cftc_value": 16631.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 53574.0,
+            "short": 36943.0,
+            "net": 16631.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 74669.0,
+              "raw_cftc_value": 74669.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 91435.0,
+              "raw_cftc_value": 91435.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -16766.0,
+              "raw_cftc_value": -16766.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 74669.0,
+              "raw_cftc_value": 74669.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 91435.0,
+              "raw_cftc_value": 91435.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -16766.0,
+              "raw_cftc_value": -16766.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 74669.0,
+            "short": 91435.0,
+            "net": -16766.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 7985.0,
+              "raw_cftc_value": 7985.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 7850.0,
+              "raw_cftc_value": 7850.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 135.0,
+              "raw_cftc_value": 135.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 7985.0,
+              "raw_cftc_value": 7985.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 7850.0,
+              "raw_cftc_value": 7850.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 135.0,
+              "raw_cftc_value": 135.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 7985.0,
+            "short": 7850.0,
+            "net": 135.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Cocoa": {
+      "instrument_id": "Cocoa",
+      "report_date": "2026-05-26",
+      "cftc_code": "073732",
+      "market_name": "COCOA - ICE FUTURES U.S.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5356,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 41108.0,
+              "raw_cftc_value": 41108.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 57348.0,
+              "raw_cftc_value": 57348.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -16240.0,
+              "raw_cftc_value": -16240.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 41108.0,
+              "raw_cftc_value": 41108.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 57348.0,
+              "raw_cftc_value": 57348.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -16240.0,
+              "raw_cftc_value": -16240.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 41108.0,
+            "short": 57348.0,
+            "net": -16240.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 105544.0,
+              "raw_cftc_value": 105544.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 90253.0,
+              "raw_cftc_value": 90253.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 15291.0,
+              "raw_cftc_value": 15291.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 105544.0,
+              "raw_cftc_value": 105544.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 90253.0,
+              "raw_cftc_value": 90253.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 15291.0,
+              "raw_cftc_value": 15291.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 105544.0,
+            "short": 90253.0,
+            "net": 15291.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 10501.0,
+              "raw_cftc_value": 10501.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9552.0,
+              "raw_cftc_value": 9552.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 949.0,
+              "raw_cftc_value": 949.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 10501.0,
+              "raw_cftc_value": 10501.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9552.0,
+              "raw_cftc_value": 9552.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 949.0,
+              "raw_cftc_value": 949.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 10501.0,
+            "short": 9552.0,
+            "net": 949.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Corn": {
+      "instrument_id": "Corn",
+      "report_date": "2026-05-26",
+      "cftc_code": "002602",
+      "market_name": "CORN - CHICAGO BOARD OF TRADE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 63,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 521725.0,
+              "raw_cftc_value": 521725.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 219723.0,
+              "raw_cftc_value": 219723.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 302002.0,
+              "raw_cftc_value": 302002.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 521725.0,
+              "raw_cftc_value": 521725.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 219723.0,
+              "raw_cftc_value": 219723.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 302002.0,
+              "raw_cftc_value": 302002.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 521725.0,
+            "short": 219723.0,
+            "net": 302002.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 773197.0,
+              "raw_cftc_value": 773197.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1004716.0,
+              "raw_cftc_value": 1004716.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -231519.0,
+              "raw_cftc_value": -231519.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 773197.0,
+              "raw_cftc_value": 773197.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1004716.0,
+              "raw_cftc_value": 1004716.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -231519.0,
+              "raw_cftc_value": -231519.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 773197.0,
+            "short": 1004716.0,
+            "net": -231519.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 133362.0,
+              "raw_cftc_value": 133362.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 203845.0,
+              "raw_cftc_value": 203845.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -70483.0,
+              "raw_cftc_value": -70483.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 133362.0,
+              "raw_cftc_value": 133362.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 203845.0,
+              "raw_cftc_value": 203845.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -70483.0,
+              "raw_cftc_value": -70483.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 133362.0,
+            "short": 203845.0,
+            "net": -70483.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Wheat": {
+      "instrument_id": "Wheat",
+      "report_date": "2026-05-26",
+      "cftc_code": "001602",
+      "market_name": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 0,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 144186.0,
+              "raw_cftc_value": 144186.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 153644.0,
+              "raw_cftc_value": 153644.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -9458.0,
+              "raw_cftc_value": -9458.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 144186.0,
+              "raw_cftc_value": 144186.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 153644.0,
+              "raw_cftc_value": 153644.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -9458.0,
+              "raw_cftc_value": -9458.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 144186.0,
+            "short": 153644.0,
+            "net": -9458.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 162357.0,
+              "raw_cftc_value": 162357.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 154827.0,
+              "raw_cftc_value": 154827.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 7530.0,
+              "raw_cftc_value": 7530.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 162357.0,
+              "raw_cftc_value": 162357.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 154827.0,
+              "raw_cftc_value": 154827.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 7530.0,
+              "raw_cftc_value": 7530.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 162357.0,
+            "short": 154827.0,
+            "net": 7530.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 37621.0,
+              "raw_cftc_value": 37621.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 35693.0,
+              "raw_cftc_value": 35693.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 1928.0,
+              "raw_cftc_value": 1928.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 37621.0,
+              "raw_cftc_value": 37621.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 35693.0,
+              "raw_cftc_value": 35693.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 1928.0,
+              "raw_cftc_value": 1928.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 37621.0,
+            "short": 35693.0,
+            "net": 1928.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Soybeans": {
+      "instrument_id": "Soybeans",
+      "report_date": "2026-05-26",
+      "cftc_code": "005602",
+      "market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 90,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 285330.0,
+              "raw_cftc_value": 285330.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 80655.0,
+              "raw_cftc_value": 80655.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 204675.0,
+              "raw_cftc_value": 204675.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 285330.0,
+              "raw_cftc_value": 285330.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 80655.0,
+              "raw_cftc_value": 80655.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 204675.0,
+              "raw_cftc_value": 204675.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 285330.0,
+            "short": 80655.0,
+            "net": 204675.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 484904.0,
+              "raw_cftc_value": 484904.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 661514.0,
+              "raw_cftc_value": 661514.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -176610.0,
+              "raw_cftc_value": -176610.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 484904.0,
+              "raw_cftc_value": 484904.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 661514.0,
+              "raw_cftc_value": 661514.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -176610.0,
+              "raw_cftc_value": -176610.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 484904.0,
+            "short": 661514.0,
+            "net": -176610.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 51229.0,
+              "raw_cftc_value": 51229.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 79294.0,
+              "raw_cftc_value": 79294.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -28065.0,
+              "raw_cftc_value": -28065.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 51229.0,
+              "raw_cftc_value": 51229.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 79294.0,
+              "raw_cftc_value": 79294.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -28065.0,
+              "raw_cftc_value": -28065.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 51229.0,
+            "short": 79294.0,
+            "net": -28065.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Sugar": {
+      "instrument_id": "Sugar",
+      "report_date": "2026-05-26",
+      "cftc_code": "080732",
+      "market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5419,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 238727.0,
+              "raw_cftc_value": 238727.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 318477.0,
+              "raw_cftc_value": 318477.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -79750.0,
+              "raw_cftc_value": -79750.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 238727.0,
+              "raw_cftc_value": 238727.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 318477.0,
+              "raw_cftc_value": 318477.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -79750.0,
+              "raw_cftc_value": -79750.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 238727.0,
+            "short": 318477.0,
+            "net": -79750.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 490877.0,
+              "raw_cftc_value": 490877.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 412585.0,
+              "raw_cftc_value": 412585.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 78292.0,
+              "raw_cftc_value": 78292.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 490877.0,
+              "raw_cftc_value": 490877.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 412585.0,
+              "raw_cftc_value": 412585.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 78292.0,
+              "raw_cftc_value": 78292.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 490877.0,
+            "short": 412585.0,
+            "net": 78292.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 79967.0,
+              "raw_cftc_value": 79967.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 78509.0,
+              "raw_cftc_value": 78509.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 1458.0,
+              "raw_cftc_value": 1458.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 79967.0,
+              "raw_cftc_value": 79967.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 78509.0,
+              "raw_cftc_value": 78509.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 1458.0,
+              "raw_cftc_value": 1458.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 79967.0,
+            "short": 78509.0,
+            "net": 1458.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Platinum": {
+      "instrument_id": "Platinum",
+      "report_date": "2026-05-26",
+      "cftc_code": "076651",
+      "market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5398,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 25998.0,
+              "raw_cftc_value": 25998.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 8340.0,
+              "raw_cftc_value": 8340.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 17658.0,
+              "raw_cftc_value": 17658.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 25998.0,
+              "raw_cftc_value": 25998.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 8340.0,
+              "raw_cftc_value": 8340.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 17658.0,
+              "raw_cftc_value": 17658.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 25998.0,
+            "short": 8340.0,
+            "net": 17658.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 18267.0,
+              "raw_cftc_value": 18267.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 41574.0,
+              "raw_cftc_value": 41574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -23307.0,
+              "raw_cftc_value": -23307.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 18267.0,
+              "raw_cftc_value": 18267.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 41574.0,
+              "raw_cftc_value": 41574.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -23307.0,
+              "raw_cftc_value": -23307.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 18267.0,
+            "short": 41574.0,
+            "net": -23307.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 8463.0,
+              "raw_cftc_value": 8463.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 2814.0,
+              "raw_cftc_value": 2814.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 5649.0,
+              "raw_cftc_value": 5649.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 8463.0,
+              "raw_cftc_value": 8463.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 2814.0,
+              "raw_cftc_value": 2814.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 5649.0,
+              "raw_cftc_value": 5649.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 8463.0,
+            "short": 2814.0,
+            "net": 5649.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    },
+    "Palladium": {
+      "instrument_id": "Palladium",
+      "report_date": "2026-05-26",
+      "cftc_code": "075651",
+      "market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
+      "report_type": "legacy_futures_only",
+      "source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+      "source_row": 5377,
+      "mapping_status": "PASS",
+      "overall_status": "PASS",
+      "column_status": {
+        "NC": "PASS",
+        "Commercial": "PASS",
+        "Non-Reportable": "PASS"
+      },
+      "groups": {
+        "noncommercials": {
+          "group_id": "noncommercials",
+          "label": "NC",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 6432.0,
+              "raw_cftc_value": 6432.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9322.0,
+              "raw_cftc_value": 9322.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2890.0,
+              "raw_cftc_value": -2890.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 6432.0,
+              "raw_cftc_value": 6432.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 9322.0,
+              "raw_cftc_value": 9322.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": -2890.0,
+              "raw_cftc_value": -2890.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 6432.0,
+            "short": 9322.0,
+            "net": -2890.0
+          }
+        },
+        "commercials": {
+          "group_id": "commercials",
+          "label": "Commercial",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 6739.0,
+              "raw_cftc_value": 6739.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 4680.0,
+              "raw_cftc_value": 4680.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 2059.0,
+              "raw_cftc_value": 2059.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 6739.0,
+              "raw_cftc_value": 6739.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 4680.0,
+              "raw_cftc_value": 4680.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 2059.0,
+              "raw_cftc_value": 2059.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 6739.0,
+            "short": 4680.0,
+            "net": 2059.0
+          }
+        },
+        "nonreportables": {
+          "group_id": "nonreportables",
+          "label": "Non-Reportable",
+          "status": "PASS",
+          "legacy_panel": {
+            "long": {
+              "dashboard_value": 2478.0,
+              "raw_cftc_value": 2478.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1647.0,
+              "raw_cftc_value": 1647.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 831.0,
+              "raw_cftc_value": 831.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "confluence_headline": {
+            "long": {
+              "dashboard_value": 2478.0,
+              "raw_cftc_value": 2478.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "short": {
+              "dashboard_value": 1647.0,
+              "raw_cftc_value": 1647.0,
+              "difference": 0.0,
+              "match": true
+            },
+            "net": {
+              "dashboard_value": 831.0,
+              "raw_cftc_value": 831.0,
+              "difference": 0.0,
+              "match": true
+            }
+          },
+          "raw_cftc": {
+            "long": 2478.0,
+            "short": 1647.0,
+            "net": 831.0
+          }
+        }
+      },
+      "mismatch_reasons": [],
+      "confluence_present": true,
+      "confluence_trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)",
+      "confluence_positioning_source": "legacy_cot_latest.json"
+    }
+  }
+}

@@ -13,6 +13,9 @@ def build_news_risk_context(events_df: pd.DataFrame | None = None) -> pd.DataFra
 
     No live scraping and no fake news data are used here. This placeholder does
     not affect macro_score.
+
+    For the economic calendar pipeline, see ``hptl.news`` (calendar_downloader,
+    calendar_parser, calendar_scoring).
     """
     if events_df is None or events_df.empty:
         return pd.DataFrame(

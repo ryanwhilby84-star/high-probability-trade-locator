@@ -1,0 +1,15 @@
+{
+  "description": "Planned instrument expansion — wire data feeds before adding to TARGET_MARKETS.",
+  "active_cot_markets": "See hptl.confluence.build_decision_table.TARGET_MARKETS",
+  "planned": [
+    { "id": "BTC", "label": "Bitcoin", "asset_class": "crypto", "feed": "cot_or_proxy_tbd" },
+    { "id": "ETH", "label": "Ethereum", "asset_class": "crypto", "feed": "cot_or_proxy_tbd" },
+    { "id": "DXY", "label": "US Dollar Index", "asset_class": "fx", "feed": "fred_or_futures" },
+    { "id": "EURUSD", "label": "EUR/USD", "asset_class": "fx", "feed": "cot_6e" },
+    { "id": "GBPUSD", "label": "GBP/USD", "asset_class": "fx", "feed": "cot_6b" },
+    { "id": "VIX", "label": "VIX", "asset_class": "volatility", "feed": "fred_cboe" },
+    { "id": "US10Y", "label": "US 10Y (rates)", "asset_class": "rates", "feed": "fred_dgs10" },
+    { "id": "NIKKEI", "label": "Nikkei", "asset_class": "indices", "feed": "cot_or_index" },
+    { "id": "RUSSELL", "label": "Russell 2000", "asset_class": "indices", "feed": "cot_mini" }
+  ]
+}

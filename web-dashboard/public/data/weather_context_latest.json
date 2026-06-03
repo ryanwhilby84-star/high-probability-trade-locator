@@ -1,0 +1,404 @@
+{
+  "wired": true,
+  "skip_live_feeds": false,
+  "openweather_api_key_detected": true,
+  "provider": "openweather",
+  "error": null,
+  "fetched_at": "2026-05-21T05:31:44.080020+00:00",
+  "forecast_records_loaded": 8,
+  "forecast_records_ok": 8,
+  "locations_queried": [
+    {
+      "market": "Natural Gas / NG",
+      "region": "Chicago",
+      "lat": 41.88,
+      "lon": -87.63
+    },
+    {
+      "market": "Natural Gas / NG",
+      "region": "New York",
+      "lat": 40.71,
+      "lon": -74.01
+    },
+    {
+      "market": "Natural Gas / NG",
+      "region": "Houston",
+      "lat": 29.76,
+      "lon": -95.37
+    },
+    {
+      "market": "Natural Gas / NG",
+      "region": "Dallas",
+      "lat": 32.78,
+      "lon": -96.8
+    },
+    {
+      "market": "Wheat",
+      "region": "Kansas",
+      "lat": 38.5,
+      "lon": -98.5
+    },
+    {
+      "market": "Wheat",
+      "region": "Oklahoma",
+      "lat": 35.47,
+      "lon": -97.52
+    },
+    {
+      "market": "Wheat",
+      "region": "Nebraska",
+      "lat": 41.26,
+      "lon": -95.94
+    },
+    {
+      "market": "Wheat",
+      "region": "Texas",
+      "lat": 32.78,
+      "lon": -96.8
+    }
+  ],
+  "markets": {
+    "Natural Gas / NG": {
+      "status": "openweather",
+      "records": [
+        {
+          "region": "Chicago",
+          "market": "Natural Gas / NG",
+          "lat": 41.88,
+          "lon": -87.63,
+          "temperature_f": {
+            "min": 48.97,
+            "max": 59.43,
+            "current": 49.96
+          },
+          "temperature_display": "49\u201359\u00b0F (48h)",
+          "precipitation_mm_24h": 0.0,
+          "precipitation_display": "Trace / none (24h)",
+          "forecast_summary": "Chicago \u2014 49\u201359\u00b0F next 48h",
+          "importance": "low",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.080161+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "neutral",
+            "crop_impact_label": "Mild demand backdrop",
+            "price_impact": "bearish",
+            "price_impact_label": "Bearish nat gas",
+            "confidence": "low",
+            "badge": "green",
+            "reason": "Chicago: mild conditions reduce heating/cooling demand versus extremes."
+          }
+        },
+        {
+          "region": "New York",
+          "market": "Natural Gas / NG",
+          "lat": 40.71,
+          "lon": -74.01,
+          "temperature_f": {
+            "min": 57.61,
+            "max": 66.38,
+            "current": 66.38
+          },
+          "temperature_display": "58\u201366\u00b0F (48h)",
+          "precipitation_mm_24h": 5.6,
+          "precipitation_display": "5.6 mm / 24h",
+          "forecast_summary": "New York \u2014 58\u201366\u00b0F next 48h \u00b7 ~6 mm precip / 24h",
+          "importance": "low",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.080161+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "neutral",
+            "crop_impact_label": "Neutral demand",
+            "price_impact": "neutral",
+            "price_impact_label": "Neutral nat gas",
+            "confidence": "low",
+            "badge": "amber",
+            "reason": "New York: weather not extreme enough for a clear demand bias."
+          }
+        },
+        {
+          "region": "Houston",
+          "market": "Natural Gas / NG",
+          "lat": 29.76,
+          "lon": -95.37,
+          "temperature_f": {
+            "min": 69.8,
+            "max": 85.05,
+            "current": 73.89
+          },
+          "temperature_display": "70\u201385\u00b0F (48h)",
+          "precipitation_mm_24h": 30.1,
+          "precipitation_display": "30.1 mm / 24h",
+          "forecast_summary": "Houston \u2014 heavy precipitation",
+          "importance": "medium",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.080161+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [
+            "heavy precipitation"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": true,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "neutral",
+            "crop_impact_label": "Mixed (supply/logistics)",
+            "price_impact": "mixed",
+            "price_impact_label": "Mixed nat gas",
+            "confidence": "medium",
+            "badge": "amber",
+            "reason": "Houston: storms can disrupt Gulf production/flows \u2014 direction depends on damage vs demand loss."
+          }
+        },
+        {
+          "region": "Dallas",
+          "market": "Natural Gas / NG",
+          "lat": 32.78,
+          "lon": -96.8,
+          "temperature_f": {
+            "min": 66.69,
+            "max": 86.61,
+            "current": 72.23
+          },
+          "temperature_display": "67\u201387\u00b0F (48h)",
+          "precipitation_mm_24h": 18.0,
+          "precipitation_display": "18.0 mm / 24h",
+          "forecast_summary": "Dallas \u2014 heavy precipitation",
+          "importance": "medium",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.080161+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [
+            "heavy precipitation"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": true,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "neutral",
+            "crop_impact_label": "Mixed (supply/logistics)",
+            "price_impact": "mixed",
+            "price_impact_label": "Mixed nat gas",
+            "confidence": "medium",
+            "badge": "amber",
+            "reason": "Dallas: storms can disrupt Gulf production/flows \u2014 direction depends on damage vs demand loss."
+          }
+        }
+      ],
+      "weekly_bias": "Mixed",
+      "weekly_bias_line": "Weather bias this week: Mixed for Natural Gas / NG."
+    },
+    "Wheat": {
+      "status": "openweather",
+      "records": [
+        {
+          "region": "Kansas",
+          "market": "Wheat",
+          "lat": 38.5,
+          "lon": -98.5,
+          "temperature_f": {
+            "min": 53.26,
+            "max": 67.37,
+            "current": 53.26
+          },
+          "temperature_display": "53\u201367\u00b0F (48h)",
+          "precipitation_mm_24h": 2.1,
+          "precipitation_display": "2.1 mm / 24h",
+          "forecast_summary": "Kansas \u2014 53\u201367\u00b0F next 48h \u00b7 ~2 mm precip / 24h",
+          "importance": "low",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.701009+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "good",
+            "crop_impact_label": "Moisture adequate",
+            "price_impact": "neutral",
+            "price_impact_label": "Neutral wheat",
+            "confidence": "low",
+            "badge": "green",
+            "reason": "Kansas: light precipitation is generally crop-supportive."
+          }
+        },
+        {
+          "region": "Oklahoma",
+          "market": "Wheat",
+          "lat": 35.47,
+          "lon": -97.52,
+          "temperature_f": {
+            "min": 58.12,
+            "max": 80.31,
+            "current": 58.12
+          },
+          "temperature_display": "58\u201380\u00b0F (48h)",
+          "precipitation_mm_24h": 14.8,
+          "precipitation_display": "14.8 mm / 24h",
+          "forecast_summary": "Oklahoma \u2014 precipitation anomaly",
+          "importance": "low",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.701009+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [
+            "precipitation anomaly"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "good",
+            "crop_impact_label": "Moisture supportive",
+            "price_impact": "bearish",
+            "price_impact_label": "Neutral/Bearish wheat",
+            "confidence": "low",
+            "badge": "green",
+            "reason": "Oklahoma: rainfall can improve crop conditions unless totals become excessive."
+          }
+        },
+        {
+          "region": "Nebraska",
+          "market": "Wheat",
+          "lat": 41.26,
+          "lon": -95.94,
+          "temperature_f": {
+            "min": 50.59,
+            "max": 63.16,
+            "current": 52.61
+          },
+          "temperature_display": "51\u201363\u00b0F (48h)",
+          "precipitation_mm_24h": 0.0,
+          "precipitation_display": "Trace / none (24h)",
+          "forecast_summary": "Nebraska \u2014 51\u201363\u00b0F next 48h",
+          "importance": "low",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.701009+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "neutral",
+            "crop_impact_label": "Neutral",
+            "price_impact": "neutral",
+            "price_impact_label": "Neutral wheat",
+            "confidence": "low",
+            "badge": "amber",
+            "reason": "Nebraska: no dominant stress signal in the current forecast window."
+          }
+        },
+        {
+          "region": "Texas",
+          "market": "Wheat",
+          "lat": 32.78,
+          "lon": -96.8,
+          "temperature_f": {
+            "min": 66.69,
+            "max": 86.61,
+            "current": 72.23
+          },
+          "temperature_display": "67\u201387\u00b0F (48h)",
+          "precipitation_mm_24h": 18.0,
+          "precipitation_display": "18.0 mm / 24h",
+          "forecast_summary": "Texas \u2014 heavy precipitation",
+          "importance": "medium",
+          "timestamp": "2026-05-21T06:00:00+00:00",
+          "fetched_at": "2026-05-21T05:31:44.701009+00:00",
+          "provider": "openweather",
+          "ok": true,
+          "error": null,
+          "risk_tags": [
+            "heavy precipitation"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": true,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "interpretation": {
+            "crop_impact": "good",
+            "crop_impact_label": "Moisture supportive",
+            "price_impact": "bearish",
+            "price_impact_label": "Neutral/Bearish wheat",
+            "confidence": "medium",
+            "badge": "green",
+            "reason": "Texas: rainfall can improve crop conditions unless totals become excessive."
+          }
+        }
+      ],
+      "weekly_bias": "Bearish",
+      "weekly_bias_line": "Weather bias this week: Bearish for Wheat."
+    }
+  }
+}

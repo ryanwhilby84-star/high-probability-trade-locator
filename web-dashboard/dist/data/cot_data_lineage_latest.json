@@ -1,0 +1,3685 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-02T08:14:01.917124+00:00",
+  "parser": "hptl.cot.data_lineage_audit",
+  "latest_report_date": "2026-05-26",
+  "chain": [
+    "Instrument",
+    "Raw Source (official CFTC deacot)",
+    "Mapping (canonical code)",
+    "Source Truth Audit",
+    "Dashboard (confluence_history_latest)",
+    "Scanner (same confluence row)",
+    "Thesis (thesis_tracker_latest snapshots)",
+    "Scoring (cot_score on confluence row)"
+  ],
+  "input_files": {
+    "source_truth": {
+      "file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+      "exists": true,
+      "generated_at": "2026-06-02T08:13:55.038682+00:00",
+      "mtime_utc": "2026-06-02T08:13:55.070666+00:00"
+    },
+    "confluence": {
+      "file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+      "exists": true,
+      "generated_at": "2026-06-01T14:32:59.057087+00:00",
+      "mtime_utc": "2026-06-01T14:32:59.198301+00:00"
+    },
+    "thesis": {
+      "file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+      "exists": true,
+      "generated_at": null,
+      "mtime_utc": "2026-06-02T08:13:55.239997+00:00"
+    },
+    "legacy_latest": {
+      "file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\legacy_cot_latest.json",
+      "exists": true,
+      "generated_at": "2026-06-01T13:35:34.018642+00:00",
+      "mtime_utc": "2026-06-01T13:35:34.892580+00:00"
+    }
+  },
+  "summary": {
+    "total_instruments_checked": 23,
+    "pass_count": 23,
+    "fail_count": 0,
+    "all_layers_identical": true,
+    "failed_instruments": []
+  },
+  "instruments": {
+    "NASDAQ / NQ": {
+      "instrument": "NASDAQ / NQ",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "209742",
+        "market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 6942,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.NASDAQ / NQ official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 85248.0,
+            "nc_short": 91333.0,
+            "nc_net": -6085.0,
+            "nr_long": 41004.0,
+            "nr_short": 34357.0,
+            "nr_net": 6647.0,
+            "cot_score": null
+          },
+          "cftc_code": "209742",
+          "market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 6942
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='NASDAQ / NQ' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 85248.0,
+            "nc_short": 91333.0,
+            "nc_net": -6085.0,
+            "nr_long": 41004.0,
+            "nr_short": 34357.0,
+            "nr_net": 6647.0,
+            "cot_score": 3.3
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 85248.0,
+            "nc_short": 91333.0,
+            "nc_net": -6085.0,
+            "nr_long": 41004.0,
+            "nr_short": 34357.0,
+            "nr_net": 6647.0,
+            "cot_score": 3.3
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='NASDAQ / NQ'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 85248.0,
+            "nc_short": 91333.0,
+            "nc_net": -6085.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.3
+          },
+          "thesis_id": "f1ff996a-1ece-4993-8e22-cb8e64949c98"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='NASDAQ / NQ'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 85248.0,
+            "nc_short": 91333.0,
+            "nc_net": -6085.0,
+            "nr_long": 41004.0,
+            "nr_short": 34357.0,
+            "nr_net": 6647.0,
+            "cot_score": 3.3
+          },
+          "final_calculated_cot_score": 3.3
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "S&P 500 / ES": {
+      "instrument": "S&P 500 / ES",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "13874A",
+        "market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 6142,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.S&P 500 / ES official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 254188.0,
+            "nc_short": 420019.0,
+            "nc_net": -165831.0,
+            "nr_long": 268642.0,
+            "nr_short": 157740.0,
+            "nr_net": 110902.0,
+            "cot_score": null
+          },
+          "cftc_code": "13874A",
+          "market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 6142
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='S&P 500 / ES' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 254188.0,
+            "nc_short": 420019.0,
+            "nc_net": -165831.0,
+            "nr_long": 268642.0,
+            "nr_short": 157740.0,
+            "nr_net": 110902.0,
+            "cot_score": 4.4
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 254188.0,
+            "nc_short": 420019.0,
+            "nc_net": -165831.0,
+            "nr_long": 268642.0,
+            "nr_short": 157740.0,
+            "nr_net": 110902.0,
+            "cot_score": 4.4
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='S&P 500 / ES'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 254188.0,
+            "nc_short": 420019.0,
+            "nc_net": -165831.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 4.4
+          },
+          "thesis_id": "4ee20500-73b4-4c8e-b279-188094f90c3f"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='S&P 500 / ES'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 254188.0,
+            "nc_short": 420019.0,
+            "nc_net": -165831.0,
+            "nr_long": 268642.0,
+            "nr_short": 157740.0,
+            "nr_net": 110902.0,
+            "cot_score": 4.4
+          },
+          "final_calculated_cot_score": 4.4
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Dow / YM": {
+      "instrument": "Dow / YM",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "124603",
+        "market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
+        "exchange": "CHICAGO BOARD OF TRADE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5869,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Dow / YM official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 9500.0,
+            "nc_short": 17262.0,
+            "nc_net": -7762.0,
+            "nr_long": 14716.0,
+            "nr_short": 9358.0,
+            "nr_net": 5358.0,
+            "cot_score": null
+          },
+          "cftc_code": "124603",
+          "market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5869
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Dow / YM' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 9500.0,
+            "nc_short": 17262.0,
+            "nc_net": -7762.0,
+            "nr_long": 14716.0,
+            "nr_short": 9358.0,
+            "nr_net": 5358.0,
+            "cot_score": 1.9
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 9500.0,
+            "nc_short": 17262.0,
+            "nc_net": -7762.0,
+            "nr_long": 14716.0,
+            "nr_short": 9358.0,
+            "nr_net": 5358.0,
+            "cot_score": 1.9
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Dow / YM'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 9500.0,
+            "nc_short": 17262.0,
+            "nc_net": -7762.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.9
+          },
+          "thesis_id": "44573100-1a7a-4130-9075-cdac52ff21d9"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Dow / YM'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 9500.0,
+            "nc_short": 17262.0,
+            "nc_net": -7762.0,
+            "nr_long": 14716.0,
+            "nr_short": 9358.0,
+            "nr_net": 5358.0,
+            "cot_score": 1.9
+          },
+          "final_calculated_cot_score": 1.9
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Euro FX / 6E": {
+      "instrument": "Euro FX / 6E",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "099741",
+        "market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5682,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Euro FX / 6E official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 223055.0,
+            "nc_short": 193629.0,
+            "nc_net": 29426.0,
+            "nr_long": 88813.0,
+            "nr_short": 52715.0,
+            "nr_net": 36098.0,
+            "cot_score": null
+          },
+          "cftc_code": "099741",
+          "market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5682
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Euro FX / 6E' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 223055.0,
+            "nc_short": 193629.0,
+            "nc_net": 29426.0,
+            "nr_long": 88813.0,
+            "nr_short": 52715.0,
+            "nr_net": 36098.0,
+            "cot_score": 3.6
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 223055.0,
+            "nc_short": 193629.0,
+            "nc_net": 29426.0,
+            "nr_long": 88813.0,
+            "nr_short": 52715.0,
+            "nr_net": 36098.0,
+            "cot_score": 3.6
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Euro FX / 6E'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 223055.0,
+            "nc_short": 193629.0,
+            "nc_net": 29426.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.6
+          },
+          "thesis_id": "099bff79-b0b2-4a49-afbc-de564b0344cb"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Euro FX / 6E'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 223055.0,
+            "nc_short": 193629.0,
+            "nc_net": 29426.0,
+            "nr_long": 88813.0,
+            "nr_short": 52715.0,
+            "nr_net": 36098.0,
+            "cot_score": 3.6
+          },
+          "final_calculated_cot_score": 3.6
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "British Pound / 6B": {
+      "instrument": "British Pound / 6B",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "096742",
+        "market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5619,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.British Pound / 6B official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 57978.0,
+            "nc_short": 119376.0,
+            "nc_net": -61398.0,
+            "nr_long": 28467.0,
+            "nr_short": 30617.0,
+            "nr_net": -2150.0,
+            "cot_score": null
+          },
+          "cftc_code": "096742",
+          "market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5619
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='British Pound / 6B' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 57978.0,
+            "nc_short": 119376.0,
+            "nc_net": -61398.0,
+            "nr_long": 28467.0,
+            "nr_short": 30617.0,
+            "nr_net": -2150.0,
+            "cot_score": 1.0
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 57978.0,
+            "nc_short": 119376.0,
+            "nc_net": -61398.0,
+            "nr_long": 28467.0,
+            "nr_short": 30617.0,
+            "nr_net": -2150.0,
+            "cot_score": 1.0
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='British Pound / 6B'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 57978.0,
+            "nc_short": 119376.0,
+            "nc_net": -61398.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.0
+          },
+          "thesis_id": "7492c5b2-6d67-4e99-b5b6-dfb30b4f690c"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='British Pound / 6B'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 57978.0,
+            "nc_short": 119376.0,
+            "nc_net": -61398.0,
+            "nr_long": 28467.0,
+            "nr_short": 30617.0,
+            "nr_net": -2150.0,
+            "cot_score": 1.0
+          },
+          "final_calculated_cot_score": 1.0
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Japanese Yen / 6J": {
+      "instrument": "Japanese Yen / 6J",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "097741",
+        "market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5640,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Japanese Yen / 6J official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 112993.0,
+            "nc_short": 227660.0,
+            "nc_net": -114667.0,
+            "nr_long": 46540.0,
+            "nr_short": 39565.0,
+            "nr_net": 6975.0,
+            "cot_score": null
+          },
+          "cftc_code": "097741",
+          "market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5640
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Japanese Yen / 6J' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 112993.0,
+            "nc_short": 227660.0,
+            "nc_net": -114667.0,
+            "nr_long": 46540.0,
+            "nr_short": 39565.0,
+            "nr_net": 6975.0,
+            "cot_score": 4.9
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 112993.0,
+            "nc_short": 227660.0,
+            "nc_net": -114667.0,
+            "nr_long": 46540.0,
+            "nr_short": 39565.0,
+            "nr_net": 6975.0,
+            "cot_score": 4.9
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Japanese Yen / 6J'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 112993.0,
+            "nc_short": 227660.0,
+            "nc_net": -114667.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 4.9
+          },
+          "thesis_id": "e6cdcf54-22bf-4fff-bb2a-2fa4a8292873"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Japanese Yen / 6J'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 112993.0,
+            "nc_short": 227660.0,
+            "nc_net": -114667.0,
+            "nr_long": 46540.0,
+            "nr_short": 39565.0,
+            "nr_net": 6975.0,
+            "cot_score": 4.9
+          },
+          "final_calculated_cot_score": 4.9
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Swiss Franc / 6S": {
+      "instrument": "Swiss Franc / 6S",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "092741",
+        "market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5577,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Swiss Franc / 6S official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 7118.0,
+            "nc_short": 42258.0,
+            "nc_net": -35140.0,
+            "nr_long": 11286.0,
+            "nr_short": 21317.0,
+            "nr_net": -10031.0,
+            "cot_score": null
+          },
+          "cftc_code": "092741",
+          "market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5577
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Swiss Franc / 6S' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 7118.0,
+            "nc_short": 42258.0,
+            "nc_net": -35140.0,
+            "nr_long": 11286.0,
+            "nr_short": 21317.0,
+            "nr_net": -10031.0,
+            "cot_score": 1.1
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 7118.0,
+            "nc_short": 42258.0,
+            "nc_net": -35140.0,
+            "nr_long": 11286.0,
+            "nr_short": 21317.0,
+            "nr_net": -10031.0,
+            "cot_score": 1.1
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Swiss Franc / 6S'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 7118.0,
+            "nc_short": 42258.0,
+            "nc_net": -35140.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.1
+          },
+          "thesis_id": "319d4872-bfab-4a8b-9d57-512282476507"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Swiss Franc / 6S'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 7118.0,
+            "nc_short": 42258.0,
+            "nc_net": -35140.0,
+            "nr_long": 11286.0,
+            "nr_short": 21317.0,
+            "nr_net": -10031.0,
+            "cot_score": 1.1
+          },
+          "final_calculated_cot_score": 1.1
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Australian Dollar / 6A": {
+      "instrument": "Australian Dollar / 6A",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "232741",
+        "market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 7017,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Australian Dollar / 6A official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 129129.0,
+            "nc_short": 68974.0,
+            "nc_net": 60155.0,
+            "nr_long": 39822.0,
+            "nr_short": 19545.0,
+            "nr_net": 20277.0,
+            "cot_score": null
+          },
+          "cftc_code": "232741",
+          "market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 7017
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Australian Dollar / 6A' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 129129.0,
+            "nc_short": 68974.0,
+            "nc_net": 60155.0,
+            "nr_long": 39822.0,
+            "nr_short": 19545.0,
+            "nr_net": 20277.0,
+            "cot_score": 5.0
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 129129.0,
+            "nc_short": 68974.0,
+            "nc_net": 60155.0,
+            "nr_long": 39822.0,
+            "nr_short": 19545.0,
+            "nr_net": 20277.0,
+            "cot_score": 5.0
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Australian Dollar / 6A'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 129129.0,
+            "nc_short": 68974.0,
+            "nc_net": 60155.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 5.0
+          },
+          "thesis_id": "5d0c06f0-f565-4773-bb53-8e07a4d6b2c0"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Australian Dollar / 6A'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 129129.0,
+            "nc_short": 68974.0,
+            "nc_net": 60155.0,
+            "nr_long": 39822.0,
+            "nr_short": 19545.0,
+            "nr_net": 20277.0,
+            "cot_score": 5.0
+          },
+          "final_calculated_cot_score": 5.0
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Canadian Dollar / 6C": {
+      "instrument": "Canadian Dollar / 6C",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "090741",
+        "market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5556,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Canadian Dollar / 6C official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53676.0,
+            "nc_short": 122558.0,
+            "nc_net": -68882.0,
+            "nr_long": 31797.0,
+            "nr_short": 34760.0,
+            "nr_net": -2963.0,
+            "cot_score": null
+          },
+          "cftc_code": "090741",
+          "market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5556
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Canadian Dollar / 6C' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53676.0,
+            "nc_short": 122558.0,
+            "nc_net": -68882.0,
+            "nr_long": 31797.0,
+            "nr_short": 34760.0,
+            "nr_net": -2963.0,
+            "cot_score": 4.7
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53676.0,
+            "nc_short": 122558.0,
+            "nc_net": -68882.0,
+            "nr_long": 31797.0,
+            "nr_short": 34760.0,
+            "nr_net": -2963.0,
+            "cot_score": 4.7
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Canadian Dollar / 6C'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53676.0,
+            "nc_short": 122558.0,
+            "nc_net": -68882.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 4.7
+          },
+          "thesis_id": "1d706ee3-ae8f-4958-b8b0-20484154968b"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Canadian Dollar / 6C'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53676.0,
+            "nc_short": 122558.0,
+            "nc_net": -68882.0,
+            "nr_long": 31797.0,
+            "nr_short": 34760.0,
+            "nr_net": -2963.0,
+            "cot_score": 4.7
+          },
+          "final_calculated_cot_score": 4.7
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "NZ Dollar / 6N": {
+      "instrument": "NZ Dollar / 6N",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "112741",
+        "market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+        "exchange": "CHICAGO MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5785,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.NZ Dollar / 6N official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 11721.0,
+            "nc_short": 45900.0,
+            "nc_net": -34179.0,
+            "nr_long": 3570.0,
+            "nr_short": 6381.0,
+            "nr_net": -2811.0,
+            "cot_score": null
+          },
+          "cftc_code": "112741",
+          "market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5785
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='NZ Dollar / 6N' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 11721.0,
+            "nc_short": 45900.0,
+            "nc_net": -34179.0,
+            "nr_long": 3570.0,
+            "nr_short": 6381.0,
+            "nr_net": -2811.0,
+            "cot_score": 1.4
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 11721.0,
+            "nc_short": 45900.0,
+            "nc_net": -34179.0,
+            "nr_long": 3570.0,
+            "nr_short": 6381.0,
+            "nr_net": -2811.0,
+            "cot_score": 1.4
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='NZ Dollar / 6N'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 11721.0,
+            "nc_short": 45900.0,
+            "nc_net": -34179.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.4
+          },
+          "thesis_id": "4848db1a-203f-45d4-8f23-d06b4ad1564b"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='NZ Dollar / 6N'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 11721.0,
+            "nc_short": 45900.0,
+            "nc_net": -34179.0,
+            "nr_long": 3570.0,
+            "nr_short": 6381.0,
+            "nr_net": -2811.0,
+            "cot_score": 1.4
+          },
+          "final_calculated_cot_score": 1.4
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Gold": {
+      "instrument": "Gold",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "088691",
+        "market_name": "GOLD - COMMODITY EXCHANGE INC.",
+        "exchange": "COMMODITY EXCHANGE INC.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5511,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Gold official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 200704.0,
+            "nc_short": 46444.0,
+            "nc_net": 154260.0,
+            "nr_long": 47149.0,
+            "nr_short": 15643.0,
+            "nr_net": 31506.0,
+            "cot_score": null
+          },
+          "cftc_code": "088691",
+          "market_name": "GOLD - COMMODITY EXCHANGE INC.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5511
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Gold' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 200704.0,
+            "nc_short": 46444.0,
+            "nc_net": 154260.0,
+            "nr_long": 47149.0,
+            "nr_short": 15643.0,
+            "nr_net": 31506.0,
+            "cot_score": 5.0
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 200704.0,
+            "nc_short": 46444.0,
+            "nc_net": 154260.0,
+            "nr_long": 47149.0,
+            "nr_short": 15643.0,
+            "nr_net": 31506.0,
+            "cot_score": 5.0
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Gold'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 200704.0,
+            "nc_short": 46444.0,
+            "nc_net": 154260.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 5.0
+          },
+          "thesis_id": "c6cc561e-4421-44c6-8c9a-d1ab8124314b"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Gold'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 200704.0,
+            "nc_short": 46444.0,
+            "nc_net": 154260.0,
+            "nr_long": 47149.0,
+            "nr_short": 15643.0,
+            "nr_net": 31506.0,
+            "cot_score": 5.0
+          },
+          "final_calculated_cot_score": 5.0
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Silver": {
+      "instrument": "Silver",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "084691",
+        "market_name": "SILVER - COMMODITY EXCHANGE INC.",
+        "exchange": "COMMODITY EXCHANGE INC.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5461,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Silver official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 32758.0,
+            "nc_short": 10535.0,
+            "nc_net": 22223.0,
+            "nr_long": 27301.0,
+            "nr_short": 8631.0,
+            "nr_net": 18670.0,
+            "cot_score": null
+          },
+          "cftc_code": "084691",
+          "market_name": "SILVER - COMMODITY EXCHANGE INC.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5461
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Silver' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 32758.0,
+            "nc_short": 10535.0,
+            "nc_net": 22223.0,
+            "nr_long": 27301.0,
+            "nr_short": 8631.0,
+            "nr_net": 18670.0,
+            "cot_score": 3.2
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 32758.0,
+            "nc_short": 10535.0,
+            "nc_net": 22223.0,
+            "nr_long": 27301.0,
+            "nr_short": 8631.0,
+            "nr_net": 18670.0,
+            "cot_score": 3.2
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Silver'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 32758.0,
+            "nc_short": 10535.0,
+            "nc_net": 22223.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.2
+          },
+          "thesis_id": "8bc53869-8817-4e2a-8396-ee53e02cd262"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Silver'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 32758.0,
+            "nc_short": 10535.0,
+            "nc_net": 22223.0,
+            "nr_long": 27301.0,
+            "nr_short": 8631.0,
+            "nr_net": 18670.0,
+            "cot_score": 3.2
+          },
+          "final_calculated_cot_score": 3.2
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Copper / HG": {
+      "instrument": "Copper / HG",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "085692",
+        "market_name": "COPPER- #1 - COMMODITY EXCHANGE INC.",
+        "exchange": "COMMODITY EXCHANGE INC.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5487,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Copper / HG official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 105673.0,
+            "nc_short": 32633.0,
+            "nc_net": 73040.0,
+            "nr_long": 20574.0,
+            "nr_short": 9902.0,
+            "nr_net": 10672.0,
+            "cot_score": null
+          },
+          "cftc_code": "085692",
+          "market_name": "COPPER- #1 - COMMODITY EXCHANGE INC.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5487
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Copper / HG' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 105673.0,
+            "nc_short": 32633.0,
+            "nc_net": 73040.0,
+            "nr_long": 20574.0,
+            "nr_short": 9902.0,
+            "nr_net": 10672.0,
+            "cot_score": 5.1
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 105673.0,
+            "nc_short": 32633.0,
+            "nc_net": 73040.0,
+            "nr_long": 20574.0,
+            "nr_short": 9902.0,
+            "nr_net": 10672.0,
+            "cot_score": 5.1
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Copper / HG'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 105673.0,
+            "nc_short": 32633.0,
+            "nc_net": 73040.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 5.1
+          },
+          "thesis_id": "07ea14ae-9e51-411d-99f1-df18cc318709"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Copper / HG'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 105673.0,
+            "nc_short": 32633.0,
+            "nc_net": 73040.0,
+            "nr_long": 20574.0,
+            "nr_short": 9902.0,
+            "nr_net": 10672.0,
+            "cot_score": 5.1
+          },
+          "final_calculated_cot_score": 5.1
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Crude Oil / CL": {
+      "instrument": "Crude Oil / CL",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "067651",
+        "market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+        "exchange": "NEW YORK MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5220,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Crude Oil / CL official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 378088.0,
+            "nc_short": 217090.0,
+            "nc_net": 160998.0,
+            "nr_long": 82778.0,
+            "nr_short": 48303.0,
+            "nr_net": 34475.0,
+            "cot_score": null
+          },
+          "cftc_code": "067651",
+          "market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5220
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Crude Oil / CL' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 378088.0,
+            "nc_short": 217090.0,
+            "nc_net": 160998.0,
+            "nr_long": 82778.0,
+            "nr_short": 48303.0,
+            "nr_net": 34475.0,
+            "cot_score": 3.6
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 378088.0,
+            "nc_short": 217090.0,
+            "nc_net": 160998.0,
+            "nr_long": 82778.0,
+            "nr_short": 48303.0,
+            "nr_net": 34475.0,
+            "cot_score": 3.6
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Crude Oil / CL'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 378088.0,
+            "nc_short": 217090.0,
+            "nc_net": 160998.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.6
+          },
+          "thesis_id": "d20e87c3-f19f-4e14-aa16-2db5da4beb0b"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Crude Oil / CL'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 378088.0,
+            "nc_short": 217090.0,
+            "nc_net": 160998.0,
+            "nr_long": 82778.0,
+            "nr_short": 48303.0,
+            "nr_net": 34475.0,
+            "cot_score": 3.6
+          },
+          "final_calculated_cot_score": 3.6
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Natural Gas / NG": {
+      "instrument": "Natural Gas / NG",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "023651",
+        "market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
+        "exchange": "NEW YORK MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 2046,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Natural Gas / NG official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 230515.0,
+            "nc_short": 433696.0,
+            "nc_net": -203181.0,
+            "nr_long": 51581.0,
+            "nr_short": 38578.0,
+            "nr_net": 13003.0,
+            "cot_score": null
+          },
+          "cftc_code": "023651",
+          "market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 2046
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Natural Gas / NG' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 230515.0,
+            "nc_short": 433696.0,
+            "nc_net": -203181.0,
+            "nr_long": 51581.0,
+            "nr_short": 38578.0,
+            "nr_net": 13003.0,
+            "cot_score": 3.7
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 230515.0,
+            "nc_short": 433696.0,
+            "nc_net": -203181.0,
+            "nr_long": 51581.0,
+            "nr_short": 38578.0,
+            "nr_net": 13003.0,
+            "cot_score": 3.7
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Natural Gas / NG'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 230515.0,
+            "nc_short": 433696.0,
+            "nc_net": -203181.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.7
+          },
+          "thesis_id": "94a858b3-8fba-4e36-b12a-b2fa56e85076"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Natural Gas / NG'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 230515.0,
+            "nc_short": 433696.0,
+            "nc_net": -203181.0,
+            "nr_long": 51581.0,
+            "nr_short": 38578.0,
+            "nr_net": 13003.0,
+            "cot_score": 3.7
+          },
+          "final_calculated_cot_score": 3.7
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Coffee": {
+      "instrument": "Coffee",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "083731",
+        "market_name": "COFFEE C - ICE FUTURES U.S.",
+        "exchange": "ICE FUTURES U.S.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5440,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Coffee official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53574.0,
+            "nc_short": 36943.0,
+            "nc_net": 16631.0,
+            "nr_long": 7985.0,
+            "nr_short": 7850.0,
+            "nr_net": 135.0,
+            "cot_score": null
+          },
+          "cftc_code": "083731",
+          "market_name": "COFFEE C - ICE FUTURES U.S.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5440
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Coffee' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53574.0,
+            "nc_short": 36943.0,
+            "nc_net": 16631.0,
+            "nr_long": 7985.0,
+            "nr_short": 7850.0,
+            "nr_net": 135.0,
+            "cot_score": 3.2
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53574.0,
+            "nc_short": 36943.0,
+            "nc_net": 16631.0,
+            "nr_long": 7985.0,
+            "nr_short": 7850.0,
+            "nr_net": 135.0,
+            "cot_score": 3.2
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Coffee'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53574.0,
+            "nc_short": 36943.0,
+            "nc_net": 16631.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.2
+          },
+          "thesis_id": "20fc055a-6c97-488e-ab6b-f94e68a0937a"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Coffee'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 53574.0,
+            "nc_short": 36943.0,
+            "nc_net": 16631.0,
+            "nr_long": 7985.0,
+            "nr_short": 7850.0,
+            "nr_net": 135.0,
+            "cot_score": 3.2
+          },
+          "final_calculated_cot_score": 3.2
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Cocoa": {
+      "instrument": "Cocoa",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "073732",
+        "market_name": "COCOA - ICE FUTURES U.S.",
+        "exchange": "ICE FUTURES U.S.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5356,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Cocoa official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 41108.0,
+            "nc_short": 57348.0,
+            "nc_net": -16240.0,
+            "nr_long": 10501.0,
+            "nr_short": 9552.0,
+            "nr_net": 949.0,
+            "cot_score": null
+          },
+          "cftc_code": "073732",
+          "market_name": "COCOA - ICE FUTURES U.S.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5356
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Cocoa' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 41108.0,
+            "nc_short": 57348.0,
+            "nc_net": -16240.0,
+            "nr_long": 10501.0,
+            "nr_short": 9552.0,
+            "nr_net": 949.0,
+            "cot_score": 1.8
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 41108.0,
+            "nc_short": 57348.0,
+            "nc_net": -16240.0,
+            "nr_long": 10501.0,
+            "nr_short": 9552.0,
+            "nr_net": 949.0,
+            "cot_score": 1.8
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Cocoa'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 41108.0,
+            "nc_short": 57348.0,
+            "nc_net": -16240.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.8
+          },
+          "thesis_id": "e45750c3-0bfb-4ee2-8ab0-ca31b8568534"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Cocoa'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 41108.0,
+            "nc_short": 57348.0,
+            "nc_net": -16240.0,
+            "nr_long": 10501.0,
+            "nr_short": 9552.0,
+            "nr_net": 949.0,
+            "cot_score": 1.8
+          },
+          "final_calculated_cot_score": 1.8
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Corn": {
+      "instrument": "Corn",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "002602",
+        "market_name": "CORN - CHICAGO BOARD OF TRADE",
+        "exchange": "CHICAGO BOARD OF TRADE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 63,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Corn official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 521725.0,
+            "nc_short": 219723.0,
+            "nc_net": 302002.0,
+            "nr_long": 133362.0,
+            "nr_short": 203845.0,
+            "nr_net": -70483.0,
+            "cot_score": null
+          },
+          "cftc_code": "002602",
+          "market_name": "CORN - CHICAGO BOARD OF TRADE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 63
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Corn' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 521725.0,
+            "nc_short": 219723.0,
+            "nc_net": 302002.0,
+            "nr_long": 133362.0,
+            "nr_short": 203845.0,
+            "nr_net": -70483.0,
+            "cot_score": 4.4
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 521725.0,
+            "nc_short": 219723.0,
+            "nc_net": 302002.0,
+            "nr_long": 133362.0,
+            "nr_short": 203845.0,
+            "nr_net": -70483.0,
+            "cot_score": 4.4
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Corn'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 521725.0,
+            "nc_short": 219723.0,
+            "nc_net": 302002.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 4.4
+          },
+          "thesis_id": "eec9bbdf-5162-4e12-bf3e-eea66ad43f25"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Corn'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 521725.0,
+            "nc_short": 219723.0,
+            "nc_net": 302002.0,
+            "nr_long": 133362.0,
+            "nr_short": 203845.0,
+            "nr_net": -70483.0,
+            "cot_score": 4.4
+          },
+          "final_calculated_cot_score": 4.4
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Wheat": {
+      "instrument": "Wheat",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "001602",
+        "market_name": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
+        "exchange": "CHICAGO BOARD OF TRADE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 0,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Wheat official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 144186.0,
+            "nc_short": 153644.0,
+            "nc_net": -9458.0,
+            "nr_long": 37621.0,
+            "nr_short": 35693.0,
+            "nr_net": 1928.0,
+            "cot_score": null
+          },
+          "cftc_code": "001602",
+          "market_name": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 0
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Wheat' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 144186.0,
+            "nc_short": 153644.0,
+            "nc_net": -9458.0,
+            "nr_long": 37621.0,
+            "nr_short": 35693.0,
+            "nr_net": 1928.0,
+            "cot_score": 3.4
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 144186.0,
+            "nc_short": 153644.0,
+            "nc_net": -9458.0,
+            "nr_long": 37621.0,
+            "nr_short": 35693.0,
+            "nr_net": 1928.0,
+            "cot_score": 3.4
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Wheat'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 144186.0,
+            "nc_short": 153644.0,
+            "nc_net": -9458.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 3.4
+          },
+          "thesis_id": "0fdf37f3-7c3b-4b32-933a-12d2b406e515"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Wheat'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 144186.0,
+            "nc_short": 153644.0,
+            "nc_net": -9458.0,
+            "nr_long": 37621.0,
+            "nr_short": 35693.0,
+            "nr_net": 1928.0,
+            "cot_score": 3.4
+          },
+          "final_calculated_cot_score": 3.4
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Soybeans": {
+      "instrument": "Soybeans",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "005602",
+        "market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
+        "exchange": "CHICAGO BOARD OF TRADE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 90,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Soybeans official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 285330.0,
+            "nc_short": 80655.0,
+            "nc_net": 204675.0,
+            "nr_long": 51229.0,
+            "nr_short": 79294.0,
+            "nr_net": -28065.0,
+            "cot_score": null
+          },
+          "cftc_code": "005602",
+          "market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 90
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Soybeans' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 285330.0,
+            "nc_short": 80655.0,
+            "nc_net": 204675.0,
+            "nr_long": 51229.0,
+            "nr_short": 79294.0,
+            "nr_net": -28065.0,
+            "cot_score": 4.4
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 285330.0,
+            "nc_short": 80655.0,
+            "nc_net": 204675.0,
+            "nr_long": 51229.0,
+            "nr_short": 79294.0,
+            "nr_net": -28065.0,
+            "cot_score": 4.4
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Soybeans'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 285330.0,
+            "nc_short": 80655.0,
+            "nc_net": 204675.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 4.4
+          },
+          "thesis_id": "7264fbe3-7d52-4be5-92f1-6a5cb607f179"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Soybeans'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 285330.0,
+            "nc_short": 80655.0,
+            "nc_net": 204675.0,
+            "nr_long": 51229.0,
+            "nr_short": 79294.0,
+            "nr_net": -28065.0,
+            "cot_score": 4.4
+          },
+          "final_calculated_cot_score": 4.4
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Sugar": {
+      "instrument": "Sugar",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "080732",
+        "market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
+        "exchange": "ICE FUTURES U.S.",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5419,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Sugar official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 238727.0,
+            "nc_short": 318477.0,
+            "nc_net": -79750.0,
+            "nr_long": 79967.0,
+            "nr_short": 78509.0,
+            "nr_net": 1458.0,
+            "cot_score": null
+          },
+          "cftc_code": "080732",
+          "market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5419
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Sugar' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 238727.0,
+            "nc_short": 318477.0,
+            "nc_net": -79750.0,
+            "nr_long": 79967.0,
+            "nr_short": 78509.0,
+            "nr_net": 1458.0,
+            "cot_score": 1.0
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 238727.0,
+            "nc_short": 318477.0,
+            "nc_net": -79750.0,
+            "nr_long": 79967.0,
+            "nr_short": 78509.0,
+            "nr_net": 1458.0,
+            "cot_score": 1.0
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Sugar'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 238727.0,
+            "nc_short": 318477.0,
+            "nc_net": -79750.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 1.0
+          },
+          "thesis_id": "9ca46be6-0f3d-4b83-a06c-5bb2879b72d6"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Sugar'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 238727.0,
+            "nc_short": 318477.0,
+            "nc_net": -79750.0,
+            "nr_long": 79967.0,
+            "nr_short": 78509.0,
+            "nr_net": 1458.0,
+            "cot_score": 1.0
+          },
+          "final_calculated_cot_score": 1.0
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Platinum": {
+      "instrument": "Platinum",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "076651",
+        "market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
+        "exchange": "NEW YORK MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5398,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Platinum official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 25998.0,
+            "nc_short": 8340.0,
+            "nc_net": 17658.0,
+            "nr_long": 8463.0,
+            "nr_short": 2814.0,
+            "nr_net": 5649.0,
+            "cot_score": null
+          },
+          "cftc_code": "076651",
+          "market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5398
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Platinum' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 25998.0,
+            "nc_short": 8340.0,
+            "nc_net": 17658.0,
+            "nr_long": 8463.0,
+            "nr_short": 2814.0,
+            "nr_net": 5649.0,
+            "cot_score": 2.8
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 25998.0,
+            "nc_short": 8340.0,
+            "nc_net": 17658.0,
+            "nr_long": 8463.0,
+            "nr_short": 2814.0,
+            "nr_net": 5649.0,
+            "cot_score": 2.8
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Platinum'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 25998.0,
+            "nc_short": 8340.0,
+            "nc_net": 17658.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 2.8
+          },
+          "thesis_id": "b29683c4-01e4-4bf9-909d-08e8365c349d"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Platinum'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 25998.0,
+            "nc_short": 8340.0,
+            "nc_net": 17658.0,
+            "nr_long": 8463.0,
+            "nr_short": 2814.0,
+            "nr_net": 5649.0,
+            "cot_score": 2.8
+          },
+          "final_calculated_cot_score": 2.8
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    },
+    "Palladium": {
+      "instrument": "Palladium",
+      "report_date": "2026-05-26",
+      "mapping": {
+        "cftc_code": "075651",
+        "market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
+        "exchange": "NEW YORK MERCANTILE EXCHANGE",
+        "source_truth_status": "PASS"
+      },
+      "raw_source": {
+        "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
+        "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+        "official_raw_row_index": 5377,
+        "report_type": "legacy_futures_only"
+      },
+      "layers": {
+        "source_truth": {
+          "layer": "source_truth",
+          "dataset_name": "cot_source_truth_audit_latest",
+          "file_name": "cot_source_truth_audit_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-02T08:13:55.038682+00:00",
+          "mtime_utc": "2026-06-02T08:13:55.070666+00:00",
+          "row_source": "instruments.Palladium official_raw_values (fresh CFTC deacot parse)",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 6432.0,
+            "nc_short": 9322.0,
+            "nc_net": -2890.0,
+            "nr_long": 2478.0,
+            "nr_short": 1647.0,
+            "nr_net": 831.0,
+            "cot_score": null
+          },
+          "cftc_code": "075651",
+          "market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
+          "official_raw_source_file": "cot_legacy_futures_only_2026_20260601T131428Z.zip",
+          "official_raw_row_index": 5377
+        },
+        "dashboard": {
+          "layer": "dashboard",
+          "dataset_name": "confluence_history_latest",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Palladium' cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 6432.0,
+            "nc_short": 9322.0,
+            "nc_net": -2890.0,
+            "nr_long": 2478.0,
+            "nr_short": 1647.0,
+            "nr_net": 831.0,
+            "cot_score": 2.9
+          },
+          "calendar_week": "2026-05-26",
+          "positioning_source": "legacy_cot_latest.json",
+          "trader_group_used": "Noncommercial Positions-Long (All) / Noncommercial Positions-Short (All)"
+        },
+        "scanner": {
+          "layer": "scanner",
+          "dataset_name": "confluence_history_latest (scanner marketRows)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "same as dashboard \u2014 useConfluenceData.marketRows for week 2026-05-26",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 6432.0,
+            "nc_short": 9322.0,
+            "nc_net": -2890.0,
+            "nr_long": 2478.0,
+            "nr_short": 1647.0,
+            "nr_net": 831.0,
+            "cot_score": 2.9
+          },
+          "note": "Scanner table reads identical confluence record; divergence here indicates a UI bug."
+        },
+        "thesis": {
+          "layer": "thesis",
+          "dataset_name": "thesis_tracker_latest",
+          "file_name": "thesis_tracker_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+          "file_exists": true,
+          "generated_at": null,
+          "mtime_utc": "2026-06-02T08:13:55.239997+00:00",
+          "row_source": "theses[market='Palladium'].snapshots[cot_report_date=2026-05-26]",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 6432.0,
+            "nc_short": 9322.0,
+            "nc_net": -2890.0,
+            "nr_long": null,
+            "nr_short": null,
+            "nr_net": null,
+            "cot_score": 2.9
+          },
+          "thesis_id": "cb340b3b-232d-451a-8132-f56c7d3eaf58"
+        },
+        "scoring": {
+          "layer": "scoring",
+          "dataset_name": "confluence_history_latest (cot_score from build_decision_table)",
+          "file_name": "confluence_history_latest.json",
+          "file_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\confluence_history_latest.json",
+          "file_exists": true,
+          "generated_at": "2026-06-01T14:32:59.057087+00:00",
+          "mtime_utc": "2026-06-01T14:32:59.198301+00:00",
+          "row_source": "records[market='Palladium'].cot_score \u2014 same row as dashboard",
+          "report_date": "2026-05-26",
+          "values": {
+            "nc_long": 6432.0,
+            "nc_short": 9322.0,
+            "nc_net": -2890.0,
+            "nr_long": 2478.0,
+            "nr_short": 1647.0,
+            "nr_net": 831.0,
+            "cot_score": 2.9
+          },
+          "final_calculated_cot_score": 2.9
+        }
+      },
+      "chain_checks": [
+        {
+          "from_layer": "source_truth",
+          "to_layer": "dashboard",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "dashboard",
+          "to_layer": "scanner",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "scanner",
+          "to_layer": "thesis",
+          "match": true,
+          "differences": []
+        },
+        {
+          "from_layer": "thesis",
+          "to_layer": "scoring",
+          "match": true,
+          "differences": []
+        }
+      ],
+      "overall_status": "PASS",
+      "positioning_matches_source_truth": true,
+      "first_divergence_layer": null,
+      "failure_reasons": []
+    }
+  }
+}

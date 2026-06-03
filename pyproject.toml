@@ -19,6 +19,8 @@ dev = ["pytest>=8.0.0"]
 
 [project.scripts]
 hptl-cot-update = "hptl.cot.run_update:main"
+hptl-weekly-cot-update = "hptl.cot.run_weekly_update:main"
+hptl-environment-feed = "hptl.intelligence.run_environment_feed_update:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

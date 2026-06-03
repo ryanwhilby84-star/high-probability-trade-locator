@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "description": "Instrument-scoped catalyst keywords, related markets, and macro sensitivities. Used only for tagging and routing real adapter outputs — not for inventing prices or positions.",
+  "global": {
+    "title_sentiment_lexicon": {
+      "positive": [
+        "smaller than expected",
+        "better than expected",
+        "surplus build",
+        "bearish for prices",
+        "cooler than normal"
+      ],
+      "negative": [
+        "larger than expected",
+        "miss estimates",
+        "draw",
+        "shortfall",
+        "freeze-off",
+        "outage",
+        "sanctions",
+        "embargo"
+      ]
+    }
+  },
+  "instruments": {
+    "NASDAQ / NQ": {
+      "catalyst_keyword_groups": {
+        "rates_fed": ["FOMC", "Fed", "dot plot", "Powell", "rate cut", "rate hike"],
+        "tech_earnings": ["Magnificent 7", "NVIDIA", "guidance", "AI capex", "semiconductor"]
+      },
+      "related_markets": ["S&P 500 / ES", "Gold"],
+      "macro_sensitivities": ["real_rates", "liquidity", "usd_funding", "growth_expectations"]
+    },
+    "S&P 500 / ES": {
+      "catalyst_keyword_groups": {
+        "rates_fed": ["FOMC", "Fed", "CPI", "PCE", "inflation surprise"],
+        "credit": ["IG spread", "high yield", "LQD", "investment grade"]
+      },
+      "related_markets": ["NASDAQ / NQ", "Dow / YM"],
+      "macro_sensitivities": ["real_rates", "earnings_revision", "usd", "credit_conditions"]
+    },
+    "Dow / YM": {
+      "catalyst_keyword_groups": {
+        "industrial": ["ISM manufacturing", "Durable goods", "freight", "rail"],
+        "macro": ["FOMC", "CPI", "payrolls"]
+      },
+      "related_markets": ["S&P 500 / ES", "Copper / HG"],
+      "macro_sensitivities": ["cyclicals", "usd", "rates_curve"]
+    },
+    "Gold": {
+      "catalyst_keyword_groups": {
+        "real_rates": ["real yields", "TIPS", "inflation breakeven"],
+        "geo": ["sanctions", "central bank buying", "reserves"]
+      },
+      "related_markets": ["Silver", "Crude Oil / CL"],
+      "macro_sensitivities": ["real_rates", "usd", "volatility_risk"]
+    },
+    "Silver": {
+      "catalyst_keyword_groups": {
+        "industrial": ["solar", "photovoltaic", "electronics demand"],
+        "macro": ["inflation", "silver", "gold ratio"]
+      },
+      "related_markets": ["Gold", "Copper / HG"],
+      "macro_sensitivities": ["real_rates", "industrial_cycle", "usd"]
+    },
+    "Copper / HG": {
+      "catalyst_keyword_groups": {
+        "china": ["China PMI", "refined copper", "grid investment"],
+        "supply": ["mine strike", "concentrate", "smelter"]
+      },
+      "related_markets": ["Crude Oil / CL", "Silver"],
+      "macro_sensitivities": ["china_credit", "usd", "global_growth"]
+    },
+    "Crude Oil / CL": {
+      "catalyst_keyword_groups": {
+        "opec": ["OPEC+", "production cut", "quota", "Saudi"],
+        "inventory": ["EIA crude", "Cushing", "SPR"],
+        "geo": ["Strait of Hormuz", "sanctions", "embargo"]
+      },
+      "related_markets": ["Natural Gas / NG", "Copper / HG"],
+      "macro_sensitivities": ["usd", "global_demand", "risk_sentiment"]
+    },
+    "Natural Gas / NG": {
+      "catalyst_keyword_groups": {
+        "storage_eia": ["EIA natural gas storage", "underground storage", "storage report"],
+        "weather": ["heating degree", "HDD", "polar vortex", "hurricane", "LNG"],
+        "infrastructure": ["Freeport", "pipeline", "freeze-off", "LNG export"]
+      },
+      "news_catalyst_map": [
+        { "match": "inventory draw", "catalyst_type": "storage_inventory" },
+        { "match": "inventory build", "catalyst_type": "storage_inventory" },
+        { "match": "gas storage", "catalyst_type": "storage_inventory" },
+        { "match": "eia storage", "catalyst_type": "storage_inventory" },
+        { "match": "production freeze-off", "catalyst_type": "production_outage" },
+        { "match": "freeze-off", "catalyst_type": "production_outage" },
+        { "match": "freeport lng", "catalyst_type": "lng_infrastructure" },
+        { "match": "henry hub", "catalyst_type": "benchmark_pricing" },
+        { "match": "heating demand", "catalyst_type": "weather_demand" },
+        { "match": "cooling demand", "catalyst_type": "weather_demand" },
+        { "match": "weather demand", "catalyst_type": "weather_demand" },
+        { "match": "natural gas", "catalyst_type": "general" },
+        { "match": "lng", "catalyst_type": "lng_trade" }
+      ],
+      "related_markets": ["Crude Oil / CL", "Copper / HG"],
+      "macro_sensitivities": ["weather_demand", "usd_funding", "global_lng_balance"]
+    },
+    "Coffee": {
+      "catalyst_keyword_groups": {
+        "weather": ["frost", "Brazil drought", "rainfall Minas"],
+        "currency": ["Brazil real", "BRL"]
+      },
+      "related_markets": ["Cocoa"],
+      "macro_sensitivities": ["brl", "weather", "freight"]
+    },
+    "Cocoa": {
+      "catalyst_keyword_groups": {
+        "supply": ["Ivory Coast", "Ghana", "main crop", "mid crop"],
+        "logistics": ["port", "concession", "export tax"]
+      },
+      "related_markets": ["Coffee"],
+      "macro_sensitivities": ["west_africa_supply", "fx_em", "freight"]
+    },
+    "Corn": {
+      "catalyst_keyword_groups": {
+        "usda": ["WASDE", "USDA", "acreage", "yield"],
+        "weather": ["drought", "La Nina", "planting progress"]
+      },
+      "related_markets": ["Soybeans", "Wheat"],
+      "macro_sensitivities": ["energy_cost", "china_imports", "usd"]
+    },
+    "Wheat": {
+      "catalyst_keyword_groups": {
+        "black_sea": ["Black Sea", "Odessa", "export corridor", "Russia wheat"],
+        "usda": ["WASDE", "wheat ratings", "winterkill"]
+      },
+      "related_markets": ["Corn", "Soybeans"],
+      "macro_sensitivities": ["export_policy", "usd", "weather"]
+    },
+    "Soybeans": {
+      "catalyst_keyword_groups": {
+        "china": ["China soy", "crush margin", "Brazil soy"],
+        "usda": ["WASDE", "pod count", "yield"]
+      },
+      "related_markets": ["Corn", "Wheat"],
+      "macro_sensitivities": ["china_demand", "energy_meal", "usd"]
+    }
+  }
+}

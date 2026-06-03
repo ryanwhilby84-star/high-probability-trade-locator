@@ -14,6 +14,7 @@ from hptl.cot.contracts import (
 )
 
 from hptl.config import Settings
+from hptl.cot.update_log import log_kv, log_step
 from hptl.shared.file_utils import ensure_dir
 
 logger = logging.getLogger(__name__)
@@ -37,6 +38,7 @@ def download_latest_cot(settings: Settings) -> DownloadResult:
     raw_path = settings.raw_dir / filename
     warnings: list[str] = []
 
+    log_step(f"HTTP GET (commodity) {source_url}")
     logger.info("Downloading COT data from %s", source_url)
     try:
         response = requests.get(source_url, timeout=settings.request_timeout_seconds)
@@ -49,6 +51,7 @@ def download_latest_cot(settings: Settings) -> DownloadResult:
         warnings.append(f"Unexpected content type: {content_type or 'unknown'}")
 
     raw_path.write_bytes(response.content)
+    log_kv("saved commodity download", raw_path.resolve())
     logger.info("Saved raw COT file to %s", raw_path)
 
     return DownloadResult(
@@ -106,6 +109,7 @@ def download_financial_futures_only_history(settings: Settings, year: int | None
     raw_path = settings.raw_dir / f"cot_financial_futures_only_{selected_year}_{timestamp}.zip"
     warnings: list[str] = []
 
+    log_step(f"HTTP GET (financial) {source_url}")
     logger.info("Downloading Financial Futures Only COT history from %s", source_url)
     try:
         response = requests.get(source_url, timeout=settings.request_timeout_seconds)
@@ -118,6 +122,7 @@ def download_financial_futures_only_history(settings: Settings, year: int | None
         warnings.append(f"Unexpected Financial Futures Only content type: {content_type or 'unknown'}")
 
     raw_path.write_bytes(response.content)
+    log_kv("saved financial download", raw_path.resolve())
     logger.info("Saved raw Financial Futures Only history file to %s", raw_path)
 
     return DownloadResult(

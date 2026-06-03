@@ -1,0 +1,584 @@
+{
+  "wired": true,
+  "skip_live_feeds": false,
+  "openweather_api_key_detected": true,
+  "provider": "openweather",
+  "message": "",
+  "fetched_at": "2026-05-19T13:14:13.599148+00:00",
+  "locations_queried": [
+    {
+      "market": "Cocoa",
+      "region": "Abidjan / Ivory Coast",
+      "lat": 5.36,
+      "lon": -4.01
+    },
+    {
+      "market": "Cocoa",
+      "region": "Accra / Ghana",
+      "lat": 5.56,
+      "lon": -0.2
+    },
+    {
+      "market": "Coffee",
+      "region": "S\u00e3o Paulo arabica belt",
+      "lat": -22.91,
+      "lon": -43.17
+    },
+    {
+      "market": "Coffee",
+      "region": "Vietnam robusta (\u0110\u1eafk L\u1eafk proxy)",
+      "lat": 12.67,
+      "lon": 108.05
+    },
+    {
+      "market": "Corn",
+      "region": "Iowa crop belt",
+      "lat": 41.59,
+      "lon": -93.62
+    },
+    {
+      "market": "Corn",
+      "region": "Chicago futures hub",
+      "lat": 41.88,
+      "lon": -87.63
+    },
+    {
+      "market": "Natural Gas / NG",
+      "region": "Henry Hub / Gulf Coast",
+      "lat": 29.76,
+      "lon": -95.37
+    },
+    {
+      "market": "Natural Gas / NG",
+      "region": "Chicago demand hub",
+      "lat": 41.88,
+      "lon": -87.63
+    },
+    {
+      "market": "Soybeans",
+      "region": "Illinois belt",
+      "lat": 40.11,
+      "lon": -88.24
+    },
+    {
+      "market": "Soybeans",
+      "region": "Paranagu\u00e1 export (proxy)",
+      "lat": -25.52,
+      "lon": -48.51
+    },
+    {
+      "market": "Wheat",
+      "region": "Kansas City HRW",
+      "lat": 39.1,
+      "lon": -94.58
+    },
+    {
+      "market": "Wheat",
+      "region": "Chicago futures hub",
+      "lat": 41.88,
+      "lon": -87.63
+    }
+  ],
+  "regions_queried": [
+    "Abidjan / Ivory Coast",
+    "Accra / Ghana",
+    "S\u00e3o Paulo arabica belt",
+    "Vietnam robusta (\u0110\u1eafk L\u1eafk proxy)",
+    "Iowa crop belt",
+    "Chicago futures hub",
+    "Henry Hub / Gulf Coast",
+    "Chicago demand hub",
+    "Illinois belt",
+    "Paranagu\u00e1 export (proxy)",
+    "Kansas City HRW",
+    "Chicago futures hub"
+  ],
+  "forecast_records_loaded": 12,
+  "markets": {
+    "Cocoa": {
+      "status": "openweather",
+      "regions_loaded": [
+        "Abidjan / Ivory Coast",
+        "Accra / Ghana"
+      ],
+      "summaries": [
+        {
+          "region": "Abidjan / Ivory Coast",
+          "summary": "Abidjan / Ivory Coast \u2014 79\u201386\u00b0F next 48h \u00b7 ~7 mm precip / 24h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:13.599162+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 8031572,
+              "name": "Les deux-Plateaux",
+              "coord": {
+                "lat": 5.36,
+                "lon": -4.01
+              },
+              "country": "CI",
+              "population": 0,
+              "timezone": 0,
+              "sunrise": 1779170482,
+              "sunset": 1779215034
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Accra / Ghana",
+          "summary": "Accra / Ghana \u2014 79\u201386\u00b0F next 48h \u00b7 ~1 mm precip / 24h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:13.599162+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 2306104,
+              "name": "Accra",
+              "coord": {
+                "lat": 5.56,
+                "lon": -0.2
+              },
+              "country": "GH",
+              "population": 1963264,
+              "timezone": 0,
+              "sunrise": 1779169550,
+              "sunset": 1779214137
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    },
+    "Coffee": {
+      "status": "openweather",
+      "regions_loaded": [
+        "S\u00e3o Paulo arabica belt",
+        "Vietnam robusta (\u0110\u1eafk L\u1eafk proxy)"
+      ],
+      "summaries": [
+        {
+          "region": "S\u00e3o Paulo arabica belt",
+          "summary": "S\u00e3o Paulo arabica belt \u2014 69\u201376\u00b0F next 48h \u00b7 ~10 mm precip / 24h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:13.924086+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 3451190,
+              "name": "Rio de Janeiro",
+              "coord": {
+                "lat": -22.91,
+                "lon": -43.17
+              },
+              "country": "BR",
+              "population": 6023699,
+              "timezone": -10800,
+              "sunrise": 1779182423,
+              "sunset": 1779221891
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Vietnam robusta (\u0110\u1eafk L\u1eafk proxy)",
+          "summary": "Vietnam robusta (\u0110\u1eafk L\u1eafk proxy) \u2014 72\u201395\u00b0F next 48h \u00b7 ~3 mm precip / 24h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:13.924086+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 1586896,
+              "name": "Buon Ma Thuot",
+              "coord": {
+                "lat": 12.67,
+                "lon": 108.05
+              },
+              "country": "VN",
+              "population": 146975,
+              "timezone": 25200,
+              "sunrise": 1779142938,
+              "sunset": 1779188788
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    },
+    "Corn": {
+      "status": "openweather",
+      "regions_loaded": [
+        "Iowa crop belt",
+        "Chicago futures hub"
+      ],
+      "summaries": [
+        {
+          "region": "Iowa crop belt",
+          "summary": "Iowa crop belt \u2014 cold snap; temperature anomaly (cold)",
+          "importance": "high",
+          "risk_tags": [
+            "cold snap",
+            "temperature anomaly (cold)"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": true,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": true
+          },
+          "fetched_at": "2026-05-19T13:14:14.233406+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4853828,
+              "name": "Des Moines",
+              "coord": {
+                "lat": 41.59,
+                "lon": -93.62
+              },
+              "country": "US",
+              "population": 203433,
+              "timezone": -18000,
+              "sunrise": 1779187891,
+              "sunset": 1779240640
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Chicago futures hub",
+          "summary": "Chicago futures hub \u2014 48\u201374\u00b0F next 48h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:14.233406+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4887398,
+              "name": "Chicago",
+              "coord": {
+                "lat": 41.88,
+                "lon": -87.63
+              },
+              "country": "US",
+              "population": 2695598,
+              "timezone": -18000,
+              "sunrise": 1779186405,
+              "sunset": 1779239250
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    },
+    "Natural Gas / NG": {
+      "status": "openweather",
+      "regions_loaded": [
+        "Henry Hub / Gulf Coast",
+        "Chicago demand hub"
+      ],
+      "summaries": [
+        {
+          "region": "Henry Hub / Gulf Coast",
+          "summary": "Henry Hub / Gulf Coast \u2014 heavy precipitation",
+          "importance": "medium",
+          "risk_tags": [
+            "heavy precipitation"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": true,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:14.547181+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4699066,
+              "name": "Houston",
+              "coord": {
+                "lat": 29.76,
+                "lon": -95.37
+              },
+              "country": "US",
+              "population": 2099451,
+              "timezone": -18000,
+              "sunrise": 1779189983,
+              "sunset": 1779239388
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Chicago demand hub",
+          "summary": "Chicago demand hub \u2014 48\u201374\u00b0F next 48h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:14.547181+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4887398,
+              "name": "Chicago",
+              "coord": {
+                "lat": 41.88,
+                "lon": -87.63
+              },
+              "country": "US",
+              "population": 2695598,
+              "timezone": -18000,
+              "sunrise": 1779186405,
+              "sunset": 1779239250
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    },
+    "Soybeans": {
+      "status": "openweather",
+      "regions_loaded": [
+        "Illinois belt",
+        "Paranagu\u00e1 export (proxy)"
+      ],
+      "summaries": [
+        {
+          "region": "Illinois belt",
+          "summary": "Illinois belt \u2014 cold snap; temperature anomaly (cold)",
+          "importance": "high",
+          "risk_tags": [
+            "cold snap",
+            "temperature anomaly (cold)"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": true,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": true
+          },
+          "fetched_at": "2026-05-19T13:14:14.859379+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4887158,
+              "name": "Champaign",
+              "coord": {
+                "lat": 40.11,
+                "lon": -88.24
+              },
+              "country": "US",
+              "population": 81055,
+              "timezone": -18000,
+              "sunrise": 1779186845,
+              "sunset": 1779239104
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Paranagu\u00e1 export (proxy)",
+          "summary": "Paranagu\u00e1 export (proxy) \u2014 60\u201372\u00b0F next 48h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:14.859379+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 3455070,
+              "name": "Paranagu\u00e1",
+              "coord": {
+                "lat": -25.52,
+                "lon": -48.51
+              },
+              "country": "BR",
+              "population": 141013,
+              "timezone": -10800,
+              "sunrise": 1779183974,
+              "sunset": 1779222904
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    },
+    "Wheat": {
+      "status": "openweather",
+      "regions_loaded": [
+        "Kansas City HRW",
+        "Chicago futures hub"
+      ],
+      "summaries": [
+        {
+          "region": "Kansas City HRW",
+          "summary": "Kansas City HRW \u2014 cold snap; temperature anomaly (cold)",
+          "importance": "high",
+          "risk_tags": [
+            "cold snap",
+            "temperature anomaly (cold)"
+          ],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": true,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": true
+          },
+          "fetched_at": "2026-05-19T13:14:15.187314+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4393217,
+              "name": "Kansas City",
+              "coord": {
+                "lat": 39.1,
+                "lon": -94.58
+              },
+              "country": "US",
+              "population": 459787,
+              "timezone": -18000,
+              "sunrise": 1779188525,
+              "sunset": 1779240467
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        },
+        {
+          "region": "Chicago futures hub",
+          "summary": "Chicago futures hub \u2014 48\u201374\u00b0F next 48h",
+          "importance": "low",
+          "risk_tags": [],
+          "signals": {
+            "heatwave": false,
+            "cold_snap": false,
+            "storm": false,
+            "heavy_precip": false,
+            "dry_spell": false,
+            "temp_anomaly_high": false,
+            "temp_anomaly_low": false
+          },
+          "fetched_at": "2026-05-19T13:14:15.187314+00:00",
+          "source": "OpenWeather",
+          "provider": "openweather",
+          "raw_payload": {
+            "city": {
+              "id": 4887398,
+              "name": "Chicago",
+              "coord": {
+                "lat": 41.88,
+                "lon": -87.63
+              },
+              "country": "US",
+              "population": 2695598,
+              "timezone": -18000,
+              "sunrise": 1779186405,
+              "sunset": 1779239250
+            },
+            "cnt": 40,
+            "forecast_window_start": "2026-05-19T15:00:00+00:00"
+          }
+        }
+      ]
+    }
+  }
+}

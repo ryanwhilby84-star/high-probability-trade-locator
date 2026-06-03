@@ -1,0 +1,1262 @@
+{
+  "version": 1,
+  "generated_at": "2026-06-03T05:26:17.053444+00:00",
+  "parser": "hptl.valuation.export",
+  "summary": {
+    "total_instruments": 125,
+    "wired_count": 91,
+    "unavailable_count": 34
+  },
+  "instruments": {
+    "NASDAQ / NQ": {
+      "market": "NASDAQ / NQ",
+      "as_of_week": "2026-06-02",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "S&P 500 / ES": {
+      "market": "S&P 500 / ES",
+      "as_of_week": "2026-06-02",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "Dow / YM": {
+      "market": "Dow / YM",
+      "as_of_week": "2026-06-02",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "Euro FX / 6E": {
+      "market": "Euro FX / 6E",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.6,
+      "valuation_reason": "52-week price percentile 47% (middle range).",
+      "price_percentile_52w": 47.1,
+      "pass": false
+    },
+    "British Pound / 6B": {
+      "market": "British Pound / 6B",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.6,
+      "valuation_reason": "52-week price percentile 53% (middle range).",
+      "price_percentile_52w": 52.9,
+      "pass": false
+    },
+    "Japanese Yen / 6J": {
+      "market": "Japanese Yen / 6J",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 8.0,
+      "valuation_reason": "52-week price percentile 90% (upper third).",
+      "price_percentile_52w": 90.2,
+      "pass": false
+    },
+    "Swiss Franc / 6S": {
+      "market": "Swiss Franc / 6S",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 6.5,
+      "valuation_reason": "52-week price percentile 18% (lower third).",
+      "price_percentile_52w": 17.6,
+      "pass": false
+    },
+    "Australian Dollar / 6A": {
+      "market": "Australian Dollar / 6A",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 96% (upper third).",
+      "price_percentile_52w": 96.1,
+      "pass": false
+    },
+    "Canadian Dollar / 6C": {
+      "market": "Canadian Dollar / 6C",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 1.4,
+      "valuation_reason": "52-week price percentile 57% (middle range).",
+      "price_percentile_52w": 56.9,
+      "pass": false
+    },
+    "NZ Dollar / 6N": {
+      "market": "NZ Dollar / 6N",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.5,
+      "valuation_reason": "52-week price percentile 82% (upper third).",
+      "price_percentile_52w": 82.4,
+      "pass": false
+    },
+    "Gold": {
+      "market": "Gold",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 3.2,
+      "valuation_reason": "52-week price percentile 69% (upper third). Macro relationship link is weak — score capped.",
+      "price_percentile_52w": 68.6,
+      "pass": false
+    },
+    "Silver": {
+      "market": "Silver",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.4,
+      "valuation_reason": "52-week price percentile 65% (middle range). Macro driver correlation supports the read.",
+      "price_percentile_52w": 64.7,
+      "pass": false
+    },
+    "Copper / HG": {
+      "market": "Copper / HG",
+      "as_of_week": "2026-03-01",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 8.7,
+      "valuation_reason": "52-week price percentile 96% (upper third). Macro relationship link is weak — score capped.",
+      "price_percentile_52w": 96.2,
+      "pass": false
+    },
+    "Crude Oil / CL": {
+      "market": "Crude Oil / CL",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Natural Gas / NG": {
+      "market": "Natural Gas / NG",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.1,
+      "valuation_reason": "52-week price percentile 47% (middle range). Macro relationship link is weak — score capped.",
+      "price_percentile_52w": 47.1,
+      "pass": false
+    },
+    "Coffee": {
+      "market": "Coffee",
+      "as_of_week": "2026-03-01",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 5.5,
+      "valuation_reason": "52-week price percentile 75% (upper third). Macro driver correlation supports the read.",
+      "price_percentile_52w": 75.0,
+      "pass": false
+    },
+    "Cocoa": {
+      "market": "Cocoa",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Corn": {
+      "market": "Corn",
+      "as_of_week": "2026-03-01",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.4,
+      "valuation_reason": "52-week price percentile 52% (middle range).",
+      "price_percentile_52w": 51.9,
+      "pass": false
+    },
+    "Wheat": {
+      "market": "Wheat",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Soybeans": {
+      "market": "Soybeans",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Sugar": {
+      "market": "Sugar",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Platinum": {
+      "market": "Platinum",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Palladium": {
+      "market": "Palladium",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "AUD/CAD": {
+      "market": "AUD/CAD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "AUD/CHF": {
+      "market": "AUD/CHF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 8.8,
+      "valuation_reason": "52-week price percentile 94% (upper third).",
+      "price_percentile_52w": 94.1,
+      "pass": false
+    },
+    "AUD/HKD": {
+      "market": "AUD/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 96% (upper third).",
+      "price_percentile_52w": 96.1,
+      "pass": false
+    },
+    "AUD/JPY": {
+      "market": "AUD/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "AUD/NZD": {
+      "market": "AUD/NZD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 80% (upper third).",
+      "price_percentile_52w": 80.4,
+      "pass": false
+    },
+    "AUD/SGD": {
+      "market": "AUD/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 98% (upper third).",
+      "price_percentile_52w": 98.0,
+      "pass": false
+    },
+    "AUD/USD": {
+      "market": "AUD/USD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 96% (upper third).",
+      "price_percentile_52w": 96.1,
+      "pass": false
+    },
+    "Australia 200": {
+      "market": "Australia 200",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Bitcoin": {
+      "market": "Bitcoin",
+      "as_of_week": "2026-06-01",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 32% (lower third).",
+      "price_percentile_52w": 31.6,
+      "pass": false
+    },
+    "Bitcoin Cash": {
+      "market": "Bitcoin Cash",
+      "as_of_week": "2026-06-01",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 8.9,
+      "valuation_reason": "52-week price percentile 5% (lower third).",
+      "price_percentile_52w": 5.3,
+      "pass": false
+    },
+    "Brent Crude Oil": {
+      "market": "Brent Crude Oil",
+      "as_of_week": "2026-04-01",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 98% (upper third).",
+      "price_percentile_52w": 98.1,
+      "pass": false
+    },
+    "Bund": {
+      "market": "Bund",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "CAD/HKD": {
+      "market": "CAD/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.6,
+      "valuation_reason": "52-week price percentile 53% (middle range).",
+      "price_percentile_52w": 52.9,
+      "pass": false
+    },
+    "CAD/SGD": {
+      "market": "CAD/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 7.6,
+      "valuation_reason": "52-week price percentile 12% (lower third).",
+      "price_percentile_52w": 11.8,
+      "pass": false
+    },
+    "CHF/HKD": {
+      "market": "CHF/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 7.3,
+      "valuation_reason": "52-week price percentile 86% (upper third).",
+      "price_percentile_52w": 86.3,
+      "pass": false
+    },
+    "CHF/ZAR": {
+      "market": "CHF/ZAR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 6.9,
+      "valuation_reason": "52-week price percentile 16% (lower third).",
+      "price_percentile_52w": 15.7,
+      "pass": false
+    },
+    "China A50": {
+      "market": "China A50",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Copper": {
+      "market": "Copper",
+      "as_of_week": "2026-03-01",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 96% (upper third).",
+      "price_percentile_52w": 96.2,
+      "pass": false
+    },
+    "EUR/AUD": {
+      "market": "EUR/AUD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 2% (lower third).",
+      "price_percentile_52w": 2.0,
+      "pass": false
+    },
+    "EUR/CZK": {
+      "market": "EUR/CZK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 31% (lower third).",
+      "price_percentile_52w": 31.4,
+      "pass": false
+    },
+    "EUR/DKK": {
+      "market": "EUR/DKK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "EUR/HKD": {
+      "market": "EUR/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.9,
+      "valuation_reason": "52-week price percentile 65% (middle range).",
+      "price_percentile_52w": 64.7,
+      "pass": false
+    },
+    "EUR/HUF": {
+      "market": "EUR/HUF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 2% (lower third).",
+      "price_percentile_52w": 2.0,
+      "pass": false
+    },
+    "EUR/NOK": {
+      "market": "EUR/NOK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 4% (lower third).",
+      "price_percentile_52w": 3.9,
+      "pass": false
+    },
+    "EUR/NZD": {
+      "market": "EUR/NZD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 7.6,
+      "valuation_reason": "52-week price percentile 12% (lower third).",
+      "price_percentile_52w": 11.8,
+      "pass": false
+    },
+    "EUR/SEK": {
+      "market": "EUR/SEK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 20% (lower third).",
+      "price_percentile_52w": 19.6,
+      "pass": false
+    },
+    "EUR/SGD": {
+      "market": "EUR/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 20% (lower third).",
+      "price_percentile_52w": 19.6,
+      "pass": false
+    },
+    "EUR/TRY": {
+      "market": "EUR/TRY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "EUR/ZAR": {
+      "market": "EUR/ZAR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 8.8,
+      "valuation_reason": "52-week price percentile 6% (lower third).",
+      "price_percentile_52w": 5.9,
+      "pass": false
+    },
+    "Ethereum/Ether": {
+      "market": "Ethereum/Ether",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Europe 50": {
+      "market": "Europe 50",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "France 40": {
+      "market": "France 40",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "GBP/AUD": {
+      "market": "GBP/AUD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 4% (lower third).",
+      "price_percentile_52w": 3.9,
+      "pass": false
+    },
+    "GBP/HKD": {
+      "market": "GBP/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.5,
+      "valuation_reason": "52-week price percentile 63% (middle range).",
+      "price_percentile_52w": 62.7,
+      "pass": false
+    },
+    "GBP/NZD": {
+      "market": "GBP/NZD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 8.4,
+      "valuation_reason": "52-week price percentile 8% (lower third).",
+      "price_percentile_52w": 7.8,
+      "pass": false
+    },
+    "GBP/PLN": {
+      "market": "GBP/PLN",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.2,
+      "valuation_reason": "52-week price percentile 49% (middle range).",
+      "price_percentile_52w": 49.0,
+      "pass": false
+    },
+    "GBP/SGD": {
+      "market": "GBP/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.3,
+      "valuation_reason": "52-week price percentile 33% (middle range).",
+      "price_percentile_52w": 33.3,
+      "pass": false
+    },
+    "GBP/ZAR": {
+      "market": "GBP/ZAR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 8.4,
+      "valuation_reason": "52-week price percentile 8% (lower third).",
+      "price_percentile_52w": 7.8,
+      "pass": false
+    },
+    "Germany 30": {
+      "market": "Germany 30",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Gold/AUD": {
+      "market": "Gold/AUD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.6,
+      "valuation_reason": "52-week price percentile 47% (middle range).",
+      "price_percentile_52w": 47.1,
+      "pass": false
+    },
+    "Gold/CAD": {
+      "market": "Gold/CAD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 69% (upper third).",
+      "price_percentile_52w": 68.6,
+      "pass": false
+    },
+    "Gold/CHF": {
+      "market": "Gold/CHF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.5,
+      "valuation_reason": "52-week price percentile 63% (middle range).",
+      "price_percentile_52w": 62.7,
+      "pass": false
+    },
+    "Gold/EUR": {
+      "market": "Gold/EUR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.3,
+      "valuation_reason": "52-week price percentile 67% (middle range).",
+      "price_percentile_52w": 66.7,
+      "pass": false
+    },
+    "Gold/GBP": {
+      "market": "Gold/GBP",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.3,
+      "valuation_reason": "52-week price percentile 67% (middle range).",
+      "price_percentile_52w": 66.7,
+      "pass": false
+    },
+    "Gold/HKD": {
+      "market": "Gold/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 4.1,
+      "valuation_reason": "52-week price percentile 71% (upper third).",
+      "price_percentile_52w": 70.6,
+      "pass": false
+    },
+    "Gold/JPY": {
+      "market": "Gold/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 4.1,
+      "valuation_reason": "52-week price percentile 71% (upper third).",
+      "price_percentile_52w": 70.6,
+      "pass": false
+    },
+    "Gold/NZD": {
+      "market": "Gold/NZD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 1.8,
+      "valuation_reason": "52-week price percentile 59% (middle range).",
+      "price_percentile_52w": 58.8,
+      "pass": false
+    },
+    "Gold/SGD": {
+      "market": "Gold/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.9,
+      "valuation_reason": "52-week price percentile 65% (middle range).",
+      "price_percentile_52w": 64.7,
+      "pass": false
+    },
+    "Gold/Silver": {
+      "market": "Gold/Silver",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 5.3,
+      "valuation_reason": "52-week price percentile 24% (lower third).",
+      "price_percentile_52w": 23.5,
+      "pass": false
+    },
+    "HKD/JPY": {
+      "market": "HKD/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 7.6,
+      "valuation_reason": "52-week price percentile 88% (upper third).",
+      "price_percentile_52w": 88.2,
+      "pass": false
+    },
+    "Hong Kong 33": {
+      "market": "Hong Kong 33",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "India 50": {
+      "market": "India 50",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Japan 225": {
+      "market": "Japan 225",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "Litecoin": {
+      "market": "Litecoin",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "NZD/CAD": {
+      "market": "NZD/CAD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 98% (upper third).",
+      "price_percentile_52w": 98.0,
+      "pass": false
+    },
+    "NZD/CHF": {
+      "market": "NZD/CHF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 4.5,
+      "valuation_reason": "52-week price percentile 73% (upper third).",
+      "price_percentile_52w": 72.5,
+      "pass": false
+    },
+    "NZD/HKD": {
+      "market": "NZD/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.9,
+      "valuation_reason": "52-week price percentile 84% (upper third).",
+      "price_percentile_52w": 84.3,
+      "pass": false
+    },
+    "NZD/JPY": {
+      "market": "NZD/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "NZD/SGD": {
+      "market": "NZD/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 80% (upper third).",
+      "price_percentile_52w": 80.4,
+      "pass": false
+    },
+    "NZD/USD": {
+      "market": "NZD/USD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.5,
+      "valuation_reason": "52-week price percentile 82% (upper third).",
+      "price_percentile_52w": 82.4,
+      "pass": false
+    },
+    "Netherlands 25": {
+      "market": "Netherlands 25",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "SGD/CHF": {
+      "market": "SGD/CHF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 7.3,
+      "valuation_reason": "52-week price percentile 14% (lower third).",
+      "price_percentile_52w": 13.7,
+      "pass": false
+    },
+    "SGD/JPY": {
+      "market": "SGD/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 8.8,
+      "valuation_reason": "52-week price percentile 94% (upper third).",
+      "price_percentile_52w": 94.1,
+      "pass": false
+    },
+    "Silver/AUD": {
+      "market": "Silver/AUD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.5,
+      "valuation_reason": "52-week price percentile 63% (middle range).",
+      "price_percentile_52w": 62.7,
+      "pass": false
+    },
+    "Silver/CAD": {
+      "market": "Silver/CAD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 69% (upper third).",
+      "price_percentile_52w": 68.6,
+      "pass": false
+    },
+    "Silver/CHF": {
+      "market": "Silver/CHF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.9,
+      "valuation_reason": "52-week price percentile 65% (middle range).",
+      "price_percentile_52w": 64.7,
+      "pass": false
+    },
+    "Silver/EUR": {
+      "market": "Silver/EUR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.3,
+      "valuation_reason": "52-week price percentile 67% (middle range).",
+      "price_percentile_52w": 66.7,
+      "pass": false
+    },
+    "Silver/GBP": {
+      "market": "Silver/GBP",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 69% (upper third).",
+      "price_percentile_52w": 68.6,
+      "pass": false
+    },
+    "Silver/HKD": {
+      "market": "Silver/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.9,
+      "valuation_reason": "52-week price percentile 65% (middle range).",
+      "price_percentile_52w": 64.7,
+      "pass": false
+    },
+    "Silver/JPY": {
+      "market": "Silver/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 69% (upper third).",
+      "price_percentile_52w": 68.6,
+      "pass": false
+    },
+    "Silver/NZD": {
+      "market": "Silver/NZD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 2.2,
+      "valuation_reason": "52-week price percentile 61% (middle range).",
+      "price_percentile_52w": 60.8,
+      "pass": false
+    },
+    "Silver/SGD": {
+      "market": "Silver/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 3.3,
+      "valuation_reason": "52-week price percentile 67% (middle range).",
+      "price_percentile_52w": 66.7,
+      "pass": false
+    },
+    "Singapore 30": {
+      "market": "Singapore 30",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "TRY/JPY": {
+      "market": "TRY/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 8.8,
+      "valuation_reason": "52-week price percentile 6% (lower third).",
+      "price_percentile_52w": 5.9,
+      "pass": false
+    },
+    "Taiwan Index": {
+      "market": "Taiwan Index",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "UK 100": {
+      "market": "UK 100",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "UK 10Y Gilt": {
+      "market": "UK 10Y Gilt",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US 10Y T-Note": {
+      "market": "US 10Y T-Note",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US 2Y T-Note": {
+      "market": "US 2Y T-Note",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US 5Y T-Note": {
+      "market": "US 5Y T-Note",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US Nas 100": {
+      "market": "US Nas 100",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US Russ 2000": {
+      "market": "US Russ 2000",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US SPX 500": {
+      "market": "US SPX 500",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US T-Bond": {
+      "market": "US T-Bond",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "US Wall St 30": {
+      "market": "US Wall St 30",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "USD/CNH": {
+      "market": "USD/CNH",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.6,
+      "valuation_reason": "52-week price percentile 2% (lower third).",
+      "price_percentile_52w": 2.0,
+      "pass": false
+    },
+    "USD/CZK": {
+      "market": "USD/CZK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 0.6,
+      "valuation_reason": "52-week price percentile 47% (middle range).",
+      "price_percentile_52w": 47.1,
+      "pass": false
+    },
+    "USD/DKK": {
+      "market": "USD/DKK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 1.0,
+      "valuation_reason": "52-week price percentile 55% (middle range).",
+      "price_percentile_52w": 54.9,
+      "pass": false
+    },
+    "USD/HKD": {
+      "market": "USD/HKD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 80% (upper third).",
+      "price_percentile_52w": 80.4,
+      "pass": false
+    },
+    "USD/HUF": {
+      "market": "USD/HUF",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 4% (lower third).",
+      "price_percentile_52w": 3.9,
+      "pass": false
+    },
+    "USD/INR": {
+      "market": "USD/INR",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "USD/MXN": {
+      "market": "USD/MXN",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 20% (lower third).",
+      "price_percentile_52w": 19.6,
+      "pass": false
+    },
+    "USD/NOK": {
+      "market": "USD/NOK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 9.2,
+      "valuation_reason": "52-week price percentile 4% (lower third).",
+      "price_percentile_52w": 3.9,
+      "pass": false
+    },
+    "USD/PLN": {
+      "market": "USD/PLN",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Neutral",
+      "valuation_score": 1.0,
+      "valuation_reason": "52-week price percentile 45% (middle range).",
+      "price_percentile_52w": 45.1,
+      "pass": false
+    },
+    "USD/SAR": {
+      "market": "USD/SAR",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "USD/SEK": {
+      "market": "USD/SEK",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 3.7,
+      "valuation_reason": "52-week price percentile 31% (lower third).",
+      "price_percentile_52w": 31.4,
+      "pass": false
+    },
+    "USD/SGD": {
+      "market": "USD/SGD",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 4.5,
+      "valuation_reason": "52-week price percentile 27% (lower third).",
+      "price_percentile_52w": 27.5,
+      "pass": false
+    },
+    "USD/THB": {
+      "market": "USD/THB",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 6.1,
+      "valuation_reason": "52-week price percentile 80% (upper third).",
+      "price_percentile_52w": 80.4,
+      "pass": false
+    },
+    "USD/TRY": {
+      "market": "USD/TRY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    },
+    "USD/ZAR": {
+      "market": "USD/ZAR",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bullish",
+      "valuation_score": 7.3,
+      "valuation_reason": "52-week price percentile 14% (lower third).",
+      "price_percentile_52w": 13.7,
+      "pass": false
+    },
+    "West Texas Oil": {
+      "market": "West Texas Oil",
+      "as_of_week": null,
+      "wired": false,
+      "valuation_bias": "UNAVAILABLE",
+      "valuation_score": null,
+      "valuation_reason": "Insufficient weekly price history for valuation percentile.",
+      "price_percentile_52w": null,
+      "pass": false
+    },
+    "ZAR/JPY": {
+      "market": "ZAR/JPY",
+      "as_of_week": "2026-05-22",
+      "wired": true,
+      "valuation_bias": "Bearish",
+      "valuation_score": 10.0,
+      "valuation_reason": "52-week price percentile 100% (upper third).",
+      "price_percentile_52w": 100.0,
+      "pass": false
+    }
+  }
+}

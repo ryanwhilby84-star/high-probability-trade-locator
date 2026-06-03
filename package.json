@@ -1,0 +1,9 @@
+{
+  "name": "high-probability-trade-locator",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix web-dashboard",
+    "build": "npm run build --prefix web-dashboard",
+    "preview": "npm run preview --prefix web-dashboard"
+  }
+}

@@ -1,0 +1,57 @@
+name: Weekly COT update
+
+on:
+  schedule:
+    # Saturday 06:00 UTC — UK morning after US Friday CFTC release
+    - cron: "0 6 * * 6"
+    # Saturday 01:00 UTC — ~Friday 8:00 PM US Eastern (winter)
+    - cron: "0 1 * * 6"
+  workflow_dispatch:
+
+concurrency:
+  group: hptl-weekly-cot
+  cancel-in-progress: false
+
+jobs:
+  weekly-cot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Unit tests (weekly COT)
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_weekly_cot_update tests.test_cot_parser -q
+
+      - name: Weekly COT update
+        id: cot_update
+        env:
+          PYTHONPATH: src
+          HPTL_SKIP_LIVE_FEEDS: "1"
+        run: python -m hptl.cot.run_weekly_update
+
+      - name: Upload weekly run logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-cot-logs
+          path: |
+            data/exports/weekly_cot_update.log
+            data/exports/weekly_cot_update_latest.json
+            data/exports/weekly_cot_update_history.jsonl
+          if-no-files-found: ignore
+
+      - name: Production note
+        if: always()
+        run: |
+          echo "GitHub Actions validates the weekly script on each schedule."
+          echo "Production data (cot_cleaned_*, workbook, dashboard JSON) must live on your Windows host"
+          echo "with Task Scheduler: scripts/register_weekly_cot_task.ps1"

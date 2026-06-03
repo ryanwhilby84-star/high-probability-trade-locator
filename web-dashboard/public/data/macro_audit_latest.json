@@ -1,0 +1,238 @@
+{
+  "generated_at": "2026-06-03T05:26:26.843298+00:00",
+  "summary": {
+    "total": 13,
+    "available": 13,
+    "live": 13,
+    "cached": 0,
+    "stale": 0,
+    "warning": 0,
+    "missing": 0,
+    "unknown": 0,
+    "last_successful_refresh": "2026-05-30T21:11:32.722842+00:00",
+    "last_failed_refresh": null
+  },
+  "assets": [
+    {
+      "asset": "NASDAQ / NQ",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "NASDAQCOM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-05-28",
+      "latency_days": 6,
+      "last_successful_refresh": "2026-05-30T21:11:12.524460+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "S&P 500 / ES",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "SP500",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-05-28",
+      "latency_days": 6,
+      "last_successful_refresh": "2026-05-30T21:11:14.939129+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Dow / YM",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "DJIA",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-05-28",
+      "latency_days": 6,
+      "last_successful_refresh": "2026-05-30T21:11:16.793455+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Gold",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "IR14270",
+        "DTWEXBGS"
+      ],
+      "latest_observation_date": "2026-04-30",
+      "latency_days": 34,
+      "last_successful_refresh": "2026-05-30T21:11:19.205147+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Silver",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "WPU102301",
+        "IR14270"
+      ],
+      "latest_observation_date": "2026-04-30",
+      "latency_days": 34,
+      "last_successful_refresh": "2026-05-30T21:11:20.034329+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Copper / HG",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PCOPPUSDM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:21.056710+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Crude Oil / CL",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "DCOILWTICO",
+        "DTWEXBGS"
+      ],
+      "latest_observation_date": "2026-05-22",
+      "latency_days": 12,
+      "last_successful_refresh": "2026-05-30T21:11:26.116704+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Natural Gas / NG",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "DHHNGSP",
+        "DCOILWTICO"
+      ],
+      "latest_observation_date": "2026-05-26",
+      "latency_days": 8,
+      "last_successful_refresh": "2026-05-30T21:11:27.442943+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Coffee",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PCOFFOTMUSDM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:28.544559+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Cocoa",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PCOCOUSDM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:29.556986+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Wheat",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PWHEAMTUSDM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:30.738580+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Corn",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PMAIZMTUSDM",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:31.809578+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    },
+    {
+      "asset": "Soybeans",
+      "data_source": "FRED",
+      "available": true,
+      "coverage_status": "available",
+      "data_status": "live",
+      "freshness": "Live",
+      "source_series_ids": [
+        "PSOYBUSDQ",
+        "DGS10"
+      ],
+      "latest_observation_date": "2026-03-31",
+      "latency_days": 64,
+      "last_successful_refresh": "2026-05-30T21:11:32.722842+00:00",
+      "carried_over": false,
+      "failure_reason": null
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTPL Thesis Opportunity Engine — Wireframe (pre-code)</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --border: #2d3a4f;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --pass: #34d399;
+      --fail: #fb7185;
+      --warn: #fbbf24;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.25rem; font-weight: 600; margin: 0 0 8px; }
+    .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+    .layout { display: grid; grid-template-columns: 1fr 420px; gap: 20px; align-items: start; }
+    @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+
+    /* —— Summary card (hero) —— */
+    .summary {
+      background: linear-gradient(145deg, #1e2a3d 0%, #151c28 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+    }
+    .summary h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin: 0 0 20px;
+      text-transform: uppercase;
+    }
+    .align-big {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .align-big .num { font-size: 3rem; font-weight: 800; color: var(--pass); }
+    .align-big .lbl { font-size: 1rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px; }
+    .pillar { display: flex; flex-direction: column; gap: 2px; }
+    .pillar .k { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .pillar .v { font-size: 1.05rem; font-weight: 600; }
+    .pillar .sub { font-size: 0.8rem; color: var(--accent); }
+    .action {
+      margin-top: 28px;
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(52, 211, 153, 0.2);
+      border: 2px solid var(--pass);
+      color: var(--pass);
+      border-radius: 8px;
+    }
+    .action--high { border-color: #a78bfa; color: #c4b5fd; background: rgba(167, 139, 250, 0.15); }
+    .action--none { border-color: var(--muted); color: var(--muted); background: transparent; }
+
+    /* —— Opportunity table —— */
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      background: #121820;
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    td { padding: 14px 16px; border-top: 1px solid var(--border); }
+    tr:hover td { background: rgba(56, 189, 248, 0.06); }
+    tr.active td { background: rgba(56, 189, 248, 0.12); }
+    .mkt { font-weight: 700; }
+    .align-cell { font-variant-numeric: tabular-nums; }
+    .act-high { color: #c4b5fd; font-weight: 700; }
+    .act-pay { color: var(--pass); font-weight: 700; }
+    .act-none { color: var(--muted); }
+
+    /* —— Detail panel —— */
+    .detail { border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--panel); }
+    .detail h3 { margin: 0 0 16px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .section { margin-bottom: 24px; }
+    .checks { list-style: none; padding: 0; margin: 0; }
+    .checks li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .pass { color: var(--pass); font-weight: 700; }
+    .fail { color: var(--fail); font-weight: 700; }
+    .why { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+    details {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    summary { cursor: pointer; font-weight: 600; color: var(--text); }
+    .tag { font-size: 0.65rem; background: #334155; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Thesis Opportunity Engine</h1>
+    <p class="sub">Wireframe only — open in browser before implementation. Hierarchy: Summary → Alignment → Action → Evidence → Advanced.</p>
+
+    <div class="layout">
+      <div>
+        <!-- Selected instrument summary (always visible above fold on detail route; on list, shows selection) -->
+        <article class="summary" aria-label="Thesis summary card">
+          <h2>Canadian Dollar</h2>
+          <div class="align-big">
+            <span class="lbl">Alignment</span>
+            <span class="num">4 / 5</span>
+          </div>
+          <div class="pillars">
+            <div class="pillar"><span class="k">Valuation</span><span class="v">8.4 / 10</span><span class="sub">UNDERVALUED</span></div>
+            <div class="pillar"><span class="k">Institutions</span><span class="v">STRONGLY BULLISH</span></div>
+            <div class="pillar"><span class="k">Retail</span><span class="v">BEARISH</span></div>
+            <div class="pillar"><span class="k">Seasonality</span><span class="v">BULLISH</span></div>
+            <div class="pillar"><span class="k">Location</span><span class="v">AWAITING DEMAND ZONE</span></div>
+          </div>
+          <div class="action">Pay attention</div>
+        </article>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Instrument</th>
+                <th>Alignment</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mkt">Copper / HG</td>
+                <td class="align-cell">5 / 5</td>
+                <td class="act-high">High attention</td>
+              </tr>
+              <tr class="active">
+                <td class="mkt">Canadian Dollar / 6C</td>
+                <td class="align-cell">4 / 5</td>
+                <td class="act-pay">Pay attention</td>
+              </tr>
+              <tr>
+                <td class="mkt">Gold</td>
+                <td class="align-cell">2 / 5</td>
+                <td class="act-none">No edge</td>
+              </tr>
+              <tr>
+                <td class="mkt">Sugar</td>
+                <td class="align-cell">3 / 5</td>
+                <td class="act-pay">Pay attention</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="detail">
+        <div class="section">
+          <h3>Section 1 — Thesis summary</h3>
+          <p style="margin:0;font-size:1.1rem;font-weight:700;">Canadian Dollar</p>
+          <p style="margin:8px 0 0;color:var(--pass);font-size:1.5rem;font-weight:800;">4 / 5 alignment</p>
+          <p style="margin:4px 0 0;color:var(--muted);">Pay attention — institutions and seasonality agree; location not ready.</p>
+        </div>
+
+        <div class="section">
+          <h3>Section 2 — Why this score exists</h3>
+          <ul class="checks">
+            <li><span>Valuation</span><span class="pass">PASS</span></li>
+            <li><span>Institutions</span><span class="pass">PASS</span></li>
+            <li><span>Retail</span><span class="pass">PASS</span></li>
+            <li><span>Seasonality</span><span class="fail">FAIL</span></li>
+            <li><span>Location</span><span class="pass">PASS</span></li>
+          </ul>
+          <p class="why">Valuation: price in lower band vs macro anchor. Institutions: managed money net rising 4 weeks. Retail: non-reportables fading longs. Seasonality: neutral month for CAD. Location: demand zone not tagged yet.</p>
+        </div>
+
+        <div class="section">
+          <h3>Section 3 — Advanced detail <span class="tag">collapsed by default</span></h3>
+          <details>
+            <summary>COT · Participation · Conviction · Narrative · Momentum</summary>
+            <p style="margin-top:12px;">Legacy positioning tables, evolution log, sparklines — unchanged from current tracker, hidden until expanded.</p>
+          </details>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+{
+  "version": 1,
+  "mode": "3_pillar_stripped",
+  "generated_at": "2026-06-02T12:23:47.458996+00:00",
+  "source": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\thesis_tracker_latest.json",
+  "instruments": [
+    {
+      "market": "Corn",
+      "thesis_id": "0b832691-ed22-49a4-911d-48ddc3f8e9f3",
+      "alignment_label": "3 / 5",
+      "alignment_pass": 3,
+      "action": "WATCH",
+      "rank_score": 83,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Copper / HG",
+      "thesis_id": "46629c10-a304-4321-b6f9-94009f4dfd33",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 50,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Gold",
+      "thesis_id": "423c2cbb-d3a0-4b54-9ce6-7fce9637b749",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 50,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Japanese Yen / 6J",
+      "thesis_id": "5bf10212-6ad3-4d68-9fdd-c1bbcf1bde24",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 49,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "S&P 500 / ES",
+      "thesis_id": "d347b40b-ca91-48a9-95f3-c3fcadaf8969",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 48,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Natural Gas / NG",
+      "thesis_id": "698f70e1-742c-4727-93b6-74e8a8a2e4c0",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 47,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Coffee",
+      "thesis_id": "4334ac28-0e56-41d8-8e1e-4358c4e81675",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 46,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "NASDAQ / NQ",
+      "thesis_id": "20372b2a-e4e4-4ebd-9d4b-1764a128eb25",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 46,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Silver",
+      "thesis_id": "6106ce49-be69-48ac-9a1a-82846475bb84",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 46,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Palladium",
+      "thesis_id": "88e94d82-2b46-4527-bb08-deaa26aff566",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 45,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Platinum",
+      "thesis_id": "e4549a60-7e99-4dc2-a78a-e91716cce2db",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 45,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Cocoa",
+      "thesis_id": "a0013da0-dc94-4ff8-a391-4922fb5c1c6f",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 43,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Dow / YM",
+      "thesis_id": "ebc97dd1-c876-4ee4-b57e-0f3010424d88",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 43,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "British Pound / 6B",
+      "thesis_id": "2f7ca4b1-5066-4137-afbd-fb1e2b000969",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 42,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": true,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Swiss Franc / 6S",
+      "thesis_id": "09f5746f-ff4d-4466-99d5-7539697e17cf",
+      "alignment_label": "2 / 5",
+      "alignment_pass": 2,
+      "action": "NO EDGE",
+      "rank_score": 42,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": true,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Australian Dollar / 6A",
+      "thesis_id": "b2991e7f-57e1-4af1-b358-7ad561ee4e76",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 30,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Canadian Dollar / 6C",
+      "thesis_id": "968c7c87-b0a8-4031-ad80-58f8b91698d4",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 29,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Crude Oil / CL",
+      "thesis_id": "b6d21a7b-ce23-4954-8100-ddf84ae48bbd",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 27,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Euro FX / 6E",
+      "thesis_id": "6d443180-fc0d-440d-bce2-73ccdd5862e9",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 27,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": true,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Wheat",
+      "thesis_id": "8e89044b-497e-4ba6-8e61-dd91354eb4b1",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 26,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "NZ Dollar / 6N",
+      "thesis_id": "bb954403-619d-446e-9a0a-d0de199423f3",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 22,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": true,
+        "retail": false,
+        "location": false,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Sugar",
+      "thesis_id": "89f8e542-1ea4-4f13-aed2-fb450c511192",
+      "alignment_label": "1 / 5",
+      "alignment_pass": 1,
+      "action": "NO EDGE",
+      "rank_score": 22,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": false,
+        "location": true,
+        "seasonality": false
+      }
+    },
+    {
+      "market": "Soybeans",
+      "thesis_id": "49b82324-523c-4314-a7e8-53c44950667e",
+      "alignment_label": "0 / 5",
+      "alignment_pass": 0,
+      "action": "NO EDGE",
+      "rank_score": 8,
+      "pillars_pass": {
+        "valuation": false,
+        "institutions": false,
+        "retail": false,
+        "location": false,
+        "seasonality": false
+      }
+    }
+  ]
+}

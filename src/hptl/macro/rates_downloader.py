@@ -6,6 +6,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from hptl.config import get_fred_api_key
+
 BASE_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
 START_DATE = "2025-01-01"
 
@@ -49,6 +51,21 @@ def download_all() -> pd.DataFrame:
     """Download required macro/rates series from 2025-01-01 to latest available."""
     print("=" * 70)
     print("Macro rates download started")
+    key = get_fred_api_key()
+    if key:
+        print("Data path: FRED API (FRED_API_KEY present)")
+        from hptl.macro.fred_api import download_macro_series_via_fred_api
+
+        merged = download_macro_series_via_fred_api(key, observation_start=START_DATE)
+        latest_available = merged["date"].max()
+        print(f"FRED API series: {', '.join(SERIES.values())}")
+        print(f"Loaded macro rows: {len(merged)}")
+        print(f"Latest available date in pulled data: {latest_available.date() if pd.notna(latest_available) else 'UNKNOWN'}")
+        print(f"Raw macro file saved: {RAW_PATH / 'rates_raw.csv'}")
+        print("=" * 70)
+        return merged
+
+    print("Data path: public FRED graph CSV (set FRED_API_KEY to use the official API)")
     print(f"Pulled date range: {START_DATE} -> latest available")
     print(f"FRED series requested: {', '.join(SERIES.values())}")
     print("=" * 70)

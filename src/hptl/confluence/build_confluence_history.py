@@ -26,7 +26,7 @@ TARGET_ALIASES = {
     "Silver / SI": ["SILVER -", "SILVER"],
     "Copper / HG": ["COPPER-GRADE #1", "COPPER"],
     "Crude Oil / CL": ["CRUDE OIL, LIGHT SWEET", "CRUDE OIL"],
-    "Natural Gas / NG": ["NATURAL GAS"],
+    "Natural Gas / NG": ["NAT GAS NYME", "NATURAL GAS"],
     "Corn / ZC": ["CORN -"],
     "Soybeans / ZS": ["SOYBEANS -"],
     "Wheat / ZW": ["WHEAT -"],

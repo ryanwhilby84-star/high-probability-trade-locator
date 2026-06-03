@@ -1,0 +1,103 @@
+{
+  "report_type": "legacy_cot_dependency",
+  "generated_at_utc": "2026-06-01T13:35:09.337645+00:00",
+  "canonical_positioning_source": "data/legacy_cot_latest.json",
+  "tff_financial_futures_removed_from_confluence_merge": true,
+  "legacy_cot_file": {
+    "exists": true,
+    "path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\legacy_cot_latest.json",
+    "generated_at": "2026-06-01T13:15:06.743085+00:00",
+    "max_report_date": null,
+    "scoring_eligible_count": 23,
+    "pass_mapping_count": 23
+  },
+  "components": {
+    "Scanner": {
+      "consumer_files": [
+        "web-dashboard/src/hooks/useConfluenceData.js",
+        "web-dashboard/src/App.jsx"
+      ],
+      "data_path": "web-dashboard/public/data/confluence_history_latest.json",
+      "python_build_chain": [
+        "hptl.confluence.build_decision_table._merge_cot_from_cleaned_csvs",
+        "hptl.cot.legacy_cot_loader.load_legacy_positioning_decision_rows"
+      ],
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    },
+    "Thesis Tracker": {
+      "consumer_files": [
+        "web-dashboard/src/hooks/useConfluenceData.js"
+      ],
+      "data_path": "web-dashboard/public/data/confluence_history_latest.json",
+      "python_build_chain": [
+        "hptl.confluence.build_decision_table",
+        "hptl.cot.legacy_cot_loader"
+      ],
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    },
+    "Confluence Engine": {
+      "consumer_files": [
+        "src/hptl/confluence/build_decision_table.py",
+        "src/hptl/confluence/cot_tracked_backfill.py"
+      ],
+      "data_path": "web-dashboard/public/data/confluence_history_latest.json",
+      "python_build_chain": [
+        "hptl.confluence.build_decision_table._merge_cot_from_cleaned_csvs",
+        "hptl.cot.trader_positioning.merge_trader_positioning_into_cot",
+        "hptl.cot.legacy_cot_loader"
+      ],
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    },
+    "Attention Board": {
+      "consumer_files": [
+        "web-dashboard/src/hooks/useConfluenceData.js"
+      ],
+      "data_path": "web-dashboard/public/data/confluence_history_latest.json",
+      "python_build_chain": [
+        "hptl.confluence.build_decision_table",
+        "hptl.cot.legacy_cot_loader"
+      ],
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    },
+    "Instrument Page": {
+      "consumer_files": [
+        "web-dashboard/src/components/LegacyCotPanel.jsx",
+        "web-dashboard/src/legacyCotData.js",
+        "web-dashboard/src/hooks/useLegacyCot.js",
+        "web-dashboard/src/pages/InstrumentPage.jsx"
+      ],
+      "data_path": "web-dashboard/public/data/legacy_cot_latest.json",
+      "python_build_chain": [
+        "hptl.cot.run_legacy_cot",
+        "hptl.cot.legacy_cot"
+      ],
+      "direct_legacy_json": true,
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    },
+    "COT Positioning Charts": {
+      "consumer_files": [
+        "web-dashboard/src/pages/CotPositioningPage.jsx",
+        "web-dashboard/src/cotPositioningHistory.js",
+        "web-dashboard/src/cotPositioningConfig.js"
+      ],
+      "data_path": "confluence_history_latest.json (cot_positioning_groups.profile=legacy)",
+      "python_build_chain": [
+        "hptl.cot.legacy_cot_loader.legacy_trader_groups_payload",
+        "hptl.cot.trader_positioning.trader_groups_payload"
+      ],
+      "positioning_source": "data/legacy_cot_latest.json",
+      "reads_tff_or_financial_futures": false,
+      "status": "PASS"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-05-12T13:40:56.121382+00:00",
+  "upstream": "gdelt_doc_api_v2",
+  "instruments": {
+    "Natural Gas / NG": {
+      "instrument": "Natural Gas / NG",
+      "status": "ok",
+      "message": null,
+      "headlines": [
+        {
+          "date": "2026-02-23",
+          "title": "Petro Policies Are Decimating Colombia Natural Gas Industry",
+          "source": "finance.yahoo.com",
+          "url": "https://finance.yahoo.com/news/petros-policies-decimating-colombias-natural-220000777.html",
+          "matched_keywords": [
+            "natural gas"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "general",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-27",
+          "title": "Energy Dominance 2 . 0 : LNG Edition",
+          "source": "wattsupwiththat.com",
+          "url": "https://wattsupwiththat.com/2026/02/26/energy-dominance-2-0-lng-edition/",
+          "matched_keywords": [
+            "lng"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "lng_trade",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-24",
+          "title": "Τι προβλέπει το κοινό ανακοινωθέν για την αύξηση του αμερικανικού LNG στην Κεντρική και Ανατολική Ευρώπη",
+          "source": "eleftherostypos.gr",
+          "url": "https://www.eleftherostypos.gr/diethni/ti-provlepei-to-koino-anakoinothen-gia-tin-afxisi-tou-amerikanikou-lng-stin-kentriki-kai-anatoliki-evropi",
+          "matched_keywords": [
+            "lng"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "lng_trade",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-24",
+          "title": "Το κοινό ανακοινωθέν των 13 υπουργών των χωρών του Κάθετου Διάδρομου - Αύξηση του αμερικανικού LNG σε Κεντρική και Ανατολική Ευρώπη",
+          "source": "inewsgr.com",
+          "url": "https://www.inewsgr.com/184/to-koino-anakoinothen-ton-13-ypourgon-ton-choron-tou-kathetou-diadromou--afxisi-tou-amerikanikou-LNG-se-kentriki-kai-anatoliki-evropi.htm",
+          "matched_keywords": [
+            "lng"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "lng_trade",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-24",
+          "title": "Τι αναφέρει το κοινό ανακοινωθέν για την αύξηση του αμερικανικού LNG",
+          "source": "lykavitos.gr",
+          "url": "https://www.lykavitos.gr/news/planet/ti-anaferei-to-koino-anakoinothen-gia-tin-ayksisi-tou-amerikanikou-lng",
+          "matched_keywords": [
+            "lng"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "lng_trade",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-17",
+          "title": "Energy Transfer Is a Diversified Midstream Firm With a Competitive Natural Gas Footprint",
+          "source": "morningstar.com",
+          "url": "https://www.morningstar.com/company-reports/1431822-energy-transfer-is-a-diversified-midstream-firm-with-a-competitive-natural-gas-footprint",
+          "matched_keywords": [
+            "natural gas"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "general",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        },
+        {
+          "date": "2026-02-19",
+          "title": "Springs Utilities proposes temporary charge to fund natural gas upgrades",
+          "source": "aol.com",
+          "url": "https://www.aol.com/articles/springs-utilities-proposes-temporary-charge-004940424.html",
+          "matched_keywords": [
+            "natural gas"
+          ],
+          "instrument": "Natural Gas / NG",
+          "catalyst_type": "general",
+          "rough_sentiment": "neutral",
+          "relevance_score": 0.42
+        }
+      ],
+      "matched_catalyst_tags": [
+        "lng_trade",
+        "general"
+      ],
+      "query_used": "natural gas"
+    }
+  }
+}

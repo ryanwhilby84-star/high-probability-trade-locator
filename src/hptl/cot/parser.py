@@ -397,11 +397,11 @@ def _canonical_index_market(row: pd.Series) -> str | None:
         return CME_INDEX_NAME_TO_DASHBOARD[full_name]
 
     # Some historical files split the exchange from the market name. Accept the
-    # known CFTC codes only when the row is clearly a Chicago Mercantile contract.
-    if code in CME_INDEX_MAPPINGS and (
-        "CHICAGO MERCANTILE EXCHANGE" in full_name or "CHICAGO MERCANTILE EXCHANGE" in exchange
-    ):
-        return CME_INDEX_MAPPINGS[code].dashboard_name
+    # known CFTC codes only when the row matches the mapped exchange venue.
+    if code in CME_INDEX_MAPPINGS:
+        mapped_exchange = _normalise_market_key(CME_INDEX_MAPPINGS[code].exchange)
+        if mapped_exchange in full_name or mapped_exchange in exchange:
+            return CME_INDEX_MAPPINGS[code].dashboard_name
 
     return None
 
@@ -472,7 +472,7 @@ def financial_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "
 
 
 def filter_cme_index_history(df: pd.DataFrame) -> pd.DataFrame:
-    """Filter annual historical rows for only approved CME NASDAQ/S&P contracts."""
+    """Filter fut_fin rows for NASDAQ, S&P 500, and Dow (CFTC codes 209742, 13874A, 124603)."""
     from hptl.cot.contracts import CME_INDEX_MAPPINGS
 
     cleaned = clean_columns(df)
