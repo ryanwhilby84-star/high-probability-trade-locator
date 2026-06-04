@@ -2230,6 +2230,7 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
                 "long_value": float(row["long_value"]) if pd.notna(row.get("long_value")) else None,
                 "short_value": float(row["short_value"]) if pd.notna(row.get("short_value")) else None,
                 "net_value": float(net) if pd.notna(net) else None,
+                "open_interest": float(row["open_interest"]) if pd.notna(row.get("open_interest")) else None,
                 "cot_positioning_groups": trader_groups_payload(row),
                 "missing_reason": None if pd.isna(row.get("missing_reason")) else str(row.get("missing_reason")),
                 "previous_week_net": float(net - weekly) if weekly is not None else None,

@@ -53,6 +53,36 @@ def test_currency_leg_has_audit_components():
     assert leg["strongest_driver"]
 
 
+def test_currency_leg_uses_one_week_net_change_fallback_and_open_interest():
+    row = _cot_row("Australian Dollar / 6A", weekly=0.0)
+    row.pop("weekly_change")
+    row["one_week_net_change"] = -8000.0
+    row["cot_positioning_groups"] = {"open_interest": 123456.0}
+
+    leg = score_currency_leg(row, currency="AUD", invert_cot=False)
+
+    assert leg["weekly_change_source"] == "one_week_net_change"
+    assert leg["weekly_change_used"] == -8000.0
+    assert leg["one_week_net_change"] == -8000.0
+    assert leg["open_interest"] == 123456.0
+    assert leg["data_integrity_status"] == "PASS"
+    assert leg["fx_flow_input_audit"]["flow_component"] == leg["flow_component"]
+
+
+def test_currency_leg_uses_net_week_change_second_fallback():
+    row = _cot_row("Canadian Dollar / 6C", weekly=0.0)
+    row.pop("weekly_change")
+    row["net_week_change"] = 4000.0
+    row["open_interest"] = 222.0
+
+    leg = score_currency_leg(row, currency="CAD", invert_cot=True)
+
+    assert leg["weekly_change_source"] == "net_week_change"
+    assert leg["weekly_change_raw"] == 4000.0
+    assert leg["weekly_change_used"] == -4000.0
+    assert leg["open_interest"] == 222.0
+
+
 def test_synthetic_usd_marked():
     legs = {
         "EUR": score_currency_leg(_cot_row("Euro FX / 6E", cot_score=8), currency="EUR", invert_cot=False),
