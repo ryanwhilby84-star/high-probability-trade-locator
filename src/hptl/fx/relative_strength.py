@@ -42,6 +42,34 @@ def _finite_float(v: Any, default: float = 0.0) -> float:
         return default
 
 
+def _field_float(rec: dict[str, Any], field: str) -> float | None:
+    if field not in rec:
+        return None
+    try:
+        x = float(rec.get(field))
+        return x if x == x else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _weekly_change_input(rec: dict[str, Any]) -> tuple[float, str]:
+    for field in ("weekly_change", "one_week_net_change", "net_week_change"):
+        value = _field_float(rec, field)
+        if value is not None:
+            return value, field
+    return 0.0, "default_0"
+
+
+def _open_interest_input(rec: dict[str, Any]) -> float | None:
+    value = _field_float(rec, "open_interest")
+    if value is not None:
+        return value
+    groups = rec.get("cot_positioning_groups") or {}
+    if isinstance(groups, dict):
+        return _field_float(groups, "open_interest")
+    return None
+
+
 def _cot_resolved(rec: dict[str, Any]) -> bool:
     bias = str(rec.get("cot_bias") or "").strip().upper()
     return bool(bias and bias != "N/A" and "no mapped raw COT" not in str(rec.get("missing_reason") or ""))
@@ -91,9 +119,8 @@ def score_currency_leg(rec: dict[str, Any], *, currency: str, invert_cot: bool) 
         regime_bonus += 4.0 if regime_bonus > 0 else (-4.0 if regime_bonus < 0 else 0)
 
     flow_dir = _flow_direction(inst)
-    w1 = _finite_float(rec.get("weekly_change"), 0.0)
-    if invert_cot:
-        w1 = -w1
+    w1_raw, weekly_change_source = _weekly_change_input(rec)
+    w1 = -w1_raw if invert_cot else w1_raw
     flow_intensity = min(25.0, abs(w1) / 4000.0)
     flow_sign = 1.0 if flow_dir == "bullish" else (-1.0 if flow_dir == "bearish" else (1.0 if w1 > 0 else (-1.0 if w1 < 0 else 0.0)))
     flow_component = round(flow_sign * flow_intensity + regime_bonus * 0.35, 1)
@@ -177,6 +204,23 @@ def score_currency_leg(rec: dict[str, Any], *, currency: str, invert_cot: bool) 
         "flow_momentum": inst.get("flow_momentum"),
         "structural_regime": inst.get("structural_regime"),
         "macro_alignment": align,
+        "weekly_change_used": w1,
+        "weekly_change_raw": w1_raw,
+        "weekly_change_source": weekly_change_source,
+        "one_week_net_change": _field_float(rec, "one_week_net_change"),
+        "net_week_change": _field_float(rec, "net_week_change"),
+        "open_interest": _open_interest_input(rec),
+        "data_integrity_status": "PASS" if weekly_change_source != "default_0" and _open_interest_input(rec) is not None else "FAIL",
+        "fx_flow_input_audit": {
+            "currency": currency,
+            "weekly_change_used": w1,
+            "weekly_change_raw": w1_raw,
+            "weekly_change_source": weekly_change_source,
+            "one_week_net_change": _field_float(rec, "one_week_net_change"),
+            "net_week_change": _field_float(rec, "net_week_change"),
+            "open_interest": _open_interest_input(rec),
+            "flow_component": flow_component,
+        },
     }
 
 
@@ -497,6 +541,9 @@ def build_relative_strength(
                 "anomaly_component": 0.0,
             }
             continue
+        rec = dict(rec)
+        if "open_interest" not in rec:
+            rec["open_interest"] = _open_interest_input(rec)
         leg = score_currency_leg(rec, currency=code, invert_cot=bool(meta["invert_cot"]))
         leg["positioning_extreme"] = (rec.get("institutional_context") or {}).get("positioning_extreme")
         leg_scores[code] = leg
@@ -611,6 +658,11 @@ def build_relative_strength(
         ],
         "audit": {
             "leg_scores": leg_scores,
+            "fx_leg_flow_inputs": [
+                leg_scores[c]["fx_flow_input_audit"]
+                for c in LEADERBOARD_CURRENCIES
+                if c in leg_scores and "fx_flow_input_audit" in leg_scores[c]
+            ],
             "top_pair_differentials_by_raw": by_raw_display[:30],
             "top_pair_differentials_by_adjusted": sorted(
                 [r for r in pair_audit_all if r.get("adjusted_opportunity_score") is not None],
