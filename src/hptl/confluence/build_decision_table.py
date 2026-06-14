@@ -17,6 +17,18 @@ from hptl.confluence.build_confluence_history import _build_confluence
 from hptl.cot.contracts import FINANCIAL_FUTURES_ONLY_URL_TEMPLATE, FINANCIAL_INDEX_CODE_TO_TARGET
 from hptl.cot.scoring_engine import apply_probabilistic_cot_scoring
 from hptl.cot.parser import clean_columns
+from hptl.cot.positioning_percentiles import (
+    WINDOW_WEEKS_3Y,
+    classification_line,
+    classify_percentile,
+    compute_absolute_positioning,
+    empirical_percentile_rank as _pct_rank_window,
+    interpret_metric,
+    METRIC_LONG,
+    METRIC_NET,
+    METRIC_OI,
+    METRIC_SHORT,
+)
 from hptl.confluence.run_confluence_update import _find_column
 from hptl.macro.macro_scoring import build_macro_audit_payload, _row_has_required_scoring_inputs
 from hptl.macro.macro_transmission import build_macro_transmission
@@ -49,6 +61,8 @@ from hptl.markets.instrument_registry import (
 )
 from hptl.markets.coverage_audit import run_coverage_audit, write_coverage_audit
 from hptl.pillars.confluence_attach import pillar_fields_for_market_week
+from hptl.fx.fx_valuation_attach import fx_valuation_fields_for_market
+from hptl.confluence.macro_hub_cot_attach import apply_macro_hub_cot_fallback
 
 PROCESSED_DIR = Path("data/processed")
 RATES_CLEAN_PATH = PROCESSED_DIR / "macro" / "rates_clean.csv"
@@ -1317,11 +1331,186 @@ def _hist_context_block_from_row(row: pd.Series, prefix: str) -> dict[str, Any]:
     }
 
 
+def _rolling_3y_context_block_from_row(row: pd.Series) -> dict[str, Any]:
+    """Serialize the rolling 3-year (156-week) positioning context block."""
+    pl = _json_safe_num(row.get("rolling_3y_long_percentile"))
+    ps = _json_safe_num(row.get("rolling_3y_short_percentile"))
+    pn = _json_safe_num(row.get("rolling_3y_net_percentile"))
+    po = _json_safe_num(row.get("rolling_3y_oi_percentile"))
+    pl = None if pl is None else round(pl, 1)
+    ps = None if ps is None else round(ps, 1)
+    pn = None if pn is None else round(pn, 1)
+    po = None if po is None else round(po, 1)
+
+    ru = row.get("rolling_3y_rows_used")
+    try:
+        rows_used = None if ru is None or pd.isna(ru) else int(ru)
+    except (TypeError, ValueError):
+        rows_used = None
+    ww = row.get("rolling_3y_window_weeks")
+    try:
+        window_weeks = WINDOW_WEEKS_3Y if ww is None or pd.isna(ww) else int(ww)
+    except (TypeError, ValueError):
+        window_weeks = WINDOW_WEEKS_3Y
+
+    classification_lines = [
+        line
+        for line in (
+            classification_line(METRIC_NET, pn),
+            classification_line(METRIC_LONG, pl),
+            classification_line(METRIC_SHORT, ps),
+            classification_line(METRIC_OI, po),
+        )
+        if line
+    ]
+    long_vs_max = _json_safe_num(row.get("rolling_3y_long_vs_max_pct"))
+    short_vs_max = _json_safe_num(row.get("rolling_3y_short_vs_max_pct"))
+    net_range = _json_safe_num(row.get("rolling_3y_net_range_pct"))
+    oi_vs_max = _json_safe_num(row.get("rolling_3y_oi_vs_max_pct"))
+    long_vs_max = None if long_vs_max is None else round(long_vs_max, 1)
+    short_vs_max = None if short_vs_max is None else round(short_vs_max, 1)
+    net_range = None if net_range is None else round(net_range, 1)
+    oi_vs_max = None if oi_vs_max is None else round(oi_vs_max, 1)
+    long_crowding = str(row.get("rolling_3y_long_crowding") or "N/A")
+    short_crowding = str(row.get("rolling_3y_short_crowding") or "N/A")
+    oi_participation = str(row.get("rolling_3y_oi_participation") or "N/A")
+    crowding_classification_lines = [
+        line for line in (long_crowding, short_crowding, oi_participation) if line and line != "N/A"
+    ]
+    summary_parts = []
+    if pn is not None:
+        summary_parts.append(f"Net {pn:.0f}th pct — {interpret_metric(METRIC_NET, pn)}")
+    if pl is not None:
+        summary_parts.append(f"Long {pl:.0f}th pct — {interpret_metric(METRIC_LONG, pl)}")
+    if ps is not None:
+        summary_parts.append(f"Short {ps:.0f}th pct — {interpret_metric(METRIC_SHORT, ps)}")
+    if po is not None:
+        summary_parts.append(f"OI {po:.0f}th pct — {interpret_metric(METRIC_OI, po)}")
+    summary = (
+        "\n".join(
+            [
+                (
+                    f"Rolling {window_weeks}-week (3Y) positioning context using the trailing "
+                    f"{rows_used if rows_used is not None else 'N/A'} reports "
+                    f"({row.get('rolling_3y_earliest_report_date')} → "
+                    f"{row.get('rolling_3y_latest_report_date')})."
+                ),
+                *summary_parts,
+            ]
+        )
+        if summary_parts
+        else (
+            "N/A: insufficient multi-year history loaded for rolling 3Y positioning context."
+        )
+    )
+
+    return {
+        "window_weeks": window_weeks,
+        "rows_used": rows_used,
+        "earliest_report_date": (
+            None
+            if row.get("rolling_3y_earliest_report_date") is None
+            else str(row.get("rolling_3y_earliest_report_date"))
+        ),
+        "latest_report_date": (
+            None
+            if row.get("rolling_3y_latest_report_date") is None
+            else str(row.get("rolling_3y_latest_report_date"))
+        ),
+        "long_min": _json_safe_contract_int(row.get("rolling_3y_long_min")),
+        "long_max": _json_safe_contract_int(row.get("rolling_3y_long_max")),
+        "long_avg": _json_safe_contract_int(row.get("rolling_3y_long_avg")),
+        "short_min": _json_safe_contract_int(row.get("rolling_3y_short_min")),
+        "short_max": _json_safe_contract_int(row.get("rolling_3y_short_max")),
+        "short_avg": _json_safe_contract_int(row.get("rolling_3y_short_avg")),
+        "net_min": _json_safe_contract_int(row.get("rolling_3y_net_min")),
+        "net_max": _json_safe_contract_int(row.get("rolling_3y_net_max")),
+        "net_avg": _json_safe_contract_int(row.get("rolling_3y_net_avg")),
+        "oi_min": _json_safe_contract_int(row.get("rolling_3y_oi_min")),
+        "oi_max": _json_safe_contract_int(row.get("rolling_3y_oi_max")),
+        "oi_avg": _json_safe_contract_int(row.get("rolling_3y_oi_avg")),
+        "long_percentile": pl,
+        "short_percentile": ps,
+        "net_percentile": pn,
+        "oi_percentile": po,
+        "long_class": classify_percentile(pl),
+        "short_class": classify_percentile(ps),
+        "net_class": classify_percentile(pn),
+        "oi_class": classify_percentile(po),
+        "net_interpretation": interpret_metric(METRIC_NET, pn),
+        "long_interpretation": interpret_metric(METRIC_LONG, pl),
+        "short_interpretation": interpret_metric(METRIC_SHORT, ps),
+        "oi_interpretation": interpret_metric(METRIC_OI, po),
+        "classification_lines": classification_lines,
+        "current_long": _json_safe_contract_int(row.get("rolling_3y_current_long")),
+        "current_short": _json_safe_contract_int(row.get("rolling_3y_current_short")),
+        "current_net": _json_safe_contract_int(row.get("rolling_3y_current_net")),
+        "current_oi": _json_safe_contract_int(row.get("rolling_3y_current_oi")),
+        "long_vs_3y_max_pct": long_vs_max,
+        "short_vs_3y_max_pct": short_vs_max,
+        "net_range_pct": net_range,
+        "oi_vs_3y_max_pct": oi_vs_max,
+        "long_crowding": long_crowding,
+        "short_crowding": short_crowding,
+        "oi_participation": oi_participation,
+        "crowding_classification_lines": crowding_classification_lines,
+        "summary": summary,
+    }
+
+
+def _rolling_3y_context_missing() -> dict[str, Any]:
+    return {
+        "window_weeks": WINDOW_WEEKS_3Y,
+        "rows_used": None,
+        "earliest_report_date": None,
+        "latest_report_date": None,
+        "long_min": None,
+        "long_max": None,
+        "long_avg": None,
+        "short_min": None,
+        "short_max": None,
+        "short_avg": None,
+        "net_min": None,
+        "net_max": None,
+        "net_avg": None,
+        "oi_min": None,
+        "oi_max": None,
+        "oi_avg": None,
+        "long_percentile": None,
+        "short_percentile": None,
+        "net_percentile": None,
+        "oi_percentile": None,
+        "long_class": "N/A",
+        "short_class": "N/A",
+        "net_class": "N/A",
+        "oi_class": "N/A",
+        "net_interpretation": "N/A",
+        "long_interpretation": "N/A",
+        "short_interpretation": "N/A",
+        "oi_interpretation": "N/A",
+        "classification_lines": [],
+        "current_long": None,
+        "current_short": None,
+        "current_net": None,
+        "current_oi": None,
+        "long_vs_3y_max_pct": None,
+        "short_vs_3y_max_pct": None,
+        "net_range_pct": None,
+        "oi_vs_3y_max_pct": None,
+        "long_crowding": "N/A",
+        "short_crowding": "N/A",
+        "oi_participation": "N/A",
+        "crowding_classification_lines": [],
+        "summary": "N/A: no COT row for this market and date — 3Y positioning context unavailable.",
+    }
+
+
 def _historical_json_fields_from_row(row: pd.Series) -> dict[str, Any]:
     """Serialize dual-mode historical positioning for JSON (no flat legacy keys)."""
     return {
         "expanding_history_context": _hist_context_block_from_row(row, "expanding"),
         "full_loaded_history_context": _hist_context_block_from_row(row, "full_loaded"),
+        "rolling_3y_history_context": _rolling_3y_context_block_from_row(row),
     }
 
 
@@ -1345,6 +1534,7 @@ def _historical_json_fields_missing() -> dict[str, Any]:
     return {
         "expanding_history_context": dict(empty),
         "full_loaded_history_context": dict(empty),
+        "rolling_3y_history_context": _rolling_3y_context_missing(),
     }
 
 
@@ -1518,6 +1708,107 @@ def _build_full_loaded_historical_stats(cot: pd.DataFrame) -> pd.DataFrame:
                     f"Current net is in the {pns}th percentile of all loaded net readings — {row_out['full_loaded_current_net_rank_label']}",
                 ]
             )
+            out_rows.append(row_out)
+
+    if not out_rows:
+        return pd.DataFrame()
+    return pd.DataFrame(out_rows)
+
+
+def _build_rolling_3y_historical_stats(cot: pd.DataFrame, window: int = WINDOW_WEEKS_3Y) -> pd.DataFrame:
+    """Trailing rolling-window (default 156wk / 3Y) extremes + percentiles per report.
+
+    Backtest-safe: each row uses only the prior ``window`` reports up to and
+    including itself. Covers long / short / net / open interest. When fewer than
+    ``window`` reports exist, the full available trailing history is used and
+    ``rolling_3y_rows_used`` reflects the actual depth.
+    """
+    out_rows: list[dict[str, Any]] = []
+    for market in TARGET_MARKETS:
+        cols = ["cot_report_date", "long_value", "short_value", "net_value", "open_interest"]
+        present = [c for c in cols if c in cot.columns]
+        m = cot.loc[cot["market"] == market, present].sort_values("cot_report_date")
+        if m.empty:
+            continue
+        dates = m["cot_report_date"].to_numpy()
+        longs = m["long_value"].to_numpy(dtype=float) if "long_value" in m else np.full(len(m), np.nan)
+        shorts = m["short_value"].to_numpy(dtype=float) if "short_value" in m else np.full(len(m), np.nan)
+        nets = m["net_value"].to_numpy(dtype=float) if "net_value" in m else np.full(len(m), np.nan)
+        ois = m["open_interest"].to_numpy(dtype=float) if "open_interest" in m else np.full(len(m), np.nan)
+        n_m = len(m)
+        for i in range(n_m):
+            lo = max(0, i + 1 - window)
+            w_l = longs[lo : i + 1]
+            w_s = shorts[lo : i + 1]
+            w_n = nets[lo : i + 1]
+            w_o = ois[lo : i + 1]
+            fin_n = w_n[np.isfinite(w_n)]
+            rows_used = int(fin_n.size) if fin_n.size else int(np.sum(np.isfinite(w_l)))
+            earliest = pd.Timestamp(dates[lo]).strftime("%Y-%m-%d")
+            cur_dt = pd.Timestamp(dates[i]).strftime("%Y-%m-%d")
+
+            def _extrema(arr: np.ndarray) -> tuple[float | None, float | None, float | None]:
+                fin = arr[np.isfinite(arr)]
+                if not fin.size:
+                    return None, None, None
+                return float(np.min(fin)), float(np.max(fin)), float(np.mean(fin))
+
+            l_min, l_max, l_avg = _extrema(w_l)
+            s_min, s_max, s_avg = _extrema(w_s)
+            n_min, n_max, n_avg = _extrema(w_n)
+            o_min, o_max, o_avg = _extrema(w_o)
+
+            row_out: dict[str, Any] = {
+                "market": market,
+                "cot_report_date": dates[i],
+                "rolling_3y_window_weeks": int(window),
+                "rolling_3y_rows_used": rows_used,
+                "rolling_3y_earliest_report_date": earliest,
+                "rolling_3y_latest_report_date": cur_dt,
+                "rolling_3y_long_min": l_min,
+                "rolling_3y_long_max": l_max,
+                "rolling_3y_long_avg": l_avg,
+                "rolling_3y_short_min": s_min,
+                "rolling_3y_short_max": s_max,
+                "rolling_3y_short_avg": s_avg,
+                "rolling_3y_net_min": n_min,
+                "rolling_3y_net_max": n_max,
+                "rolling_3y_net_avg": n_avg,
+                "rolling_3y_oi_min": o_min,
+                "rolling_3y_oi_max": o_max,
+                "rolling_3y_oi_avg": o_avg,
+            }
+            row_out["rolling_3y_long_percentile"] = _pct_rank_window(w_l.tolist(), longs[i])
+            row_out["rolling_3y_short_percentile"] = _pct_rank_window(w_s.tolist(), shorts[i])
+            row_out["rolling_3y_net_percentile"] = _pct_rank_window(w_n.tolist(), nets[i])
+            row_out["rolling_3y_oi_percentile"] = _pct_rank_window(w_o.tolist(), ois[i])
+
+            cur_long = float(longs[i]) if math.isfinite(longs[i]) else None
+            cur_short = float(shorts[i]) if math.isfinite(shorts[i]) else None
+            cur_net = float(nets[i]) if math.isfinite(nets[i]) else None
+            cur_oi = float(ois[i]) if math.isfinite(ois[i]) else None
+            abs_ctx = compute_absolute_positioning(
+                current_long=cur_long,
+                long_max=l_max,
+                current_short=cur_short,
+                short_max=s_max,
+                current_net=cur_net,
+                net_min=n_min,
+                net_max=n_max,
+                current_oi=cur_oi,
+                oi_max=o_max,
+            )
+            row_out["rolling_3y_current_long"] = cur_long
+            row_out["rolling_3y_current_short"] = cur_short
+            row_out["rolling_3y_current_net"] = cur_net
+            row_out["rolling_3y_current_oi"] = cur_oi
+            row_out["rolling_3y_long_vs_max_pct"] = abs_ctx.long_vs_3y_max_pct
+            row_out["rolling_3y_short_vs_max_pct"] = abs_ctx.short_vs_3y_max_pct
+            row_out["rolling_3y_net_range_pct"] = abs_ctx.net_range_pct
+            row_out["rolling_3y_oi_vs_max_pct"] = abs_ctx.oi_vs_3y_max_pct
+            row_out["rolling_3y_long_crowding"] = abs_ctx.long_crowding
+            row_out["rolling_3y_short_crowding"] = abs_ctx.short_crowding
+            row_out["rolling_3y_oi_participation"] = abs_ctx.oi_participation
             out_rows.append(row_out)
 
     if not out_rows:
@@ -1860,6 +2151,7 @@ def _build_no_cot_record(
         "intermarket_impulse_context": inter_missing,
         "ui_pack": ui_pack_missing,
         "institutional_context": inst_ctx,
+        **fx_valuation_fields_for_market(market),
     }
 
 
@@ -1914,6 +2206,8 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
     _heartbeat("2/6 historical stats", "expanding stats built")
     hist_full = _build_full_loaded_historical_stats(cot)
     _heartbeat("2/6 historical stats", "full-loaded stats built")
+    hist_3y = _build_rolling_3y_historical_stats(cot)
+    _heartbeat("2/6 historical stats", "rolling 3Y stats built")
     if hist_exp.empty:
         print("WARNING: expanding historical stats frame is empty — check TARGET_MARKETS vs COT market mapping.")
     else:
@@ -1936,6 +2230,18 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
             if n_miss:
                 print(
                     f"WARNING: full-loaded hist merge missed {n_miss}/{len(cot)} COT rows "
+                    "(cot_report_date / market alignment)."
+                )
+    if hist_3y.empty:
+        print("WARNING: rolling 3Y historical stats frame is empty — check TARGET_MARKETS vs COT market mapping.")
+    else:
+        hist_3y = _normalize_cot_report_dates_naive(hist_3y)
+        cot = cot.merge(hist_3y, on=["market", "cot_report_date"], how="left")
+        if "rolling_3y_rows_used" in cot.columns:
+            n_miss = int(cot["rolling_3y_rows_used"].isna().sum())
+            if n_miss:
+                print(
+                    f"WARNING: rolling 3Y hist merge missed {n_miss}/{len(cot)} COT rows "
                     "(cot_report_date / market alignment)."
                 )
     from hptl.cot.legacy_cot_loader import legacy_trader_groups_payload
@@ -2258,6 +2564,7 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
                 "institutional_context": inst_ctx if inst_ctx else None,
                 "macro_transmission": macro_transmission,
                 **pillar_week,
+                **fx_valuation_fields_for_market(market),
             })
             if market == "Cocoa":
                 print(
@@ -2279,6 +2586,19 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
 
     _stage4.__exit__(None, None, None)
     print(f"[BUILD ROWS] complete — {len(records)} records from {_n_dates} weeks.", flush=True)
+
+    _mh_patched = apply_macro_hub_cot_fallback(records)
+    if _mh_patched:
+        print(f"MACRO_HUB_COT: patched {_mh_patched} latest-week row(s) from macro_hub_latest.json", flush=True)
+
+    from hptl.confluence.macro_hub_institutional_attach import apply_macro_hub_institutional_fallback
+
+    _mh_inst = apply_macro_hub_institutional_fallback(records)
+    if _mh_inst:
+        print(
+            f"MACRO_HUB_INSTITUTIONAL: patched {_mh_inst} macro asset row(s) + scanner drivers on latest week",
+            flush=True,
+        )
 
     for rec in records:
         if rec.get("market") == "Wheat" and str(rec.get("date")) == "2026-05-05":
@@ -2348,6 +2668,25 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
         f"Wrote relative strength: {relative_strength_path} "
         f"({len(relative_strength.get('pair_opportunities', []))} pair opportunities)"
     )
+
+    from hptl.fx.usd_anchor import sync_usd_dxy_price_to_store, write_usd_anchor_document
+
+    _usd_px = sync_usd_dxy_price_to_store()
+    _usd_anchor_path = write_usd_anchor_document()
+    print(
+        f"Wrote USD anchor: {_usd_anchor_path} "
+        f"(price_sync={_usd_px.get('written')}, mode={_usd_px.get('mode')})"
+    )
+
+    from hptl.cot.tff_macro_export import run as run_tff_macro_positioning
+
+    _tff_path = run_tff_macro_positioning()
+    print(f"Wrote TFF macro positioning: {_tff_path}")
+
+    from hptl.setup_ranking.export import run as run_fx_setup_ranking
+
+    _setup_path = run_fx_setup_ranking(confluence_records=records)
+    print(f"Wrote FX setup ranking: {_setup_path}")
 
     scanner_attention_week = aggregate_priority_markets(
         week_slice, top_n=6, calendar_week=latest_calendar_week or ""

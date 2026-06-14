@@ -191,6 +191,74 @@ def _clear_probe_cache() -> None:
         log_step(f"Removed stale probe cache: {PROBE_CACHE_PATH.resolve()}")
 
 
+def _legacy_latest_report_date() -> pd.Timestamp | None:
+    """Max report date across instruments in ``legacy_cot_latest.json``."""
+    from hptl.cot.legacy_cot_loader import legacy_cot_latest_path, load_legacy_cot_document
+
+    path = legacy_cot_latest_path()
+    if not path.exists():
+        return None
+    try:
+        doc = load_legacy_cot_document(str(path))
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return None
+    max_dt: pd.Timestamp | None = None
+    for block in (doc.get("instruments") or {}).values():
+        weeks = ((block.get("groups") or {}).get("noncommercials") or {}).get("weeks") or []
+        if not weeks:
+            continue
+        last = weeks[-1].get("report_date")
+        ts = pd.to_datetime(last, errors="coerce")
+        if pd.isna(ts):
+            continue
+        ts = pd.Timestamp(ts).normalize()
+        if max_dt is None or ts > max_dt:
+            max_dt = ts
+    return max_dt
+
+
+def _refresh_legacy_positioning(*, cftc_max: pd.Timestamp | None = None) -> None:
+    """Re-download Legacy Futures-Only ZIPs and rebuild ``legacy_cot_latest.json``.
+
+    Confluence/master positioning reads exclusively from legacy exports — workbook
+    disaggregated/TFF downloads do not feed the dashboard bundle.
+    """
+    from datetime import datetime as dt, timezone as tz
+
+    from hptl.cot.legacy_cot import default_history_years, ensure_legacy_futures_only_year, run_legacy_cot_reset
+
+    year = dt.now(tz.utc).year
+    legacy_max = _legacy_latest_report_date()
+    needs_zip = (
+        cftc_max is not None
+        and not pd.isna(cftc_max)
+        and (legacy_max is None or legacy_max < cftc_max.normalize())
+    )
+    if needs_zip:
+        log_step(f"Refreshing Legacy COT year {year} ZIP (CFTC {_iso(cftc_max)} > legacy {_iso(legacy_max)})…")
+        ensure_legacy_futures_only_year(year, download=True, force_refresh=True)
+    elif legacy_max is not None and cftc_max is not None and legacy_max >= cftc_max.normalize():
+        log_step(f"Legacy COT already at {_iso(legacy_max)} — skipping ZIP re-download.")
+    else:
+        log_step(f"Ensuring Legacy COT year {year} ZIP is present…")
+        ensure_legacy_futures_only_year(year, download=True, force_refresh=bool(needs_zip))
+
+    if legacy_max is not None and cftc_max is not None and legacy_max >= cftc_max.normalize():
+        log_step("Legacy COT JSON current — skipping full legacy rebuild.")
+        return
+
+    log_step("Rebuilding legacy_cot_latest.json (positioning source for master + confluence)…")
+    run_legacy_cot_reset(years=default_history_years())
+
+
+def _export_cot_workstation_series() -> Path:
+    """Write ``cot_3y_series_latest.json`` to processed + public dashboard paths."""
+    from hptl.cot.cot_3y_series_export import run as run_cot_3y_export
+
+    log_step("Writing cot_3y_series_latest.json (COT workstation charts)…")
+    return run_cot_3y_export()
+
+
 def _sync_confluence_dashboard_exports(source: Path | None = None) -> list[Path]:
     """Copy canonical JSON to ``dist/data`` so ``vite preview`` / built assets are not stale."""
     if source and Path(source).exists() and Path(source).resolve() != Path(OUT_PATH).resolve():
@@ -207,6 +275,8 @@ def _safe_rebuild_confluence(*, previous_latest: str | None, cftc_week: str | No
         shutil.copy2(out, backup)
 
     os.environ.setdefault("HPTL_SKIP_LIVE_FEEDS", "1")
+    # Weekly COT refresh legitimately exceeds the 120s stage watchdog during confluence export.
+    os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
     bdt.run(
         cot_feed_meta={
             "latest_cftc_report_date": cftc_week,
@@ -415,6 +485,11 @@ def run_full_pipeline(
                 result.cot_data_stale = False
                 result.update_performed = True
                 print(f"Wrote confluence: {result.export_confluence_path}")
+                try:
+                    cot3_path = _export_cot_workstation_series()
+                    print(f"Wrote COT workstation: {cot3_path.resolve()}")
+                except Exception as exc:
+                    logger.warning("cot_3y export failed (confluence OK): %s", exc)
             except Exception as exc:
                 result.error = f"Confluence rebuild failed: {exc}"
                 result.exit_code = 1
@@ -447,6 +522,18 @@ def run_full_pipeline(
         print(f"Wrote processed:  {result.export_processed_csv}")
     except Exception as exc:
         result.error = f"COT download/export failed: {exc}"
+        logger.exception(result.error)
+        result.exit_code = 1
+        _print_banner("HPTL COT PIPELINE — FAILED")
+        for line in _human_lines(result):
+            print(line)
+        return result
+
+    _print_banner("HPTL COT PIPELINE — LEGACY POSITIONING REFRESH")
+    try:
+        _refresh_legacy_positioning(cftc_max=cftc_max)
+    except Exception as exc:
+        result.error = f"Legacy COT refresh failed: {exc}"
         logger.exception(result.error)
         result.exit_code = 1
         _print_banner("HPTL COT PIPELINE — FAILED")
@@ -513,6 +600,12 @@ def run_full_pipeline(
             for line in _human_lines(result):
                 print(line)
             return result
+
+        try:
+            cot3_path = _export_cot_workstation_series()
+            print(f"Wrote COT workstation: {cot3_path.resolve()}")
+        except Exception as exc:
+            logger.warning("cot_3y export failed (confluence OK): %s", exc)
 
         if with_live_feeds:
             _print_banner("HPTL COT PIPELINE — LIVE ENVIRONMENT FEEDS")

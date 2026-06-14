@@ -1,149 +1,130 @@
-"""Valuation pillar: Bullish / Neutral / Bearish from price percentile + macro map."""
+"""Fundamental valuation pillar — fair value from approved asset-class models only.
+
+When no approved model exists, returns UNAVAILABLE. Never substitutes price
+percentile, rankings, or location reads for valuation.
+
+FX architecture (Phase 2):
+  - **Pillar / dashboard column:** ``fx_carry_real_yield_v3`` only (via ``export.py``).
+  - **Legacy (confluence attach):** ``hptl.fx.fx_valuation`` V1 yield-differential.
+  - **Secondary (setup ranking / panels):** ``hptl.fx.fx_institutional_valuation`` V2.
+
+Do not route new FX dashboard valuation work through V1 or V2.
+"""
 from __future__ import annotations
 
 from typing import Any
 
-BIAS_BULLISH = "Bullish"
-BIAS_NEUTRAL = "Neutral"
-BIAS_BEARISH = "Bearish"
+from hptl.markets.instrument_registry import get_instrument
+
+BIAS_UNAVAILABLE = "UNAVAILABLE"
+
+# Planned Valuation V3 models (not wired until phase gate passes).
+ASSET_CLASS_ROADMAP: dict[str, dict[str, str]] = {
+    "fx": {
+        "phase": "V3.0",
+        "model_id": "fx_carry_real_yield_v3",
+        "drivers": "policy rates, 2Y yields, real yields, inflation, DXY, Treasury regime",
+    },
+    "metals": {
+        "phase": "V3.1",
+        "model_id": "metals_real_yield_dxy_v3",
+        "drivers": "real yields, DXY, inflation expectations, positioning overlay",
+    },
+    "indices": {
+        "phase": "V3.2",
+        "model_id": "indices_erp_cape_v3",
+        "drivers": "CAPE, earnings yield, dividend yield, 10Y yield, ERP (S&P 500 only)",
+    },
+    "energy": {
+        "phase": "V3.3",
+        "model_id": "energy_inventory_dxy_v3",
+        "drivers": "EIA inventories, DXY, seasonality context",
+    },
+    "grains": {
+        "phase": "V3.4",
+        "model_id": "grains_stocks_to_use_v3",
+        "drivers": "USDA/WASDE stocks-to-use, DXY, seasonality context",
+    },
+    "crypto": {
+        "phase": "V3.5",
+        "model_id": "crypto_liquidity_risk_v3",
+        "drivers": "liquidity, DXY, real yields, risk appetite",
+    },
+    "softs": {
+        "phase": "V3.6",
+        "model_id": "softs_balance_sheet_v3",
+        "drivers": "daily ICE price, origin balance sheets, DXY, weather (when available)",
+    },
+}
 
 
-def _num(v: Any) -> float | None:
-    if v is None or isinstance(v, bool):
-        return None
-    try:
-        f = float(v)
-    except (TypeError, ValueError):
-        return None
-    return f if f == f else None
-
-
-def _weekly_closes(weekly: list[dict[str, Any]]) -> list[tuple[str, float]]:
-    out: list[tuple[str, float]] = []
-    for b in weekly or []:
-        if not isinstance(b, dict):
-            continue
-        c = _num(b.get("close"))
-        d = str(b.get("date") or "")[:10]
-        if c is not None and d:
-            out.append((d, c))
-    out.sort(key=lambda x: x[0])
-    return out
-
-
-def price_percentile(closes: list[float], *, window: int = 52) -> float | None:
-    if len(closes) < 12:
-        return None
-    window_closes = closes[-window:] if len(closes) >= window else closes
-    current = window_closes[-1]
-    if not window_closes:
-        return None
-    rank = sum(1 for c in window_closes if c <= current) / len(window_closes)
-    return rank * 100.0
-
-
-def _bias_from_percentile(pct: float) -> str:
-    if pct <= 33.0:
-        return BIAS_BULLISH
-    if pct >= 67.0:
-        return BIAS_BEARISH
-    return BIAS_NEUTRAL
-
-
-def _score_from_percentile(pct: float) -> float:
-    """0–10 conviction from distance from fair-value middle (50th pct)."""
-    return round(min(10.0, max(0.0, abs(pct - 50.0) / 5.0)), 1)
-
-
-def _macro_adjustment(macro_map: dict[str, Any] | None) -> tuple[str | None, float]:
-    """Optional nudge from macro relationship map correlation regime."""
-    if not macro_map or macro_map.get("available") is not True:
-        return None, 0.0
-    corr = _num(macro_map.get("latest_rolling_corr_20"))
-    if corr is None:
-        return None, 0.0
-    regime = str(macro_map.get("correlation_regime") or "").lower()
-    if abs(corr) < 0.2:
-        return "weak_macro_link", -0.5
-    if "positive" in regime or corr > 0.35:
-        return "macro_aligned", 0.5
-    if "negative" in regime or corr < -0.35:
-        return "macro_inverse", 0.0
-    return None, 0.0
+def _valuation_asset_class(market: str) -> str:
+    spec = get_instrument(market)
+    if spec is None:
+        return "other"
+    if spec.asset_class == "commodities":
+        subgroup = spec.subgroup or ""
+        if subgroup == "energy":
+            return "energy"
+        if subgroup == "ag":
+            return "grains"
+        if subgroup == "soft":
+            return "softs"
+    if spec.asset_class == "macro" and spec.subgroup == "usd_index":
+        return "fx"
+    return spec.asset_class or "other"
 
 
 def compute_valuation(
     *,
     market: str,
-    weekly_bars: list[dict[str, Any]] | None = None,
-    range_52w: dict[str, Any] | None = None,
-    macro_map: dict[str, Any] | None = None,
     as_of_week: str | None = None,
+    **_kwargs: Any,
 ) -> dict[str, Any]:
-    """
-    Returns valuation_bias, valuation_score (0–10), valuation_reason, pass (None until aligned).
-    """
-    closes_series = _weekly_closes(weekly_bars or [])
-    closes = [c for _, c in closes_series]
+    """Return fundamental valuation state from approved V3 models only."""
+    asset_class = _valuation_asset_class(market)
+    if asset_class == "fx":
+        from hptl.valuation.fx_carry_real_yield_v3 import compute_fx_market_v3
 
-    if len(closes) < 12:
-        r52 = range_52w or {}
-        hi, lo = _num(r52.get("high")), _num(r52.get("low"))
-        if hi is not None and lo is not None and hi > lo:
-            last = closes[-1] if closes else None
-            if last is None and weekly_bars:
-                last = _num(weekly_bars[-1].get("close"))
-            pct = (last - lo) / (hi - lo) * 100.0 if last is not None else None
-        else:
-            pct = None
-    else:
-        pct = price_percentile(closes)
+        return compute_fx_market_v3(market, as_of_week=as_of_week)
 
-    if pct is None:
-        return {
-            "market": market,
-            "as_of_week": as_of_week,
-            "wired": False,
-            "valuation_bias": "UNAVAILABLE",
-            "valuation_score": None,
-            "valuation_reason": "Insufficient weekly price history for valuation percentile.",
-            "price_percentile_52w": None,
-            "pass": False,
-        }
-
-    bias = _bias_from_percentile(pct)
-    score = _score_from_percentile(pct)
-    macro_note, score_adj = _macro_adjustment(macro_map)
-    if score_adj:
-        score = round(min(10.0, max(0.0, score + score_adj)), 1)
-
-    reason = (
-        f"52-week price percentile {pct:.0f}% "
-        f"({'lower third' if bias == BIAS_BULLISH else 'upper third' if bias == BIAS_BEARISH else 'middle range'})."
+    roadmap = ASSET_CLASS_ROADMAP.get(
+        asset_class,
+        {"phase": "—", "model_id": "—", "drivers": "asset-class model not defined"},
     )
-    if macro_note == "weak_macro_link":
-        reason += " Macro relationship link is weak — score capped."
-    elif macro_note == "macro_aligned":
-        reason += " Macro driver correlation supports the read."
-
+    phase = roadmap["phase"]
+    model_id = roadmap["model_id"]
+    drivers = roadmap["drivers"]
+    reason = (
+        f"No approved valuation model exists for this asset class ({asset_class}). "
+        f"Planned: {phase} {model_id}. "
+        f"Do not substitute location or price percentile for valuation."
+    )
     return {
         "market": market,
         "as_of_week": as_of_week,
-        "wired": True,
-        "valuation_bias": bias,
-        "valuation_score": score,
+        "asset_class": asset_class,
+        "wired": False,
+        "valuation_state": BIAS_UNAVAILABLE,
+        "valuation_bias": BIAS_UNAVAILABLE,
+        "valuation_score": None,
+        "fair_value": None,
+        "deviation_pct": None,
+        "confidence": "none",
+        "model_id": model_id if model_id != "—" else None,
+        "valuation_phase": phase,
+        "driver_summary": drivers,
         "valuation_reason": reason,
-        "price_percentile_52w": round(pct, 1),
         "pass": False,
     }
 
 
 def valuation_pass(bias: str, direction: str) -> bool:
-    if bias == "UNAVAILABLE":
+    if bias == BIAS_UNAVAILABLE:
         return False
     d = direction.lower()
     if d == "long":
-        return bias == BIAS_BULLISH
+        return bias == "Undervalued"
     if d == "short":
-        return bias == BIAS_BEARISH
-    return bias == BIAS_NEUTRAL
+        return bias == "Overvalued"
+    return bias in {"Fair Value", "Neutral"}
