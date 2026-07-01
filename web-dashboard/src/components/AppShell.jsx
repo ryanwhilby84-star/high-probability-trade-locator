@@ -25,6 +25,7 @@ export function AppShell({
   onSidebarClass,
   marketSwitcher,
   topActions,
+  contentClassName = '',
 }) {
   const weekDates = Array.isArray(dates) ? dates : []
   const showWeekPicker = weekDates.length > 0 && typeof onDateChange === 'function'
@@ -145,7 +146,7 @@ export function AppShell({
           {marketSwitcher}
           {topActions}
         </header>
-        <main className="ws-content">{children}</main>
+        <main className={`ws-content${contentClassName ? ` ${contentClassName}` : ''}`}>{children}</main>
       </div>
     </div>
   )

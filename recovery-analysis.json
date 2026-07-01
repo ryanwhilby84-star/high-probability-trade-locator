@@ -1,0 +1,997 @@
+﻿{
+  "transcript": {
+    "totalWrites": 390,
+    "webWrites": 250,
+    "scopedWrites": 82,
+    "strReplaceTotal": 2032,
+    "scopedStrReplace": 751
+  },
+  "compare": [
+    {
+      "rel": "web-dashboard/src/main.jsx",
+      "transcriptLen": 324,
+      "diskLen": 324,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4553
+    },
+    {
+      "rel": "web-dashboard/src/charts/buildChartWorkstation.js",
+      "transcriptLen": 6770,
+      "diskLen": 6784,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 1111
+    },
+    {
+      "rel": "web-dashboard/src/cot/groupPositioningView.js",
+      "transcriptLen": 3996,
+      "diskLen": 3996,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 1879
+    },
+    {
+      "rel": "web-dashboard/src/components/GroupPositioningSheet.jsx",
+      "transcriptLen": 680,
+      "diskLen": 680,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 1974
+    },
+    {
+      "rel": "web-dashboard/src/components/InstrumentPositioningWorkspace.jsx",
+      "transcriptLen": 3457,
+      "diskLen": 3381,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4574
+    },
+    {
+      "rel": "web-dashboard/src/App.jsx",
+      "transcriptLen": 3514,
+      "diskLen": 3640,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4593
+    },
+    {
+      "rel": "web-dashboard/src/routing.js",
+      "transcriptLen": 2843,
+      "diskLen": 2843,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 1904
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useCot3ySeries.js",
+      "transcriptLen": 619,
+      "diskLen": 619,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3247
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartStack.jsx",
+      "transcriptLen": 18198,
+      "diskLen": 13183,
+      "diskExists": true,
+      "winner": "transcript",
+      "writeLine": 3875
+    },
+    {
+      "rel": "web-dashboard/src/components/ValuationWorkstationPanel.jsx",
+      "transcriptLen": 227,
+      "diskLen": 229,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 2528
+    },
+    {
+      "rel": "web-dashboard/src/cot/positioningChartMetrics.js",
+      "transcriptLen": 2394,
+      "diskLen": 2402,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3255
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartChrome.jsx",
+      "transcriptLen": 1154,
+      "diskLen": 1157,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4008
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartPanel.jsx",
+      "transcriptLen": 8214,
+      "diskLen": 8214,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4011
+    },
+    {
+      "rel": "web-dashboard/src/charts/positioningChart.css",
+      "transcriptLen": 4842,
+      "diskLen": 4844,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3258
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/deriveWeeklyOhlc.js",
+      "transcriptLen": 2588,
+      "diskLen": 2588,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3723
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WeeklyCandlestickChart.jsx",
+      "transcriptLen": 8604,
+      "diskLen": 8604,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3889
+    },
+    {
+      "rel": "web-dashboard/src/workstation/InstrumentResearchWorkstation.jsx",
+      "transcriptLen": 4972,
+      "diskLen": 4986,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3725
+    },
+    {
+      "rel": "web-dashboard/src/workstation/InstrumentWorkstationLayout.jsx",
+      "transcriptLen": 3736,
+      "diskLen": 3742,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4008
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/TimelineSyncIndicator.jsx",
+      "transcriptLen": 1174,
+      "diskLen": 1178,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3725
+    },
+    {
+      "rel": "web-dashboard/src/workstation/index.js",
+      "transcriptLen": 1146,
+      "diskLen": 1160,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3726
+    },
+    {
+      "rel": "web-dashboard/src/workstation/ARCHITECTURE.md",
+      "transcriptLen": 1684,
+      "diskLen": 1700,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3728
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/WorkstationErrorBoundary.jsx",
+      "transcriptLen": 793,
+      "diskLen": 793,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3748
+    },
+    {
+      "rel": "web-dashboard/scripts/check-gold-workstation.mjs",
+      "transcriptLen": 1236,
+      "diskLen": 1236,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3768
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPositioningWorkstationSeries.js",
+      "transcriptLen": 5808,
+      "diskLen": 5814,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4063
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/workstationBindingDiagnostics.js",
+      "transcriptLen": 4196,
+      "diskLen": 4196,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3946
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPositioningWorkstationSeries.test.js",
+      "transcriptLen": 1600,
+      "diskLen": 1600,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3847
+    },
+    {
+      "rel": "web-dashboard/src/workstation/featureFlags.js",
+      "transcriptLen": 245,
+      "diskLen": 247,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/safeWorkstationSeries.js",
+      "transcriptLen": 2157,
+      "diskLen": 2157,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/WorkstationDataErrorPanel.jsx",
+      "transcriptLen": 484,
+      "diskLen": 486,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/prepareLightweightCandles.js",
+      "transcriptLen": 2278,
+      "diskLen": 2278,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3889
+    },
+    {
+      "rel": "src/hptl/prices/workstation_ohlc_export.py",
+      "transcriptLen": 9674,
+      "diskLen": 0,
+      "diskExists": false,
+      "winner": "transcript-only",
+      "writeLine": 3928
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/computeWorkstationCommonRange.js",
+      "transcriptLen": 2681,
+      "diskLen": 2681,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3928
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/resolveWorkstationOhlc.js",
+      "transcriptLen": 263,
+      "diskLen": 263,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useWorkstationOhlc.js",
+      "transcriptLen": 784,
+      "diskLen": 786,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4363
+    },
+    {
+      "rel": "src/hptl/prices/workstation_index_ohlc_history.py",
+      "transcriptLen": 13458,
+      "diskLen": 0,
+      "diskExists": false,
+      "winner": "transcript-only",
+      "writeLine": 3975
+    },
+    {
+      "rel": "src/hptl/prices/workstation_index_ohlc_backfill.py",
+      "transcriptLen": 1433,
+      "diskLen": 0,
+      "diskExists": false,
+      "winner": "transcript-only",
+      "writeLine": 3976
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingTypes.js",
+      "transcriptLen": 1500,
+      "diskLen": 1510,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/useWorkstationDrawings.js",
+      "transcriptLen": 2539,
+      "diskLen": 2539,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4068
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/sliceVisibleWindow.js",
+      "transcriptLen": 1152,
+      "diskLen": 1152,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/WorkstationDrawingLayer.jsx",
+      "transcriptLen": 362,
+      "diskLen": 362,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/context/WorkstationCanvasContext.jsx",
+      "transcriptLen": 2884,
+      "diskLen": 2884,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/workstationChartOptions.js",
+      "transcriptLen": 2212,
+      "diskLen": 2214,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4029
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/useLinkedChartTimeline.js",
+      "transcriptLen": 4670,
+      "diskLen": 4670,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4029
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationChartPane.jsx",
+      "transcriptLen": 8388,
+      "diskLen": 8388,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4030
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationDrawingToolbar.jsx",
+      "transcriptLen": 1335,
+      "diskLen": 1335,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4030
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationLwcDrawingOverlay.jsx",
+      "transcriptLen": 9546,
+      "diskLen": 9548,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4343
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/buildWorkstationTimelineData.js",
+      "transcriptLen": 716,
+      "diskLen": 716,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4031
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/SynchronizedWorkstationPanels.jsx",
+      "transcriptLen": 11502,
+      "diskLen": 11506,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4033
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/workstationPanelSizing.js",
+      "transcriptLen": 582,
+      "diskLen": 582,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/useCotPanelHeights.js",
+      "transcriptLen": 2403,
+      "diskLen": 2403,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/ResizablePlotShell.jsx",
+      "transcriptLen": 1855,
+      "diskLen": 1857,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/filterWorkstationOhlc.js",
+      "transcriptLen": 2849,
+      "diskLen": 2853,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4060
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/workstationOhlcAlignmentAudit.js",
+      "transcriptLen": 2278,
+      "diskLen": 2282,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4060
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/filterWorkstationOhlc.test.js",
+      "transcriptLen": 1455,
+      "diskLen": 1455,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4071
+    },
+    {
+      "rel": "web-dashboard/src/workstation/verify/verifyWorkstationBindings.test.js",
+      "transcriptLen": 3391,
+      "diskLen": 3393,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4078
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-workstation-drawings.mjs",
+      "transcriptLen": 4777,
+      "diskLen": 4779,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4081
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/GoldOhlcDebugStrip.jsx",
+      "transcriptLen": 2677,
+      "diskLen": 2706,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4117
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useLiveQuotes.js",
+      "transcriptLen": 1878,
+      "diskLen": 1878,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/instrumentPriceDiagnostics.js",
+      "transcriptLen": 5203,
+      "diskLen": 5215,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildGoldPriceTruthAudit.js",
+      "transcriptLen": 299,
+      "diskLen": 299,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4373
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/GoldPriceTruthPanel.jsx",
+      "transcriptLen": 5882,
+      "diskLen": 5902,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4231
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildGoldPriceTruthAudit.test.js",
+      "transcriptLen": 2810,
+      "diskLen": 2810,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4236
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-workstation-load.mjs",
+      "transcriptLen": 1359,
+      "diskLen": 1359,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4253
+    },
+    {
+      "rel": "web-dashboard/src/hooks/liveQuoteFreshness.js",
+      "transcriptLen": 1462,
+      "diskLen": 1466,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4260
+    },
+    {
+      "rel": "web-dashboard/src/components/LiveQuoteRefreshBar.jsx",
+      "transcriptLen": 2304,
+      "diskLen": 2311,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4260
+    },
+    {
+      "rel": "web-dashboard/src/hooks/liveQuoteFreshness.test.js",
+      "transcriptLen": 2261,
+      "diskLen": 2261,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4378
+    },
+    {
+      "rel": "web-dashboard/src/hooks/LiveQuotesContext.jsx",
+      "transcriptLen": 2402,
+      "diskLen": 2402,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4430
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingTimeline.js",
+      "transcriptLen": 985,
+      "diskLen": 985,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4315
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/GlobalTimelineVlineOverlay.jsx",
+      "transcriptLen": 7904,
+      "diskLen": 7908,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4345
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingCoords.js",
+      "transcriptLen": 1215,
+      "diskLen": 1217,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4340
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/drawingViewport.js",
+      "transcriptLen": 2469,
+      "diskLen": 2473,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4340
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineValidation.js",
+      "transcriptLen": 3061,
+      "diskLen": 3065,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineReport.js",
+      "transcriptLen": 2771,
+      "diskLen": 2773,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPriceTruthTable.js",
+      "transcriptLen": 7001,
+      "diskLen": 7022,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4366
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineValidation.test.js",
+      "transcriptLen": 2045,
+      "diskLen": 2045,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4378
+    },
+    {
+      "rel": "web-dashboard/src/charts/chartTheme.js",
+      "transcriptLen": 693,
+      "diskLen": 695,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4515
+    },
+    {
+      "rel": "web-dashboard/src/workstation/styles/instrumentWorkstation.css",
+      "transcriptLen": 2184,
+      "diskLen": 2186,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4574
+    },
+    {
+      "rel": "web-dashboard/src/pages/InstrumentPage.jsx",
+      "transcriptLen": 8561,
+      "diskLen": 8571,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4574
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/normalizeWeeklyTimeline.js",
+      "transcriptLen": 3306,
+      "diskLen": 3094,
+      "diskExists": true,
+      "winner": "transcript",
+      "writeLine": 4590
+    },
+    {
+      "rel": "web-dashboard/src/workstation/context/WeeklyTimelineContext.jsx",
+      "transcriptLen": 544,
+      "diskLen": 563,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4590
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useInstrumentValuationHistory.js",
+      "transcriptLen": 1574,
+      "diskLen": 1643,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4590
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useWorkstationData.js",
+      "transcriptLen": 2154,
+      "diskLen": 2225,
+      "diskExists": true,
+      "winner": "tie-merge-review",
+      "writeLine": 4597
+    }
+  ],
+  "keyStatus": [
+    {
+      "rel": "web-dashboard/src/cot/buildCotWorkstation.js",
+      "write": false,
+      "writeLen": 0,
+      "disk": {
+        "exists": false
+      },
+      "tracked": false,
+      "strReplaceCount": 3
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/normalizeWeeklyTimeline.js",
+      "write": true,
+      "writeLen": 3306,
+      "disk": {
+        "exists": true,
+        "len": 3094,
+        "mtime": "2026-07-01T09:30:45.828Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 4
+    },
+    {
+      "rel": "web-dashboard/src/workstation/context/WeeklyTimelineContext.jsx",
+      "write": true,
+      "writeLen": 544,
+      "disk": {
+        "exists": true,
+        "len": 563,
+        "mtime": "2026-07-01T09:30:34.031Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 0
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useInstrumentValuationHistory.js",
+      "write": true,
+      "writeLen": 1574,
+      "disk": {
+        "exists": true,
+        "len": 1643,
+        "mtime": "2026-07-01T09:30:39.915Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 0
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useWorkstationData.js",
+      "write": true,
+      "writeLen": 2154,
+      "disk": {
+        "exists": true,
+        "len": 2225,
+        "mtime": "2026-07-01T09:32:16.652Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 7
+    },
+    {
+      "rel": "web-dashboard/src/workstation/styles/instrumentWorkstation.css",
+      "write": true,
+      "writeLen": 2184,
+      "disk": {
+        "exists": true,
+        "len": 2186,
+        "mtime": "2026-07-01T09:26:50.928Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 9
+    },
+    {
+      "rel": "web-dashboard/src/charts/chartTheme.js",
+      "write": true,
+      "writeLen": 693,
+      "disk": {
+        "exists": true,
+        "len": 695,
+        "mtime": "2026-07-01T09:32:50.779Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 2
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartStack.jsx",
+      "write": true,
+      "writeLen": 18198,
+      "disk": {
+        "exists": true,
+        "len": 13183,
+        "mtime": "2026-07-01T09:33:34.262Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 139
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/SynchronizedWorkstationPanels.jsx",
+      "write": true,
+      "writeLen": 11502,
+      "disk": {
+        "exists": true,
+        "len": 11506,
+        "mtime": "2026-07-01T09:32:50.735Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 74
+    },
+    {
+      "rel": "web-dashboard/src/pages/InstrumentPage.jsx",
+      "write": true,
+      "writeLen": 8561,
+      "disk": {
+        "exists": true,
+        "len": 8571,
+        "mtime": "2026-07-01T09:27:17.313Z"
+      },
+      "tracked": true,
+      "strReplaceCount": 15
+    },
+    {
+      "rel": "web-dashboard/src/components/InstrumentPositioningWorkspace.jsx",
+      "write": true,
+      "writeLen": 3457,
+      "disk": {
+        "exists": true,
+        "len": 3381,
+        "mtime": "2026-07-01T09:32:50.651Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 11
+    },
+    {
+      "rel": "web-dashboard/src/main.jsx",
+      "write": true,
+      "writeLen": 324,
+      "disk": {
+        "exists": true,
+        "len": 324,
+        "mtime": "2026-07-01T09:18:47.657Z"
+      },
+      "tracked": true,
+      "strReplaceCount": 172
+    },
+    {
+      "rel": "web-dashboard/src/App.jsx",
+      "write": true,
+      "writeLen": 3514,
+      "disk": {
+        "exists": true,
+        "len": 3640,
+        "mtime": "2026-07-01T09:31:17.986Z"
+      },
+      "tracked": true,
+      "strReplaceCount": 13
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/useLinkedChartTimeline.js",
+      "write": true,
+      "writeLen": 4670,
+      "disk": {
+        "exists": true,
+        "len": 4670,
+        "mtime": "2026-07-01T09:32:50.733Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 15
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationChartPane.jsx",
+      "write": true,
+      "writeLen": 8388,
+      "disk": {
+        "exists": true,
+        "len": 8388,
+        "mtime": "2026-07-01T09:32:50.734Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 21
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/ResizablePlotShell.jsx",
+      "write": true,
+      "writeLen": 1855,
+      "disk": {
+        "exists": true,
+        "len": 1857,
+        "mtime": "2026-07-01T09:32:50.735Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 0
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/WorkstationDrawingLayer.jsx",
+      "write": true,
+      "writeLen": 362,
+      "disk": {
+        "exists": true,
+        "len": 362,
+        "mtime": "2026-07-01T09:32:50.717Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 0
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationLwcDrawingOverlay.jsx",
+      "write": true,
+      "writeLen": 9546,
+      "disk": {
+        "exists": true,
+        "len": 9548,
+        "mtime": "2026-07-01T09:32:50.735Z"
+      },
+      "tracked": false,
+      "strReplaceCount": 12
+    },
+    {
+      "rel": "src/hptl/prices/workstation_ohlc_export.py",
+      "write": true,
+      "writeLen": 9674,
+      "disk": {
+        "exists": false
+      },
+      "tracked": false,
+      "strReplaceCount": 13
+    }
+  ],
+  "diskOnlyCount": 0,
+  "diskOnlySample": [],
+  "strReplaceFiles": [
+    [
+      "web-dashboard/src/main.jsx",
+      172
+    ],
+    [
+      "web-dashboard/src/components/PositioningChartStack.jsx",
+      139
+    ],
+    [
+      "web-dashboard/src/workstation/charts/SynchronizedWorkstationPanels.jsx",
+      74
+    ],
+    [
+      "web-dashboard/src/charts/positioningChart.css",
+      25
+    ],
+    [
+      "web-dashboard/src/workstation/charts/WorkstationChartPane.jsx",
+      21
+    ],
+    [
+      "web-dashboard/src/workstation/charts/WeeklyCandlestickChart.jsx",
+      17
+    ],
+    [
+      "web-dashboard/src/pages/InstrumentPage.jsx",
+      15
+    ],
+    [
+      "web-dashboard/src/workstation/charts/useLinkedChartTimeline.js",
+      15
+    ],
+    [
+      "web-dashboard/src/components/CotWorkstation.jsx",
+      13
+    ],
+    [
+      "web-dashboard/src/App.jsx",
+      13
+    ],
+    [
+      "src/hptl/prices/workstation_ohlc_export.py",
+      13
+    ],
+    [
+      "web-dashboard/src/charts/buildChartWorkstation.js",
+      12
+    ],
+    [
+      "web-dashboard/src/workstation/charts/WorkstationLwcDrawingOverlay.jsx",
+      12
+    ],
+    [
+      "web-dashboard/src/workstation/components/GoldPriceTruthPanel.jsx",
+      12
+    ],
+    [
+      "web-dashboard/src/routing.js",
+      11
+    ],
+    [
+      "web-dashboard/src/components/InstrumentPositioningWorkspace.jsx",
+      11
+    ],
+    [
+      "web-dashboard/src/workstation/data/buildPositioningWorkstationSeries.js",
+      10
+    ],
+    [
+      "web-dashboard/src/components/CotPositioningChart.jsx",
+      9
+    ],
+    [
+      "web-dashboard/src/charts/chartWorkstation.css",
+      9
+    ],
+    [
+      "web-dashboard/src/components/PositioningChartPanel.jsx",
+      9
+    ],
+    [
+      "web-dashboard/src/workstation/styles/instrumentWorkstation.css",
+      9
+    ],
+    [
+      "web-dashboard/src/workstation/data/instrumentPriceDiagnostics.js",
+      9
+    ],
+    [
+      "web-dashboard/src/workstation/charts/GlobalTimelineVlineOverlay.jsx",
+      9
+    ],
+    [
+      "web-dashboard/src/workstation/InstrumentWorkstationLayout.jsx",
+      8
+    ],
+    [
+      "web-dashboard/src/workstation/verify/verifyWorkstationBindings.test.js",
+      8
+    ]
+  ]
+}

@@ -3,8 +3,6 @@
  * Presentation only — no fabricated fields.
  */
 
-import { buildMacroReadableDigest } from './macroReadableDigest.js'
-
 function clip(s, n = 160) {
   const t = String(s || '').trim()
   if (!t || t.toUpperCase() === 'N/A') return ''
@@ -26,8 +24,8 @@ function cotLeanLine(row) {
   return 'Net positioning is roughly balanced.'
 }
 
-/** @param {object} row @param {object} pack @param {object|null} intel @param {object|null} [globalMarketRegime] */
-export function buildMarketBriefing(row, pack, intel, globalMarketRegime) {
+/** @param {object} row @param {object} pack @param {ReturnType<import('./marketIntelligence.js').computeInstrumentIntelligence>} intel */
+export function buildMarketBriefing(row, pack, intel) {
   const p = pack || {}
   const ex = p.executive || {}
   const inter = row?.intermarket_impulse_context && typeof row.intermarket_impulse_context === 'object' ? row.intermarket_impulse_context : {}
@@ -39,8 +37,9 @@ export function buildMarketBriefing(row, pack, intel, globalMarketRegime) {
 
   const pressure = clip(row?.pressure_summary, 200) || '—'
 
-  const digest = buildMacroReadableDigest(row, globalMarketRegime)
-  const macro = digest.macroBiasLine
+  let macro = clip(ex.macro, 120)
+  if (!macro && has(row?.macro_regime)) macro = String(row.macro_regime).replace(/_/g, ' ')
+  if (!macro) macro = '—'
 
   const conf = String(inter.intermarket_confirmation || '').trim()
   let intermarket = conf && conf !== '—' ? conf : '—'
@@ -49,10 +48,11 @@ export function buildMarketBriefing(row, pack, intel, globalMarketRegime) {
     if (has(imp)) intermarket = imp
   }
 
-  let eventRisk = digest.nextEventSummary
-  if (digest.calendar?.contextLine) {
-    eventRisk = clip(`${digest.nextEventSummary} — ${digest.calendar.contextLine}`, 200)
-  }
+  const er = intel?.eventRisk
+  let eventRisk = '—'
+  if (er?.level === 'high') eventRisk = `Elevated — ${clip(er.explain, 100)}`
+  else if (er?.level === 'medium') eventRisk = `Moderate — ${clip(er.explain, 100)}`
+  else if (er?.level === 'low') eventRisk = `Subdued — ${clip(er.explain, 90)}`
 
   const tradeEnvironment = clip(intel?.trade?.quality, 120) || clip(ex.environment, 120) || '—'
 

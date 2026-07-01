@@ -14,7 +14,7 @@ export function getSeriesPair(rm) {
     rm?.dgs10_rebased_pct ||
     []
   const priceLabel = String(rm?.price_series_display || 'Price')
-  const driverLabel = String(rm?.driver_series_display || rm?.driver_label || 'Macro driver').replace(/\s*\(FRED\s+[^)]+\)/gi, '')
+  const driverLabel = String(rm?.driver_series_display || 'Macro driver')
   const cadence = String(rm?.cadence || 'daily')
   return { price, driver, priceLabel, driverLabel, cadence }
 }
@@ -57,7 +57,7 @@ export function buildOverlayInterpretationHeadline(rm) {
   const { price: nq, driver: y10, priceLabel, driverLabel, cadence } = getSeriesPair(rm)
   const n = nq.length
   if (n < 8) {
-    return 'Window starts at 0% rebased — watch whether price and the macro line separate or track together.'
+    return 'Both lines reset to 0% at the start of the window — follow separation vs overlap to read who is leading.'
   }
   const win = cadence === 'daily' ? 20 : cadence === 'monthly' ? 6 : 4
   const i1 = n - 1
@@ -71,21 +71,21 @@ export function buildOverlayInterpretationHeadline(rm) {
   const dl = driverLabel
 
   if (dy > 0.12 && dn > 0.08) {
-    return `${pl} firm while ${dl} rose — price absorbing higher macro line on this stretch.`
+    return `${pl} has held in while ${dl} rose on this stretch — price is absorbing macro pressure here (still not a signal).`
   }
   if (dy > 0.08 && dn < -0.1) {
-    return `${dl} up, ${pl} softer — macro friction visible in the overlay.`
+    return `${dl} moved higher while ${pl} softened — macro friction shows up clearly in the overlay.`
   }
   if (dy < -0.08 && dn > 0.1) {
-    return `${dl} eased while ${pl} rebuilt — friendlier macro tone vs price over this window.`
+    return `${dl} eased while ${pl} rebuilt — a friendlier macro tone for this market over this window.`
   }
   if (rcN != null && rcN < -0.22) {
-    return `Short window: ${pl} and ${dl} often lean opposite — note when that relationship breaks.`
+    return `Short-term moves skew opposite: when ${dl} pushes one way, ${pl} often leans the other — watch for stretches where that breaks.`
   }
   if (rcN != null && rcN > 0.22) {
-    return `Short window: ${pl} and ${dl} more aligned than usual — sanity-check vs your normal read.`
+    return `Short-term moves have been more aligned than usual — worth a sanity check vs your normal read for ${pl}.`
   }
-  return `Read the gap between ${pl} and ${dl} — widening means one side of the macro vs price story is leading.`
+  return `Read the spread between ${pl} and ${dl}: widening usually means one side of the macro vs price story is winning.`
 }
 
 /**
@@ -161,13 +161,13 @@ export function plainRollingRead(rm) {
   }
   const a = Math.abs(Number(c20))
   if (a < 0.12) {
-    return `${cad}, ${priceLabel} and ${driverLabel} are only loosely coupled — other drivers may dominate.`
+    return `${cad}, ${priceLabel} and ${driverLabel} are only loosely linked — other drivers are probably leading.`
   }
   if (Number(c20) < -0.25) {
-    return `${cad} changes often run opposite — when ${driverLabel} pushes, ${priceLabel} frequently leans the other way (context only).`
+    return `${cad} changes often run opposite: when ${driverLabel} pushes one way, ${priceLabel} tends to lean the other — context only.`
   }
   if (Number(c20) > 0.25) {
-    return `${cad} changes unusually in sync — check whether that matches your usual model for ${priceLabel}.`
+    return `${cad} changes have been unusually in sync — notice if that matches your usual mental model for ${priceLabel}.`
   }
-  return `Co-movement is mid-range for this sample — tone, not a trigger.`
+  return `Co-movement is in a middling range for this sample — use it as tone, not as an entry trigger.`
 }

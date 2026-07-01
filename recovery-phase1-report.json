@@ -1,0 +1,2300 @@
+{
+  "generatedAt": "2026-07-01T10:55:41.007Z",
+  "transcriptWriteFiles": 392,
+  "restoredCount": 194,
+  "keptDiskCount": 59,
+  "skippedIdenticalCount": 139,
+  "restored": [
+    {
+      "rel": "data/audits/coffee_seasonality_rebuild.json",
+      "action": "created",
+      "transcriptLen": 1083,
+      "writeLine": 2109
+    },
+    {
+      "rel": "data/audits/fx_dashboard_valuation_coverage_results.md",
+      "action": "created",
+      "transcriptLen": 3122,
+      "writeLine": 1601
+    },
+    {
+      "rel": "data/audits/fx_dashboard_valuation_coverage.md",
+      "action": "created",
+      "transcriptLen": 1377,
+      "writeLine": 1598
+    },
+    {
+      "rel": "data/audits/seasonality_corruption_copper_hg_audit.md",
+      "action": "created",
+      "transcriptLen": 7356,
+      "writeLine": 2299
+    },
+    {
+      "rel": "data/audits/seasonality_engine_inventory.md",
+      "action": "created",
+      "transcriptLen": 6408,
+      "writeLine": 2071
+    },
+    {
+      "rel": "data/audits/seasonality_foundation_rebuild.json",
+      "action": "created",
+      "transcriptLen": 5196,
+      "writeLine": 2078
+    },
+    {
+      "rel": "data/audits/seasonality_foundation_rebuild.md",
+      "action": "created",
+      "transcriptLen": 4185,
+      "writeLine": 2078
+    },
+    {
+      "rel": "data/audits/valuation_coverage_radar_audit.md",
+      "action": "created",
+      "transcriptLen": 17670,
+      "writeLine": 2159
+    },
+    {
+      "rel": "data/config/agri_valuation_sources.json",
+      "action": "created",
+      "transcriptLen": 1998,
+      "writeLine": 1696
+    },
+    {
+      "rel": "data/config/metals_institutional_sources.json",
+      "action": "created",
+      "transcriptLen": 3049,
+      "writeLine": 2948
+    },
+    {
+      "rel": "data/config/usda_psd_commodity_map.json",
+      "action": "created",
+      "transcriptLen": 1455,
+      "writeLine": 1748
+    },
+    {
+      "rel": "data/manual/metals/.gitkeep",
+      "action": "created",
+      "transcriptLen": 0,
+      "writeLine": 3038
+    },
+    {
+      "rel": "scripts/_audit_copper_units.py",
+      "action": "created",
+      "transcriptLen": 1374,
+      "writeLine": 2297
+    },
+    {
+      "rel": "scripts/_cot_dashboard_sim.py",
+      "action": "created",
+      "transcriptLen": 3696,
+      "writeLine": 2850
+    },
+    {
+      "rel": "scripts/_debug_metals_attach.py",
+      "action": "created",
+      "transcriptLen": 714,
+      "writeLine": 2233
+    },
+    {
+      "rel": "scripts/_discover_gold_focus_brute.py",
+      "action": "created",
+      "transcriptLen": 1676,
+      "writeLine": 3328
+    },
+    {
+      "rel": "scripts/_discover_gold_focus_urls.py",
+      "action": "created",
+      "transcriptLen": 801,
+      "writeLine": 3326
+    },
+    {
+      "rel": "scripts/_eval_fx_candidates.py",
+      "action": "created",
+      "transcriptLen": 4062,
+      "writeLine": 2786
+    },
+    {
+      "rel": "scripts/_fx_final_report.py",
+      "action": "created",
+      "transcriptLen": 2928,
+      "writeLine": 3007
+    },
+    {
+      "rel": "scripts/_print_gold_diag.py",
+      "action": "created",
+      "transcriptLen": 826,
+      "writeLine": 3374
+    },
+    {
+      "rel": "scripts/_probe_cb_gold_sources2.py",
+      "action": "created",
+      "transcriptLen": 2696,
+      "writeLine": 3283
+    },
+    {
+      "rel": "scripts/_probe_cb_gold_sources3.py",
+      "action": "created",
+      "transcriptLen": 2363,
+      "writeLine": 3285
+    },
+    {
+      "rel": "scripts/_probe_cb_gold_sources4.py",
+      "action": "created",
+      "transcriptLen": 3040,
+      "writeLine": 3288
+    },
+    {
+      "rel": "scripts/_probe_coffee_sources.py",
+      "action": "created",
+      "transcriptLen": 2127,
+      "writeLine": 2083
+    },
+    {
+      "rel": "scripts/_probe_fmp_commodities.py",
+      "action": "created",
+      "transcriptLen": 1527,
+      "writeLine": 2056
+    },
+    {
+      "rel": "scripts/_probe_gdt_cb_row.py",
+      "action": "created",
+      "transcriptLen": 1243,
+      "writeLine": 3331
+    },
+    {
+      "rel": "scripts/_probe_gdt_tables.py",
+      "action": "created",
+      "transcriptLen": 1208,
+      "writeLine": 3333
+    },
+    {
+      "rel": "scripts/_probe_imf_country_gold.py",
+      "action": "created",
+      "transcriptLen": 1110,
+      "writeLine": 3292
+    },
+    {
+      "rel": "scripts/_probe_imf_irfcl_filters.py",
+      "action": "created",
+      "transcriptLen": 1466,
+      "writeLine": 3295
+    },
+    {
+      "rel": "scripts/_probe_metals_sources.py",
+      "action": "created",
+      "transcriptLen": 1341,
+      "writeLine": 2983
+    },
+    {
+      "rel": "scripts/_probe_oanda_commodities.py",
+      "action": "created",
+      "transcriptLen": 874,
+      "writeLine": 2059
+    },
+    {
+      "rel": "scripts/_probe_softs.py",
+      "action": "created",
+      "transcriptLen": 2034,
+      "writeLine": 1746
+    },
+    {
+      "rel": "scripts/_probe_soy.py",
+      "action": "created",
+      "transcriptLen": 2387,
+      "writeLine": 1744
+    },
+    {
+      "rel": "scripts/_probe_usda_all.py",
+      "action": "created",
+      "transcriptLen": 2109,
+      "writeLine": 1731
+    },
+    {
+      "rel": "scripts/_probe_usda_attrs.py",
+      "action": "created",
+      "transcriptLen": 1887,
+      "writeLine": 1724
+    },
+    {
+      "rel": "scripts/_probe_usda_codes.py",
+      "action": "created",
+      "transcriptLen": 1753,
+      "writeLine": 1733
+    },
+    {
+      "rel": "scripts/_probe_usda_keys.py",
+      "action": "created",
+      "transcriptLen": 1583,
+      "writeLine": 1742
+    },
+    {
+      "rel": "scripts/_probe_usda_psd.py",
+      "action": "created",
+      "transcriptLen": 1557,
+      "writeLine": 1722
+    },
+    {
+      "rel": "scripts/_probe_usda_sample.py",
+      "action": "created",
+      "transcriptLen": 2305,
+      "writeLine": 1726
+    },
+    {
+      "rel": "scripts/_probe_wasde_csv.py",
+      "action": "created",
+      "transcriptLen": 981,
+      "writeLine": 1738
+    },
+    {
+      "rel": "scripts/_probe_wgc_cb.py",
+      "action": "created",
+      "transcriptLen": 1038,
+      "writeLine": 3047
+    },
+    {
+      "rel": "scripts/_probe_wgc_file_slugs.py",
+      "action": "created",
+      "transcriptLen": 1184,
+      "writeLine": 3290
+    },
+    {
+      "rel": "scripts/_probe_wgc_gdt_scrape.py",
+      "action": "created",
+      "transcriptLen": 1554,
+      "writeLine": 3300
+    },
+    {
+      "rel": "scripts/_probe_wgc_gdt_tables.py",
+      "action": "created",
+      "transcriptLen": 1456,
+      "writeLine": 3306
+    },
+    {
+      "rel": "scripts/_probe_wgc_lme.py",
+      "action": "created",
+      "transcriptLen": 742,
+      "writeLine": 2990
+    },
+    {
+      "rel": "scripts/_probe_wgc_slv.py",
+      "action": "created",
+      "transcriptLen": 664,
+      "writeLine": 2996
+    },
+    {
+      "rel": "scripts/_seasonality_foundation_audit.py",
+      "action": "created",
+      "transcriptLen": 2300,
+      "writeLine": 2045
+    },
+    {
+      "rel": "scripts/_test_gold_focus_extract.py",
+      "action": "created",
+      "transcriptLen": 1400,
+      "writeLine": 3323
+    },
+    {
+      "rel": "scripts/_valuation_coverage_probe.py",
+      "action": "created",
+      "transcriptLen": 2759,
+      "writeLine": 2148
+    },
+    {
+      "rel": "scripts/_verify_seasonality_outlier_fix.py",
+      "action": "created",
+      "transcriptLen": 1920,
+      "writeLine": 2316
+    },
+    {
+      "rel": "scripts/analyze-recovery-plan.mjs",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 5684,
+      "transcriptLen": 5802,
+      "writeLine": 4623
+    },
+    {
+      "rel": "scripts/apply_gold_cb_roll12_production.py",
+      "action": "created",
+      "transcriptLen": 3372,
+      "writeLine": 3623
+    },
+    {
+      "rel": "scripts/audit_cftc_freshness.py",
+      "action": "created",
+      "transcriptLen": 6054,
+      "writeLine": 3068
+    },
+    {
+      "rel": "scripts/audit_cot_pipeline.py",
+      "action": "created",
+      "transcriptLen": 2662,
+      "writeLine": 2838
+    },
+    {
+      "rel": "scripts/audit_fx_futures_data_pipeline.py",
+      "action": "created",
+      "transcriptLen": 12105,
+      "writeLine": 2683
+    },
+    {
+      "rel": "scripts/audit_seasonality_live_spikes.py",
+      "action": "created",
+      "transcriptLen": 4780,
+      "writeLine": 2285
+    },
+    {
+      "rel": "scripts/audit_seasonality_spikes.py",
+      "action": "created",
+      "transcriptLen": 3654,
+      "writeLine": 2282
+    },
+    {
+      "rel": "scripts/audit_tier1_fx_repair_board.py",
+      "action": "created",
+      "transcriptLen": 11664,
+      "writeLine": 1607
+    },
+    {
+      "rel": "scripts/bootstrap_cb_gold_from_gdt.py",
+      "action": "created",
+      "transcriptLen": 3118,
+      "writeLine": 3336
+    },
+    {
+      "rel": "scripts/bootstrap_cb_gold_from_gold_focus.py",
+      "action": "created",
+      "transcriptLen": 5104,
+      "writeLine": 3321
+    },
+    {
+      "rel": "scripts/close_gold_institutional_research_cycle.py",
+      "action": "created",
+      "transcriptLen": 1877,
+      "writeLine": 3707
+    },
+    {
+      "rel": "scripts/confidence_normalization_audit.py",
+      "action": "created",
+      "transcriptLen": 26403,
+      "writeLine": 2435
+    },
+    {
+      "rel": "scripts/diagnose_workstation_binding.mjs",
+      "action": "created",
+      "transcriptLen": 3511,
+      "writeLine": 3845
+    },
+    {
+      "rel": "scripts/emergency_dashboard_restore.py",
+      "action": "created",
+      "transcriptLen": 10479,
+      "writeLine": 1487
+    },
+    {
+      "rel": "scripts/enrich_valuation_ive.py",
+      "action": "created",
+      "transcriptLen": 1393,
+      "writeLine": 2525
+    },
+    {
+      "rel": "scripts/export_cot_pipeline_health.py",
+      "action": "created",
+      "transcriptLen": 406,
+      "writeLine": 2754
+    },
+    {
+      "rel": "scripts/export_currency_futures_ive.py",
+      "action": "created",
+      "transcriptLen": 1188,
+      "writeLine": 2700
+    },
+    {
+      "rel": "scripts/gold_price_truth_audit.py",
+      "action": "created",
+      "transcriptLen": 13613,
+      "writeLine": 4178
+    },
+    {
+      "rel": "scripts/ingest_gold_drivers.py",
+      "action": "created",
+      "transcriptLen": 10773,
+      "writeLine": 3053
+    },
+    {
+      "rel": "scripts/investigate_dx_failure.py",
+      "action": "created",
+      "transcriptLen": 20310,
+      "writeLine": 2611
+    },
+    {
+      "rel": "scripts/merge_cb_gold_sources.py",
+      "action": "created",
+      "transcriptLen": 3196,
+      "writeLine": 3353
+    },
+    {
+      "rel": "scripts/metals_framework_trust_audit.py",
+      "action": "created",
+      "transcriptLen": 17238,
+      "writeLine": 2937
+    },
+    {
+      "rel": "scripts/non_fx_institutional_valuation_audit.py",
+      "action": "created",
+      "transcriptLen": 18282,
+      "writeLine": 2872
+    },
+    {
+      "rel": "scripts/phase3a_check.py",
+      "action": "created",
+      "transcriptLen": 1527,
+      "writeLine": 2898
+    },
+    {
+      "rel": "scripts/phase3a_publish_export.py",
+      "action": "created",
+      "transcriptLen": 439,
+      "writeLine": 2929
+    },
+    {
+      "rel": "scripts/phase4b_metals_export.py",
+      "action": "created",
+      "transcriptLen": 2598,
+      "writeLine": 2962
+    },
+    {
+      "rel": "scripts/phase4b_metals_report.py",
+      "action": "created",
+      "transcriptLen": 2845,
+      "writeLine": 2955
+    },
+    {
+      "rel": "scripts/phase4e_gold_manual_ingest.py",
+      "action": "created",
+      "transcriptLen": 4197,
+      "writeLine": 3038
+    },
+    {
+      "rel": "scripts/probe_cb_gold_sources.py",
+      "action": "created",
+      "transcriptLen": 3326,
+      "writeLine": 3270
+    },
+    {
+      "rel": "scripts/probe_imf_gold_reserves.py",
+      "action": "created",
+      "transcriptLen": 2226,
+      "writeLine": 3273
+    },
+    {
+      "rel": "scripts/publish_fx_futures_ive.py",
+      "action": "created",
+      "transcriptLen": 2541,
+      "writeLine": 2652
+    },
+    {
+      "rel": "scripts/rebuild_confluence_from_masters.py",
+      "action": "created",
+      "transcriptLen": 650,
+      "writeLine": 3121
+    },
+    {
+      "rel": "scripts/rebuild_dx_model.py",
+      "action": "created",
+      "transcriptLen": 8503,
+      "writeLine": 2620
+    },
+    {
+      "rel": "scripts/rebuild_g10_futures_model.py",
+      "action": "created",
+      "transcriptLen": 6582,
+      "writeLine": 2746
+    },
+    {
+      "rel": "scripts/recover-from-transcript.mjs",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 1659,
+      "transcriptLen": 1955,
+      "writeLine": 4497
+    },
+    {
+      "rel": "scripts/refresh_metals_confluence_valuation.py",
+      "action": "created",
+      "transcriptLen": 1873,
+      "writeLine": 2249
+    },
+    {
+      "rel": "scripts/reliability_improvement_audit.py",
+      "action": "created",
+      "transcriptLen": 18962,
+      "writeLine": 2489
+    },
+    {
+      "rel": "scripts/run_fx_ive_audit.py",
+      "action": "created",
+      "transcriptLen": 390,
+      "writeLine": 2541
+    },
+    {
+      "rel": "scripts/run_gold_breakeven_research.py",
+      "action": "created",
+      "transcriptLen": 2683,
+      "writeLine": 3693
+    },
+    {
+      "rel": "scripts/run_gold_cb_driver_comparison.py",
+      "action": "created",
+      "transcriptLen": 2167,
+      "writeLine": 3592
+    },
+    {
+      "rel": "scripts/run_gold_real_yield_research.py",
+      "action": "created",
+      "transcriptLen": 2005,
+      "writeLine": 3666
+    },
+    {
+      "rel": "scripts/run_gold_valuation_research.py",
+      "action": "created",
+      "transcriptLen": 4324,
+      "writeLine": 3583
+    },
+    {
+      "rel": "scripts/run_metals_valuation_v1.py",
+      "action": "created",
+      "transcriptLen": 480,
+      "writeLine": 2181
+    },
+    {
+      "rel": "scripts/run_seasonality_corruption_audit.py",
+      "action": "created",
+      "transcriptLen": 7413,
+      "writeLine": 2302
+    },
+    {
+      "rel": "scripts/run_usdchf_ive_rebuild.py",
+      "action": "created",
+      "transcriptLen": 383,
+      "writeLine": 2555
+    },
+    {
+      "rel": "scripts/seasonality_audit_report.py",
+      "action": "created",
+      "transcriptLen": 6548,
+      "writeLine": 2031
+    },
+    {
+      "rel": "scripts/seasonality_confidence_clarity_audit.py",
+      "action": "created",
+      "transcriptLen": 8937,
+      "writeLine": 2329
+    },
+    {
+      "rel": "scripts/trace_fx_dashboard_valuation.py",
+      "action": "created",
+      "transcriptLen": 6349,
+      "writeLine": 1569
+    },
+    {
+      "rel": "scripts/validate_dx_futures_ive.py",
+      "action": "created",
+      "transcriptLen": 17493,
+      "writeLine": 2602
+    },
+    {
+      "rel": "scripts/valuation_completion_audit.py",
+      "action": "created",
+      "transcriptLen": 17240,
+      "writeLine": 2269
+    },
+    {
+      "rel": "scripts/valuation_coverage_radar_audit.py",
+      "action": "created",
+      "transcriptLen": 4087,
+      "writeLine": 2151
+    },
+    {
+      "rel": "scripts/valuation_explainability_audit.py",
+      "action": "created",
+      "transcriptLen": 11532,
+      "writeLine": 2399
+    },
+    {
+      "rel": "scripts/verify_metals_confluence_wiring.py",
+      "action": "created",
+      "transcriptLen": 5220,
+      "writeLine": 2229
+    },
+    {
+      "rel": "scripts/verify_valuation_exports.py",
+      "action": "created",
+      "transcriptLen": 452,
+      "writeLine": 3562
+    },
+    {
+      "rel": "scripts/verify_workstation_ohlc.py",
+      "action": "created",
+      "transcriptLen": 2332,
+      "writeLine": 4078
+    },
+    {
+      "rel": "scripts/weekly_dashboard_refresh.py",
+      "action": "created",
+      "transcriptLen": 1156,
+      "writeLine": 3176
+    },
+    {
+      "rel": "src/hptl/confluence/export_from_masters.py",
+      "action": "created",
+      "transcriptLen": 10132,
+      "writeLine": 3120
+    },
+    {
+      "rel": "src/hptl/cot/cot_download_validate.py",
+      "action": "created",
+      "transcriptLen": 9578,
+      "writeLine": 2826
+    },
+    {
+      "rel": "src/hptl/cot/cot_failures.py",
+      "action": "created",
+      "transcriptLen": 1734,
+      "writeLine": 2826
+    },
+    {
+      "rel": "src/hptl/cot/cot_ingest_validate.py",
+      "action": "created",
+      "transcriptLen": 6717,
+      "writeLine": 2826
+    },
+    {
+      "rel": "src/hptl/cot/cot_resolver_diagnostics.py",
+      "action": "created",
+      "transcriptLen": 6049,
+      "writeLine": 3428
+    },
+    {
+      "rel": "src/hptl/cot/pipeline_finalize.py",
+      "action": "created",
+      "transcriptLen": 1961,
+      "writeLine": 2827
+    },
+    {
+      "rel": "src/hptl/cot/pipeline_health.py",
+      "action": "created",
+      "transcriptLen": 10668,
+      "writeLine": 2827
+    },
+    {
+      "rel": "src/hptl/dashboard/__init__.py",
+      "action": "created",
+      "transcriptLen": 0,
+      "writeLine": 3177
+    },
+    {
+      "rel": "src/hptl/dashboard/weekly_refresh.py",
+      "action": "created",
+      "transcriptLen": 9871,
+      "writeLine": 3172
+    },
+    {
+      "rel": "src/hptl/data_sources/cb_gold_purchases_ingest.py",
+      "action": "created",
+      "transcriptLen": 16590,
+      "writeLine": 3320
+    },
+    {
+      "rel": "src/hptl/data_sources/gdt_cb_gold_bootstrap.py",
+      "action": "created",
+      "transcriptLen": 2212,
+      "writeLine": 3338
+    },
+    {
+      "rel": "src/hptl/data_sources/metals_driver_ingest.py",
+      "action": "created",
+      "transcriptLen": 19112,
+      "writeLine": 2994
+    },
+    {
+      "rel": "src/hptl/data_sources/metals_manual_gold_ingest.py",
+      "action": "created",
+      "transcriptLen": 12144,
+      "writeLine": 3038
+    },
+    {
+      "rel": "src/hptl/fx/commercial_strength_research.py",
+      "action": "created",
+      "transcriptLen": 13115,
+      "writeLine": 1660
+    },
+    {
+      "rel": "src/hptl/fx/ecb_adapter.py",
+      "action": "created",
+      "transcriptLen": 2183,
+      "writeLine": 2696
+    },
+    {
+      "rel": "src/hptl/fx/positioning_story_score.py",
+      "action": "created",
+      "transcriptLen": 13793,
+      "writeLine": 1816
+    },
+    {
+      "rel": "src/hptl/fx/run_commercial_strength_research.py",
+      "action": "created",
+      "transcriptLen": 388,
+      "writeLine": 1660
+    },
+    {
+      "rel": "src/hptl/fx/run_positioning_story_score.py",
+      "action": "created",
+      "transcriptLen": 330,
+      "writeLine": 1816
+    },
+    {
+      "rel": "src/hptl/fx/snb_adapter.py",
+      "action": "created",
+      "transcriptLen": 2948,
+      "writeLine": 2697
+    },
+    {
+      "rel": "src/hptl/intelligence/event_adapter.py",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 1178,
+      "transcriptLen": 4605,
+      "writeLine": 543
+    },
+    {
+      "rel": "src/hptl/prices/coffee_foundation_backfill.py",
+      "action": "created",
+      "transcriptLen": 8243,
+      "writeLine": 2106
+    },
+    {
+      "rel": "src/hptl/prices/corn_foundation_backfill.py",
+      "action": "created",
+      "transcriptLen": 5001,
+      "writeLine": 2889
+    },
+    {
+      "rel": "src/hptl/prices/fred_prices.py",
+      "action": "created",
+      "transcriptLen": 3913,
+      "writeLine": 2695
+    },
+    {
+      "rel": "src/hptl/prices/live_quotes_export.py",
+      "action": "created",
+      "transcriptLen": 8493,
+      "writeLine": 4140
+    },
+    {
+      "rel": "src/hptl/prices/workstation_index_ohlc_backfill.py",
+      "action": "created",
+      "transcriptLen": 1433,
+      "writeLine": 3976
+    },
+    {
+      "rel": "src/hptl/prices/workstation_index_ohlc_history.py",
+      "action": "created",
+      "transcriptLen": 13458,
+      "writeLine": 3975
+    },
+    {
+      "rel": "src/hptl/prices/workstation_ohlc_export.py",
+      "action": "created",
+      "transcriptLen": 9674,
+      "writeLine": 3928
+    },
+    {
+      "rel": "src/hptl/seasonality/seasonality_foundation_rebuild.py",
+      "action": "created",
+      "transcriptLen": 10661,
+      "writeLine": 2064
+    },
+    {
+      "rel": "src/hptl/seasonality/seasonality_outlier_filter.py",
+      "action": "created",
+      "transcriptLen": 4286,
+      "writeLine": 2309
+    },
+    {
+      "rel": "src/hptl/util/console_safe.py",
+      "action": "created",
+      "transcriptLen": 1660,
+      "writeLine": 3642
+    },
+    {
+      "rel": "src/hptl/valuation/agri_balance_sheet_ingest.py",
+      "action": "created",
+      "transcriptLen": 11204,
+      "writeLine": 1749
+    },
+    {
+      "rel": "src/hptl/valuation/agri_fundamental_valuation.py",
+      "action": "created",
+      "transcriptLen": 15985,
+      "writeLine": 1696
+    },
+    {
+      "rel": "src/hptl/valuation/agri_valuation_export.py",
+      "action": "created",
+      "transcriptLen": 6894,
+      "writeLine": 1698
+    },
+    {
+      "rel": "src/hptl/valuation/cb_gold_features.py",
+      "action": "created",
+      "transcriptLen": 2575,
+      "writeLine": 3622
+    },
+    {
+      "rel": "src/hptl/valuation/confidence_v2.py",
+      "action": "created",
+      "transcriptLen": 11806,
+      "writeLine": 2446
+    },
+    {
+      "rel": "src/hptl/valuation/currency_futures_ive_v1.py",
+      "action": "created",
+      "transcriptLen": 22563,
+      "writeLine": 2590
+    },
+    {
+      "rel": "src/hptl/valuation/display_price_attach.py",
+      "action": "created",
+      "transcriptLen": 3198,
+      "writeLine": 4140
+    },
+    {
+      "rel": "src/hptl/valuation/fx_futures_data_refresh.py",
+      "action": "created",
+      "transcriptLen": 9478,
+      "writeLine": 2710
+    },
+    {
+      "rel": "src/hptl/valuation/fx_ive_audit.py",
+      "action": "created",
+      "transcriptLen": 31020,
+      "writeLine": 2540
+    },
+    {
+      "rel": "src/hptl/valuation/fx_v3_audit.py",
+      "action": "created",
+      "transcriptLen": 10899,
+      "writeLine": 1129
+    },
+    {
+      "rel": "src/hptl/valuation/fx_valuation_diagnostics.py",
+      "action": "created",
+      "transcriptLen": 4507,
+      "writeLine": 3527
+    },
+    {
+      "rel": "src/hptl/valuation/gold_breakeven_inflation_research.py",
+      "action": "created",
+      "transcriptLen": 18281,
+      "writeLine": 3693
+    },
+    {
+      "rel": "src/hptl/valuation/gold_cb_driver_comparison.py",
+      "action": "created",
+      "transcriptLen": 29722,
+      "writeLine": 3592
+    },
+    {
+      "rel": "src/hptl/valuation/gold_institutional_research_cycle.py",
+      "action": "created",
+      "transcriptLen": 19568,
+      "writeLine": 3707
+    },
+    {
+      "rel": "src/hptl/valuation/gold_model_research.py",
+      "action": "created",
+      "transcriptLen": 18906,
+      "writeLine": 3583
+    },
+    {
+      "rel": "src/hptl/valuation/gold_production_cb_driver.py",
+      "action": "created",
+      "transcriptLen": 8094,
+      "writeLine": 3623
+    },
+    {
+      "rel": "src/hptl/valuation/gold_real_yield_research.py",
+      "action": "created",
+      "transcriptLen": 28566,
+      "writeLine": 3666
+    },
+    {
+      "rel": "src/hptl/valuation/institutional_publish_gate.py",
+      "action": "created",
+      "transcriptLen": 7181,
+      "writeLine": 2889
+    },
+    {
+      "rel": "src/hptl/valuation/ive_adapter.py",
+      "action": "created",
+      "transcriptLen": 13261,
+      "writeLine": 2503
+    },
+    {
+      "rel": "src/hptl/valuation/ive_schema.py",
+      "action": "created",
+      "transcriptLen": 4007,
+      "writeLine": 2503
+    },
+    {
+      "rel": "src/hptl/valuation/macro_valuation_export.py",
+      "action": "created",
+      "transcriptLen": 2142,
+      "writeLine": 2368
+    },
+    {
+      "rel": "src/hptl/valuation/metals_institutional_drivers.py",
+      "action": "created",
+      "transcriptLen": 12803,
+      "writeLine": 2949
+    },
+    {
+      "rel": "src/hptl/valuation/metals_institutional_fair_value_v1.py",
+      "action": "created",
+      "transcriptLen": 14022,
+      "writeLine": 2951
+    },
+    {
+      "rel": "src/hptl/valuation/metals_valuation_export.py",
+      "action": "created",
+      "transcriptLen": 7547,
+      "writeLine": 2179
+    },
+    {
+      "rel": "src/hptl/valuation/metals_valuation_select.py",
+      "action": "created",
+      "transcriptLen": 11085,
+      "writeLine": 2890
+    },
+    {
+      "rel": "src/hptl/valuation/metals_valuation_v1.py",
+      "action": "created",
+      "transcriptLen": 16798,
+      "writeLine": 2179
+    },
+    {
+      "rel": "src/hptl/valuation/rates_curve_fair_value_v1.py",
+      "action": "created",
+      "transcriptLen": 14706,
+      "writeLine": 2367
+    },
+    {
+      "rel": "src/hptl/valuation/run_agri_balance_sheet_ingest.py",
+      "action": "created",
+      "transcriptLen": 1422,
+      "writeLine": 1749
+    },
+    {
+      "rel": "src/hptl/valuation/run_agri_valuation.py",
+      "action": "created",
+      "transcriptLen": 708,
+      "writeLine": 1698
+    },
+    {
+      "rel": "src/hptl/valuation/series_asof.py",
+      "action": "created",
+      "transcriptLen": 938,
+      "writeLine": 2590
+    },
+    {
+      "rel": "src/hptl/valuation/usd_broad_fair_value_v1.py",
+      "action": "created",
+      "transcriptLen": 10279,
+      "writeLine": 2368
+    },
+    {
+      "rel": "src/hptl/valuation/usda_psd_client.py",
+      "action": "created",
+      "transcriptLen": 3755,
+      "writeLine": 1748
+    },
+    {
+      "rel": "src/hptl/valuation/usdchf_ive_rebuild.py",
+      "action": "created",
+      "transcriptLen": 30967,
+      "writeLine": 2554
+    },
+    {
+      "rel": "src/hptl/valuation/valuation_export_verify.py",
+      "action": "created",
+      "transcriptLen": 9017,
+      "writeLine": 3562
+    },
+    {
+      "rel": "tests/test_agri_balance_sheet_ingest.py",
+      "action": "created",
+      "transcriptLen": 4677,
+      "writeLine": 1754
+    },
+    {
+      "rel": "tests/test_agri_fundamental_valuation.py",
+      "action": "created",
+      "transcriptLen": 5350,
+      "writeLine": 1708
+    },
+    {
+      "rel": "tests/test_commercial_strength_research.py",
+      "action": "created",
+      "transcriptLen": 3186,
+      "writeLine": 1660
+    },
+    {
+      "rel": "tests/test_confidence_v2.py",
+      "action": "created",
+      "transcriptLen": 2455,
+      "writeLine": 2447
+    },
+    {
+      "rel": "tests/test_cot_pipeline_health.py",
+      "action": "created",
+      "transcriptLen": 4653,
+      "writeLine": 2838
+    },
+    {
+      "rel": "tests/test_currency_futures_ive_v1.py",
+      "action": "created",
+      "transcriptLen": 4410,
+      "writeLine": 2591
+    },
+    {
+      "rel": "tests/test_display_price_attach.py",
+      "action": "created",
+      "transcriptLen": 1537,
+      "writeLine": 4147
+    },
+    {
+      "rel": "tests/test_fx_futures_data_pipeline.py",
+      "action": "created",
+      "transcriptLen": 5213,
+      "writeLine": 2702
+    },
+    {
+      "rel": "tests/test_fx_ive_audit.py",
+      "action": "created",
+      "transcriptLen": 801,
+      "writeLine": 2543
+    },
+    {
+      "rel": "tests/test_ive_schema.py",
+      "action": "created",
+      "transcriptLen": 3016,
+      "writeLine": 2505
+    },
+    {
+      "rel": "tests/test_metals_valuation_v1.py",
+      "action": "created",
+      "transcriptLen": 3906,
+      "writeLine": 2181
+    },
+    {
+      "rel": "tests/test_positioning_story_score.py",
+      "action": "created",
+      "transcriptLen": 3769,
+      "writeLine": 1816
+    },
+    {
+      "rel": "tests/test_seasonality_outlier_filter.py",
+      "action": "created",
+      "transcriptLen": 2929,
+      "writeLine": 2314
+    },
+    {
+      "rel": "tests/test_thesis_fx_valuation_snap.py",
+      "action": "created",
+      "transcriptLen": 3251,
+      "writeLine": 2521
+    },
+    {
+      "rel": "tests/test_weekly_refresh_fx_valuation.py",
+      "action": "created",
+      "transcriptLen": 6258,
+      "writeLine": 3539
+    },
+    {
+      "rel": "tests/test_workstation_index_ohlc_history.py",
+      "action": "created",
+      "transcriptLen": 1075,
+      "writeLine": 3980
+    },
+    {
+      "rel": "web-dashboard/scripts/debug-rect.mjs",
+      "action": "created",
+      "transcriptLen": 1105,
+      "writeLine": 4085
+    },
+    {
+      "rel": "web-dashboard/scripts/smoke_nasdaq.mjs",
+      "action": "created",
+      "transcriptLen": 974,
+      "writeLine": 3885
+    },
+    {
+      "rel": "web-dashboard/scripts/verify_dashboard_chart_render.mjs",
+      "action": "created",
+      "transcriptLen": 2357,
+      "writeLine": 3249
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-live-quotes-browser.mjs",
+      "action": "created",
+      "transcriptLen": 3478,
+      "writeLine": 4159
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-live-quotes-consumption.mjs",
+      "action": "created",
+      "transcriptLen": 5658,
+      "writeLine": 4156
+    },
+    {
+      "rel": "web-dashboard/src/components/InstrumentPositioningWorkspace.jsx",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 3381,
+      "transcriptLen": 3457,
+      "writeLine": 4571
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartStack.jsx",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 13183,
+      "transcriptLen": 18198,
+      "writeLine": 3875
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/normalizeWeeklyTimeline.js",
+      "action": "overwritten_transcript_larger",
+      "diskLen": 3094,
+      "transcriptLen": 3306,
+      "writeLine": 4587
+    }
+  ],
+  "keptDisk": [
+    {
+      "rel": "data/audits/valuation_phase2_fx_cleanup.md",
+      "reason": "disk_larger",
+      "diskLen": 5050,
+      "transcriptLen": 4905,
+      "writeLine": 1248
+    },
+    {
+      "rel": "data/audits/valuation_update_profile.md",
+      "reason": "disk_larger",
+      "diskLen": 4066,
+      "transcriptLen": 3969,
+      "writeLine": 1344
+    },
+    {
+      "rel": "data/config/catalyst_config.json",
+      "reason": "disk_larger",
+      "diskLen": 6202,
+      "transcriptLen": 5072,
+      "writeLine": 521
+    },
+    {
+      "rel": "data/processed/gold_sign_gate_diagnostic_latest.json",
+      "reason": "disk_larger",
+      "diskLen": 1934,
+      "transcriptLen": 3,
+      "writeLine": 3378
+    },
+    {
+      "rel": "data/processed/gold_valuation_model_redesign_todo.md",
+      "reason": "disk_larger",
+      "diskLen": 1012,
+      "transcriptLen": 989,
+      "writeLine": 3384
+    },
+    {
+      "rel": "scripts/audit_cot_refresh_pipeline.py",
+      "reason": "disk_larger",
+      "diskLen": 6609,
+      "transcriptLen": 6165,
+      "writeLine": 1169
+    },
+    {
+      "rel": "scripts/audit_fx_v3_parser_repair.py",
+      "reason": "disk_larger",
+      "diskLen": 22055,
+      "transcriptLen": 20409,
+      "writeLine": 1290
+    },
+    {
+      "rel": "scripts/audit_fx_v3_performance.py",
+      "reason": "disk_larger",
+      "diskLen": 13282,
+      "transcriptLen": 12663,
+      "writeLine": 1349
+    },
+    {
+      "rel": "scripts/audit_instrument_validation_coverage.py",
+      "reason": "disk_larger",
+      "diskLen": 20271,
+      "transcriptLen": 17952,
+      "writeLine": 1397
+    },
+    {
+      "rel": "scripts/audit_location_pipeline.py",
+      "reason": "disk_larger",
+      "diskLen": 3531,
+      "transcriptLen": 3426,
+      "writeLine": 1109
+    },
+    {
+      "rel": "scripts/audit_valuation_inventory.py",
+      "reason": "disk_larger",
+      "diskLen": 27457,
+      "transcriptLen": 26879,
+      "writeLine": 1228
+    },
+    {
+      "rel": "scripts/profile_valuation_update.py",
+      "reason": "disk_larger",
+      "diskLen": 6287,
+      "transcriptLen": 6121,
+      "writeLine": 1344
+    },
+    {
+      "rel": "scripts/recovery-phase-plan.mjs",
+      "reason": "disk_larger",
+      "diskLen": 4369,
+      "transcriptLen": 4254,
+      "writeLine": 4635
+    },
+    {
+      "rel": "src/hptl/confluence/cot_tracked_backfill.py",
+      "reason": "disk_larger",
+      "diskLen": 7633,
+      "transcriptLen": 7526,
+      "writeLine": 301
+    },
+    {
+      "rel": "src/hptl/confluence/repair_missing_markets.py",
+      "reason": "disk_larger",
+      "diskLen": 5952,
+      "transcriptLen": 4246,
+      "writeLine": 1397
+    },
+    {
+      "rel": "src/hptl/confluence/ui_pack.py",
+      "reason": "disk_larger",
+      "diskLen": 9936,
+      "transcriptLen": 9704,
+      "writeLine": 423
+    },
+    {
+      "rel": "src/hptl/intelligence/__init__.py",
+      "reason": "disk_larger",
+      "diskLen": 793,
+      "transcriptLen": 770,
+      "writeLine": 524
+    },
+    {
+      "rel": "src/hptl/intelligence/catalyst_loader.py",
+      "reason": "disk_larger",
+      "diskLen": 1339,
+      "transcriptLen": 1268,
+      "writeLine": 524
+    },
+    {
+      "rel": "src/hptl/intelligence/impulse_adapter.py",
+      "reason": "disk_larger",
+      "diskLen": 4582,
+      "transcriptLen": 4406,
+      "writeLine": 544
+    },
+    {
+      "rel": "src/hptl/intelligence/intelligence_engine.py",
+      "reason": "disk_larger",
+      "diskLen": 4826,
+      "transcriptLen": 4746,
+      "writeLine": 546
+    },
+    {
+      "rel": "src/hptl/intelligence/news_adapter.py",
+      "reason": "disk_larger",
+      "diskLen": 11722,
+      "transcriptLen": 11464,
+      "writeLine": 527
+    },
+    {
+      "rel": "src/hptl/intermarket/__init__.py",
+      "reason": "disk_larger",
+      "diskLen": 214,
+      "transcriptLen": 209,
+      "writeLine": 415
+    },
+    {
+      "rel": "src/hptl/intermarket/correlation_map.py",
+      "reason": "disk_larger",
+      "diskLen": 4851,
+      "transcriptLen": 4801,
+      "writeLine": 404
+    },
+    {
+      "rel": "src/hptl/intermarket/impulse_engine.py",
+      "reason": "disk_larger",
+      "diskLen": 6823,
+      "transcriptLen": 6531,
+      "writeLine": 408
+    },
+    {
+      "rel": "src/hptl/intermarket/intermarket_scoring.py",
+      "reason": "disk_larger",
+      "diskLen": 5028,
+      "transcriptLen": 5004,
+      "writeLine": 412
+    },
+    {
+      "rel": "src/hptl/macro/fred_api.py",
+      "reason": "disk_larger",
+      "diskLen": 5682,
+      "transcriptLen": 5521,
+      "writeLine": 573
+    },
+    {
+      "rel": "src/hptl/macro/fred_relationship_pair.py",
+      "reason": "disk_larger",
+      "diskLen": 15466,
+      "transcriptLen": 12917,
+      "writeLine": 839
+    },
+    {
+      "rel": "src/hptl/macro/macro_dashboard_columns.py",
+      "reason": "disk_larger",
+      "diskLen": 764,
+      "transcriptLen": 748,
+      "writeLine": 576
+    },
+    {
+      "rel": "src/hptl/macro/macro_relationship_maps.py",
+      "reason": "disk_larger",
+      "diskLen": 12841,
+      "transcriptLen": 8073,
+      "writeLine": 844
+    },
+    {
+      "rel": "src/hptl/macro/nq_dgs10_relationship.py",
+      "reason": "disk_larger",
+      "diskLen": 595,
+      "transcriptLen": 579,
+      "writeLine": 845
+    },
+    {
+      "rel": "src/hptl/news/__init__.py",
+      "reason": "disk_larger",
+      "diskLen": 670,
+      "transcriptLen": 647,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/news/asset_sensitivity.py",
+      "reason": "disk_larger",
+      "diskLen": 9822,
+      "transcriptLen": 9589,
+      "writeLine": 389
+    },
+    {
+      "rel": "src/hptl/news/calendar_downloader.py",
+      "reason": "disk_larger",
+      "diskLen": 3236,
+      "transcriptLen": 3039,
+      "writeLine": 371
+    },
+    {
+      "rel": "src/hptl/news/calendar_parser.py",
+      "reason": "disk_larger",
+      "diskLen": 4593,
+      "transcriptLen": 4456,
+      "writeLine": 371
+    },
+    {
+      "rel": "src/hptl/news/calendar_scoring.py",
+      "reason": "disk_larger",
+      "diskLen": 4915,
+      "transcriptLen": 4756,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/news/catalyst_news_builder.py",
+      "reason": "disk_larger",
+      "diskLen": 8846,
+      "transcriptLen": 7295,
+      "writeLine": 623
+    },
+    {
+      "rel": "src/hptl/news/contracts.py",
+      "reason": "disk_larger",
+      "diskLen": 1785,
+      "transcriptLen": 1722,
+      "writeLine": 371
+    },
+    {
+      "rel": "src/hptl/news/gdelt_downloader.py",
+      "reason": "disk_larger",
+      "diskLen": 2241,
+      "transcriptLen": 2203,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/news/headline_classifier.py",
+      "reason": "disk_larger",
+      "diskLen": 1520,
+      "transcriptLen": 1484,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/news/instrument_intel.py",
+      "reason": "disk_larger",
+      "diskLen": 10676,
+      "transcriptLen": 9996,
+      "writeLine": 390
+    },
+    {
+      "rel": "src/hptl/news/narrative_engine.py",
+      "reason": "disk_larger",
+      "diskLen": 2493,
+      "transcriptLen": 2463,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/news/run_news_update.py",
+      "reason": "disk_larger",
+      "diskLen": 1521,
+      "transcriptLen": 1475,
+      "writeLine": 623
+    },
+    {
+      "rel": "src/hptl/news/sentiment_interference.py",
+      "reason": "disk_larger",
+      "diskLen": 2483,
+      "transcriptLen": 2424,
+      "writeLine": 372
+    },
+    {
+      "rel": "src/hptl/thesis_tracker/fx_valuation_v3_snap.py",
+      "reason": "disk_larger",
+      "diskLen": 4819,
+      "transcriptLen": 4684,
+      "writeLine": 1138
+    },
+    {
+      "rel": "tests/test_catalyst_news.py",
+      "reason": "disk_larger",
+      "diskLen": 2361,
+      "transcriptLen": 2275,
+      "writeLine": 635
+    },
+    {
+      "rel": "tests/test_fred_api.py",
+      "reason": "disk_larger",
+      "diskLen": 2565,
+      "transcriptLen": 2501,
+      "writeLine": 606
+    },
+    {
+      "rel": "tests/test_fred_relationship_pair.py",
+      "reason": "disk_larger",
+      "diskLen": 2697,
+      "transcriptLen": 2630,
+      "writeLine": 886
+    },
+    {
+      "rel": "tests/test_fx_v3_parser_repair.py",
+      "reason": "disk_larger",
+      "diskLen": 4599,
+      "transcriptLen": 4595,
+      "writeLine": 1309
+    },
+    {
+      "rel": "tests/test_intelligence_pipeline.py",
+      "reason": "disk_larger",
+      "diskLen": 2660,
+      "transcriptLen": 2596,
+      "writeLine": 548
+    },
+    {
+      "rel": "tests/test_natural_gas_tracked_mapping.py",
+      "reason": "disk_larger",
+      "diskLen": 805,
+      "transcriptLen": 606,
+      "writeLine": 500
+    },
+    {
+      "rel": "tests/test_nq_dgs10_relationship.py",
+      "reason": "disk_larger",
+      "diskLen": 1273,
+      "transcriptLen": 1212,
+      "writeLine": 758
+    },
+    {
+      "rel": "web-dashboard/DASHBOARD_AUDIT.md",
+      "reason": "disk_larger",
+      "diskLen": 1987,
+      "transcriptLen": 1943,
+      "writeLine": 958
+    },
+    {
+      "rel": "web-dashboard/postcss.config.js",
+      "reason": "disk_larger",
+      "diskLen": 86,
+      "transcriptLen": 80,
+      "writeLine": 734
+    },
+    {
+      "rel": "web-dashboard/src/App.jsx",
+      "reason": "disk_larger",
+      "diskLen": 3640,
+      "transcriptLen": 3514,
+      "writeLine": 4590
+    },
+    {
+      "rel": "web-dashboard/src/workstation/context/WeeklyTimelineContext.jsx",
+      "reason": "disk_larger",
+      "diskLen": 563,
+      "transcriptLen": 544,
+      "writeLine": 4587
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useInstrumentValuationHistory.js",
+      "reason": "disk_larger",
+      "diskLen": 1643,
+      "transcriptLen": 1574,
+      "writeLine": 4587
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useWorkstationData.js",
+      "reason": "disk_larger",
+      "diskLen": 2225,
+      "transcriptLen": 2154,
+      "writeLine": 4594
+    },
+    {
+      "rel": "web-dashboard/tailwind.config.js",
+      "reason": "disk_larger",
+      "diskLen": 217,
+      "transcriptLen": 206,
+      "writeLine": 734
+    },
+    {
+      "rel": "web-dashboard/UI_IMPACT_AUDIT.md",
+      "reason": "disk_larger",
+      "diskLen": 7951,
+      "transcriptLen": 6812,
+      "writeLine": 1068
+    }
+  ],
+  "skippedIdentical": [
+    {
+      "rel": "web-dashboard/scripts/check-gold-workstation.mjs",
+      "len": 1236,
+      "writeLine": 3768
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-workstation-drawings.mjs",
+      "len": 4779,
+      "writeLine": 4081
+    },
+    {
+      "rel": "web-dashboard/scripts/verify-workstation-load.mjs",
+      "len": 1359,
+      "writeLine": 4253
+    },
+    {
+      "rel": "web-dashboard/src/charts/buildChartWorkstation.js",
+      "len": 6784,
+      "writeLine": 1111
+    },
+    {
+      "rel": "web-dashboard/src/charts/chartTheme.js",
+      "len": 695,
+      "writeLine": 4515
+    },
+    {
+      "rel": "web-dashboard/src/charts/positioningChart.css",
+      "len": 4844,
+      "writeLine": 3258
+    },
+    {
+      "rel": "web-dashboard/src/charts/positioningTimelineAlign.js",
+      "len": 2515,
+      "writeLine": 3782
+    },
+    {
+      "rel": "web-dashboard/src/components/CommercialPositioningPanel.jsx",
+      "len": 3973,
+      "writeLine": 1633
+    },
+    {
+      "rel": "web-dashboard/src/components/CommercialPositioningTable.jsx",
+      "len": 1508,
+      "writeLine": 1646
+    },
+    {
+      "rel": "web-dashboard/src/components/CommercialStrengthResearchPanel.jsx",
+      "len": 2717,
+      "writeLine": 1674
+    },
+    {
+      "rel": "web-dashboard/src/components/CommercialStrengthResearchTable.jsx",
+      "len": 1193,
+      "writeLine": 1660
+    },
+    {
+      "rel": "web-dashboard/src/components/CotRawDataTable.jsx",
+      "len": 3580,
+      "writeLine": 1951
+    },
+    {
+      "rel": "web-dashboard/src/components/FxValuationDiagnosticsSection.jsx",
+      "len": 2776,
+      "writeLine": 3490
+    },
+    {
+      "rel": "web-dashboard/src/components/FxValuationV3DevPanel.jsx",
+      "len": 6414,
+      "writeLine": 1069
+    },
+    {
+      "rel": "web-dashboard/src/components/FxValuationV3Panel.jsx",
+      "len": 6643,
+      "writeLine": 1130
+    },
+    {
+      "rel": "web-dashboard/src/components/GroupPositioningSheet.jsx",
+      "len": 680,
+      "writeLine": 1974
+    },
+    {
+      "rel": "web-dashboard/src/components/IVECalculationPanel.jsx",
+      "len": 7097,
+      "writeLine": 2568
+    },
+    {
+      "rel": "web-dashboard/src/components/LiveQuoteRefreshBar.jsx",
+      "len": 2311,
+      "writeLine": 4260
+    },
+    {
+      "rel": "web-dashboard/src/components/MarketStatesPanel.jsx",
+      "len": 2601,
+      "writeLine": 1929
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningCandlestickPanel.jsx",
+      "len": 3491,
+      "writeLine": 4011
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartChrome.jsx",
+      "len": 1157,
+      "writeLine": 4008
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningChartPanel.jsx",
+      "len": 8214,
+      "writeLine": 4011
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningStoryPanel.jsx",
+      "len": 2624,
+      "writeLine": 1817
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningStoryTable.jsx",
+      "len": 1708,
+      "writeLine": 1817
+    },
+    {
+      "rel": "web-dashboard/src/components/PositioningWeeklySummary.jsx",
+      "len": 2718,
+      "writeLine": 1973
+    },
+    {
+      "rel": "web-dashboard/src/components/RelativeStrengthPanel.jsx",
+      "len": 7765,
+      "writeLine": 1763
+    },
+    {
+      "rel": "web-dashboard/src/components/SeasonalityDecisionPanel.jsx",
+      "len": 7053,
+      "writeLine": 2135
+    },
+    {
+      "rel": "web-dashboard/src/components/SeasonalityProjectionPanel.jsx",
+      "len": 11602,
+      "writeLine": 2134
+    },
+    {
+      "rel": "web-dashboard/src/components/ValuationCell.jsx",
+      "len": 5901,
+      "writeLine": 2568
+    },
+    {
+      "rel": "web-dashboard/src/components/ValuationWorkstationPanel.jsx",
+      "len": 229,
+      "writeLine": 2528
+    },
+    {
+      "rel": "web-dashboard/src/cot/commercialPositioning.js",
+      "len": 2947,
+      "writeLine": 1646
+    },
+    {
+      "rel": "web-dashboard/src/cot/cotHeatmap.js",
+      "len": 4583,
+      "writeLine": 1802
+    },
+    {
+      "rel": "web-dashboard/src/cot/groupPositioningView.js",
+      "len": 3996,
+      "writeLine": 1879
+    },
+    {
+      "rel": "web-dashboard/src/cot/marketStateEngine.js",
+      "len": 8931,
+      "writeLine": 1929
+    },
+    {
+      "rel": "web-dashboard/src/cot/positioningChartMetrics.js",
+      "len": 2402,
+      "writeLine": 3255
+    },
+    {
+      "rel": "web-dashboard/src/cot/rawCotPositioning.js",
+      "len": 3073,
+      "writeLine": 1951
+    },
+    {
+      "rel": "web-dashboard/src/cot/rolling3yFromLegacyWeeks.js",
+      "len": 5206,
+      "writeLine": 1879
+    },
+    {
+      "rel": "web-dashboard/src/data/cot3ySeriesStore.js",
+      "len": 280,
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/fx/fxValuationV3Display.js",
+      "len": 5042,
+      "writeLine": 2513
+    },
+    {
+      "rel": "web-dashboard/src/hooks/liveQuoteFreshness.js",
+      "len": 1466,
+      "writeLine": 4260
+    },
+    {
+      "rel": "web-dashboard/src/hooks/liveQuoteFreshness.test.js",
+      "len": 2261,
+      "writeLine": 4378
+    },
+    {
+      "rel": "web-dashboard/src/hooks/LiveQuotesContext.jsx",
+      "len": 2402,
+      "writeLine": 4430
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useCommercialStrengthResearch.js",
+      "len": 3465,
+      "writeLine": 1674
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useCot3ySeries.js",
+      "len": 619,
+      "writeLine": 3247
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useCotPipelineHealth.js",
+      "len": 370,
+      "writeLine": 2754
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useCurrencyFuturesIVE.js",
+      "len": 910,
+      "writeLine": 3487
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useFxValuationV3Dev.js",
+      "len": 1438,
+      "writeLine": 3487
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useLiveQuotes.js",
+      "len": 1878,
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useLocationLatest.js",
+      "len": 874,
+      "writeLine": 1068
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useMarketStates.js",
+      "len": 1241,
+      "writeLine": 1929
+    },
+    {
+      "rel": "web-dashboard/src/hooks/usePositioningStory.js",
+      "len": 2589,
+      "writeLine": 1817
+    },
+    {
+      "rel": "web-dashboard/src/hooks/useValuationLatest.js",
+      "len": 552,
+      "writeLine": 3489
+    },
+    {
+      "rel": "web-dashboard/src/location/computeLocationSeries.js",
+      "len": 2967,
+      "writeLine": 1109
+    },
+    {
+      "rel": "web-dashboard/src/macroIntelligence.js",
+      "len": 25369,
+      "writeLine": 706
+    },
+    {
+      "rel": "web-dashboard/src/macroRelationshipChartNarrative.js",
+      "len": 6869,
+      "writeLine": 862
+    },
+    {
+      "rel": "web-dashboard/src/MacroRelationshipMap.jsx",
+      "len": 20696,
+      "writeLine": 867
+    },
+    {
+      "rel": "web-dashboard/src/macroRelationshipMapData.js",
+      "len": 10024,
+      "writeLine": 736
+    },
+    {
+      "rel": "web-dashboard/src/macroTraderLens.js",
+      "len": 7515,
+      "writeLine": 792
+    },
+    {
+      "rel": "web-dashboard/src/main.jsx",
+      "len": 324,
+      "writeLine": 4552
+    },
+    {
+      "rel": "web-dashboard/src/marketBriefing.js",
+      "len": 2751,
+      "writeLine": 958
+    },
+    {
+      "rel": "web-dashboard/src/marketIntelligence.js",
+      "len": 19354,
+      "writeLine": 684
+    },
+    {
+      "rel": "web-dashboard/src/marketRadarCoverage.js",
+      "len": 3975,
+      "writeLine": 2019
+    },
+    {
+      "rel": "web-dashboard/src/nqYieldChartNarrative.js",
+      "len": 3933,
+      "writeLine": 821
+    },
+    {
+      "rel": "web-dashboard/src/pages/CommercialPositioningPage.jsx",
+      "len": 3161,
+      "writeLine": 1646
+    },
+    {
+      "rel": "web-dashboard/src/pages/CommercialStrengthResearchPage.jsx",
+      "len": 827,
+      "writeLine": 1674
+    },
+    {
+      "rel": "web-dashboard/src/pages/CotRawDataPage.jsx",
+      "len": 3536,
+      "writeLine": 1802
+    },
+    {
+      "rel": "web-dashboard/src/pages/InstrumentPage.jsx",
+      "len": 8571,
+      "writeLine": 4571
+    },
+    {
+      "rel": "web-dashboard/src/pages/PositioningStoryPage.jsx",
+      "len": 712,
+      "writeLine": 1817
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineReport.js",
+      "len": 2773,
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineValidation.js",
+      "len": 3065,
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/prices/priceEngineValidation.test.js",
+      "len": 2045,
+      "writeLine": 4378
+    },
+    {
+      "rel": "web-dashboard/src/prices/stores/createExternalStore.js",
+      "len": 171,
+      "writeLine": 4359
+    },
+    {
+      "rel": "web-dashboard/src/prices/stores/HistoricalCOTStore.js",
+      "len": 3040,
+      "writeLine": 4361
+    },
+    {
+      "rel": "web-dashboard/src/prices/stores/LivePriceStore.js",
+      "len": 4731,
+      "writeLine": 4359
+    },
+    {
+      "rel": "web-dashboard/src/prices/stores/WeeklyOHLCStore.js",
+      "len": 4146,
+      "writeLine": 4361
+    },
+    {
+      "rel": "web-dashboard/src/prices/usePriceStores.js",
+      "len": 3658,
+      "writeLine": 4430
+    },
+    {
+      "rel": "web-dashboard/src/routing.js",
+      "len": 2843,
+      "writeLine": 1904
+    },
+    {
+      "rel": "web-dashboard/src/seasonality/seasonalityConfidenceInterpret.js",
+      "len": 7826,
+      "writeLine": 2329
+    },
+    {
+      "rel": "web-dashboard/src/seasonality/seasonalityProjectionModel.js",
+      "len": 9054,
+      "writeLine": 2123
+    },
+    {
+      "rel": "web-dashboard/src/styles.css",
+      "len": 5714,
+      "writeLine": 176
+    },
+    {
+      "rel": "web-dashboard/src/tailwind.css",
+      "len": 59,
+      "writeLine": 734
+    },
+    {
+      "rel": "web-dashboard/src/utils/fetchPublicJson.js",
+      "len": 272,
+      "writeLine": 3488
+    },
+    {
+      "rel": "web-dashboard/src/valuation/agriValuationDisplay.js",
+      "len": 3405,
+      "writeLine": 2513
+    },
+    {
+      "rel": "web-dashboard/src/valuation/confidenceV2Display.js",
+      "len": 1693,
+      "writeLine": 2452
+    },
+    {
+      "rel": "web-dashboard/src/valuation/currencyFuturesIveDisplay.js",
+      "len": 3564,
+      "writeLine": 2651
+    },
+    {
+      "rel": "web-dashboard/src/valuation/fxValuationDiagnosticsDisplay.js",
+      "len": 1242,
+      "writeLine": 3489
+    },
+    {
+      "rel": "web-dashboard/src/valuation/iveDisplay.js",
+      "len": 2689,
+      "writeLine": 2506
+    },
+    {
+      "rel": "web-dashboard/src/valuation/macroValuationDisplay.js",
+      "len": 2579,
+      "writeLine": 2513
+    },
+    {
+      "rel": "web-dashboard/src/valuation/metalsValuationDisplay.js",
+      "len": 3499,
+      "writeLine": 2513
+    },
+    {
+      "rel": "web-dashboard/src/valuation/publishGate.js",
+      "len": 797,
+      "writeLine": 2925
+    },
+    {
+      "rel": "web-dashboard/src/valuation/valuationExplainability.js",
+      "len": 12162,
+      "writeLine": 2398
+    },
+    {
+      "rel": "web-dashboard/src/workstation/ARCHITECTURE.md",
+      "len": 1700,
+      "writeLine": 3728
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/sliceVisibleWindow.js",
+      "len": 1152,
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/useWorkstationDrawings.js",
+      "len": 2539,
+      "writeLine": 4068
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingCoords.js",
+      "len": 1217,
+      "writeLine": 4340
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/WorkstationDrawingLayer.jsx",
+      "len": 362,
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingTimeline.js",
+      "len": 985,
+      "writeLine": 4315
+    },
+    {
+      "rel": "web-dashboard/src/workstation/canvas/workstationDrawingTypes.js",
+      "len": 1510,
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/buildWorkstationTimelineData.js",
+      "len": 716,
+      "writeLine": 4031
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/drawingViewport.js",
+      "len": 2473,
+      "writeLine": 4340
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/GlobalTimelineVlineOverlay.jsx",
+      "len": 7908,
+      "writeLine": 4345
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/ResizablePlotShell.jsx",
+      "len": 1857,
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/SynchronizedWorkstationPanels.jsx",
+      "len": 11506,
+      "writeLine": 4033
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/useCotPanelHeights.js",
+      "len": 2403,
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/useLinkedChartTimeline.js",
+      "len": 4670,
+      "writeLine": 4029
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WeeklyCandlestickChart.jsx",
+      "len": 8604,
+      "writeLine": 3889
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/workstationChartOptions.js",
+      "len": 2214,
+      "writeLine": 4029
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationChartPane.jsx",
+      "len": 8388,
+      "writeLine": 4030
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationDrawingToolbar.jsx",
+      "len": 1335,
+      "writeLine": 4030
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/WorkstationLwcDrawingOverlay.jsx",
+      "len": 9548,
+      "writeLine": 4343
+    },
+    {
+      "rel": "web-dashboard/src/workstation/charts/workstationPanelSizing.js",
+      "len": 582,
+      "writeLine": 4051
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/GoldOhlcDebugStrip.jsx",
+      "len": 2706,
+      "writeLine": 4117
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/GoldPriceTruthPanel.jsx",
+      "len": 5902,
+      "writeLine": 4231
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/TimelineSyncIndicator.jsx",
+      "len": 1178,
+      "writeLine": 3725
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/WorkstationDataErrorPanel.jsx",
+      "len": 486,
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/components/WorkstationErrorBoundary.jsx",
+      "len": 793,
+      "writeLine": 3748
+    },
+    {
+      "rel": "web-dashboard/src/workstation/context/WorkstationCanvasContext.jsx",
+      "len": 2884,
+      "writeLine": 3990
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildGoldPriceTruthAudit.js",
+      "len": 299,
+      "writeLine": 4373
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildGoldPriceTruthAudit.test.js",
+      "len": 2810,
+      "writeLine": 4236
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPositioningWorkstationSeries.js",
+      "len": 5814,
+      "writeLine": 4063
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPositioningWorkstationSeries.test.js",
+      "len": 1600,
+      "writeLine": 3847
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/buildPriceTruthTable.js",
+      "len": 7022,
+      "writeLine": 4366
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/computeWorkstationCommonRange.js",
+      "len": 2681,
+      "writeLine": 3928
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/deriveWeeklyOhlc.js",
+      "len": 2588,
+      "writeLine": 3723
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/filterWorkstationOhlc.js",
+      "len": 2853,
+      "writeLine": 4060
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/filterWorkstationOhlc.test.js",
+      "len": 1455,
+      "writeLine": 4071
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/instrumentPriceDiagnostics.js",
+      "len": 5215,
+      "writeLine": 4362
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/prepareLightweightCandles.js",
+      "len": 2278,
+      "writeLine": 3889
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/resolveWorkstationOhlc.js",
+      "len": 263,
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/workstationBindingDiagnostics.js",
+      "len": 4196,
+      "writeLine": 3946
+    },
+    {
+      "rel": "web-dashboard/src/workstation/data/workstationOhlcAlignmentAudit.js",
+      "len": 2282,
+      "writeLine": 4060
+    },
+    {
+      "rel": "web-dashboard/src/workstation/featureFlags.js",
+      "len": 247,
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/hooks/useWorkstationOhlc.js",
+      "len": 786,
+      "writeLine": 4363
+    },
+    {
+      "rel": "web-dashboard/src/workstation/index.js",
+      "len": 1160,
+      "writeLine": 3726
+    },
+    {
+      "rel": "web-dashboard/src/workstation/InstrumentResearchWorkstation.jsx",
+      "len": 4986,
+      "writeLine": 3725
+    },
+    {
+      "rel": "web-dashboard/src/workstation/InstrumentWorkstationLayout.jsx",
+      "len": 3742,
+      "writeLine": 4008
+    },
+    {
+      "rel": "web-dashboard/src/workstation/safeWorkstationSeries.js",
+      "len": 2157,
+      "writeLine": 3870
+    },
+    {
+      "rel": "web-dashboard/src/workstation/styles/instrumentWorkstation.css",
+      "len": 2186,
+      "writeLine": 4571
+    },
+    {
+      "rel": "web-dashboard/src/workstation/verify/verifyWorkstationBindings.test.js",
+      "len": 3393,
+      "writeLine": 4078
+    }
+  ],
+  "missingNoTranscriptWrite": [
+    "web-dashboard/src/cot/buildCotWorkstation.js"
+  ],
+  "missingOnDiskAfter": [
+    {
+      "rel": "web-dashboard/src/cot/buildCotWorkstation.js",
+      "writeInTranscript": false
+    }
+  ]
+}

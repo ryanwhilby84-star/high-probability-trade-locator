@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source": "USDA FAS PSD (WASDE-aligned)",
+  "soap_endpoint": "https://apps.fas.usda.gov/PSDExternalAPIService/svcPSD_AMIS.asmx",
+  "rest_endpoint": "https://apps.fas.usda.gov/OpenData/api/psd",
+  "raw_cache_dir": "data/raw/usda_psd",
+  "note": "Primary ingest via PSD SOAP getDatabyCommodity (no API key). Optional REST when USDA_FAS_API_KEY is set.",
+  "attribute_ids": {
+    "production": "28",
+    "ending_stocks": "176",
+    "total_supply": "86",
+    "beginning_stocks": "20",
+    "total_use_direct": "126",
+    "total_domestic_consumption": "125",
+    "ty_exports": "113",
+    "cy_exports": "110",
+    "exports": "88"
+  },
+  "instruments": {
+    "Soybeans": {
+      "psd_code": "2222000",
+      "country": "US",
+      "total_use_mode": "domestic_plus_exports",
+      "exports_attr": "cy_exports"
+    },
+    "Corn": {
+      "psd_code": "0440000",
+      "country": "US",
+      "total_use_mode": "domestic_plus_exports",
+      "exports_attr": "ty_exports"
+    },
+    "Wheat": {
+      "psd_code": "0410000",
+      "country": "US",
+      "total_use_mode": "domestic_plus_exports",
+      "exports_attr": "ty_exports"
+    },
+    "Sugar": {
+      "psd_code": "0612000",
+      "country": "US",
+      "total_use_mode": "direct",
+      "total_use_attr": "total_use_direct"
+    },
+    "Cotton": {
+      "psd_code": "2631000",
+      "country": "US",
+      "total_use_mode": "domestic_plus_exports",
+      "exports_attr": "exports"
+    }
+  }
+}

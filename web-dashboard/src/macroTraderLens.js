@@ -4,7 +4,6 @@
  */
 
 import { computeInstrumentIntelligence } from './marketIntelligence.js'
-import { getSeriesPair } from './macroRelationshipChartNarrative.js'
 
 const num = (v) => {
   const n = Number(v)
@@ -89,7 +88,7 @@ function buildContextBrief(intel, pack, row, relationshipMapData) {
   const env = environmentFromPack(pack)
   const pos = positioningCard(row)
   const align = macroAlignmentCard(row)
-  const { eventRisk } = intel
+  const { trade, eventRisk, env: mEnv } = intel
   const parts = []
 
   let s1 = ''
@@ -114,17 +113,11 @@ function buildContextBrief(intel, pack, row, relationshipMapData) {
     parts.push('Some second-tier data or headlines may add noise this week.')
   }
 
-  if (
-    relationshipMapData?.available &&
-    String(relationshipMapData.market || '') === String(row?.market || '') &&
-    relationshipMapData.latest_rolling_corr_20 != null &&
-    Number.isFinite(Number(relationshipMapData.latest_rolling_corr_20))
-  ) {
-    const { priceLabel, driverLabel } = getSeriesPair(relationshipMapData)
+  if (row?.market === 'NASDAQ / NQ' && relationshipMapData?.available && relationshipMapData.driver_id === 'dgs10') {
     const r20 = relationshipMapData.latest_rolling_corr_20
-    parts.push(
-      `Live macro map (${priceLabel} vs ${driverLabel}): primary rolling correlation ≈ ${Number(r20).toFixed(2)} — context only.`,
-    )
+    if (r20 != null && Number.isFinite(Number(r20))) {
+      parts.push(`Live NQ vs 10Y window: short-term rolling correlation ≈ ${Number(r20).toFixed(2)} (see chart).`)
+    }
   }
 
   return parts.slice(0, 3).join(' ')

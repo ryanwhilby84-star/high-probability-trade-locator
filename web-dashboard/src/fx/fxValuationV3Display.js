@@ -5,13 +5,18 @@
  * chart workstation overlays. Do not substitute V2 (fxInstitutionalValuation.js).
  */
 import { resolveFxPairId } from './fxInstitutionalValuation.js'
+import { gradeFromPct, iveSummaryLine, readIVE } from '../valuation/iveDisplay.js'
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
 export const FX_V3_LIVE_PAIRS = new Set([
   'EUR/USD',
+  'GBP/USD',
   'AUD/USD',
+  'NZD/USD',
+  'USD/JPY',
   'USD/CAD',
+  'USD/CHF',
   'EUR/GBP',
   'EUR/AUD',
 ])
@@ -38,12 +43,6 @@ export function fmtRate(v) {
   const n = Number(v)
   if (!Number.isFinite(n)) return '—'
   return `${n.toFixed(2)}%`
-}
-
-export function normalizeConfidence(v) {
-  const s = String(v || '').trim()
-  if (!s || s.toLowerCase() === 'none') return 'None'
-  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 }
 
 export function fxV3StateTone(state) {
@@ -77,9 +76,9 @@ export function fxValuationV3FromDocs(v3Doc, foundationPair, pairId) {
   if (!block) return null
 
   const foundationPass = foundationPair?.overall_status === 'PASS'
-  const inLiveScope =
-    FX_V3_LIVE_PAIRS.has(pairId) || (pairId === 'USD/CHF' && foundationPass)
+  const inLiveScope = FX_V3_LIVE_PAIRS.has(pairId) && foundationPass
   const wired = block.wired === true && inLiveScope && foundationPass
+  const ive = readIVE(block)
 
   const blockers = foundationPair?.v3_blocker?.blockers || []
   let unavailableReason =
@@ -104,7 +103,8 @@ export function fxValuationV3FromDocs(v3Doc, foundationPair, pairId) {
     fairValue: block.fair_value,
     deviation: block.deviation_pct,
     state: block.valuation_state,
-    confidence: normalizeConfidence(block.confidence),
+    valuationGrade: ive?.valuationGrade || gradeFromPct(block.deviation_pct),
+    modelStatus: ive?.modelStatus || block.model_status || 'MODEL_INCOMPLETE',
     modelId: block.model_id,
     auditStatus: block.audit_status,
     driverSummary: block.driver_summary,
@@ -119,6 +119,7 @@ export function fxValuationV3FromDocs(v3Doc, foundationPair, pairId) {
     blockers,
     foundationPass,
     foundationTone: foundationPass ? 'pass' : 'fail',
+    ive,
   }
 }
 
@@ -137,7 +138,8 @@ export function fxValuationV3Display(marketId, v3Doc, foundationDoc, row) {
       gap: null,
       bias: null,
       condition: 'Unavailable',
-      confidence: model.confidence,
+      valuationGrade: model.valuationGrade,
+      modelStatus: model.modelStatus,
       fair: model.fairValue,
       spot: model.spot,
       model: model.modelId,
@@ -146,14 +148,17 @@ export function fxValuationV3Display(marketId, v3Doc, foundationDoc, row) {
     }
   }
 
+  const iveLine = model.ive ? iveSummaryLine(model.ive) : null
   return {
     gap: model.deviation,
     bias: valuationStateToBias(model.state),
     condition: model.state,
-    confidence: model.confidence,
+    valuationGrade: model.valuationGrade,
+    modelStatus: model.modelStatus,
     fair: model.fairValue,
     spot: model.spot,
     model: model.modelId,
-    summary: model.driverSummary,
+    summary: [model.driverSummary, iveLine].filter(Boolean).join(' · '),
   }
 }
+

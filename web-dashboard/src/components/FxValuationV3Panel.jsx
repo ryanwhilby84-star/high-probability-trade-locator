@@ -103,7 +103,7 @@ export function FxValuationV3Panel({ marketId, row }) {
                   {model.quote} 2Y: {fmtRate(d.quote_yield_2y)}
                 </p>
                 <p className="fxv3-driver-result">
-                  2Y differential: <strong>{fmtPp(d.yield_2y_diff)}</strong>
+                  2Y differential: <strong>{fmtPp(d.yield_2y_diff ?? d.yield_2y_diff)}</strong>
                 </p>
               </DriverBlock>
 

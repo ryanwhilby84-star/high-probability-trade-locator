@@ -5,7 +5,22 @@ import { buildMarketBriefing } from '../marketBriefing.js'
 import { MacroRelationshipMap, MacroRelationshipOverlayChart, humanMacroMapUnavailableReason } from '../MacroRelationshipMap.jsx'
 import { expectsMacroRelationshipMap, marketsMacroAlign, readMacroFreshness, resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
 import { MacroHealthPanel } from '../components/MacroHealthPanel.jsx'
+import { CotWorkstation } from '../components/CotWorkstation.jsx'
+import { SeasonalityPriceChart } from '../components/SeasonalityPriceChart.jsx'
+import { SeasonalityV2ErrorBoundary } from '../components/SeasonalityV2Panel.jsx'
+import { FxValuationHistoryChart } from '../components/FxValuationHistoryChart.jsx'
+import { ValuationInstrumentSection } from '../components/IVECalculationPanel.jsx'
+import { useLocationLatest } from '../hooks/useLocationLatest.js'
+import { useFxValuationV3Latest } from '../hooks/useFxValuationV3Dev.js'
+import {
+  isPriceChartQuarantined,
+  PriceAuditQuarantineBanner,
+  usePriceScaleAudit,
+} from '../prices/priceScaleAudit.jsx'
 import { LiveMarketContextSection } from '../LiveMarketContextSection.jsx'
+import { MacroCatalystPanel } from '../components/MacroCatalystPanel.jsx'
+import { WeatherCropPanel } from '../components/WeatherCropPanel.jsx'
+import { LegacyCotPanel } from '../components/LegacyCotPanel.jsx'
 import { buildInstitutionalDecisionDigest } from '../institutionalPositioningDigest.js'
 import { buildWeekBackdropDigest } from '../macroReadableDigest.js'
 import {
@@ -778,6 +793,403 @@ function HistoricalModeBlock({ title, subtitle, ctx, headingStyle }) {
   )
 }
 
+const PCT_CLASS_TONE = {
+  'Extreme Low': { bg: '#fee2e2', fg: '#991b1b', bd: '#fca5a5' },
+  Low: { bg: '#ffedd5', fg: '#c2410c', bd: '#fdba74' },
+  Neutral: { bg: '#f1f5f9', fg: '#334155', bd: '#cbd5e1' },
+  High: { bg: '#d1fae5', fg: '#047857', bd: '#6ee7b7' },
+  'Extreme High': { bg: '#dcfce7', fg: '#15803d', bd: '#86efac' },
+}
+
+function pctClassTone(label) {
+  return PCT_CLASS_TONE[label] || PCT_CLASS_TONE.Neutral
+}
+
+/** Tone for absolute crowding labels (Low/Normal/High/Strong/Crowded/Extreme). */
+function crowdTone(label) {
+  const s = String(label || '')
+  if (/Crowded|Extreme/.test(s)) return { bg: '#fee2e2', fg: '#991b1b', bd: '#f87171' }
+  if (/High|Strong/.test(s)) return { bg: '#ffedd5', fg: '#c2410c', bd: '#fb923c' }
+  if (/Low|Weak/.test(s)) return { bg: '#ccfbf1', fg: '#0f766e', bd: '#5eead4' }
+  return { bg: '#f1f5f9', fg: '#334155', bd: '#cbd5e1' }
+}
+
+/** One row of the absolute "vs 3Y Max" positioning view. */
+function ThreeYearAbsRow({ label, value, pct, pctLabel }) {
+  const num = value == null || value === '' ? '—' : Number(value).toLocaleString('en-US')
+  const pctTxt = pct == null || pct === '' || !Number.isFinite(Number(pct)) ? null : `${Number(pct).toFixed(1)}% ${pctLabel}`
+  return (
+    <div className="tyc-abs-row">
+      <span className="tyc-abs-label">{label}</span>
+      <span className="tyc-abs-value">{num}</span>
+      <span className="tyc-abs-pct">{pctTxt || '—'}</span>
+    </div>
+  )
+}
+
+function fmtPp(v) {
+  if (v == null || v === '' || !Number.isFinite(Number(v))) return '—'
+  const n = Number(v)
+  return `${n >= 0 ? '+' : ''}${n.toFixed(2)}pp`
+}
+
+// Valuation describes value (cheap/fair/expensive), not trade direction.
+function fxValueCondition(fx) {
+  if (fx && fx.value_condition) return String(fx.value_condition)
+  const b = String((fx && fx.valuation_bias) || '')
+  if (b === 'Bullish') return 'Undervalued'
+  if (b === 'Bearish') return 'Overvalued'
+  if (b === 'Neutral') return 'Fair Value'
+  return '—'
+}
+
+function fxValueTone(condition) {
+  const c = String(condition || '')
+  if (c === 'Undervalued') return { bg: 'rgba(22,163,74,0.2)', fg: '#86efac', bd: 'rgba(22,163,74,0.5)' }
+  if (c === 'Overvalued') return { bg: 'rgba(220,38,38,0.18)', fg: '#fca5a5', bd: 'rgba(220,38,38,0.45)' }
+  return { bg: 'rgba(100,116,139,0.16)', fg: '#cbd5e1', bd: 'rgba(100,116,139,0.4)' }
+}
+
+function fxConfTone(conf) {
+  const c = String(conf || '')
+  if (c === 'High') return { fg: '#86efac' }
+  if (c === 'Medium') return { fg: '#fcd34d' }
+  return { fg: '#fca5a5' }
+}
+
+/** FX Valuation — institutional macro V2 (primary) or yield V1 fallback. */
+function FxValuationBlock({ fx }) {
+  if (!fx || typeof fx !== 'object' || !fx.pair) return null
+  const isV2 = String(fx.valuation_model_type || '').includes('Institutional Macro V2')
+  const valueCondition = fxValueCondition(fx)
+  const conditionTone = fxValueTone(valueCondition)
+  const has10y = fx.yield_10y_diff != null
+  const fmtPct = (v) => (v == null || !Number.isFinite(Number(v)) ? '—' : `${Number(v) >= 0 ? '+' : ''}${Number(v).toFixed(2)}%`)
+  const DiffRow = ({ label, base, quote, diff }) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', padding: '4px 0', fontSize: '0.85rem' }}>
+      <span style={{ color: '#94a3b8', minWidth: '150px' }}>{label}</span>
+      <span style={{ color: '#cbd5e1', flex: '1 1 auto', textAlign: 'right' }}>
+        {base == null ? '—' : Number(base).toFixed(2)} − {quote == null ? '—' : Number(quote).toFixed(2)}
+      </span>
+      <span style={{ color: '#e2e8f0', fontWeight: 700, minWidth: '84px', textAlign: 'right' }}>{fmtPp(diff)}</span>
+    </div>
+  )
+  return (
+    <section className="fx-valuation" style={{ marginTop: '24px' }}>
+      <h4 className="wo-cot-section-title">FX Institutional Valuation</h4>
+      <p className="wo-cot-hint wo-cot-hint-tight">
+        Macro-driven fair value for <strong>{fx.pair}</strong> ({fx.valuation_model_type}). Independent of price action,
+        COT, and seasonality.
+      </p>
+      {isV2 && fx.spot != null ? (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: '10px',
+            marginBottom: '12px',
+          }}
+        >
+          <div className="fx-val-metric">
+            <span className="fx-val-metric-label">Current price</span>
+            <strong>{Number(fx.spot).toFixed(4)}</strong>
+          </div>
+          <div className="fx-val-metric">
+            <span className="fx-val-metric-label">Model fair value</span>
+            <strong>{fx.fair_value_estimate != null ? Number(fx.fair_value_estimate).toFixed(4) : '—'}</strong>
+          </div>
+          <div className="fx-val-metric">
+            <span className="fx-val-metric-label">Valuation gap</span>
+            <strong className={fx.valuation_gap_pct > 0 ? 'val-tone-bullish' : fx.valuation_gap_pct < 0 ? 'val-tone-bearish' : ''}>
+              {fmtPct(fx.valuation_gap_pct)}
+            </strong>
+          </div>
+        </div>
+      ) : null}
+      {isV2 ? (
+        <div style={{ marginBottom: '12px', fontSize: '0.85rem', color: '#cbd5e1' }}>
+          Currency scores: {fx.base} {fx.base_currency_score != null ? `${Number(fx.base_currency_score).toFixed(0)}` : '—'} vs{' '}
+          {fx.quote} {fx.quote_currency_score != null ? `${Number(fx.quote_currency_score).toFixed(0)}` : '—'}
+          {fx.real_yield_diff != null ? ` · Real yield diff ${fmtPp(fx.real_yield_diff)}` : null}
+        </div>
+      ) : null}
+      <div
+        style={{
+          padding: '12px 14px',
+          borderRadius: '10px',
+          background: 'rgba(15,23,42,0.55)',
+          border: '1px solid rgba(100,116,139,0.28)',
+          marginBottom: '12px',
+        }}
+      >
+        <DiffRow label="Policy Differential" base={fx.base_policy_rate} quote={fx.quote_policy_rate} diff={fx.policy_rate_diff} />
+        <DiffRow label="2Y Yield Differential" base={fx.base_2y} quote={fx.quote_2y} diff={fx.yield_2y_diff} />
+        {isV2 ? (
+          <DiffRow label="Real Yield Differential" base={fx.base_real_yield} quote={fx.quote_real_yield} diff={fx.real_yield_diff} />
+        ) : null}
+        {has10y ? (
+          <DiffRow label="10Y Yield Differential" base={fx.base_10y} quote={fx.quote_10y} diff={fx.yield_10y_diff} />
+        ) : (
+          <div style={{ padding: '4px 0', fontSize: '0.85rem', color: '#64748b' }}>10Y Yield Differential: not available</div>
+        )}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+        <span
+          style={{
+            fontSize: '0.85rem',
+            padding: '4px 12px',
+            borderRadius: '999px',
+            color: conditionTone.fg,
+            background: conditionTone.bg,
+            border: `1px solid ${conditionTone.bd}`,
+          }}
+        >
+          Valuation: <strong>{valueCondition}</strong>
+        </span>
+        <span style={{ fontSize: '0.85rem', padding: '4px 12px', color: '#cbd5e1' }}>
+          {isV2 ? (
+            <>
+              Gap: <strong>{fmtPct(fx.valuation_gap_pct)}</strong>
+            </>
+          ) : (
+            <>
+              Score: <strong>{fx.valuation_score != null ? `${Number(fx.valuation_score).toFixed(1)} / 10` : '—'}</strong>
+            </>
+          )}
+        </span>
+      </div>
+      {fx.pair_status ? (
+        <p style={{ margin: '0 0 8px', fontSize: '0.88rem', color: '#94a3b8' }}>{fx.pair_status}</p>
+      ) : null}
+      {fx.explanation ? (
+        <p className="wo-cot-trader-blurb" style={{ margin: '0 0 8px', fontSize: '0.88rem', color: '#cbd5e1', lineHeight: 1.55 }}>
+          {fx.explanation}
+        </p>
+      ) : null}
+      {!isV2 && fx.fair_value_estimate == null ? (
+        <p style={{ margin: '0 0 4px', fontSize: '0.78rem', color: '#64748b' }}>
+          Fair value: not yet modelled — V1 reports yield-differential valuation only.
+        </p>
+      ) : null}
+      {Array.isArray(fx.missing_fields) && fx.missing_fields.length ? (
+        <p style={{ margin: 0, fontSize: '0.78rem', color: '#fca5a5' }}>Missing inputs: {fx.missing_fields.join(', ')}</p>
+      ) : null}
+      {Array.isArray(fx.stale_fields) && fx.stale_fields.length ? (
+        <p style={{ margin: 0, fontSize: '0.78rem', color: '#fcd34d' }}>Stale inputs: {fx.stale_fields.join(', ')}</p>
+      ) : null}
+    </section>
+  )
+}
+
+function ThreeYearPercentileChip({ label, pct, cls, interp }) {
+  const tone = pctClassTone(cls)
+  const pctTxt = pct == null || pct === '' || !Number.isFinite(Number(pct)) ? '—' : `${Number(pct).toFixed(0)}%`
+  return (
+    <div
+      className="tyc-chip"
+      title={interp || undefined}
+      style={{
+        background: tone.bg,
+        border: `1px solid ${tone.bd}`,
+      }}
+    >
+      <div className="tyc-chip-label">{label}</div>
+      <div className="tyc-chip-value" style={{ color: tone.fg }}>{pctTxt}</div>
+      <div className="tyc-chip-class" style={{ color: tone.fg }}>{cls && cls !== 'N/A' ? cls : '—'}</div>
+    </div>
+  )
+}
+
+/** 3Y CONTEXT — rolling 156-week institutional positioning context (below 13W). */
+export function ThreeYearContextBlock({ ctx, multiyear, hideDeepAudit = false }) {
+  const has = ctx && typeof ctx === 'object'
+  const rowsUsed = has ? ctx.rows_used : null
+  const insufficient = !has || rowsUsed == null || Number(rowsUsed) < 1
+  const window = (has && ctx.window_weeks) || 156
+  const lines = (has && Array.isArray(ctx.classification_lines) ? ctx.classification_lines : []).filter(Boolean)
+  const crowdLines = (has && Array.isArray(ctx.crowding_classification_lines) ? ctx.crowding_classification_lines : []).filter(Boolean)
+  return (
+    <section className="three-year-context" style={{ marginTop: '24px' }}>
+      <h4 className="wo-cot-section-title">3Y Context</h4>
+      <p className="wo-cot-hint wo-cot-hint-tight">
+        Rolling {window}-week (3-year) percentile of current positioning versus institutional history.
+        {!insufficient && rowsUsed != null ? (
+          <>
+            {' '}Trailing window: <strong>{display(rowsUsed)}</strong> reports
+            {has && ctx.earliest_report_date && ctx.latest_report_date ? (
+              <> ({display(ctx.earliest_report_date)} → {display(ctx.latest_report_date)})</>
+            ) : null}.
+          </>
+        ) : null}
+      </p>
+      {insufficient ? (
+        <p className="wo-cot-trader-blurb tyc-insufficient">
+          Insufficient multi-year history loaded for this contract — rebuild the tracked master with deeper history
+          to populate the rolling 3-year window.
+        </p>
+      ) : (
+        <>
+          <div className="tyc-chips">
+            <ThreeYearPercentileChip label="Net Percentile" pct={ctx.net_percentile} cls={ctx.net_class} interp={ctx.net_interpretation} />
+            <ThreeYearPercentileChip label="Long Percentile" pct={ctx.long_percentile} cls={ctx.long_class} interp={ctx.long_interpretation} />
+            <ThreeYearPercentileChip label="Short Percentile" pct={ctx.short_percentile} cls={ctx.short_class} interp={ctx.short_interpretation} />
+            <ThreeYearPercentileChip label="OI Percentile" pct={ctx.oi_percentile} cls={ctx.oi_class} interp={ctx.oi_interpretation} />
+          </div>
+          <div className="tyc-proximity-panel">
+            <div className="tyc-proximity-title">
+              3Y Positioning Context — proximity to multi-year extremes
+            </div>
+            <ThreeYearAbsRow label="Longs" value={ctx.current_long} pct={ctx.long_vs_3y_max_pct} pctLabel="of 3Y Max" />
+            <ThreeYearAbsRow label="Shorts" value={ctx.current_short} pct={ctx.short_vs_3y_max_pct} pctLabel="of 3Y Max" />
+            <ThreeYearAbsRow label="Net" value={ctx.current_net} pct={ctx.net_range_pct} pctLabel="of 3Y range" />
+            <ThreeYearAbsRow label="Open Interest" value={ctx.current_oi} pct={ctx.oi_vs_3y_max_pct} pctLabel="of 3Y Max" />
+            {crowdLines.length ? (
+              <div style={{ marginTop: '10px' }}>
+                <div className="tyc-class-label">Classification</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {crowdLines.map((line) => {
+                    const tone = crowdTone(line)
+                    return (
+                      <span
+                        key={line}
+                        style={{
+                          fontSize: '0.84rem',
+                          fontWeight: 600,
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          color: tone.fg,
+                          background: tone.bg,
+                          border: `1px solid ${tone.bd}`,
+                        }}
+                      >
+                        {line}
+                      </span>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+          {lines.length ? (
+            <div className="tyc-class-block">
+              <div className="tyc-class-label">Classification</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {lines.map((line) => {
+                  const cls = String(line).split(' ').slice(0, line.startsWith('Extreme') ? 2 : 1).join(' ')
+                  const tone = pctClassTone(cls)
+                  return (
+                    <span
+                      key={line}
+                      style={{
+                        fontSize: '0.84rem',
+                        fontWeight: 600,
+                        padding: '3px 10px',
+                        borderRadius: '999px',
+                        color: tone.fg,
+                        background: tone.bg,
+                        border: `1px solid ${tone.bd}`,
+                      }}
+                    >
+                      {line}
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null}
+          {multiyear && multiyear.interpretation ? (
+            <p className="wo-cot-trader-blurb tyc-engine-read">
+              <strong>Engine read:</strong> {multiyear.interpretation}
+            </p>
+          ) : null}
+          {!hideDeepAudit ? (
+          <details className="hist-deep-audit" style={{ marginBottom: '6px' }}>
+            <summary>Deep audit — 3Y min / max / average table</summary>
+            <PositioningDeepAuditTable ctx={ctx} />
+          </details>
+          ) : null}
+        </>
+      )}
+    </section>
+  )
+}
+
+function PositioningDeepAuditTable({ ctx }) {
+  const has = ctx && typeof ctx === 'object'
+  if (!has) return null
+  return (
+    <>
+      <div className="wo-cot-hist-table-wrap">
+        <table className="wo-cot-hist-table">
+          <thead>
+            <tr>
+              <th />
+              <th>3Y Min</th>
+              <th>3Y Max</th>
+              <th>3Y Average</th>
+              <th>Percentile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Long</th>
+              <td>{fmtNum(ctx.long_min)}</td>
+              <td>{fmtNum(ctx.long_max)}</td>
+              <td>{fmtNum(ctx.long_avg)}</td>
+              <td>{fmtHistPct(ctx.long_percentile)}</td>
+            </tr>
+            <tr>
+              <th scope="row">Short</th>
+              <td>{fmtNum(ctx.short_min)}</td>
+              <td>{fmtNum(ctx.short_max)}</td>
+              <td>{fmtNum(ctx.short_avg)}</td>
+              <td>{fmtHistPct(ctx.short_percentile)}</td>
+            </tr>
+            <tr>
+              <th scope="row">Net</th>
+              <td>{fmtNum(ctx.net_min)}</td>
+              <td>{fmtNum(ctx.net_max)}</td>
+              <td>{fmtNum(ctx.net_avg)}</td>
+              <td>{fmtHistPct(ctx.net_percentile)}</td>
+            </tr>
+            <tr>
+              <th scope="row">Open Interest</th>
+              <td>{fmtNum(ctx.oi_min)}</td>
+              <td>{fmtNum(ctx.oi_max)}</td>
+              <td>{fmtNum(ctx.oi_avg)}</td>
+              <td>{fmtHistPct(ctx.oi_percentile)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {ctx.summary ? (
+        <div className="wo-cot-context-summary" style={{ whiteSpace: 'pre-wrap', marginTop: '10px' }}>
+          {ctx.summary}
+        </div>
+      ) : null}
+    </>
+  )
+}
+
+/** Deep audit table — shown below 3Y context in instrument positioning workspace. */
+export function PositioningDeepAuditBlock({ ctx }) {
+  const has = ctx && typeof ctx === 'object'
+  const insufficient = !has || ctx.rows_used == null || Number(ctx.rows_used) < 1
+  return (
+    <section className="positioning-deep-audit" style={{ marginTop: '20px' }}>
+      <h4 className="wo-cot-section-title">Deep audit</h4>
+      <p className="wo-cot-hint wo-cot-hint-tight">3-year min / max / average and percentile ranks for this cohort.</p>
+      {insufficient ? (
+        <p className="wo-cot-trader-blurb tyc-insufficient">
+          Insufficient multi-year history loaded for this cohort.
+        </p>
+      ) : (
+        <PositioningDeepAuditTable ctx={ctx} />
+      )}
+    </section>
+  )
+}
+
 function clipUiStr(s, n) {
   const t = String(s || '').trim()
   if (t.length <= n) return t
@@ -990,6 +1402,12 @@ function MarketBriefingPanel({ row, pack, peersByMarket, globalMarketRegime, lat
 
 function PositioningDecisionSupport({ row }) {
   const d = React.useMemo(() => buildInstitutionalDecisionDigest(row), [row])
+  const r3 = row?.rolling_3y_history_context || {}
+  const fmtPct = (v) => {
+    const n = Number(v)
+    if (!Number.isFinite(n)) return '—'
+    return `${n.toFixed(1)}%`
+  }
   return (
     <div className="pds-wrap" aria-label="Institutional positioning read">
       <h4 className="pds-section-title">Institutional read</h4>
@@ -1002,6 +1420,10 @@ function PositioningDecisionSupport({ row }) {
           <dd>{display(d.positioning.weekly)}</dd>
           <dt>4-week change</dt>
           <dd>{display(d.positioning.fourWeek)}</dd>
+          <dt>Net percentile (3Y)</dt>
+          <dd>{fmtPct(r3.net_percentile)}</dd>
+          <dt>Open interest percentile (3Y)</dt>
+          <dd>{fmtPct(r3.oi_percentile)}</dd>
           <dt>Meaning</dt>
           <dd>{display(d.positioning.meaning)}</dd>
         </dl>
@@ -1024,24 +1446,426 @@ export function buildMarketHistoryForMarket(allRows, market, asOfDate, maxWeeks 
 
 export { enrichRowHistoryContext, buildFallbackUiPack, stateToneClass }
 
-function InstrumentDetail({
-  row,
-  historyRows,
-  peersByMarket = {},
-  globalMarketRegime = null,
-  relationshipMapData = null,
-  hideWeatherPlaceholder = false,
-  workspaceMode = false,
-  economicCalendar = null,
-  weatherContext = null,
-  weatherLoadError = null,
-}) {
-  const L = row?.long_value
-  const S = row?.short_value
-  const N = row?.net_value
+let _cot3yCache = null
+let _cot3yPromise = null
+let _cot3yError = false
+
+function useCot3ySeries() {
+  const [doc, setDoc] = React.useState(_cot3yCache)
+  const [errored, setErrored] = React.useState(_cot3yError)
+  React.useEffect(() => {
+    if (_cot3yCache) {
+      setDoc(_cot3yCache)
+      return
+    }
+    if (!_cot3yPromise) {
+      _cot3yPromise = fetch('/data/cot_3y_series_latest.json')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((d) => {
+          _cot3yCache = d
+          return d
+        })
+        .catch((e) => {
+          _cot3yError = true
+          return null
+        })
+    }
+    let active = true
+    _cot3yPromise.then((d) => {
+      if (!active) return
+      setDoc(d)
+      setErrored(_cot3yError)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+  return { doc, errored }
+}
+
+/** Resolve the cot_3y_series block for a market, tolerating label vs key drift. */
+function resolveCot3yBlock(doc, market) {
+  return resolveMarketBlock(doc, market)
+}
+
+const V2_STAGING_CHART_KEY = 'hptl_seasonality_v2_staging_chart'
+
+const FX_V2_STAGING_MARKETS = new Set([
+  'Euro FX / 6E',
+  'British Pound / 6B',
+  'Australian Dollar / 6A',
+  'NZ Dollar / 6N',
+  'Japanese Yen / 6J',
+  'Canadian Dollar / 6C',
+  'Swiss Franc / 6S',
+  'EUR/JPY',
+  'EUR/USD',
+  'GBP/USD',
+  'AUD/USD',
+  'NZD/USD',
+  'USD/JPY',
+  'USDCAD',
+  'USD/CAD',
+  'USDCHF',
+  'USD/CHF',
+  'EURJPY',
+])
+
+let _seaPriceCache = null
+let _seaPricePromise = null
+let _v2StagingChartCache = null
+let _v2StagingChartPromise = null
+
+function useSeasonalityV2StagingToggle() {
+  const [on, setOn] = React.useState(() => {
+    try {
+      return localStorage.getItem(V2_STAGING_CHART_KEY) === '1'
+    } catch {
+      return false
+    }
+  })
+  const toggle = React.useCallback(() => {
+    setOn((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem(V2_STAGING_CHART_KEY, next ? '1' : '0')
+      } catch {
+        /* ignore */
+      }
+      return next
+    })
+  }, [])
+  return [on, toggle]
+}
+
+function useSeasonalityV2StagingChart() {
+  const [doc, setDoc] = React.useState(_v2StagingChartCache)
+  React.useEffect(() => {
+    if (_v2StagingChartCache) {
+      setDoc(_v2StagingChartCache)
+      return
+    }
+    if (!_v2StagingChartPromise) {
+      _v2StagingChartPromise = fetch('/data/seasonality_v2_staging_latest.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          _v2StagingChartCache = d
+          return d
+        })
+        .catch(() => null)
+    }
+    let active = true
+    _v2StagingChartPromise.then((d) => {
+      if (active) setDoc(d)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+  return doc
+}
+
+function useSeasonalityPrice() {
+  const [doc, setDoc] = React.useState(_seaPriceCache)
+  React.useEffect(() => {
+    if (_seaPriceCache) {
+      setDoc(_seaPriceCache)
+      return
+    }
+    if (!_seaPricePromise) {
+      _seaPricePromise = fetch('/data/seasonality_price_latest.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          _seaPriceCache = d
+          return d
+        })
+        .catch(() => null)
+    }
+    let active = true
+    _seaPricePromise.then((d) => {
+      if (active) setDoc(d)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+  return doc
+}
+
+function normalizeFxMarketKey(market) {
+  const m = String(market || '').trim()
+  if (/^[A-Z]{6}$/.test(m)) return `${m.slice(0, 3)}/${m.slice(3)}`
+  return m
+}
+
+function isFxSeasonalityMarket(market) {
+  const m = String(market || '').trim()
+  if (!m) return false
+  if (FX_V2_STAGING_MARKETS.has(m)) return true
+  if (/^[A-Z]{3}\/[A-Z]{3}$/.test(m)) return true
+  if (/^[A-Z]{6}$/.test(m)) return true
+  if (/\/ 6[A-Z0-9]/i.test(m)) return true
+  return false
+}
+
+function resolveMarketBlock(doc, market) {
+  if (!doc || !doc.markets || !market) return { block: null, matchedKey: null }
+  const markets = doc.markets
+  const candidates = [String(market).trim(), normalizeFxMarketKey(market)]
+  for (const key of candidates) {
+    if (key && markets[key]) return { block: markets[key], matchedKey: key }
+  }
+  const norm = (s) => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim()
+  const target = norm(market)
+  const targetSlash = norm(normalizeFxMarketKey(market))
+  for (const k of Object.keys(markets)) {
+    const nk = norm(k)
+    if (nk === target || nk === targetSlash) return { block: markets[k], matchedKey: k }
+  }
+  const compact = (s) => norm(s).replace(/\//g, '').replace(/\s+/g, '')
+  const targetCompact = compact(market)
+  for (const k of Object.keys(markets)) {
+    const block = markets[k]
+    if (compact(k) === targetCompact) return { block, matchedKey: k }
+    if (block?.display_symbol && compact(block.display_symbol) === targetCompact) {
+      return { block, matchedKey: k }
+    }
+  }
+  return { block: null, matchedKey: null }
+}
+
+let _fxValHistCache = null
+let _fxValHistPromise = null
+let _valuationLatestCache = null
+let _valuationLatestPromise = null
+
+function useValuationLatest() {
+  const [doc, setDoc] = React.useState(_valuationLatestCache)
+  React.useEffect(() => {
+    if (_valuationLatestCache) {
+      setDoc(_valuationLatestCache)
+      return
+    }
+    if (!_valuationLatestPromise) {
+      _valuationLatestPromise = fetch('/data/valuation_latest.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          _valuationLatestCache = d
+          return d
+        })
+        .catch(() => null)
+    }
+    let active = true
+    _valuationLatestPromise.then((d) => {
+      if (active) setDoc(d)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+  return doc
+}
+
+function useFxValuationHistory() {
+  const [doc, setDoc] = React.useState(_fxValHistCache)
+  React.useEffect(() => {
+    if (_fxValHistCache) {
+      setDoc(_fxValHistCache)
+      return
+    }
+    if (!_fxValHistPromise) {
+      _fxValHistPromise = fetch('/data/fx_valuation_history_latest.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          _fxValHistCache = d
+          return d
+        })
+        .catch(() => null)
+    }
+    let active = true
+    _fxValHistPromise.then((d) => {
+      if (active) setDoc(d)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+  return doc
+}
+
+function resolveFxPairId(market, fx) {
+  if (fx?.pair) return fx.pair
+  const m = String(market || '').trim()
+  if (/^[A-Z]{3}\/[A-Z]{3}$/.test(m)) return m
+  const alias = {
+    'Euro FX / 6E': 'EUR/USD',
+    'British Pound / 6B': 'GBP/USD',
+    'Australian Dollar / 6A': 'AUD/USD',
+    'NZ Dollar / 6N': 'NZD/USD',
+    'Japanese Yen / 6J': 'USD/JPY',
+    'Canadian Dollar / 6C': 'USD/CAD',
+    'Swiss Franc / 6S': 'USD/CHF',
+    'EUR/JPY': 'EUR/JPY',
+  }
+  return alias[m] || null
+}
+
+function FxValuationHistorySection({ market, fx }) {
+  const doc = useFxValuationHistory()
+  const pairId = resolveFxPairId(market, fx)
+  if (!pairId && !fx?.pair) return null
+  const block = doc?.by_pair?.[pairId] || (doc?.pairs || []).find((p) => p.pair === pairId) || null
+  if (!doc && !block) return null
+  return (
+    <section className="v2-chart-section">
+      <div className="fxvh-dark">
+        <FxValuationHistoryChart block={block || { available: false, reason: 'FX valuation history export not loaded.' }} />
+      </div>
+    </section>
+  )
+}
+
+function SeasonalityPriceSection({ market }) {
+  const [v2StagingOn, toggleV2Staging] = useSeasonalityV2StagingToggle()
+  const prodDoc = useSeasonalityPrice()
+  const v2Doc = useSeasonalityV2StagingChart()
+  const priceAudit = usePriceScaleAudit()
+  const prodBlock = resolveMarketBlock(prodDoc, market).block
+  const v2Resolved = resolveMarketBlock(v2Doc, market)
+  const v2Block = v2Resolved.block
+  const showFxToggle = isFxSeasonalityMarket(market)
+  const v2StagingActive = v2StagingOn && showFxToggle
+
+  let block = prodBlock
+  let dataMode = 'production'
+  if (v2StagingActive) {
+    dataMode = 'seasonality_v2_staging'
+    if (!v2Doc) {
+      block = { available: false, reason: 'Loading Seasonality V2 staging data…', seasonality_v2_staging: true }
+    } else if (v2Block?.available) {
+      block = { ...v2Block, seasonality_v2_staging: true, data_source_mode: 'seasonality_v2_staging' }
+    } else {
+      block = {
+        available: false,
+        reason: 'No V2 staging data for this market',
+        seasonality_v2_staging: true,
+        data_source_mode: 'seasonality_v2_staging',
+      }
+    }
+  }
+
+  const usingV2 = v2StagingActive && v2Block?.available
+  const { quarantined, reason } = isPriceChartQuarantined(priceAudit, market)
+
+  if (!prodDoc && !v2Doc && !priceAudit) return null
+
+  if (quarantined) {
+    return (
+      <section className="v2-chart-section">
+        <PriceAuditQuarantineBanner reason={reason} />
+      </section>
+    )
+  }
+
+  if (!showFxToggle && !block?.available) return null
+
+  if (!block?.available) {
+    return (
+      <section className="v2-chart-section">
+        <div className="sea-price-dark">
+          {showFxToggle ? (
+            <div className="sea-v2-toggle-row">
+              <label className="sea-v2-toggle">
+                <input type="checkbox" checked={v2StagingOn} onChange={toggleV2Staging} />
+                Use Seasonality V2 Staging: {v2StagingOn ? 'ON' : 'OFF'}
+              </label>
+              <span className="sea-v2-toggle-hint">Visual validation only — not live scoring</span>
+            </div>
+          ) : null}
+          <p className="sea-price-empty">
+            {v2StagingActive
+              ? block?.reason || 'No V2 staging data for this market'
+              : 'Seasonality price chart unavailable for this instrument.'}
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="v2-chart-section">
+      <div className="sea-price-dark">
+        {showFxToggle ? (
+          <div className="sea-v2-toggle-row">
+            <label className="sea-v2-toggle">
+              <input type="checkbox" checked={v2StagingOn} onChange={toggleV2Staging} />
+              Use Seasonality V2 Staging: {v2StagingOn ? 'ON' : 'OFF'}
+            </label>
+            <span className="sea-v2-toggle-hint">
+              {usingV2
+                ? 'Source: Seasonality V2 staging — not production seasonality'
+                : v2StagingOn
+                  ? v2Doc
+                    ? 'No V2 staging data for this market'
+                    : 'Loading V2 staging export…'
+                  : 'Toggle ON to preview 10Y V2 chart before promotion'}
+            </span>
+          </div>
+        ) : null}
+        <SeasonalityV2ErrorBoundary>
+          <SeasonalityPriceChart block={block} dataMode={dataMode} />
+        </SeasonalityV2ErrorBoundary>
+      </div>
+    </section>
+  )
+}
+
+/** Instrument-page section: COT workstation (replaces legacy 3Y overlay chart). */
+function CotWorkstationSection({ market, confluenceRow, confluenceHistory }) {
+  const { doc, errored } = useCot3ySeries()
+  const seasonalityDoc = useSeasonalityPrice()
+  const valHistDoc = useFxValuationHistory()
+  const valuationDoc = useValuationLatest()
+  const locationDoc = useLocationLatest()
+  const v3Doc = useFxValuationV3Latest()
+  const priceAudit = usePriceScaleAudit()
+  const { block } = resolveCot3yBlock(doc, market)
+  const { quarantined, reason: quarantineReason } = isPriceChartQuarantined(priceAudit, market)
+
+  if (!doc && !errored) return null
+
+  if (quarantined) {
+    return (
+      <section className="v2-chart-section">
+        <PriceAuditQuarantineBanner reason={quarantineReason} />
+      </section>
+    )
+  }
+
+  if (block?.series?.length) {
+    return (
+      <section className="v2-chart-section">
+        <CotWorkstation
+          block={block}
+          marketId={market}
+          seasonalityDoc={seasonalityDoc}
+          valHistDoc={valHistDoc}
+          valuationDoc={valuationDoc}
+          locationDoc={locationDoc}
+          v3Doc={v3Doc}
+          confluenceRow={confluenceRow}
+          confluenceHistory={confluenceHistory}
+        />
+      </section>
+    )
+  }
+
+  return null
+}
+
+export function PositioningTrailPanel({ row, historyRows }) {
   const chrono = historyRows || []
   const chronoEnriched = enrichCotHistoryWithParticipation(chrono)
-  const latestParticipation = chronoEnriched.length ? chronoEnriched[chronoEnriched.length - 1]._participation : null
   const stats = computeWoWindowStats(chronoEnriched)
   const netsForHeat = chronoEnriched.map((r) => Number(r.net_value)).filter(Number.isFinite)
   const longsForHeat = chronoEnriched.map((r) => Number(r.long_value)).filter(Number.isFinite)
@@ -1049,7 +1873,6 @@ function InstrumentDetail({
   const netDeltasForHeat = chronoEnriched.map((r) => Number(r._netDelta1w)).filter(Number.isFinite)
   const longDeltasForHeat = chronoEnriched.map((r) => Number(r._longDelta1w)).filter(Number.isFinite)
   const shortDeltasForHeat = chronoEnriched.map((r) => Number(r._shortDelta1w)).filter(Number.isFinite)
-  const totalDeltasForHeat = chronoEnriched.map((r) => Number(r._totalDelta1w)).filter(Number.isFinite)
   const totalsForHeat = chronoEnriched.map((r) => rowOiTotal(r)).filter(Number.isFinite)
   const displayDesc = [...chronoEnriched].reverse()
   const avgLabel = stats?.windowN >= HISTORY_WEEKS ? '13W Avg' : `13W Avg (${stats?.windowN || 0} reports)`
@@ -1071,14 +1894,6 @@ function InstrumentDetail({
       max: Number.isFinite(stats?.net?.max) ? stats.net.max : Math.max(...netsForHeat),
     },
   }
-  const subRaw = String(row?.raw_cftc_market_name || '').trim()
-  const tg = String(row?.trader_group_used || '')
-  const subTrader = tg.includes('Noncommercial') || row?.position_source_family === 'legacy_noncommercial'
-    ? 'Non-commercial (Legacy CFTC)'
-    : tg.includes('lev_money')
-      ? 'Leveraged funds (CFTC)'
-      : 'Asset managers & large specs (CFTC "managed money" line)'
-  const pack = row?.ui_pack && typeof row.ui_pack === 'object' ? row.ui_pack : buildFallbackUiPack(row)
 
   const sumRow = (label, sLong, sShort, sLd, sSd, sTot, sPl, sPs, sNet, sW1) => (
     <tr key={label} className="wo-cot-summary-row">
@@ -1096,6 +1911,172 @@ function InstrumentDetail({
       <td>—</td>
     </tr>
   )
+
+  return (
+    <>
+      <h4 className="wo-cot-section-title" style={{ marginTop: '22px' }}>
+        Recent positioning trail
+      </h4>
+      <p className="wo-cot-hint">
+        Last {chronoEnriched.length} reports in view: <strong>13W high / low / average</strong> for context (not the full archive).
+        {' '}Newest row at top. Heat on long/short = size versus this window; week columns = change from the prior COT print.
+      </p>
+      <div className="wo-cot-table-wrap">
+        <table className="wo-cot-table wo-cot-table-participation">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Long</th>
+              <th>Short</th>
+              <th title="Change in longs vs prior COT week">Long Wk</th>
+              <th title="Change in shorts vs prior COT week">Short Wk</th>
+              <th>Total OI</th>
+              <th>% Long</th>
+              <th>% Short</th>
+              <th>Net</th>
+              <th title="Net change vs prior COT week">Net Wk</th>
+              <th title="Independent long/short flow classification">Participation</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!displayDesc.length ? (
+              <tr>
+                <td colSpan={12} style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
+                  No COT history rows for this contract in the current file.
+                </td>
+              </tr>
+            ) : null}
+            {stats && stats.windowN > 0 && displayDesc.length ? (
+              <>
+                {sumRow('13W Max', stats.long.max, stats.short.max, stats.longDelta.max, stats.shortDelta.max, stats.total.max, stats.pctLong.max, stats.pctShort.max, stats.net.max, stats.w1.max)}
+                {sumRow('13W Min', stats.long.min, stats.short.min, stats.longDelta.min, stats.shortDelta.min, stats.total.min, stats.pctLong.min, stats.pctShort.min, stats.net.min, stats.w1.min)}
+                {sumRow(avgLabel, stats.long.avg, stats.short.avg, stats.longDelta.avg, stats.shortDelta.avg, stats.total.avg, stats.pctLong.avg, stats.pctShort.avg, stats.net.avg, stats.w1.avg)}
+              </>
+            ) : null}
+            {displayDesc.map((h) => {
+              const d = rowDate(h)
+              const isCurrent = normalizeDate(d) === normalizeDate(rowDate(row))
+              const netVal = Number(h.net_value)
+              const ld = h._longDelta1w
+              const sd = h._shortDelta1w
+              const nd = Number.isFinite(h._netDelta1w) ? h._netDelta1w : numOrNaN(h.one_week_net_change)
+              const part = h._participation || { category: '—', tooltip: '', summary: '' }
+              const stateLine = String(h.positioning_state || '').trim()
+              const rowTip = [
+                `Report ${d}: ${part.summary}`,
+                `Legs vs prior week — longs ${fmtDeltaCell(ld)}, shorts ${fmtDeltaCell(sd)}, net ${fmtDeltaCell(nd)}.`,
+                part.tooltip,
+                stateLine ? `Engine state: ${stateLine}.` : '',
+              ]
+                .filter(Boolean)
+                .join(' ')
+              return (
+                <tr
+                  key={d}
+                  className={isCurrent ? 'wo-cot-data-row wo-row-current' : 'wo-cot-data-row'}
+                  title={rowTip}
+                  style={{ cursor: 'help' }}
+                >
+                  <td className="wo-cot-date">{display(d)}</td>
+                  <td className={longLevelHeat(h.long_value, heatRanges.long.min, heatRanges.long.max).className}>
+                    {fmtNum(h.long_value)}
+                  </td>
+                  <td className={shortLevelHeat(h.short_value, heatRanges.short.min, heatRanges.short.max).className}>
+                    {fmtNum(h.short_value)}
+                  </td>
+                  <td className={signedDeltaHeat(ld, longDeltasForHeat).className}>{fmtDeltaCell(ld)}</td>
+                  <td className={signedDeltaHeat(sd, shortDeltasForHeat, true).className}>{fmtDeltaCell(sd)}</td>
+                  <td
+                    className={totalOiLevelHeat(rowOiTotal(h), heatRanges.total.min, heatRanges.total.max).className}
+                  >
+                    {fmtNum(rowOiTotal(h))}
+                  </td>
+                  <td>{fmtPct1(pctLongNumber(h))}</td>
+                  <td>{fmtPct1(pctShortNumber(h))}</td>
+                  <td
+                    className={`wo-cot-net-col ${netHeatStyle(netVal, heatRanges.net.min, heatRanges.net.max).className}`}
+                  >
+                    {fmtNum(h.net_value)}
+                  </td>
+                  <td className={signedDeltaHeat(nd, netDeltasForHeat).className}>{fmtDeltaCell(nd)}</td>
+                  <td className={`wo-cot-participation-cell ${participationCellStyle(part.tone).className}`}>
+                    <span className="wo-cot-participation-label">{display(part.category)}</span>
+                    <span className="wo-cot-participation-sub">
+                      {display(part.summary).slice(0, 72)}
+                      {String(part.summary || '').length > 72 ? '…' : ''}
+                    </span>
+                  </td>
+                  <td className="wo-cot-state-cell">
+                    <span className={`badge-state ${stateToneClass(h.positioning_state)}`}>
+                      {display(h.positioning_state)}
+                    </span>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )
+}
+
+function InstrumentDetail({
+  row,
+  historyRows,
+  peersByMarket = {},
+  globalMarketRegime = null,
+  relationshipMapData = null,
+  hideWeatherPlaceholder = false,
+  workspaceMode = false,
+  economicCalendar = null,
+  weatherContext = null,
+  weatherLoadError = null,
+}) {
+  const L = row?.long_value
+  const S = row?.short_value
+  const N = row?.net_value
+  const chrono = historyRows || []
+  const chronoEnriched = enrichCotHistoryWithParticipation(chrono)
+  const latestParticipation = chronoEnriched.length ? chronoEnriched[chronoEnriched.length - 1]._participation : null
+  const subRaw = String(row?.raw_cftc_market_name || '').trim()
+  const tg = String(row?.trader_group_used || '')
+  const subTrader =
+    row?.position_source_family === 'tff_leveraged_money'
+      ? 'Leveraged Money (CFTC TFF · fut_fin_txt)'
+      : tg.includes('Noncommercial') || row?.position_source_family === 'legacy_noncommercial'
+        ? 'Non-commercial (Legacy CFTC)'
+        : tg.includes('lev_money') || tg.includes('Leveraged Money')
+          ? 'Leveraged funds (CFTC TFF)'
+          : 'Asset managers & large specs (CFTC "managed money" line)'
+  const pack = row?.ui_pack && typeof row.ui_pack === 'object' ? row.ui_pack : buildFallbackUiPack(row)
+
+  const macroMapLive =
+    relationshipMapData &&
+    relationshipMapData.available === true &&
+    marketsMacroAlign(relationshipMapData.market || '', row?.market || '')
+
+  if (workspaceMode) {
+    return (
+      <div className="detail-panel detail-panel-terminal detail-panel--workspace-tail">
+        <SeasonalityPriceSection market={row?.market} />
+        <ValuationInstrumentSection row={row} />
+        <details className="audit-disclosure">
+          <summary>Expand engine detail &amp; audit</summary>
+          <div className="audit-inner">
+            {hasRealValue(row?.final_context_reason) ? (
+              <p className="audit-rationale">
+                <span className="audit-rationale-k">Confluence rationale</span>
+                {display(row.final_context_reason)}
+              </p>
+            ) : null}
+            <MacroAuditBlock audit={row?.macro_audit} />
+          </div>
+        </details>
+      </div>
+    )
+  }
 
   return (
     <div className="detail-panel detail-panel-terminal">
@@ -1216,102 +2197,9 @@ function InstrumentDetail({
         </>
         ) : null}
 
-        <h4 className="wo-cot-section-title" style={{ marginTop: '22px' }}>Recent positioning trail</h4>
-        <p className="wo-cot-hint">
-          Last {chronoEnriched.length} reports in view: <strong>13W high / low / average</strong> for context (not the full archive).
-          {' '}Newest row at top. Heat on long/short = size versus this window; week columns = change from the prior COT print.
-        </p>
-        <div className="wo-cot-table-wrap">
-          <table className="wo-cot-table wo-cot-table-participation">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Long</th>
-                <th>Short</th>
-                <th title="Change in longs vs prior COT week">Long Wk</th>
-                <th title="Change in shorts vs prior COT week">Short Wk</th>
-                <th>Total OI</th>
-                <th>% Long</th>
-                <th>% Short</th>
-                <th>Net</th>
-                <th title="Net change vs prior COT week">Net Wk</th>
-                <th title="Independent long/short flow classification">Participation</th>
-                <th>State</th>
-              </tr>
-            </thead>
-            <tbody>
-              {!displayDesc.length ? (
-                <tr>
-                  <td colSpan={12} style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>
-                    No COT history rows for this contract in the current file.
-                  </td>
-                </tr>
-              ) : null}
-              {stats && stats.windowN > 0 && displayDesc.length ? (
-                <>
-                  {sumRow('13W Max', stats.long.max, stats.short.max, stats.longDelta.max, stats.shortDelta.max, stats.total.max, stats.pctLong.max, stats.pctShort.max, stats.net.max, stats.w1.max)}
-                  {sumRow('13W Min', stats.long.min, stats.short.min, stats.longDelta.min, stats.shortDelta.min, stats.total.min, stats.pctLong.min, stats.pctShort.min, stats.net.min, stats.w1.min)}
-                  {sumRow(avgLabel, stats.long.avg, stats.short.avg, stats.longDelta.avg, stats.shortDelta.avg, stats.total.avg, stats.pctLong.avg, stats.pctShort.avg, stats.net.avg, stats.w1.avg)}
-                </>
-              ) : null}
-              {displayDesc.map((h) => {
-                const d = rowDate(h)
-                const isCurrent = normalizeDate(d) === normalizeDate(rowDate(row))
-                const netVal = Number(h.net_value)
-                const ld = h._longDelta1w
-                const sd = h._shortDelta1w
-                const nd = Number.isFinite(h._netDelta1w) ? h._netDelta1w : numOrNaN(h.one_week_net_change)
-                const td = h._totalDelta1w
-                const part = h._participation || { category: '—', tooltip: '', summary: '' }
-                const stateLine = String(h.positioning_state || '').trim()
-                const rowTip = [
-                  `Report ${d}: ${part.summary}`,
-                  `Legs vs prior week — longs ${fmtDeltaCell(ld)}, shorts ${fmtDeltaCell(sd)}, net ${fmtDeltaCell(nd)}.`,
-                  part.tooltip,
-                  stateLine ? `Engine state: ${stateLine}.` : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')
-                return (
-                  <tr
-                    key={d}
-                    className={isCurrent ? 'wo-cot-data-row wo-row-current' : 'wo-cot-data-row'}
-                    title={rowTip}
-                    style={{ cursor: 'help' }}
-                  >
-                    <td className="wo-cot-date">{display(d)}</td>
-                    <td className={longLevelHeat(h.long_value, heatRanges.long.min, heatRanges.long.max).className}>
-                      {fmtNum(h.long_value)}
-                    </td>
-                    <td className={shortLevelHeat(h.short_value, heatRanges.short.min, heatRanges.short.max).className}>
-                      {fmtNum(h.short_value)}
-                    </td>
-                    <td className={signedDeltaHeat(ld, longDeltasForHeat).className}>{fmtDeltaCell(ld)}</td>
-                    <td className={signedDeltaHeat(sd, shortDeltasForHeat, true).className}>{fmtDeltaCell(sd)}</td>
-                    <td
-                      className={totalOiLevelHeat(rowOiTotal(h), heatRanges.total.min, heatRanges.total.max).className}
-                    >
-                      {fmtNum(rowOiTotal(h))}
-                    </td>
-                    <td>{fmtPct1(pctLongNumber(h))}</td>
-                    <td>{fmtPct1(pctShortNumber(h))}</td>
-                    <td
-                      className={`wo-cot-net-col ${netHeatStyle(netVal, heatRanges.net.min, heatRanges.net.max).className}`}
-                    >
-                      {fmtNum(h.net_value)}
-                    </td>
-                    <td className={signedDeltaHeat(nd, netDeltasForHeat).className}>{fmtDeltaCell(nd)}</td>
-                    <td className={`wo-cot-participation-cell ${participationCellStyle(part.tone).className}`}>
-                      <span className="wo-cot-participation-label">{display(part.category)}</span>
-                      <span className="wo-cot-participation-sub">{display(part.summary).slice(0, 72)}{String(part.summary || '').length > 72 ? '…' : ''}</span>
-                    </td>
-                    <td className="wo-cot-state-cell"><span className={`badge-state ${stateToneClass(h.positioning_state)}`}>{display(h.positioning_state)}</span></td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <SeasonalityPriceSection market={row?.market} />
+
+        <ValuationInstrumentSection row={row} />
 
         <details className="engine-scoring-details" style={{ marginTop: '14px' }}>
           <summary className="engine-scoring-sum" style={{ cursor: 'pointer', color: '#94a3b8', fontSize: '0.85rem' }}>
@@ -1348,9 +2236,6 @@ function InstrumentDetail({
             </p>
           ) : null}
           <MacroAuditBlock audit={row?.macro_audit} />
-          <p className="wo-cot-meta-line audit-debug">
-            <strong>Dataset</strong> — loaded COT rows for this market: {display(row?.loadedSeriesRowCount)}
-          </p>
         </div>
       </details>
     </div>

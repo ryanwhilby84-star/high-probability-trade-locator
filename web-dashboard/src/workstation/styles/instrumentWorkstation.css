@@ -1,0 +1,112 @@
+/* Instrument positioning workstation — dark canvas (matches June 30 screenshot) */
+
+.ws-content--instrument-canvas {
+  background: #06080d;
+  padding: 0 12px 24px;
+}
+
+.instrument-positioning-workspace--dark {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.instrument-positioning-workspace--dark .instrument-positioning-head {
+  display: none;
+}
+
+.instrument-positioning-workspace--dark .instrument-positioning-archive {
+  margin-top: 16px;
+}
+
+.instrument-positioning-archive-summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  list-style: none;
+  border: 1px solid #243044;
+  border-radius: 8px;
+  background: #0b1220;
+}
+
+.instrument-positioning-archive-summary::-webkit-details-marker {
+  display: none;
+}
+
+.instrument-positioning-archive[open] .instrument-positioning-archive-summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid #243044;
+  color: #e2e8f0;
+}
+
+.instrument-positioning-archive-body {
+  padding: 12px 14px 16px;
+  border: 1px solid #243044;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: #0b1220;
+}
+
+.instrument-page-detail-collapse {
+  margin-top: 20px;
+  border: 1px solid #243044;
+  border-radius: 8px;
+  background: #0b1220;
+}
+
+.instrument-page-detail-summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  list-style: none;
+}
+
+.instrument-page-detail-summary::-webkit-details-marker {
+  display: none;
+}
+
+.instrument-page-detail-collapse[open] .instrument-page-detail-summary {
+  border-bottom: 1px solid #243044;
+  color: #e2e8f0;
+}
+
+.instrument-page-detail-collapse .detail-panel--workspace-tail {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px 16px 16px;
+}
+
+.pos-delta--up {
+  color: #34d399;
+}
+
+.pos-delta--down {
+  color: #f87171;
+}
+
+.pos-series-badge-week {
+  font-size: 0.62rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.pos-chart-panel-body--canvas {
+  min-height: 0;
+}
+
+.pos-chart-panel-plot--synced {
+  min-height: 0;
+}
+
+.positioning-chart-stack--integrated {
+  margin: 0;
+}
