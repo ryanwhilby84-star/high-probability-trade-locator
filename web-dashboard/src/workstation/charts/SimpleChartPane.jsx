@@ -1,12 +1,13 @@
 import React from 'react'
 import { createChart } from 'lightweight-charts'
 
-import { cotDateToBarTime } from '../../charts/positioningTimelineAlign.js'
+import { createRafCoalescer } from './drawingViewport.js'
 import {
   prepareLightweightCandles,
   prepareLightweightLinePoints,
 } from '../data/prepareLightweightCandles.js'
-import { createWorkstationChartOptions } from './workstationChartOptions.js'
+import { WS_CHART_COLORS, createCotWorkstationChartOptions, WS_PRICE_SCALE_WIDTH } from './workstationChartOptions.js'
+import { recordChartMount, recordChartUnmount } from './cotWsRenderDiagnostics.js'
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
@@ -27,6 +28,26 @@ function findCandleAtTime(candles, time) {
   return candles.find((c) => c.time === time) || null
 }
 
+function hasChartData(mode, candleBars, linePoints) {
+  if (mode === 'candle') return prepareLightweightCandles(candleBars).length > 0
+  return prepareLightweightLinePoints(linePoints).length > 0
+}
+
+function waitForContainerSize(el, cb) {
+  if (el.clientWidth > 0 && el.clientHeight > 0) {
+    cb()
+    return () => {}
+  }
+  const ro = new ResizeObserver(() => {
+    if (el.clientWidth > 0 && el.clientHeight > 0) {
+      ro.disconnect()
+      cb()
+    }
+  })
+  ro.observe(el)
+  return () => ro.disconnect()
+}
+
 /** Lightweight chart pane — candles or line, linked timeline, no drawings. */
 export function SimpleChartPane({
   panelId,
@@ -37,10 +58,12 @@ export function SimpleChartPane({
   candleBars = [],
   timelineRows = [],
   zeroLine = false,
+  syncOnly = false,
+  emptyMessage = null,
   registerPane,
-  onCrosshairMove,
-  onCrosshairClear,
-  externalCrosshairTime = null,
+  chartsReady = true,
+  passiveCamera = false,
+  nativeWheelZoom = false,
   className = '',
 }) {
   const containerRef = React.useRef(null)
@@ -50,130 +73,200 @@ export function SimpleChartPane({
   const zeroRef = React.useRef(null)
   const candlesRef = React.useRef([])
   const lineRef = React.useRef([])
-  const skipEmitRef = React.useRef(false)
+  const syncOnlyRef = React.useRef(syncOnly)
+  const modeRef = React.useRef(mode)
+  const registerPaneRef = React.useRef(registerPane)
+  const [viewportPainted, setViewportPainted] = React.useState(false)
 
-  const onCrosshairMoveRef = React.useRef(onCrosshairMove)
-  const onCrosshairClearRef = React.useRef(onCrosshairClear)
-  onCrosshairMoveRef.current = onCrosshairMove
-  onCrosshairClearRef.current = onCrosshairClear
+  registerPaneRef.current = registerPane
+  syncOnlyRef.current = syncOnly
+  modeRef.current = mode
+
+  const showPlaceholder = Boolean(emptyMessage) && !hasChartData(mode, candleBars, linePoints)
 
   React.useEffect(() => {
+    if (!chartsReady) return undefined
     const el = containerRef.current
     if (!el) return undefined
 
     let chart
-    try {
-      chart = createChart(
-        el,
-        createWorkstationChartOptions({
-          width: Math.max(el.clientWidth, 1),
-          height: Math.max(el.clientHeight, 1),
-          showTimeAxis,
-          interactionEnabled: true,
-        }),
-      )
-    } catch (err) {
-      console.error('[cot-workstation] createChart failed', panelId, err)
-      return undefined
-    }
+    let unregister = () => {}
+    let resizeRo = null
+    let cancelled = false
 
-    const anchorSeries = chart.addLineSeries({
-      color: 'transparent',
-      lineWidth: 0,
-      priceLineVisible: false,
-      lastValueVisible: false,
-      crosshairMarkerVisible: false,
-    })
+    const mountChart = () => {
+      if (cancelled || chartRef.current) return
 
-    let primarySeries
-    if (mode === 'candle') {
-      primarySeries = chart.addCandlestickSeries({
-        upColor: '#22c55e',
-        downColor: '#ef4444',
-        borderUpColor: '#22c55e',
-        borderDownColor: '#ef4444',
-        wickUpColor: '#22c55e',
-        wickDownColor: '#ef4444',
-        priceLineVisible: false,
-        lastValueVisible: false,
-      })
-    } else {
-      primarySeries = chart.addLineSeries({
-        color: lineColor,
-        lineWidth: 1.75,
-        priceLineVisible: false,
-        lastValueVisible: true,
-        crosshairMarkerVisible: true,
-        crosshairMarkerRadius: 4,
-      })
-    }
+      try {
+        chart = createChart(
+          el,
+          createCotWorkstationChartOptions({
+            width: Math.max(el.clientWidth, 1),
+            height: Math.max(el.clientHeight, 1),
+            showTimeAxis,
+            interactionEnabled: true,
+            passiveCamera,
+            hidePriceScale: syncOnlyRef.current,
+            reservePriceScaleGutter: syncOnlyRef.current,
+          }),
+        )
+      } catch (err) {
+        console.error('[cot-workstation] createChart failed', panelId, err)
+        return
+      }
 
-    let zeroSeries = null
-    if (zeroLine && mode === 'line') {
-      zeroSeries = chart.addLineSeries({
-        color: 'rgba(203, 213, 225, 0.5)',
-        lineWidth: 1,
-        lineStyle: 2,
+      recordChartMount(panelId)
+
+      const anchorSeries = chart.addLineSeries({
+        color: 'transparent',
+        lineWidth: 0,
         priceLineVisible: false,
         lastValueVisible: false,
         crosshairMarkerVisible: false,
       })
+
+      let primarySeries = null
+      let zeroSeries = null
+
+      if (modeRef.current === 'candle') {
+        primarySeries = chart.addCandlestickSeries({
+          upColor: WS_CHART_COLORS.up,
+          downColor: WS_CHART_COLORS.down,
+          borderUpColor: WS_CHART_COLORS.up,
+          borderDownColor: WS_CHART_COLORS.down,
+          wickUpColor: WS_CHART_COLORS.upWick,
+          wickDownColor: WS_CHART_COLORS.downWick,
+          priceLineVisible: false,
+          lastValueVisible: false,
+        })
+      } else {
+        primarySeries = chart.addLineSeries({
+          color: lineColor,
+          lineWidth: 2,
+          lineType: 0,
+          priceLineVisible: false,
+          lastValueVisible: false,
+          crosshairMarkerVisible: true,
+          crosshairMarkerRadius: 3,
+          crosshairMarkerBorderColor: lineColor,
+          crosshairMarkerBackgroundColor: WS_CHART_COLORS.background,
+        })
+
+        if (zeroLine) {
+          zeroSeries = chart.addLineSeries({
+            color: 'rgba(148, 163, 184, 0.28)',
+            lineWidth: 1,
+            lineStyle: 2,
+            priceLineVisible: false,
+            lastValueVisible: false,
+            crosshairMarkerVisible: false,
+          })
+        }
+      }
+
+      chartRef.current = chart
+      primaryRef.current = primarySeries
+      anchorRef.current = anchorSeries
+      zeroRef.current = zeroSeries
+
+      const scheduleResize = createRafCoalescer(() => {
+        if (!containerRef.current || !chartRef.current) return
+        const { clientWidth, clientHeight } = containerRef.current
+        chartRef.current.applyOptions({
+          width: Math.max(clientWidth, 1),
+          height: Math.max(clientHeight, 1),
+        })
+      })
+
+      resizeRo = new ResizeObserver(() => scheduleResize())
+      resizeRo.observe(el)
+
+      unregister =
+        registerPaneRef.current?.(panelId, {
+          chart,
+          primarySeries: primarySeries ?? anchorSeries,
+          anchorSeries,
+          panelId,
+          mode: modeRef.current,
+          syncOnly: syncOnlyRef.current,
+          valueAtTime: (time) => {
+            if (syncOnlyRef.current) return null
+            if (modeRef.current === 'candle') {
+              const close = findCandleAtTime(candlesRef.current, time)?.close
+              return close != null ? close : null
+            }
+            return findValueAtTime(lineRef.current, time)
+          },
+        }) || (() => {})
+
+      requestAnimationFrame(() => {
+        if (!cancelled) setViewportPainted((prev) => (prev ? prev : true))
+      })
     }
 
-    chartRef.current = chart
-    primaryRef.current = primarySeries
-    anchorRef.current = anchorSeries
-    zeroRef.current = zeroSeries
-
-    const ro = new ResizeObserver(() => {
-      if (!containerRef.current || !chartRef.current) return
-      const { clientWidth, clientHeight } = containerRef.current
-      chartRef.current.applyOptions({
-        width: Math.max(clientWidth, 1),
-        height: Math.max(clientHeight, 1),
-      })
-    })
-    ro.observe(el)
-
-    const unregister =
-      registerPane?.(panelId, {
-        chart,
-        primarySeries,
-        valueAtTime: (time) => {
-          if (mode === 'candle') {
-            return findCandleAtTime(candlesRef.current, time)?.close ?? 0
-          }
-          return findValueAtTime(lineRef.current, time) ?? 0
-        },
-        onCrosshairMove: (param) => {
-          if (skipEmitRef.current) return
-          if (!param?.time) {
-            onCrosshairClearRef.current?.()
-            return
-          }
-          onCrosshairMoveRef.current?.({
-            time: param.time,
-            panelId,
-            candle: mode === 'candle' ? findCandleAtTime(candlesRef.current, param.time) : null,
-            value:
-              mode === 'candle'
-                ? findCandleAtTime(candlesRef.current, param.time)?.close ?? null
-                : findValueAtTime(lineRef.current, param.time),
-          })
-        },
-        onCrosshairClear: () => onCrosshairClearRef.current?.(),
-      }) || (() => {})
+    const cancelWait = waitForContainerSize(el, mountChart)
 
     return () => {
-      ro.disconnect()
+      cancelled = true
+      cancelWait()
+      resizeRo?.disconnect()
       unregister()
-      chart.remove()
+      if (chart) {
+        recordChartUnmount(panelId)
+        chart.remove()
+      }
       chartRef.current = null
       primaryRef.current = null
       anchorRef.current = null
       zeroRef.current = null
+      setViewportPainted((prev) => (prev ? false : prev))
     }
-  }, [panelId, mode, showTimeAxis, lineColor, zeroLine, registerPane])
+  }, [panelId, mode, showTimeAxis, zeroLine, lineColor, chartsReady, passiveCamera])
+
+  React.useEffect(() => {
+    if (!chartRef.current) return
+    const gutterOnly = syncOnly
+    chartRef.current.applyOptions({
+      handleScroll: {
+        mouseWheel: false,
+        pressedMouseMove: !passiveCamera,
+        horzTouchDrag: !passiveCamera,
+        vertTouchDrag: false,
+      },
+      handleScale: {
+        mouseWheel: nativeWheelZoom || !passiveCamera,
+        pinch: nativeWheelZoom || !passiveCamera,
+        axisPressedMouseMove: { time: nativeWheelZoom || !passiveCamera, price: false },
+        axisDoubleClickReset: { time: false, price: false },
+      },
+      grid: {
+        horzLines: { visible: !gutterOnly },
+      },
+      rightPriceScale: {
+        visible: !syncOnly || gutterOnly,
+        minimumWidth: WS_PRICE_SCALE_WIDTH,
+        ticksVisible: !gutterOnly,
+      },
+      crosshair: {
+        horzLine: {
+          visible: !syncOnly && !gutterOnly,
+          labelVisible: !syncOnly && !gutterOnly,
+        },
+        vertLine: {
+          visible: true,
+          labelVisible: showTimeAxis,
+        },
+      },
+      localization: gutterOnly ? { priceFormatter: () => '' } : undefined,
+    })
+    if (syncOnly && primaryRef.current) {
+      try {
+        primaryRef.current.setData([])
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [syncOnly, passiveCamera, nativeWheelZoom])
 
   React.useEffect(() => {
     if (!anchorRef.current) return
@@ -185,7 +278,7 @@ export function SimpleChartPane({
   }, [timelineRows, panelId])
 
   React.useEffect(() => {
-    if (!primaryRef.current) return
+    if (syncOnly || !primaryRef.current) return
     if (mode === 'candle') {
       const data = prepareLightweightCandles(candleBars)
       candlesRef.current = data
@@ -204,7 +297,7 @@ export function SimpleChartPane({
     } catch (err) {
       console.error('[cot-workstation] line setData failed', panelId, err)
     }
-  }, [candleBars, linePoints, mode, panelId])
+  }, [candleBars, linePoints, mode, panelId, syncOnly])
 
   React.useEffect(() => {
     if (!zeroRef.current || !timelineRows.length) return
@@ -221,35 +314,25 @@ export function SimpleChartPane({
     }
   }, [timelineRows])
 
-  React.useEffect(() => {
-    if (!chartRef.current || !primaryRef.current) return
-    if (externalCrosshairTime == null) return
-    const value =
-      mode === 'candle'
-        ? findCandleAtTime(candlesRef.current, externalCrosshairTime)?.close
-        : findValueAtTime(lineRef.current, externalCrosshairTime)
-    skipEmitRef.current = true
-    try {
-      if (value == null) {
-        chartRef.current.setCrosshairPosition(0, externalCrosshairTime, anchorRef.current)
-      } else {
-        chartRef.current.setCrosshairPosition(value, externalCrosshairTime, primaryRef.current)
-      }
-    } catch {
-      /* ignore */
-    }
-    skipEmitRef.current = false
-  }, [externalCrosshairTime, mode])
-
   return (
-    <div className={`ws-chart-pane ${className}`.trim()} data-panel={panelId}>
-      <div className="ws-chart-pane-plot">
-        <div className="ws-chart-pane-canvas" ref={containerRef} />
+    <div className={`ws-chart-pane cot-ws-chart-pane ${className}`.trim()} data-panel={panelId}>
+      <div className="ws-chart-pane-plot cot-ws-chart-plot">
+        <div
+          className={`ws-chart-pane-canvas cot-ws-chart-canvas${
+            viewportPainted ? ' cot-ws-chart-canvas--ready' : ''
+          }`}
+          ref={containerRef}
+        />
+        <div className="cot-ws-drawing-host" data-drawing-panel={panelId} aria-hidden="true" />
+        {!chartsReady ? (
+          <div className="cot-ws-chart-skeleton" aria-hidden="true" />
+        ) : null}
+        {showPlaceholder ? (
+          <div className="cot-ws-chart-placeholder" aria-live="polite">
+            {emptyMessage}
+          </div>
+        ) : null}
       </div>
     </div>
   )
-}
-
-export function dateToBarTime(timelineRows, date) {
-  return cotDateToBarTime(timelineRows, date)
 }

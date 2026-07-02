@@ -35,8 +35,15 @@ function pickStoreOhlc(bar) {
  * @param {object} model - buildCotWorkstation() output
  * @param {object|null} priceRec - getInstrumentPrices() record
  * @param {object|null} ohlcExportBlock - workstation_ohlc_latest.json instrument block
+ * @param {{ preserveFullCotHistory?: boolean }} [options]
  */
-export function buildPositioningWorkstationSeries(model, priceRec, ohlcExportBlock = null) {
+export function buildPositioningWorkstationSeries(
+  model,
+  priceRec,
+  ohlcExportBlock = null,
+  options = {},
+) {
+  const preserveFullCotHistory = options.preserveFullCotHistory === true
   const cotSeries = Array.isArray(model?.series) ? model.series : []
   if (!cotSeries.length) {
     return { rows: [], weeklyBars: [], priceSource: 'none', meta: {} }
@@ -96,7 +103,7 @@ export function buildPositioningWorkstationSeries(model, priceRec, ohlcExportBlo
   }
 
   const range = computeWorkstationCommonRange(fullRows, fullWeeklyBars)
-  const useCommon = Boolean(range.commonFirst && range.commonLast)
+  const useCommon = !preserveFullCotHistory && Boolean(range.commonFirst && range.commonLast)
   const rows = useCommon
     ? sliceRowsToDateRange(fullRows, range.commonFirst, range.commonLast)
     : fullRows

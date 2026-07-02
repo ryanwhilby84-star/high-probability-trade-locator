@@ -2269,6 +2269,16 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
 
     all_dates = sorted(cot["cot_report_date"].dropna().dt.strftime("%Y-%m-%d").unique())
 
+    _only_env = os.environ.get("HPTL_CONFLUENCE_ONLY_DATES", "").strip()
+    _incremental = os.environ.get("HPTL_CONFLUENCE_INCREMENTAL", "").strip().lower() in {"1", "true", "yes"}
+    if _only_env:
+        only_set = {d.strip()[:10] for d in _only_env.split(",") if d.strip()}
+        all_dates = [d for d in all_dates if d in only_set]
+        print(
+            f"[INCREMENTAL] restricting build to {len(all_dates)} week(s): {', '.join(all_dates)}",
+            flush=True,
+        )
+
     build_markets = _selected_build_markets()
     _stage4 = _Stage(f"4/6 build confluence rows ({len(build_markets)} markets x {len(all_dates)} weeks)")
     _stage4.__enter__()
@@ -2587,6 +2597,26 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
     _stage4.__exit__(None, None, None)
     print(f"[BUILD ROWS] complete — {len(records)} records from {_n_dates} weeks.", flush=True)
 
+    if _incremental and OUT_PATH.exists():
+        try:
+            existing = json.loads(OUT_PATH.read_text(encoding="utf-8"))
+            old_records = existing.get("records") or []
+            new_keys = {(str(r.get("market")), str(r.get("date") or "")[:10]) for r in records}
+            merged = [
+                r
+                for r in old_records
+                if (str(r.get("market")), str(r.get("date") or "")[:10]) not in new_keys
+            ]
+            merged.extend(records)
+            records = merged
+            print(
+                f"[INCREMENTAL] merged {len(new_keys)} new market-week keys into "
+                f"{len(records)} total records",
+                flush=True,
+            )
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"[INCREMENTAL] merge skipped — could not read existing export: {exc}", flush=True)
+
     _mh_patched = apply_macro_hub_cot_fallback(records)
     if _mh_patched:
         print(f"MACRO_HUB_COT: patched {_mh_patched} latest-week row(s) from macro_hub_latest.json", flush=True)
@@ -2619,7 +2649,11 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
             )
             break
 
-    latest_cot_report_date = all_dates[-1] if all_dates else None
+    latest_cot_report_date = (
+        sorted(cot["cot_report_date"].dropna().dt.strftime("%Y-%m-%d").unique())[-1]
+        if not cot.empty
+        else None
+    )
     latest_cot_report_date_by_market: dict[str, str] = {}
     if not cot.empty:
         for market in TARGET_MARKETS:
@@ -2638,7 +2672,10 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
         attach_feeds_to_latest_records(records, markets=list(TARGET_MARKETS))
         _heartbeat("3b/6 instrument metadata", "feeds attached")
 
-        latest_calendar_week = all_dates[-1] if all_dates else ""
+        latest_calendar_week = (
+            max((str(r.get("date") or "")[:10] for r in records), default="")
+            or (latest_cot_report_date or "")
+        )
         week_slice = (
             [r for r in records if str(r.get("date") or "") == latest_calendar_week]
             if latest_calendar_week

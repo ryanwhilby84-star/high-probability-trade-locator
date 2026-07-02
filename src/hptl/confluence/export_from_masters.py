@@ -36,6 +36,10 @@ class CatchUpResult:
     export_path: str = ""
     error: str | None = None
 
+    @property
+    def markets_exported(self) -> int:
+        return self.records_exported
+
 
 def _read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
@@ -220,7 +224,7 @@ def catch_up_confluence_export(
 
     from hptl.confluence.build_decision_table import run as run_confluence_build
 
-    out = run_confluence_build(cot_feed_meta=cot_feed_meta, incremental_existing=existing)
+    out = run_confluence_build(cot_feed_meta=cot_feed_meta)
     sync_dist_exports(confluence_source=out)
 
     after = _confluence_latest(out)

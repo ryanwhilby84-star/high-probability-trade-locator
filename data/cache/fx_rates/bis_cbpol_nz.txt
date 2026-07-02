@@ -1,0 +1,2 @@
+FREQ,REF_AREA,UNIT_MEASURE,UNIT_MULT,TIME_FORMAT,COMPILATION,DECIMALS,SOURCE_REF,SUPP_INFO_BREAKS,TITLE,TIME_PERIOD,OBS_VALUE,OBS_STATUS,OBS_CONF,OBS_PRE_BREAK
+D,NZ,368,0,,"From 17 Mar 1999 onwards: Official market intervention representative rate, official cash rate; from Jan 1985 to 16 Mar 1999: overnight cash rate.",4,Reserve Bank of New Zealand,This rate can be considered the official policy rate as from 17 Mar 1999. , Central bank policy rates - New Zealand - Daily - End of period,2026-06-19,2.25,A,F,

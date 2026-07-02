@@ -1,0 +1,320 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-02",
+  "generated_at_utc": "2026-07-02T06:28:33Z",
+  "note": "FX Institutional Macro currency inputs: policy rates + sovereign yields from official central-bank adapters; CPI YoY from FRED OECD harmonized series. Fields marked live=False are carried forward. Run scripts/audit_fx_data_sources.py for PASS/WARN/FAIL.",
+  "max_staleness_days": 10,
+  "max_staleness_days_cpi": 400,
+  "central_banks": {
+    "USD": "Federal Reserve",
+    "EUR": "ECB",
+    "GBP": "Bank of England",
+    "JPY": "Bank of Japan",
+    "AUD": "Reserve Bank of Australia",
+    "NZD": "Reserve Bank of New Zealand",
+    "CAD": "Bank of Canada",
+    "CHF": "Swiss National Bank"
+  },
+  "currencies": {
+    "USD": {
+      "central_bank": "Federal Reserve",
+      "policy_rate": 3.63,
+      "y2": 4.17,
+      "y10": 4.48,
+      "policy_rate_as_of": "2026-06-30",
+      "y2_as_of": "2026-07-01",
+      "y10_as_of": "2026-07-01",
+      "source": "Federal Reserve (NY Fed EFFR)/US Treasury (daily par yield curve)",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-07-01",
+      "fetched_at": "2026-07-02T06:27:55Z",
+      "field_sources": {
+        "policy_rate": "Federal Reserve (NY Fed EFFR)",
+        "y2": "US Treasury (daily par yield curve)",
+        "y10": "US Treasury (daily par yield curve)",
+        "cpi_yoy": "FRED (FPCPITOTLZGUSA)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [],
+      "cpi_yoy": 2.95,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "EUR": {
+      "central_bank": "ECB",
+      "policy_rate": 2.25,
+      "y2": 2.476,
+      "y10": 2.924,
+      "policy_rate_as_of": "2026-06-17",
+      "y2_as_of": "2026-06-30",
+      "y10_as_of": "2026-06-30",
+      "source": "ECB (Deposit Facility Rate)/ECB (euro-area AAA gov curve, 2Y)/ECB (euro-area AAA gov curve, 10Y)",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-06-30",
+      "fetched_at": "2026-07-02T06:27:56Z",
+      "field_sources": {
+        "policy_rate": "ECB (Deposit Facility Rate)",
+        "y2": "ECB (euro-area AAA gov curve, 2Y)",
+        "y10": "ECB (euro-area AAA gov curve, 10Y)",
+        "cpi_yoy": "FRED (FPCPITOTLZGEMU)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [],
+      "cpi_yoy": 2.185,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "GBP": {
+      "central_bank": "Bank of England",
+      "policy_rate": 3.75,
+      "y2": 4.048,
+      "y10": 4.827,
+      "policy_rate_as_of": "2026-06-30",
+      "y2_as_of": "2026-06-30",
+      "y10_as_of": "2026-06-30",
+      "source": "Bank of England (Bank Rate, IUDBEDR)/Bank of England (GLC nominal spot curve) 2Y/Bank of England (GLC nominal spot curve) 10Y",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-06-30",
+      "fetched_at": "2026-07-02T06:27:57Z",
+      "field_sources": {
+        "policy_rate": "Bank of England (Bank Rate, IUDBEDR)",
+        "y2": "Bank of England (GLC nominal spot curve) 2Y",
+        "y10": "Bank of England (GLC nominal spot curve) 10Y",
+        "cpi_yoy": "FRED (FPCPITOTLZGGBR)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [],
+      "cpi_yoy": 3.272,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "JPY": {
+      "central_bank": "Bank of Japan",
+      "policy_rate": 1.0,
+      "y2": 1.4,
+      "y10": 2.711,
+      "policy_rate_as_of": "2026-06-23",
+      "y2_as_of": "2026-07-01",
+      "y10_as_of": "2026-07-01",
+      "source": "BIS WS_CBPOL (Bank of Japan)/Japan MoF (JGB constant-maturity yields) 2Y/Japan MoF (JGB constant-maturity yields) 10Y",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-07-01",
+      "fetched_at": "2026-07-02T06:27:58Z",
+      "field_sources": {
+        "policy_rate": "BIS WS_CBPOL (Bank of Japan)",
+        "y2": "Japan MoF (JGB constant-maturity yields) 2Y",
+        "y10": "Japan MoF (JGB constant-maturity yields) 10Y",
+        "cpi_yoy": "FRED (FPCPITOTLZGJPN)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [
+        "Policy rate via BIS WS_CBPOL (sourced from the Bank of Japan); BoJ has no clean first-party machine endpoint for the policy rate."
+      ],
+      "cpi_yoy": 2.739,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "AUD": {
+      "central_bank": "Reserve Bank of Australia",
+      "policy_rate": 4.35,
+      "y2": 4.445,
+      "y10": 4.772,
+      "policy_rate_as_of": "2026-07-01",
+      "y2_as_of": "2026-06-24",
+      "y10_as_of": "2026-06-24",
+      "source": "RBA F1 (Cash Rate Target)/RBA F2 (AGB 2Y)/RBA F2 (AGB 10Y)",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-07-01",
+      "fetched_at": "2026-07-02T06:28:25Z",
+      "field_sources": {
+        "policy_rate": "RBA F1 (Cash Rate Target)",
+        "y2": "RBA F2 (AGB 2Y)",
+        "y10": "RBA F2 (AGB 10Y)",
+        "cpi_yoy": "FRED (FPCPITOTLZGAUS)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [],
+      "cpi_yoy": 3.167,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "NZD": {
+      "central_bank": "Reserve Bank of New Zealand",
+      "policy_rate": 2.25,
+      "y2": 2.63,
+      "y10": 4.68,
+      "policy_rate_as_of": "2026-06-19",
+      "y2_as_of": "2026-05-01",
+      "y10_as_of": "2026-05-01",
+      "source": "BIS WS_CBPOL (Reserve Bank of New Zealand)",
+      "data_quality": "partial",
+      "status": "WARN",
+      "as_of": "2026-06-19",
+      "fetched_at": "2026-07-02T06:28:26Z",
+      "field_sources": {
+        "policy_rate": "BIS WS_CBPOL (Reserve Bank of New Zealand)",
+        "y2": "FRED OECD IR3TIB01NZM156N (NZD 3M; RBNZ B2 unavailable) [carried]",
+        "y10": "FRED OECD IRLTLT01NZM156N (NZD 10Y; RBNZ B2 unavailable) [carried]",
+        "cpi_yoy": "FRED (FPCPITOTLZGNZL)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": false,
+        "y10": false,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "WARN",
+        "y10": "WARN",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [
+        "y2: DATA_STALE \u2014 RBNZ B2 daily source missing",
+        "y10: DATA_STALE \u2014 RBNZ B2 daily source missing"
+      ],
+      "notes": [
+        "RBNZ B2 unavailable: FileNotFoundError: RBNZ B2 unavailable: live download blocked (Cloudflare) and no manual file at C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\manual\\rbnz_b2_daily.xlsx",
+        "Policy rate via BIS WS_CBPOL (sourced from the RBNZ)."
+      ],
+      "cpi_yoy": 2.923,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "CAD": {
+      "central_bank": "Bank of Canada",
+      "policy_rate": 2.25,
+      "y2": 2.73,
+      "y10": 3.37,
+      "policy_rate_as_of": "2026-06-25",
+      "y2_as_of": "2026-06-29",
+      "y10_as_of": "2026-06-29",
+      "source": "Bank of Canada (Valet) 2Y benchmark/Bank of Canada (Valet) 10Y benchmark",
+      "data_quality": "partial",
+      "status": "WARN",
+      "as_of": "2026-06-29",
+      "fetched_at": "2026-07-02T06:28:26Z",
+      "field_sources": {
+        "policy_rate": "Bank of Canada (Valet) V39079 [carried]",
+        "y2": "Bank of Canada (Valet) 2Y benchmark",
+        "y10": "Bank of Canada (Valet) 10Y benchmark",
+        "cpi_yoy": "FRED (FPCPITOTLZGCAN)"
+      },
+      "field_live": {
+        "policy_rate": false,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "WARN",
+        "y2": "PASS",
+        "y10": "PASS",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [],
+      "cpi_yoy": 2.382,
+      "cpi_yoy_as_of": "2024-01-01"
+    },
+    "CHF": {
+      "central_bank": "Swiss National Bank",
+      "policy_rate": 0.0,
+      "y2": -0.083,
+      "y10": 0.378,
+      "policy_rate_as_of": "2026-06-23",
+      "y2_as_of": "2025-07-31",
+      "y10_as_of": "2025-07-31",
+      "source": "BIS WS_CBPOL (Swiss National Bank)/SNB (Confederation bond yields, rendoblid) 2Y/SNB (Confederation bond yields, rendoblid) 10Y",
+      "data_quality": "live",
+      "status": "WARN",
+      "as_of": "2026-06-23",
+      "fetched_at": "2026-07-02T06:28:29Z",
+      "field_sources": {
+        "policy_rate": "BIS WS_CBPOL (Swiss National Bank)",
+        "y2": "SNB (Confederation bond yields, rendoblid) 2Y",
+        "y10": "SNB (Confederation bond yields, rendoblid) 10Y",
+        "cpi_yoy": "FRED (FPCPITOTLZGCHE)"
+      },
+      "field_live": {
+        "policy_rate": true,
+        "y2": true,
+        "y10": true,
+        "cpi_yoy": true
+      },
+      "field_status": {
+        "policy_rate": "PASS",
+        "y2": "WARN",
+        "y10": "WARN",
+        "cpi_yoy": "WARN"
+      },
+      "errors": [],
+      "notes": [
+        "Policy rate via BIS WS_CBPOL (sourced from the SNB).",
+        "2Y/10Y from SNB rendoblid daily cube only \u2014 OECD monthly fallbacks are not used for live valuation.",
+        "SNB rendoblid last observation 2025-07-31; CHF yields marked stale."
+      ],
+      "cpi_yoy": 1.062,
+      "cpi_yoy_as_of": "2024-01-01"
+    }
+  }
+}

@@ -9,6 +9,8 @@ import { ScannerPage } from './pages/ScannerPage.jsx'
 
 import { InstrumentPage } from './pages/InstrumentPage.jsx'
 
+import { CotWorkstationPage } from './pages/CotWorkstationPage.jsx'
+
 import { TradeJournalPage } from './pages/TradeJournalPage.jsx'
 
 import { ThesisTrackerPage } from './pages/ThesisTrackerPage.jsx'
@@ -200,6 +202,38 @@ export default function App() {
         Loading confluence data…
 
       </div>
+
+    )
+
+  }
+
+
+
+  if (route.view === 'cot-workstation' && route.market) {
+
+    const marketId = canonicalMarketId(route.market)
+
+    if (!allowedMarkets.includes(marketId)) {
+
+      navigateToScanner()
+
+      return null
+
+    }
+
+    return (
+
+      <CotWorkstationPage
+
+        marketId={marketId}
+
+        trackedMarkets={allowedMarkets}
+
+        sidebarClass={sidebarClass}
+
+        onSidebarClass={setSidebarClass}
+
+      />
 
     )
 

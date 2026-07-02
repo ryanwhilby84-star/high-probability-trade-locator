@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-06-28T11:29:46.518038+00:00",
+  "generated_at": "2026-07-02T06:21:48.342927+00:00",
   "target_history_weeks": 520,
   "min_history_weeks": 260,
   "window_weeks": 520,
@@ -49962,7 +49962,7 @@
       "price_audit": {
         "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\prices_latest.json",
         "price_store_key": "Cocoa",
-        "canonical_source": "fred",
+        "canonical_source": "alpha_vantage",
         "canonical_symbol": "fred:PCOCOUSDM",
         "proxy": false,
         "proxy_explanation": null,
@@ -101618,7 +101618,7 @@
       "price_audit": {
         "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\prices_latest.json",
         "price_store_key": "Cotton",
-        "canonical_source": "fred",
+        "canonical_source": "price_store",
         "canonical_symbol": "fred:PCOTTINDUSDM",
         "proxy": false,
         "proxy_explanation": null,
@@ -120538,7 +120538,7 @@
         "price_bar_count": 891,
         "store_bar_count": 891,
         "fred_fallback_series": "DJIA",
-        "fred_fallback_bar_count": 1099,
+        "fred_fallback_bar_count": 1102,
         "oanda_fallback_symbol": null,
         "oanda_fallback_bar_count": 0,
         "resampled_weekly_from_daily": false,
@@ -120555,7 +120555,7 @@
         "prior_close_weeks": 53,
         "missing_price_weeks": 0,
         "cot_weeks_after_latest_price_bar": 3,
-        "note": "Extended with FRED DJIA (1099 bars) before store history (2022-02-08)."
+        "note": "Extended with FRED DJIA (1102 bars) before store history (2022-02-08)."
       },
       "series": [
         {
@@ -139447,8 +139447,8 @@
         "proxy": false,
         "proxy_explanation": null,
         "cot_match_method": "canonical_daily_match_as_of_cot_date",
-        "price_bar_count": 2596,
-        "store_bar_count": 2596,
+        "price_bar_count": 2609,
+        "store_bar_count": 2609,
         "fred_fallback_series": null,
         "fred_fallback_bar_count": 0,
         "oanda_fallback_symbol": null,
@@ -139459,15 +139459,15 @@
         "first_matched_cot_date": "2017-01-03",
         "missing_before": null,
         "latest_cot_date": "2026-06-23",
-        "latest_price_bar_date": "2026-06-09",
-        "latest_matched_price_date": "2026-06-09",
-        "latest_price_match": "prior_close",
-        "latest_price_lag_days": 14,
-        "exact_match_weeks": 488,
-        "prior_close_weeks": 7,
+        "latest_price_bar_date": "2026-06-28",
+        "latest_matched_price_date": "2026-06-23",
+        "latest_price_match": "exact",
+        "latest_price_lag_days": 0,
+        "exact_match_weeks": 490,
+        "prior_close_weeks": 5,
         "missing_price_weeks": 0,
-        "cot_weeks_after_latest_price_bar": 2,
-        "note": "Latest price bar is 2026-06-09; 2 COT week(s) through 2026-06-23 use prior close (2026-06-09, lag 14d)."
+        "cot_weeks_after_latest_price_bar": 0,
+        "note": null
       },
       "series": [
         {
@@ -152298,10 +152298,10 @@
           "retail_short": 16623.0,
           "commercial_net": -207563.0,
           "open_interest": 339330.0,
-          "price": 4072.015,
-          "price_date": "2026-06-09",
-          "price_match": "prior_close",
-          "price_lag_days": 7,
+          "price": 4257.65,
+          "price_date": "2026-06-16",
+          "price_match": "exact",
+          "price_lag_days": 0,
           "positioning_state": "Bullish Strengthening",
           "cot_bias": "Bullish",
           "market_state": "trend_persistence",
@@ -152324,10 +152324,10 @@
           "retail_short": 15200.0,
           "commercial_net": -205404.0,
           "open_interest": 352167.0,
-          "price": 4072.015,
-          "price_date": "2026-06-09",
-          "price_match": "prior_close",
-          "price_lag_days": 14,
+          "price": 3999.5,
+          "price_date": "2026-06-23",
+          "price_match": "exact",
+          "price_lag_days": 0,
           "positioning_state": "Bullish Strengthening",
           "cot_bias": "Bullish",
           "market_state": "trend_persistence",
@@ -165278,7 +165278,7 @@
         "price_bar_count": 2176,
         "store_bar_count": 2176,
         "fred_fallback_series": "NASDAQCOM",
-        "fred_fallback_bar_count": 2384,
+        "fred_fallback_bar_count": 2387,
         "oanda_fallback_symbol": null,
         "oanda_fallback_bar_count": 0,
         "resampled_weekly_from_daily": false,
@@ -165295,7 +165295,7 @@
         "prior_close_weeks": 53,
         "missing_price_weeks": 0,
         "cot_weeks_after_latest_price_bar": 3,
-        "note": "Extended with FRED NASDAQCOM (2384 bars) before store history (2017-01-03)."
+        "note": "Extended with FRED NASDAQCOM (2387 bars) before store history (2017-01-03)."
       },
       "series": [
         {
@@ -229848,7 +229848,7 @@
         "price_bar_count": 2175,
         "store_bar_count": 2175,
         "fred_fallback_series": "SP500",
-        "fred_fallback_bar_count": 2383,
+        "fred_fallback_bar_count": 2386,
         "oanda_fallback_symbol": null,
         "oanda_fallback_bar_count": 0,
         "resampled_weekly_from_daily": false,
@@ -229865,7 +229865,7 @@
         "prior_close_weeks": 53,
         "missing_price_weeks": 0,
         "cot_weeks_after_latest_price_bar": 3,
-        "note": "Extended with FRED SP500 (2383 bars) before store history (2017-01-03)."
+        "note": "Extended with FRED SP500 (2386 bars) before store history (2017-01-03)."
       },
       "series": [
         {
@@ -294410,7 +294410,7 @@
       "price_audit": {
         "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\web-dashboard\\public\\data\\prices_latest.json",
         "price_store_key": "US Dollar Index / DX",
-        "canonical_source": "fred",
+        "canonical_source": "price_store",
         "canonical_symbol": "fred:DTWEXBGS",
         "proxy": false,
         "proxy_explanation": null,

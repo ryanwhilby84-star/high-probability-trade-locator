@@ -3,7 +3,7 @@ import { AppShell, filterMarketsBySidebar } from '../components/AppShell.jsx'
 import { InstrumentDetail, buildMarketHistoryForMarket } from '../legacy/dashboardLegacy.jsx'
 import { resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
 import { recordCotReportDate, isCotRowResolved } from '../marketResolution.js'
-import { navigateToInstrument, navigateToScanner, navigateToThesisTracker } from '../routing.js'
+import { navigateToInstrument, navigateToScanner, navigateToThesisTracker, navigateToCotWorkstation } from '../routing.js'
 import { CotUnavailablePanel } from '../components/CotUnavailablePanel.jsx'
 import { InstrumentWorkstationLayout } from '../workstation/InstrumentWorkstationLayout.jsx'
 import { InstrumentPositioningWorkspace } from '../components/InstrumentPositioningWorkspace.jsx'
@@ -174,8 +174,11 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       <button type="button" className="ws-btn" onClick={() => setJournalOpen(true)}>
         Log trade idea
       </button>
+      <button type="button" className="ws-btn ws-btn-primary" onClick={() => navigateToCotWorkstation(marketId)}>
+        Open COT Workstation
+      </button>
       <button type="button" className="ws-btn" onClick={scrollToPositioningWorkspace}>
-        Positioning
+        Positioning data
       </button>
       {tracked ? (
         <button type="button" className="ws-btn" onClick={navigateToThesisTracker}>
@@ -203,7 +206,12 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       {!isCotRowResolved(row) ? <CotUnavailablePanel row={row} marketId={marketId} /> : null}
 
       <InstrumentWorkstationLayout>
-        <InstrumentPositioningWorkspace marketId={marketId} />
+        <InstrumentPositioningWorkspace
+          marketId={marketId}
+          headlineRow={row}
+          confluenceRecords={confluenceRecordsForMarket}
+          asOfDate={date}
+        />
 
         <details className="instrument-page-detail-collapse" id="valuation-evidence">
           <summary className="instrument-page-detail-summary">

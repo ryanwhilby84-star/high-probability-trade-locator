@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generated_at": "2026-06-03T05:26:17.155646+00:00",
+  "generated_at": "2026-07-02T05:12:03.892195+00:00",
   "parser": "hptl.seasonality.export",
   "summary": {
-    "total_instruments": 125,
-    "wired_count": 89,
-    "unavailable_count": 36
+    "total_instruments": 138,
+    "wired_count": 86,
+    "unavailable_count": 52
   },
   "instruments": {
     "NASDAQ / NQ": {
@@ -46,98 +46,98 @@
     },
     "Euro FX / 6E": {
       "market": "Euro FX / 6E",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Neutral",
-      "seasonality_score": 0.4,
-      "seasonality_reason": "Historical May seasonality: avg weekly return -0.12% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": -0.123,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Bullish",
+      "seasonality_score": 0.9,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return +0.31% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": 0.306,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "British Pound / 6B": {
       "market": "British Pound / 6B",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Bearish",
-      "seasonality_score": 0.6,
-      "seasonality_reason": "Historical May seasonality: avg weekly return -0.21% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": -0.212,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Bullish",
+      "seasonality_score": 0.7,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return +0.23% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": 0.234,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "Japanese Yen / 6J": {
       "market": "Japanese Yen / 6J",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
       "seasonality_bias": "Bullish",
-      "seasonality_score": 1.0,
-      "seasonality_reason": "Historical May seasonality: avg weekly return +0.35% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": 0.347,
-      "month_sample_weeks": 4,
+      "seasonality_score": 0.9,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return +0.30% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": 0.3,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "Swiss Franc / 6S": {
       "market": "Swiss Franc / 6S",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Neutral",
-      "seasonality_score": 0.1,
-      "seasonality_reason": "Historical May seasonality: avg weekly return -0.03% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": -0.03,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Bearish",
+      "seasonality_score": 0.7,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return -0.25% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": -0.25,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "Australian Dollar / 6A": {
       "market": "Australian Dollar / 6A",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Neutral",
-      "seasonality_score": 0.2,
-      "seasonality_reason": "Historical May seasonality: avg weekly return -0.06% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": -0.06,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Bullish",
+      "seasonality_score": 0.5,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return +0.17% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": 0.17,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "Canadian Dollar / 6C": {
       "market": "Canadian Dollar / 6C",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Bullish",
-      "seasonality_score": 1.1,
-      "seasonality_reason": "Historical May seasonality: avg weekly return +0.37% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": 0.37,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Neutral",
+      "seasonality_score": 0.2,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return -0.05% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": -0.054,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "NZ Dollar / 6N": {
       "market": "NZ Dollar / 6N",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-06-19",
       "wired": true,
-      "seasonality_bias": "Bullish",
-      "seasonality_score": 1.1,
-      "seasonality_reason": "Historical May seasonality: avg weekly return +0.40% across 4 sample weeks in price history.",
-      "calendar_month": 5,
-      "month_avg_return_pct": 0.401,
-      "month_sample_weeks": 4,
+      "seasonality_bias": "Neutral",
+      "seasonality_score": 0.2,
+      "seasonality_reason": "Historical Jun seasonality: avg weekly return +0.08% across 16 sample weeks in price history.",
+      "calendar_month": 6,
+      "month_avg_return_pct": 0.075,
+      "month_sample_weeks": 16,
       "pass": false
     },
     "Gold": {
       "market": "Gold",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-05-29",
       "wired": true,
       "seasonality_bias": "Bearish",
       "seasonality_score": 1.1,
-      "seasonality_reason": "Historical May seasonality: avg weekly return -0.38% across 4 sample weeks in price history.",
+      "seasonality_reason": "Historical May seasonality: avg weekly return -0.39% across 19 sample weeks in price history.",
       "calendar_month": 5,
-      "month_avg_return_pct": -0.376,
-      "month_sample_weeks": 4,
+      "month_avg_return_pct": -0.394,
+      "month_sample_weeks": 19,
       "pass": false
     },
     "Silver": {
@@ -154,14 +154,12 @@
     },
     "Copper / HG": {
       "market": "Copper / HG",
-      "as_of_week": "2026-03-01",
-      "wired": true,
-      "seasonality_bias": "Bullish",
-      "seasonality_score": 4.4,
-      "seasonality_reason": "Historical Mar seasonality: avg weekly return +1.55% across 5 sample weeks in price history.",
-      "calendar_month": 3,
-      "month_avg_return_pct": 1.548,
-      "month_sample_weeks": 5,
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
       "pass": false
     },
     "Crude Oil / CL": {
@@ -188,14 +186,12 @@
     },
     "Coffee": {
       "market": "Coffee",
-      "as_of_week": "2026-03-01",
-      "wired": true,
-      "seasonality_bias": "Bearish",
-      "seasonality_score": 4.4,
-      "seasonality_reason": "Historical Mar seasonality: avg weekly return -1.54% across 5 sample weeks in price history.",
-      "calendar_month": 3,
-      "month_avg_return_pct": -1.538,
-      "month_sample_weeks": 5,
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
       "pass": false
     },
     "Cocoa": {
@@ -208,16 +204,24 @@
       "calendar_month": null,
       "pass": false
     },
+    "Cotton": {
+      "market": "Cotton",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
     "Corn": {
       "market": "Corn",
-      "as_of_week": "2026-03-01",
-      "wired": true,
-      "seasonality_bias": "Bullish",
-      "seasonality_score": 3.5,
-      "seasonality_reason": "Historical Mar seasonality: avg weekly return +1.23% across 5 sample weeks in price history.",
-      "calendar_month": 3,
-      "month_avg_return_pct": 1.233,
-      "month_sample_weeks": 5,
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
       "pass": false
     },
     "Wheat": {
@@ -262,6 +266,76 @@
     },
     "Palladium": {
       "market": "Palladium",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "Bitcoin": {
+      "market": "Bitcoin",
+      "as_of_week": "2026-06-01",
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "Only 1 historical weeks for month 6 (need 3+).",
+      "calendar_month": 6,
+      "pass": false
+    },
+    "US Dollar Index / DX": {
+      "market": "US Dollar Index / DX",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "US 2-Year Treasury Yield": {
+      "market": "US 2-Year Treasury Yield",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "US 10-Year Treasury Yield": {
+      "market": "US 10-Year Treasury Yield",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "US 30-Year Treasury Yield": {
+      "market": "US 30-Year Treasury Yield",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "2s10s Yield Curve": {
+      "market": "2s10s Yield Curve",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "10-Year Real Yield": {
+      "market": "10-Year Real Yield",
       "as_of_week": null,
       "wired": false,
       "seasonality_bias": "UNAVAILABLE",
@@ -362,16 +436,6 @@
       "seasonality_score": null,
       "seasonality_reason": "No weekly price bars for seasonality.",
       "calendar_month": null,
-      "pass": false
-    },
-    "Bitcoin": {
-      "market": "Bitcoin",
-      "as_of_week": "2026-06-01",
-      "wired": false,
-      "seasonality_bias": "UNAVAILABLE",
-      "seasonality_score": null,
-      "seasonality_reason": "Only 1 historical weeks for month 6 (need 3+).",
-      "calendar_month": 6,
       "pass": false
     },
     "Bitcoin Cash": {
@@ -510,6 +574,16 @@
       "calendar_month": 5,
       "month_avg_return_pct": 0.006,
       "month_sample_weeks": 4,
+      "pass": false
+    },
+    "EUR/GBP": {
+      "market": "EUR/GBP",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
       "pass": false
     },
     "EUR/HKD": {
@@ -1158,6 +1232,16 @@
       "calendar_month": null,
       "pass": false
     },
+    "US 10-Year T-Note / ZN": {
+      "market": "US 10-Year T-Note / ZN",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
     "US 10Y T-Note": {
       "market": "US 10Y T-Note",
       "as_of_week": null,
@@ -1168,8 +1252,38 @@
       "calendar_month": null,
       "pass": false
     },
+    "US 2-Year T-Note / ZT": {
+      "market": "US 2-Year T-Note / ZT",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
     "US 2Y T-Note": {
       "market": "US 2Y T-Note",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "US 30-Year T-Bond / ZB": {
+      "market": "US 30-Year T-Bond / ZB",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
+      "pass": false
+    },
+    "US 5-Year T-Note / ZF": {
+      "market": "US 5-Year T-Note / ZF",
       "as_of_week": null,
       "wired": false,
       "seasonality_bias": "UNAVAILABLE",
@@ -1412,6 +1526,16 @@
       "calendar_month": 5,
       "month_avg_return_pct": -0.625,
       "month_sample_weeks": 4,
+      "pass": false
+    },
+    "Ultra 10-Year T-Note / TN": {
+      "market": "Ultra 10-Year T-Note / TN",
+      "as_of_week": null,
+      "wired": false,
+      "seasonality_bias": "UNAVAILABLE",
+      "seasonality_score": null,
+      "seasonality_reason": "No weekly price bars for seasonality.",
+      "calendar_month": null,
       "pass": false
     },
     "West Texas Oil": {

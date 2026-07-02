@@ -5,6 +5,8 @@ export const POSITIONING_RANGE_PRESETS = [
   { id: '6m', label: '6M', weeks: 26 },
   { id: '1y', label: '1Y', weeks: 52 },
   { id: '3y', label: '3Y', weeks: 156 },
+  { id: '5y', label: '5Y', weeks: 260 },
+  { id: '10y', label: '10Y', weeks: 520 },
   { id: 'all', label: 'All', weeks: null },
 ]
 

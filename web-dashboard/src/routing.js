@@ -14,6 +14,14 @@ export function parseRoute() {
 
   if (parts[0] === 'instrument') {
 
+    if (parts.length >= 3 && parts[parts.length - 1] === 'cot-workstation') {
+
+      const market = decodeURIComponent(parts.slice(1, -1).join('/')).trim()
+
+      return { view: 'cot-workstation', market }
+
+    }
+
     if (parts.length >= 2) {
 
       const market = decodeURIComponent(parts.slice(1).join('/')).trim()
@@ -97,6 +105,16 @@ export function navigateToInstrument(market) {
   const id = canonicalMarketId(market)
 
   window.location.hash = `#/instrument/${encodeURIComponent(id)}`
+
+}
+
+
+
+export function navigateToCotWorkstation(market) {
+
+  const id = canonicalMarketId(market)
+
+  window.location.hash = `#/instrument/${encodeURIComponent(id)}/cot-workstation`
 
 }
 

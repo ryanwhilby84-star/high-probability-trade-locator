@@ -10,7 +10,9 @@ import { WeeklyOHLCStore } from './stores/WeeklyOHLCStore.js'
 import { HistoricalCOTStore } from './stores/HistoricalCOTStore.js'
 
 function useStoreSnapshot(store) {
-  return React.useSyncExternalStore(store.subscribe.bind(store), store.getSnapshot.bind(store), store.getSnapshot.bind(store))
+  const subscribe = React.useCallback((onStoreChange) => store.subscribe(onStoreChange), [store])
+  const getSnapshot = React.useCallback(() => store.getSnapshot(), [store])
+  return React.useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
 }
 
 export function useLivePriceStore() {

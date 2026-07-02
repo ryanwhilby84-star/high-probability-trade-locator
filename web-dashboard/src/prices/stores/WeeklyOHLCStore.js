@@ -81,8 +81,8 @@ export const WeeklyOHLCStore = {
   subscribe(listener) {
     _listeners.add(listener)
     _subscriberCount += 1
-    if (_subscriberCount === 1) {
-      fetchDoc({ bustCache: true })
+    if (_subscriberCount === 1 && !_doc && !_loadPromise) {
+      fetchDoc({ bustCache: false })
     }
     return () => {
       _listeners.delete(listener)
@@ -91,7 +91,7 @@ export const WeeklyOHLCStore = {
   },
 
   getSnapshot() {
-    const key = `${_doc?.generated_at ?? ''}|${_subscriberCount}|${_lastFetchUrl ?? ''}`
+    const key = `${_doc?.generated_at ?? ''}|${_lastFetchUrl ?? ''}`
     if (_snapshotCache && _snapshotCacheKey === key) return _snapshotCache
     _snapshotCacheKey = key
     _snapshotCache = {

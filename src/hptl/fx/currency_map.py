@@ -28,6 +28,10 @@ LEADERBOARD_CURRENCIES: Final[tuple[str, ...]] = (
     "USD",
 )
 
+DX_INSTRUMENT_ID: Final[str] = "US Dollar Index / DX"
+USD_SYNTHETIC_LABEL: Final[str] = "Synthetic USD (G10 inverse basket)"
+USD_DIRECT_LABEL: Final[str] = "Direct USD / DXY (ICE Dollar Index COT 098662)"
+
 
 @dataclass(frozen=True)
 class FxPairLegs:

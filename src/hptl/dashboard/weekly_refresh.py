@@ -131,14 +131,66 @@ def rebuild_chart_series_exports() -> Path:
     return run_cot_3y()
 
 
-def rebuild_pillar_exports() -> None:
+def refresh_fx_valuation_inputs() -> dict[str, Any]:
+    """Refresh FX futures price + macro inputs used by IVE / V3 valuation exports."""
+    from hptl.valuation.fx_futures_data_refresh import refresh_fx_futures_data
+
+    return refresh_fx_futures_data()
+
+
+def rebuild_pillar_exports() -> dict[str, Any]:
     from hptl.location.export import write_location_exports
     from hptl.seasonality.export import build_seasonality_latest, write_seasonality_exports
     from hptl.valuation.export import write_valuation_exports
 
+    meta: dict[str, Any] = {}
+    fx_report = refresh_fx_valuation_inputs()
+    meta["fx_refresh_at"] = str(fx_report.get("generated_at") or datetime.now(timezone.utc).isoformat())
+
     write_valuation_exports()
+    meta["fx_valuation_exports_at"] = datetime.now(timezone.utc).isoformat()
+
+    try:
+        from hptl.valuation.currency_futures_ive_v1 import write_currency_futures_ive_export
+
+        write_currency_futures_ive_export()
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"currency_futures_ive export: {exc}")
+
+    try:
+        from hptl.valuation.fx_v3_audit import write_fx_v3_audit_artifacts
+
+        write_fx_v3_audit_artifacts()
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"fx_valuation_v3 export: {exc}")
+
     write_location_exports()
     write_seasonality_exports(build_seasonality_latest())
+    return meta
+
+
+def rebuild_workstation_exports() -> Path:
+    from hptl.prices.workstation_ohlc_export import write_workstation_ohlc_exports
+
+    return write_workstation_ohlc_exports()
+
+
+def refresh_legacy_cot_if_stale() -> str:
+    """Rebuild legacy_cot_latest.json when it trails the tracked master CSV."""
+    import pandas as pd
+
+    from hptl.cot.pipeline import _legacy_latest_report_date, _refresh_legacy_positioning
+    from hptl.cot.report_dates import get_latest_local_report_date
+
+    master_ts = get_latest_local_report_date()
+    legacy_ts = _legacy_latest_report_date()
+    if master_ts is None or pd.isna(master_ts):
+        return "—"
+    if legacy_ts is not None and not pd.isna(legacy_ts) and legacy_ts >= master_ts.normalize():
+        return str(legacy_ts)[:10]
+    _refresh_legacy_positioning(cftc_max=pd.Timestamp(master_ts).normalize())
+    refreshed = _legacy_latest_report_date()
+    return str(refreshed)[:10] if refreshed is not None and not pd.isna(refreshed) else "—"
 
 
 def pull_cot_and_master(*, force: bool = False) -> int:
@@ -168,20 +220,18 @@ def validate_alignment(*, probe_market: str = CHART_PROBE_MARKET) -> tuple[bool,
     if graph == "—":
         errors.append(f"cot_3y_series missing latest_date for {probe_market}")
 
-    targets = {d for d in (master, legacy, conf) if d not in ("—", "")}
-    if len(targets) > 1 and len(targets) != 1:
-        errors.append(f"master/legacy/confluence week mismatch: master={master} legacy={legacy} confluence={conf}")
-    elif targets:
-        expected = max(targets)
-        if conf != "—" and conf != expected:
-            errors.append(f"confluence {conf} != master bundle {expected}")
-        if master != "—" and master != expected:
-            errors.append(f"master {master} != expected {expected}")
-
-    if graph != "—" and conf != "—" and graph != conf:
-        errors.append(f"graph latest ({graph}) != confluence latest ({conf}) for probe {probe_market}")
-    if graph != "—" and master != "—" and graph != master:
-        errors.append(f"graph latest ({graph}) != master latest ({master})")
+    if master != "—":
+        if legacy != "—" and legacy < master:
+            errors.append(
+                f"legacy COT bundle stale: legacy={legacy} master={master} "
+                "(run refresh without --skip-cot-pull)"
+            )
+        if conf != "—" and conf < master:
+            errors.append(f"confluence export stale: confluence={conf} master={master}")
+        if graph != "—" and graph != master:
+            errors.append(f"graph latest ({graph}) != master latest ({master}) for {probe_market}")
+        if conf != "—" and graph != "—" and conf != graph:
+            errors.append(f"graph ({graph}) != confluence ({conf}) for {probe_market}")
 
     return (len(errors) == 0, errors)
 
@@ -198,9 +248,15 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         rc = pull_cot_and_master(force=force_cot)
         if rc != 0:
             report.errors.append(f"COT/master pull exited {rc}")
+    try:
+        refresh_legacy_cot_if_stale()
+    except Exception as exc:
+        report.errors.append(f"legacy COT refresh failed: {exc}")
 
     try:
-        rebuild_pillar_exports()
+        meta = rebuild_pillar_exports()
+        if meta.get("warnings"):
+            report.errors.extend(meta["warnings"])
     except Exception as exc:
         report.errors.append(f"pillar export failed: {exc}")
 
@@ -219,6 +275,11 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         report.chart_series_updated = _cot3y_market_count()
     except Exception as exc:
         report.errors.append(f"chart series export failed: {exc}")
+
+    try:
+        rebuild_workstation_exports()
+    except Exception as exc:
+        report.errors.append(f"workstation OHLC export failed: {exc}")
 
     try:
         from hptl.thesis_tracker.opportunity_distribution_report import write_scanner_latest
