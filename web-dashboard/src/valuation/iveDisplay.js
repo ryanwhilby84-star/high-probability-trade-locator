@@ -6,25 +6,35 @@
 export function readIVE(block) {
   if (!block) return null
   const ive = block.ive || block
-  if (!ive || ive.instrument == null && !block.model_name && !block.model_id) {
-    if (!block.wired && !block.fair_value) return null
+
+  const wired = block.wired === true || ive.wired === true
+  const modelStatus =
+    ive.model_status ||
+    block.model_status ||
+    (wired ? 'VALIDATED' : 'MODEL_INCOMPLETE')
+
+  if (!ive || (ive.instrument == null && !block.market && !block.model_name && !block.model_id)) {
+    if (!wired && !block.fair_value) return null
   }
+
+  const valuationPct = ive.valuation_pct ?? block.deviation_pct
+
   return {
     instrument: ive.instrument || block.market,
     currentPrice: ive.current_price ?? block.spot_price,
     fairValue: ive.fair_value ?? block.fair_value,
-    valuationPct: ive.valuation_pct ?? block.deviation_pct,
+    valuationPct,
     valuationLabel: ive.valuation_label || block.valuation_state || block.valuation_bias || '—',
-    valuationGrade: ive.valuation_grade || gradeFromPct(ive.valuation_pct ?? block.deviation_pct),
+    valuationGrade: ive.valuation_grade || block.trust_grade || gradeFromPct(valuationPct),
     modelName: ive.model_name || block.model_id || '—',
-    modelStatus: ive.model_status || 'MODEL_INCOMPLETE',
+    modelStatus,
     sourceNames: ive.source_names || [],
     sourceDates: ive.source_dates || [],
     sourceLineage: ive.source_lineage || [],
     inputs: ive.inputs || {},
     calculationBreakdown: ive.calculation_breakdown || [],
-    lastUpdated: ive.last_updated || block.as_of_week || '—',
-    wired: block.wired === true && ive.model_status !== 'MODEL_INCOMPLETE',
+    lastUpdated: ive.last_updated || block.as_of_week || block.input_freshness?.price_as_of || '—',
+    wired,
     unavailableReason:
       block.unavailable_reason || block.valuation_reason || 'Valuation model incomplete.',
   }

@@ -9,6 +9,7 @@ import {
 } from '../cot/positioningChartMetrics.js'
 import { useCot3ySeries, resolveCot3yBlock } from '../hooks/useCot3ySeries.js'
 import { COT_3Y_PATH } from '../data/cot3ySeriesStore.js'
+import { useLivePrice } from '../prices/usePriceStores.js'
 import { useWorkstationOhlc } from './hooks/useWorkstationOhlc.js'
 import {
   buildPositioningWorkstationSeries,
@@ -20,9 +21,12 @@ import { useGlobalVerticalMagnification } from './charts/useGlobalVerticalMagnif
 import { SimpleChartPane } from './charts/SimpleChartPane.jsx'
 import {
   WS_COT_PLOT_HEIGHT,
+  WS_COT_RETAIL_PLOT_HEIGHT,
   WS_PRICE_PLOT_HEIGHT,
 } from './charts/workstationPanelSizing.js'
 import { CotDrawingCoordinator } from './charts/CotDrawingCoordinator.jsx'
+import { CotPanelStatsStrip } from './charts/CotPanelStatsStrip.jsx'
+import { computeCotPanelStats } from './charts/cotPanelStats.js'
 import { useCotWorkstationReady } from './charts/useCotWorkstationReady.js'
 import {
   bumpRender,
@@ -43,6 +47,7 @@ function PanelBlock({
   subtitle = null,
   panelClass = '',
   bodyHeight,
+  footer = null,
   children,
 }) {
   return (
@@ -54,6 +59,7 @@ function PanelBlock({
       <div className="cot-ws-panel-body" style={{ height: bodyHeight }}>
         {children}
       </div>
+      {footer}
     </div>
   )
 }
@@ -87,6 +93,7 @@ function CotWorkstationSkeleton({ message = 'Loading COT series…' }) {
 export function CotWorkstation({ marketId, variant = 'default' }) {
   const { doc, loading, errored } = useCot3ySeries()
   const { exportBlock, exportLoaded } = useWorkstationOhlc(marketId)
+  const livePriceState = useLivePrice(marketId)
   const [rangeId, setRangeId] = React.useState(POSITIONING_DEFAULT_RANGE_ID)
   const crosshairLabelRef = React.useRef(null)
   const panelsStackRef = React.useRef(null)
@@ -134,6 +141,19 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     [timelineRows],
   )
 
+  const commercialStats = React.useMemo(
+    () => computeCotPanelStats(commercialLinePoints),
+    [commercialLinePoints],
+  )
+  const institutionalStats = React.useMemo(
+    () => computeCotPanelStats(institutionalLinePoints),
+    [institutionalLinePoints],
+  )
+  const retailStats = React.useMemo(
+    () => computeCotPanelStats(retailLinePoints),
+    [retailLinePoints],
+  )
+
   const { chartsReady, cotSettled, ohlcSettled, cotDataReady } = useCotWorkstationReady({
     marketId,
     cotLoading: loading,
@@ -152,7 +172,6 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         (binding?.meta?.alignedOhlcWeeks ?? 0) < totalCotWeeks),
   )
   const isFullscreen = variant === 'fullscreen'
-
   const priceBodyHeight = hasAnyOhlc ? PRICE_BODY_HEIGHT : 72
 
   const preset = React.useMemo(() => rangePresetById(rangeId), [rangeId])
@@ -180,7 +199,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     setCrosshairLabel(latest?.date || latest?.label || '—')
   }, [setCrosshairLabel])
 
-  const { registerPane, goHome, goAll, goPreset, resetCamera, panByPixels, zoomAtClientX, adjustVerticalMagnification, onDragStart, onDragEnd, subscribeGeometry, getViewportState } =
+  const { registerPane, goHome, goAll, goPreset, resetCamera, panByPixels, panPriceByPixels, zoomAtClientX, adjustVerticalMagnification, onDragStart, onDragEnd, subscribeGeometry, getViewportState } =
     useMasterCamera({
       timelineRowsRef: visibleRowsRef,
       onCrosshairTime,
@@ -192,6 +211,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     containerRef: panelsStackRef,
     enabled: chartsReady,
     onPanDelta: panByPixels,
+    onPricePanDelta: panPriceByPixels,
     onZoomAt: zoomAtClientX,
     onDragStart,
     onDragEnd,
@@ -276,9 +296,15 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   const instTitle = model.institutionalGroup || 'Non-Commercial'
   const retailTitle = model.retailGroup || 'Non-Reportable'
 
-  const priceSubtitle = ohlcPartial
+  const priceQuality = exportBlock?.price_quality
+  const priceQualityWarning =
+    priceQuality?.status && priceQuality.status !== 'PASS'
+      ? `PRICE ${priceQuality.status}: ${priceQuality.warning || 'verify source/date'}`
+      : null
+  const priceRangeSubtitle = ohlcPartial
     ? `OHLC ${binding?.meta?.range?.ohlcFirst ?? '—'} → ${binding?.meta?.range?.ohlcLast ?? '—'} · COT full history`
     : null
+  const priceSubtitle = [priceQualityWarning, priceRangeSubtitle].filter(Boolean).join(' · ') || null
 
   const windowWeeks =
     preset.weeks == null ? totalCotWeeks : Math.min(preset.weeks, totalCotWeeks)
@@ -305,7 +331,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
       <header className="cot-ws-toolbar">
         <div className="cot-ws-toolbar-left">
           <span className="cot-ws-build-badge" aria-label="Build marker">
-            MASTER CAMERA BUILD 12
+            MASTER CAMERA BUILD 14
           </span>
           <span className="cot-ws-history">{model.historyLabel}</span>
           <span className="cot-ws-weeks">
@@ -377,6 +403,11 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 mode="candle"
                 candleBars={visibleBars}
                 syncOnly={!hasVisibleOhlc}
+                livePrice={livePriceState.quote?.mid ?? null}
+                livePriceAsOf={livePriceState.quote?.asOf ?? null}
+                livePriceSource={livePriceState.quote?.source ?? null}
+                livePriceStale={livePriceState.freshness?.isStale ?? true}
+                livePriceAgeMs={livePriceState.freshness?.ageMs ?? null}
                 emptyMessage={
                   hasAnyOhlc && !hasVisibleOhlc
                     ? 'No weekly OHLC in this range.'
@@ -397,6 +428,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
               title="Commercial net"
               panelClass="cot-ws-panel--cot"
               bodyHeight={COT_BODY_HEIGHT}
+              footer={<CotPanelStatsStrip label="Commercial" stats={commercialStats} />}
             >
               {chartsReady ? (
                 <SimpleChartPane
@@ -417,6 +449,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
               title={`${instTitle} net`}
               panelClass="cot-ws-panel--cot"
               bodyHeight={COT_BODY_HEIGHT}
+              footer={<CotPanelStatsStrip label={instTitle} stats={institutionalStats} />}
             >
               {chartsReady ? (
                 <SimpleChartPane
@@ -436,7 +469,8 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
               panelId={PANEL_IDS.retail}
               title={`${retailTitle} net`}
               panelClass="cot-ws-panel--cot cot-ws-panel--retail"
-              bodyHeight={COT_BODY_HEIGHT}
+              bodyHeight={WS_COT_RETAIL_PLOT_HEIGHT}
+              footer={<CotPanelStatsStrip label={retailTitle} stats={retailStats} />}
             >
               {chartsReady ? (
                 <SimpleChartPane

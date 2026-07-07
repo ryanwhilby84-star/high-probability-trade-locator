@@ -6,8 +6,12 @@ import {
   prepareLightweightCandles,
   prepareLightweightLinePoints,
 } from '../data/prepareLightweightCandles.js'
-import { WS_CHART_COLORS, createCotWorkstationChartOptions, WS_PRICE_SCALE_WIDTH } from './workstationChartOptions.js'
+import { formatAgeMs } from '../../hooks/liveQuoteFreshness.js'
+import { WS_CHART_COLORS, createCotWorkstationChartOptions, EXCLUDE_FROM_AUTOSCALE, WS_PRICE_SCALE_WIDTH, formatWorkstationAxisPrice } from './workstationChartOptions.js'
 import { recordChartMount, recordChartUnmount } from './cotWsRenderDiagnostics.js'
+
+const LIVE_PRICE_LINE_COLOR = '#38bdf8'
+const LIVE_PRICE_STALE_LINE_COLOR = '#fbbf24'
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
@@ -64,11 +68,17 @@ export function SimpleChartPane({
   chartsReady = true,
   passiveCamera = false,
   nativeWheelZoom = false,
+  livePrice = null,
+  livePriceAsOf = null,
+  livePriceSource = null,
+  livePriceStale = false,
+  livePriceAgeMs = null,
   className = '',
 }) {
   const containerRef = React.useRef(null)
   const chartRef = React.useRef(null)
   const primaryRef = React.useRef(null)
+  const livePriceLineRef = React.useRef(null)
   const anchorRef = React.useRef(null)
   const zeroRef = React.useRef(null)
   const candlesRef = React.useRef([])
@@ -104,6 +114,7 @@ export function SimpleChartPane({
             width: Math.max(el.clientWidth, 1),
             height: Math.max(el.clientHeight, 1),
             showTimeAxis,
+            panelId,
             interactionEnabled: true,
             passiveCamera,
             hidePriceScale: syncOnlyRef.current,
@@ -123,6 +134,7 @@ export function SimpleChartPane({
         priceLineVisible: false,
         lastValueVisible: false,
         crosshairMarkerVisible: false,
+        autoscaleInfoProvider: EXCLUDE_FROM_AUTOSCALE,
       })
 
       let primarySeries = null
@@ -244,8 +256,11 @@ export function SimpleChartPane({
       },
       rightPriceScale: {
         visible: !syncOnly || gutterOnly,
+        borderVisible: false,
         minimumWidth: WS_PRICE_SCALE_WIDTH,
+        entireTextOnly: true,
         ticksVisible: !gutterOnly,
+        scaleMargins: { top: 0.12, bottom: showTimeAxis ? 0.14 : 0.1 },
       },
       crosshair: {
         horzLine: {
@@ -257,7 +272,9 @@ export function SimpleChartPane({
           labelVisible: showTimeAxis,
         },
       },
-      localization: gutterOnly ? { priceFormatter: () => '' } : undefined,
+      localization: gutterOnly
+        ? { priceFormatter: () => '' }
+        : { priceFormatter: formatWorkstationAxisPrice },
     })
     if (syncOnly && primaryRef.current) {
       try {
@@ -266,7 +283,7 @@ export function SimpleChartPane({
         /* ignore */
       }
     }
-  }, [syncOnly, passiveCamera, nativeWheelZoom])
+  }, [syncOnly, passiveCamera, nativeWheelZoom, panelId, showTimeAxis])
 
   React.useEffect(() => {
     if (!anchorRef.current) return
@@ -300,6 +317,32 @@ export function SimpleChartPane({
   }, [candleBars, linePoints, mode, panelId, syncOnly])
 
   React.useEffect(() => {
+    if (!primaryRef.current || mode !== 'candle') return
+    if (livePriceLineRef.current) {
+      try {
+        primaryRef.current.removePriceLine(livePriceLineRef.current)
+      } catch {
+        /* ignore */
+      }
+      livePriceLineRef.current = null
+    }
+    if (!isNum(livePrice)) return
+    const stale = Boolean(livePriceStale)
+    try {
+      livePriceLineRef.current = primaryRef.current.createPriceLine({
+        price: livePrice,
+        color: stale ? LIVE_PRICE_STALE_LINE_COLOR : LIVE_PRICE_LINE_COLOR,
+        lineWidth: 1,
+        lineStyle: 2,
+        axisLabelVisible: true,
+        title: stale ? 'Last' : 'Live',
+      })
+    } catch (err) {
+      console.error('[cot-workstation] live price line failed', panelId, err)
+    }
+  }, [livePrice, livePriceStale, mode, panelId])
+
+  React.useEffect(() => {
     if (!zeroRef.current || !timelineRows.length) return
     const first = timelineRows.find((r) => isNum(r.time))
     const last = timelineRows[timelineRows.length - 1]
@@ -330,6 +373,27 @@ export function SimpleChartPane({
         {showPlaceholder ? (
           <div className="cot-ws-chart-placeholder" aria-live="polite">
             {emptyMessage}
+          </div>
+        ) : null}
+        {mode === 'candle' && isNum(livePrice) ? (
+          <div className="cot-ws-live-price-hud" aria-live="polite">
+            <span
+              className={`cot-ws-live-price-badge${
+                livePriceStale ? ' cot-ws-live-price-badge--stale' : ''
+              }`}
+            >
+              {livePriceStale ? 'STALE' : 'LIVE'}
+            </span>
+            <span className="cot-ws-live-price-value">{formatWorkstationAxisPrice(livePrice)}</span>
+            {livePriceAsOf ? (
+              <span
+                className="cot-ws-live-price-ts"
+                title={livePriceSource ? `Source: ${livePriceSource}` : undefined}
+              >
+                {String(livePriceAsOf).slice(0, 19).replace('T', ' ')}
+                {livePriceAgeMs != null ? ` · ${formatAgeMs(livePriceAgeMs)}` : ''}
+              </span>
+            ) : null}
           </div>
         ) : null}
       </div>

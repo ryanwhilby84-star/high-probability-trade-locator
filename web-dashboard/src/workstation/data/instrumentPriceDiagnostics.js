@@ -17,6 +17,8 @@ export function buildPriceContextFromStores(marketId, { visibleBars, valuationBl
   const liveStatus = LivePriceStore.getStatus(marketId)
   const completedWeekly = WeeklyOHLCStore.getCompletedWeekly(marketId)
   const weeklySource = WeeklyOHLCStore.getPriceSource(marketId)
+  const ohlcQuality = WeeklyOHLCStore.getPriceQuality(marketId)
+  const ohlcQualityStatus = ohlcQuality?.status && ohlcQuality.status !== 'PASS' ? ohlcQuality.status : null
 
   const chartBar = visibleBars?.[visibleBars.length - 1]
   const weeklyFromChart = isNum(chartBar?.close) ? chartBar.close : null
@@ -64,6 +66,11 @@ export function buildPriceContextFromStores(marketId, { visibleBars, valuationBl
     chartClose: weeklyClose,
     chartCloseDate: weeklyCloseDate,
     weeklyOhlcSource: weeklySource,
+    ohlcPriceQuality: ohlcQuality,
+    ohlcQualityStatus,
+    ohlcStaleNote: ohlcQualityStatus
+      ? `OHLC ${ohlcQualityStatus}${ohlcQuality?.warning ? `: ${ohlcQuality.warning}` : ''}`
+      : null,
 
     valuationLiveMid,
     valuationPriceUsed: valuationLiveMid,

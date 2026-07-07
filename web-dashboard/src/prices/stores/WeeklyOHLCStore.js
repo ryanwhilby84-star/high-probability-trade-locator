@@ -136,6 +136,10 @@ export const WeeklyOHLCStore = {
     return block?.price_source || block?.canonical_source || 'workstation_ohlc_latest.json'
   },
 
+  getPriceQuality(marketId) {
+    return this.getExportBlock(marketId)?.price_quality ?? null
+  },
+
   async refresh({ bustCache = true } = {}) {
     await fetchDoc({ bustCache })
   },

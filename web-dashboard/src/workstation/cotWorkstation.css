@@ -34,9 +34,9 @@
 }
 
 .cot-ws-crosshair-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #7dd3fc;
+  font-size: 13px;
+  font-weight: 700;
+  color: #bae6fd;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   min-width: 96px;
@@ -46,8 +46,55 @@
   background: rgba(56, 189, 248, 0.04);
 }
 
+.cot-ws-panel--price {
+  border-bottom: 1px solid rgba(56, 189, 248, 0.14);
+}
+
 .cot-ws-panel--price .cot-ws-panel-title {
-  color: #94a3b8;
+  color: #cbd5e1;
+}
+
+.cot-ws-panel--price .cot-ws-panel-body {
+  min-height: 360px;
+}
+
+.cot-ws-panels--camera .cot-ws-panel-body {
+  cursor: grab;
+}
+
+.cot-ws-panels--camera .cot-ws-panel-body:active {
+  cursor: grabbing;
+}
+
+.cot-ws-panels--camera .cot-ws-panel--price .cot-ws-panel-body {
+  cursor: grab;
+}
+
+.cot-ws-panels--camera .cot-ws-panel--price .cot-ws-panel-body:active {
+  cursor: grabbing;
+}
+
+.cot-ws-panel--price .cot-ws-chart-plot {
+  padding: 6px 0 8px;
+  box-sizing: border-box;
+}
+
+.cot-ws-panel--cot .cot-ws-panel-body {
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.cot-ws-panel--cot .cot-ws-chart-plot {
+  padding: 2px 0 4px;
+  box-sizing: border-box;
+}
+
+.cot-ws-panel--retail .cot-ws-panel-body {
+  padding-bottom: 4px;
+}
+
+.cot-ws-panel--retail .cot-ws-chart-plot {
+  padding-bottom: 8px;
 }
 
 .cot-ws-chart-plot {
@@ -81,8 +128,8 @@
 }
 
 .cot-ws-weeks {
-  font-size: 10px;
-  color: #64748b;
+  font-size: 11px;
+  color: #94a3b8;
 }
 
 .cot-ws-toolbar-center {
@@ -122,6 +169,7 @@
   display: flex;
   flex-direction: column;
   min-height: min-content;
+  padding-bottom: 20px;
 }
 
 .cot-ws-canvas-scroll {
@@ -141,11 +189,11 @@
 
 .cot-ws-cot-group-head {
   padding: 6px 10px 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .cot-ws-panel--cot {
@@ -196,11 +244,15 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
 }
 
 .cot-ws-panel-title {
-  font-size: 10px;
-  font-weight: 600;
-  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.cot-ws-panel--cot .cot-ws-panel-title {
+  color: #e2e8f0;
 }
 
 .cot-ws-panel-subtitle {
@@ -208,7 +260,7 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
   margin-top: 2px;
   font-size: 10px;
   font-weight: 500;
-  color: #475569;
+  color: #64748b;
   text-transform: none;
   letter-spacing: 0;
 }
@@ -304,6 +356,53 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
   background: rgba(11, 18, 32, 0.72);
   pointer-events: none;
   z-index: 2;
+}
+
+.cot-ws-live-price-hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  max-width: calc(100% - 88px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(11, 18, 32, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  pointer-events: none;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #cbd5e1;
+}
+
+.cot-ws-live-price-badge {
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  background: #38bdf8;
+}
+
+.cot-ws-live-price-badge--stale {
+  background: #fbbf24;
+  color: #422006;
+}
+
+.cot-ws-live-price-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.cot-ws-live-price-ts {
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
 }
 
 .cot-ws-panel--price-empty .cot-ws-panel-body {
@@ -411,6 +510,61 @@ body.cot-ws-panel-resizing {
 
 .cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-chart-plot {
   padding-bottom: 2px;
+}
+
+.cot-ws-panel-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  padding: 4px 10px 7px;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  font-size: 10px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  background: rgba(11, 18, 32, 0.55);
+}
+
+.cot-ws-panel-stats-group {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+.cot-ws-stat-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.cot-ws-stat-item-label {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cot-ws-stat-item-value {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.cot-ws-stat-item--up .cot-ws-stat-item-value {
+  color: #34d399;
+}
+
+.cot-ws-stat-item--down .cot-ws-stat-item-value {
+  color: #f87171;
+}
+
+.cot-ws-stat-item--flat .cot-ws-stat-item-value {
+  color: #94a3b8;
 }
 
 .cot-ws-range-btn--fit {

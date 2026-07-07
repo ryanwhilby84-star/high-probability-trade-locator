@@ -99,6 +99,8 @@ export function useMasterCamera({
   const pendingZoomRef = React.useRef(null)
   const priceVerticalRef = React.useRef(VERTICAL_STRETCH_DEFAULTS.factor)
   const cotVerticalRef = React.useRef(VERTICAL_STRETCH_DEFAULTS.factor)
+  const pricePanOffsetRef = React.useRef(0)
+  const pendingPricePanRef = React.useRef(0)
 
   const rows = timelineRowsRef?.current ?? timelineRowsRefInternal.current
   timelineRowsRefInternal.current = rows
@@ -147,6 +149,7 @@ export function useMasterCamera({
     applyVerticalMagnificationToPanes(panesRef.current, {
       priceFactor: priceVerticalRef.current,
       cotFactor: cotVerticalRef.current,
+      pricePanOffset: pricePanOffsetRef.current,
     })
     if (cameraRef.current) {
       applyingRef.current = true
@@ -268,6 +271,7 @@ export function useMasterCamera({
     cameraRef.current = null
     priceVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
     cotVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
+    pricePanOffsetRef.current = 0
     lastCrosshairTimeRef.current = null
     crosshairSourceRef.current = null
     for (const pane of panesRef.current.values()) {
@@ -318,6 +322,45 @@ export function useMasterCamera({
       pushVerticalMagnification()
     },
     [pushVerticalMagnification],
+  )
+
+  const commitPendingPricePan = React.useMemo(
+    () =>
+      createRafCoalescer(() => {
+        const deltaY = pendingPricePanRef.current
+        pendingPricePanRef.current = 0
+        if (!deltaY) return
+        const pane = panesRef.current.get(PANEL_IDS.price)
+        const series = pane?.primarySeries
+        const chart = pane?.chart
+        if (!series || !chart) return
+        try {
+          const chartEl = chart.chartElement?.()
+          const height = chartEl?.clientHeight ?? 0
+          if (height < 40) return
+          const yTop = Math.round(height * 0.2)
+          const yBottom = Math.round(height * 0.8)
+          const priceTop = series.coordinateToPrice(yTop)
+          const priceBottom = series.coordinateToPrice(yBottom)
+          if (priceTop == null || priceBottom == null) return
+          const plotPx = Math.max(yBottom - yTop, 1)
+          const pricePerPixel = (priceBottom - priceTop) / plotPx
+          pricePanOffsetRef.current -= deltaY * pricePerPixel
+          pushVerticalMagnification()
+        } catch {
+          /* ignore stale chart */
+        }
+      }),
+    [pushVerticalMagnification],
+  )
+
+  const panPriceByPixels = React.useCallback(
+    (deltaYPixels) => {
+      if (!deltaYPixels) return
+      pendingPricePanRef.current += deltaYPixels
+      commitPendingPricePan()
+    },
+    [commitPendingPricePan],
   )
 
   const zoomAtClientX = React.useCallback(
@@ -387,6 +430,7 @@ export function useMasterCamera({
       verticalMagnification: {
         price: priceVerticalRef.current,
         cot: cotVerticalRef.current,
+        pricePanOffset: pricePanOffsetRef.current,
       },
       crosshairTime: lastCrosshairTimeRef.current,
       panes: panesRef.current,
@@ -418,6 +462,7 @@ export function useMasterCamera({
       applyVerticalMagnificationToPane(api, {
         priceFactor: priceVerticalRef.current,
         cotFactor: cotVerticalRef.current,
+        pricePanOffset: pricePanOffsetRef.current,
       })
 
       if (lastCrosshairTimeRef.current != null) {
@@ -531,6 +576,7 @@ export function useMasterCamera({
     goPreset,
     resetCamera,
     panByPixels,
+    panPriceByPixels,
     zoomAtClientX,
     adjustVerticalMagnification,
     resetVerticalMagnification,

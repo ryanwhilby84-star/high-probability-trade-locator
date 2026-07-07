@@ -1,9 +1,10 @@
 /** Default and bounds for synchronized workstation panel plot areas. */
 
-export const WS_PRICE_PLOT_HEIGHT = 520
-export const WS_PRICE_PLOT_MIN = 360
+export const WS_PRICE_PLOT_HEIGHT = 600
+export const WS_PRICE_PLOT_MIN = 400
 
-export const WS_COT_PLOT_HEIGHT = 400
+export const WS_COT_PLOT_HEIGHT = 420
+export const WS_COT_RETAIL_PLOT_HEIGHT = 448
 export const WS_COT_PLOT_MIN = 280
 export const WS_COT_PLOT_MAX = 960
 

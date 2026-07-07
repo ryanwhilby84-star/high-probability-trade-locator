@@ -5,6 +5,7 @@ import { resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
 import { recordCotReportDate, isCotRowResolved } from '../marketResolution.js'
 import { navigateToInstrument, navigateToScanner, navigateToThesisTracker, navigateToCotWorkstation } from '../routing.js'
 import { CotUnavailablePanel } from '../components/CotUnavailablePanel.jsx'
+import { ValuationInstrumentSection } from '../components/IVECalculationPanel.jsx'
 import { InstrumentWorkstationLayout } from '../workstation/InstrumentWorkstationLayout.jsx'
 import { InstrumentPositioningWorkspace } from '../components/InstrumentPositioningWorkspace.jsx'
 import { hasRealWeather, resolveWeatherForMarket } from '../weatherData.js'
@@ -206,6 +207,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       {!isCotRowResolved(row) ? <CotUnavailablePanel row={row} marketId={marketId} /> : null}
 
       <InstrumentWorkstationLayout>
+        <ValuationInstrumentSection row={row} />
         <InstrumentPositioningWorkspace
           marketId={marketId}
           headlineRow={row}

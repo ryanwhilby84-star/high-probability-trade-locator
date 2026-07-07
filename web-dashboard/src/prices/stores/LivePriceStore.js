@@ -1,5 +1,5 @@
 /**
- * LivePriceStore — authoritative OANDA live quotes only.
+ * LivePriceStore - authoritative OANDA live quotes only.
  * No weekly OHLC, no historical COT, no valuation fallbacks.
  */
 
@@ -30,8 +30,10 @@ function normalizeLiveQuote(marketId, raw) {
     const mid = raw?.live_price
     if (mid == null || !Number.isFinite(Number(mid))) return null
   }
+
   const mid = raw?.live_price
   if (mid == null || !Number.isFinite(Number(mid))) return null
+
   return {
     instrumentId: marketId,
     symbol: raw.canonical_symbol ?? null,
@@ -50,10 +52,12 @@ export async function triggerLiveQuotesExport() {
     method: 'POST',
     cache: 'no-store',
   })
+
   if (!resp.ok) {
     const body = await resp.json().catch(() => ({}))
     throw new Error(body?.error || `HTTP ${resp.status}`)
   }
+
   return resp.json().catch(() => ({ ok: true }))
 }
 
@@ -68,6 +72,7 @@ async function fetchDoc({ bustCache = false } = {}) {
 
   const fetchUrl = `${LIVE_QUOTES_URL}?v=${Date.now()}`
   _lastFetchUrl = fetchUrl
+
   _loadPromise = fetch(fetchUrl, { cache: 'no-store' })
     .then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`)
@@ -87,14 +92,24 @@ async function fetchDoc({ bustCache = false } = {}) {
       emit()
       throw err
     })
+
   return _loadPromise
 }
 
 function startPolling() {
   if (_pollId != null) return
-  _pollId = window.setInterval(() => {
-    fetchDoc({ bustCache: true }).catch(() => {})
-  }, LIVE_QUOTE_POLL_MS)
+
+  const poll = async () => {
+    try {
+      await LivePriceStore.refresh({ runExport: true })
+    } catch (err) {
+      console.warn('[LivePriceStore] poll failed', err)
+    }
+  }
+
+  poll()
+
+  _pollId = window.setInterval(poll, LIVE_QUOTE_POLL_MS)
 }
 
 function stopPolling() {
@@ -110,20 +125,29 @@ export const LivePriceStore = {
   subscribe(listener) {
     _listeners.add(listener)
     _subscriberCount += 1
+
     if (_subscriberCount === 1) {
       fetchDoc({ bustCache: true }).catch(() => {})
       startPolling()
     }
+
     return () => {
       _listeners.delete(listener)
       _subscriberCount = Math.max(0, _subscriberCount - 1)
-      if (_subscriberCount === 0) stopPolling()
+
+      if (_subscriberCount === 0) {
+        stopPolling()
+      }
     }
   },
 
   getSnapshot() {
     const key = `${_doc?.generated_at ?? ''}|${_refreshing}|${_refreshError ?? ''}|${_subscriberCount}|${_lastFetchedAtMs ?? ''}`
-    if (_snapshotCache && _snapshotCacheKey === key) return _snapshotCache
+
+    if (_snapshotCache && _snapshotCacheKey === key) {
+      return _snapshotCache
+    }
+
     _snapshotCacheKey = key
     _snapshotCache = {
       doc: _doc,
@@ -135,10 +159,11 @@ export const LivePriceStore = {
       refreshError: _refreshError,
       subscriberCount: _subscriberCount,
     }
+
     return _snapshotCache
   },
 
-  /** Live OANDA quote for one instrument — never includes weekly/historical fields. */
+  /** Live OANDA quote for one instrument - never includes weekly/historical fields. */
   getQuote(marketId) {
     if (!marketId || !_doc?.instruments) return null
     return normalizeLiveQuote(marketId, _doc.instruments[marketId])
@@ -149,10 +174,11 @@ export const LivePriceStore = {
     return getLiveQuoteFreshness(raw, _doc)
   },
 
-  /** 'LIVE' | 'STALE' | 'UNAVAILABLE' */
   getStatus(marketId) {
     const quote = this.getQuote(marketId)
+
     if (!quote) return 'UNAVAILABLE'
+
     const { isStale } = this.getFreshness(marketId)
     return isStale ? 'STALE' : 'LIVE'
   },
@@ -161,6 +187,7 @@ export const LivePriceStore = {
     _refreshing = true
     _refreshError = null
     emit()
+
     try {
       if (runExport) {
         try {
@@ -169,6 +196,7 @@ export const LivePriceStore = {
           console.warn('[LivePriceStore] export refresh unavailable', exportErr)
         }
       }
+
       await fetchDoc({ bustCache: true })
     } catch (err) {
       _refreshError = String(err?.message || err)
@@ -180,10 +208,11 @@ export const LivePriceStore = {
     }
   },
 
-  /** @deprecated use LivePriceStore.refresh */
   clearCache() {
     _doc = null
     _loadPromise = null
     emit()
   },
 }
+
+export default LivePriceStore

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { hitPriceAxis } from './priceAxisHit.js'
+import { PANEL_IDS } from '../../charts/chartTheme.js'
 
 function wheelIntensity(event) {
   let mag = Math.abs(event.deltaY)
@@ -20,15 +21,18 @@ export function useMasterCameraGestures({
   containerRef,
   enabled,
   onPanDelta,
+  onPricePanDelta,
   onZoomAt,
   onDragStart,
   onDragEnd,
 }) {
   const onPanDeltaRef = React.useRef(onPanDelta)
+  const onPricePanDeltaRef = React.useRef(onPricePanDelta)
   const onZoomAtRef = React.useRef(onZoomAt)
   const onDragStartRef = React.useRef(onDragStart)
   const onDragEndRef = React.useRef(onDragEnd)
   onPanDeltaRef.current = onPanDelta
+  onPricePanDeltaRef.current = onPricePanDelta
   onZoomAtRef.current = onZoomAt
   onDragStartRef.current = onDragStart
   onDragEndRef.current = onDragEnd
@@ -38,7 +42,9 @@ export function useMasterCameraGestures({
     if (!root || !enabled) return undefined
 
     let dragging = false
+    let dragInPricePanel = false
     let lastX = 0
+    let lastY = 0
     let activePointerId = null
     let mouseDragging = false
 
@@ -50,6 +56,21 @@ export function useMasterCameraGestures({
     const isHorizontalPlotTarget = (event) => {
       if (!isPlotTarget(event.target)) return false
       return !hitPriceAxis(event.clientX, event.clientY, root)
+    }
+
+    const isPricePlotTarget = (event) => {
+      if (!isHorizontalPlotTarget(event)) return false
+      const panel = event.target?.closest?.('[data-panel]')
+      return panel?.getAttribute('data-panel') === PANEL_IDS.price
+    }
+
+    const applyDragDelta = (deltaX, deltaY) => {
+      if (deltaX !== 0) {
+        onPanDeltaRef.current?.(deltaX)
+      }
+      if (dragInPricePanel && deltaY !== 0) {
+        onPricePanDeltaRef.current?.(deltaY)
+      }
     }
 
     const onWheel = (event) => {
@@ -66,8 +87,10 @@ export function useMasterCameraGestures({
       if (event.pointerType === 'mouse') return
       if (event.button !== 0 || !isHorizontalPlotTarget(event)) return
       dragging = true
+      dragInPricePanel = isPricePlotTarget(event)
       activePointerId = event.pointerId
       lastX = event.clientX
+      lastY = event.clientY
       onDragStartRef.current?.()
       try {
         root.setPointerCapture(event.pointerId)
@@ -81,9 +104,11 @@ export function useMasterCameraGestures({
       if (event.pointerType === 'mouse') return
       if (!dragging || event.pointerId !== activePointerId) return
       const deltaX = event.clientX - lastX
-      if (deltaX !== 0) {
-        onPanDeltaRef.current?.(deltaX)
+      const deltaY = event.clientY - lastY
+      if (deltaX !== 0 || (dragInPricePanel && deltaY !== 0)) {
+        applyDragDelta(deltaX, deltaY)
         lastX = event.clientX
+        lastY = event.clientY
       }
       event.preventDefault()
     }
@@ -92,6 +117,7 @@ export function useMasterCameraGestures({
       if (event.pointerType === 'mouse') return
       if (!dragging || (event.pointerId != null && event.pointerId !== activePointerId)) return
       dragging = false
+      dragInPricePanel = false
       activePointerId = null
       onDragEndRef.current?.()
       try {
@@ -104,7 +130,9 @@ export function useMasterCameraGestures({
     const onMouseDown = (event) => {
       if (event.button !== 0 || !isHorizontalPlotTarget(event)) return
       mouseDragging = true
+      dragInPricePanel = isPricePlotTarget(event)
       lastX = event.clientX
+      lastY = event.clientY
       onDragStartRef.current?.()
       event.preventDefault()
     }
@@ -112,9 +140,11 @@ export function useMasterCameraGestures({
     const onMouseMove = (event) => {
       if (!mouseDragging) return
       const deltaX = event.clientX - lastX
-      if (deltaX !== 0) {
-        onPanDeltaRef.current?.(deltaX)
+      const deltaY = event.clientY - lastY
+      if (deltaX !== 0 || (dragInPricePanel && deltaY !== 0)) {
+        applyDragDelta(deltaX, deltaY)
         lastX = event.clientX
+        lastY = event.clientY
       }
       event.preventDefault()
     }
@@ -122,6 +152,7 @@ export function useMasterCameraGestures({
     const endMouseDrag = () => {
       if (!mouseDragging) return
       mouseDragging = false
+      dragInPricePanel = false
       onDragEndRef.current?.()
     }
 

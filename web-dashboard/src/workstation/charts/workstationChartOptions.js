@@ -1,12 +1,12 @@
 import { CrosshairMode } from 'lightweight-charts'
 
-import { CHART_WS } from '../../charts/chartTheme.js'
+import { CHART_WS, PANEL_IDS } from '../../charts/chartTheme.js'
 
 export const WS_CHART_COLORS = {
   background: CHART_WS.canvas,
-  text: '#64748b',
-  grid: 'rgba(148, 163, 184, 0.06)',
-  gridMajor: 'rgba(148, 163, 184, 0.1)',
+  text: '#f1f5f9',
+  grid: 'rgba(148, 163, 184, 0.1)',
+  gridMajor: 'rgba(148, 163, 184, 0.14)',
   border: CHART_WS.border,
   up: '#34d399',
   down: '#f87171',
@@ -37,11 +37,27 @@ export function formatWorkstationAxisPrice(value) {
   return `${sign}${abs.toFixed(2)}`
 }
 
+/** COT line drawing uses ~78% of panel height — comfortable padding, panel size unchanged. */
+const COT_RENDER_FILL = 0.78
+const COT_RENDER_PAD = (1 - COT_RENDER_FILL) / 2
+
+/** Per-panel vertical breathing room — keeps drawings centred inside each frame. */
+export function scaleMarginsForPanel(panelId, showTimeAxis = false) {
+  if (panelId === PANEL_IDS.price) {
+    return { top: 0.18, bottom: 0.16 }
+  }
+  if (showTimeAxis) {
+    return { top: COT_RENDER_PAD + 0.02, bottom: 0.22 }
+  }
+  return { top: COT_RENDER_PAD + 0.01, bottom: COT_RENDER_PAD + 0.01 }
+}
+
 /** Identical time-scale + layout options — every pane must match for pixel alignment. */
 export function createWorkstationChartOptions({
   width,
   height,
   showTimeAxis = false,
+  panelId = null,
   interactionEnabled = true,
   passiveCamera = false,
   hidePriceScale = false,
@@ -49,7 +65,7 @@ export function createWorkstationChartOptions({
   compact = false,
 } = {}) {
   const horizontalNav = interactionEnabled && !passiveCamera
-  const fontSize = compact ? 9 : CHART_WS.axisFontSize
+  const fontSize = compact ? 11 : CHART_WS.axisFontSize
   const gutterOnly = hidePriceScale && reservePriceScaleGutter
 
   return {
@@ -132,3 +148,6 @@ export function createWorkstationChartOptions({
 export function createCotWorkstationChartOptions(opts) {
   return createWorkstationChartOptions({ ...opts, compact: true })
 }
+
+/** Exclude invisible helper series from the shared price scale. */
+export const EXCLUDE_FROM_AUTOSCALE = () => null
