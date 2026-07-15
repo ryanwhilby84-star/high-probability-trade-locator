@@ -17,9 +17,10 @@ import pandas as pd
 
 from hptl.config import PROCESSED_DIR, PROJECT_ROOT
 from hptl.markets.instrument_registry import InstrumentSpec, get_instrument
+from hptl.alpha_vantage.mappings import resolve_alpha_mapping
 from hptl.prices.coverage import load_price_coverage, oanda_symbol_for, select_price_source
 from hptl.prices.data_integrity import _instrument_price_row
-from hptl.prices.price_store import CANONICAL_PATH, load_price_store
+from hptl.prices.price_store import CANONICAL_PATH, load_price_store, load_instrument_record_internal
 
 Confidence = Literal["high", "medium", "low"]
 MatchType = Literal["exact", "prior_close", "null"]
@@ -49,6 +50,7 @@ OANDA_PRICE_FALLBACK: dict[str, str] = {
     "Gold": "XAU_USD",
     "Silver": "XAG_USD",
     "Crude Oil / CL": "WTICO_USD",
+    "Copper / HG": "XCU_USD",
     "Natural Gas / NG": "NATGAS_USD",
     "Wheat": "WHEAT_USD",
     "Soybeans": "SOYBN_USD",
@@ -233,10 +235,19 @@ def resolve_store_key(
 def _canonical_symbol(instrument_id: str, store_key: str | None, source: str) -> str:
     spec = get_instrument(instrument_id)
     cov = load_price_coverage()
-    if source == "oanda" and spec:
-        sym = oanda_symbol_for(spec, cov)
-        if sym:
-            return sym
+    if source == "oanda":
+        if instrument_id in OANDA_PRICE_FALLBACK:
+            return OANDA_PRICE_FALLBACK[instrument_id]
+        if spec:
+            sym = oanda_symbol_for(spec, cov)
+            if sym:
+                return sym
+    if source == "alpha_vantage" and spec:
+        mapping = resolve_alpha_mapping(spec)
+        if mapping:
+            return f"alpha_vantage:{mapping.symbol}"
+    if source == "fred" and instrument_id in FRED_PRICE_FALLBACK:
+        return f"fred:{FRED_PRICE_FALLBACK[instrument_id]}"
     if instrument_id in OANDA_PRICE_FALLBACK:
         return OANDA_PRICE_FALLBACK[instrument_id]
     if instrument_id in FRED_PRICE_FALLBACK:
@@ -446,6 +457,16 @@ def build_canonical_timeline(
         return None
 
     source = select_price_source(instrument_id) or "price_store"
+    internal = load_instrument_record_internal(instrument_id) or (
+        load_instrument_record_internal(store_key) if store_key else None
+    )
+    fetched_via = (internal or {}).get("_fetched_via")
+    if fetched_via in ("oanda", "oanda_backfill"):
+        source = "oanda"
+    elif fetched_via == "alpha_vantage":
+        source = "alpha_vantage"
+    elif fetched_via == "fred":
+        source = "fred"
     scale = record.get("price_scale") or {}
     if scale.get("source") == "fred":
         source = "fred"

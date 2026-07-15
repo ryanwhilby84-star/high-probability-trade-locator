@@ -1,9 +1,21 @@
 .cot-workstation {
+  /* Phase 1 unified-canvas tokens: one surface, hairline separators, aligned edges. */
+  --ws-canvas-bg: #0b1220;
+  --ws-separator: rgba(148, 163, 184, 0.1);
+  --ws-separator-strong: rgba(148, 163, 184, 0.16);
+  --ws-pane-pad-x: 0px;
+  --ws-pane-pad-top: 3px;
+  --ws-pane-pad-bottom: 4px;
+  --ws-pane-pad-bottom-axis: 8px;
+  --ws-header-pad: 3px 10px 2px;
+  --ws-label: #cbd5e1;
+  --ws-label-muted: #94a3b8;
+
   display: flex;
   flex-direction: column;
   gap: 0;
   margin-top: 12px;
-  background: #0b1220;
+  background: var(--ws-canvas-bg);
 }
 
 .cot-ws-toolbar {
@@ -18,21 +30,6 @@
   flex-shrink: 0;
 }
 
-.cot-ws-build-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #0b1220;
-  background: #facc15;
-  border: 1px solid #eab308;
-  box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.35);
-}
-
 .cot-ws-crosshair-label {
   font-size: 13px;
   font-weight: 700;
@@ -42,16 +39,8 @@
   min-width: 96px;
 }
 
-.cot-ws-panel--price .cot-ws-panel-head {
-  background: rgba(56, 189, 248, 0.04);
-}
-
 .cot-ws-panel--price {
-  border-bottom: 1px solid rgba(56, 189, 248, 0.14);
-}
-
-.cot-ws-panel--price .cot-ws-panel-title {
-  color: #cbd5e1;
+  border-bottom: 1px solid var(--ws-separator);
 }
 
 .cot-ws-panel--price .cot-ws-panel-body {
@@ -75,7 +64,7 @@
 }
 
 .cot-ws-panel--price .cot-ws-chart-plot {
-  padding: 6px 0 8px;
+  padding: var(--ws-pane-pad-top) var(--ws-pane-pad-x) var(--ws-pane-pad-bottom);
   box-sizing: border-box;
 }
 
@@ -85,16 +74,16 @@
 }
 
 .cot-ws-panel--cot .cot-ws-chart-plot {
-  padding: 2px 0 4px;
+  padding: var(--ws-pane-pad-top) var(--ws-pane-pad-x) var(--ws-pane-pad-bottom);
   box-sizing: border-box;
 }
 
 .cot-ws-panel--retail .cot-ws-panel-body {
-  padding-bottom: 4px;
+  padding-bottom: var(--ws-pane-pad-bottom);
 }
 
 .cot-ws-panel--retail .cot-ws-chart-plot {
-  padding-bottom: 8px;
+  padding-bottom: var(--ws-pane-pad-bottom-axis);
 }
 
 .cot-ws-chart-plot {
@@ -135,6 +124,12 @@
 .cot-ws-toolbar-center {
   flex: 1;
   text-align: center;
+}
+
+.cot-ws-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .cot-ws-range-toggles {
@@ -178,26 +173,18 @@
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  background: #0b1220;
+  background: var(--ws-canvas-bg);
 }
 
+/* One continuous surface: no separate group background, just a hairline flow line. */
 .cot-ws-cot-group {
   flex-shrink: 0;
-  border-top: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(15, 23, 42, 0.35);
-}
-
-.cot-ws-cot-group-head {
-  padding: 6px 10px 4px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #94a3b8;
+  border-top: 1px solid var(--ws-separator-strong);
+  background: transparent;
 }
 
 .cot-ws-panel--cot {
-  border-bottom-color: rgba(148, 163, 184, 0.06);
+  border-bottom-color: var(--ws-separator);
 }
 
 .cot-ws-panel--cot:last-child {
@@ -232,37 +219,11 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
 }
 
 .cot-ws-panel {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  border-bottom: 1px solid var(--ws-separator);
   flex-shrink: 0;
   min-height: 0;
   overflow: visible;
-}
-
-.cot-ws-panel-head {
-  padding: 4px 8px 2px;
-  flex-shrink: 0;
-}
-
-.cot-ws-panel-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #cbd5e1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.cot-ws-panel--cot .cot-ws-panel-title {
-  color: #e2e8f0;
-}
-
-.cot-ws-panel-subtitle {
-  display: block;
-  margin-top: 2px;
-  font-size: 10px;
-  font-weight: 500;
-  color: #64748b;
-  text-transform: none;
-  letter-spacing: 0;
+  background: transparent;
 }
 
 .cot-ws-range-note {
@@ -280,6 +241,7 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
+  background: transparent;
 }
 
 .cot-ws-panel-body .ws-chart-pane,
@@ -332,14 +294,6 @@ body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
 
 .cot-workstation--loading .cot-ws-range-btn {
   opacity: 0.55;
-}
-
-.cot-ws-diag {
-  padding: 2px 14px 4px;
-  font-size: 9px;
-  color: #334155;
-  font-family: ui-monospace, monospace;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
 }
 
 .cot-ws-chart-placeholder {
@@ -485,23 +439,64 @@ body.cot-ws-panel-resizing {
   flex-shrink: 0;
 }
 
+/* Phase 2 — one continuous surface fitted to the viewport (no vertical scroll).
+   Price is the hero pane; the COT group and its three panes flex to fill the
+   remaining height as equal indicators beneath it. Density (bar spacing / scale
+   margins) is intentionally unchanged here — that is Phase 3. */
 .cot-workstation--fullscreen .cot-ws-canvas-scroll {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .cot-workstation--fullscreen .cot-ws-panels {
-  flex: none;
-  min-height: min-content;
-  overflow: visible;
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+  padding-bottom: 0;
 }
 
 .cot-workstation--fullscreen .cot-ws-panel {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .cot-workstation--fullscreen .cot-ws-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
   height: auto;
+}
+
+/* Price is a compact market-context viewport at the top. */
+.cot-workstation--fullscreen .cot-ws-panel--price {
+  flex: var(--ws-price-flex, 29) 1 0;
+  min-height: 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
+  min-height: 0;
+}
+
+/* COT positioning is the primary product — owns the majority of the surface. */
+.cot-workstation--fullscreen .cot-ws-cot-group {
+  flex: var(--ws-cot-group-flex, 71) 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--cot {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+/* No OHLC: collapse price so the COT indicators dominate the surface. */
+.cot-workstation--fullscreen.cot-workstation--no-ohlc .cot-ws-panel--price {
+  flex: var(--ws-price-flex-no-ohlc, 10) 1 0;
 }
 
 .cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-panel-body {
@@ -518,11 +513,11 @@ body.cot-ws-panel-resizing {
   align-items: baseline;
   gap: 2px 12px;
   padding: 4px 10px 7px;
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  border-top: 1px solid var(--ws-separator);
   font-size: 10px;
   line-height: 1.35;
   font-variant-numeric: tabular-nums;
-  background: rgba(11, 18, 32, 0.55);
+  background: transparent;
 }
 
 .cot-ws-panel-stats-group {
@@ -573,4 +568,175 @@ body.cot-ws-panel-resizing {
 
 .cot-workstation--no-ohlc .cot-ws-panel--price-empty .cot-ws-panel-body {
   min-height: 72px;
+}
+
+/* --- Toolbar freshness + reload controls --------------------------------- */
+.cot-ws-stale-view {
+  padding: 3px 9px;
+  border-radius: 5px;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #fee2e2;
+  background: #dc2626;
+  cursor: pointer;
+  animation: cot-ws-stale-pulse 1.4s ease-in-out infinite;
+}
+
+.cot-ws-stale-view:hover {
+  background: #ef4444;
+}
+
+@keyframes cot-ws-stale-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.cot-ws-reload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.8);
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.cot-ws-reload-btn:hover:not(:disabled) {
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.cot-ws-reload-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* --- Aligned vertical LATEST marker (per pane) --------------------------- */
+.cot-ws-latest-vline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(56, 189, 248, 0.55);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cot-ws-latest-vline-label {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  background: rgba(56, 189, 248, 0.9);
+}
+
+/* --- TradingView-style in-pane legend (indicator name + latest value) ---- */
+.cot-ws-pane-legend {
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 1px 2px;
+  pointer-events: none;
+  font-size: 11px;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(3, 7, 18, 0.85);
+}
+
+/* Small per-pane "Fit Y" control — fits only this pane to the visible range. */
+.cot-ws-fit-y-btn {
+  position: absolute;
+  top: 5px;
+  right: calc(var(--ws-price-scale-width, 56px) + 6px);
+  z-index: 5;
+  padding: 1px 6px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.55);
+  color: #cbd5e1;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.cot-ws-chart-plot:hover .cot-ws-fit-y-btn {
+  opacity: 0.85;
+}
+
+.cot-ws-fit-y-btn:hover {
+  opacity: 1;
+  background: rgba(30, 41, 59, 0.9);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.cot-ws-pane-legend-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.cot-ws-pane-legend-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.cot-ws-pane-legend-chg {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.cot-ws-pane-legend-chg-key {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.cot-ws-pane-legend-delta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+}
+
+.cot-ws-pane-legend-delta--up {
+  color: #4ade80;
+}
+
+.cot-ws-pane-legend-delta--down {
+  color: #f87171;
+}
+
+.cot-ws-pane-legend-delta--flat {
+  color: #94a3b8;
 }

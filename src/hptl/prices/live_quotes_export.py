@@ -29,6 +29,10 @@ PUBLIC_OUT = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "live_quotes_l
 LIVE_QUOTE_OANDA: dict[str, dict[str, str]] = {
     "Gold": {"oanda_symbol": "XAU_USD", "historical_ohlc_source": "oanda:XAU_USD"},
     "Silver": {"oanda_symbol": "XAG_USD", "historical_ohlc_source": "oanda:XAG_USD"},
+    "Crude Oil / CL": {"oanda_symbol": "WTICO_USD", "historical_ohlc_source": "oanda:WTICO_USD"},
+    "Copper / HG": {"oanda_symbol": "XCU_USD", "historical_ohlc_source": "oanda:XCU_USD"},
+    "Sugar": {"oanda_symbol": "SUGAR_USD", "historical_ohlc_source": "oanda:SUGAR_USD"},
+    "Soybeans": {"oanda_symbol": "SOYBN_USD", "historical_ohlc_source": "oanda:SOYBN_USD"},
 }
 for _iid, _spec in WORKSTATION_INDEX_SOURCES.items():
     sym = _spec.get("oanda_symbol") or ""
@@ -149,6 +153,7 @@ def build_live_quotes_latest(*, fetch_live: bool = True) -> dict[str, Any]:
         row: dict[str, Any] = {
             "instrument_id": iid,
             **hist,
+            "ohlc_price_quality": (ws_block or {}).get("price_quality"),
             "live_price": None,
             "live_bid": None,
             "live_ask": None,

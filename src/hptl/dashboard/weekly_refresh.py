@@ -32,6 +32,8 @@ class WeeklyRefreshReport:
     chart_series_updated: int = 0
     stale_cleared: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    fx_valuation_status: str = "—"
+    fx_valuation_error: str | None = None
     passed: bool = False
 
     def as_dict(self) -> dict[str, Any]:
@@ -44,6 +46,8 @@ class WeeklyRefreshReport:
             "chart_series_updated": self.chart_series_updated,
             "stale_cleared": self.stale_cleared,
             "errors": self.errors,
+            "fx_valuation_status": self.fx_valuation_status,
+            "fx_valuation_error": self.fx_valuation_error,
             "passed": self.passed,
             "checked_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -138,9 +142,14 @@ def refresh_fx_valuation_inputs() -> dict[str, Any]:
     return refresh_fx_futures_data()
 
 
-def rebuild_pillar_exports() -> dict[str, Any]:
-    from hptl.location.export import write_location_exports
-    from hptl.seasonality.export import build_seasonality_latest, write_seasonality_exports
+def rebuild_fx_valuation_exports() -> dict[str, Any]:
+    """ISOLATED FX valuation stage — refresh FX macro inputs + write FX/valuation exports.
+
+    Raises on a hard failure (e.g. a broken FX macro workbook reaching
+    ``_parse_rba_workbook`` / ``pandas.read_excel``) so the caller can record it,
+    skip this stage, and continue the rest of the dashboard refresh. Valuation
+    logic is unchanged — this only isolates the dependency.
+    """
     from hptl.valuation.export import write_valuation_exports
 
     meta: dict[str, Any] = {}
@@ -150,22 +159,55 @@ def rebuild_pillar_exports() -> dict[str, Any]:
     write_valuation_exports()
     meta["fx_valuation_exports_at"] = datetime.now(timezone.utc).isoformat()
 
+    fx_warnings: list[str] = []
     try:
         from hptl.valuation.currency_futures_ive_v1 import write_currency_futures_ive_export
 
         write_currency_futures_ive_export()
     except Exception as exc:
-        meta.setdefault("warnings", []).append(f"currency_futures_ive export: {exc}")
+        fx_warnings.append(f"currency_futures_ive export: {exc}")
 
     try:
         from hptl.valuation.fx_v3_audit import write_fx_v3_audit_artifacts
 
         write_fx_v3_audit_artifacts()
     except Exception as exc:
-        meta.setdefault("warnings", []).append(f"fx_valuation_v3 export: {exc}")
+        fx_warnings.append(f"fx_valuation_v3 export: {exc}")
 
-    write_location_exports()
-    write_seasonality_exports(build_seasonality_latest())
+    if fx_warnings:
+        meta["fx_warnings"] = fx_warnings
+    return meta
+
+
+def rebuild_pillar_exports() -> dict[str, Any]:
+    """Rebuild valuation/location/seasonality pillar exports.
+
+    FX valuation runs as an isolated sub-stage: a broken FX macro workbook must
+    not stop the independent location and seasonality exports (or the wider
+    dashboard refresh). Any FX failure is recorded under ``fx_valuation_error``
+    and reported at the end instead of aborting the run.
+    """
+    from hptl.location.export import write_location_exports
+    from hptl.seasonality.export import build_seasonality_latest, write_seasonality_exports
+
+    meta: dict[str, Any] = {}
+
+    try:
+        meta.update(rebuild_fx_valuation_exports())
+    except Exception as exc:
+        meta["fx_valuation_error"] = f"{type(exc).__name__}: {exc}"
+
+    # Independent pillars — always run regardless of the FX valuation outcome.
+    try:
+        write_location_exports()
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"location export: {exc}")
+
+    try:
+        write_seasonality_exports(build_seasonality_latest())
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"seasonality export: {exc}")
+
     return meta
 
 
@@ -257,7 +299,18 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         meta = rebuild_pillar_exports()
         if meta.get("warnings"):
             report.errors.extend(meta["warnings"])
+        # FX valuation is isolated: record its outcome but do NOT fail the
+        # dashboard refresh when only the FX macro workbook is broken.
+        if meta.get("fx_valuation_error"):
+            report.fx_valuation_status = "FAILED"
+            report.fx_valuation_error = str(meta["fx_valuation_error"])
+        elif meta.get("fx_warnings"):
+            report.fx_valuation_status = "PARTIAL"
+            report.fx_valuation_error = "; ".join(meta["fx_warnings"])
+        else:
+            report.fx_valuation_status = "OK"
     except Exception as exc:
+        # Non-FX pillar failure (location/seasonality) — preserve prior strictness.
         report.errors.append(f"pillar export failed: {exc}")
 
     try:
@@ -321,6 +374,9 @@ def print_weekly_report(report: WeeklyRefreshReport) -> None:
     print(f"| stale files cleared | {len(report.stale_cleared)} |")
     for item in report.stale_cleared:
         print(f"  - {item}")
+    print(f"| FX valuation stage | {report.fx_valuation_status} |")
+    if report.fx_valuation_error:
+        print(f"  - FX valuation issue (non-fatal, dashboard still refreshed): {report.fx_valuation_error}")
     if report.errors:
         print("| errors | |")
         for err in report.errors:

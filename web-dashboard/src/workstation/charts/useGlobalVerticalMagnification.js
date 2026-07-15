@@ -3,33 +3,45 @@ import React from 'react'
 import { hitPriceAxis } from './priceAxisHit.js'
 
 /**
- * TradingView-style global vertical magnification — drag any panel's right value axis.
- * One shared factor; horizontal camera is untouched.
+ * Per-pane vertical camera control on the right value axis.
+ *
+ * - Drag a pane's right axis → vertically scale ONLY that pane (`onMagnifyDelta`).
+ * - Double-click a pane's right axis → Fit Y for ONLY that pane (`onFitY`).
+ *
+ * Each callback is scoped by the pane's `panelId`, so one pane's vertical camera
+ * never affects another. The shared horizontal camera is untouched.
  */
 export function useGlobalVerticalMagnification({
   containerRef,
   enabled,
   onMagnifyDelta,
+  onFitY,
 }) {
   const onMagnifyDeltaRef = React.useRef(onMagnifyDelta)
+  const onFitYRef = React.useRef(onFitY)
   onMagnifyDeltaRef.current = onMagnifyDelta
+  onFitYRef.current = onFitY
 
   React.useEffect(() => {
     const root = containerRef.current
     if (!root || !enabled) return undefined
 
     let axisDragging = false
-    let dragZone = 'cot'
+    let dragPanelId = null
     let lastY = 0
     let activePointerId = null
+
+    const onResizeHandle = (event) =>
+      event.target instanceof Element &&
+      Boolean(event.target.closest('.cot-ws-panel-resize-handle'))
 
     const setAxisCursor = (active) => {
       document.body.classList.toggle('cot-ws-axis-magnify', active)
     }
 
-    const beginAxisDrag = (clientY, zone, event) => {
+    const beginAxisDrag = (clientY, panelId, event) => {
       axisDragging = true
-      dragZone = zone
+      dragPanelId = panelId
       lastY = clientY
       setAxisCursor(true)
       event.preventDefault()
@@ -37,11 +49,11 @@ export function useGlobalVerticalMagnification({
     }
 
     const onPointerDown = (event) => {
-      if (event.button !== 0) return
+      if (event.button !== 0 || onResizeHandle(event)) return
       const hit = hitPriceAxis(event.clientX, event.clientY, root)
       if (!hit) return
       activePointerId = event.pointerId
-      beginAxisDrag(event.clientY, hit.zone, event)
+      beginAxisDrag(event.clientY, hit.panelId, event)
       try {
         root.setPointerCapture(event.pointerId)
       } catch {
@@ -50,16 +62,26 @@ export function useGlobalVerticalMagnification({
     }
 
     const onMouseDown = (event) => {
-      if (event.button !== 0) return
+      if (event.button !== 0 || onResizeHandle(event)) return
       const hit = hitPriceAxis(event.clientX, event.clientY, root)
       if (!hit) return
-      beginAxisDrag(event.clientY, hit.zone, event)
+      beginAxisDrag(event.clientY, hit.panelId, event)
+    }
+
+    const onDoubleClick = (event) => {
+      if (onResizeHandle(event)) return
+      const hit = hitPriceAxis(event.clientX, event.clientY, root)
+      if (!hit?.panelId) return
+      // Own the reset ourselves so LWC's native double-click reset cannot fight it.
+      event.preventDefault()
+      event.stopPropagation()
+      onFitYRef.current?.(hit.panelId)
     }
 
     const applyDelta = (clientY, event) => {
       const deltaY = clientY - lastY
       if (deltaY !== 0) {
-        onMagnifyDeltaRef.current?.(deltaY, dragZone)
+        onMagnifyDeltaRef.current?.(deltaY, dragPanelId)
         lastY = clientY
       }
       event.preventDefault()
@@ -81,6 +103,7 @@ export function useGlobalVerticalMagnification({
         return
       }
       axisDragging = false
+      dragPanelId = null
       activePointerId = null
       setAxisCursor(false)
       try {
@@ -102,6 +125,7 @@ export function useGlobalVerticalMagnification({
     root.addEventListener('pointerup', endAxisDrag, capture)
     root.addEventListener('pointercancel', endAxisDrag, capture)
     root.addEventListener('mousedown', onMouseDown, capture)
+    root.addEventListener('dblclick', onDoubleClick, capture)
     window.addEventListener('mousemove', onMouseMove, capture)
     window.addEventListener('mouseup', endAxisDrag, capture)
     root.addEventListener('mousemove', onHoverMove, capture)
@@ -113,6 +137,7 @@ export function useGlobalVerticalMagnification({
       root.removeEventListener('pointerup', endAxisDrag, capture)
       root.removeEventListener('pointercancel', endAxisDrag, capture)
       root.removeEventListener('mousedown', onMouseDown, capture)
+      root.removeEventListener('dblclick', onDoubleClick, capture)
       window.removeEventListener('mousemove', onMouseMove, capture)
       window.removeEventListener('mouseup', endAxisDrag, capture)
       root.removeEventListener('mousemove', onHoverMove, capture)

@@ -6,6 +6,7 @@ import argparse
 import sys
 
 from hptl.price_config import PriceApiConfigError, validate_price_api_keys
+from hptl.prices.cot_fail_backfill import FRED_COT_FAIL_SERIES
 from hptl.prices.coverage import load_price_coverage, supported_instrument_ids
 from hptl.prices.price_store import (
     load_instrument_record,
@@ -27,6 +28,9 @@ def refresh_instrument_record(
     existing = load_instrument_record_internal(instrument_id)
     has_incoming = bool(fetched.get("daily") or fetched.get("weekly"))
 
+    if fetched_via == "fred" and instrument_id in FRED_COT_FAIL_SERIES and has_incoming:
+        existing = None
+
     if fetched.get("error") and not has_incoming:
         if existing:
             rec = load_instrument_record(instrument_id)
@@ -47,19 +51,37 @@ def refresh_instrument_record(
     return merged
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Refresh HTPL canonical price store (OANDA + Alpha Vantage)")
     parser.add_argument("--limit", type=int, default=0, help="Max instruments (0 = all supported)")
     parser.add_argument("--instrument", type=str, default="", help="Refresh single instrument id")
     parser.add_argument("--skip-validation", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    try:
-        if not args.skip_validation:
-            validate_price_api_keys(probe_live=True)
-    except (PriceApiConfigError, RuntimeError) as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        sys.exit(1)
+    probe_warnings: list[str] = []
+    if not args.skip_validation:
+        # Missing API keys are fatal (nothing can fetch). Live-source probes are
+        # advisory only: a rate-limited or unavailable source (e.g. an Alpha
+        # Vantage informational/quota response) must NOT abort the refresh, so
+        # OANDA/FRED instruments still fetch and last-known-good data is kept.
+        try:
+            validate_price_api_keys(probe_live=False)
+        except (PriceApiConfigError, RuntimeError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+
+        from hptl.oanda.oanda_adapter import validate_oanda_connection
+        from hptl.alpha_vantage.alpha_adapter import validate_alpha_vantage_connection
+
+        for name, probe in (
+            ("OANDA", validate_oanda_connection),
+            ("Alpha Vantage", validate_alpha_vantage_connection),
+        ):
+            try:
+                probe()
+            except Exception as exc:  # noqa: BLE001 — advisory probe, never fatal
+                probe_warnings.append(f"{name} live probe: {exc}")
+                print(f"WARNING (price source probe, non-fatal): {name}: {exc}", file=sys.stderr)
 
     coverage = load_price_coverage()
     ids = [args.instrument.strip()] if args.instrument.strip() else supported_instrument_ids(coverage)
@@ -76,7 +98,7 @@ def main() -> None:
 
     for iid in ids:
         fetched = adapter.fetch(iid)
-        src = adapter.source_for(iid) or "none"
+        src = str(fetched.get("_fetched_via") or adapter.source_for(iid) or "none")
         rec = refresh_instrument_record(iid, fetched, fetched_via=src)
         records[iid] = rec
         progress(len(records), len(ids), iid, rec)
@@ -91,6 +113,12 @@ def main() -> None:
     print(f"Canonical: {path}")
     print(f"Dashboard: web-dashboard/public/data/prices_latest.json")
 
+    if probe_warnings:
+        print(f"\nPrice source probe warnings ({len(probe_warnings)}, non-fatal):")
+        for w in probe_warnings:
+            print(f"  - {w}")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

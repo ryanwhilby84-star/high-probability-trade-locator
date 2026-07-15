@@ -1,6 +1,6 @@
 {
   "instrument_id": "US Dollar Index / DX",
-  "generated_at": "2026-07-02T06:21:38.347572+00:00",
+  "generated_at": "2026-07-11T08:30:08.615937+00:00",
   "cftc_code": "098662",
   "registry": {
     "has_cot_mapping": true,
@@ -14,16 +14,16 @@
   "price": {
     "mode": "price_store",
     "label": "US Dollar Index / DX (price_store)",
-    "current_close": 120.3958,
-    "as_of_date": "2026-06-18",
+    "current_close": 120.8866,
+    "as_of_date": "2026-06-26",
     "source": "price_store",
     "series_id": null,
     "is_fallback": false,
     "fallback_note": null,
     "freshness": {
       "status": "stale",
-      "as_of": "2026-06-18",
-      "age_days": 14
+      "as_of": "2026-06-26",
+      "age_days": 15
     },
     "history": {
       "daily_all": [
@@ -10462,34 +10462,34 @@
         {
           "date": "2026-06-18",
           "close": 120.3958
+        },
+        {
+          "date": "2026-06-22",
+          "close": 120.5463
+        },
+        {
+          "date": "2026-06-23",
+          "close": 121.0552
+        },
+        {
+          "date": "2026-06-24",
+          "close": 121.412
+        },
+        {
+          "date": "2026-06-25",
+          "close": 121.0559
+        },
+        {
+          "date": "2026-06-26",
+          "close": 120.8866
         }
       ],
       "windows": {
         "1y": {
           "bar_count": 252,
-          "from": "2025-06-17",
-          "to": "2026-06-18",
+          "from": "2025-06-25",
+          "to": "2026-06-26",
           "closes": [
-            {
-              "date": "2025-06-17",
-              "close": 120.5048
-            },
-            {
-              "date": "2025-06-18",
-              "close": 120.7305
-            },
-            {
-              "date": "2025-06-20",
-              "close": 121.0408
-            },
-            {
-              "date": "2025-06-23",
-              "close": 121.1694
-            },
-            {
-              "date": "2025-06-24",
-              "close": 120.3645
-            },
             {
               "date": "2025-06-25",
               "close": 120.3336
@@ -11477,34 +11477,34 @@
             {
               "date": "2026-06-18",
               "close": 120.3958
+            },
+            {
+              "date": "2026-06-22",
+              "close": 120.5463
+            },
+            {
+              "date": "2026-06-23",
+              "close": 121.0552
+            },
+            {
+              "date": "2026-06-24",
+              "close": 121.412
+            },
+            {
+              "date": "2026-06-25",
+              "close": 121.0559
+            },
+            {
+              "date": "2026-06-26",
+              "close": 120.8866
             }
           ]
         },
         "3y": {
           "bar_count": 756,
-          "from": "2023-06-12",
-          "to": "2026-06-18",
+          "from": "2023-06-20",
+          "to": "2026-06-26",
           "closes": [
-            {
-              "date": "2023-06-12",
-              "close": 119.6376
-            },
-            {
-              "date": "2023-06-13",
-              "close": 119.1899
-            },
-            {
-              "date": "2023-06-14",
-              "close": 118.776
-            },
-            {
-              "date": "2023-06-15",
-              "close": 118.5521
-            },
-            {
-              "date": "2023-06-16",
-              "close": 118.4184
-            },
             {
               "date": "2023-06-20",
               "close": 118.938
@@ -14508,34 +14508,34 @@
             {
               "date": "2026-06-18",
               "close": 120.3958
+            },
+            {
+              "date": "2026-06-22",
+              "close": 120.5463
+            },
+            {
+              "date": "2026-06-23",
+              "close": 121.0552
+            },
+            {
+              "date": "2026-06-24",
+              "close": 121.412
+            },
+            {
+              "date": "2026-06-25",
+              "close": 121.0559
+            },
+            {
+              "date": "2026-06-26",
+              "close": 120.8866
             }
           ]
         },
         "5y": {
           "bar_count": 1260,
-          "from": "2021-06-07",
-          "to": "2026-06-18",
+          "from": "2021-06-14",
+          "to": "2026-06-26",
           "closes": [
-            {
-              "date": "2021-06-07",
-              "close": 110.5155
-            },
-            {
-              "date": "2021-06-08",
-              "close": 110.649
-            },
-            {
-              "date": "2021-06-09",
-              "close": 110.5707
-            },
-            {
-              "date": "2021-06-10",
-              "close": 110.5456
-            },
-            {
-              "date": "2021-06-11",
-              "close": 111.0933
-            },
             {
               "date": "2021-06-14",
               "close": 110.9659
@@ -19555,6 +19555,26 @@
             {
               "date": "2026-06-18",
               "close": 120.3958
+            },
+            {
+              "date": "2026-06-22",
+              "close": 120.5463
+            },
+            {
+              "date": "2026-06-23",
+              "close": 121.0552
+            },
+            {
+              "date": "2026-06-24",
+              "close": 121.412
+            },
+            {
+              "date": "2026-06-25",
+              "close": 121.0559
+            },
+            {
+              "date": "2026-06-26",
+              "close": 120.8866
             }
           ]
         }
@@ -19571,25 +19591,25 @@
     "confidence": "moderate"
   },
   "cot": {
-    "long": 34278.0,
-    "short": 21350.0,
-    "net": 12928.0,
-    "weekly_net_change": -269.0,
-    "four_week_net_change": 12078.0,
-    "open_interest": 54908.0,
-    "net_percentile_3y": 76.6,
-    "long_percentile_3y": 97.8,
-    "short_percentile_3y": 74.0,
-    "oi_percentile_3y": 99.7,
-    "report_date": "2026-06-23",
+    "long": 32524.0,
+    "short": 19508.0,
+    "net": 13016.0,
+    "weekly_net_change": 88.0,
+    "four_week_net_change": 9258.0,
+    "open_interest": 54306.0,
+    "net_percentile_3y": 77.2,
+    "long_percentile_3y": 95.2,
+    "short_percentile_3y": 62.5,
+    "oi_percentile_3y": 99.0,
+    "report_date": "2026-06-30",
     "cftc_code": "098662",
     "market_name": null,
-    "weeks_available": 495,
+    "weeks_available": 496,
     "source": "cot_3y_series_latest.json",
     "freshness": {
       "status": "fresh",
-      "as_of": "2026-06-23",
-      "age_days": 9
+      "as_of": "2026-06-30",
+      "age_days": 11
     },
     "error": null,
     "mode": "direct_dxy_cot",
@@ -19600,11 +19620,11 @@
     "mode": "fx_currency_rates",
     "confidence": "live",
     "policy_rate": 3.63,
-    "policy_rate_as_of": "2026-06-25",
-    "y2": 4.07,
-    "y10": 4.38,
+    "policy_rate_as_of": "2026-06-30",
+    "y2": 4.17,
+    "y10": 4.48,
     "cpi_yoy": 2.95,
-    "real_yield": 1.12,
+    "real_yield": 1.22,
     "source": "Federal Reserve (NY Fed EFFR)/US Treasury (daily par yield curve)",
     "stale_fields": [
       "cpi_yoy"

@@ -33,6 +33,15 @@ logger = logging.getLogger(__name__)
 
 PROBE_CACHE_PATH = Path("data/processed/cot_probe_cache.json")
 
+# The probe cache lets repeated same-day runs skip the (slow) live CFTC download.
+# It MUST expire, otherwise once local data matches a cached week the pipeline
+# trusts that cache forever and never notices a newly published CFTC report.
+# Override with HPTL_PROBE_CACHE_TTL_HOURS (0 = always re-check the live source).
+try:
+    PROBE_CACHE_TTL_HOURS = float(os.environ.get("HPTL_PROBE_CACHE_TTL_HOURS", "12"))
+except (TypeError, ValueError):
+    PROBE_CACHE_TTL_HOURS = 12.0
+
 
 @dataclass
 class CotPipelineResult:
@@ -166,8 +175,23 @@ def _read_probe_cache() -> dict[str, Any] | None:
         return None
 
 
+def _probe_cache_age_hours(cache: dict[str, Any] | None) -> float | None:
+    """Age of the probe cache in hours (None when timestamp missing/unparseable)."""
+    if not cache:
+        return None
+    ts = pd.to_datetime(cache.get("probed_at_utc"), errors="coerce", utc=True)
+    if pd.isna(ts):
+        return None
+    return max(0.0, (pd.Timestamp.now(tz="UTC") - ts).total_seconds() / 3600.0)
+
+
 def _probe_cache_is_trusted(cache: dict[str, Any] | None, local_max: pd.Timestamp | None) -> bool:
-    """Reject test fixtures or cache older than local processed data."""
+    """Trust cache only when it is CFTC-sourced, matches local data, and is fresh.
+
+    Rejects test fixtures, caches older than the local processed week, and caches
+    older than ``PROBE_CACHE_TTL_HOURS`` so a newly published CFTC report is
+    detected on the next run without requiring ``--force``.
+    """
     if not cache:
         return False
     week = cache.get("latest_cftc_report_date")
@@ -180,6 +204,14 @@ def _probe_cache_is_trusted(cache: dict[str, Any] | None, local_max: pd.Timestam
     if local_max is not None and pd.Timestamp(week) != pd.Timestamp(local_max).normalize():
         log_step(
             f"Ignoring probe cache (cached {week} != local processed max {_iso(local_max)})."
+        )
+        return False
+    age_hours = _probe_cache_age_hours(cache)
+    if age_hours is None or age_hours > PROBE_CACHE_TTL_HOURS:
+        age_txt = "unknown" if age_hours is None else f"{age_hours:.1f}h"
+        log_step(
+            f"Ignoring probe cache (age {age_txt} > TTL {PROBE_CACHE_TTL_HOURS:g}h) — "
+            "re-checking live CFTC source for a newer weekly report."
         )
         return False
     return True

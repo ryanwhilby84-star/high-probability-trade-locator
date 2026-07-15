@@ -97,7 +97,7 @@ def _filter_daily_bars(
     *,
     window_start: date | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
-  stats = {"input_rows": len(bars), "rejected_flat_rows": 0, "rejected_invalid_rows": 0, "accepted_rows": 0}
+    stats = {"input_rows": len(bars), "rejected_flat_rows": 0, "rejected_invalid_rows": 0, "accepted_rows": 0}
     out: list[dict[str, Any]] = []
     for bar in bars:
         d = str(bar.get("date") or "")[:10]

@@ -6,7 +6,7 @@ export function applyCameraToChart(chart, camera) {
   try {
     chart.timeScale().applyOptions({
       barSpacing: camera.barSpacing,
-      rightOffset: camera.rightOffset ?? 8,
+      rightOffset: camera.rightOffset ?? 3,
     })
   } catch {
     /* ignore stale chart */

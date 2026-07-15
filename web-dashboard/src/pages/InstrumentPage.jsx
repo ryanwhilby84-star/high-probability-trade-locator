@@ -50,8 +50,10 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
     () => resolveWeatherForMarket(row, weatherContext, { loadError: weatherLoadError }),
     [row, weatherContext, weatherLoadError],
   )
+
   const hideWeatherPlaceholder = hasRealWeather(weatherResolved)
   const [journalOpen, setJournalOpen] = React.useState(false)
+
   const journalPrefill = React.useMemo(
     () =>
       buildJournalPrefill({
@@ -68,6 +70,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       const tffHist = tffHistoryRows(tffDoc, marketId)
       if (tffHist.length) return tffHist
     }
+
     return buildMarketHistoryForMarket(data, marketId, date)
   }, [data, marketId, date, tffDoc])
 
@@ -80,9 +83,11 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
 
   const [tracked, setTracked] = React.useState(false)
   const [trackedId, setTrackedId] = React.useState(null)
+
   React.useEffect(() => {
     const overlay = loadOverlay()
     const local = overlay.added.find((t) => t.market === marketId)
+
     setTracked(Boolean(local))
     setTrackedId(local?.thesis_id || null)
   }, [marketId])
@@ -94,7 +99,9 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       setTrackedId(null)
       return
     }
+
     const t = addThesisFromRow({ market: marketId, row, week: date })
+
     setTracked(true)
     setTrackedId(t?.thesis_id || null)
   }, [tracked, trackedId, marketId, row, date])
@@ -115,13 +122,16 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
 
   React.useEffect(() => {
     let scroll = false
+
     try {
       scroll = sessionStorage.getItem('scrollToValuation') === '1'
       if (scroll) sessionStorage.removeItem('scrollToValuation')
     } catch {
       /* ignore */
     }
+
     if (!scroll) return undefined
+
     const t = window.setTimeout(scrollToValuationEvidence, 120)
     return () => window.clearTimeout(t)
   }, [marketId])
@@ -149,6 +159,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       <button type="button" className="ws-btn" onClick={navigateToScanner}>
         ← Scanner
       </button>
+
       <button
         type="button"
         className="ws-btn"
@@ -157,6 +168,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       >
         Prev
       </button>
+
       <button
         type="button"
         className="ws-btn"
@@ -165,6 +177,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       >
         Next
       </button>
+
       <button
         type="button"
         className={`ws-btn${tracked ? ' ws-btn-primary' : ''}`}
@@ -172,15 +185,19 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       >
         {tracked ? '★ Tracking' : '☆ Track thesis'}
       </button>
+
       <button type="button" className="ws-btn" onClick={() => setJournalOpen(true)}>
         Log trade idea
       </button>
+
       <button type="button" className="ws-btn ws-btn-primary" onClick={() => navigateToCotWorkstation(marketId)}>
         Open COT Workstation
       </button>
+
       <button type="button" className="ws-btn" onClick={scrollToPositioningWorkspace}>
         Positioning data
       </button>
+
       {tracked ? (
         <button type="button" className="ws-btn" onClick={navigateToThesisTracker}>
           Open tracker
@@ -208,6 +225,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
 
       <InstrumentWorkstationLayout>
         <ValuationInstrumentSection row={row} />
+
         <InstrumentPositioningWorkspace
           marketId={marketId}
           headlineRow={row}
@@ -219,6 +237,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
           <summary className="instrument-page-detail-summary">
             Valuation, seasonality &amp; market context
           </summary>
+
           <InstrumentDetail
             row={row}
             historyRows={historyRows}

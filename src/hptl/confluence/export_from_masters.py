@@ -135,7 +135,7 @@ def audit_local_drivers() -> list[DriverAuditRow]:
     conf = _read_json(OUT_PATH)
     add(
         "confluence_export",
-        str(OUT_PATH.relative_to(PROJECT_ROOT)),
+       str(OUT_PATH.resolve().relative_to(PROJECT_ROOT.resolve())),
         str(conf.get("latest_cot_report_date") or "—")[:10],
         note=f"{len(conf.get('records') or [])} records",
     )

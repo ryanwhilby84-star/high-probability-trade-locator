@@ -1459,7 +1459,9 @@ function useCot3ySeries() {
       return
     }
     if (!_cot3yPromise) {
-      _cot3yPromise = fetch('/data/cot_3y_series_latest.json')
+      _cot3yPromise = fetch(`/data/cot_3y_series_latest.json?v=${Date.now()}`, {
+        cache: 'no-store',
+      })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
         .then((d) => {
           _cot3yCache = d

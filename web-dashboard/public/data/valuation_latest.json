@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-07-06T18:41:08.530310+00:00",
+  "generated_at": "2026-07-11T14:14:49.017418+00:00",
   "parser": "hptl.valuation.export",
   "summary": {
     "total_instruments": 138,
@@ -10,7 +10,7 @@
   "instruments": {
     "NASDAQ / NQ": {
       "market": "NASDAQ / NQ",
-      "as_of_week": "2026-07-02",
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -27,7 +27,7 @@
     },
     "S&P 500 / ES": {
       "market": "S&P 500 / ES",
-      "as_of_week": "2026-07-02",
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -44,7 +44,7 @@
     },
     "Dow / YM": {
       "market": "Dow / YM",
-      "as_of_week": "2026-07-02",
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -63,15 +63,15 @@
       "pair": "EUR/USD",
       "base": "EUR",
       "quote": "USD",
-      "spot_price": 1.144765,
-      "fair_value": 1.039254,
-      "deviation_pct": 10.15,
-      "deviation_pct_raw": 10.152570978798266,
+      "spot_price": 1.141495,
+      "fair_value": 1.039295,
+      "deviation_pct": 9.83,
+      "deviation_pct_raw": 9.833589115698608,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "EUR.policy_rate": "2026-06-17",
           "USD.policy_rate": "2026-06-30",
           "EUR.y2": "2026-06-30",
@@ -81,23 +81,27 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 1.144765,
-        "fair_value": 1.039254,
-        "raw_gap_pct_unrounded": 10.152570978798266,
-        "gap_pct_rounded": 10.15,
-        "cache_generated_at": "2026-07-06T18:34:52.842849+00:00",
+        "spot": 1.141495,
+        "fair_value": 1.039295,
+        "raw_gap_pct_unrounded": 9.833589115698608,
+        "gap_pct_rounded": 9.83,
+        "cache_generated_at": "2026-07-11T14:10:47.764488+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "EUR.y2",
+          "EUR.y10",
           "EUR.cpi_yoy",
           "USD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
+          "stale 2Y yield (EUR.y2)",
+          "stale 10Y yield (EUR.y10)",
           "stale CPI (EUR.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale 2Y yield (EUR.y2); stale 10Y yield (EUR.y10); stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
@@ -109,9 +113,9 @@
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "EUR/USD trades above estimated fair value because EUR real-yield differential vs USD is lower, policy rate gap supports quote, inflation differential quote higher, broad USD (DXY) regime is strong.",
       "valuation_reason": "EUR/USD trades above estimated fair value because EUR real-yield differential vs USD is lower, policy rate gap supports quote, inflation differential quote higher, broad USD (DXY) regime is strong.",
-      "explanation": "EUR/USD trades 10.2% above estimated fair value.\n\nEUR/USD trades above estimated fair value because EUR real-yield differential vs USD is lower, policy rate gap supports quote, inflation differential quote higher, broad USD (DXY) regime is strong.\n\nConfidence:\nNone",
+      "explanation": "EUR/USD trades 9.8% above estimated fair value.\n\nEUR/USD trades above estimated fair value because EUR real-yield differential vs USD is lower, policy rate gap supports quote, inflation differential quote higher, broad USD (DXY) regime is strong.\n\nConfidence:\nNone",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-17",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-06-30",
@@ -125,6 +129,8 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "EUR.y2",
+        "EUR.y10",
         "EUR.cpi_yoy",
         "USD.cpi_yoy"
       ],
@@ -134,12 +140,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2617,
-        "b_y2": 0.012003607685121558,
-        "intercept": 0.13970744403482113,
-        "r_squared": 0.0325,
+        "n": 2623,
+        "b_y2": 0.012019049319836427,
+        "intercept": 0.1397731946585722,
+        "r_squared": 0.0326,
         "features": "y2,policy",
-        "b_policy": 0.0009465226156246953
+        "b_policy": 0.0009473069157799191
       },
       "drivers": {
         "base_policy_rate": 2.25,
@@ -161,7 +167,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -186,22 +192,22 @@
       "confidence_explanation": "Confidence unavailable — insufficient model fit, data quality, or publish gates. Publish gates not met.",
       "confidence_v1": "None",
       "market": "Euro FX / 6E",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "British Pound / 6B": {
       "pair": "GBP/USD",
       "base": "GBP",
       "quote": "USD",
-      "spot_price": 1.335685,
-      "fair_value": 1.265905,
-      "deviation_pct": 5.51,
-      "deviation_pct_raw": 5.512261978584487,
+      "spot_price": 1.34021,
+      "fair_value": 1.266047,
+      "deviation_pct": 5.86,
+      "deviation_pct_raw": 5.857839400906916,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "GBP.policy_rate": "2026-06-30",
           "USD.policy_rate": "2026-06-30",
           "GBP.y2": "2026-06-30",
@@ -211,37 +217,41 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 1.335685,
-        "fair_value": 1.265905,
-        "raw_gap_pct_unrounded": 5.512261978584487,
-        "gap_pct_rounded": 5.51,
-        "cache_generated_at": "2026-07-06T18:35:30.552461+00:00",
+        "spot": 1.34021,
+        "fair_value": 1.266047,
+        "raw_gap_pct_unrounded": 5.857839400906916,
+        "gap_pct_rounded": 5.86,
+        "cache_generated_at": "2026-07-11T14:11:07.829360+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "GBP.y2",
+          "GBP.y10",
           "GBP.cpi_yoy",
           "USD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
+          "stale 2Y yield (GBP.y2)",
+          "stale 10Y yield (GBP.y10)",
           "stale CPI (GBP.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (GBP.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale 2Y yield (GBP.y2); stale 10Y yield (GBP.y10); stale CPI (GBP.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Overvalued",
       "valuation_bias": "Overvalued",
-      "confidence": "medium",
+      "confidence": "low",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "GBP/USD trades above estimated fair value because GBP real-yield differential vs USD is lower, inflation differential base higher, broad USD (DXY) regime is strong.",
       "valuation_reason": "GBP/USD trades above estimated fair value because GBP real-yield differential vs USD is lower, inflation differential base higher, broad USD (DXY) regime is strong.",
-      "explanation": "GBP/USD trades 5.5% above estimated fair value.\n\nGBP/USD trades above estimated fair value because GBP real-yield differential vs USD is lower, inflation differential base higher, broad USD (DXY) regime is strong.\n\nConfidence:\nMedium",
+      "explanation": "GBP/USD trades 5.9% above estimated fair value.\n\nGBP/USD trades above estimated fair value because GBP real-yield differential vs USD is lower, inflation differential base higher, broad USD (DXY) regime is strong.\n\nConfidence:\nLow",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-30",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-06-30",
@@ -255,6 +265,8 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "GBP.y2",
+        "GBP.y10",
         "GBP.cpi_yoy",
         "USD.cpi_yoy"
       ],
@@ -264,12 +276,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2618,
-        "b_y2": 0.02907555726463558,
-        "intercept": 0.2683668581703227,
-        "r_squared": 0.0812,
+        "n": 2624,
+        "b_y2": 0.029142262083841682,
+        "intercept": 0.2684836530521217,
+        "r_squared": 0.0814,
         "features": "y2,policy",
-        "b_policy": -0.027655489219626878
+        "b_policy": -0.027626762531708926
       },
       "drivers": {
         "base_policy_rate": 3.75,
@@ -291,7 +303,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -302,50 +314,50 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 60.1,
+      "confidence_v2_score": 45.1,
       "confidence_subscores": {
         "fit_score": 46.5,
-        "data_score": 80.0,
+        "data_score": 30.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "Medium",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: Medium — fit Medium, data High, error High. Input freshness weaker due to stale CPI (GBP.cpi_yoy, USD.cpi_yoy).",
+      "confidence_explanation": "Confidence: Low — fit Medium, data Low, error High. Input freshness weaker due to stale CPI (GBP.cpi_yoy, USD.cpi_yoy). Stale core inputs: GBP.y2, GBP.y10.",
       "confidence_v1": "Low",
       "market": "British Pound / 6B",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Japanese Yen / 6J": {
       "pair": "USD/JPY",
       "base": "USD",
       "quote": "JPY",
-      "spot_price": 161.0805,
-      "fair_value": 169.277747,
-      "deviation_pct": -4.84,
-      "deviation_pct_raw": -4.8424835191125295,
+      "spot_price": 161.70499999999998,
+      "fair_value": 169.608298,
+      "deviation_pct": -4.66,
+      "deviation_pct_raw": -4.659735457047041,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "USD.policy_rate": "2026-06-30",
           "JPY.policy_rate": "2026-06-23",
           "USD.y2": "2026-07-01",
-          "JPY.y2": "2026-07-01",
+          "JPY.y2": "2026-07-03",
           "USD.cpi_yoy": "2024-01-01",
           "JPY.cpi_yoy": "2024-01-01",
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 161.0805,
-        "fair_value": 169.277747,
-        "raw_gap_pct_unrounded": -4.8424835191125295,
-        "gap_pct_rounded": -4.84,
-        "cache_generated_at": "2026-07-06T18:36:15.735034+00:00",
+        "spot": 161.70499999999998,
+        "fair_value": 169.608298,
+        "raw_gap_pct_unrounded": -4.659735457047041,
+        "gap_pct_rounded": -4.66,
+        "cache_generated_at": "2026-07-11T14:11:26.166434+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
@@ -369,17 +381,17 @@
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "USD/JPY trades below estimated fair value because USD real-yield differential vs JPY is higher, policy rate gap supports base.",
       "valuation_reason": "USD/JPY trades below estimated fair value because USD real-yield differential vs JPY is higher, policy rate gap supports base.",
-      "explanation": "USD/JPY trades 4.8% below estimated fair value.\n\nUSD/JPY trades below estimated fair value because USD real-yield differential vs JPY is higher, policy rate gap supports base.\n\nConfidence:\nHigh",
+      "explanation": "USD/JPY trades 4.7% below estimated fair value.\n\nUSD/JPY trades below estimated fair value because USD real-yield differential vs JPY is higher, policy rate gap supports base.\n\nConfidence:\nHigh",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-30",
         "quote_policy_as_of": "2026-06-23",
         "base_y2_as_of": "2026-07-01",
-        "quote_y2_as_of": "2026-07-01",
+        "quote_y2_as_of": "2026-07-03",
         "base_cpi_as_of": "2024-01-01",
         "quote_cpi_as_of": "2024-01-01",
         "base_real_yield_as_of": "2026-07-01",
-        "quote_real_yield_as_of": "2026-07-01",
+        "quote_real_yield_as_of": "2026-07-03",
         "dxy_as_of": "2026-06-26",
         "treasury_as_of": "2026-07-01"
       },
@@ -394,10 +406,10 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2627,
-        "b_y2": 0.0817218953234637,
-        "intercept": 4.631544168854907,
-        "r_squared": 0.6314,
+        "n": 2633,
+        "b_y2": 0.08184365028728494,
+        "intercept": 4.631789280866921,
+        "r_squared": 0.6288,
         "features": "y2"
       },
       "drivers": {
@@ -405,11 +417,11 @@
         "quote_policy_rate": 1.0,
         "policy_rate_diff": 2.63,
         "base_yield_2y": 4.17,
-        "quote_yield_2y": 1.4,
-        "yield_2y_diff": 2.77,
+        "quote_yield_2y": 1.39,
+        "yield_2y_diff": 2.78,
         "base_real_yield": 1.22,
-        "quote_real_yield": -1.339,
-        "real_yield_diff": 2.559,
+        "quote_real_yield": -1.349,
+        "real_yield_diff": 2.569,
         "base_cpi_yoy": 2.95,
         "quote_cpi_yoy": 2.739,
         "inflation_diff": 0.211
@@ -420,7 +432,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -445,22 +457,22 @@
       "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (USD.cpi_yoy, JPY.cpi_yoy).",
       "confidence_v1": "Low",
       "market": "Japanese Yen / 6J",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Swiss Franc / 6S": {
       "pair": "USD/CHF",
       "base": "USD",
       "quote": "CHF",
-      "spot_price": 0.80305,
-      "fair_value": 1.260505,
-      "deviation_pct": -36.29,
-      "deviation_pct_raw": -36.29140701544222,
+      "spot_price": 0.808405,
+      "fair_value": 1.259619,
+      "deviation_pct": -35.82,
+      "deviation_pct_raw": -35.82146664983618,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "USD.policy_rate": "2026-06-30",
           "CHF.policy_rate": "2026-06-23",
           "USD.y2": "2026-07-01",
@@ -470,11 +482,11 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.80305,
-        "fair_value": 1.260505,
-        "raw_gap_pct_unrounded": -36.29140701544222,
-        "gap_pct_rounded": -36.29,
-        "cache_generated_at": "2026-07-06T18:36:50.993461+00:00",
+        "spot": 0.808405,
+        "fair_value": 1.259619,
+        "raw_gap_pct_unrounded": -35.82146664983618,
+        "gap_pct_rounded": -35.82,
+        "cache_generated_at": "2026-07-11T14:11:45.388264+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
@@ -502,9 +514,9 @@
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "USD/CHF trades below estimated fair value because USD real-yield differential vs CHF is higher, policy rate gap supports base, inflation differential base higher.",
       "valuation_reason": "USD/CHF trades below estimated fair value because USD real-yield differential vs CHF is higher, policy rate gap supports base, inflation differential base higher.",
-      "explanation": "USD/CHF trades 36.3% below estimated fair value.\n\nUSD/CHF trades below estimated fair value because USD real-yield differential vs CHF is higher, policy rate gap supports base, inflation differential base higher.\n\nConfidence:\nLow",
+      "explanation": "USD/CHF trades 35.8% below estimated fair value.\n\nUSD/CHF trades below estimated fair value because USD real-yield differential vs CHF is higher, policy rate gap supports base, inflation differential base higher.\n\nConfidence:\nLow",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-30",
         "quote_policy_as_of": "2026-06-23",
         "base_y2_as_of": "2026-07-01",
@@ -529,10 +541,10 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2622,
-        "b_y2": -0.02539258382323685,
-        "intercept": -0.010375004913109673,
-        "r_squared": 0.1421,
+        "n": 2628,
+        "b_y2": -0.02570151804163717,
+        "intercept": -0.009764194205802247,
+        "r_squared": 0.1451,
         "features": "y2"
       },
       "drivers": {
@@ -555,7 +567,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -566,9 +578,9 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 47.8,
+      "confidence_v2_score": 47.9,
       "confidence_subscores": {
-        "fit_score": 51.4,
+        "fit_score": 51.6,
         "data_score": 30.0,
         "error_score": 70.0
       },
@@ -580,22 +592,22 @@
       "confidence_explanation": "Confidence: Low — fit Medium, data Low, error High. Input freshness weaker due to stale CPI (USD.cpi_yoy, CHF.cpi_yoy). Stale core inputs: CHF.y2, CHF.y10.",
       "confidence_v1": "Low",
       "market": "Swiss Franc / 6S",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Australian Dollar / 6A": {
       "pair": "AUD/USD",
       "base": "AUD",
       "quote": "USD",
-      "spot_price": 0.7181500000000001,
-      "fair_value": 0.744461,
-      "deviation_pct": -3.53,
-      "deviation_pct_raw": -3.5342348356730535,
+      "spot_price": 0.695235,
+      "fair_value": 0.744003,
+      "deviation_pct": -6.55,
+      "deviation_pct_raw": -6.554812278982736,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "AUD.policy_rate": "2026-07-01",
           "USD.policy_rate": "2026-06-30",
           "AUD.y2": "2026-06-24",
@@ -605,37 +617,41 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.7181500000000001,
-        "fair_value": 0.744461,
-        "raw_gap_pct_unrounded": -3.5342348356730535,
-        "gap_pct_rounded": -3.53,
-        "cache_generated_at": "2026-07-06T18:37:23.899528+00:00",
+        "spot": 0.695235,
+        "fair_value": 0.744003,
+        "raw_gap_pct_unrounded": -6.554812278982736,
+        "gap_pct_rounded": -6.55,
+        "cache_generated_at": "2026-07-11T14:12:04.441591+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "AUD.y2",
+          "AUD.y10",
           "AUD.cpi_yoy",
           "USD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
+          "stale 2Y yield (AUD.y2)",
+          "stale 10Y yield (AUD.y10)",
           "stale CPI (AUD.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale 2Y yield (AUD.y2); stale 10Y yield (AUD.y10); stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Undervalued",
       "valuation_bias": "Undervalued",
-      "confidence": "high",
+      "confidence": "medium",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "AUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.",
       "valuation_reason": "AUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.",
-      "explanation": "AUD/USD trades 3.5% below estimated fair value.\n\nAUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.\n\nConfidence:\nHigh",
+      "explanation": "AUD/USD trades 6.5% below estimated fair value.\n\nAUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.\n\nConfidence:\nMedium",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-07-01",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-06-24",
@@ -649,6 +665,8 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "AUD.y2",
+        "AUD.y10",
         "AUD.cpi_yoy",
         "USD.cpi_yoy"
       ],
@@ -658,12 +676,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2616,
-        "b_y2": -0.009444473881268319,
-        "intercept": -0.3378211283180163,
-        "r_squared": 0.3199,
+        "n": 2622,
+        "b_y2": -0.008961125282881724,
+        "intercept": -0.3380469628796223,
+        "r_squared": 0.3174,
         "features": "y2,policy",
-        "b_policy": 0.06396135988165477
+        "b_policy": 0.06323606988081704
       },
       "drivers": {
         "base_policy_rate": 4.35,
@@ -685,7 +703,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -696,64 +714,62 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 81.6,
+      "confidence_v2_score": 66.5,
       "confidence_subscores": {
-        "fit_score": 85.6,
-        "data_score": 80.0,
+        "fit_score": 85.4,
+        "data_score": 30.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "High",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, USD.cpi_yoy).",
+      "confidence_explanation": "Confidence: Medium — fit High, data Low, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, USD.cpi_yoy). Stale core inputs: AUD.y2, AUD.y10.",
       "confidence_v1": "Low",
       "market": "Australian Dollar / 6A",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Canadian Dollar / 6C": {
       "pair": "USD/CAD",
       "base": "USD",
       "quote": "CAD",
-      "spot_price": 1.418635,
-      "fair_value": 1.515326,
-      "deviation_pct": -6.38,
-      "deviation_pct_raw": -6.380871178875032,
+      "spot_price": 1.41574,
+      "fair_value": 1.511896,
+      "deviation_pct": -6.36,
+      "deviation_pct_raw": -6.359961267177101,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "USD.policy_rate": "2026-06-30",
-          "CAD.policy_rate": "2026-06-25",
+          "CAD.policy_rate": "2026-07-03",
           "USD.y2": "2026-07-01",
-          "CAD.y2": "2026-06-29",
+          "CAD.y2": "2026-07-03",
           "USD.cpi_yoy": "2024-01-01",
           "CAD.cpi_yoy": "2024-01-01",
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 1.418635,
-        "fair_value": 1.515326,
-        "raw_gap_pct_unrounded": -6.380871178875032,
-        "gap_pct_rounded": -6.38,
-        "cache_generated_at": "2026-07-06T18:37:52.948997+00:00",
+        "spot": 1.41574,
+        "fair_value": 1.511896,
+        "raw_gap_pct_unrounded": -6.359961267177101,
+        "gap_pct_rounded": -6.36,
+        "cache_generated_at": "2026-07-11T14:12:23.284241+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
           "USD.cpi_yoy",
-          "CAD.policy_rate",
           "CAD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
           "stale CPI (USD.cpi_yoy)",
-          "stale policy rate (CAD.policy_rate)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (USD.cpi_yoy); stale policy rate (CAD.policy_rate); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale CPI (USD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
@@ -767,22 +783,21 @@
       "valuation_reason": "USD/CAD trades below estimated fair value because USD real-yield differential vs CAD is higher, policy rate gap supports base, inflation differential base higher.",
       "explanation": "USD/CAD trades 6.4% below estimated fair value.\n\nUSD/CAD trades below estimated fair value because USD real-yield differential vs CAD is higher, policy rate gap supports base, inflation differential base higher.\n\nConfidence:\nHigh",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-30",
-        "quote_policy_as_of": "2026-06-25",
+        "quote_policy_as_of": "2026-07-03",
         "base_y2_as_of": "2026-07-01",
-        "quote_y2_as_of": "2026-06-29",
+        "quote_y2_as_of": "2026-07-03",
         "base_cpi_as_of": "2024-01-01",
         "quote_cpi_as_of": "2024-01-01",
         "base_real_yield_as_of": "2026-07-01",
-        "quote_real_yield_as_of": "2026-06-29",
+        "quote_real_yield_as_of": "2026-07-03",
         "dxy_as_of": "2026-06-26",
         "treasury_as_of": "2026-07-01"
       },
       "missing_inputs": [],
       "stale_inputs": [
         "USD.cpi_yoy",
-        "CAD.policy_rate",
         "CAD.cpi_yoy"
       ],
       "audit_status": "PASS",
@@ -791,23 +806,23 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2628,
-        "b_y2": 0.06302583759703188,
-        "intercept": 0.2606826338541274,
-        "r_squared": 0.4942,
+        "n": 2634,
+        "b_y2": 0.06312367106161632,
+        "intercept": 0.26066779909099996,
+        "r_squared": 0.4977,
         "features": "y2,policy",
-        "b_policy": -0.005236622044259259
+        "b_policy": -0.005257948445854477
       },
       "drivers": {
         "base_policy_rate": 3.63,
         "quote_policy_rate": 2.25,
         "policy_rate_diff": 1.38,
         "base_yield_2y": 4.17,
-        "quote_yield_2y": 2.73,
-        "yield_2y_diff": 1.44,
+        "quote_yield_2y": 2.75,
+        "yield_2y_diff": 1.42,
         "base_real_yield": 1.22,
-        "quote_real_yield": 0.348,
-        "real_yield_diff": 0.872,
+        "quote_real_yield": 0.368,
+        "real_yield_diff": 0.852,
         "base_cpi_yoy": 2.95,
         "quote_cpi_yoy": 2.382,
         "inflation_diff": 0.568
@@ -818,7 +833,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -829,36 +844,36 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 81.7,
+      "confidence_v2_score": 89.4,
       "confidence_subscores": {
-        "fit_score": 99.5,
-        "data_score": 55.0,
+        "fit_score": 99.8,
+        "data_score": 80.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "High",
-        "data": "Medium",
+        "data": "High",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: High — fit High, data Medium, error High. Input freshness weaker due to stale CPI (USD.cpi_yoy, CAD.cpi_yoy). Stale core inputs: CAD.policy_rate.",
+      "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (USD.cpi_yoy, CAD.cpi_yoy).",
       "confidence_v1": "Low",
       "market": "Canadian Dollar / 6C",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "NZ Dollar / 6N": {
       "pair": "NZD/USD",
       "base": "NZD",
       "quote": "USD",
-      "spot_price": 0.5963750000000001,
+      "spot_price": 0.5763,
       "fair_value": null,
       "deviation_pct": null,
       "deviation_pct_raw": null,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "NZD.policy_rate": "2026-06-19",
           "USD.policy_rate": "2026-06-30",
           "NZD.y2": "2026-05-01",
@@ -868,11 +883,11 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.5963750000000001,
+        "spot": 0.5763,
         "fair_value": null,
         "raw_gap_pct_unrounded": null,
         "gap_pct_rounded": null,
-        "cache_generated_at": "2026-07-06T18:38:20.324756+00:00",
+        "cache_generated_at": "2026-07-11T14:12:41.043147+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
@@ -902,7 +917,7 @@
       "valuation_reason": "Insufficient validated macro inputs or regression history for fair value.",
       "explanation": "VALUATION UNAVAILABLE — Insufficient validated macro inputs or regression history for fair value.",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-19",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-05-01",
@@ -949,7 +964,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -974,12 +989,12 @@
       "confidence_explanation": "Confidence unavailable — insufficient model fit, data quality, or publish gates. Publish gates not met.",
       "confidence_v1": "None",
       "market": "NZ Dollar / 6N",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Gold": {
       "market": "Gold",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -996,7 +1011,7 @@
     },
     "Silver": {
       "market": "Silver",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1013,7 +1028,7 @@
     },
     "Copper / HG": {
       "market": "Copper / HG",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1030,7 +1045,7 @@
     },
     "Crude Oil / CL": {
       "market": "Crude Oil / CL",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "energy",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1047,7 +1062,7 @@
     },
     "Natural Gas / NG": {
       "market": "Natural Gas / NG",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "energy",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1064,7 +1079,7 @@
     },
     "Coffee": {
       "market": "Coffee",
-      "as_of_week": "2026-05-01",
+      "as_of_week": null,
       "asset_class": "softs",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1132,7 +1147,7 @@
     },
     "Wheat": {
       "market": "Wheat",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "grains",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1149,7 +1164,7 @@
     },
     "Soybeans": {
       "market": "Soybeans",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "grains",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1166,7 +1181,7 @@
     },
     "Sugar": {
       "market": "Sugar",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "softs",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1217,7 +1232,7 @@
     },
     "Bitcoin": {
       "market": "Bitcoin",
-      "as_of_week": "2026-06-19",
+      "as_of_week": "2026-07-03",
       "asset_class": "crypto",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1343,7 +1358,7 @@
     },
     "AUD/CAD": {
       "market": "AUD/CAD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1367,7 +1382,7 @@
     },
     "AUD/CHF": {
       "market": "AUD/CHF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1391,7 +1406,7 @@
     },
     "AUD/HKD": {
       "market": "AUD/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1417,69 +1432,74 @@
       "pair": "AUD/JPY",
       "base": "AUD",
       "quote": "JPY",
-      "spot_price": 114.5095,
-      "fair_value": 144.14418,
-      "deviation_pct": -20.56,
-      "deviation_pct_raw": -20.559054135935284,
+      "spot_price": 112.431,
+      "fair_value": 145.026864,
+      "deviation_pct": -22.48,
+      "deviation_pct_raw": -22.4757421493993,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-05-28",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-05-28",
+          "spot": "2026-07-09",
           "AUD.policy_rate": "2026-07-01",
           "JPY.policy_rate": "2026-06-23",
           "AUD.y2": "2026-06-24",
-          "JPY.y2": "2026-07-01",
+          "JPY.y2": "2026-07-03",
           "AUD.cpi_yoy": "2024-01-01",
           "JPY.cpi_yoy": "2024-01-01",
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 114.5095,
-        "fair_value": 144.14418,
-        "raw_gap_pct_unrounded": -20.559054135935284,
-        "gap_pct_rounded": -20.56,
-        "cache_generated_at": "2026-07-06T18:38:47.400631+00:00",
+        "spot": 112.431,
+        "fair_value": 145.026864,
+        "raw_gap_pct_unrounded": -22.4757421493993,
+        "gap_pct_rounded": -22.48,
+        "cache_generated_at": "2026-07-11T14:13:00.277338+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "AUD.y2",
+          "AUD.y10",
           "AUD.cpi_yoy",
           "JPY.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
-          "stale spot / futures price (as-of 2026-05-28)",
+          "stale 2Y yield (AUD.y2)",
+          "stale 10Y yield (AUD.y10)",
           "stale CPI (AUD.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale spot / futures price (as-of 2026-05-28); stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
-        "price_stale": true,
+        "stale_reason": "stale 2Y yield (AUD.y2); stale 10Y yield (AUD.y10); stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Undervalued",
       "valuation_bias": "Undervalued",
-      "confidence": "high",
+      "confidence": "medium",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "AUD/JPY trades below estimated fair value because AUD real-yield differential vs JPY is higher, policy rate gap supports base, inflation differential base higher.",
       "valuation_reason": "AUD/JPY trades below estimated fair value because AUD real-yield differential vs JPY is higher, policy rate gap supports base, inflation differential base higher.",
-      "explanation": "AUD/JPY trades 20.6% below estimated fair value.\n\nAUD/JPY trades below estimated fair value because AUD real-yield differential vs JPY is higher, policy rate gap supports base, inflation differential base higher.\n\nConfidence:\nHigh",
+      "explanation": "AUD/JPY trades 22.5% below estimated fair value.\n\nAUD/JPY trades below estimated fair value because AUD real-yield differential vs JPY is higher, policy rate gap supports base, inflation differential base higher.\n\nConfidence:\nMedium",
       "input_freshness": {
-        "spot_as_of": "2026-05-28",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-07-01",
         "quote_policy_as_of": "2026-06-23",
         "base_y2_as_of": "2026-06-24",
-        "quote_y2_as_of": "2026-07-01",
+        "quote_y2_as_of": "2026-07-03",
         "base_cpi_as_of": "2024-01-01",
         "quote_cpi_as_of": "2024-01-01",
         "base_real_yield_as_of": "2026-06-24",
-        "quote_real_yield_as_of": "2026-07-01",
+        "quote_real_yield_as_of": "2026-07-03",
         "dxy_as_of": "2026-06-26",
         "treasury_as_of": "2026-07-01"
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "AUD.y2",
+        "AUD.y10",
         "AUD.cpi_yoy",
         "JPY.cpi_yoy"
       ],
@@ -1489,10 +1509,10 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 259,
-        "b_y2": 0.18778592031534336,
-        "intercept": 4.093620923423991,
-        "r_squared": 0.8824,
+        "n": 289,
+        "b_y2": 0.1938281534484294,
+        "intercept": 4.078838986543211,
+        "r_squared": 0.8803,
         "features": "y2"
       },
       "drivers": {
@@ -1500,11 +1520,11 @@
         "quote_policy_rate": 1.0,
         "policy_rate_diff": 3.35,
         "base_yield_2y": 4.445,
-        "quote_yield_2y": 1.4,
-        "yield_2y_diff": 3.045,
+        "quote_yield_2y": 1.39,
+        "yield_2y_diff": 3.055,
         "base_real_yield": 1.278,
-        "quote_real_yield": -1.339,
-        "real_yield_diff": 2.617,
+        "quote_real_yield": -1.349,
+        "real_yield_diff": 2.627,
         "base_cpi_yoy": 3.167,
         "quote_cpi_yoy": 2.739,
         "inflation_diff": 0.428
@@ -1515,7 +1535,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -1526,26 +1546,26 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 74.6,
+      "confidence_v2_score": 59.8,
       "confidence_subscores": {
-        "fit_score": 73.0,
-        "data_score": 80.0,
+        "fit_score": 73.3,
+        "data_score": 30.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "High",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, JPY.cpi_yoy).",
+      "confidence_explanation": "Confidence: Medium — fit High, data Low, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, JPY.cpi_yoy). Stale core inputs: AUD.y2, AUD.y10.",
       "confidence_v1": "Low",
       "market": "AUD/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "AUD/NZD": {
       "market": "AUD/NZD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1569,7 +1589,7 @@
     },
     "AUD/SGD": {
       "market": "AUD/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1595,15 +1615,15 @@
       "pair": "AUD/USD",
       "base": "AUD",
       "quote": "USD",
-      "spot_price": 0.7181500000000001,
-      "fair_value": 0.744461,
-      "deviation_pct": -3.53,
-      "deviation_pct_raw": -3.5342348356730535,
+      "spot_price": 0.695235,
+      "fair_value": 0.744003,
+      "deviation_pct": -6.55,
+      "deviation_pct_raw": -6.554812278982736,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "AUD.policy_rate": "2026-07-01",
           "USD.policy_rate": "2026-06-30",
           "AUD.y2": "2026-06-24",
@@ -1613,37 +1633,41 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.7181500000000001,
-        "fair_value": 0.744461,
-        "raw_gap_pct_unrounded": -3.5342348356730535,
-        "gap_pct_rounded": -3.53,
-        "cache_generated_at": "2026-07-06T18:39:15.953196+00:00",
+        "spot": 0.695235,
+        "fair_value": 0.744003,
+        "raw_gap_pct_unrounded": -6.554812278982736,
+        "gap_pct_rounded": -6.55,
+        "cache_generated_at": "2026-07-11T14:13:29.274583+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "AUD.y2",
+          "AUD.y10",
           "AUD.cpi_yoy",
           "USD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
+          "stale 2Y yield (AUD.y2)",
+          "stale 10Y yield (AUD.y10)",
           "stale CPI (AUD.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale 2Y yield (AUD.y2); stale 10Y yield (AUD.y10); stale CPI (AUD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Undervalued",
       "valuation_bias": "Undervalued",
-      "confidence": "high",
+      "confidence": "medium",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "AUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.",
       "valuation_reason": "AUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.",
-      "explanation": "AUD/USD trades 3.5% below estimated fair value.\n\nAUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.\n\nConfidence:\nHigh",
+      "explanation": "AUD/USD trades 6.5% below estimated fair value.\n\nAUD/USD trades below estimated fair value because 2Y yield differential favours base (AUD/USD), policy rate gap supports base, broad USD (DXY) regime is strong.\n\nConfidence:\nMedium",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-07-01",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-06-24",
@@ -1657,6 +1681,8 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "AUD.y2",
+        "AUD.y10",
         "AUD.cpi_yoy",
         "USD.cpi_yoy"
       ],
@@ -1666,12 +1692,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2616,
-        "b_y2": -0.009444473881268319,
-        "intercept": -0.3378211283180163,
-        "r_squared": 0.3199,
+        "n": 2622,
+        "b_y2": -0.008961125282881724,
+        "intercept": -0.3380469628796223,
+        "r_squared": 0.3174,
         "features": "y2,policy",
-        "b_policy": 0.06396135988165477
+        "b_policy": 0.06323606988081704
       },
       "drivers": {
         "base_policy_rate": 4.35,
@@ -1693,7 +1719,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -1704,26 +1730,26 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 81.6,
+      "confidence_v2_score": 66.5,
       "confidence_subscores": {
-        "fit_score": 85.6,
-        "data_score": 80.0,
+        "fit_score": 85.4,
+        "data_score": 30.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "High",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, USD.cpi_yoy).",
+      "confidence_explanation": "Confidence: Medium — fit High, data Low, error High. Input freshness weaker due to stale CPI (AUD.cpi_yoy, USD.cpi_yoy). Stale core inputs: AUD.y2, AUD.y10.",
       "confidence_v1": "Low",
       "market": "AUD/USD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Australia 200": {
       "market": "Australia 200",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1740,7 +1766,7 @@
     },
     "Bitcoin Cash": {
       "market": "Bitcoin Cash",
-      "as_of_week": "2026-06-01",
+      "as_of_week": "2026-07-11",
       "asset_class": "crypto",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1757,7 +1783,7 @@
     },
     "Brent Crude Oil": {
       "market": "Brent Crude Oil",
-      "as_of_week": "2026-04-01",
+      "as_of_week": "2026-06-01",
       "asset_class": "energy",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1791,7 +1817,7 @@
     },
     "CAD/HKD": {
       "market": "CAD/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1815,7 +1841,7 @@
     },
     "CAD/SGD": {
       "market": "CAD/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1839,7 +1865,7 @@
     },
     "CHF/HKD": {
       "market": "CHF/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1863,7 +1889,7 @@
     },
     "CHF/ZAR": {
       "market": "CHF/ZAR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -1887,7 +1913,7 @@
     },
     "China A50": {
       "market": "China A50",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1904,7 +1930,7 @@
     },
     "Copper": {
       "market": "Copper",
-      "as_of_week": "2026-03-01",
+      "as_of_week": "2026-05-01",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -1923,15 +1949,15 @@
       "pair": "EUR/AUD",
       "base": "EUR",
       "quote": "AUD",
-      "spot_price": 1.6232,
-      "fair_value": 1.544344,
-      "deviation_pct": 5.11,
-      "deviation_pct_raw": 5.1061162538916225,
+      "spot_price": 1.64175,
+      "fair_value": 1.540386,
+      "deviation_pct": 6.58,
+      "deviation_pct_raw": 6.580428541936892,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-05-28",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-05-28",
+          "spot": "2026-07-09",
           "EUR.policy_rate": "2026-06-17",
           "AUD.policy_rate": "2026-07-01",
           "EUR.y2": "2026-06-30",
@@ -1941,38 +1967,43 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 1.6232,
-        "fair_value": 1.544344,
-        "raw_gap_pct_unrounded": 5.1061162538916225,
-        "gap_pct_rounded": 5.11,
-        "cache_generated_at": "2026-07-06T18:39:43.403437+00:00",
+        "spot": 1.64175,
+        "fair_value": 1.540386,
+        "raw_gap_pct_unrounded": 6.580428541936892,
+        "gap_pct_rounded": 6.58,
+        "cache_generated_at": "2026-07-11T14:13:50.981585+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "EUR.y2",
+          "EUR.y10",
           "EUR.cpi_yoy",
+          "AUD.y2",
+          "AUD.y10",
           "AUD.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
-          "stale spot / futures price (as-of 2026-05-28)",
+          "stale 2Y yield (EUR.y2)",
+          "stale 10Y yield (EUR.y10)",
           "stale CPI (EUR.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale spot / futures price (as-of 2026-05-28); stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
-        "price_stale": true,
+        "stale_reason": "stale 2Y yield (EUR.y2); stale 10Y yield (EUR.y10); stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Overvalued",
       "valuation_bias": "Overvalued",
-      "confidence": "high",
+      "confidence": "medium",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "EUR/AUD trades above estimated fair value because EUR real-yield differential vs AUD is lower, policy rate gap supports quote, inflation differential quote higher.",
       "valuation_reason": "EUR/AUD trades above estimated fair value because EUR real-yield differential vs AUD is lower, policy rate gap supports quote, inflation differential quote higher.",
-      "explanation": "EUR/AUD trades 5.1% above estimated fair value.\n\nEUR/AUD trades above estimated fair value because EUR real-yield differential vs AUD is lower, policy rate gap supports quote, inflation differential quote higher.\n\nConfidence:\nHigh",
+      "explanation": "EUR/AUD trades 6.6% above estimated fair value.\n\nEUR/AUD trades above estimated fair value because EUR real-yield differential vs AUD is lower, policy rate gap supports quote, inflation differential quote higher.\n\nConfidence:\nMedium",
       "input_freshness": {
-        "spot_as_of": "2026-05-28",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-17",
         "quote_policy_as_of": "2026-07-01",
         "base_y2_as_of": "2026-06-30",
@@ -1986,7 +2017,11 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "EUR.y2",
+        "EUR.y10",
         "EUR.cpi_yoy",
+        "AUD.y2",
+        "AUD.y10",
         "AUD.cpi_yoy"
       ],
       "audit_status": "PASS",
@@ -1995,12 +2030,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 259,
-        "b_y2": 0.07604447203876982,
-        "intercept": 0.8042559012901503,
-        "r_squared": 0.8942,
+        "n": 289,
+        "b_y2": 0.07553252888871914,
+        "intercept": 0.8126206099433312,
+        "r_squared": 0.9032,
         "features": "y2,policy",
-        "b_policy": 0.06718584104141223
+        "b_policy": 0.0728708898889894
       },
       "drivers": {
         "base_policy_rate": 2.25,
@@ -2022,7 +2057,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -2033,26 +2068,26 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 74.6,
+      "confidence_v2_score": 50.8,
       "confidence_subscores": {
-        "fit_score": 73.0,
-        "data_score": 80.0,
+        "fit_score": 73.3,
+        "data_score": 0.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "High",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: High — fit High, data High, error High. Input freshness weaker due to stale CPI (EUR.cpi_yoy, AUD.cpi_yoy).",
+      "confidence_explanation": "Confidence: Medium — fit High, data Low, error High. Input freshness weaker due to stale CPI (EUR.cpi_yoy, AUD.cpi_yoy). Stale core inputs: EUR.y2, EUR.y10, AUD.y2, AUD.y10.",
       "confidence_v1": "Low",
       "market": "EUR/AUD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "EUR/CZK": {
       "market": "EUR/CZK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2076,7 +2111,7 @@
     },
     "EUR/DKK": {
       "market": "EUR/DKK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2102,15 +2137,15 @@
       "pair": "EUR/GBP",
       "base": "EUR",
       "quote": "GBP",
-      "spot_price": 0.857062,
-      "fair_value": 0.815814,
-      "deviation_pct": 5.06,
-      "deviation_pct_raw": 5.056054443782522,
+      "spot_price": 0.851728,
+      "fair_value": 0.815793,
+      "deviation_pct": 4.4,
+      "deviation_pct_raw": 4.404916443264413,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "EUR.policy_rate": "2026-06-17",
           "GBP.policy_rate": "2026-06-30",
           "EUR.y2": "2026-06-30",
@@ -2120,37 +2155,43 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.857062,
-        "fair_value": 0.815814,
-        "raw_gap_pct_unrounded": 5.056054443782522,
-        "gap_pct_rounded": 5.06,
-        "cache_generated_at": "2026-07-06T18:40:13.735006+00:00",
+        "spot": 0.851728,
+        "fair_value": 0.815793,
+        "raw_gap_pct_unrounded": 4.404916443264413,
+        "gap_pct_rounded": 4.4,
+        "cache_generated_at": "2026-07-11T14:14:12.349803+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
+          "EUR.y2",
+          "EUR.y10",
           "EUR.cpi_yoy",
+          "GBP.y2",
+          "GBP.y10",
           "GBP.cpi_yoy"
         ],
         "missing_inputs": [],
         "stale_warnings": [
+          "stale 2Y yield (EUR.y2)",
+          "stale 10Y yield (EUR.y10)",
           "stale CPI (EUR.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "stale_reason": "stale 2Y yield (EUR.y2); stale 10Y yield (EUR.y10); stale CPI (EUR.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
         "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Overvalued",
       "valuation_bias": "Overvalued",
-      "confidence": "medium",
+      "confidence": "low",
       "model_id": "fx_carry_real_yield_v3",
       "valuation_phase": "V3.0 FX",
       "valuation_model_id": "fx_carry_real_yield_v3",
       "driver_summary": "EUR/GBP trades above estimated fair value because EUR real-yield differential vs GBP is lower, policy rate gap supports quote, inflation differential quote higher.",
       "valuation_reason": "EUR/GBP trades above estimated fair value because EUR real-yield differential vs GBP is lower, policy rate gap supports quote, inflation differential quote higher.",
-      "explanation": "EUR/GBP trades 5.1% above estimated fair value.\n\nEUR/GBP trades above estimated fair value because EUR real-yield differential vs GBP is lower, policy rate gap supports quote, inflation differential quote higher.\n\nConfidence:\nMedium",
+      "explanation": "EUR/GBP trades 4.4% above estimated fair value.\n\nEUR/GBP trades above estimated fair value because EUR real-yield differential vs GBP is lower, policy rate gap supports quote, inflation differential quote higher.\n\nConfidence:\nLow",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-17",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-06-30",
@@ -2164,7 +2205,11 @@
       },
       "missing_inputs": [],
       "stale_inputs": [
+        "EUR.y2",
+        "EUR.y10",
         "EUR.cpi_yoy",
+        "GBP.y2",
+        "GBP.y10",
         "GBP.cpi_yoy"
       ],
       "audit_status": "PASS",
@@ -2173,12 +2218,12 @@
       "inputs_stale": true,
       "regression": {
         "ok": true,
-        "n": 2616,
-        "b_y2": 0.027668240030762428,
-        "intercept": -0.11460404355959102,
-        "r_squared": 0.1406,
+        "n": 2622,
+        "b_y2": 0.027705461713960995,
+        "intercept": -0.11457993029047862,
+        "r_squared": 0.1411,
         "features": "y2,policy",
-        "b_policy": -0.005586318862514594
+        "b_policy": -0.005592255612778853
       },
       "drivers": {
         "base_policy_rate": 2.25,
@@ -2200,7 +2245,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -2211,18 +2256,18 @@
         "regime_label": "Neutral",
         "as_of": "2026-07-01"
       },
-      "confidence_v2_score": 62.7,
+      "confidence_v2_score": 38.7,
       "confidence_subscores": {
-        "fit_score": 51.2,
-        "data_score": 80.0,
+        "fit_score": 51.3,
+        "data_score": 0.0,
         "error_score": 70.0
       },
       "confidence_subscore_bands": {
         "fit": "Medium",
-        "data": "High",
+        "data": "Low",
         "error": "High"
       },
-      "confidence_explanation": "Confidence: Medium — fit Medium, data High, error High. Input freshness weaker due to stale CPI (EUR.cpi_yoy, GBP.cpi_yoy).",
+      "confidence_explanation": "Confidence: Low — fit Medium, data Low, error High. Input freshness weaker due to stale CPI (EUR.cpi_yoy, GBP.cpi_yoy). Stale core inputs: EUR.y2, EUR.y10, GBP.y2, GBP.y10.",
       "confidence_v1": "Low",
       "market": "EUR/GBP",
       "as_of_week": null,
@@ -2230,7 +2275,7 @@
     },
     "EUR/HKD": {
       "market": "EUR/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2254,7 +2299,7 @@
     },
     "EUR/HUF": {
       "market": "EUR/HUF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2278,7 +2323,7 @@
     },
     "EUR/NOK": {
       "market": "EUR/NOK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2302,7 +2347,7 @@
     },
     "EUR/NZD": {
       "market": "EUR/NZD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2326,7 +2371,7 @@
     },
     "EUR/SEK": {
       "market": "EUR/SEK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2350,7 +2395,7 @@
     },
     "EUR/SGD": {
       "market": "EUR/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2374,7 +2419,7 @@
     },
     "EUR/TRY": {
       "market": "EUR/TRY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2398,7 +2443,7 @@
     },
     "EUR/ZAR": {
       "market": "EUR/ZAR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2422,7 +2467,7 @@
     },
     "Ethereum/Ether": {
       "market": "Ethereum/Ether",
-      "as_of_week": null,
+      "as_of_week": "2026-07-11",
       "asset_class": "crypto",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2439,7 +2484,7 @@
     },
     "Europe 50": {
       "market": "Europe 50",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2456,7 +2501,7 @@
     },
     "France 40": {
       "market": "France 40",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2473,7 +2518,7 @@
     },
     "GBP/AUD": {
       "market": "GBP/AUD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2497,7 +2542,7 @@
     },
     "GBP/HKD": {
       "market": "GBP/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2521,7 +2566,7 @@
     },
     "GBP/NZD": {
       "market": "GBP/NZD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2545,7 +2590,7 @@
     },
     "GBP/PLN": {
       "market": "GBP/PLN",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2569,7 +2614,7 @@
     },
     "GBP/SGD": {
       "market": "GBP/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2593,7 +2638,7 @@
     },
     "GBP/ZAR": {
       "market": "GBP/ZAR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2617,7 +2662,7 @@
     },
     "Germany 30": {
       "market": "Germany 30",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2634,7 +2679,7 @@
     },
     "Gold/AUD": {
       "market": "Gold/AUD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2651,7 +2696,7 @@
     },
     "Gold/CAD": {
       "market": "Gold/CAD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2668,7 +2713,7 @@
     },
     "Gold/CHF": {
       "market": "Gold/CHF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2685,7 +2730,7 @@
     },
     "Gold/EUR": {
       "market": "Gold/EUR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2702,7 +2747,7 @@
     },
     "Gold/GBP": {
       "market": "Gold/GBP",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2719,7 +2764,7 @@
     },
     "Gold/HKD": {
       "market": "Gold/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2736,7 +2781,7 @@
     },
     "Gold/JPY": {
       "market": "Gold/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2753,7 +2798,7 @@
     },
     "Gold/NZD": {
       "market": "Gold/NZD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2770,7 +2815,7 @@
     },
     "Gold/SGD": {
       "market": "Gold/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2787,7 +2832,7 @@
     },
     "Gold/Silver": {
       "market": "Gold/Silver",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2804,7 +2849,7 @@
     },
     "HKD/JPY": {
       "market": "HKD/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2828,7 +2873,7 @@
     },
     "Hong Kong 33": {
       "market": "Hong Kong 33",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2845,7 +2890,7 @@
     },
     "India 50": {
       "market": "India 50",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2862,7 +2907,7 @@
     },
     "Japan 225": {
       "market": "Japan 225",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2879,7 +2924,7 @@
     },
     "Litecoin": {
       "market": "Litecoin",
-      "as_of_week": null,
+      "as_of_week": "2026-07-11",
       "asset_class": "crypto",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -2896,7 +2941,7 @@
     },
     "NZD/CAD": {
       "market": "NZD/CAD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2920,7 +2965,7 @@
     },
     "NZD/CHF": {
       "market": "NZD/CHF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2944,7 +2989,7 @@
     },
     "NZD/HKD": {
       "market": "NZD/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -2970,29 +3015,29 @@
       "pair": "NZD/JPY",
       "base": "NZD",
       "quote": "JPY",
-      "spot_price": 95.0985,
+      "spot_price": 93.2045,
       "fair_value": null,
       "deviation_pct": null,
       "deviation_pct_raw": null,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-05-28",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-05-28",
+          "spot": "2026-07-09",
           "NZD.policy_rate": "2026-06-19",
           "JPY.policy_rate": "2026-06-23",
           "NZD.y2": "2026-05-01",
-          "JPY.y2": "2026-07-01",
+          "JPY.y2": "2026-07-03",
           "NZD.cpi_yoy": "2024-01-01",
           "JPY.cpi_yoy": "2024-01-01",
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 95.0985,
+        "spot": 93.2045,
         "fair_value": null,
         "raw_gap_pct_unrounded": null,
         "gap_pct_rounded": null,
-        "cache_generated_at": "2026-07-06T18:40:41.548117+00:00",
+        "cache_generated_at": "2026-07-11T14:14:30.453225+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
@@ -3003,14 +3048,13 @@
         ],
         "missing_inputs": [],
         "stale_warnings": [
-          "stale spot / futures price (as-of 2026-05-28)",
           "stale 2Y yield (NZD.y2)",
           "stale 10Y yield (NZD.y10)",
           "stale CPI (NZD.cpi_yoy)",
           "DXY / broad USD proxy as-of 2026-06-26"
         ],
-        "stale_reason": "stale spot / futures price (as-of 2026-05-28); stale 2Y yield (NZD.y2); stale 10Y yield (NZD.y10); stale CPI (NZD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
-        "price_stale": true,
+        "stale_reason": "stale 2Y yield (NZD.y2); stale 10Y yield (NZD.y10); stale CPI (NZD.cpi_yoy); DXY / broad USD proxy as-of 2026-06-26",
+        "price_stale": false,
         "inputs_stale": true
       },
       "valuation_state": "Unavailable",
@@ -3023,15 +3067,15 @@
       "valuation_reason": "Insufficient validated macro inputs or regression history for fair value.",
       "explanation": "VALUATION UNAVAILABLE — Insufficient validated macro inputs or regression history for fair value.",
       "input_freshness": {
-        "spot_as_of": "2026-05-28",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-19",
         "quote_policy_as_of": "2026-06-23",
         "base_y2_as_of": "2026-05-01",
-        "quote_y2_as_of": "2026-07-01",
+        "quote_y2_as_of": "2026-07-03",
         "base_cpi_as_of": "2024-01-01",
         "quote_cpi_as_of": "2024-01-01",
         "base_real_yield_as_of": "2026-05-01",
-        "quote_real_yield_as_of": "2026-07-01",
+        "quote_real_yield_as_of": "2026-07-03",
         "dxy_as_of": "2026-06-26",
         "treasury_as_of": "2026-07-01"
       },
@@ -3055,11 +3099,11 @@
         "quote_policy_rate": 1.0,
         "policy_rate_diff": 1.25,
         "base_yield_2y": 2.63,
-        "quote_yield_2y": 1.4,
-        "yield_2y_diff": 1.23,
+        "quote_yield_2y": 1.39,
+        "yield_2y_diff": 1.24,
         "base_real_yield": -0.293,
-        "quote_real_yield": -1.339,
-        "real_yield_diff": 1.046,
+        "quote_real_yield": -1.349,
+        "real_yield_diff": 1.056,
         "base_cpi_yoy": 2.923,
         "quote_cpi_yoy": 2.739,
         "inflation_diff": 0.184
@@ -3070,7 +3114,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -3095,12 +3139,12 @@
       "confidence_explanation": "Confidence unavailable — insufficient model fit, data quality, or publish gates. Publish gates not met.",
       "confidence_v1": "None",
       "market": "NZD/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "NZD/SGD": {
       "market": "NZD/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3126,15 +3170,15 @@
       "pair": "NZD/USD",
       "base": "NZD",
       "quote": "USD",
-      "spot_price": 0.5963750000000001,
+      "spot_price": 0.5763,
       "fair_value": null,
       "deviation_pct": null,
       "deviation_pct_raw": null,
       "valuation_diagnostics": {
-        "valuation_date": "2026-07-06",
-        "spot_date": "2026-07-01",
+        "valuation_date": "2026-07-11",
+        "spot_date": "2026-07-09",
         "input_latest_dates": {
-          "spot": "2026-07-01",
+          "spot": "2026-07-09",
           "NZD.policy_rate": "2026-06-19",
           "USD.policy_rate": "2026-06-30",
           "NZD.y2": "2026-05-01",
@@ -3144,11 +3188,11 @@
           "dxy": "2026-06-26",
           "treasury": "2026-07-01"
         },
-        "spot": 0.5963750000000001,
+        "spot": 0.5763,
         "fair_value": null,
         "raw_gap_pct_unrounded": null,
         "gap_pct_rounded": null,
-        "cache_generated_at": "2026-07-06T18:41:08.528559+00:00",
+        "cache_generated_at": "2026-07-11T14:14:49.015436+00:00",
         "source_file": "web-dashboard/public/data/fx_valuation_v3_latest.json",
         "freshness_status": "stale",
         "stale_inputs": [
@@ -3178,7 +3222,7 @@
       "valuation_reason": "Insufficient validated macro inputs or regression history for fair value.",
       "explanation": "VALUATION UNAVAILABLE — Insufficient validated macro inputs or regression history for fair value.",
       "input_freshness": {
-        "spot_as_of": "2026-07-01",
+        "spot_as_of": "2026-07-09",
         "base_policy_as_of": "2026-06-19",
         "quote_policy_as_of": "2026-06-30",
         "base_y2_as_of": "2026-05-01",
@@ -3225,7 +3269,7 @@
         "regime": "strong_usd",
         "regime_label": "Bullish",
         "as_of": "2026-06-26",
-        "source": "fred"
+        "source": "price_store"
       },
       "treasury_regime": {
         "available": true,
@@ -3250,12 +3294,12 @@
       "confidence_explanation": "Confidence unavailable — insufficient model fit, data quality, or publish gates. Publish gates not met.",
       "confidence_v1": "None",
       "market": "NZD/USD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx"
     },
     "Netherlands 25": {
       "market": "Netherlands 25",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3272,7 +3316,7 @@
     },
     "SGD/CHF": {
       "market": "SGD/CHF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3296,7 +3340,7 @@
     },
     "SGD/JPY": {
       "market": "SGD/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3320,7 +3364,7 @@
     },
     "Silver/AUD": {
       "market": "Silver/AUD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3337,7 +3381,7 @@
     },
     "Silver/CAD": {
       "market": "Silver/CAD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3354,7 +3398,7 @@
     },
     "Silver/CHF": {
       "market": "Silver/CHF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3371,7 +3415,7 @@
     },
     "Silver/EUR": {
       "market": "Silver/EUR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3388,7 +3432,7 @@
     },
     "Silver/GBP": {
       "market": "Silver/GBP",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3405,7 +3449,7 @@
     },
     "Silver/HKD": {
       "market": "Silver/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3422,7 +3466,7 @@
     },
     "Silver/JPY": {
       "market": "Silver/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3439,7 +3483,7 @@
     },
     "Silver/NZD": {
       "market": "Silver/NZD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3456,7 +3500,7 @@
     },
     "Silver/SGD": {
       "market": "Silver/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "metals",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3473,7 +3517,7 @@
     },
     "Singapore 30": {
       "market": "Singapore 30",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3490,7 +3534,7 @@
     },
     "TRY/JPY": {
       "market": "TRY/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3514,7 +3558,7 @@
     },
     "Taiwan Index": {
       "market": "Taiwan Index",
-      "as_of_week": null,
+      "as_of_week": "2026-07-10",
       "asset_class": "indices",
       "wired": false,
       "valuation_state": "UNAVAILABLE",
@@ -3769,7 +3813,7 @@
     },
     "USD/CNH": {
       "market": "USD/CNH",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3793,7 +3837,7 @@
     },
     "USD/CZK": {
       "market": "USD/CZK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3817,7 +3861,7 @@
     },
     "USD/DKK": {
       "market": "USD/DKK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3841,7 +3885,7 @@
     },
     "USD/HKD": {
       "market": "USD/HKD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3865,7 +3909,7 @@
     },
     "USD/HUF": {
       "market": "USD/HUF",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3913,7 +3957,7 @@
     },
     "USD/MXN": {
       "market": "USD/MXN",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3937,7 +3981,7 @@
     },
     "USD/NOK": {
       "market": "USD/NOK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -3961,7 +4005,7 @@
     },
     "USD/PLN": {
       "market": "USD/PLN",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4009,7 +4053,7 @@
     },
     "USD/SEK": {
       "market": "USD/SEK",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4033,7 +4077,7 @@
     },
     "USD/SGD": {
       "market": "USD/SGD",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4057,7 +4101,7 @@
     },
     "USD/THB": {
       "market": "USD/THB",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4081,7 +4125,7 @@
     },
     "USD/TRY": {
       "market": "USD/TRY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4105,7 +4149,7 @@
     },
     "USD/ZAR": {
       "market": "USD/ZAR",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",
@@ -4163,7 +4207,7 @@
     },
     "ZAR/JPY": {
       "market": "ZAR/JPY",
-      "as_of_week": "2026-05-22",
+      "as_of_week": "2026-07-03",
       "asset_class": "fx",
       "wired": false,
       "valuation_state": "Unavailable",

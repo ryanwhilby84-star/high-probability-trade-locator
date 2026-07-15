@@ -60,6 +60,11 @@ def get_finnhub_api_key() -> str:
     return os.getenv("FINNHUB_API_KEY", "").strip()
 
 
+def get_fmp_api_key() -> str:
+    """Financial Modeling Prep API key (optional). Used by index price audit/backfill helpers."""
+    return os.getenv("FMP_API_KEY", "").strip()
+
+
 def get_openweather_api_key() -> str:
     """OpenWeather API key (optional). Used by ``hptl.intelligence.weather_adapter``."""
     return os.getenv("OPENWEATHER_API_KEY", "").strip()

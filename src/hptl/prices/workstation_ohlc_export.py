@@ -17,9 +17,15 @@ from hptl.config import PROCESSED_DIR, PROJECT_ROOT
 from hptl.cot.cot_3y_series_export import PUBLIC_PATH as COT_3Y_PUBLIC
 from hptl.markets.instrument_registry import all_instrument_ids
 from hptl.prices.canonical_timeline import build_canonical_timeline
+from hptl.prices.workstation_index_ohlc_history import (
+    load_workstation_index_daily_bars,
+    resolve_workstation_index_source,
+)
 
 OUT_PATH = PROCESSED_DIR / "workstation_ohlc_latest.json"
 PUBLIC_OUT = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "workstation_ohlc_latest.json"
+DIST_OUT = PROJECT_ROOT / "web-dashboard" / "dist" / "data" / "workstation_ohlc_latest.json"
+MAX_COMPLETED_OHLC_AGE_DAYS = 10
 
 
 def _num(v: Any) -> float | None:
@@ -98,6 +104,43 @@ def _common_range(cot_first: str | None, cot_last: str | None, ohlc_first: str |
     return common_start, common_end
 
 
+def _age_days(date_str: str | None) -> int | None:
+    if not date_str:
+        return None
+    try:
+        d = datetime.fromisoformat(str(date_str)[:10]).date()
+    except ValueError:
+        return None
+    return max(0, (datetime.now(timezone.utc).date() - d).days)
+
+
+def _price_quality(instrument_id: str, latest_date: str | None, source: str | None, symbol: str | None) -> dict[str, Any]:
+    if not latest_date:
+        return {
+            "status": "MISSING",
+            "latest_date": None,
+            "latest_age_days": None,
+            "warning": "Price OHLC is missing.",
+        }
+    age = _age_days(latest_date)
+    warnings: list[str] = []
+    status = "PASS"
+    if age is not None and age > MAX_COMPLETED_OHLC_AGE_DAYS:
+        status = "STALE"
+        warnings.append(f"Latest completed OHLC is {age} days old.")
+    if instrument_id == "NASDAQ / NQ" and symbol != "NAS100_USD" and source != "oanda":
+        status = "WRONG_SYMBOL" if status == "PASS" else status
+        warnings.append("NASDAQ / NQ is not using the configured OANDA NAS100_USD workstation proxy.")
+    return {
+        "status": status,
+        "latest_date": latest_date,
+        "latest_age_days": age,
+        "source": source,
+        "symbol": symbol,
+        "warning": " ".join(warnings) if warnings else None,
+    }
+
+
 def build_instrument_workstation_ohlc(
     instrument_id: str,
     *,
@@ -107,6 +150,67 @@ def build_instrument_workstation_ohlc(
     cot_last = str(cot_block.get("latest_date") or "")[:10] if cot_block else None
     cot_rows = int(cot_block.get("weeks") or 0) if cot_block else 0
     price_audit = (cot_block or {}).get("price_audit") or {}
+
+    index_spec = resolve_workstation_index_source(instrument_id)
+    if index_spec:
+        index_daily, index_diag = load_workstation_index_daily_bars(
+            instrument_id,
+            window_start=cot_first or None,
+            refresh=False,
+        )
+        weekly_ohlc = derive_weekly_ohlc_from_daily(index_daily)
+        ohlc_first = weekly_ohlc[0]["date"] if weekly_ohlc else None
+        ohlc_last = weekly_ohlc[-1]["date"] if weekly_ohlc else None
+        common_first, common_last = _common_range(cot_first, cot_last, ohlc_first, ohlc_last)
+        aligned: list[dict[str, Any]] = []
+        missing = 0
+        if cot_block and cot_block.get("series"):
+            for row in cot_block["series"]:
+                d = str(row.get("date") or "")[:10]
+                if not d:
+                    continue
+                if common_first and d < common_first:
+                    continue
+                if common_last and d > common_last:
+                    continue
+                bar = _find_bar_as_of(weekly_ohlc, d)
+                if bar:
+                    aligned.append({**bar, "cot_date": d})
+                else:
+                    missing += 1
+        source = index_diag.get("source") or "oanda"
+        symbol = index_diag.get("source_symbol") or index_spec.get("oanda_symbol")
+        incomplete = bool(cot_rows > 0 and weekly_ohlc and common_first and cot_first and common_first > cot_first)
+        note = None
+        if not weekly_ohlc:
+            note = "Weekly OHLC unavailable."
+        elif incomplete:
+            note = "Price OHLC history incomplete — displaying common overlap only."
+        return {
+            "instrument_id": instrument_id,
+            "weekly_ohlc": weekly_ohlc,
+            "aligned_weekly_ohlc": aligned,
+            "price_source": f"{source}:{symbol}",
+            "canonical_symbol": symbol,
+            "canonical_source": source,
+            "cot_first_date": cot_first,
+            "cot_last_date": cot_last,
+            "cot_rows": cot_rows,
+            "ohlc_first_date": ohlc_first,
+            "ohlc_last_date": ohlc_last,
+            "ohlc_rows": len(weekly_ohlc),
+            "common_first_date": common_first,
+            "common_last_date": common_last,
+            "common_rows": len(aligned) if aligned else 0,
+            "missing_ohlc_weeks": missing,
+            "incomplete_history": incomplete or (not weekly_ohlc),
+            "note": note,
+            "price_quality": _price_quality(instrument_id, ohlc_last, source, symbol),
+            "price_audit": {
+                "workstation_index_source": index_spec,
+                "index_diagnostics": index_diag,
+            },
+        }
 
     tl = build_canonical_timeline(instrument_id, window_start=cot_first or None)
     if not tl:
@@ -203,12 +307,15 @@ def build_instrument_workstation_ohlc(
     elif incomplete:
         note = "Price OHLC history incomplete — displaying common overlap only."
 
+    source = price_audit.get("price_store_key") or tl.canonical_source
+    symbol = price_audit.get("canonical_symbol") or tl.canonical_symbol
+
     return {
         "instrument_id": instrument_id,
         "weekly_ohlc": weekly_ohlc,
         "aligned_weekly_ohlc": aligned,
-        "price_source": price_audit.get("price_store_key") or tl.canonical_source,
-        "canonical_symbol": price_audit.get("canonical_symbol") or tl.canonical_symbol,
+        "price_source": source,
+        "canonical_symbol": symbol,
         "canonical_source": tl.canonical_source,
         "cot_first_date": cot_first,
         "cot_last_date": cot_last,
@@ -224,6 +331,7 @@ def build_instrument_workstation_ohlc(
         "missing_ohlc_weeks": missing,
         "incomplete_history": incomplete or (not weekly_ohlc),
         "note": note,
+        "price_quality": _price_quality(instrument_id, ohlc_last, tl.canonical_source, symbol),
         "price_audit": {
             "fred_fallback_series": price_audit.get("fred_fallback_series"),
             "store_bar_count": price_audit.get("store_bar_count"),
@@ -258,6 +366,11 @@ def write_workstation_ohlc_exports(payload: dict[str, Any] | None = None) -> Pat
     OUT_PATH.write_text(text, encoding="utf-8")
     PUBLIC_OUT.parent.mkdir(parents=True, exist_ok=True)
     PUBLIC_OUT.write_text(text, encoding="utf-8")
+    # Publish to dist/data too so preview/build copies never drift from
+    # processed/public. sync_dist_exports() only copies confluence + macro maps,
+    # so without this the dist workstation OHLC only updated on a full build.
+    if DIST_OUT.parent.exists():
+        DIST_OUT.write_text(text, encoding="utf-8")
     return OUT_PATH
 
 

@@ -3,9 +3,9 @@
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
 export const CAMERA_DEFAULTS = {
-  rightOffset: 8,
+  rightOffset: 3,
   minBarSpacing: 0.35,
-  zoomFactor: 1.12,
+  zoomFactor: 1.22,
   defaultBarSpacing: 6,
 }
 

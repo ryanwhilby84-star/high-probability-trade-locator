@@ -233,41 +233,56 @@ def backfill_pair(
     warnings: list[str] = []
 
     checkpoint = _load_checkpoint(store_key)
-    if checkpoint and checkpoint.get("status") == "completed":
-        logger.info("%s: checkpoint completed — skipping", display)
-        rec = _baseline_record(store_key)
-        daily = normalize_daily_bars(rec.get("daily") or [])
-        return {
-            "instrument": store_key,
-            "display_symbol": display,
-            "oanda_symbol": oanda_symbol,
-            "status": "skipped_completed",
-            "bars_added": 0,
-            "earliest_date": daily[0]["date"] if daily else None,
-            "latest_date": daily[-1]["date"] if daily else None,
-            "total_bars_after_merge": len(daily),
-            "years_of_coverage": round(years_spanned(daily), 2) if daily else 0.0,
-            "can_10y_seasonality": _can_10y(daily),
-            "warnings": ["Resumed from completed checkpoint — no fetch performed"],
-        }
-
-    baseline = _baseline_record(store_key)
-    merged = normalize_daily_bars(baseline.get("daily") or [])
-    bars_before = len(merged)
+    baseline: InstrumentPriceRecord | None = None
+    merged: list[OhlcBar] = []
     resume_from: date | None = None
+    bars_before = 0
     chunks_fetched = 0
     bars_added_total = 0
 
-    if checkpoint and checkpoint.get("status") == "in_progress":
-        resume_from_str = checkpoint.get("next_from")
-        if resume_from_str:
-            try:
-                resume_from = _parse_date(resume_from_str)
-            except ValueError:
-                warnings.append(f"Invalid checkpoint next_from: {resume_from_str}")
-        chunks_fetched = int(checkpoint.get("chunks_fetched") or 0)
-        bars_added_total = int(checkpoint.get("bars_added_total") or 0)
-        warnings.extend(checkpoint.get("warnings") or [])
+    if checkpoint and checkpoint.get("status") == "completed":
+        rec = _baseline_record(store_key)
+        daily = normalize_daily_bars(rec.get("daily") or [])
+        latest = daily[-1]["date"] if daily else None
+        stale_after = (today - timedelta(days=3)).isoformat()
+        if latest and latest >= stale_after:
+            logger.info("%s: checkpoint completed — skipping", display)
+            return {
+                "instrument": store_key,
+                "display_symbol": display,
+                "oanda_symbol": oanda_symbol,
+                "status": "skipped_completed",
+                "bars_added": 0,
+                "earliest_date": daily[0]["date"] if daily else None,
+                "latest_date": latest,
+                "total_bars_after_merge": len(daily),
+                "years_of_coverage": round(years_spanned(daily), 2) if daily else 0.0,
+                "can_10y_seasonality": _can_10y(daily),
+                "warnings": ["Resumed from completed checkpoint — no fetch performed"],
+            }
+        logger.info("%s: checkpoint completed but stale (%s) — incremental refresh", display, latest)
+        warnings.append(f"Incremental refresh from {latest}")
+        baseline = rec
+        merged = daily
+        bars_before = len(merged)
+        resume_from = _parse_date(latest) + timedelta(days=1) if latest else target_start
+    else:
+        baseline = _baseline_record(store_key)
+        merged = normalize_daily_bars(baseline.get("daily") or [])
+        bars_before = len(merged)
+
+        if checkpoint and checkpoint.get("status") == "in_progress":
+            resume_from_str = checkpoint.get("next_from")
+            if resume_from_str:
+                try:
+                    resume_from = _parse_date(resume_from_str)
+                except ValueError:
+                    warnings.append(f"Invalid checkpoint next_from: {resume_from_str}")
+            chunks_fetched = int(checkpoint.get("chunks_fetched") or 0)
+            bars_added_total = int(checkpoint.get("bars_added_total") or 0)
+            warnings.extend(checkpoint.get("warnings") or [])
+
+    assert baseline is not None
 
     def _persist(next_from: date | None, *, status: str) -> None:
         daily_norm = normalize_daily_bars(merged)

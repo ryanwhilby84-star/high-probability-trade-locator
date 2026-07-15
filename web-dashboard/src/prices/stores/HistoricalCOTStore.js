@@ -17,6 +17,14 @@ let _subscriberCount = 0
 let _snapshotCache = null
 let _snapshotCacheKey = ''
 
+// Auto-refresh: detect a newly published cot_3y file while a workstation is open,
+// so the user never needs Ctrl+F5. We poll a cheap HEAD (etag/last-modified) and
+// only re-download the full JSON when the published version actually changed.
+const POLL_INTERVAL_MS = 45000
+let _polledTag = null
+let _pollTimer = null
+let _pollInFlight = false
+
 function emit() {
   _snapshotCache = null
   _snapshotCacheKey = ''
@@ -53,16 +61,76 @@ function prefetch() {
   return _promise
 }
 
+async function checkForNewVersion() {
+  if (_pollInFlight || _subscriberCount === 0) return
+  _pollInFlight = true
+  try {
+    let tag = null
+    try {
+      const head = await fetch(COT_3Y_PATH, { method: 'HEAD', cache: 'no-store' })
+      if (head.ok) tag = head.headers.get('etag') || head.headers.get('last-modified')
+    } catch {
+      tag = null
+    }
+
+    if (tag) {
+      if (_polledTag == null) {
+        _polledTag = tag // establish baseline, do not refetch on first observation
+      } else if (tag !== _polledTag) {
+        _polledTag = tag
+        if (_doc) await HistoricalCOTStore.refresh()
+      }
+      return
+    }
+
+    // Fallback for servers without HEAD/etag support: compare generated_at via GET.
+    try {
+      const res = await fetch(`${COT_3Y_PATH}?probe=${Date.now()}`, { cache: 'no-store' })
+      if (!res.ok) return
+      const next = await res.json()
+      const nextGen = next?.generated_at ?? null
+      const curGen = _doc?.generated_at ?? null
+      if (nextGen && nextGen !== curGen && next && typeof next === 'object') {
+        _doc = next
+        _loading = false
+        _error = null
+        emit()
+      }
+    } catch {
+      /* ignore transient poll errors */
+    }
+  } finally {
+    _pollInFlight = false
+  }
+}
+
+function startPolling() {
+  if (_pollTimer != null || typeof window === 'undefined') return
+  _pollTimer = window.setInterval(checkForNewVersion, POLL_INTERVAL_MS)
+}
+
+function stopPolling() {
+  if (_pollTimer != null && typeof window !== 'undefined') {
+    window.clearInterval(_pollTimer)
+  }
+  _pollTimer = null
+  _polledTag = null
+}
+
 export const HistoricalCOTStore = {
   STORE_NAME: 'HistoricalCOTStore',
 
   subscribe(listener) {
     _listeners.add(listener)
     _subscriberCount += 1
-    if (_subscriberCount === 1) prefetch()
+    if (_subscriberCount === 1) {
+      prefetch()
+      startPolling()
+    }
     return () => {
       _listeners.delete(listener)
       _subscriberCount = Math.max(0, _subscriberCount - 1)
+      if (_subscriberCount === 0) stopPolling()
     }
   },
 
@@ -130,6 +198,18 @@ export function invalidateCot3ySeriesCache() {
   _promise = null
   _fetchUrl = COT_3Y_PATH
   emit()
+}
+
+/**
+ * Manual "Reload latest data": drop the in-memory document, refetch with cache
+ * busting, and notify subscribers. Resolves with the fresh snapshot so callers
+ * can re-anchor the camera once the newest document is loaded.
+ */
+export async function reloadCot3ySeries() {
+  invalidateCot3ySeriesCache()
+  _polledTag = null
+  await prefetch()
+  return HistoricalCOTStore.getSnapshot()
 }
 
 export const COT_3Y_PATH_EXPORT = COT_3Y_PATH

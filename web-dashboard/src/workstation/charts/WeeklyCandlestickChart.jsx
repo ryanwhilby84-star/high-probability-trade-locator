@@ -54,6 +54,7 @@ export function WeeklyCandlestickChart({
   const onCrosshairMoveRef = React.useRef(onCrosshairMove)
   const onVisibleRangeChangeRef = React.useRef(onVisibleRangeChange)
   const onVisibleTimeRangeChangeRef = React.useRef(onVisibleTimeRangeChange)
+
   onCrosshairMoveRef.current = onCrosshairMove
   onVisibleRangeChangeRef.current = onVisibleRangeChange
   onVisibleTimeRangeChangeRef.current = onVisibleTimeRangeChange
@@ -85,6 +86,7 @@ export function WeeklyCandlestickChart({
     if (!el) return undefined
 
     let chart
+
     try {
       chart = createChart(el, {
         width: Math.max(el.clientWidth, 1),
@@ -153,6 +155,8 @@ export function WeeklyCandlestickChart({
       borderDownColor: WS_CHART.down,
       wickUpColor: WS_CHART.wickUp,
       wickDownColor: WS_CHART.wickDown,
+      priceLineVisible: false,
+      lastValueVisible: true,
     })
 
     const fairSeries = chart.addLineSeries({
@@ -172,10 +176,14 @@ export function WeeklyCandlestickChart({
     userZoomedRef.current = false
 
     const ro = new ResizeObserver(() => {
-      if (containerRef.current && chartRef.current) {
-        chartRef.current.applyOptions({ width: Math.max(containerRef.current.clientWidth, 1) })
-      }
+      if (!containerRef.current || !chartRef.current) return
+
+      chartRef.current.applyOptions({
+        width: Math.max(containerRef.current.clientWidth, 1),
+        height: Math.max(containerRef.current.clientHeight || height, 1),
+      })
     })
+
     ro.observe(el)
 
     chart.subscribeCrosshairMove((param) => {
@@ -183,14 +191,18 @@ export function WeeklyCandlestickChart({
         skipCrosshairEmitRef.current = false
         return
       }
+
       const handler = onCrosshairMoveRef.current
       if (!handler) return
+
       if (!param?.time) {
         handler(null)
         return
       }
+
       const candle = param.seriesData.get(candleSeries)
       const fair = param.seriesData.get(fairSeries)
+
       handler({
         time: param.time,
         candle: candle || null,
@@ -201,9 +213,11 @@ export function WeeklyCandlestickChart({
     const emitVisible = () => {
       const ts = chart.timeScale()
       const timeRange = ts.getVisibleRange()
+
       if (timeRange && onVisibleTimeRangeChangeRef.current) {
         onVisibleTimeRangeChangeRef.current(timeRange)
       }
+
       if (onVisibleRangeChangeRef.current) {
         onVisibleRangeChangeRef.current(ts.getVisibleLogicalRange())
       }
@@ -212,8 +226,10 @@ export function WeeklyCandlestickChart({
     chart.timeScale().subscribeVisibleLogicalRangeChange(emitVisible)
 
     return () => {
+      chart.timeScale().unsubscribeVisibleLogicalRangeChange(emitVisible)
       ro.disconnect()
       chart.remove()
+
       chartRef.current = null
       candleRef.current = null
       fairRef.current = null
@@ -234,14 +250,25 @@ export function WeeklyCandlestickChart({
     }
 
     const el = containerRef.current
-    if (el && chartRef.current && el.clientWidth > 0) {
-      chartRef.current.applyOptions({ width: el.clientWidth, height })
+
+    if (el && chartRef.current) {
+      chartRef.current.applyOptions({
+        width: Math.max(el.clientWidth, 1),
+        height: Math.max(el.clientHeight || height, 1),
+      })
     }
 
     const key = data.length ? `${data[0].time}-${data.length}` : ''
-    if (data.length && autoFit && !userZoomedRef.current && (!fittedRef.current || barsKeyRef.current !== key)) {
+
+    if (
+      data.length &&
+      autoFit &&
+      !userZoomedRef.current &&
+      (!fittedRef.current || barsKeyRef.current !== key)
+    ) {
       barsKeyRef.current = key
       fittedRef.current = true
+
       try {
         chartRef.current?.timeScale().fitContent()
       } catch (err) {
@@ -252,7 +279,9 @@ export function WeeklyCandlestickChart({
 
   React.useEffect(() => {
     if (!fairRef.current) return
+
     const data = prepareLightweightLinePoints(fairValuePoints)
+
     try {
       fairRef.current.setData(data)
     } catch (err) {
@@ -262,7 +291,9 @@ export function WeeklyCandlestickChart({
 
   React.useEffect(() => {
     if (!chartRef.current || !controlledVisibleRange) return
+
     skipCrosshairEmitRef.current = true
+
     try {
       chartRef.current.timeScale().setVisibleRange(controlledVisibleRange)
     } catch (err) {
@@ -272,13 +303,17 @@ export function WeeklyCandlestickChart({
 
   React.useEffect(() => {
     if (!chartRef.current || !candleRef.current) return
+
     if (externalCrosshairTime == null) {
       chartRef.current.clearCrosshairPosition()
       return
     }
+
     const bar = findBarByTime(barsRef.current, externalCrosshairTime)
     if (!bar) return
+
     skipCrosshairEmitRef.current = true
+
     try {
       chartRef.current.setCrosshairPosition(bar.close, bar.time, candleRef.current)
     } catch (err) {
@@ -286,5 +321,16 @@ export function WeeklyCandlestickChart({
     }
   }, [externalCrosshairTime])
 
-  return <div ref={containerRef} className={`irw-candle-chart ${className}`.trim()} />
+  return (
+    <div
+      ref={containerRef}
+      className={`irw-candle-chart ${className}`.trim()}
+      style={{
+        width: '100%',
+        height: `${height}px`,
+        minHeight: `${height}px`,
+        position: 'relative',
+      }}
+    />
+  )
 }

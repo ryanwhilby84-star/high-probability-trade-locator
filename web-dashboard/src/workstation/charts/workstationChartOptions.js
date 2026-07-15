@@ -37,19 +37,24 @@ export function formatWorkstationAxisPrice(value) {
   return `${sign}${abs.toFixed(2)}`
 }
 
-/** COT line drawing uses ~78% of panel height — comfortable padding, panel size unchanged. */
-const COT_RENDER_FILL = 0.78
-const COT_RENDER_PAD = (1 - COT_RENDER_FILL) / 2
-
-/** Per-panel vertical breathing room — keeps drawings centred inside each frame. */
+/**
+ * Per-panel vertical breathing room — tight margins so each line uses more of the
+ * pane without touching the edges. Autoscale is driven by the visible analytical
+ * line only (helper/zero/anchor series are excluded), so zero only appears when it
+ * naturally sits inside the visible data range.
+ */
 export function scaleMarginsForPanel(panelId, showTimeAxis = false) {
+  // Price is a compact market-context viewport — fill the shorter pane naturally
+  // (no large empty regions) while keeping its own independent, undistorted Y scale.
   if (panelId === PANEL_IDS.price) {
-    return { top: 0.18, bottom: 0.16 }
+    return { top: 0.1, bottom: 0.1 }
   }
+  // Non-Reportable (bottom pane, carries the shared time axis) — roomiest.
   if (showTimeAxis) {
-    return { top: COT_RENDER_PAD + 0.02, bottom: 0.22 }
+    return { top: 0.2, bottom: 0.2 }
   }
-  return { top: COT_RENDER_PAD + 0.01, bottom: COT_RENDER_PAD + 0.01 }
+  // Commercial / Non-Commercial — the primary study panes.
+  return { top: 0.18, bottom: 0.18 }
 }
 
 /** Identical time-scale + layout options — every pane must match for pixel alignment. */
@@ -97,7 +102,7 @@ export function createWorkstationChartOptions({
       visible: showTimeAxis,
       timeVisible: showTimeAxis,
       secondsVisible: false,
-      rightOffset: 8,
+      rightOffset: 3,
       barSpacing: compact ? 6 : 7,
       minBarSpacing: 0.35,
       fixLeftEdge: false,

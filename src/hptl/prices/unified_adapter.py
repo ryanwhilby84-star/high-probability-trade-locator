@@ -6,9 +6,11 @@ from typing import Any
 
 from hptl.alpha_vantage.alpha_prices import fetch_instrument_prices as av_fetch
 from hptl.alpha_vantage.client import AlphaVantageApiError
+from hptl.config import get_oanda_api_key
 from hptl.markets.instrument_registry import InstrumentSpec, get_instrument
 from hptl.oanda.oanda_client import OandaApiError
 from hptl.oanda.oanda_prices import fetch_instrument_prices as oanda_fetch
+from hptl.prices.cot_fail_backfill import FRED_COT_FAIL_SERIES, OANDA_COT_FAIL_PAIRS, fred_series_to_daily_bars
 from hptl.prices.coverage import load_price_coverage, oanda_symbol_for, select_price_source
 from hptl.prices.models import (
     InstrumentPriceRecord,
@@ -17,6 +19,9 @@ from hptl.prices.models import (
     build_history_meta,
     compute_range_52w,
 )
+
+
+OANDA_STORE_SYMBOL: dict[str, str] = {store_key: symbol for _, symbol, store_key in OANDA_COT_FAIL_PAIRS}
 
 
 class UnifiedPriceAdapter:
@@ -47,7 +52,11 @@ class UnifiedPriceAdapter:
             }
 
         source = self.source_for(instrument_id)
-        if not source:
+        if (
+            not source
+            and instrument_id not in FRED_COT_FAIL_SERIES
+            and instrument_id not in OANDA_STORE_SYMBOL
+        ):
             return {
                 "instrument_id": instrument_id,
                 "price": None,
@@ -57,20 +66,41 @@ class UnifiedPriceAdapter:
                 "history": None,
                 "error": "unsupported_instrument",
             }
+        if not source and instrument_id in FRED_COT_FAIL_SERIES:
+            source = "fred"
 
         price: PriceSnapshot | None = None
         daily: list[OhlcBar] = []
         weekly: list[OhlcBar] = []
         err: str | None = None
 
+        oanda_sym = OANDA_STORE_SYMBOL.get(instrument_id)
+        if oanda_sym and get_oanda_api_key():
+            try:
+                price, daily, weekly = oanda_fetch(oanda_sym)
+                if daily:
+                    source = "oanda"
+            except OandaApiError:
+                price = None
+                daily = []
+                weekly = []
+
         try:
-            if source == "oanda":
-                sym = oanda_symbol_for(spec, self._coverage)
-                if not sym:
-                    raise OandaApiError(f"No OANDA symbol for {instrument_id}")
-                price, daily, weekly = oanda_fetch(sym)
-            else:
-                price, daily, weekly = av_fetch(spec)
+            if not daily:
+                if instrument_id in FRED_COT_FAIL_SERIES and instrument_id not in OANDA_STORE_SYMBOL:
+                    fred_daily = fred_series_to_daily_bars(FRED_COT_FAIL_SERIES[instrument_id])
+                    if fred_daily:
+                        daily = fred_daily
+                        source = "fred"
+                        price = {"mid": daily[-1]["close"], "as_of": daily[-1]["date"]}
+                if not daily:
+                    if source == "oanda":
+                        sym = oanda_symbol_for(spec, self._coverage) or oanda_sym
+                        if not sym:
+                            raise OandaApiError(f"No OANDA symbol for {instrument_id}")
+                        price, daily, weekly = oanda_fetch(sym)
+                    else:
+                        price, daily, weekly = av_fetch(spec)
         except OandaApiError:
             if source == "oanda" and instrument_id in set(self._coverage.get("alpha_supported") or []):
                 try:
@@ -86,6 +116,14 @@ class UnifiedPriceAdapter:
         range_52w = compute_range_52w(daily)
         history = build_history_meta(daily, weekly, range_52w) if daily or weekly else None
 
+        price_scale = None
+        if source == "oanda" and daily:
+            sym = oanda_sym or (oanda_symbol_for(spec, self._coverage) if spec else None)
+            if sym:
+                price_scale = {"source": "oanda", "symbol": sym}
+        elif source == "fred" and instrument_id in FRED_COT_FAIL_SERIES:
+            price_scale = {"source": "fred", "series_id": FRED_COT_FAIL_SERIES[instrument_id]}
+
         return {
             "instrument_id": instrument_id,
             "price": price,
@@ -94,6 +132,8 @@ class UnifiedPriceAdapter:
             "range_52w": range_52w,
             "history": history,
             "error": err,
+            "price_scale": price_scale,
+            "_fetched_via": source,
         }
 
     def fetch_many(

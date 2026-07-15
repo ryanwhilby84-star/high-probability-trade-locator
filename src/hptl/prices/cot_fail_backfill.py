@@ -31,6 +31,7 @@ OANDA_COT_FAIL_PAIRS: tuple[BackfillPair, ...] = (
     ("WHEAT", "WHEAT_USD", "Wheat"),
     ("SOYBEAN", "SOYBN_USD", "Soybeans"),
     ("SUGAR", "SUGAR_USD", "Sugar"),
+    ("COPPER", "XCU_USD", "Copper / HG"),
     ("PLAT", "XPT_USD", "Platinum"),
     ("PALL", "XPD_USD", "Palladium"),
     ("BTC", "BTC_USD", "Bitcoin"),

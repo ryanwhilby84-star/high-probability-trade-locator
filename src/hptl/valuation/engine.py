@@ -12,13 +12,13 @@ Do not route new FX dashboard valuation work through V1 or V2.
 """
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from hptl.markets.instrument_registry import get_instrument
 
 BIAS_UNAVAILABLE = "UNAVAILABLE"
 
-# Planned Valuation V3 models (not wired until phase gate passes).
 ASSET_CLASS_ROADMAP: dict[str, dict[str, str]] = {
     "fx": {
         "phase": "V3.0",
@@ -75,6 +75,26 @@ def _valuation_asset_class(market: str) -> str:
     return spec.asset_class or "other"
 
 
+def _skipped_valuation(market: str, as_of_week: str | None, asset_class: str) -> dict[str, Any]:
+    return {
+        "market": market,
+        "as_of_week": as_of_week,
+        "asset_class": asset_class,
+        "wired": False,
+        "valuation_state": BIAS_UNAVAILABLE,
+        "valuation_bias": BIAS_UNAVAILABLE,
+        "valuation_score": None,
+        "fair_value": None,
+        "deviation_pct": None,
+        "confidence": "none",
+        "model_id": None,
+        "valuation_phase": "SKIPPED",
+        "driver_summary": "Valuation skipped for fast COT/dashboard export.",
+        "valuation_reason": "Skipped by HPTL_SKIP_VALUATION=1.",
+        "pass": False,
+    }
+
+
 def compute_valuation(
     *,
     market: str,
@@ -83,6 +103,10 @@ def compute_valuation(
 ) -> dict[str, Any]:
     """Return fundamental valuation state from approved V3 models only."""
     asset_class = _valuation_asset_class(market)
+
+    if os.environ.get("HPTL_SKIP_VALUATION") == "1":
+        return _skipped_valuation(market, as_of_week, asset_class)
+
     if asset_class == "fx":
         from hptl.valuation.fx_carry_real_yield_v3 import compute_fx_market_v3
 

@@ -9,6 +9,7 @@ import {
   plotXFromClientX,
 } from './cameraViewport.js'
 import {
+  CAMERA_DEFAULTS,
   cameraForWeekWindow,
   cameraShowAll,
   camerasEqual,
@@ -26,8 +27,7 @@ import {
   magnifyByAxisDrag,
 } from './verticalStretch.js'
 import {
-  applyVerticalMagnificationToPane,
-  applyVerticalMagnificationToPanes,
+  applyVerticalCameraToPane,
   readPaneVerticalSpanPx,
 } from './verticalStretchViewport.js'
 
@@ -76,8 +76,22 @@ function leadPaneChart(panes) {
   return panes.values().next().value?.chart ?? null
 }
 
+function defaultVerticalCamera() {
+  return { factor: VERTICAL_STRETCH_DEFAULTS.factor, panOffset: 0 }
+}
+
 /**
- * Master camera controller — single horizontal viewport, passive chart panes.
+ * Master camera controller.
+ *
+ * Horizontal model: ONE shared camera (barSpacing + rightOffset) applied to every
+ * pane. Panes are passive — they never own horizontal navigation, so there is a
+ * single source of truth and no chart-to-chart echo. Gestures mutate the shared
+ * camera and it is broadcast to all panes.
+ *
+ * Vertical model: each pane owns an INDEPENDENT vertical camera `{ factor, panOffset }`
+ * stored in `verticalCamerasRef` keyed by panelId. Adjusting one pane's vertical
+ * camera only re-applies that pane's autoscale provider — the other panes' Y ranges
+ * are never touched. `factor === 1 && panOffset === 0` == Fit Y for the visible range.
  */
 export function useMasterCamera({
   timelineRowsRef,
@@ -97,10 +111,10 @@ export function useMasterCamera({
   const draggingRef = React.useRef(false)
   const pendingPanRef = React.useRef(0)
   const pendingZoomRef = React.useRef(null)
-  const priceVerticalRef = React.useRef(VERTICAL_STRETCH_DEFAULTS.factor)
-  const cotVerticalRef = React.useRef(VERTICAL_STRETCH_DEFAULTS.factor)
-  const pricePanOffsetRef = React.useRef(0)
-  const pendingPricePanRef = React.useRef(0)
+
+  // Independent per-pane vertical cameras + coalesced per-pane vertical pan deltas.
+  const verticalCamerasRef = React.useRef(new Map())
+  const pendingVerticalPanRef = React.useRef(new Map())
 
   const rows = timelineRowsRef?.current ?? timelineRowsRefInternal.current
   timelineRowsRefInternal.current = rows
@@ -110,6 +124,15 @@ export function useMasterCamera({
   const onCrosshairClearRef = React.useRef(onCrosshairClear)
   onCrosshairTimeRef.current = onCrosshairTime
   onCrosshairClearRef.current = onCrosshairClear
+
+  const getVerticalCamera = React.useCallback((panelId) => {
+    let cam = verticalCamerasRef.current.get(panelId)
+    if (!cam) {
+      cam = defaultVerticalCamera()
+      verticalCamerasRef.current.set(panelId, cam)
+    }
+    return cam
+  }, [])
 
   const scheduleGeometryBump = React.useMemo(
     () =>
@@ -144,20 +167,16 @@ export function useMasterCamera({
     return readPlotWidthFromChart(chart)
   }, [])
 
-  const pushVerticalMagnification = React.useCallback(() => {
-    if (panesRef.current.size === 0) return
-    applyVerticalMagnificationToPanes(panesRef.current, {
-      priceFactor: priceVerticalRef.current,
-      cotFactor: cotVerticalRef.current,
-      pricePanOffset: pricePanOffsetRef.current,
-    })
-    if (cameraRef.current) {
-      applyingRef.current = true
-      applyCameraToPanes(panesRef.current, cameraRef.current)
-      applyingRef.current = false
-    }
-    bumpGeometry()
-  }, [bumpGeometry])
+  // Re-apply a single pane's independent vertical camera. Never touches other panes.
+  const pushVerticalCamera = React.useCallback(
+    (panelId) => {
+      const pane = panesRef.current.get(panelId)
+      if (!pane) return
+      applyVerticalCameraToPane(pane, getVerticalCamera(panelId))
+      bumpGeometry()
+    },
+    [bumpGeometry, getVerticalCamera],
+  )
 
   const pushCamera = React.useCallback(() => {
     const camera = cameraRef.current
@@ -173,6 +192,8 @@ export function useMasterCamera({
       if (!nextCamera) return
       const plotWidth = getPlotWidth()
       const clamped = clampStretchCamera(nextCamera, plotWidth)
+      // Ignore updates that are effectively identical — avoids float oscillation
+      // and redundant broadcasts.
       if (!force && camerasEqual(cameraRef.current, clamped)) return
       cameraRef.current = clamped
       pushCamera()
@@ -234,15 +255,35 @@ export function useMasterCamera({
     [emitCrosshairTime],
   )
 
+  // Imperatively scroll every pane so the latest bar sits `rightOffset` bars from
+  // the right edge. Home/All/preset only mutate barSpacing+rightOffset via
+  // applyOptions, which is a no-op when those values are unchanged — so after new
+  // COT weeks are appended (or on instrument switch) the view stays pinned to the
+  // previous right-most bar and the newest week is hidden. scrollToPosition forces
+  // a re-anchor to the latest bar regardless. Panning/zoom are untouched.
+  const anchorPanesToLatest = React.useCallback(() => {
+    const offset = cameraRef.current?.rightOffset ?? CAMERA_DEFAULTS.rightOffset
+    for (const pane of panesRef.current.values()) {
+      try {
+        pane.chart.timeScale().scrollToPosition(offset, false)
+      } catch {
+        /* ignore stale chart */
+      }
+    }
+  }, [])
+
   const goHome = React.useCallback(
     (weeks = homeWeeksRef.current) => {
       const timelineRows = timelineRowsRefInternal.current
       if (!timelineRows.length) return
       const plotWidth = getPlotWidth()
       const next = cameraForWeekWindow(timelineRows, weeks, plotWidth)
-      if (next) setCamera(next, { force: true })
+      if (next) {
+        setCamera(next, { force: true })
+        anchorPanesToLatest()
+      }
     },
-    [getPlotWidth, setCamera],
+    [getPlotWidth, setCamera, anchorPanesToLatest],
   )
 
   const goAll = React.useCallback(() => {
@@ -250,8 +291,11 @@ export function useMasterCamera({
     if (!timelineRows.length) return
     const plotWidth = getPlotWidth()
     const next = cameraShowAll(timelineRows, plotWidth)
-    if (next) setCamera(next, { force: true })
-  }, [getPlotWidth, setCamera])
+    if (next) {
+      setCamera(next, { force: true })
+      anchorPanesToLatest()
+    }
+  }, [getPlotWidth, setCamera, anchorPanesToLatest])
 
   const goPreset = React.useCallback(
     (weeks) => {
@@ -262,16 +306,18 @@ export function useMasterCamera({
         weeks == null
           ? cameraShowAll(timelineRows, plotWidth)
           : cameraForWeekWindow(timelineRows, weeks, plotWidth)
-      if (next) setCamera(next, { force: true })
+      if (next) {
+        setCamera(next, { force: true })
+        anchorPanesToLatest()
+      }
     },
-    [getPlotWidth, setCamera],
+    [getPlotWidth, setCamera, anchorPanesToLatest],
   )
 
   const resetCamera = React.useCallback(() => {
     cameraRef.current = null
-    priceVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
-    cotVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
-    pricePanOffsetRef.current = 0
+    verticalCamerasRef.current.clear()
+    pendingVerticalPanRef.current.clear()
     lastCrosshairTimeRef.current = null
     crosshairSourceRef.current = null
     for (const pane of panesRef.current.values()) {
@@ -292,75 +338,91 @@ export function useMasterCamera({
     [commitPendingPan],
   )
 
-  const resetVerticalMagnification = React.useCallback(
-    (zone = 'all') => {
-      let changed = false
-      if (zone === 'all' || zone === 'price') {
-        if (!verticalStretchEqual(priceVerticalRef.current, VERTICAL_STRETCH_DEFAULTS.factor)) {
-          priceVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
-          changed = true
-        }
-      }
-      if (zone === 'all' || zone === 'cot') {
-        if (!verticalStretchEqual(cotVerticalRef.current, VERTICAL_STRETCH_DEFAULTS.factor)) {
-          cotVerticalRef.current = VERTICAL_STRETCH_DEFAULTS.factor
-          changed = true
-        }
-      }
-      if (changed) pushVerticalMagnification()
-    },
-    [pushVerticalMagnification],
-  )
-
+  // Y-axis drag on a pane → vertically scale ONLY that pane.
   const adjustVerticalMagnification = React.useCallback(
-    (deltaYPixels, zone = 'cot') => {
-      if (!deltaYPixels) return
-      const targetRef = zone === 'price' ? priceVerticalRef : cotVerticalRef
-      const next = magnifyByAxisDrag(targetRef.current, deltaYPixels)
-      if (verticalStretchEqual(targetRef.current, next)) return
-      targetRef.current = next
-      pushVerticalMagnification()
+    (deltaYPixels, panelId) => {
+      if (!deltaYPixels || !panelId) return
+      const cam = getVerticalCamera(panelId)
+      const next = magnifyByAxisDrag(cam.factor, deltaYPixels)
+      if (verticalStretchEqual(cam.factor, next)) return
+      cam.factor = next
+      pushVerticalCamera(panelId)
     },
-    [pushVerticalMagnification],
+    [getVerticalCamera, pushVerticalCamera],
   )
 
-  const commitPendingPricePan = React.useMemo(
+  // Fit Y for one pane: reset its vertical camera to native visible-range autoscale.
+  const fitVertical = React.useCallback(
+    (panelId) => {
+      if (!panelId) return
+      const cam = getVerticalCamera(panelId)
+      cam.factor = VERTICAL_STRETCH_DEFAULTS.factor
+      cam.panOffset = 0
+      pushVerticalCamera(panelId)
+    },
+    [getVerticalCamera, pushVerticalCamera],
+  )
+
+  const resetVerticalMagnification = React.useCallback(
+    (panelId = 'all') => {
+      if (panelId !== 'all') {
+        fitVertical(panelId)
+        return
+      }
+      verticalCamerasRef.current.clear()
+      pendingVerticalPanRef.current.clear()
+      for (const [id, pane] of panesRef.current) {
+        applyVerticalCameraToPane(pane, getVerticalCamera(id))
+      }
+      bumpGeometry()
+    },
+    [bumpGeometry, fitVertical, getVerticalCamera],
+  )
+
+  const commitPendingVerticalPan = React.useMemo(
     () =>
       createRafCoalescer(() => {
-        const deltaY = pendingPricePanRef.current
-        pendingPricePanRef.current = 0
-        if (!deltaY) return
-        const pane = panesRef.current.get(PANEL_IDS.price)
-        const series = pane?.primarySeries
-        const chart = pane?.chart
-        if (!series || !chart) return
-        try {
-          const chartEl = chart.chartElement?.()
-          const height = chartEl?.clientHeight ?? 0
-          if (height < 40) return
-          const yTop = Math.round(height * 0.2)
-          const yBottom = Math.round(height * 0.8)
-          const priceTop = series.coordinateToPrice(yTop)
-          const priceBottom = series.coordinateToPrice(yBottom)
-          if (priceTop == null || priceBottom == null) return
-          const plotPx = Math.max(yBottom - yTop, 1)
-          const pricePerPixel = (priceBottom - priceTop) / plotPx
-          pricePanOffsetRef.current -= deltaY * pricePerPixel
-          pushVerticalMagnification()
-        } catch {
-          /* ignore stale chart */
+        const pending = pendingVerticalPanRef.current
+        if (pending.size === 0) return
+        for (const [panelId, deltaY] of pending) {
+          if (!deltaY) continue
+          const pane = panesRef.current.get(panelId)
+          const series = pane?.primarySeries
+          const chart = pane?.chart
+          if (!series || !chart || pane.syncOnly) continue
+          try {
+            const chartEl = chart.chartElement?.()
+            const height = chartEl?.clientHeight ?? 0
+            if (height < 40) continue
+            const yTop = Math.round(height * 0.2)
+            const yBottom = Math.round(height * 0.8)
+            const priceTop = series.coordinateToPrice(yTop)
+            const priceBottom = series.coordinateToPrice(yBottom)
+            if (priceTop == null || priceBottom == null) continue
+            const plotPx = Math.max(yBottom - yTop, 1)
+            const pricePerPixel = (priceBottom - priceTop) / plotPx
+            const cam = getVerticalCamera(panelId)
+            cam.panOffset -= deltaY * pricePerPixel
+            applyVerticalCameraToPane(pane, cam)
+          } catch {
+            /* ignore stale chart */
+          }
         }
+        pending.clear()
+        bumpGeometry()
       }),
-    [pushVerticalMagnification],
+    [bumpGeometry, getVerticalCamera],
   )
 
-  const panPriceByPixels = React.useCallback(
-    (deltaYPixels) => {
-      if (!deltaYPixels) return
-      pendingPricePanRef.current += deltaYPixels
-      commitPendingPricePan()
+  // Vertical plot-drag inside a pane → reposition ONLY that pane's line (Y offset).
+  const panPaneVerticalByPixels = React.useCallback(
+    (panelId, deltaYPixels) => {
+      if (!panelId || !deltaYPixels) return
+      const prev = pendingVerticalPanRef.current.get(panelId) ?? 0
+      pendingVerticalPanRef.current.set(panelId, prev + deltaYPixels)
+      commitPendingVerticalPan()
     },
-    [commitPendingPricePan],
+    [commitPendingVerticalPan],
   )
 
   const zoomAtClientX = React.useCallback(
@@ -424,18 +486,18 @@ export function useMasterCamera({
             return { from, to }
           })()
         : null
+    const verticalCameras = {}
+    for (const id of panesRef.current.keys()) {
+      verticalCameras[id] = { ...getVerticalCamera(id) }
+    }
     return {
       logicalRange,
       camera,
-      verticalMagnification: {
-        price: priceVerticalRef.current,
-        cot: cotVerticalRef.current,
-        pricePanOffset: pricePanOffsetRef.current,
-      },
+      verticalCameras,
       crosshairTime: lastCrosshairTimeRef.current,
       panes: panesRef.current,
     }
-  }, [])
+  }, [getVerticalCamera])
 
   const registerPane = React.useCallback(
     (panelId, api) => {
@@ -459,11 +521,8 @@ export function useMasterCamera({
         applyingRef.current = false
       }
 
-      applyVerticalMagnificationToPane(api, {
-        priceFactor: priceVerticalRef.current,
-        cotFactor: cotVerticalRef.current,
-        pricePanOffset: pricePanOffsetRef.current,
-      })
+      // Apply this pane's own independent vertical camera (default = Fit Y).
+      applyVerticalCameraToPane(api, getVerticalCamera(panelId))
 
       if (lastCrosshairTimeRef.current != null) {
         syncingCrosshairRef.current = true
@@ -517,21 +576,20 @@ export function useMasterCamera({
         if (crosshairSourceRef.current === panelId) crosshairSourceRef.current = null
       }
     },
-    [bumpGeometry, scheduleCrosshairSync, timelineRowsRef],
+    [bumpGeometry, getVerticalCamera, scheduleCrosshairSync, timelineRowsRef],
   )
 
   React.useEffect(() => {
     if (!import.meta.env?.DEV || typeof window === 'undefined') return undefined
+    const snapshotVerticalCameras = () => {
+      const out = {}
+      for (const [id, cam] of verticalCamerasRef.current) out[id] = { ...cam }
+      return out
+    }
     window.__COT_WS_CAMERA__ = {
       getCamera: () => JSON.parse(JSON.stringify(cameraRef.current)),
-      getVerticalMagnification: () => ({
-        price: priceVerticalRef.current,
-        cot: cotVerticalRef.current,
-      }),
-      getVerticalStretch: () => ({
-        price: priceVerticalRef.current,
-        cot: cotVerticalRef.current,
-      }),
+      getVerticalCameras: snapshotVerticalCameras,
+      getVerticalMagnification: snapshotVerticalCameras,
       getVerticalMetrics: () => {
         const out = {}
         for (const [id, pane] of panesRef.current) {
@@ -539,6 +597,7 @@ export function useMasterCamera({
         }
         return out
       },
+      fitVertical,
       resetVerticalMagnification,
       getTimelineBounds: () => {
         const rows = timelineRowsRefInternal.current
@@ -567,7 +626,7 @@ export function useMasterCamera({
     return () => {
       delete window.__COT_WS_CAMERA__
     }
-  }, [goAll, goHome, resetVerticalMagnification])
+  }, [goAll, goHome, fitVertical, resetVerticalMagnification])
 
   return {
     registerPane,
@@ -576,9 +635,10 @@ export function useMasterCamera({
     goPreset,
     resetCamera,
     panByPixels,
-    panPriceByPixels,
+    panPaneVerticalByPixels,
     zoomAtClientX,
     adjustVerticalMagnification,
+    fitVertical,
     resetVerticalMagnification,
     onDragStart,
     onDragEnd,

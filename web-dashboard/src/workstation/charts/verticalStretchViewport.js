@@ -5,56 +5,53 @@ const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
 function breathMarginsPx(panelId, stretchFactor) {
   const factor = clampVerticalStretch(stretchFactor)
-  const isPrice = panelId === PANEL_IDS.price
-  const base = isPrice ? 36 : 22
-  const scaled = base + Math.max(0, factor - 1) * (isPrice ? 6 : 4)
-  const px = Math.round(Math.min(isPrice ? 72 : 48, scaled))
+  // Price sits in a compact top pane. Keep its breathing room small and constant
+  // so a manual vertical stretch actually magnifies the candles instead of being
+  // swallowed by fixed pixel padding. COT panes are tall, so they keep the larger,
+  // factor-scaled margins that give the "best version so far" look.
+  if (panelId === PANEL_IDS.price) {
+    return { above: 8, below: 8 }
+  }
+  const scaled = 22 + Math.max(0, factor - 1) * 4
+  const px = Math.round(Math.min(48, scaled))
   return { above: px, below: px }
 }
 
-/** Shrink visible price range around its center — drawings render taller. */
-export function createVerticalStretchAutoscaleProvider(stretchFactor, panelId = null) {
+/**
+ * Independent per-pane vertical camera.
+ *
+ * A pane's vertical camera is `{ factor, panOffset }`:
+ *   - `factor`   — Y zoom/stretch around the visible center (1 = native fit).
+ *   - `panOffset`— additive Y shift in price units (moves the line up/down).
+ *
+ * At `factor === 1` and `panOffset === 0` the provider returns the chart's native
+ * autoscale, which Lightweight Charts computes from the currently visible time
+ * range only — i.e. this is exactly "Fit Y for the visible date range". Because
+ * each pane owns its own provider instance, adjusting one pane never touches the
+ * Y range of any other pane.
+ */
+export function createVerticalCameraAutoscaleProvider({
+  stretchFactor,
+  panOffset = 0,
+  panelId = null,
+}) {
   const factor = clampVerticalStretch(stretchFactor)
+  const stretched = Math.abs(factor - VERTICAL_STRETCH_DEFAULTS.factor) >= 0.005
+  const shifted = Boolean(panOffset)
+
   return (baseImplementation) => {
     const info = baseImplementation()
     if (!info?.priceRange) return info
 
-    const { minValue, maxValue } = info.priceRange
-    if (!isNum(minValue) || !isNum(maxValue)) return info
-    const span = maxValue - minValue
-    if (span <= 0) return info
-
-    if (Math.abs(factor - VERTICAL_STRETCH_DEFAULTS.factor) < 0.005) {
-      return info
-    }
-
-    const center = (minValue + maxValue) / 2
-    const half = span / (2 * factor)
-    const margins = breathMarginsPx(panelId, factor)
-    return {
-      ...info,
-      priceRange: {
-        minValue: center - half,
-        maxValue: center + half,
-      },
-      margins,
-    }
-  }
-}
-
-/** Price-only composition — vertical stretch + in-panel vertical pan offset. */
-export function createPriceCompositionAutoscaleProvider({ stretchFactor, panOffset = 0 }) {
-  const factor = clampVerticalStretch(stretchFactor)
-  return (baseImplementation) => {
-    const info = baseImplementation()
-    if (!info?.priceRange) return info
+    // Default camera → hand back the native visible-range autoscale untouched.
+    if (!stretched && !shifted) return info
 
     let { minValue, maxValue } = info.priceRange
     if (!isNum(minValue) || !isNum(maxValue)) return info
     let span = maxValue - minValue
     if (span <= 0) return info
 
-    if (Math.abs(factor - VERTICAL_STRETCH_DEFAULTS.factor) >= 0.005) {
+    if (stretched) {
       const center = (minValue + maxValue) / 2
       const half = span / (2 * factor)
       minValue = center - half
@@ -62,38 +59,30 @@ export function createPriceCompositionAutoscaleProvider({ stretchFactor, panOffs
       span = maxValue - minValue
     }
 
-    if (panOffset !== 0) {
+    if (shifted) {
       minValue += panOffset
       maxValue += panOffset
     }
 
-    const margins = breathMarginsPx(PANEL_IDS.price, factor)
     return {
       ...info,
       priceRange: { minValue, maxValue },
-      margins,
+      margins: breathMarginsPx(panelId, factor),
     }
   }
 }
 
-export function applyVerticalStretchToSeries(series, stretchFactor, panelId = null) {
+export function applyVerticalCameraToSeries(
+  series,
+  { stretchFactor, panOffset = 0, panelId = null },
+) {
   if (!series) return
   try {
     series.applyOptions({
-      autoscaleInfoProvider: createVerticalStretchAutoscaleProvider(stretchFactor, panelId),
-    })
-  } catch {
-    /* ignore stale series */
-  }
-}
-
-export function applyPriceCompositionToSeries(series, { stretchFactor, panOffset = 0 }) {
-  if (!series) return
-  try {
-    series.applyOptions({
-      autoscaleInfoProvider: createPriceCompositionAutoscaleProvider({
+      autoscaleInfoProvider: createVerticalCameraAutoscaleProvider({
         stretchFactor,
         panOffset,
+        panelId,
       }),
     })
   } catch {
@@ -101,51 +90,17 @@ export function applyPriceCompositionToSeries(series, { stretchFactor, panOffset
   }
 }
 
-export function applyVerticalStretchToPane(pane, stretchFactor) {
-  if (!pane || pane.syncOnly) return
-  applyVerticalStretchToSeries(pane.primarySeries, stretchFactor)
-}
-
-export function magnificationFactorForPane(panelId, { priceFactor, cotFactor }) {
-  if (panelId === PANEL_IDS.price) return priceFactor
-  return cotFactor
-}
-
-export function applyVerticalMagnificationToPane(
-  pane,
-  { priceFactor, cotFactor, pricePanOffset = 0 },
-) {
-  if (!pane || pane.syncOnly) return
-  if (pane.panelId === PANEL_IDS.price) {
-    applyPriceCompositionToSeries(pane.primarySeries, {
-      stretchFactor: priceFactor,
-      panOffset: pricePanOffset,
-    })
-    return
-  }
-  const factor = magnificationFactorForPane(pane.panelId, { priceFactor, cotFactor })
-  applyVerticalStretchToSeries(pane.primarySeries, factor, pane.panelId)
-}
-
-export function applyVerticalMagnificationToPanes(
-  panes,
-  { priceFactor, cotFactor, pricePanOffset = 0 },
-) {
-  if (!panes?.size) return
-  for (const pane of panes.values()) {
-    applyVerticalMagnificationToPane(pane, { priceFactor, cotFactor, pricePanOffset })
-  }
-}
-
-/** @deprecated use applyVerticalMagnificationToPanes */
-export function applyVerticalStretchToPanes(panes, stretchFactor) {
-  applyVerticalMagnificationToPanes(panes, {
-    priceFactor: stretchFactor,
-    cotFactor: stretchFactor,
+/** Apply one pane's independent vertical camera to its primary series. */
+export function applyVerticalCameraToPane(pane, camera) {
+  if (!pane || pane.syncOnly || !camera) return
+  applyVerticalCameraToSeries(pane.primarySeries, {
+    stretchFactor: camera.factor,
+    panOffset: camera.panOffset ?? 0,
+    panelId: pane.panelId,
   })
 }
 
-/** Pixel height of the visible price span — used for stretch verification. */
+/** Pixel height of the visible price span — used for stretch verification/diagnostics. */
 export function readPaneVerticalSpanPx(pane) {
   const chart = pane?.chart
   const series = pane?.primarySeries
