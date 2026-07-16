@@ -1,21 +1,17 @@
 /**
- * LivePriceStore - authoritative OANDA live quotes only.
- * No weekly OHLC, no historical COT, no valuation fallbacks.
+ * LivePriceStore — live quotes from the Phase 2 Current Price Service.
+ *
+ * Backed by CurrentPriceStreamStore (single shared WebSocket to
+ * ws://localhost:8787/ws/prices via the Vite /ws/prices proxy).
+ *
+ * No longer polls /data/live_quotes_latest.json for the current price.
+ * Historical weekly OHLC remains in WeeklyOHLCStore.
  */
 
-import { getLiveQuoteFreshness, LIVE_QUOTE_POLL_MS } from '../../hooks/liveQuoteFreshness.js'
-
-const LIVE_QUOTES_URL = '/data/live_quotes_latest.json'
+import { CurrentPriceStreamStore } from './CurrentPriceStreamStore.js'
 
 const _listeners = new Set()
-let _doc = null
-let _loadPromise = null
-let _lastFetchUrl = null
-let _lastFetchedAtMs = null
-let _refreshing = false
-let _refreshError = null
-let _pollId = null
-let _subscriberCount = 0
+let _unsubStream = null
 let _snapshotCache = null
 let _snapshotCacheKey = ''
 
@@ -25,98 +21,50 @@ function emit() {
   for (const fn of _listeners) fn()
 }
 
-function normalizeLiveQuote(marketId, raw) {
-  if (!raw || raw.live_fetch_ok === false) {
-    const mid = raw?.live_price
-    if (mid == null || !Number.isFinite(Number(mid))) return null
-  }
+function ensureStreamSubscription() {
+  if (_unsubStream) return
+  _unsubStream = CurrentPriceStreamStore.subscribe(() => emit())
+}
 
-  const mid = raw?.live_price
+function releaseStreamSubscription() {
+  if (_listeners.size > 0) return
+  if (_unsubStream) {
+    _unsubStream()
+    _unsubStream = null
+  }
+}
+
+function toLegacyQuote(price) {
+  if (!price) return null
+  const mid = price.mid ?? price.currentPrice
   if (mid == null || !Number.isFinite(Number(mid))) return null
 
   return {
-    instrumentId: marketId,
-    symbol: raw.canonical_symbol ?? null,
-    bid: Number.isFinite(Number(raw.live_bid)) ? Number(raw.live_bid) : null,
-    ask: Number.isFinite(Number(raw.live_ask)) ? Number(raw.live_ask) : null,
+    instrumentId: price.internalKey,
+    symbol: price.providerSymbol ?? null,
+    bid: price.bid,
+    ask: price.ask,
     mid: Number(mid),
-    source: raw.live_price_source ?? 'OANDA',
-    asOf: raw.live_price_as_of ?? null,
-    fetchOk: raw.live_fetch_ok !== false,
-    fetchError: raw.live_fetch_error ?? null,
+    source: price.provider
+      ? `${price.provider}:${price.providerSymbol || ''}`.replace(/:$/, '')
+      : 'oanda',
+    asOf: price.timestamp ?? null,
+    fetchOk: true,
+    fetchError: null,
+    pricePrecision: price.pricePrecision,
+    status: price.status,
+    ageSeconds: price.ageSeconds,
+    provider: price.provider,
+    providerSymbol: price.providerSymbol,
+    currentPrice: price.currentPrice,
+    fallbackClose: price.fallbackClose,
+    fallbackSource: price.fallbackSource,
   }
 }
 
 export async function triggerLiveQuotesExport() {
-  const resp = await fetch('/api/live-quotes/refresh', {
-    method: 'POST',
-    cache: 'no-store',
-  })
-
-  if (!resp.ok) {
-    const body = await resp.json().catch(() => ({}))
-    throw new Error(body?.error || `HTTP ${resp.status}`)
-  }
-
-  return resp.json().catch(() => ({ ok: true }))
-}
-
-async function fetchDoc({ bustCache = false } = {}) {
-  if (_doc && !bustCache) return _doc
-  if (_loadPromise && !bustCache) return _loadPromise
-
-  if (bustCache) {
-    _doc = null
-    _loadPromise = null
-  }
-
-  const fetchUrl = `${LIVE_QUOTES_URL}?v=${Date.now()}`
-  _lastFetchUrl = fetchUrl
-
-  _loadPromise = fetch(fetchUrl, { cache: 'no-store' })
-    .then((r) => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      return r.json()
-    })
-    .then((doc) => {
-      _doc = doc && typeof doc === 'object' ? doc : { instruments: {} }
-      _lastFetchedAtMs = Date.now()
-      _loadPromise = null
-      _refreshError = null
-      emit()
-      return _doc
-    })
-    .catch((err) => {
-      _loadPromise = null
-      _refreshError = String(err?.message || err)
-      emit()
-      throw err
-    })
-
-  return _loadPromise
-}
-
-function startPolling() {
-  if (_pollId != null) return
-
-  const poll = async () => {
-    try {
-      await LivePriceStore.refresh({ runExport: true })
-    } catch (err) {
-      console.warn('[LivePriceStore] poll failed', err)
-    }
-  }
-
-  poll()
-
-  _pollId = window.setInterval(poll, LIVE_QUOTE_POLL_MS)
-}
-
-function stopPolling() {
-  if (_pollId != null) {
-    window.clearInterval(_pollId)
-    _pollId = null
-  }
+  // Legacy path kept for callers; live prices now come from the stream service.
+  return { ok: true, skipped: true, reason: 'current_price_stream' }
 }
 
 export const LivePriceStore = {
@@ -124,95 +72,96 @@ export const LivePriceStore = {
 
   subscribe(listener) {
     _listeners.add(listener)
-    _subscriberCount += 1
-
-    if (_subscriberCount === 1) {
-      fetchDoc({ bustCache: true }).catch(() => {})
-      startPolling()
-    }
-
+    ensureStreamSubscription()
     return () => {
       _listeners.delete(listener)
-      _subscriberCount = Math.max(0, _subscriberCount - 1)
-
-      if (_subscriberCount === 0) {
-        stopPolling()
-      }
+      releaseStreamSubscription()
     }
   },
 
   getSnapshot() {
-    const key = `${_doc?.generated_at ?? ''}|${_refreshing}|${_refreshError ?? ''}|${_subscriberCount}|${_lastFetchedAtMs ?? ''}`
+    const stream = CurrentPriceStreamStore.getSnapshot()
+    const key = [
+      stream.connectionState,
+      stream.generatedAt ?? '',
+      Object.keys(stream.prices).length,
+      stream.lastError ?? '',
+    ].join('|')
 
-    if (_snapshotCache && _snapshotCacheKey === key) {
-      return _snapshotCache
-    }
+    if (_snapshotCache && _snapshotCacheKey === key) return _snapshotCache
 
     _snapshotCacheKey = key
     _snapshotCache = {
-      doc: _doc,
-      loaded: _doc != null,
-      fetchUrl: _lastFetchUrl,
-      fetchedAtMs: _lastFetchedAtMs,
-      generatedAt: _doc?.generated_at ?? null,
-      refreshing: _refreshing,
-      refreshError: _refreshError,
-      subscriberCount: _subscriberCount,
+      doc: {
+        generated_at: stream.generatedAt,
+        instruments: stream.prices,
+        source: 'current_price_service',
+      },
+      loaded: Object.keys(stream.prices).length > 0 || stream.connected,
+      fetchUrl: 'ws:/ws/prices',
+      fetchedAtMs: stream.generatedAt ? Date.parse(stream.generatedAt) || Date.now() : null,
+      generatedAt: stream.generatedAt,
+      refreshing: stream.reconnecting,
+      refreshError: stream.lastError,
+      subscriberCount: _listeners.size,
+      connectionState: stream.connectionState,
+      streamMeta: stream.streamMeta,
     }
-
     return _snapshotCache
   },
 
-  /** Live OANDA quote for one instrument - never includes weekly/historical fields. */
   getQuote(marketId) {
-    if (!marketId || !_doc?.instruments) return null
-    return normalizeLiveQuote(marketId, _doc.instruments[marketId])
+    return toLegacyQuote(CurrentPriceStreamStore.getPrice(marketId))
   },
 
   getFreshness(marketId) {
-    const raw = _doc?.instruments?.[marketId]
-    return getLiveQuoteFreshness(raw, _doc)
-  },
-
-  getStatus(marketId) {
-    const quote = this.getQuote(marketId)
-
-    if (!quote) return 'UNAVAILABLE'
-
-    const { isStale } = this.getFreshness(marketId)
-    return isStale ? 'STALE' : 'LIVE'
-  },
-
-  async refresh({ runExport = true } = {}) {
-    _refreshing = true
-    _refreshError = null
-    emit()
-
-    try {
-      if (runExport) {
-        try {
-          await triggerLiveQuotesExport()
-        } catch (exportErr) {
-          console.warn('[LivePriceStore] export refresh unavailable', exportErr)
-        }
+    const price = CurrentPriceStreamStore.getPrice(marketId)
+    if (!price) {
+      return {
+        isStale: true,
+        ageMs: null,
+        quoteAsOf: null,
+        docGeneratedAt: CurrentPriceStreamStore.getSnapshot().generatedAt,
       }
+    }
 
-      await fetchDoc({ bustCache: true })
-    } catch (err) {
-      _refreshError = String(err?.message || err)
-      emit()
-      throw err
-    } finally {
-      _refreshing = false
-      emit()
+    const ageSeconds = price.ageSeconds
+    const ageMs = ageSeconds != null ? ageSeconds * 1000 : null
+    const status = CurrentPriceStreamStore.getDisplayStatus(marketId)
+    const isStale = status !== 'LIVE'
+
+    return {
+      isStale,
+      ageMs,
+      quoteAsOf: price.timestamp ?? null,
+      docGeneratedAt: CurrentPriceStreamStore.getSnapshot().generatedAt,
+      status,
     }
   },
 
+  getStatus(marketId) {
+    return CurrentPriceStreamStore.getDisplayStatus(marketId)
+  },
+
+  getActiveWeeklyCandle(marketId) {
+    return CurrentPriceStreamStore.getWeeklyCandle(marketId)
+  },
+
+  async refresh() {
+    await CurrentPriceStreamStore.reconnect()
+    return this.getSnapshot()
+  },
+
   clearCache() {
-    _doc = null
-    _loadPromise = null
+    CurrentPriceStreamStore.clearCache()
     emit()
   },
+}
+
+// Dev/proof hook: backend quote ↔ store ↔ DOM parity checks.
+if (typeof window !== 'undefined') {
+  window.__HPTL_LIVE_PRICE_STORE__ = LivePriceStore
+  window.__HPTL_CURRENT_PRICE_STREAM__ = CurrentPriceStreamStore
 }
 
 export default LivePriceStore

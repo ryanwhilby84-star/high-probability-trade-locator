@@ -628,11 +628,34 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 }
                 candleBars={visibleBars}
                 syncOnly={!hasVisibleOhlc}
-                livePrice={livePriceState.quote?.mid ?? null}
+                livePrice={
+                  livePriceState.quote?.mid ??
+                  livePriceState.streamPrice?.currentPrice ??
+                  null
+                }
                 livePriceAsOf={livePriceState.quote?.asOf ?? null}
                 livePriceSource={livePriceState.quote?.source ?? null}
-                livePriceStale={livePriceState.freshness?.isStale ?? true}
+                livePriceStale={livePriceState.status !== 'LIVE'}
                 livePriceAgeMs={livePriceState.freshness?.ageMs ?? null}
+                livePriceStatus={livePriceState.status}
+                livePricePrecision={
+                  livePriceState.quote?.pricePrecision ??
+                  livePriceState.streamPrice?.pricePrecision ??
+                  null
+                }
+                livePriceBid={livePriceState.quote?.bid ?? null}
+                livePriceAsk={livePriceState.quote?.ask ?? null}
+                livePriceProvider={
+                  livePriceState.streamPrice?.provider ??
+                  livePriceState.quote?.provider ??
+                  null
+                }
+                livePriceSymbol={
+                  livePriceState.quote?.symbol ??
+                  livePriceState.streamPrice?.providerSymbol ??
+                  null
+                }
+                activeWeeklyCandle={livePriceState.activeWeeklyCandle}
                 latestMarkerTime={latestMarkerTime}
                 latestMarkerLabel={plottedLatestDate}
                 showLatestLabel

@@ -16,6 +16,7 @@ from hptl.config import PROCESSED_DIR, PROJECT_ROOT, get_oanda_api_key
 from hptl.oanda.oanda_client import OandaApiError
 from hptl.oanda.oanda_prices import fetch_pricing
 from hptl.prices.coverage import oanda_symbol_for, select_price_source
+from hptl.prices.current_price_service import load_instrument_mappings
 from hptl.prices.price_store import load_price_store
 from hptl.prices.workstation_index_ohlc_history import WORKSTATION_INDEX_SOURCES
 from hptl.markets.instrument_registry import get_instrument
@@ -51,7 +52,31 @@ def _num(v: Any) -> float | None:
     return f if f == f else None
 
 
+def _canonical_symbol(instrument_id: str) -> str | None:
+    """OANDA symbol from the canonical Current Price Service mapping (single source)."""
+    try:
+        mapping = load_instrument_mappings().get(instrument_id)
+    except Exception:  # noqa: BLE001 - mapping is best-effort; legacy fallback below
+        return None
+    if mapping and mapping.provider == "oanda" and mapping.provider_symbol:
+        return mapping.provider_symbol
+    return None
+
+
+def _canonical_precision(instrument_id: str) -> int | None:
+    try:
+        mapping = load_instrument_mappings().get(instrument_id)
+    except Exception:  # noqa: BLE001
+        return None
+    return mapping.price_precision if mapping else None
+
+
 def _resolve_oanda_symbol(instrument_id: str) -> str | None:
+    # Canonical Current Price Service mapping (discovery-driven) takes priority so
+    # the dashboard header and valuation share one authoritative OANDA symbol.
+    canonical = _canonical_symbol(instrument_id)
+    if canonical:
+        return canonical
     if instrument_id in LIVE_QUOTE_OANDA:
         return LIVE_QUOTE_OANDA[instrument_id]["oanda_symbol"]
     spec = get_instrument(instrument_id)
@@ -159,6 +184,7 @@ def build_live_quotes_latest(*, fetch_live: bool = True) -> dict[str, Any]:
             "live_ask": None,
             "live_price_source": None,
             "live_price_as_of": None,
+            "live_price_precision": _canonical_precision(iid),
             "live_fetch_ok": False,
             "live_fetch_error": fetch_error,
         }

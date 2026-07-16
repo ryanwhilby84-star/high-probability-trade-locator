@@ -96,6 +96,22 @@ def get_oanda_api_host() -> str:
     return "https://api-fxpractice.oanda.com"
 
 
+def get_oanda_stream_host() -> str:
+    """OANDA v20 pricing-stream base URL. Mirrors :func:`get_oanda_api_host` env selection.
+
+    ``OANDA_STREAM_URL`` overrides; otherwise the streaming host is derived from the
+    same ``OANDA_ENVIRONMENT`` used for REST (``stream-fxtrade`` for live,
+    ``stream-fxpractice`` for practice).
+    """
+    explicit = os.getenv("OANDA_STREAM_URL", "").strip().rstrip("/")
+    if explicit:
+        return explicit
+    host = get_oanda_api_host()
+    if "fxtrade" in host:
+        return "https://stream-fxtrade.oanda.com"
+    return "https://stream-fxpractice.oanda.com"
+
+
 def get_alpha_vantage_api_key() -> str:
     """Alpha Vantage API key (optional unless running price coverage audit)."""
     return (os.getenv("ALPHA_VANTAGE_API_KEY") or os.getenv("ALPHAVANTAGE_API_KEY") or "").strip()

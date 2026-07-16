@@ -10,6 +10,7 @@ import {
   navigateToPriceCoverage,
   navigateToScanner,
   navigateToThesisTracker,
+  navigateToNaturalGasValuation,
 } from '../routing.js'
 
 export function AppShell({
@@ -101,6 +102,14 @@ export function AppShell({
           </button>
           <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToOandaCoverage}>
             OANDA coverage
+          </button>
+          <button
+            type="button"
+            className="ws-btn ws-btn-primary"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToNaturalGasValuation}
+          >
+            NG Valuation
           </button>
         </div>
       </aside>

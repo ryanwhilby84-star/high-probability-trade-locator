@@ -38,6 +38,30 @@ export function formatWorkstationAxisPrice(value) {
 }
 
 /**
+ * Exact live-price display for badges / line titles / tooltips.
+ * Uses backend price_precision when provided. Never abbreviates to "4.1K".
+ */
+export function formatExactLivePrice(value, precision = null) {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return ''
+  const digits =
+    precision != null && Number.isFinite(Number(precision))
+      ? Math.max(0, Math.min(8, Number(precision)))
+      : Math.abs(n) >= 1000
+        ? 3
+        : Math.abs(n) >= 100
+          ? 2
+          : Math.abs(n) >= 1
+            ? 3
+            : 4
+  return n.toLocaleString('en-US', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+    useGrouping: true,
+  })
+}
+
+/**
  * Per-panel vertical breathing room — tight margins so each line uses more of the
  * pane without touching the edges. Autoscale is driven by the visible analytical
  * line only (helper/zero/anchor series are excluded), so zero only appears when it

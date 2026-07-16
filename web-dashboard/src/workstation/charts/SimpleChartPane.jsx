@@ -13,6 +13,7 @@ import {
   EXCLUDE_FROM_AUTOSCALE,
   WS_PRICE_SCALE_WIDTH,
   formatWorkstationAxisPrice,
+  formatExactLivePrice,
   scaleMarginsForPanel,
 } from './workstationChartOptions.js'
 import {
@@ -22,9 +23,28 @@ import {
 
 const LIVE_PRICE_LINE_COLOR = '#38bdf8'
 const LIVE_PRICE_STALE_LINE_COLOR = '#fbbf24'
+const LIVE_PRICE_FALLBACK_LINE_COLOR = '#94a3b8'
 
 const isFiniteNumber = (value) =>
   typeof value === 'number' && Number.isFinite(value)
+
+const isDev =
+  typeof import.meta !== 'undefined' && Boolean(import.meta.env?.DEV)
+
+function liveBadgeClass(status) {
+  const s = String(status || '').toUpperCase()
+  if (s === 'LIVE') return ''
+  if (s === 'STALE' || s === 'RECONNECTING') return ' cot-ws-live-price-badge--stale'
+  if (s === 'FALLBACK') return ' cot-ws-live-price-badge--fallback'
+  return ' cot-ws-live-price-badge--offline'
+}
+
+function liveLineColor(status) {
+  const s = String(status || '').toUpperCase()
+  if (s === 'LIVE') return LIVE_PRICE_LINE_COLOR
+  if (s === 'STALE' || s === 'RECONNECTING') return LIVE_PRICE_STALE_LINE_COLOR
+  return LIVE_PRICE_FALLBACK_LINE_COLOR
+}
 
 function buildAnchorPoints(timelineRows) {
   return (timelineRows || [])
@@ -93,6 +113,13 @@ export function SimpleChartPane({
   livePriceSource = null,
   livePriceStale = false,
   livePriceAgeMs = null,
+  livePriceStatus = null,
+  livePricePrecision = null,
+  livePriceBid = null,
+  livePriceAsk = null,
+  livePriceProvider = null,
+  livePriceSymbol = null,
+  activeWeeklyCandle = null,
   latestMarkerTime = null,
   latestMarkerLabel = null,
   showLatestLabel = false,
@@ -400,6 +427,45 @@ export function SimpleChartPane({
     syncOnly,
   ])
 
+  // Incremental live weekly-candle update — series.update only. Never setData,
+  // fitContent, or camera resets. Preserves pan/zoom/drawings.
+  React.useEffect(() => {
+    const primarySeries = primarySeriesRef.current
+    if (syncOnly || mode !== 'candle' || !primarySeries) return
+    if (!activeWeeklyCandle) return
+
+    const open = Number(activeWeeklyCandle.open)
+    const high = Number(activeWeeklyCandle.high)
+    const low = Number(activeWeeklyCandle.low)
+    const close = Number(activeWeeklyCandle.close)
+    const time = Number(activeWeeklyCandle.time)
+
+    if (![open, high, low, close, time].every(isFiniteNumber)) return
+
+    const candle = {
+      time,
+      open,
+      high: Math.max(open, high, low, close),
+      low: Math.min(open, high, low, close),
+      close,
+    }
+
+    try {
+      primarySeries.update(candle)
+      const existing = candlesRef.current || []
+      const idx = existing.findIndex((row) => row.time === time)
+      if (idx >= 0) {
+        const next = existing.slice()
+        next[idx] = candle
+        candlesRef.current = next
+      } else {
+        candlesRef.current = [...existing, candle]
+      }
+    } catch (error) {
+      console.error('[cot-workstation] active weekly candle update failed', panelId, error)
+    }
+  }, [activeWeeklyCandle, mode, panelId, syncOnly])
+
   React.useEffect(() => {
     const primarySeries = primarySeriesRef.current
     if (!primarySeries || mode !== 'candle') return
@@ -415,21 +481,29 @@ export function SimpleChartPane({
 
     if (!isFiniteNumber(livePrice)) return
 
+    const status = livePriceStatus || (livePriceStale ? 'STALE' : 'LIVE')
+    const exact = formatExactLivePrice(livePrice, livePricePrecision)
+
     try {
       livePriceLineRef.current = primarySeries.createPriceLine({
         price: livePrice,
-        color: livePriceStale
-          ? LIVE_PRICE_STALE_LINE_COLOR
-          : LIVE_PRICE_LINE_COLOR,
+        color: liveLineColor(status),
         lineWidth: 1,
         lineStyle: 2,
         axisLabelVisible: true,
-        title: livePriceStale ? 'Last' : 'Live',
+        title: exact ? `${status === 'LIVE' ? 'Live' : status} ${exact}` : status,
       })
     } catch (error) {
       console.error('[cot-workstation] live price line failed', panelId, error)
     }
-  }, [livePrice, livePriceStale, mode, panelId])
+  }, [
+    livePrice,
+    livePriceStale,
+    livePriceStatus,
+    livePricePrecision,
+    mode,
+    panelId,
+  ])
 
   React.useEffect(() => {
     const zeroSeries = zeroSeriesRef.current
@@ -587,15 +661,19 @@ export function SimpleChartPane({
             {mode === 'candle' && isFiniteNumber(livePrice) ? (
               <>
                 <span
-                  className={`cot-ws-live-price-badge${
-                    livePriceStale ? ' cot-ws-live-price-badge--stale' : ''
-                  }`}
+                  className={`cot-ws-live-price-badge${liveBadgeClass(
+                    livePriceStatus || (livePriceStale ? 'STALE' : 'LIVE'),
+                  )}`}
                 >
-                  {livePriceStale ? 'STALE' : 'LIVE'}
+                  {livePriceStatus || (livePriceStale ? 'STALE' : 'LIVE')}
                 </span>
 
-                <span className="cot-ws-pane-legend-value">
-                  {formatWorkstationAxisPrice(livePrice)}
+                <span
+                  className="cot-ws-pane-legend-value cot-ws-live-price-value"
+                  data-live-mid={String(livePrice)}
+                  data-testid="live-mid"
+                >
+                  {formatExactLivePrice(livePrice, livePricePrecision)}
                 </span>
 
                 {livePriceAsOf ? (
@@ -610,6 +688,28 @@ export function SimpleChartPane({
                     {String(livePriceAsOf).slice(0, 19).replace('T', ' ')}
                     {livePriceAgeMs != null
                       ? ` · ${formatAgeMs(livePriceAgeMs)}`
+                      : ''}
+                  </span>
+                ) : null}
+
+                {isDev ? (
+                  <span className="cot-ws-live-price-diag" aria-hidden="true">
+                    Source: {livePriceProvider || 'OANDA'}
+                    {livePriceSymbol ? ` · Symbol: ${livePriceSymbol}` : ''}
+                    {livePriceAsOf
+                      ? ` · Updated: ${String(livePriceAsOf).slice(11, 19)}`
+                      : ''}
+                    {livePriceAgeMs != null
+                      ? ` · Age: ${(livePriceAgeMs / 1000).toFixed(1)}s`
+                      : ''}
+                    {isFiniteNumber(livePriceBid)
+                      ? ` · Bid: ${formatExactLivePrice(livePriceBid, livePricePrecision)}`
+                      : ''}
+                    {isFiniteNumber(livePriceAsk)
+                      ? ` · Ask: ${formatExactLivePrice(livePriceAsk, livePricePrecision)}`
+                      : ''}
+                    {isFiniteNumber(livePrice)
+                      ? ` · Mid: ${formatExactLivePrice(livePrice, livePricePrecision)}`
                       : ''}
                   </span>
                 ) : null}

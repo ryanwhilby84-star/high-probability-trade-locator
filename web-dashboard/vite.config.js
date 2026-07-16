@@ -57,6 +57,24 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
+      // Phase 2 Current Price Service (HTTP + WebSocket)
+      '/api/prices': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: true,
+      },
+      '/api/weekly-candles': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: true,
+      },
+      '/api/weekly-candle': {
+        target: 'http://127.0.0.1:8787',
+        changeOrigin: true,
+      },
+      '/ws/prices': {
+        target: 'ws://127.0.0.1:8787',
+        ws: true,
+        changeOrigin: true,
+      },
       '/api/journal': {
         target: 'http://127.0.0.1:8787',
         changeOrigin: true,

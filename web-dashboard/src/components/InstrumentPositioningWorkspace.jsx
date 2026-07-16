@@ -3,7 +3,7 @@ import React from 'react'
 import { POSITIONING_SHEET_TABS, rolling3yContextForGroup } from '../cot/groupPositioningView.js'
 import { buildRawRowsForGroup } from '../cot/rawCotPositioning.js'
 import { useLegacyCot } from '../hooks/useLegacyCot.js'
-import { navigateToCotWorkstation } from '../routing.js'
+import { navigateToCotWorkstation, navigateToNaturalGasValuation } from '../routing.js'
 import { GroupPositioningSheet } from './GroupPositioningSheet.jsx'
 import { PositioningWeeklySummary } from './PositioningWeeklySummary.jsx'
 
@@ -47,13 +47,24 @@ export function InstrumentPositioningWorkspace({
               Raw COT positioning data and weekly context. Open the dedicated workstation for full-screen charts.
             </p>
           </div>
-          <button
-            type="button"
-            className="ws-btn ws-btn-primary instrument-cot-ws-open-btn"
-            onClick={() => navigateToCotWorkstation(marketId)}
-          >
-            Open COT Workstation
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {marketId === 'Natural Gas / NG' ? (
+              <button
+                type="button"
+                className="ws-btn ws-btn-primary"
+                onClick={navigateToNaturalGasValuation}
+              >
+                Open Valuation
+              </button>
+            ) : null}
+            <button
+              type="button"
+              className="ws-btn ws-btn-primary instrument-cot-ws-open-btn"
+              onClick={() => navigateToCotWorkstation(marketId)}
+            >
+              Open COT Workstation
+            </button>
+          </div>
         </div>
       </div>
 

@@ -29,11 +29,15 @@ import { DiagnosticsPage } from './pages/DiagnosticsPage.jsx'
 
 import { MacroHubPage } from './pages/MacroHubPage.jsx'
 
+import { NaturalGasValuationPage } from './pages/NaturalGasValuationPage.jsx'
+
 import { canonicalMarketId } from './marketResolution.js'
 
 import { allInstrumentIds } from './instrumentRegistry.js'
 
 import { navigateToScanner } from './routing.js'
+
+import { LivePriceStore } from './prices/stores/LivePriceStore.js'
 
 
 
@@ -47,6 +51,13 @@ export default function App() {
 
   React.useEffect(() => {
     prefetchCot3ySeries()
+  }, [])
+
+  // Keep the canonical Current Price WebSocket alive across route changes.
+  // Without this, CotWorkstation unmount drops the last subscriber and the
+  // shared stream disconnects (BACKEND OFFLINE) between instruments.
+  React.useEffect(() => {
+    return LivePriceStore.subscribe(() => {})
   }, [])
 
 
@@ -172,6 +183,24 @@ export default function App() {
     return (
 
       <MacroHubPage
+
+        sidebarClass={sidebarClass}
+
+        onSidebarClass={setSidebarClass}
+
+      />
+
+    )
+
+  }
+
+
+
+  if (route.view === 'natural-gas-valuation') {
+
+    return (
+
+      <NaturalGasValuationPage
 
         sidebarClass={sidebarClass}
 

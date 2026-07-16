@@ -86,6 +86,34 @@ export function parseRoute() {
 
   }
 
+  // Natural Gas institutional valuation — accept several URL shapes.
+  // Preferred: #/valuation/Natural%20Gas%20%2F%20NG
+  // Also: #/valuation/natural-gas , #/Valuation/...
+  if (String(parts[0] || '').toLowerCase() === 'valuation') {
+    const rest = parts
+      .slice(1)
+      .map((p) => {
+        try {
+          return decodeURIComponent(p)
+        } catch {
+          return p
+        }
+      })
+      .join('/')
+      .trim()
+    const key = rest.toLowerCase().replace(/\s+/g, ' ')
+    if (
+      !rest ||
+      key === 'natural-gas' ||
+      key === 'ng' ||
+      key === 'natural gas / ng' ||
+      key === 'natural gas' ||
+      key.includes('natural gas')
+    ) {
+      return { view: 'natural-gas-valuation', market: 'Natural Gas / NG' }
+    }
+  }
+
   return { view: 'scanner', market: null }
 
 }
@@ -197,6 +225,14 @@ export function navigateToDiagnostics() {
 export function navigateToMacroHub() {
 
   window.location.hash = '#/macro-hub'
+
+}
+
+
+
+export function navigateToNaturalGasValuation() {
+
+  window.location.hash = `#/valuation/${encodeURIComponent('Natural Gas / NG')}`
 
 }
 

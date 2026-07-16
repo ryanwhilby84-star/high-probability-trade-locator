@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "phase": "energy_ng_v1",
+  "market": "Natural Gas / NG",
+  "model_id": "energy_natural_gas_v1",
+  "note": "Official EIA/FRED/NOAA driver caches. Missing keys leave cards UNAVAILABLE; IPN213111S is FALLBACK only for production.",
+  "fred_series": {
+    "dxy_broad": "DTWEXBGS",
+    "henry_hub_spot": "DHHNGSP",
+    "dry_gas_production_official_fred": "NGPRODUSM",
+    "dry_gas_production_proxy": "IPN213111S",
+    "gas_distribution_ip": "IPG2211A2N",
+    "gas_consumption_monthly": "NATURALGAS"
+  },
+  "eia_series": {
+    "working_gas_storage": "NW2_EPG0_SWO_R48_BCF_W",
+    "dry_gas_production": "N9070US2",
+    "lng_exports": "N9133US2"
+  },
+  "public_downloads": {
+    "working_gas_storage": "https://www.eia.gov/dnav/ng/hist_xls/NW2_EPG0_SWO_R48_BCFw.xls",
+    "dry_gas_production": "https://www.eia.gov/dnav/ng/hist_xls/N9070US2m.xls",
+    "lng_exports": "https://www.eia.gov/dnav/ng/hist_xls/N9133US2m.xls",
+    "hdd": "https://ftp.cpc.ncep.noaa.gov/htdocs/degree_days/weighted/daily_data/{year}/Population.Heating.txt",
+    "cdd": "https://ftp.cpc.ncep.noaa.gov/htdocs/degree_days/weighted/daily_data/{year}/Population.Cooling.txt"
+  },
+  "cache_paths": {
+    "working_gas_storage": "data/cache/energy_drivers/eia_working_gas_storage.json",
+    "lng_exports": "data/cache/energy_drivers/eia_lng_exports.json",
+    "dry_gas_production": "data/cache/energy_drivers/eia_dry_gas_production.json",
+    "hdd": "data/cache/energy_drivers/noaa_hdd.json",
+    "cdd": "data/cache/energy_drivers/noaa_cdd.json"
+  },
+  "sign_expectations": {
+    "storage_surplus_bcf": "negative",
+    "dry_gas_production": "negative",
+    "lng_exports": "positive",
+    "log_dxy": "negative",
+    "seasonality_factor": "positive",
+    "hdd_anomaly": "positive",
+    "cdd_anomaly": "positive"
+  },
+  "api_keys": {
+    "EIA_API_KEY": "Required for EIA Open Data (storage, production, LNG preferred path)",
+    "NOAA_API_TOKEN": "Required for official HDD/CDD ingest",
+    "FRED_API_KEY": "Optional; used for DXY and FRED republished EIA fallbacks"
+  }
+}

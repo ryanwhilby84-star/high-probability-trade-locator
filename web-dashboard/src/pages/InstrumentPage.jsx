@@ -3,7 +3,7 @@ import { AppShell, filterMarketsBySidebar } from '../components/AppShell.jsx'
 import { InstrumentDetail, buildMarketHistoryForMarket } from '../legacy/dashboardLegacy.jsx'
 import { resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
 import { recordCotReportDate, isCotRowResolved } from '../marketResolution.js'
-import { navigateToInstrument, navigateToScanner, navigateToThesisTracker, navigateToCotWorkstation } from '../routing.js'
+import { navigateToInstrument, navigateToScanner, navigateToThesisTracker, navigateToCotWorkstation, navigateToNaturalGasValuation } from '../routing.js'
 import { CotUnavailablePanel } from '../components/CotUnavailablePanel.jsx'
 import { ValuationInstrumentSection } from '../components/IVECalculationPanel.jsx'
 import { InstrumentWorkstationLayout } from '../workstation/InstrumentWorkstationLayout.jsx'
@@ -189,6 +189,16 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       <button type="button" className="ws-btn" onClick={() => setJournalOpen(true)}>
         Log trade idea
       </button>
+
+      {marketId === 'Natural Gas / NG' ? (
+        <button
+          type="button"
+          className="ws-btn ws-btn-primary"
+          onClick={navigateToNaturalGasValuation}
+        >
+          Open Valuation
+        </button>
+      ) : null}
 
       <button type="button" className="ws-btn ws-btn-primary" onClick={() => navigateToCotWorkstation(marketId)}>
         Open COT Workstation

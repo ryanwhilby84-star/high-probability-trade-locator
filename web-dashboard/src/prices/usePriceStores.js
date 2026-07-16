@@ -8,6 +8,7 @@ import React from 'react'
 import { LivePriceStore } from './stores/LivePriceStore.js'
 import { WeeklyOHLCStore } from './stores/WeeklyOHLCStore.js'
 import { HistoricalCOTStore } from './stores/HistoricalCOTStore.js'
+import { CurrentPriceStreamStore } from './stores/CurrentPriceStreamStore.js'
 
 function useStoreSnapshot(store) {
   const subscribe = React.useCallback((onStoreChange) => store.subscribe(onStoreChange), [store])
@@ -20,22 +21,44 @@ export function useLivePriceStore() {
   return snap
 }
 
+export function useCurrentPriceStream() {
+  return useStoreSnapshot(CurrentPriceStreamStore)
+}
+
+/**
+ * Live price for one instrument from the Phase 2 Current Price Service.
+ * connectionState drives LIVE / RECONNECTING / BACKEND OFFLINE display.
+ */
 export function useLivePrice(marketId) {
   const snap = useLivePriceStore()
+  const streamSnap = useCurrentPriceStream()
+
   const quote = React.useMemo(() => LivePriceStore.getQuote(marketId), [snap, marketId])
   const freshness = React.useMemo(() => LivePriceStore.getFreshness(marketId), [snap, marketId])
   const status = React.useMemo(() => LivePriceStore.getStatus(marketId), [snap, marketId])
-
-  const refresh = React.useCallback(
-    (opts) => LivePriceStore.refresh(opts),
-    [snap.refreshing],
+  const activeWeeklyCandle = React.useMemo(
+    () => LivePriceStore.getActiveWeeklyCandle(marketId),
+    [streamSnap, marketId],
   )
+  const streamPrice = React.useMemo(
+    () => CurrentPriceStreamStore.getPrice(marketId),
+    [streamSnap, marketId],
+  )
+
+  const refresh = React.useCallback((opts) => LivePriceStore.refresh(opts), [])
 
   return React.useMemo(
     () => ({
       quote,
       freshness,
       status,
+      activeWeeklyCandle,
+      streamPrice,
+      connectionState: streamSnap.connectionState,
+      connected: streamSnap.connected,
+      reconnecting: streamSnap.reconnecting,
+      disconnected: streamSnap.disconnected,
+      streamMeta: streamSnap.streamMeta,
       doc: snap.doc,
       loaded: snap.loaded,
       fetchUrl: snap.fetchUrl,
@@ -46,7 +69,16 @@ export function useLivePrice(marketId) {
       refresh,
       store: LivePriceStore.STORE_NAME,
     }),
-    [quote, freshness, status, snap, refresh],
+    [
+      quote,
+      freshness,
+      status,
+      activeWeeklyCandle,
+      streamPrice,
+      streamSnap,
+      snap,
+      refresh,
+    ],
   )
 }
 
@@ -104,4 +136,4 @@ export function useHistoricalCOT(marketId) {
   )
 }
 
-export { LivePriceStore, WeeklyOHLCStore, HistoricalCOTStore }
+export { LivePriceStore, WeeklyOHLCStore, HistoricalCOTStore, CurrentPriceStreamStore }
