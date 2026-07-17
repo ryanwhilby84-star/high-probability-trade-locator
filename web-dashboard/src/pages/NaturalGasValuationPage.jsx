@@ -102,8 +102,91 @@ function ValuationScale({ scale, deviationPct }) {
   )
 }
 
+function roleClass(badge) {
+  const r = String(badge || '')
+  if (r.includes('VALIDATED')) return 'ngv-role-validated'
+  if (r.includes('EXPERIMENTAL')) return 'ngv-role-experimental'
+  if (r.includes('INVALID')) return 'ngv-role-invalid'
+  return 'ngv-role-info'
+}
+
+function ContributionBreakdown({ breakdown }) {
+  if (!breakdown?.drivers?.length) {
+    return (
+      <div className="ngv-contrib-empty">
+        Contribution breakdown appears once validated valuation drivers are selected.
+      </div>
+    )
+  }
+  return (
+    <div className="ngv-contrib">
+      <table className="ngv-contrib-table">
+        <thead>
+          <tr>
+            <th>Driver</th>
+            <th>Raw observation</th>
+            <th>Transformed x</th>
+            <th>Coefficient β</th>
+            <th>Log contrib βx</th>
+            <th>Direction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Intercept / baseline</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>{fmtSigned(breakdown.intercept_log_contribution, 4)}</td>
+            <td>—</td>
+          </tr>
+          {breakdown.drivers.map((row) => (
+            <tr key={row.feature}>
+              <td>{row.label}</td>
+              <td>{row.raw_observation != null ? fmt(row.raw_observation, 3) : '—'}</td>
+              <td>{fmt(row.transformed_input, 4)}</td>
+              <td>{fmtSigned(row.coefficient, 4)}</td>
+              <td className={row.log_contribution >= 0 ? 'ngv-pos' : 'ngv-neg'}>
+                {fmtSigned(row.log_contribution, 4)}
+              </td>
+              <td>{row.direction}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <dl className="ngv-contrib-totals">
+        <div>
+          <dt>Σ log terms</dt>
+          <dd>{fmt(breakdown.sum_log_contributions, 4)}</dd>
+        </div>
+        <div>
+          <dt>Fair Value = exp(Σ)</dt>
+          <dd>{fmt(breakdown.reconstructed_fair_value, 3)}</dd>
+        </div>
+        <div>
+          <dt>Market Price</dt>
+          <dd>{fmt(breakdown.market_price, 3)}</dd>
+        </div>
+        <div>
+          <dt>Deviation</dt>
+          <dd className={Number(breakdown.deviation_pct) < 0 ? 'ngv-pos' : 'ngv-neg'}>
+            {fmtSigned(breakdown.deviation_pct, 2)}%
+          </dd>
+        </div>
+      </dl>
+      <p className="ngv-contrib-note">
+        {breakdown.identity}
+        {breakdown.reconciliation_ok ? ' · Reconciliation OK.' : ' · Reconciliation FAILED.'}
+      </p>
+      <p className="ngv-contrib-note">{breakdown.note}</p>
+    </div>
+  )
+}
+
 function DriverCard({ card }) {
   const available = card?.available !== false
+  const badge =
+    card?.valuation_badge || (card?.id === 'seasonality' ? 'INFORMATIONAL ONLY' : null)
   return (
     <article
       className={`ngv-driver-card ${toneClass(card?.tone)} ${available ? '' : 'ngv-driver-card--awaiting'}`}
@@ -118,6 +201,12 @@ function DriverCard({ card }) {
           {card?.institutional_effect || '—'}
         </span>
       </header>
+      {badge ? (
+        <div className={`ngv-role-badge ${roleClass(badge)}`}>
+          {badge}
+          {card?.valuation_note ? ` · ${card.valuation_note}` : ''}
+        </div>
+      ) : null}
 
       {card?.id === 'storage' ? (
         <dl className="ngv-driver-metrics">
@@ -134,6 +223,21 @@ function DriverCard({ card }) {
             <dd>{available && card.difference != null ? `${fmtSigned(card.difference, 0)} Bcf` : '—'}</dd>
           </div>
         </dl>
+      ) : card?.id === 'hdd' || card?.id === 'cdd' ? (
+        <dl className="ngv-driver-metrics">
+          <div>
+            <dt>Actual</dt>
+            <dd>{available && card.current != null ? fmt(card.current, 1) : '—'}</dd>
+          </div>
+          <div>
+            <dt>Week normal</dt>
+            <dd>{card.normal != null ? fmt(card.normal, 1) : '—'}</dd>
+          </div>
+          <div>
+            <dt>Anomaly</dt>
+            <dd>{card.anomaly != null ? `${fmtSigned(card.anomaly, 2)}σ` : '—'}</dd>
+          </div>
+        </dl>
       ) : (
         <dl className="ngv-driver-metrics">
           <div>
@@ -144,10 +248,10 @@ function DriverCard({ card }) {
                 : '—'}
             </dd>
           </div>
-          {card.proxy ? (
+          {card.proxy || card.fallback ? (
             <div>
               <dt>Status</dt>
-              <dd>V1 proxy</dd>
+              <dd>{card.fallback ? 'FALLBACK' : 'V1 proxy'}</dd>
             </div>
           ) : null}
         </dl>
@@ -294,8 +398,8 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
           <p className="ngv-eyebrow">HPTL · Energy · Version 1</p>
           <h1>Natural Gas Institutional Valuation</h1>
           <p className="ngv-hero-sub">
-            Fair value from institutional drivers — storage, production, LNG, dollar and seasonality —
-            presented as a live analytical product.
+            Fair value from validated valuation drivers only. Experimental and informational drivers
+            are displayed but do not enter the fair-value calculation.
           </p>
         </header>
 
@@ -361,12 +465,23 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
 
             <ValuationScale scale={inst.scale} deviationPct={inst.deviation_pct} />
 
+            <section className="ngv-contrib-section" aria-label="Valuation contribution breakdown">
+              <header className="ngv-section-head">
+                <h2>Valuation Contribution Breakdown</h2>
+                <span className="ngv-section-meta">
+                  {(inst.validated_features || inst.active_features || []).length} validated drivers
+                </span>
+              </header>
+              <ContributionBreakdown breakdown={inst.contribution_breakdown} />
+            </section>
+
             <section className="ngv-drivers-section">
               <header className="ngv-section-head">
                 <h2>Institutional Driver Summary</h2>
                 <span className="ngv-section-meta">
-                  {(inst.active_features || []).length} active ·{' '}
-                  {(inst.awaiting_drivers || []).length} awaiting V2 data
+                  {(inst.validated_features || []).length} validated ·{' '}
+                  {(inst.experimental_features || []).length} experimental ·{' '}
+                  {(inst.informational_features || ['seasonality']).length} informational
                 </span>
               </header>
               <div className="ngv-driver-grid">

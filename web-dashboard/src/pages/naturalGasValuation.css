@@ -392,3 +392,103 @@
   color: var(--ngv-muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
+
+.ngv-role-badge {
+  margin: 0 0 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 650;
+}
+
+.ngv-role-validated {
+  background: rgba(52, 211, 153, 0.12);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+}
+
+.ngv-role-experimental {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fcd34d;
+  border: 1px solid rgba(251, 191, 36, 0.28);
+}
+
+.ngv-role-info {
+  background: rgba(148, 163, 184, 0.1);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.ngv-role-invalid {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.ngv-contrib-section {
+  margin: 28px 0;
+  padding: 20px 22px;
+  background: var(--ngv-panel);
+  border: 1px solid var(--ngv-border);
+  border-radius: 12px;
+}
+
+.ngv-contrib-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.ngv-contrib-table th,
+.ngv-contrib-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ngv-border);
+  text-align: left;
+}
+
+.ngv-contrib-table th {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ngv-muted);
+  font-weight: 600;
+}
+
+.ngv-contrib-totals {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+.ngv-contrib-totals dt {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ngv-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ngv-contrib-totals dd {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ngv-contrib-note,
+.ngv-contrib-empty {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--ngv-muted);
+}
+
+.ngv-pos { color: var(--ngv-bull); }
+.ngv-neg { color: var(--ngv-bear); }
+
+@media (max-width: 800px) {
+  .ngv-contrib-totals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

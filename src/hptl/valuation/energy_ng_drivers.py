@@ -528,7 +528,9 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
             "required_for_v2": True,
         }
 
-    # --- HDD / CDD (optional caches; NOAA key required for ingest) ---
+    # --- HDD / CDD ---
+    # Zero midsummer HDD is a genuine observation (not missing). Anomalies must use
+    # same ISO-week climatology — never full-sample annual z-score.
     for weather_key, label, feature_name in (
         ("hdd", "Heating Degree Days", "hdd_anomaly"),
         ("cdd", "Cooling Degree Days", "cdd_anomaly"),
@@ -536,39 +538,106 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
         wpath = cache_map.get(weather_key, f"data/cache/energy_drivers/noaa_{weather_key}.json")
         wmeta = _cache_meta(wpath)
         wseries = _load_cache_series(wpath)
+        # Prefer native week keys from cache; asof onto valuation dates
         wweekly = _weekly_from_daily(wseries, dates) if wseries else {}
         if len(wweekly) >= MIN_WEEKS // 2:
-            vals = []
-            last = None
+            # Week-of-year climatology from prior years only (no look-ahead)
+            by_wn: dict[int, list[float]] = {}
+            dated: list[tuple[str, float, int]] = []
+            for d, v in sorted(wseries.items()):
+                try:
+                    wn = datetime.strptime(d[:10], "%Y-%m-%d").isocalendar()[1]
+                except ValueError:
+                    continue
+                dated.append((d[:10], float(v), wn))
+                by_wn.setdefault(wn, []).append(float(v))
+
+            anomalies: list[float] = []
+            levels: list[float] = []
+            normals: list[float | None] = []
+            ok = True
             for d in dates:
-                v = wweekly.get(d, last)
+                v = wweekly.get(d)
                 if v is None:
-                    vals = []
+                    ok = False
                     break
-                last = v
-                vals.append(float(v))
-            if len(vals) == len(dates):
-                mean = sum(vals) / len(vals)
-                std = math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals)) or 1.0
-                anomalies = [(v - mean) / std for v in vals]
+                try:
+                    wn = datetime.strptime(d[:10], "%Y-%m-%d").isocalendar()[1]
+                    year = datetime.strptime(d[:10], "%Y-%m-%d").year
+                except ValueError:
+                    ok = False
+                    break
+                # peers: same ISO week, strictly earlier years
+                peers = [
+                    val
+                    for date, val, w in dated
+                    if w == wn and date < d and datetime.strptime(date, "%Y-%m-%d").year < year
+                ]
+                peers = peers[-10:] if len(peers) > 10 else peers
+                if len(peers) < 3:
+                    # insufficient climatology — do not invent anomaly
+                    ok = False
+                    break
+                mu = sum(peers) / len(peers)
+                sd = math.sqrt(sum((p - mu) ** 2 for p in peers) / len(peers)) or 1.0
+                levels.append(float(v))
+                normals.append(mu)
+                anomalies.append((float(v) - mu) / sd)
+
+            latest = levels[-1] if levels else None
+            # Card always shows actual level when cache has asof value
+            card_level = wweekly.get(as_of)
+            if card_level is None and wseries:
+                card_level = _asof_value(wseries, as_of)
+            card_normal = normals[-1] if normals else None
+            card_anom = anomalies[-1] if anomalies and ok else None
+
+            # Zero is valid in summer for HDD — never coerce missing→0
+            zero_note = ""
+            if weather_key == "hdd" and card_level is not None and abs(card_level) < 1e-9:
+                zero_note = (
+                    " Current HDD of 0 is a genuine midsummer observation (no heating demand), "
+                    "not missing data."
+                )
+
+            if ok and len(anomalies) == len(dates):
+                # Keep series for experimental testing only — promotion decided in valuation module
                 bundle.features[feature_name] = anomalies
-                latest = vals[-1]
-                anom = anomalies[-1]
-                effect = "Bullish" if anom > 0.25 else "Bearish" if anom < -0.25 else "Neutral"
-                bundle.driver_cards[weather_key] = {
-                    "id": weather_key,
-                    "label": label,
-                    "unit": "degree-days",
-                    "available": True,
-                    "current": round(latest, 2),
-                    "anomaly": round(anom, 3),
-                    "as_of": wmeta.get("latest_observation_date") or as_of,
-                    "source": wmeta.get("official_source") or wpath,
-                    "freshness": wmeta.get("status") or "LIVE",
-                    "institutional_effect": effect,
-                    "tone": "bullish" if effect == "Bullish" else "bearish" if effect == "Bearish" else "neutral",
-                    "interpretation": f"{label} anomaly {anom:+.2f}σ vs sample mean (actuals only).",
-                }
+
+            effect = "Neutral"
+            if card_anom is not None:
+                effect = "Bullish" if card_anom > 0.25 else "Bearish" if card_anom < -0.25 else "Neutral"
+
+            data_quality = "OK" if card_normal is not None else "CLIMATOLOGY_INSUFFICIENT"
+            if not ok:
+                data_quality = "ANOMALY_INVALID_FOR_REGRESSION"
+
+            bundle.driver_cards[weather_key] = {
+                "id": weather_key,
+                "label": label,
+                "unit": "degree-days",
+                "available": card_level is not None,
+                "current": round(card_level, 2) if card_level is not None else None,
+                "normal": round(card_normal, 2) if card_normal is not None else None,
+                "anomaly": round(card_anom, 3) if card_anom is not None else None,
+                "as_of": wmeta.get("latest_observation_date") or as_of,
+                "source": wmeta.get("official_source") or wpath,
+                "freshness": wmeta.get("status") or "LIVE",
+                "data_quality": data_quality,
+                "valuation_role": "EXPERIMENTAL DRIVER",
+                "in_fair_value": False,
+                "valuation_note": "NOT INCLUDED IN FAIR VALUE pending walk-forward promotion",
+                "institutional_effect": effect,
+                "tone": "bullish" if effect == "Bullish" else "bearish" if effect == "Bearish" else "neutral",
+                "interpretation": (
+                    f"{label}: actual={card_level:.1f}, week-of-year normal="
+                    f"{card_normal:.1f}, anomaly="
+                    f"{card_anom:+.2f}σ vs same-week climatology."
+                    if card_level is not None and card_normal is not None and card_anom is not None
+                    else f"{label} level available; week-of-year climatology incomplete."
+                )
+                + zero_note,
+            }
         if weather_key not in bundle.driver_cards:
             bundle.driver_cards[weather_key] = {
                 "id": weather_key,
@@ -579,11 +648,10 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
                 "institutional_effect": "UNAVAILABLE",
                 "tone": "neutral",
                 "freshness": "UNAVAILABLE",
-                "api_key_required": "NOAA_API_TOKEN",
-                "interpretation": (
-                    "Official weather degree-day series unavailable. "
-                    "Set NOAA_API_TOKEN and extend refresh_natural_gas_drivers.py weather ingest."
-                ),
+                "valuation_role": "INVALID / DATA QUALITY FAILURE",
+                "in_fair_value": False,
+                "valuation_note": "NOT INCLUDED IN FAIR VALUE",
+                "interpretation": "Official weather degree-day series unavailable in cache.",
             }
 
     # --- Seasonality ---
@@ -619,6 +687,9 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
                 "month_avg_return_pct": seas_meta.get("month_avg_return_pct"),
                 "as_of": as_of,
                 "source": "Existing HPTL seasonality + week-of-year factor",
+                "valuation_role": "INFORMATIONAL ONLY",
+                "in_fair_value": False,
+                "valuation_note": "NOT INCLUDED IN FAIR VALUE",
                 "institutional_effect": str(bias) if bias else effect,
                 "tone": (
                     "bullish"
@@ -627,8 +698,13 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
                     if str(bias).lower().startswith("bear") or effect == "Bearish"
                     else "neutral"
                 ),
-                "interpretation": seas_meta.get("seasonality_reason")
-                or f"Seasonal week-of-year factor {latest:+.2f}σ vs multi-year average.",
+                "interpretation": (
+                    "Informational only — not a validated Natural Gas seasonality valuation model. "
+                    + (
+                        seas_meta.get("seasonality_reason")
+                        or f"Seasonal week-of-year factor {latest:+.2f}σ vs multi-year average."
+                    )
+                ),
             }
     if "seasonality" not in bundle.driver_cards:
         bundle.driver_cards["seasonality"] = {
