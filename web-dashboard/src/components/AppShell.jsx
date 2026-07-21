@@ -11,7 +11,13 @@ import {
   navigateToScanner,
   navigateToThesisTracker,
   navigateToNaturalGasValuation,
+  navigateToDxyMacroBias,
+  navigateToGoldValuation,
+  navigateToInstrument,
+  navigateToMacroHub,
 } from '../routing.js'
+
+const DXY_MARKET = 'US Dollar Index / DX'
 
 export function AppShell({
   children,
@@ -82,6 +88,9 @@ export function AppShell({
           <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>
             Scanner
           </button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>
+            Macro Hub
+          </button>
           <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToThesisTracker}>
             Thesis Tracker
           </button>
@@ -110,6 +119,30 @@ export function AppShell({
             onClick={navigateToNaturalGasValuation}
           >
             NG Valuation
+          </button>
+          <button
+            type="button"
+            className="ws-btn ws-btn-primary"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToGoldValuation}
+          >
+            Gold Valuation
+          </button>
+          <button
+            type="button"
+            className="ws-btn ws-btn-primary"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={() => navigateToInstrument(DXY_MARKET)}
+          >
+            US Dollar Index / DX
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToDxyMacroBias}
+          >
+            DXY Macro Bias
           </button>
         </div>
       </aside>

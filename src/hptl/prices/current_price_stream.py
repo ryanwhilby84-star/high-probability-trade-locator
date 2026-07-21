@@ -186,7 +186,24 @@ class OandaStreamCache:
     # -- quote access -------------------------------------------------------- #
 
     def update_quote(self, symbol: str, snap: PriceSnapshot, *, tradeable: bool, status: str) -> None:
+        """Store quote only if it is newer than (or equal age to) the cached quote.
+
+        Protects against reconnect races where an older buffered frame arrives after
+        a fresher price and would otherwise regress the displayed mid.
+        """
         with self._lock:
+            existing = self._quotes.get(symbol)
+            if existing is not None:
+                new_as_of = str(snap.get("as_of") or "")
+                old_as_of = str(existing.get("as_of") or "")
+                if new_as_of and old_as_of and new_as_of < old_as_of:
+                    log.debug(
+                        "reject older quote for %s: incoming %s < cached %s",
+                        symbol,
+                        new_as_of,
+                        old_as_of,
+                    )
+                    return
             self._quotes[symbol] = snap
             self._meta[symbol] = {"tradeable": tradeable, "status": status}
 

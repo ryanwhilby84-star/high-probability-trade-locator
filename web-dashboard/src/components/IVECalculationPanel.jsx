@@ -16,6 +16,7 @@ import {
 } from '../valuation/currencyFuturesIveDisplay.js'
 import { isAgriValuationMarket } from '../valuation/agriValuationDisplay.js'
 import { isMetalsValuationMarket } from '../valuation/metalsValuationDisplay.js'
+import { useCanonicalCurrentPrice } from '../prices/canonicalCurrentPrice.js'
 
 function MetaItem({ label, value, tone = null }) {
   return (
@@ -41,6 +42,7 @@ function Section({ title, children }) {
 export function IVECalculationPanel({ marketId, row }) {
   const futuresDoc = useCurrencyFuturesIVE()
   const valuationDoc = useValuationLatest()
+  const canonical = useCanonicalCurrentPrice(marketId)
 
   const ive = React.useMemo(() => {
     if (isCurrencyFuturesMarket(marketId)) {
@@ -58,6 +60,10 @@ export function IVECalculationPanel({ marketId, row }) {
   const tone = labelTone(ive?.valuationLabel)
   const statusClass = statusTone(ive?.modelStatus)
   const showCalc = ive?.modelStatus === 'VALIDATED' || ive?.modelStatus === 'DATA_STALE'
+  const displayCurrent =
+    canonical.price != null ? canonical.price : null
+  const currentLabel =
+    canonical.price != null ? `Current price (${canonical.label})` : 'Current price (unavailable)'
 
   return (
     <section
@@ -104,7 +110,15 @@ export function IVECalculationPanel({ marketId, row }) {
         <>
           <Section title="Valuation">
             <dl className="fxv3-dev-meta fxv3-valuation-grid">
-              <MetaItem label="Current price" value={fmtPrice(ive.currentPrice, priceDigits)} />
+              <MetaItem label={currentLabel} value={fmtPrice(displayCurrent, priceDigits)} />
+              {ive.currentPrice != null &&
+              displayCurrent != null &&
+              Math.abs(Number(ive.currentPrice) - Number(displayCurrent)) > 1e-6 ? (
+                <MetaItem
+                  label="Model spot (valuation only)"
+                  value={fmtPrice(ive.currentPrice, priceDigits)}
+                />
+              ) : null}
               <MetaItem label="Fair value" value={fmtPrice(ive.fairValue, priceDigits)} />
               <MetaItem label="Valuation %" value={fmtPct(ive.valuationPct)} tone={tone} />
               <MetaItem label="Valuation label" value={ive.valuationLabel} tone={tone} />

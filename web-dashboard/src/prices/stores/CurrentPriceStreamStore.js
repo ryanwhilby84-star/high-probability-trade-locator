@@ -73,9 +73,20 @@ function parseAgeSeconds(asOf) {
 
 function normalizePrice(raw) {
   if (!raw || typeof raw !== 'object') return null
-  const mid = Number(raw.mid ?? raw.current_price)
+  const status = String(raw.status || 'UNAVAILABLE').toUpperCase()
+  const midNum = Number(raw.mid)
+  // Never promote current_price/fallback into mid — mid is live bid/ask only.
+  const mid = Number.isFinite(midNum) ? midNum : null
   const bid = Number(raw.bid)
   const ask = Number(raw.ask)
+  const currentFromPayload =
+    raw.current_price != null && Number.isFinite(Number(raw.current_price))
+      ? Number(raw.current_price)
+      : null
+  const fallbackClose =
+    raw.fallback_close != null && Number.isFinite(Number(raw.fallback_close))
+      ? Number(raw.fallback_close)
+      : null
   return {
     internalKey: raw.internal_key ?? null,
     displayName: raw.display_name ?? null,
@@ -90,23 +101,20 @@ function normalizePrice(raw) {
     timestamp: raw.timestamp ?? null,
     bid: Number.isFinite(bid) ? bid : null,
     ask: Number.isFinite(ask) ? ask : null,
-    mid: Number.isFinite(mid) ? mid : null,
+    mid,
     currentPrice:
-      raw.current_price != null && Number.isFinite(Number(raw.current_price))
-        ? Number(raw.current_price)
-        : Number.isFinite(mid)
+      currentFromPayload != null
+        ? currentFromPayload
+        : status === 'LIVE' || status === 'STALE'
           ? mid
-          : null,
-    status: String(raw.status || 'UNAVAILABLE').toUpperCase(),
+          : fallbackClose,
+    status,
     ageSeconds:
       raw.age_seconds != null && Number.isFinite(Number(raw.age_seconds))
         ? Number(raw.age_seconds)
         : parseAgeSeconds(raw.timestamp),
     tradeable: raw.tradeable !== false,
-    fallbackClose:
-      raw.fallback_close != null && Number.isFinite(Number(raw.fallback_close))
-        ? Number(raw.fallback_close)
-        : null,
+    fallbackClose,
     fallbackSource: raw.fallback_source ?? null,
     note: raw.note ?? null,
   }
@@ -143,7 +151,18 @@ function applySnapshot(payload) {
     const next = Object.create(null)
     for (const [key, row] of Object.entries(payload.prices)) {
       const n = normalizePrice(row)
-      if (n) next[key] = n
+      if (!n) continue
+      // Reject older quotes so a reconnect cannot regress mid.
+      const existing = payload.type === 'snapshot' ? null : _prices[key]
+      if (
+        existing?.timestamp &&
+        n.timestamp &&
+        String(n.timestamp) < String(existing.timestamp)
+      ) {
+        next[key] = existing
+        continue
+      }
+      next[key] = n
     }
     if (Object.keys(next).length > 0) {
       // Full snapshot replaces; partial frames merge so brief gaps keep last quote.

@@ -397,10 +397,12 @@
   margin: 0 0 12px;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 11px;
-  letter-spacing: 0.04em;
+  font-size: 10px;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   font-weight: 650;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .ngv-role-validated {
@@ -413,6 +415,12 @@
   background: rgba(251, 191, 36, 0.1);
   color: #fcd34d;
   border: 1px solid rgba(251, 191, 36, 0.28);
+}
+
+.ngv-role-rejected {
+  background: rgba(248, 113, 113, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.28);
 }
 
 .ngv-role-info {

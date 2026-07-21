@@ -44,25 +44,44 @@ def fetch_fred_instrument(instrument_id: str, *, observation_start: str = "2016-
 
     existing = load_instrument_record_internal(instrument_id) or {}
     daily = _merge_fred_with_existing(existing.get("daily") or [], incoming, instrument_id)
+    from hptl.prices.workstation_ohlc_export import derive_weekly_ohlc_from_daily
+
+    weekly_raw = derive_weekly_ohlc_from_daily(
+        [{**b, "source": f"fred:{series_id}"} for b in daily]
+    )
+    weekly = [
+        {
+            "date": b["date"],
+            "open": b["open"],
+            "high": b["high"],
+            "low": b["low"],
+            "close": b["close"],
+            "volume": None,
+        }
+        for b in weekly_raw
+    ]
     price = {"mid": daily[-1]["close"], "as_of": daily[-1]["date"]} if daily else None
     range_52w = compute_range_52w(daily)
-    history = build_history_meta(daily, [], range_52w) if daily else None
+    history = build_history_meta(daily, weekly, range_52w) if daily else None
 
     scale_meta: dict[str, Any] = {
         "source": "fred",
         "series_id": series_id,
         "is_fallback": instrument_id == "US Dollar Index / DX",
+        "is_proxy": instrument_id == "US Dollar Index / DX",
     }
     if instrument_id == "US Dollar Index / DX":
         scale_meta["fallback_note"] = (
-            "FRED DTWEXBGS broad USD index — interim refresh until ICE DX futures feed wired."
+            "FRED DTWEXBGS Trade-Weighted Broad USD Index — NOT ICE DX / Dixie futures. "
+            "Used as the charted USD-index proxy until an ICE DX futures price feed is wired."
         )
+        scale_meta["instrument_label"] = "FRED Broad USD (DTWEXBGS) — proxy for DXY workstation"
 
     return {
         "instrument_id": instrument_id,
         "price": price,
         "daily": daily,
-        "weekly": [],
+        "weekly": weekly,
         "range_52w": range_52w,
         "history": history,
         "error": None,

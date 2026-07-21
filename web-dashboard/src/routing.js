@@ -103,6 +103,19 @@ export function parseRoute() {
       .trim()
     const key = rest.toLowerCase().replace(/\s+/g, ' ')
     if (
+      key === 'dxy' ||
+      key === 'dx' ||
+      key === 'usd index' ||
+      key === 'us dollar index' ||
+      key === 'us dollar index / dx' ||
+      key.includes('dollar index')
+    ) {
+      return { view: 'dxy-macro-bias', market: 'US Dollar Index / DX' }
+    }
+    if (key === 'gold' || key === 'xau' || key === 'xauusd' || key.includes('gold')) {
+      return { view: 'gold-valuation', market: 'Gold' }
+    }
+    if (
       !rest ||
       key === 'natural-gas' ||
       key === 'ng' ||
@@ -112,6 +125,10 @@ export function parseRoute() {
     ) {
       return { view: 'natural-gas-valuation', market: 'Natural Gas / NG' }
     }
+  }
+
+  if (String(parts[0] || '').toLowerCase() === 'dxy' || String(parts[0] || '').toLowerCase() === 'dixie') {
+    return { view: 'dxy-macro-bias', market: 'US Dollar Index / DX' }
   }
 
   return { view: 'scanner', market: null }
@@ -233,6 +250,22 @@ export function navigateToMacroHub() {
 export function navigateToNaturalGasValuation() {
 
   window.location.hash = `#/valuation/${encodeURIComponent('Natural Gas / NG')}`
+
+}
+
+
+
+export function navigateToDxyMacroBias() {
+
+  window.location.hash = `#/valuation/${encodeURIComponent('US Dollar Index / DX')}`
+
+}
+
+
+
+export function navigateToGoldValuation() {
+
+  window.location.hash = `#/valuation/${encodeURIComponent('Gold')}`
 
 }
 

@@ -76,9 +76,12 @@ def build_price_coverage_audit(
     oanda_meta = oanda_meta or fetch_oanda_coverage_metadata()
     av_meta = av_meta or fetch_alpha_vantage_coverage_metadata(delay_sec=av_probe_delay_sec)
 
+    from hptl.prices.fred_prices import FRED_INSTRUMENT_SERIES
+
     instruments: list[dict[str, Any]] = []
     oanda_supported: list[str] = []
     alpha_supported: list[str] = []
+    fred_supported: list[str] = []
     supported_by_both: list[str] = []
     unsupported: list[str] = []
 
@@ -110,16 +113,34 @@ def build_price_coverage_audit(
                 or av_meta.get("last_successful_response")
             )
 
+        fred_series = FRED_INSTRUMENT_SERIES.get(iid)
+        fred_ev = {
+            "source": "fred",
+            "symbol": fred_series,
+            "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+            "series_id": fred_series,
+            "last_successful_response": None,
+            "coverage_status": "supported" if fred_series else "unsupported",
+            "note": (
+                "FRED DTWEXBGS Trade-Weighted Broad USD — proxy, not ICE DX futures"
+                if iid == "US Dollar Index / DX" and fred_series
+                else None
+            ),
+        }
+
         o_ok = oanda_ev["coverage_status"] == "supported"
         a_ok = alpha_ev["coverage_status"] == "supported"
+        f_ok = fred_ev["coverage_status"] == "supported"
 
         if o_ok:
             oanda_supported.append(iid)
         if a_ok:
             alpha_supported.append(iid)
+        if f_ok:
+            fred_supported.append(iid)
         if o_ok and a_ok:
             supported_by_both.append(iid)
-        if not o_ok and not a_ok:
+        if not o_ok and not a_ok and not f_ok:
             unsupported.append(iid)
 
         if o_ok and a_ok:
@@ -128,6 +149,8 @@ def build_price_coverage_audit(
             overall = "oanda_only"
         elif a_ok:
             overall = "alpha_only"
+        elif f_ok:
+            overall = "fred_only"
         else:
             overall = "unsupported"
 
@@ -137,12 +160,13 @@ def build_price_coverage_audit(
                 "friendly_name": _friendly_name(spec, oanda_ev.get("symbol")),
                 "asset_class": spec.asset_class,
                 "coverage_status": overall,
-                "sources": [oanda_ev, alpha_ev],
+                "sources": [oanda_ev, alpha_ev, fred_ev],
             }
         )
 
     oanda_supported.sort()
     alpha_supported.sort()
+    fred_supported.sort()
     supported_by_both.sort()
     unsupported.sort()
 
@@ -154,6 +178,7 @@ def build_price_coverage_audit(
             "htpl_tradeable_instruments": len(instruments),
             "oanda_supported_count": len(oanda_supported),
             "alpha_supported_count": len(alpha_supported),
+            "fred_supported_count": len(fred_supported),
             "supported_by_both_count": len(supported_by_both),
             "unsupported_count": len(unsupported),
             "oanda_only_count": len(oanda_supported) - len(supported_by_both),
@@ -161,6 +186,7 @@ def build_price_coverage_audit(
         },
         "oanda_supported": oanda_supported,
         "alpha_supported": alpha_supported,
+        "fred_supported": fred_supported,
         "supported_by_both": supported_by_both,
         "unsupported": unsupported,
         "oanda_api": {

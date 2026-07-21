@@ -178,6 +178,34 @@ def _mapping_from_registry() -> dict[str, InstrumentMapping]:
     return out
 
 
+def _overlay_fred_mappings(mappings: dict[str, InstrumentMapping]) -> dict[str, InstrumentMapping]:
+    """Map FRED-backed instruments (e.g. DX / DTWEXBGS) without inventing an OANDA symbol."""
+    try:
+        from hptl.prices.fred_prices import FRED_INSTRUMENT_SERIES
+    except Exception:
+        return mappings
+    out = dict(mappings)
+    for iid, series_id in FRED_INSTRUMENT_SERIES.items():
+        existing = out.get(iid)
+        if existing and existing.is_mapped and existing.provider == PROVIDER_OANDA:
+            continue
+        display = existing.display_name if existing else iid
+        asset_type = existing.asset_type if existing else "fx"
+        tradeable = existing.tradeable if existing else True
+        out[iid] = InstrumentMapping(
+            internal_key=iid,
+            display_name=display,
+            provider="fred",
+            provider_symbol=series_id,
+            asset_type=asset_type,
+            currency="USD",
+            price_precision=4,
+            supports_streaming=False,
+            tradeable=tradeable,
+        )
+    return out
+
+
 def load_instrument_mappings(*, refresh: bool = False) -> dict[str, InstrumentMapping]:
     global _MAPPING_CACHE
     if _MAPPING_CACHE is not None and not refresh:
@@ -191,6 +219,7 @@ def load_instrument_mappings(*, refresh: bool = False) -> dict[str, InstrumentMa
         }
     else:
         _MAPPING_CACHE = _mapping_from_registry()
+    _MAPPING_CACHE = _overlay_fred_mappings(_MAPPING_CACHE)
     return _MAPPING_CACHE
 
 
@@ -329,6 +358,36 @@ def _build_current_price(
         status = STATUS_UNAVAILABLE
         note = "no live quote"
 
+    # FRED-backed instruments are never streamed via OANDA — use trusted close as primary.
+    if mapping.provider == "fred" and allow_fallback:
+        fallback_close, fallback_source = _trusted_close(mapping.internal_key)
+        if fallback_close is not None:
+            status = STATUS_FALLBACK
+            note = (
+                f"FRED {mapping.provider_symbol} daily close (not a live ICE DX / Dixie futures quote)"
+                if mapping.internal_key == "US Dollar Index / DX"
+                else f"FRED {mapping.provider_symbol} daily close (no streaming quote)"
+            )
+            return CurrentPrice(
+                internal_key=mapping.internal_key,
+                display_name=mapping.display_name,
+                provider=mapping.provider,
+                provider_symbol=mapping.provider_symbol,
+                asset_type=mapping.asset_type,
+                currency=mapping.currency,
+                price_precision=mapping.price_precision,
+                timestamp=None,
+                bid=None,
+                ask=None,
+                mid=None,
+                status=status,
+                age_seconds=None,
+                tradeable=mapping.tradeable,
+                fallback_close=fallback_close,
+                fallback_source=fallback_source or f"fred:{mapping.provider_symbol}",
+                note=note,
+            )
+
     if status in (STATUS_UNAVAILABLE, STATUS_STALE) and allow_fallback:
         fallback_close, fallback_source = _trusted_close(mapping.internal_key)
         if status == STATUS_UNAVAILABLE and fallback_close is not None:
@@ -362,15 +421,24 @@ def get_current_prices(
     fetch: bool = True,
     allow_fallback: bool = True,
 ) -> dict[str, CurrentPrice]:
-    """Current price for each requested instrument (all mapped instruments if None)."""
+    """Current price for each requested instrument (full registry if None)."""
     mappings = load_instrument_mappings()
-    selected = keys if keys is not None else list(mappings.keys())
+    # Always cover the full registry so newly added instruments appear as
+    # UNAVAILABLE/FALLBACK rather than being silently omitted.
+    registry_keys = list(all_instrument_ids())
+    if keys is None:
+        selected = list(dict.fromkeys([*registry_keys, *mappings.keys()]))
+    else:
+        selected = list(keys)
 
     symbols = sorted(
         {
             mappings[k].provider_symbol
             for k in selected
-            if k in mappings and mappings[k].is_mapped and mappings[k].provider_symbol
+            if k in mappings
+            and mappings[k].is_mapped
+            and mappings[k].provider == PROVIDER_OANDA
+            and mappings[k].provider_symbol
         }
     )
 

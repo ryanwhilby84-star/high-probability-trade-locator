@@ -12,6 +12,7 @@ import {
 
 import { AppShell } from '../components/AppShell.jsx'
 import { fetchPublicJson } from '../utils/fetchPublicJson.js'
+import { useCanonicalCurrentPrice } from '../prices/canonicalCurrentPrice.js'
 import { navigateToCotWorkstation, navigateToInstrument, navigateToScanner } from '../routing.js'
 import './naturalGasValuation.css'
 
@@ -104,9 +105,11 @@ function ValuationScale({ scale, deviationPct }) {
 
 function roleClass(badge) {
   const r = String(badge || '')
-  if (r.includes('VALIDATED')) return 'ngv-role-validated'
-  if (r.includes('EXPERIMENTAL')) return 'ngv-role-experimental'
+  if (r.includes('INCLUDED') || r.includes('VALIDATED')) return 'ngv-role-validated'
+  if (r.includes('REJECTED')) return 'ngv-role-rejected'
+  if (r.includes('INSUFFICIENT')) return 'ngv-role-invalid'
   if (r.includes('INVALID')) return 'ngv-role-invalid'
+  if (r.includes('EXPERIMENTAL')) return 'ngv-role-experimental'
   return 'ngv-role-info'
 }
 
@@ -341,6 +344,7 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
   const [doc, setDoc] = React.useState(null)
   const [error, setError] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
+  const canonical = useCanonicalCurrentPrice(MARKET)
 
   React.useEffect(() => {
     let active = true
@@ -395,11 +399,11 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
     >
       <div className="ngv-page">
         <header className="ngv-hero">
-          <p className="ngv-eyebrow">HPTL · Energy · Version 1</p>
+          <p className="ngv-eyebrow">HPTL · Energy · Validated Drivers Only</p>
           <h1>Natural Gas Institutional Valuation</h1>
           <p className="ngv-hero-sub">
-            Fair value from validated valuation drivers only. Experimental and informational drivers
-            are displayed but do not enter the fair-value calculation.
+            Fair value uses only walk-forward-validated valuation drivers. Experimental and
+            informational drivers are displayed for context but do not enter the calculation.
           </p>
         </header>
 
@@ -417,8 +421,14 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
             <section className="ngv-summary-grid" aria-label="Valuation summary">
               <SummaryCard
                 label="Current Price"
-                value={fmt(inst.spot_price, 3)}
-                sub="USD / MMBtu"
+                value={fmt(canonical.price ?? null, 3)}
+                sub={`USD / MMBtu · ${canonical.label}${
+                  inst.spot_price != null &&
+                  canonical.price != null &&
+                  Math.abs(Number(inst.spot_price) - Number(canonical.price)) > 0.01
+                    ? ` · model spot ${fmt(inst.spot_price, 3)} (valuation only)`
+                    : ''
+                }`}
                 tone="neutral"
               />
               <SummaryCard

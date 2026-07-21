@@ -21,6 +21,7 @@ import { LiveMarketContextSection } from '../LiveMarketContextSection.jsx'
 import { MacroCatalystPanel } from '../components/MacroCatalystPanel.jsx'
 import { WeatherCropPanel } from '../components/WeatherCropPanel.jsx'
 import { LegacyCotPanel } from '../components/LegacyCotPanel.jsx'
+import { useCanonicalCurrentPrice } from '../prices/canonicalCurrentPrice.js'
 import { buildInstitutionalDecisionDigest } from '../institutionalPositioningDigest.js'
 import { buildWeekBackdropDigest } from '../macroReadableDigest.js'
 import {
@@ -858,7 +859,8 @@ function fxConfTone(conf) {
 }
 
 /** FX Valuation — institutional macro V2 (primary) or yield V1 fallback. */
-function FxValuationBlock({ fx }) {
+function FxValuationBlock({ fx, marketId }) {
+  const canonicalPrice = useCanonicalCurrentPrice(marketId || fx?.pair)
   if (!fx || typeof fx !== 'object' || !fx.pair) return null
   const isV2 = String(fx.valuation_model_type || '').includes('Institutional Macro V2')
   const valueCondition = fxValueCondition(fx)
@@ -874,6 +876,10 @@ function FxValuationBlock({ fx }) {
       <span style={{ color: '#e2e8f0', fontWeight: 700, minWidth: '84px', textAlign: 'right' }}>{fmtPp(diff)}</span>
     </div>
   )
+  const displaySpot =
+    canonicalPrice.price != null ? Number(canonicalPrice.price) : fx.spot != null ? Number(fx.spot) : null
+  const spotLabel =
+    canonicalPrice.price != null ? `Current price (${canonicalPrice.label})` : 'Current price (model)'
   return (
     <section className="fx-valuation" style={{ marginTop: '24px' }}>
       <h4 className="wo-cot-section-title">FX Institutional Valuation</h4>
@@ -881,7 +887,7 @@ function FxValuationBlock({ fx }) {
         Macro-driven fair value for <strong>{fx.pair}</strong> ({fx.valuation_model_type}). Independent of price action,
         COT, and seasonality.
       </p>
-      {isV2 && fx.spot != null ? (
+      {isV2 && displaySpot != null ? (
         <div
           style={{
             display: 'grid',
@@ -891,8 +897,8 @@ function FxValuationBlock({ fx }) {
           }}
         >
           <div className="fx-val-metric">
-            <span className="fx-val-metric-label">Current price</span>
-            <strong>{Number(fx.spot).toFixed(4)}</strong>
+            <span className="fx-val-metric-label">{spotLabel}</span>
+            <strong>{displaySpot.toFixed(4)}</strong>
           </div>
           <div className="fx-val-metric">
             <span className="fx-val-metric-label">Model fair value</span>

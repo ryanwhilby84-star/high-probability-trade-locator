@@ -8,8 +8,8 @@
   "oanda_instruments_on_account": 123,
   "summary": {
     "total_instruments": 138,
-    "mapped_count": 108,
-    "unmapped_count": 30
+    "mapped_count": 109,
+    "unmapped_count": 29
   },
   "unmapped": [
     "10-Year Real Yield",
@@ -36,7 +36,6 @@
     "US 30-Year Treasury Yield",
     "US 5-Year T-Note / ZF",
     "US 5Y T-Note",
-    "US Dollar Index / DX",
     "US T-Bond",
     "USD/INR",
     "USD/SAR",
@@ -537,19 +536,20 @@
     "US Dollar Index / DX": {
       "internal_key": "US Dollar Index / DX",
       "display_name": "US Dollar Index / DX",
-      "provider": null,
-      "provider_symbol": null,
+      "provider": "fred",
+      "provider_symbol": "DTWEXBGS",
       "asset_type": "fx",
-      "provider_asset_type": null,
+      "provider_asset_type": "fred_series",
       "oanda_display_name": null,
-      "currency": null,
-      "price_precision": null,
+      "currency": "USD",
+      "price_precision": 4,
       "pip_location": null,
       "supports_streaming": false,
       "tradeable": true,
       "cot_proxy_of": null,
       "candidates_tried": [],
-      "status": "unmapped"
+      "status": "mapped_proxy",
+      "note": "FRED DTWEXBGS Trade-Weighted Broad USD \u2014 proxy, not ICE DX futures / Dixie"
     },
     "US 2-Year Treasury Yield": {
       "internal_key": "US 2-Year Treasury Yield",

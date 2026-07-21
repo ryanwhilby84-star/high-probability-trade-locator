@@ -31,6 +31,10 @@ import { MacroHubPage } from './pages/MacroHubPage.jsx'
 
 import { NaturalGasValuationPage } from './pages/NaturalGasValuationPage.jsx'
 
+import { DxyMacroBiasPage } from './pages/DxyMacroBiasPage.jsx'
+
+import { GoldValuationPage } from './pages/GoldValuationPage.jsx'
+
 import { canonicalMarketId } from './marketResolution.js'
 
 import { allInstrumentIds } from './instrumentRegistry.js'
@@ -201,6 +205,32 @@ export default function App() {
     return (
 
       <NaturalGasValuationPage
+
+        sidebarClass={sidebarClass}
+
+        onSidebarClass={setSidebarClass}
+
+      />
+
+    )
+
+  }
+
+
+
+  if (route.view === 'dxy-macro-bias') {
+
+    return <DxyMacroBiasPage />
+
+  }
+
+
+
+  if (route.view === 'gold-valuation') {
+
+    return (
+
+      <GoldValuationPage
 
         sidebarClass={sidebarClass}
 

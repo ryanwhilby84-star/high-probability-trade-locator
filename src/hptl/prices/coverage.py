@@ -57,7 +57,7 @@ def select_price_source(
     instrument_id: str,
     audit: dict[str, Any] | None = None,
 ) -> str | None:
-    """Return ``oanda``, ``alpha_vantage``, or ``None`` (unsupported). Prefer OANDA when both."""
+    """Return ``oanda``, ``alpha_vantage``, ``fred``, or ``None``. Prefer OANDA when both."""
     doc = audit or load_price_coverage()
     spec = get_instrument(instrument_id)
     oanda_set = set(doc.get("oanda_supported") or [])
@@ -66,6 +66,17 @@ def select_price_source(
     alpha_set = set(doc.get("alpha_supported") or [])
     if instrument_id in alpha_set:
         return "alpha_vantage"
+    fred_set = set(doc.get("fred_supported") or [])
+    if instrument_id in fred_set:
+        return "fred"
+    # Registry fallback for instruments with a known FRED series (e.g. DX / DTWEXBGS).
+    try:
+        from hptl.prices.fred_prices import fred_series_for
+
+        if fred_series_for(instrument_id):
+            return "fred"
+    except Exception:
+        pass
     return None
 
 
@@ -73,7 +84,15 @@ def supported_instrument_ids(audit: dict[str, Any] | None = None) -> list[str]:
     doc = audit or load_price_coverage()
     oanda_set = set(doc.get("oanda_supported") or [])
     alpha_set = set(doc.get("alpha_supported") or [])
-    return sorted(oanda_set | alpha_set)
+    fred_set = set(doc.get("fred_supported") or [])
+    if not fred_set:
+        try:
+            from hptl.prices.fred_prices import FRED_INSTRUMENT_SERIES
+
+            fred_set = set(FRED_INSTRUMENT_SERIES)
+        except Exception:
+            fred_set = set()
+    return sorted(oanda_set | alpha_set | fred_set)
 
 
 def get_spec(instrument_id: str) -> InstrumentSpec | None:

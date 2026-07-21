@@ -42,6 +42,17 @@ def _is_real_ohlc(open_: float | None, high: float | None, low: float | None, cl
     return high > low
 
 
+def _is_usable_daily_bar(
+    open_: float | None, high: float | None, low: float | None, close: float | None
+) -> bool:
+    """Accept real wick bars or close-only index prints (O=H=L=C) for weekly aggregation."""
+    if open_ is None or high is None or low is None or close is None:
+        return False
+    if high > low:
+        return True
+    return open_ == high == low == close
+
+
 def _iso_week_key(date_str: str) -> str:
     try:
         return pd.Timestamp(str(date_str)[:10]).strftime("%G-W%V")
@@ -50,13 +61,20 @@ def _iso_week_key(date_str: str) -> str:
 
 
 def derive_weekly_ohlc_from_daily(daily_bars: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """ISO-week OHLC from daily bars (real wick bars only)."""
+    """ISO-week OHLC from daily bars.
+
+    Close-only daily index prints (FRED DTWEXBGS etc.) are aggregated into weekly
+    OHLC using the week's first/last/min/max closes — not fabricated intraday wicks.
+    """
     buckets: dict[str, dict[str, Any]] = {}
     for bar in daily_bars:
         d = str(bar.get("date") or "")[:10]
         o, h, l, c = _num(bar.get("open")), _num(bar.get("high")), _num(bar.get("low")), _num(bar.get("close"))
-        if not d or not _is_real_ohlc(o, h, l, c):
+        if not d or not _is_usable_daily_bar(o, h, l, c):
             continue
+        # Close-only print: use close for all fields so weekly min/max reflect the index path.
+        if not _is_real_ohlc(o, h, l, c):
+            o = h = l = c
         wk = _iso_week_key(d)
         prev = buckets.get(wk)
         if prev is None:
@@ -80,7 +98,12 @@ def derive_weekly_ohlc_from_daily(daily_bars: list[dict[str, Any]]) -> list[dict
             }
     out = list(buckets.values())
     out.sort(key=lambda b: b["date"])
-    return [b for b in out if _is_real_ohlc(b["open"], b["high"], b["low"], b["close"])]
+    # Keep weeks with a real range; also keep flat weeks (single close) for continuity.
+    return [
+        b
+        for b in out
+        if _is_usable_daily_bar(b["open"], b["high"], b["low"], b["close"])
+    ]
 
 
 def _find_bar_as_of(bars: list[dict[str, Any]], cot_date: str) -> dict[str, Any] | None:
@@ -244,7 +267,7 @@ def build_instrument_workstation_ohlc(
             "source": b.source,
         }
         for b in tl.bars
-        if _is_real_ohlc(b.open, b.high, b.low, b.close)
+        if _is_usable_daily_bar(b.open, b.high, b.low, b.close)
     ]
     weekly_ohlc = derive_weekly_ohlc_from_daily(real_daily)
 

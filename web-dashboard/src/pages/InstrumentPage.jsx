@@ -3,11 +3,21 @@ import { AppShell, filterMarketsBySidebar } from '../components/AppShell.jsx'
 import { InstrumentDetail, buildMarketHistoryForMarket } from '../legacy/dashboardLegacy.jsx'
 import { resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
 import { recordCotReportDate, isCotRowResolved } from '../marketResolution.js'
-import { navigateToInstrument, navigateToScanner, navigateToThesisTracker, navigateToCotWorkstation, navigateToNaturalGasValuation } from '../routing.js'
+import {
+  navigateToInstrument,
+  navigateToScanner,
+  navigateToThesisTracker,
+  navigateToCotWorkstation,
+  navigateToNaturalGasValuation,
+  navigateToDxyMacroBias,
+  navigateToGoldValuation,
+} from '../routing.js'
 import { CotUnavailablePanel } from '../components/CotUnavailablePanel.jsx'
 import { ValuationInstrumentSection } from '../components/IVECalculationPanel.jsx'
+import { InstrumentPricePanel } from '../components/InstrumentPricePanel.jsx'
 import { InstrumentWorkstationLayout } from '../workstation/InstrumentWorkstationLayout.jsx'
 import { InstrumentPositioningWorkspace } from '../components/InstrumentPositioningWorkspace.jsx'
+import { useInstrumentPrices } from '../hooks/useInstrumentPrices.js'
 import { hasRealWeather, resolveWeatherForMarket } from '../weatherData.js'
 import { buildJournalPrefill } from '../journal/journalPrefill.js'
 import { LogTradeIdeaModal } from '../components/LogTradeIdeaModal.jsx'
@@ -40,6 +50,8 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
     weatherLoadError,
     tffDoc,
   } = confluence
+
+  const priceState = useInstrumentPrices(marketId)
 
   const row = React.useMemo(
     () => marketRows.find((r) => r.market === marketId) || { market: marketId },
@@ -200,6 +212,26 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
         </button>
       ) : null}
 
+      {marketId === 'Gold' ? (
+        <button
+          type="button"
+          className="ws-btn ws-btn-primary"
+          onClick={navigateToGoldValuation}
+        >
+          Open Valuation
+        </button>
+      ) : null}
+
+      {marketId === 'US Dollar Index / DX' ? (
+        <button
+          type="button"
+          className="ws-btn ws-btn-primary"
+          onClick={navigateToDxyMacroBias}
+        >
+          Open DXY Macro Bias
+        </button>
+      ) : null}
+
       <button type="button" className="ws-btn ws-btn-primary" onClick={() => navigateToCotWorkstation(marketId)}>
         Open COT Workstation
       </button>
@@ -234,6 +266,13 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       {!isCotRowResolved(row) ? <CotUnavailablePanel row={row} marketId={marketId} /> : null}
 
       <InstrumentWorkstationLayout>
+        <InstrumentPricePanel
+          instrumentId={marketId}
+          prices={priceState.data}
+          loading={priceState.loading}
+          error={priceState.error}
+        />
+
         <ValuationInstrumentSection row={row} />
 
         <InstrumentPositioningWorkspace
