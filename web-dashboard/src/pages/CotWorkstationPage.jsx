@@ -3,6 +3,10 @@ import React from 'react'
 import { filterMarketsBySidebar } from '../components/AppShell.jsx'
 import { CotWorkstation } from '../workstation/CotWorkstation.jsx'
 import {
+  WorkstationIntegrityPanel,
+  WorkstationRenderErrorPanel,
+} from '../workstation/WorkstationIntegrityPanel.jsx'
+import {
   navigateToCotWorkstation,
   navigateToInstrument,
   navigateToScanner,
@@ -13,36 +17,35 @@ import '../workstation/cotWorkstationPage.css'
 class CotWorkstationErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { error: null }
+    this.state = { error: null, retryToken: 0 }
   }
 
   static getDerivedStateFromError(error) {
     return { error }
   }
 
-  componentDidCatch(error) {
-    console.error('[cot-workstation] route failed', this.props.marketId, error)
+  componentDidCatch(error, info) {
+    console.error('[cot-workstation] WORKSTATION RENDERING ERROR', this.props.marketId, error, info)
+  }
+
+  handleRetry = () => {
+    this.setState((s) => ({ error: null, retryToken: s.retryToken + 1 }))
   }
 
   render() {
     if (this.state.error) {
       return (
-        <div className="cot-ws-status cot-ws-status--error">
-          <p>
-            COT workstation could not render for <strong>{this.props.marketId}</strong>.
-          </p>
-          <p className="cot-ws-status-detail">
-            Diagnostic: {String(this.state.error?.message || this.state.error)}
-          </p>
-          <p className="cot-ws-status-detail">
-            The app shell is still stable. Use Scanner or the instrument page while this workstation issue is
-            investigated.
-          </p>
-        </div>
+        <WorkstationRenderErrorPanel
+          instrumentId={this.props.marketId}
+          error={this.state.error}
+          onRetry={this.handleRetry}
+        />
       )
     }
 
-    return this.props.children
+    return (
+      <React.Fragment key={this.state.retryToken}>{this.props.children}</React.Fragment>
+    )
   }
 }
 
@@ -55,6 +58,36 @@ export function CotWorkstationPage({ marketId, trackedMarkets, sidebarClass, onS
   const navIndex = navMarkets.indexOf(marketId)
   const prevMarket = navIndex > 0 ? navMarkets[navIndex - 1] : null
   const nextMarket = navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
+
+  const [routePayload, setRoutePayload] = React.useState(null)
+  const [retryNonce, setRetryNonce] = React.useState(0)
+
+  React.useEffect(() => {
+    let cancelled = false
+    setRoutePayload(null)
+    const url = `/api/workstation/${encodeURIComponent(marketId)}`
+    fetch(url, { cache: 'no-store' })
+      .then(async (r) => {
+        let body = null
+        try {
+          body = await r.json()
+        } catch {
+          body = null
+        }
+        if (cancelled) return
+        if (body && typeof body === 'object' && body.status) {
+          setRoutePayload(body)
+        }
+      })
+      .catch(() => {
+        /* Static workstation path remains available if route API is down. */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [marketId, retryNonce])
+
+  const integrityFailed = routePayload?.status === 'integrity_error'
 
   return (
     <div className="cot-ws-page">
@@ -108,9 +141,23 @@ export function CotWorkstationPage({ marketId, trackedMarkets, sidebarClass, onS
       </header>
 
       <main className="cot-ws-page-body">
-        <CotWorkstationErrorBoundary key={marketId} marketId={marketId}>
-          <CotWorkstation marketId={marketId} variant="fullscreen" />
-        </CotWorkstationErrorBoundary>
+        {integrityFailed ? (
+          <WorkstationIntegrityPanel
+            instrumentId={routePayload.instrument_id || marketId}
+            reportDate={routePayload.report_date}
+            stage={routePayload.stage || 'Derived COT'}
+            missingFields={routePayload.missing_fields || []}
+            message={
+              routePayload.message ||
+              'Derived COT statistics are incomplete for this instrument.'
+            }
+            onRetry={() => setRetryNonce((n) => n + 1)}
+          />
+        ) : (
+          <CotWorkstationErrorBoundary key={marketId} marketId={marketId}>
+            <CotWorkstation marketId={marketId} variant="fullscreen" />
+          </CotWorkstationErrorBoundary>
+        )}
       </main>
     </div>
   )

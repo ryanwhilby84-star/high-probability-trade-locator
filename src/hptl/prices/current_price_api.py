@@ -234,6 +234,26 @@ def create_app() -> FastAPI:
             return JSONResponse({"error": f"no active weekly candle for: {key}"}, status_code=404)
         return JSONResponse(candle)
 
+    @app.get("/api/workstation/{key:path}")
+    def workstation_route(key: str) -> JSONResponse:
+        """Controlled COT workstation payload — never 500 for derived gaps."""
+        from hptl.cot.workstation_route_payload import build_workstation_route_payload
+
+        try:
+            body, status = build_workstation_route_payload(key)
+        except Exception as exc:  # noqa: BLE001
+            log.exception("workstation route unexpected failure for %s", key)
+            body = {
+                "status": "integrity_error",
+                "instrument_id": key,
+                "report_date": None,
+                "stage": "derived_cot",
+                "missing_fields": [f"unhandled:{type(exc).__name__}"],
+                "message": "Derived COT statistics are incomplete for this instrument.",
+            }
+            status = 422
+        return JSONResponse(body, status_code=status)
+
     @app.websocket("/ws/prices")
     async def ws_prices(ws: WebSocket) -> None:
         manager: ConnectionManager = app.state.manager
