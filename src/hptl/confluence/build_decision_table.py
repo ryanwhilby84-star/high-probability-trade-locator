@@ -59,6 +59,16 @@ from hptl.markets.instrument_registry import (
     get_instrument,
     instrument_meta_for_record,
 )
+
+
+def _cot_hist_diagnostic_markets() -> list[str]:
+    """Markets that own direct COT history diagnostics.
+
+    Must NOT use TARGET_MARKETS / all_instrument_ids(): that expanded universe
+    includes FX spot pairs (e.g. NZD/USD) with no COT rows, which previously
+    flooded HIST_CONTEXT_DUAL with generic N/A and looked like a total load failure.
+    """
+    return list(cot_mapped_ids())
 from hptl.markets.coverage_audit import run_coverage_audit, write_coverage_audit
 from hptl.pillars.confluence_attach import pillar_fields_for_market_week
 from hptl.fx.fx_valuation_attach import fx_valuation_fields_for_market
@@ -75,18 +85,109 @@ import threading
 import time
 
 _PROGRESS_LOCK = threading.Lock()
-_PROGRESS: dict[str, Any] = {"ts": time.monotonic(), "stage": "init", "detail": ""}
+_PROGRESS: dict[str, Any] = {
+    "ts": time.monotonic(),
+    "stage": "init",
+    "detail": "",
+    "week_i": 0,
+    "week_n": 0,
+    "week_date": "",
+    "market_i": 0,
+    "market_n": 0,
+    "market": "",
+    "inner": "",
+    "rows": 0,
+    "stage4_t0": 0.0,
+}
 _WATCHDOG_TIMEOUT_S = float(os.environ.get("HPTL_STAGE_TIMEOUT_S", "120"))
 _WATCHDOG_ON = os.environ.get("HPTL_DISABLE_WATCHDOG", "").strip().lower() not in {"1", "true", "yes"}
+_PROGRESS_JSON = Path("data/exports/confluence_stage_progress.json")
+_PROGRESS_LAST_WRITE = 0.0
 
 
-def _heartbeat(stage: str | None = None, detail: str = "") -> None:
+def _write_progress_sidecar(force: bool = False) -> None:
+    """Persist live stage progress so operators can inspect without stdout (Tee-Object buffering)."""
+    global _PROGRESS_LAST_WRITE
+    now = time.monotonic()
+    if not force and (now - _PROGRESS_LAST_WRITE) < 1.0:
+        return
+    with _PROGRESS_LOCK:
+        snap = dict(_PROGRESS)
+    t0 = float(snap.get("stage4_t0") or 0.0)
+    week_i = int(snap.get("week_i") or 0)
+    week_n = int(snap.get("week_n") or 0)
+    elapsed = (now - t0) if t0 else 0.0
+    rate = (elapsed / week_i) if week_i > 0 and elapsed > 0 else None
+    remaining_weeks = max(0, week_n - week_i) if week_n else None
+    eta_s = (rate * remaining_weeks) if rate is not None and remaining_weeks is not None else None
+    payload = {
+        "updated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "stage": snap.get("stage"),
+        "detail": snap.get("detail"),
+        "week_i": week_i,
+        "week_n": week_n,
+        "week_date": snap.get("week_date"),
+        "market_i": snap.get("market_i"),
+        "market_n": snap.get("market_n"),
+        "market": snap.get("market"),
+        "inner": snap.get("inner"),
+        "rows": snap.get("rows"),
+        "elapsed_s": round(elapsed, 1) if t0 else None,
+        "sec_per_week": round(rate, 1) if rate is not None else None,
+        "eta_remaining_s": round(eta_s, 1) if eta_s is not None else None,
+        "eta_remaining_h": round(eta_s / 3600.0, 2) if eta_s is not None else None,
+        "pct_complete": round(100.0 * week_i / week_n, 2) if week_n else None,
+    }
+    try:
+        _PROGRESS_JSON.parent.mkdir(parents=True, exist_ok=True)
+        tmp = _PROGRESS_JSON.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp.replace(_PROGRESS_JSON)
+        _PROGRESS_LAST_WRITE = now
+    except OSError:
+        pass
+
+
+def _heartbeat(
+    stage: str | None = None,
+    detail: str = "",
+    *,
+    week_i: int | None = None,
+    week_n: int | None = None,
+    week_date: str | None = None,
+    market_i: int | None = None,
+    market_n: int | None = None,
+    market: str | None = None,
+    inner: str | None = None,
+    rows: int | None = None,
+    stage4_t0: float | None = None,
+    force_write: bool = False,
+) -> None:
     """Mark progress so the stall watchdog does not abort a healthy stage."""
     with _PROGRESS_LOCK:
         _PROGRESS["ts"] = time.monotonic()
         if stage is not None:
             _PROGRESS["stage"] = stage
         _PROGRESS["detail"] = detail
+        if week_i is not None:
+            _PROGRESS["week_i"] = week_i
+        if week_n is not None:
+            _PROGRESS["week_n"] = week_n
+        if week_date is not None:
+            _PROGRESS["week_date"] = week_date
+        if market_i is not None:
+            _PROGRESS["market_i"] = market_i
+        if market_n is not None:
+            _PROGRESS["market_n"] = market_n
+        if market is not None:
+            _PROGRESS["market"] = market
+        if inner is not None:
+            _PROGRESS["inner"] = inner
+        if rows is not None:
+            _PROGRESS["rows"] = rows
+        if stage4_t0 is not None:
+            _PROGRESS["stage4_t0"] = stage4_t0
+    _write_progress_sidecar(force=force_write)
 
 
 def _watchdog_loop() -> None:
@@ -1158,7 +1259,7 @@ def _print_matched_raw_names(cot: pd.DataFrame) -> None:
         .to_dict("index")
     )
     print("Matched raw market names by tracked market:")
-    for m in TARGET_MARKETS:
+    for m in _cot_hist_diagnostic_markets():
         print(f"  {m}: {matched.get(m, [])}")
         print(f"    columns: {col_trace.get(m, {})}")
 
@@ -1167,11 +1268,13 @@ def _print_latest_traced_by_market(cot: pd.DataFrame) -> None:
     latest_date = cot["cot_report_date"].max()
     latest_rows = cot[cot["cot_report_date"] == latest_date] if pd.notna(latest_date) else pd.DataFrame()
     print(f"Latest traced values by tracked market (date={latest_date.date() if pd.notna(latest_date) else 'N/A'}):")
-    for market in TARGET_MARKETS:
+    for market in _cot_hist_diagnostic_markets():
         r = latest_rows[latest_rows["market"] == market]
         if r.empty:
             print(
-                f"  {market}: raw_market=N/A | long_col_used=N/A | short_col_used=N/A | long=N/A | short=N/A | net=N/A | missing_reason=no mapped raw COT row"
+                f"  {market}: raw_market=N/A | long_col_used=N/A | short_col_used=N/A | "
+                f"long=N/A | short=N/A | net=N/A | "
+                f"missing_reason=no_cot_rows_in_loaded_master"
             )
             continue
         row = r.iloc[-1]
@@ -1541,7 +1644,7 @@ def _historical_json_fields_missing() -> dict[str, Any]:
 def _build_expanding_historical_stats(cot: pd.DataFrame) -> pd.DataFrame:
     """Expanding-window stats through each report date only (no look-ahead / backtest-safe)."""
     out_rows: list[dict[str, Any]] = []
-    for market in TARGET_MARKETS:
+    for market in _cot_hist_diagnostic_markets():
         m = cot.loc[cot["market"] == market, ["cot_report_date", "long_value", "short_value", "net_value"]].sort_values(
             "cot_report_date"
         )
@@ -1635,7 +1738,7 @@ def _build_expanding_historical_stats(cot: pd.DataFrame) -> pd.DataFrame:
 def _build_full_loaded_historical_stats(cot: pd.DataFrame) -> pd.DataFrame:
     """Full loaded-series min/max and percentiles vs entire dataset (same for every report date)."""
     out_rows: list[dict[str, Any]] = []
-    for market in TARGET_MARKETS:
+    for market in _cot_hist_diagnostic_markets():
         m = cot.loc[cot["market"] == market, ["cot_report_date", "long_value", "short_value", "net_value"]].sort_values(
             "cot_report_date"
         )
@@ -1724,7 +1827,7 @@ def _build_rolling_3y_historical_stats(cot: pd.DataFrame, window: int = WINDOW_W
     ``rolling_3y_rows_used`` reflects the actual depth.
     """
     out_rows: list[dict[str, Any]] = []
-    for market in TARGET_MARKETS:
+    for market in _cot_hist_diagnostic_markets():
         cols = ["cot_report_date", "long_value", "short_value", "net_value", "open_interest"]
         present = [c for c in cols if c in cot.columns]
         m = cot.loc[cot["market"] == market, present].sort_values("cot_report_date")
@@ -1820,10 +1923,13 @@ def _print_hist_floor_coverage(cot: pd.DataFrame) -> None:
     """Warn if we lack coverage from 2025-01-01 onward (processed files are source of truth)."""
     floor = pd.Timestamp("2025-01-01")
     print("HIST_COVERAGE_FLOOR check (expect data on/after 2025-01-01 when sources include it):")
-    for market in TARGET_MARKETS:
+    for market in _cot_hist_diagnostic_markets():
         sub = cot.loc[cot["market"] == market, "cot_report_date"]
         if sub.empty:
-            print(f"  market={market!r} status=no_rows")
+            print(
+                f"  market={market!r} status=no_cot_rows "
+                f"reason=instrument_in_cot_mapped_set_but_absent_from_loaded_master"
+            )
             continue
         earliest = pd.Timestamp(sub.min())
         latest = pd.Timestamp(sub.max())
@@ -1842,45 +1948,88 @@ def _print_hist_floor_coverage(cot: pd.DataFrame) -> None:
             print(f"  market={market!r} ok earliest={earliest.date()} latest={latest.date()} rows={len(sub)}")
 
 
+def _hist_diag_missing(v: Any) -> bool:
+    if v is None:
+        return True
+    try:
+        return bool(pd.isna(v))
+    except TypeError:
+        return False
+
+
 def _print_dual_hist_context_console(cot: pd.DataFrame) -> None:
-    """Console: per tracked market, full-loaded vs expanding rows and date ranges (tail row = latest report)."""
-    print("HIST_CONTEXT_DUAL (full loaded = entire dataset; expanding = cumulative through that row's report date):")
-    for market in TARGET_MARKETS:
+    """Console: per COT-mapped market, full-loaded vs expanding rows and date ranges.
+
+    Scoped to ``cot_mapped_ids()`` only. Non-COT registry instruments (e.g. NZD/USD)
+    are intentionally excluded — they have no COT history to diagnose.
+    """
+    print(
+        "HIST_CONTEXT_DUAL (COT-mapped markets only; full loaded = entire dataset; "
+        "expanding = cumulative through that row's report date):"
+    )
+    for market in _cot_hist_diagnostic_markets():
         sub = cot.loc[cot["market"] == market].sort_values("cot_report_date")
         if sub.empty:
             print(
-                f"  market={market!r} full_loaded_rows_used=N/A full_loaded_date_range=N/A "
-                f"expanding_rows_used=N/A expanding_date_range=N/A"
+                f"  market={market!r} status=no_cot_rows "
+                f"reason=instrument_in_cot_mapped_set_but_absent_from_loaded_master "
+                f"full_loaded_rows_used=missing expanding_rows_used=missing"
             )
             continue
         tail = sub.iloc[-1]
 
         def _cell(v: Any) -> str:
-            if v is None:
-                return "N/A"
-            try:
-                if pd.isna(v):
-                    return "N/A"
-            except TypeError:
-                pass
+            if _hist_diag_missing(v):
+                return "missing"
             return str(v)
 
-        fl_ru = tail.get("full_loaded_rows_used")
-        fl_er = tail.get("full_loaded_earliest_report_date")
-        fl_lr = tail.get("full_loaded_latest_report_date")
-        ex_ru = tail.get("expanding_rows_used")
-        ex_er = tail.get("expanding_earliest_report_date")
-        ex_lr = tail.get("expanding_latest_report_date")
-        fl_range = (
-            "N/A"
-            if fl_er is None or fl_lr is None or pd.isna(fl_er) or pd.isna(fl_lr)
-            else f"{_cell(fl_er)}..{_cell(fl_lr)}"
+        fl_ru = tail.get("full_loaded_rows_used") if "full_loaded_rows_used" in cot.columns else None
+        fl_er = (
+            tail.get("full_loaded_earliest_report_date")
+            if "full_loaded_earliest_report_date" in cot.columns
+            else None
         )
-        ex_range = (
-            "N/A"
-            if ex_er is None or ex_lr is None or pd.isna(ex_er) or pd.isna(ex_lr)
-            else f"{_cell(ex_er)}..{_cell(ex_lr)}"
+        fl_lr = (
+            tail.get("full_loaded_latest_report_date")
+            if "full_loaded_latest_report_date" in cot.columns
+            else None
         )
+        ex_ru = tail.get("expanding_rows_used") if "expanding_rows_used" in cot.columns else None
+        ex_er = (
+            tail.get("expanding_earliest_report_date")
+            if "expanding_earliest_report_date" in cot.columns
+            else None
+        )
+        ex_lr = (
+            tail.get("expanding_latest_report_date")
+            if "expanding_latest_report_date" in cot.columns
+            else None
+        )
+
+        fields_missing = any(
+            _hist_diag_missing(v) for v in (fl_ru, fl_er, fl_lr, ex_ru, ex_er, ex_lr)
+        )
+        if fields_missing:
+            why = []
+            if "expanding_rows_used" not in cot.columns or "full_loaded_rows_used" not in cot.columns:
+                why.append("hist_stat_columns_absent_after_merge")
+            else:
+                why.append("hist_stat_values_null_on_latest_row")
+            print(
+                f"  market={market!r} status=hist_diagnostics_missing "
+                f"reason={'+'.join(why)} "
+                f"cot_rows_loaded={len(sub)} "
+                f"full_loaded_rows_used={_cell(fl_ru)} "
+                f"full_loaded_date_range="
+                f"{'missing' if _hist_diag_missing(fl_er) or _hist_diag_missing(fl_lr) else f'{_cell(fl_er)}..{_cell(fl_lr)}'} "
+                f"expanding_rows_used={_cell(ex_ru)} "
+                f"expanding_date_range="
+                f"{'missing' if _hist_diag_missing(ex_er) or _hist_diag_missing(ex_lr) else f'{_cell(ex_er)}..{_cell(ex_lr)}'}"
+            )
+            continue
+
+        fl_range = f"{_cell(fl_er)}..{_cell(fl_lr)}"
+        ex_range = f"{_cell(ex_er)}..{_cell(ex_lr)}"
         print(
             f"  market={market!r} full_loaded_rows_used={_cell(fl_ru)} full_loaded_date_range={fl_range} "
             f"expanding_rows_used={_cell(ex_ru)} expanding_date_range={ex_range}"
@@ -2209,7 +2358,10 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
     hist_3y = _build_rolling_3y_historical_stats(cot)
     _heartbeat("2/6 historical stats", "rolling 3Y stats built")
     if hist_exp.empty:
-        print("WARNING: expanding historical stats frame is empty — check TARGET_MARKETS vs COT market mapping.")
+        print(
+            "WARNING: expanding historical stats frame is empty — "
+            "check cot_mapped_ids() vs loaded COT market names."
+        )
     else:
         hist_exp = _normalize_cot_report_dates_naive(hist_exp)
         cot = cot.merge(hist_exp, on=["market", "cot_report_date"], how="left")
@@ -2221,7 +2373,10 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
                     "(cot_report_date / market alignment)."
                 )
     if hist_full.empty:
-        print("WARNING: full-loaded historical stats frame is empty — check TARGET_MARKETS vs COT market mapping.")
+        print(
+            "WARNING: full-loaded historical stats frame is empty — "
+            "check cot_mapped_ids() vs loaded COT market names."
+        )
     else:
         hist_full = _normalize_cot_report_dates_naive(hist_full)
         cot = cot.merge(hist_full, on=["market", "cot_report_date"], how="left")
@@ -2233,7 +2388,10 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
                     "(cot_report_date / market alignment)."
                 )
     if hist_3y.empty:
-        print("WARNING: rolling 3Y historical stats frame is empty — check TARGET_MARKETS vs COT market mapping.")
+        print(
+            "WARNING: rolling 3Y historical stats frame is empty — "
+            "check cot_mapped_ids() vs loaded COT market names."
+        )
     else:
         hist_3y = _normalize_cot_report_dates_naive(hist_3y)
         cot = cot.merge(hist_3y, on=["market", "cot_report_date"], how="left")
@@ -2283,14 +2441,47 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
     _stage4 = _Stage(f"4/6 build confluence rows ({len(build_markets)} markets x {len(all_dates)} weeks)")
     _stage4.__enter__()
     _n_dates = len(all_dates)
+    _n_markets = len(build_markets)
+    _heartbeat(
+        "4/6 build confluence rows",
+        f"start {_n_markets} markets x {_n_dates} weeks",
+        week_i=0,
+        week_n=_n_dates,
+        market_n=_n_markets,
+        stage4_t0=_stage4.t0,
+        force_write=True,
+    )
+    print(
+        f"[BUILD ROWS] progress sidecar: {_PROGRESS_JSON.resolve()} "
+        f"(poll this file for live week/market; stdout only every week)",
+        flush=True,
+    )
     for _di, date_str in enumerate(all_dates, start=1):
-        if _di == 1 or _di % 25 == 0 or _di == _n_dates:
-            print(
-                f"[BUILD ROWS] week {_di}/{_n_dates} {date_str} "
-                f"(rows so far={len(records)}, elapsed={time.monotonic() - _stage4.t0:.1f}s)",
-                flush=True,
-            )
-        _heartbeat("4/6 build confluence rows", f"week {_di}/{_n_dates} {date_str}")
+        _elapsed = time.monotonic() - _stage4.t0
+        _rate = (_elapsed / (_di - 1)) if _di > 1 else None
+        _eta = (_rate * (_n_dates - _di + 1)) if _rate else None
+        # Always print each week — sparse %25 logging looked "stuck" for hours under Tee-Object.
+        print(
+            f"[BUILD ROWS] week {_di}/{_n_dates} {date_str} "
+            f"(rows so far={len(records)}, elapsed={_elapsed:.1f}s"
+            + (f", ~{_rate:.0f}s/week, ETA~{_eta/3600:.1f}h" if _rate else "")
+            + ")",
+            flush=True,
+        )
+        _heartbeat(
+            "4/6 build confluence rows",
+            f"week {_di}/{_n_dates} {date_str}",
+            week_i=_di,
+            week_n=_n_dates,
+            week_date=date_str,
+            market_i=0,
+            market_n=_n_markets,
+            market="",
+            inner="week_setup",
+            rows=len(records),
+            stage4_t0=_stage4.t0,
+            force_write=True,
+        )
         week_date = pd.Timestamp(date_str)
         by_market = _build_by_market_as_of(cot, week_date)
         macro_row_backward = None
@@ -2308,8 +2499,21 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
             else ""
         )
 
-        for market in build_markets:
-            _heartbeat("4/6 build confluence rows", f"week {_di}/{_n_dates} {date_str} :: {market}")
+        for _mi, market in enumerate(build_markets, start=1):
+            _heartbeat(
+                "4/6 build confluence rows",
+                f"week {_di}/{_n_dates} {date_str} :: market {_mi}/{_n_markets} {market}",
+                week_i=_di,
+                week_n=_n_dates,
+                week_date=date_str,
+                market_i=_mi,
+                market_n=_n_markets,
+                market=market,
+                inner="market_loop",
+                rows=len(records),
+                stage4_t0=_stage4.t0,
+                force_write=(_mi == 1 or _mi % 10 == 0 or _mi == _n_markets),
+            )
             row = by_market.get(market)
             if row is None:
                 records.append(
@@ -2512,6 +2716,19 @@ def run(*, cot_feed_meta: dict[str, Any] | None = None) -> Path:
 
             cot_asof = _cot_report_date_str(row) or date_str
             inst_meta_cot = instrument_meta_for_record(market)
+            _heartbeat(
+                "4/6 build confluence rows",
+                f"week {_di}/{_n_dates} {date_str} :: {market} :: pillar_fields",
+                week_i=_di,
+                week_n=_n_dates,
+                week_date=date_str,
+                market_i=_mi,
+                market_n=_n_markets,
+                market=market,
+                inner="pillar_fields_for_market_week",
+                rows=len(records),
+                stage4_t0=_stage4.t0,
+            )
             pillar_week = pillar_fields_for_market_week(market, date_str)
             records.append({
                 "date": date_str,

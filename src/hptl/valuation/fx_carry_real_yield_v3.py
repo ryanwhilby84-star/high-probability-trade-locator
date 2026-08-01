@@ -874,7 +874,12 @@ def compute_fx_pair_v3(
     )
 
 
-def compute_fx_market_v3(market_id: str, *, as_of_week: str | None = None) -> dict[str, Any]:
+def compute_fx_market_v3(
+    market_id: str,
+    *,
+    as_of_week: str | None = None,
+    histories: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Map a COT FX market or cross pair id to V3 valuation payload."""
     pair_id = PAIR_BY_COT_MARKET.get(market_id)
     if pair_id is None:
@@ -882,7 +887,8 @@ def compute_fx_market_v3(market_id: str, *, as_of_week: str | None = None) -> di
         pair_id = f"{resolved[0]}/{resolved[1]}" if resolved else None
     if pair_id is None or pair_id not in FX_V3_PAIRS:
         return _unavailable_market(market_id, as_of_week, reason="Pair outside V3.0 FX scope or unsupported.")
-    result = compute_fx_pair_v3(pair_id)
+    # Reuse process-cached currency_histories() — never re-parse RBA/BoE per market-week.
+    result = compute_fx_pair_v3(pair_id, histories=histories)
     out = result.as_dict()
     out["market"] = market_id
     out["as_of_week"] = as_of_week

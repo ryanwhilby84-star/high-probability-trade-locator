@@ -176,6 +176,7 @@ def catch_up_confluence_export(
     """Append missing COT week rows to existing confluence export (no full history rebuild)."""
     os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
     os.environ.setdefault("HPTL_SKIP_LIVE_FEEDS", "1")
+    os.environ.setdefault("HPTL_SKIP_VALUATION", "1")
 
     local_ts = get_latest_local_report_date()
     local_latest = str(local_ts)[:10] if local_ts is not None and not pd.isna(local_ts) else "—"

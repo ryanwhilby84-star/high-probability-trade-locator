@@ -6,6 +6,7 @@ BoE GLC nominal archive for GBP 2Y/10Y; RBA F2/F1 for AUD; SNB rendoblid for CHF
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
 import json
 import zipfile
@@ -16,6 +17,45 @@ from typing import Any
 import pandas as pd
 
 from hptl.fx.rate_adapter_base import CACHE_DIR, fetch_bytes, fetch_text, offline_mode, to_float
+
+# Process-level parse cache: historical FX workbooks must be parsed once per refresh.
+_RBA_PARSE_COUNT = 0
+_RBA_WORKBOOK_CACHE: dict[str, dict[str, dict[str, float]]] = {}  # content_hash -> series_id -> map
+_CURRENCY_HISTORIES_CACHE: dict[str, dict[str, Any]] | None = None
+_CURRENCY_HISTORIES_KEY: str | None = None
+
+
+def rba_workbook_parse_count() -> int:
+    """Test/ops helper: number of Excel workbook parses performed in this process."""
+    return _RBA_PARSE_COUNT
+
+
+def clear_fx_macro_history_caches() -> None:
+    """Drop in-memory parsed histories (tests / forced refresh)."""
+    global _RBA_PARSE_COUNT, _CURRENCY_HISTORIES_CACHE, _CURRENCY_HISTORIES_KEY
+    _RBA_WORKBOOK_CACHE.clear()
+    _CURRENCY_HISTORIES_CACHE = None
+    _CURRENCY_HISTORIES_KEY = None
+    _RBA_PARSE_COUNT = 0
+
+
+def _content_fingerprint(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
+def _cache_files_fingerprint(names: tuple[str, ...]) -> str:
+    """Invalidate process cache when on-disk FX rate caches change."""
+    parts: list[str] = []
+    for name in names:
+        for cand in (CACHE_DIR / name, CACHE_DIR / f"{name}.bin", CACHE_DIR / f"{name}.txt"):
+            if not cand.exists():
+                continue
+            st = cand.stat()
+            parts.append(f"{cand.name}:{st.st_mtime_ns}:{st.st_size}")
+            break
+        else:
+            parts.append(f"{name}:missing")
+    return hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()
 
 FRED_OBS_START = "2016-01-01"
 MIN_FOUNDATION_OBS = 52
@@ -506,7 +546,15 @@ def _fetch_gbp_bank_rate_history() -> dict[str, float]:
     return _parse_gbp_bank_rate_csv(raw)
 
 
-def _parse_rba_workbook(content: bytes, series_id: str) -> dict[str, float]:
+def _load_rba_workbook_series(content: bytes) -> dict[str, dict[str, float]]:
+    """Parse an RBA workbook once; return all series id → {date: value} maps."""
+    global _RBA_PARSE_COUNT
+    fp = _content_fingerprint(content)
+    cached = _RBA_WORKBOOK_CACHE.get(fp)
+    if cached is not None:
+        return cached
+
+    _RBA_PARSE_COUNT += 1
     xl = pd.ExcelFile(io.BytesIO(content))
     df = xl.parse(xl.sheet_names[0], header=None)
     id_row = None
@@ -514,27 +562,44 @@ def _parse_rba_workbook(content: bytes, series_id: str) -> dict[str, float]:
         if str(df.iloc[i, 0]).strip() == "Series ID":
             id_row = i
             break
+    by_series: dict[str, dict[str, float]] = {}
     if id_row is None:
-        return {}
+        _RBA_WORKBOOK_CACHE[fp] = by_series
+        return by_series
+
     ids = [str(x).strip() for x in df.iloc[id_row].tolist()]
-    if series_id not in ids:
-        return {}
-    col = ids.index(series_id)
-    data = df.iloc[id_row + 1 :, [0, col]].copy()
-    data.columns = ["date", "value"]
-    data["value"] = pd.to_numeric(data["value"], errors="coerce")
-    data["date"] = pd.to_datetime(data["date"], errors="coerce")
-    data = data.dropna(subset=["date", "value"])
-    return {r["date"].date().isoformat(): float(r["value"]) for _, r in data.iterrows()}
+    dates = pd.to_datetime(df.iloc[id_row + 1 :, 0], errors="coerce")
+    for col, series_id in enumerate(ids):
+        if col == 0 or not series_id or series_id in {"", "nan", "None"}:
+            continue
+        values = pd.to_numeric(df.iloc[id_row + 1 :, col], errors="coerce")
+        series_map: dict[str, float] = {}
+        for dt, val in zip(dates, values, strict=False):
+            if pd.isna(dt) or pd.isna(val):
+                continue
+            series_map[pd.Timestamp(dt).date().isoformat()] = float(val)
+        by_series[series_id] = series_map
+
+    _RBA_WORKBOOK_CACHE[fp] = by_series
+    return by_series
+
+
+def _parse_rba_workbook(content: bytes, series_id: str) -> dict[str, float]:
+    """Return one RBA series from workbook bytes (workbook parsed at most once)."""
+    return dict(_load_rba_workbook_series(content).get(series_id) or {})
 
 
 def load_aud_rba_history() -> dict[str, dict[str, float]]:
     f1 = _read_cache_bytes("aud_f1")
     f2 = _read_cache_bytes("aud_f2")
-    policy = _parse_rba_workbook(f1, "FIRMMCRTD") if f1 else {}
-    y2 = _parse_rba_workbook(f2, "FCMYGBAG2D") if f2 else {}
-    y10 = _parse_rba_workbook(f2, "FCMYGBAG10D") if f2 else {}
-    return {"policy": policy, "y2": y2, "y10": y10}
+    # aud_f1 and aud_f2 are each Excel-parsed at most once per content hash.
+    f1_series = _load_rba_workbook_series(f1) if f1 else {}
+    f2_series = _load_rba_workbook_series(f2) if f2 else {}
+    return {
+        "policy": dict(f1_series.get("FIRMMCRTD") or {}),
+        "y2": dict(f2_series.get("FCMYGBAG2D") or {}),
+        "y10": dict(f2_series.get("FCMYGBAG10D") or {}),
+    }
 
 
 def load_chf_rendoblid_history() -> dict[str, dict[str, float]]:
@@ -823,7 +888,29 @@ CURRENCY_Y10_SOURCE: dict[str, str] = {
 
 
 def currency_histories() -> dict[str, dict[str, Any]]:
-    """Per-currency macro history maps for valuation regression alignment."""
+    """Per-currency macro history maps for valuation regression alignment.
+
+    Parsed result is cached for the process lifetime and invalidated when the
+    underlying on-disk FX rate cache files change (mtime/size fingerprint).
+    """
+    global _CURRENCY_HISTORIES_CACHE, _CURRENCY_HISTORIES_KEY
+    key = _cache_files_fingerprint(
+        (
+            "aud_f1",
+            "aud_f2",
+            BOE_GLC_ARCHIVE_CACHE,
+            "chf_rendoblid",
+            "cad_valet",
+            "jpy_jgb",
+            "gbp_bank_rate_history",
+            "eur_2y_history",
+            "eur_10y_history",
+            "eur_dfr_history",
+        )
+    )
+    if _CURRENCY_HISTORIES_CACHE is not None and _CURRENCY_HISTORIES_KEY == key:
+        return _CURRENCY_HISTORIES_CACHE
+
     usd = load_usd_combined_history()
     gbp_y = load_gbp_boe_yield_history()
     aud = load_aud_rba_history()
@@ -838,7 +925,7 @@ def currency_histories() -> dict[str, dict[str, Any]]:
     eur_y10, eur_y10_src = load_eur_y10_history()
     eur_pol, eur_pol_src = load_eur_policy_history()
 
-    return {
+    result = {
         "USD": {
             "policy": usd["policy"],
             "y2": usd["y2"],
@@ -916,6 +1003,9 @@ def currency_histories() -> dict[str, dict[str, Any]]:
             },
         },
     }
+    _CURRENCY_HISTORIES_CACHE = result
+    _CURRENCY_HISTORIES_KEY = key
+    return result
 
 
 def build_differential_series(

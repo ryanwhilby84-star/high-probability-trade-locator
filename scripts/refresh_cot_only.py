@@ -34,6 +34,7 @@ sys.path.insert(0, str(ROOT / "src"))
 # kill the (legitimately slow-ish) incremental confluence build.
 os.environ.setdefault("HPTL_SKIP_LIVE_FEEDS", "1")
 os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
+os.environ.setdefault("HPTL_SKIP_VALUATION", "1")
 
 
 def _iso(ts) -> str:

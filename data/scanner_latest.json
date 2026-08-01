@@ -1,14 +1,38 @@
 {
   "version": 1,
-  "generated_at": "2026-07-11T14:31:15.644775+00:00",
+  "generated_at": "2026-08-01T10:53:38.710914+00:00",
   "scanner_attention_week": {
     "priority_markets": [
+      {
+        "market": "Gold",
+        "canonical_id": "Gold",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 107.3,
+        "dominant_narrative": "Bull trend cooling — profit-taking within larger uptrend; buy pullbacks, not breakouts.",
+        "priority_headline": "Weak sponsorship — profit-taking into strength",
+        "icon": "⚠️",
+        "tactical_readable": "Buy pullbacks only",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 107.3,
+          "cot_score_component": 19.3,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 76.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
       {
         "market": "Canadian Dollar / 6C",
         "canonical_id": "Canadian Dollar / 6C",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 95.8,
+        "priority_score": 105.0,
         "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
         "priority_headline": "Early accumulation behaviour emerging",
         "icon": "👀",
@@ -17,11 +41,83 @@
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 95.8,
-          "cot_score_component": 23.8,
+          "final_attention_score": 105.0,
+          "cot_score_component": 13.0,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 60.0,
+          "anomaly_component": 80.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "British Pound / 6B",
+        "canonical_id": "British Pound / 6B",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 103.4,
+        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
+        "priority_headline": "Fresh accumulation — first week in new structure",
+        "icon": "⚡",
+        "tactical_readable": "Wait for confirmation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 103.4,
+          "cot_score_component": 5.4,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 86.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Cotton",
+        "canonical_id": "Cotton",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 100.2,
+        "dominant_narrative": "Bull trend cooling at crowded levels — avoid momentum chasing; pullbacks only.",
+        "priority_headline": "Fresh positioning extreme — crowded longs",
+        "icon": "🚨",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "broken_incomplete",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 100.2,
+          "cot_score_component": 25.2,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 78.0,
+          "data_confidence_score": 50.0,
+          "penalty_for_missing_data": 15.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Soybeans",
+        "canonical_id": "Soybeans",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 94.1,
+        "dominant_narrative": "Crowded long positioning — extension risk elevated; fade chasing breakouts.",
+        "priority_headline": "Fresh positioning extreme — crowded longs",
+        "icon": "🚨",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 94.1,
+          "cot_score_component": 40.1,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 42.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
@@ -32,116 +128,20 @@
         "canonical_id": "Natural Gas / NG",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 90.5,
-        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
-        "priority_headline": "Aggressive short covering this week",
-        "icon": "📈",
+        "priority_score": 88.2,
+        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
+        "priority_headline": "Early accumulation behaviour emerging",
+        "icon": "👀",
         "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 90.5,
-          "cot_score_component": 4.5,
+          "final_attention_score": 88.2,
+          "cot_score_component": 16.2,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 74.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "S&P 500 / ES",
-        "canonical_id": "S&P 500 / ES",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 80.8,
-        "dominant_narrative": "Bullish tape but macro headwind — size down longs until backdrop improves.",
-        "priority_headline": "Fresh structural bullish — first week in new structure",
-        "icon": "⚡",
-        "tactical_readable": "Watch for continuation",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 80.8,
-          "cot_score_component": 6.8,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 62.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Corn",
-        "canonical_id": "Corn",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 77.9,
-        "dominant_narrative": "Bear trend with covering rally underway — fade strength carefully, not blind shorts.",
-        "priority_headline": "Participation collapse — both sides reducing",
-        "icon": "📉",
-        "tactical_readable": "Fade rallies carefully",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 77.9,
-          "cot_score_component": 27.9,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 38.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Crude Oil / CL",
-        "canonical_id": "Crude Oil / CL",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 73.8,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Wait for confirmation",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 73.8,
-          "cot_score_component": 15.8,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 46.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Euro FX / 6E",
-        "canonical_id": "Euro FX / 6E",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 73.6,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Crowded shorts — squeeze risk elevated",
-        "icon": "🚨",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 73.6,
-          "cot_score_component": 21.6,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 40.0,
+          "anomaly_component": 60.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
@@ -150,11 +150,35 @@
     ],
     "high_attention": [
       {
+        "market": "Gold",
+        "canonical_id": "Gold",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 107.3,
+        "dominant_narrative": "Bull trend cooling — profit-taking within larger uptrend; buy pullbacks, not breakouts.",
+        "priority_headline": "Weak sponsorship — profit-taking into strength",
+        "icon": "⚠️",
+        "tactical_readable": "Buy pullbacks only",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 107.3,
+          "cot_score_component": 19.3,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 76.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
         "market": "Canadian Dollar / 6C",
         "canonical_id": "Canadian Dollar / 6C",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 95.8,
+        "priority_score": 105.0,
         "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
         "priority_headline": "Early accumulation behaviour emerging",
         "icon": "👀",
@@ -163,11 +187,83 @@
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 95.8,
-          "cot_score_component": 23.8,
+          "final_attention_score": 105.0,
+          "cot_score_component": 13.0,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 60.0,
+          "anomaly_component": 80.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "British Pound / 6B",
+        "canonical_id": "British Pound / 6B",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 103.4,
+        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
+        "priority_headline": "Fresh accumulation — first week in new structure",
+        "icon": "⚡",
+        "tactical_readable": "Wait for confirmation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 103.4,
+          "cot_score_component": 5.4,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 86.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Cotton",
+        "canonical_id": "Cotton",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 100.2,
+        "dominant_narrative": "Bull trend cooling at crowded levels — avoid momentum chasing; pullbacks only.",
+        "priority_headline": "Fresh positioning extreme — crowded longs",
+        "icon": "🚨",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "broken_incomplete",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 100.2,
+          "cot_score_component": 25.2,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 78.0,
+          "data_confidence_score": 50.0,
+          "penalty_for_missing_data": 15.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Soybeans",
+        "canonical_id": "Soybeans",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 94.1,
+        "dominant_narrative": "Crowded long positioning — extension risk elevated; fade chasing breakouts.",
+        "priority_headline": "Fresh positioning extreme — crowded longs",
+        "icon": "🚨",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 94.1,
+          "cot_score_component": 40.1,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 42.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
@@ -178,116 +274,20 @@
         "canonical_id": "Natural Gas / NG",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 90.5,
-        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
-        "priority_headline": "Aggressive short covering this week",
-        "icon": "📈",
+        "priority_score": 88.2,
+        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
+        "priority_headline": "Early accumulation behaviour emerging",
+        "icon": "👀",
         "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 90.5,
-          "cot_score_component": 4.5,
+          "final_attention_score": 88.2,
+          "cot_score_component": 16.2,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 74.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "S&P 500 / ES",
-        "canonical_id": "S&P 500 / ES",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 80.8,
-        "dominant_narrative": "Bullish tape but macro headwind — size down longs until backdrop improves.",
-        "priority_headline": "Fresh structural bullish — first week in new structure",
-        "icon": "⚡",
-        "tactical_readable": "Watch for continuation",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 80.8,
-          "cot_score_component": 6.8,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 62.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Corn",
-        "canonical_id": "Corn",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 77.9,
-        "dominant_narrative": "Bear trend with covering rally underway — fade strength carefully, not blind shorts.",
-        "priority_headline": "Participation collapse — both sides reducing",
-        "icon": "📉",
-        "tactical_readable": "Fade rallies carefully",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 77.9,
-          "cot_score_component": 27.9,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 38.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Crude Oil / CL",
-        "canonical_id": "Crude Oil / CL",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 73.8,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Wait for confirmation",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 73.8,
-          "cot_score_component": 15.8,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 46.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Euro FX / 6E",
-        "canonical_id": "Euro FX / 6E",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 73.6,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Crowded shorts — squeeze risk elevated",
-        "icon": "🚨",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 73.6,
-          "cot_score_component": 21.6,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 40.0,
+          "anomaly_component": 60.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
@@ -303,11 +303,15 @@
         "reason": "ranked_out_higher_priority_markets"
       },
       {
+        "market": "S&P 500 / ES",
+        "reason": "ranked_out_higher_priority_markets"
+      },
+      {
         "market": "Dow / YM",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
-        "market": "British Pound / 6B",
+        "market": "Euro FX / 6E",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
@@ -327,15 +331,15 @@
         "reason": "ranked_out_higher_priority_markets"
       },
       {
-        "market": "Gold",
-        "reason": "ranked_out_higher_priority_markets"
-      },
-      {
         "market": "Silver",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
         "market": "Copper / HG",
+        "reason": "ranked_out_higher_priority_markets"
+      },
+      {
+        "market": "Crude Oil / CL",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
@@ -347,15 +351,11 @@
         "reason": "ranked_out_higher_priority_markets"
       },
       {
-        "market": "Cotton",
+        "market": "Corn",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
         "market": "Wheat",
-        "reason": "ranked_out_higher_priority_markets"
-      },
-      {
-        "market": "Soybeans",
         "reason": "ranked_out_higher_priority_markets"
       },
       {
@@ -436,6 +436,10 @@
       },
       {
         "market": "Brent Crude Oil",
+        "reason": "macro_only_low_confidence"
+      },
+      {
+        "market": "Broad US Dollar Index — DTWEXBGS",
         "reason": "macro_only_low_confidence"
       },
       {
@@ -613,14 +617,10 @@
       {
         "market": "Litecoin",
         "reason": "macro_only_low_confidence"
-      },
-      {
-        "market": "NZD/CAD",
-        "reason": "macro_only_low_confidence"
       }
     ],
-    "calendar_week": "2026-07-07",
+    "calendar_week": "2026-07-28",
     "generated_from": "hptl.context.priority_board"
   },
-  "latest_week": null
+  "latest_week": "2026-07-28"
 }

@@ -5,6 +5,9 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 $env:PYTHONPATH = "src"
 $env:HPTL_SKIP_LIVE_FEEDS = "1"
+# Fast COT/dashboard export: skip per-row FX V3 valuation in Stage 4 (engine.py gate).
+# FX histories are still process-cached when valuation is explicitly enabled.
+$env:HPTL_SKIP_VALUATION = "1"
 
 $Python = (Get-Command python -ErrorAction SilentlyContinue).Source
 if (-not $Python) {
