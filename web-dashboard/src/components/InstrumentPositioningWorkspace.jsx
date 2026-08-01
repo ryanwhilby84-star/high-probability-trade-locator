@@ -4,8 +4,42 @@ import { POSITIONING_SHEET_TABS, rolling3yContextForGroup } from '../cot/groupPo
 import { buildRawRowsForGroup } from '../cot/rawCotPositioning.js'
 import { useLegacyCot } from '../hooks/useLegacyCot.js'
 import { navigateToCotWorkstation, navigateToNaturalGasValuation } from '../routing.js'
+import { CotWorkstation } from '../workstation/CotWorkstation.jsx'
+import { WorkstationRenderErrorPanel } from '../workstation/WorkstationIntegrityPanel.jsx'
 import { GroupPositioningSheet } from './GroupPositioningSheet.jsx'
 import { PositioningWeeklySummary } from './PositioningWeeklySummary.jsx'
+
+class EmbedWorkstationErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { error: null, retryToken: 0 }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error }
+  }
+
+  componentDidCatch(error, info) {
+    console.error('[cot-workstation-embed] WORKSTATION RENDERING ERROR', this.props.marketId, error, info)
+  }
+
+  handleRetry = () => {
+    this.setState((s) => ({ error: null, retryToken: s.retryToken + 1 }))
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <WorkstationRenderErrorPanel
+          instrumentId={this.props.marketId}
+          error={this.state.error}
+          onRetry={this.handleRetry}
+        />
+      )
+    }
+    return <React.Fragment key={this.state.retryToken}>{this.props.children}</React.Fragment>
+  }
+}
 
 export function InstrumentPositioningWorkspace({
   marketId,
@@ -44,7 +78,8 @@ export function InstrumentPositioningWorkspace({
           <div>
             <h3 className="wo-cot-title">Positioning</h3>
             <p className="wo-cot-sub">
-              Raw COT positioning data and weekly context. Open the dedicated workstation for full-screen charts.
+              Chart workstation with Commercial Extremes (EX) and Comm↔NR Divergence (DIV) on by default.
+              Scroll for raw COT tables below, or open full-screen.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -62,10 +97,16 @@ export function InstrumentPositioningWorkspace({
               className="ws-btn ws-btn-primary instrument-cot-ws-open-btn"
               onClick={() => navigateToCotWorkstation(marketId)}
             >
-              Open COT Workstation
+              Open full-screen COT Workstation
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="instrument-cot-workstation-embed" aria-label="COT workstation with research markers">
+        <EmbedWorkstationErrorBoundary marketId={marketId}>
+          <CotWorkstation marketId={marketId} variant="default" />
+        </EmbedWorkstationErrorBoundary>
       </div>
 
       {legacyLoading ? (

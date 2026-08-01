@@ -10,9 +10,12 @@
  * orphaned assets (crypto / EM / exotic / non-canonical foreign indices), and
  * no-data canonical assets awaiting P4/P5 data wiring (Brent, rates, DAX/FTSE/Nikkei/Russell).
  *
- * The keep-list below is the 23 direct-COT canonical markets identified by the
+ * The keep-list below is the direct-COT canonical markets identified by the
  * asset universe audit (classification == PRIMARY). It will expand in P4/P5 once
  * price symbols, Treasury COT mappings, and missing FRED macro maps are connected.
+ *
+ * Ranking/priority (ranked_out) is separate — eligibility only controls whether
+ * the instrument appears in the navigable radar/instrument list.
  */
 
 export const RADAR_ELIGIBLE = new Set([
@@ -20,7 +23,7 @@ export const RADAR_ELIGIBLE = new Set([
   'NASDAQ / NQ',
   'S&P 500 / ES',
   'Dow / YM',
-  // FX currency legs (direct COT)
+  // FX currency legs + USD index (direct COT)
   'Euro FX / 6E',
   'British Pound / 6B',
   'Japanese Yen / 6J',
@@ -28,6 +31,7 @@ export const RADAR_ELIGIBLE = new Set([
   'Australian Dollar / 6A',
   'Canadian Dollar / 6C',
   'NZ Dollar / 6N',
+  'US Dollar Index / DX',
   // Metals (direct COT)
   'Gold',
   'Silver',

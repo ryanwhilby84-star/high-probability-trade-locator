@@ -182,6 +182,41 @@ def build_instrument_workstation_ohlc(
             refresh=False,
         )
         weekly_ohlc = derive_weekly_ohlc_from_daily(index_daily)
+        # Prefer OANDA provider weekly tip (Friday weeks) when present in the price store.
+        try:
+            from hptl.prices.price_store import load_price_store
+
+            store_rec = (load_price_store().get("instruments") or {}).get(instrument_id) or {}
+            native_weekly = [
+                {
+                    "date": str(b.get("date") or "")[:10],
+                    "open": _num(b.get("open")),
+                    "high": _num(b.get("high")),
+                    "low": _num(b.get("low")),
+                    "close": _num(b.get("close")),
+                    "source": "prices_latest:native_weekly",
+                }
+                for b in (store_rec.get("weekly") or [])
+                if _is_real_ohlc(
+                    _num(b.get("open")), _num(b.get("high")), _num(b.get("low")), _num(b.get("close"))
+                )
+            ]
+            if native_weekly:
+                native_sorted = sorted(native_weekly, key=lambda b: b["date"])
+                native_last = native_sorted[-1]["date"]
+                derived_last = weekly_ohlc[-1]["date"] if weekly_ohlc else ""
+                try:
+                    native_age = (
+                        datetime.fromisoformat(derived_last) - datetime.fromisoformat(native_last)
+                    ).days if derived_last and native_last else 0
+                except ValueError:
+                    native_age = 0
+                if native_last and (not derived_last or native_last >= derived_last or native_age <= 7):
+                    native_start = native_sorted[0]["date"]
+                    head = [b for b in weekly_ohlc if b["date"] < native_start]
+                    weekly_ohlc = head + native_sorted
+        except Exception:
+            pass
         ohlc_first = weekly_ohlc[0]["date"] if weekly_ohlc else None
         ohlc_last = weekly_ohlc[-1]["date"] if weekly_ohlc else None
         common_first, common_last = _common_range(cot_first, cot_last, ohlc_first, ohlc_last)
@@ -292,8 +327,24 @@ def build_instrument_workstation_ohlc(
         for b in native_weekly
         if _is_real_ohlc(_num(b.get("open")), _num(b.get("high")), _num(b.get("low")), _num(b.get("close")))
     ]
-    if len(native_real) > len(weekly_ohlc):
-        weekly_ohlc = sorted(native_real, key=lambda b: b["date"])
+    # Prefer provider-native weekly (OANDA Friday weeks) for the tip when fresh.
+    # Stitch longer daily-derived history before the native series start so we keep
+    # depth without replacing the provider's completed week calendar.
+    if native_real:
+        native_sorted = sorted(native_real, key=lambda b: b["date"])
+        native_last = native_sorted[-1]["date"]
+        derived_last = weekly_ohlc[-1]["date"] if weekly_ohlc else ""
+        # Native tip is acceptable when it is not materially behind derived.
+        try:
+            native_age = (
+                datetime.fromisoformat(derived_last) - datetime.fromisoformat(native_last)
+            ).days if derived_last and native_last else 0
+        except ValueError:
+            native_age = 0
+        if native_last and (not derived_last or native_last >= derived_last or native_age <= 7):
+            native_start = native_sorted[0]["date"]
+            head = [b for b in weekly_ohlc if b["date"] < native_start]
+            weekly_ohlc = head + native_sorted
 
     ohlc_first = weekly_ohlc[0]["date"] if weekly_ohlc else None
     ohlc_last = weekly_ohlc[-1]["date"] if weekly_ohlc else None

@@ -26,22 +26,85 @@ function emit() {
 function isPlottableBar(bar) {
   if (!bar) return false
   const { open, high, low, close } = bar
-  return [open, high, low, close].every(isNum) && high > low
+  if (![open, high, low, close].every(isNum) || !(high > low)) return false
+  // Reject mixed-unit weeks (e.g. Copper $/lb OHLC mixed with tonne/HG×1000 scale).
+  // Those paint as full-height candle "forests" that obscure price.
+  if (high / Math.max(low, 1e-12) > 2.5) return false
+  const mid = (high + low) / 2
+  if (mid > 0) {
+    if (Math.max(open, high, low, close) / mid > 2.5) return false
+    if (mid / Math.min(open, high, low, close) > 2.5) return false
+  }
+  return true
+}
+
+function median(vals) {
+  if (!vals.length) return null
+  const s = [...vals].sort((a, b) => a - b)
+  const m = Math.floor(s.length / 2)
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2
+}
+
+/**
+ * Keep one coherent price scale for the series.
+ * Copper history mixes OANDA $/lb (~2–10) with legacy HG chart scale
+ * (USD/lb × 1000, ~2k–10k). Prefer the recent regime; convert when safe.
+ */
+function coerceConsistentPriceScale(bars) {
+  if (!bars.length) return bars
+  const recent = bars.slice(-Math.min(104, bars.length))
+  const med = median(recent.map((b) => b.close).filter(isNum))
+  if (!isNum(med)) return bars
+
+  const scaleBar = (b, factor) => ({
+    ...b,
+    open: b.open * factor,
+    high: b.high * factor,
+    low: b.low * factor,
+    close: b.close * factor,
+  })
+
+  if (med < 50) {
+    // Spot / $/lb regime — convert HG×1000 bars down to $/lb when whole bar is high-scale.
+    return bars
+      .map((b) => {
+        const allHigh = b.open > 100 && b.high > 100 && b.low > 100 && b.close > 100
+        const allLow = b.open < 100 && b.high < 100 && b.low < 100 && b.close < 100
+        if (allLow) return b
+        if (allHigh) return scaleBar(b, 1 / 1000)
+        return null // mixed intra-bar already rejected by isPlottableBar
+      })
+      .filter(Boolean)
+      .filter((b) => isPlottableBar(b))
+  }
+  if (med > 200) {
+    // HG chart regime — convert raw $/lb up when whole bar is low-scale.
+    return bars
+      .map((b) => {
+        const allHigh = b.open > 100 && b.high > 100 && b.low > 100 && b.close > 100
+        const allLow = b.open < 100 && b.high < 100 && b.low < 100 && b.close < 100
+        if (allHigh) return b
+        if (allLow) return scaleBar(b, 1000)
+        return null
+      })
+      .filter(Boolean)
+      .filter((b) => isPlottableBar(b))
+  }
+  return bars
 }
 
 function normalizeExportWeekly(bars) {
   if (!Array.isArray(bars)) return []
-  return normalizeWeeklyOhlc(
-    bars
-      .map((b) => ({
-        date: String(b.date || '').slice(0, 10),
-        open: Number(b.open),
-        high: Number(b.high),
-        low: Number(b.low),
-        close: Number(b.close),
-      }))
-      .filter((b) => b.date && isPlottableBar(b)),
-  )
+  const mapped = bars
+    .map((b) => ({
+      date: String(b.date || '').slice(0, 10),
+      open: Number(b.open),
+      high: Number(b.high),
+      low: Number(b.low),
+      close: Number(b.close),
+    }))
+    .filter((b) => b.date && isPlottableBar(b))
+  return normalizeWeeklyOhlc(coerceConsistentPriceScale(mapped))
 }
 
 async function fetchDoc({ bustCache = false } = {}) {

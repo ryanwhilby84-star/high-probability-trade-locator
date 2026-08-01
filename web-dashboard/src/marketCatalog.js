@@ -9,7 +9,7 @@ import {
 
 const LEGACY_ASSET_CLASSES = [
   { id: 'indices', label: 'Indices', markets: ['NASDAQ / NQ', 'S&P 500 / ES', 'Dow / YM'] },
-  { id: 'fx', label: 'FX', markets: ['Euro FX / 6E', 'British Pound / 6B', 'Japanese Yen / 6J', 'Swiss Franc / 6S', 'Australian Dollar / 6A', 'Canadian Dollar / 6C', 'NZ Dollar / 6N'] },
+  { id: 'fx', label: 'FX', markets: ['Euro FX / 6E', 'British Pound / 6B', 'Japanese Yen / 6J', 'Swiss Franc / 6S', 'Australian Dollar / 6A', 'Canadian Dollar / 6C', 'NZ Dollar / 6N', 'US Dollar Index / DX'] },
   { id: 'metals', label: 'Metals', markets: ['Gold', 'Silver', 'Copper / HG'] },
   { id: 'energy', label: 'Energy', markets: ['Crude Oil / CL', 'Natural Gas / NG'] },
   { id: 'agriculture', label: 'Agriculture', markets: ['Corn', 'Wheat', 'Soybeans'] },

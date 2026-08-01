@@ -22,7 +22,7 @@ import {
 import './goldValuation.css'
 
 const MARKET = 'Gold'
-const DXY_MARKET = 'US Dollar Index / DX'
+const DXY_MARKET = 'Broad US Dollar Index — DTWEXBGS'
 const SILVER_MARKET = 'Silver'
 
 function fmt(v, digits = 2) {

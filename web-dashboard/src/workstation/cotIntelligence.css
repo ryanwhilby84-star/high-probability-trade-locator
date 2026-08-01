@@ -1,0 +1,254 @@
+/* COT Workstation Intelligence V2 — high-contrast research panel */
+
+.cwi-panel {
+  --cwi-text: #0f172a;
+  --cwi-muted: #475569;
+  --cwi-border: #cbd5e1;
+  --cwi-bg: #f8fafc;
+  --cwi-card: #ffffff;
+  --cwi-accent: #1d4ed8;
+  --cwi-warn: #b45309;
+  --cwi-ok: #047857;
+
+  color: var(--cwi-text);
+  background: var(--cwi-bg);
+  border-left: 1px solid var(--cwi-border);
+  padding: 0.85rem 1rem 1.25rem;
+  overflow: auto;
+  min-width: 300px;
+  max-width: 360px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.cwi-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 750;
+  color: var(--cwi-text);
+}
+
+.cwi-week,
+.cwi-muted,
+.cwi-disclaimer {
+  color: var(--cwi-muted);
+  font-size: 0.78rem;
+}
+
+.cwi-head {
+  margin-bottom: 0.75rem;
+}
+
+.cwi-week {
+  margin: 0.2rem 0 0;
+}
+
+.cwi-setup,
+.cwi-block {
+  background: var(--cwi-card);
+  border: 1px solid var(--cwi-border);
+  padding: 0.7rem 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.cwi-setup-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.35rem 0;
+}
+
+.cwi-setup-row span {
+  color: var(--cwi-muted);
+  flex: 0 0 42%;
+}
+
+.cwi-setup-row strong {
+  text-align: right;
+  font-weight: 700;
+  color: var(--cwi-text);
+}
+
+.cwi-setup-detail {
+  margin: 0 0 0.5rem;
+  color: var(--cwi-muted);
+  font-size: 0.78rem;
+}
+
+.cwi-disclaimer {
+  margin: 0.55rem 0 0;
+}
+
+.cwi-block h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cwi-muted);
+}
+
+.cwi-block p {
+  margin: 0.3rem 0;
+  color: var(--cwi-text);
+}
+
+.cwi-metrics {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--cwi-text);
+}
+
+.cwi-layers {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.cwi-layer {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--cwi-text);
+  cursor: pointer;
+}
+
+.cwi-horizons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin: 0.55rem 0;
+}
+
+.cwi-horizon {
+  border: 1px solid var(--cwi-border);
+  padding: 0.45rem;
+  background: #fff;
+}
+
+.cwi-horizon strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--cwi-text);
+}
+
+.cwi-horizon p {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: var(--cwi-muted);
+}
+
+.cwi-horizon-main {
+  color: var(--cwi-text) !important;
+  font-weight: 700;
+  font-size: 0.8rem !important;
+}
+
+.cwi-horizon-note {
+  color: var(--cwi-warn) !important;
+}
+
+.cwi-quality--warn {
+  color: var(--cwi-warn) !important;
+}
+
+.cwi-quality--ok {
+  color: var(--cwi-ok) !important;
+}
+
+.cwi-quality--mid {
+  color: #a16207 !important;
+}
+
+.cwi-subh {
+  margin: 0.55rem 0 0.35rem;
+  font-size: 0.78rem;
+  color: var(--cwi-muted);
+}
+
+.cwi-cases {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.cwi-case-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  text-align: left;
+  border: 1px solid var(--cwi-border);
+  background: #fff;
+  color: var(--cwi-text);
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.cwi-case-btn:hover {
+  border-color: var(--cwi-accent);
+}
+
+.cwi-btn {
+  appearance: none;
+  border: 1px solid var(--cwi-border);
+  background: #fff;
+  color: var(--cwi-text);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  padding: 0.4rem 0.65rem;
+  cursor: pointer;
+}
+
+.cwi-btn-primary {
+  border-color: var(--cwi-accent);
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.cwi-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.cwi-block-head h3 {
+  margin: 0;
+}
+
+.cwi-event-label {
+  font-weight: 750;
+  color: var(--cwi-text);
+}
+
+.cwi-selected {
+  border-color: #93c5fd;
+}
+
+.cot-workstation--intel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  align-items: stretch;
+}
+
+.cot-workstation--intel .cot-ws-main {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .cot-workstation--intel {
+    grid-template-columns: 1fr;
+  }
+
+  .cwi-panel {
+    max-width: none;
+    border-left: none;
+    border-top: 1px solid var(--cwi-border);
+  }
+}

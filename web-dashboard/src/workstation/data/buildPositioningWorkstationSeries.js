@@ -1,6 +1,10 @@
 /**
  * Bind COT weekly series + price OHLC into one shared workstation timeline.
  * Visualization-only — does not alter COT calculations or exports.
+ *
+ * Price candles use completed weekly OHLC dates (provider/store weeks).
+ * COT values attach onto that timeline and simply stop at the latest report —
+ * price is never truncated because COT is behind.
  */
 
 import {
@@ -17,18 +21,28 @@ function isPlottableWeeklyOhlc(ohlc) {
   if (!ohlc) return false
   const { open, high, low, close } = ohlc
   if (![open, high, low, close].every(isNum)) return false
-  return high > low
+  if (!(high > low)) return false
+  if (high / Math.max(low, 1e-12) > 2.5) return false
+  return true
 }
 
-function pickStoreOhlc(bar) {
-  if (!bar || !isNum(bar.close)) return null
-  const ohlc = {
+function barTime(date) {
+  return Math.floor(Date.parse(`${date}T12:00:00Z`) / 1000)
+}
+
+function toPriceBar(bar) {
+  if (!bar || !isPlottableWeeklyOhlc(bar)) return null
+  const date = String(bar.date || '').slice(0, 10)
+  const time = Number.isFinite(bar.time) ? bar.time : barTime(date)
+  if (!date || !Number.isFinite(time)) return null
+  return {
+    time,
+    date,
     open: bar.open,
     high: bar.high,
     low: bar.low,
     close: bar.close,
   }
-  return isPlottableWeeklyOhlc(ohlc) ? ohlc : null
 }
 
 /**
@@ -52,64 +66,142 @@ export function buildPositioningWorkstationSeries(
   const resolved = resolveWorkstationWeeklyOhlc(model.market || null, priceRec, ohlcExportBlock)
   const cotLastDate =
     cotSeries[cotSeries.length - 1]?.date || ohlcExportBlock?.cot_last_date || null
-  const { bars: priceBars } = filterCompletedWorkstationOhlc(resolved.weeklyBars || [], {
-    cotLastDate,
+
+  // Completed price weeks only — never capped by COT last.
+  const { bars: completedPriceBars } = filterCompletedWorkstationOhlc(resolved.weeklyBars || [], {
+    cotLastDate: null,
   })
+
+  const priceByDate = new Map()
+  for (const bar of completedPriceBars) {
+    const pb = toPriceBar(bar)
+    if (pb) priceByDate.set(pb.date, pb)
+  }
+
+  // COT attach map (as-of match) — used for COT panel values, not for truncating price.
+  const cotByDate = new Map()
+  let prevMatchedBarDate = null
+  for (const cot of cotSeries) {
+    const date = String(cot.date || '').slice(0, 10)
+    if (!date) continue
+    const storeBar = matchOhlcBarForCotWeek(date, completedPriceBars, prevMatchedBarDate)
+    if (storeBar?.date) prevMatchedBarDate = storeBar.date
+    cotByDate.set(date, cot)
+  }
+
+  // Unified timeline = all completed price weeks ∪ all COT weeks (sorted).
+  const allDates = new Set([
+    ...priceByDate.keys(),
+    ...[...cotByDate.keys()],
+  ])
+  const sortedDates = [...allDates].sort()
 
   const fullRows = []
   const fullWeeklyBars = []
   let alignedOhlcWeeks = 0
-  let prevMatchedBarDate = null
 
-  for (const cot of cotSeries) {
-    const date = String(cot.date || '').slice(0, 10)
-    if (!date) continue
-    const time = Math.floor(Date.parse(`${date}T12:00:00Z`) / 1000)
+  for (const date of sortedDates) {
+    const time = barTime(date)
     if (!Number.isFinite(time)) continue
+    const priceBar = priceByDate.get(date) || null
+    // As-of COT: latest COT report on or before this price/COT date.
+    let cot = cotByDate.get(date) || null
+    if (!cot) {
+      for (const c of cotSeries) {
+        const cd = String(c.date || '').slice(0, 10)
+        if (cd <= date) cot = c
+        else break
+      }
+      // Only attach as-of COT onto price-only dates after the last report when
+      // the date is still within the same calendar week of that report — otherwise
+      // leave COT null so lines stop after the latest report.
+      if (cot && String(cot.date || '').slice(0, 10) !== date) {
+        const cotDate = String(cot.date || '').slice(0, 10)
+        if (date > cotLastDate) {
+          cot = null
+        } else if (cotDate !== date) {
+          // keep as-of for historical price dates between COT prints
+        }
+      }
+    }
 
-    const storeBar = matchOhlcBarForCotWeek(date, priceBars, prevMatchedBarDate)
-    const ohlc = pickStoreOhlc(storeBar)
-    if (storeBar?.date) prevMatchedBarDate = storeBar.date
+    // Stronger rule: after latest COT report date, COT nets are null (price continues).
+    const cotLive = cot && String(cot.date || '').slice(0, 10) <= (cotLastDate || '') ? cot : cot
+    const afterCot = Boolean(cotLastDate && date > cotLastDate)
+    const cotRow = afterCot ? null : cotLive
+
+    const ohlc = priceBar
+      ? {
+          open: priceBar.open,
+          high: priceBar.high,
+          low: priceBar.low,
+          close: priceBar.close,
+        }
+      : null
+
+    // Historical COT weeks without a same-date price bar: as-of match OHLC for the row.
+    let rowOhlc = ohlc
+    if (!rowOhlc && cotRow) {
+      const matched = matchOhlcBarForCotWeek(date, completedPriceBars, null)
+      if (matched && isPlottableWeeklyOhlc(matched)) {
+        rowOhlc = {
+          open: matched.open,
+          high: matched.high,
+          low: matched.low,
+          close: matched.close,
+        }
+      }
+    }
 
     const row = {
       label: date,
       date,
       time,
-      open: ohlc?.open ?? null,
-      high: ohlc?.high ?? null,
-      low: ohlc?.low ?? null,
-      close: ohlc?.close ?? null,
-      price: isNum(ohlc?.close) ? ohlc.close : cot.price,
-      institutional_net: cot.institutional_net,
-      institutional_wow: cot.institutional_wow,
-      retail_net: cot.retail_net,
-      retail_wow: cot.retail_wow,
-      commercial_net: cot.commercial_net,
-      commercial_wow: cot.commercial_wow,
+      open: rowOhlc?.open ?? null,
+      high: rowOhlc?.high ?? null,
+      low: rowOhlc?.low ?? null,
+      close: rowOhlc?.close ?? null,
+      price: isNum(rowOhlc?.close) ? rowOhlc.close : cotRow?.price ?? null,
+      institutional_net: afterCot ? null : cotRow?.institutional_net ?? null,
+      institutional_wow: afterCot ? null : cotRow?.institutional_wow ?? null,
+      retail_net: afterCot ? null : cotRow?.retail_net ?? null,
+      retail_wow: afterCot ? null : cotRow?.retail_wow ?? null,
+      commercial_net: afterCot ? null : cotRow?.commercial_net ?? null,
+      commercial_wow: afterCot ? null : cotRow?.commercial_wow ?? null,
     }
 
     fullRows.push(row)
-    if (ohlc) {
+    if (priceBar) {
+      alignedOhlcWeeks += 1
+      fullWeeklyBars.push(priceBar)
+    } else if (rowOhlc) {
+      // COT week without native same-date bar — still plot a candle on the COT date
+      // for historical continuity, but never invent weeks after the price tip.
       alignedOhlcWeeks += 1
       fullWeeklyBars.push({
         time,
         date,
-        open: ohlc.open,
-        high: ohlc.high,
-        low: ohlc.low,
-        close: ohlc.close,
+        open: rowOhlc.open,
+        high: rowOhlc.high,
+        low: rowOhlc.low,
+        close: rowOhlc.close,
       })
     }
   }
 
-  const range = computeWorkstationCommonRange(fullRows, fullWeeklyBars)
+  // Prefer pure completed price bars as the candle series (provider weeks).
+  // This is what TradingView compares against.
+  const priceOnlyBars = completedPriceBars.map(toPriceBar).filter(Boolean)
+
+  const range = computeWorkstationCommonRange(fullRows, priceOnlyBars)
+  // Default: do NOT slice price back to COT overlap. Only slice when explicitly requested.
   const useCommon = !preserveFullCotHistory && Boolean(range.commonFirst && range.commonLast)
   const rows = useCommon
     ? sliceRowsToDateRange(fullRows, range.commonFirst, range.commonLast)
     : fullRows
   const weeklyBars = useCommon
-    ? sliceBarsToDateRange(fullWeeklyBars, range.commonFirst, range.commonLast)
-    : fullWeeklyBars
+    ? sliceBarsToDateRange(priceOnlyBars, range.commonFirst, range.commonLast)
+    : priceOnlyBars
 
   const incomplete =
     ohlcExportBlock?.incomplete_history ??
@@ -127,7 +219,7 @@ export function buildPositioningWorkstationSeries(
     meta: {
       cotWeeks: cotSeries.length,
       storeWeeklyBars: resolved.weeklyBars?.length ?? 0,
-      filteredWeeklyBars: priceBars.length,
+      filteredWeeklyBars: completedPriceBars.length,
       alignedOhlcWeeks,
       resolvedFrom: resolved.resolvedFrom,
       canonicalSymbol: ohlcExportBlock?.canonical_symbol ?? resolved.exportMeta?.canonical_symbol ?? null,
@@ -139,18 +231,20 @@ export function buildPositioningWorkstationSeries(
       incompleteHistory: incomplete,
       rangeNote: note,
       cotLastDate,
+      priceLastDate: weeklyBars[weeklyBars.length - 1]?.date ?? null,
+      priceNotTruncatedToCot: true,
     },
   }
 }
 
 export function sliceWorkstationRows(rows, weeks) {
-  if (!Array.isArray(rows) || !rows.length) return []
+  if (!Array.isArray(rows) || !rows.length) return rows || []
   if (!weeks || weeks >= rows.length) return rows
   return rows.slice(rows.length - weeks)
 }
 
 export function sliceWorkstationBars(bars, weeks) {
-  if (!Array.isArray(bars) || !bars.length) return []
+  if (!Array.isArray(bars) || !bars.length) return bars || []
   if (!weeks || weeks >= bars.length) return bars
   return bars.slice(bars.length - weeks)
 }

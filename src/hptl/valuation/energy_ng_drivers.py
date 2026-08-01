@@ -369,11 +369,18 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
                     bundle.driver_cards["market_price"]["current"] = round(prices[-1], 4)
                     bundle.driver_cards["market_price"]["as_of"] = as_of
             bundle.features["storage_surplus_bcf"] = [float(v) for v in filled_surplus]  # type: ignore[arg-type]
+            # Percentage surplus/deficit vs same-week 5y average (V2 primary storage transform)
+            pct_col: list[float] = []
+            for s, u in zip(filled_storage, filled_surplus):
+                avg5 = float(s) - float(u)  # type: ignore[arg-type]
+                pct_col.append((100.0 * float(u) / avg5) if abs(avg5) > 1e-9 else 0.0)
+            bundle.features["storage_surplus_pct"] = pct_col
             bundle.lineage["storage_surplus_bcf"] = {
                 "source_name": storage_meta.get("official_source") or "EIA Working Gas (cache)",
                 "source_id": storage_meta.get("series_identifier") or storage_path,
                 "source_date": max(storage_raw.keys()),
             }
+            bundle.lineage["storage_surplus_pct"] = dict(bundle.lineage["storage_surplus_bcf"])
 
     if "storage" not in bundle.driver_cards:
         key_note = storage_meta.get("api_key_required") or "EIA_API_KEY"
@@ -415,12 +422,15 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
         vals = [prod_weekly[d] for d in dates]
         mean = sum(vals) / len(vals)
         std = math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals)) or 1.0
+        # Raw as-of levels for V2 standardisation; sample z retained for V1 compatibility
+        bundle.features["dry_gas_production_level"] = list(vals)
         bundle.features["dry_gas_production"] = [(v - mean) / std for v in vals]
         bundle.lineage["dry_gas_production"] = {
             "source_name": "FALLBACK proxy" if using_proxy else (prod_meta.get("official_source") or "Official"),
             "source_id": prod_series_id or prod_path,
             "source_date": max(prod_weekly.keys()),
         }
+        bundle.lineage["dry_gas_production_level"] = dict(bundle.lineage["dry_gas_production"])
         latest = vals[-1]
         prev = vals[-5] if len(vals) >= 5 else vals[-2] if len(vals) >= 2 else None
         avg4 = sum(vals[-4:]) / min(4, len(vals))
@@ -478,12 +488,14 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
         vals = [lng_weekly[d] for d in dates]
         mean = sum(vals) / len(vals)
         std = math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals)) or 1.0
+        bundle.features["lng_exports_level"] = list(vals)
         bundle.features["lng_exports"] = [(v - mean) / std for v in vals]
         bundle.lineage["lng_exports"] = {
             "source_name": lng_meta.get("official_source") or "EIA LNG exports",
             "source_id": lng_meta.get("series_identifier") or lng_path,
             "source_date": max(lng_weekly.keys()),
         }
+        bundle.lineage["lng_exports_level"] = dict(bundle.lineage["lng_exports"])
         latest = vals[-1]
         prev = vals[-5] if len(vals) >= 5 else vals[-2] if len(vals) >= 2 else None
         avg4 = sum(vals[-4:]) / min(4, len(vals))
@@ -624,9 +636,6 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
                 "source": wmeta.get("official_source") or wpath,
                 "freshness": wmeta.get("status") or "LIVE",
                 "data_quality": data_quality,
-                "valuation_role": "EXPERIMENTAL DRIVER",
-                "in_fair_value": False,
-                "valuation_note": "NOT INCLUDED IN FAIR VALUE pending walk-forward promotion",
                 "institutional_effect": effect,
                 "tone": "bullish" if effect == "Bullish" else "bearish" if effect == "Bearish" else "neutral",
                 "interpretation": (

@@ -14,7 +14,20 @@
 }
 
 .instrument-positioning-workspace--dark .instrument-positioning-head {
-  display: none;
+  display: block;
+  margin: 4px 0 6px;
+  padding: 0 2px;
+}
+
+.instrument-cot-workstation-embed {
+  margin: 0 0 12px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: #0b1220;
+  overflow: hidden;
+}
+
+.instrument-cot-workstation-embed .cot-workstation {
+  margin-top: 0;
 }
 
 .instrument-positioning-workspace--dark .instrument-positioning-archive {

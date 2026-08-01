@@ -39,6 +39,30 @@ import {
   resetDiagCounters,
   setDiagInstrument,
 } from './charts/cotWsRenderDiagnostics.js'
+import { findTimeForDate } from './intelMarkers.js'
+import {
+  DEFAULT_LAYER_STATE,
+  eventLayerIds,
+  eventMatchesLayers,
+  toResearchPins,
+} from './researchEventUi.js'
+import {
+  ResearchEventNavigator,
+  ResearchLayerBar,
+  ResearchMarkerLegend,
+  WeeklyHoverTooltip,
+} from './ResearchWorkstationChrome.jsx'
+import {
+  buildWeeklyViewModel,
+  researchEventId,
+  resolveInspectedWeek,
+} from './data/buildWeeklyViewModel.js'
+import { resolveWeeklyInspectorBlock } from './data/expandWeeklyInspector.js'
+import { WeeklyInspector } from './WeeklyInspector.jsx'
+import {
+  WeeklyAnalysisPanel,
+  resolveWeeklyAnalysisBlock,
+} from './WeeklyAnalysisPanel.jsx'
 
 import '../charts/positioningChart.css'
 import './cotWorkstation.css'
@@ -155,6 +179,18 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
 
   const [rangeId, setRangeId] = React.useState(POSITIONING_DEFAULT_RANGE_ID)
   const [viewportEndLabel, setViewportEndLabel] = React.useState(null)
+  /** Positioning research — on-chart event layers (any supported COT market). */
+  const [researchBlock, setResearchBlock] = React.useState(null)
+  /** Compact weekly percentile/flow series — merged without clearing selection. */
+  const [weeklyInspectorBlock, setWeeklyInspectorBlock] = React.useState(null)
+  const [weeklyAnalysisBlock, setWeeklyAnalysisBlock] = React.useState(null)
+  const [weeklyAnalysisOpen, setWeeklyAnalysisOpen] = React.useState(false)
+  const [layerState, setLayerState] = React.useState(DEFAULT_LAYER_STATE)
+  /** Separate selection states — week may have 0..N events. */
+  const [selectedWeek, setSelectedWeek] = React.useState(null)
+  const [selectedEventId, setSelectedEventId] = React.useState(null)
+  const [hoveredWeek, setHoveredWeek] = React.useState(null)
+  const [eventNavCollapsed, setEventNavCollapsed] = React.useState(true)
 
   // Live price/COT height split (percent of the fitted surface). The draggable
   // splitter mutates only this value; the COT group takes the remainder and its
@@ -296,16 +332,62 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     setCrosshairLabel(plottedLatestDate || '—')
   }, [plottedLatestDate, marketId, setCrosshairLabel])
 
+  const allResearchEvents = React.useMemo(
+    () => (Array.isArray(researchBlock?.markers) ? researchBlock.markers : []),
+    [researchBlock],
+  )
+
+  const visibleResearchEvents = React.useMemo(
+    () => allResearchEvents.filter((e) => eventMatchesLayers(e, layerState)),
+    [allResearchEvents, layerState],
+  )
+
+  const eventCounts = React.useMemo(() => {
+    const counts = {
+      commercial_extremes: 0,
+      commercial_rotations: 0,
+      noncommercial_extremes: 0,
+      noncommercial_rotations: 0,
+      divergence: 0,
+      nr_extremes: 0,
+    }
+    for (const e of allResearchEvents) {
+      for (const id of eventLayerIds(e)) {
+        if (counts[id] != null) counts[id] += 1
+      }
+    }
+    return counts
+  }, [allResearchEvents])
+
+  const dateByTime = React.useMemo(() => {
+    const map = new Map()
+    for (const row of timelineRows) {
+      if (row?.time != null) {
+        map.set(row.time, String(row.date || row.label || '').slice(0, 10))
+      }
+    }
+    return map
+  }, [timelineRows])
+
+  const dataStale = Boolean(
+    loadedLatestDate &&
+      plottedLatestDate &&
+      loadedLatestDate !== plottedLatestDate,
+  )
+
   const onCrosshairTime = React.useCallback(
     (time) => {
       setCrosshairLabel(labelFromTimelineTime(visibleRowsRef.current, time))
+      const date = dateByTime.get(time) || null
+      setHoveredWeek(date)
     },
-    [setCrosshairLabel],
+    [setCrosshairLabel, dateByTime],
   )
 
   const onCrosshairClear = React.useCallback(() => {
     const latest = visibleRowsRef.current[visibleRowsRef.current.length - 1]
     setCrosshairLabel(latest?.date || latest?.label || '—')
+    setHoveredWeek(null)
   }, [setCrosshairLabel])
 
   const {
@@ -313,6 +395,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     goHome,
     goAll,
     goPreset,
+    goToTime,
     resetCamera,
     panByPixels,
     panPaneVerticalByPixels,
@@ -329,6 +412,252 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     onCrosshairClear,
     homeWeeks: rangePresetById(POSITIONING_DEFAULT_RANGE_ID).weeks,
   })
+
+  // Clear selection only when the instrument changes — never on data refetch,
+  // matchedKey resolution, percentile load, or marker regeneration.
+  React.useEffect(() => {
+    setHoveredWeek(null)
+    setSelectedWeek(null)
+    setSelectedEventId(null)
+    setResearchBlock(null)
+    setWeeklyInspectorBlock(null)
+    setWeeklyAnalysisBlock(null)
+    setWeeklyAnalysisOpen(false)
+  }, [marketId])
+
+  // Research markers — keep previous block until the new one arrives (no flash-clear).
+  React.useEffect(() => {
+    let cancelled = false
+    fetch('/data/cot_positioning_research_latest.json', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((doc) => {
+        if (cancelled || !doc?.markets) return
+        const markets = doc.markets
+        const block =
+          markets[marketId] ||
+          (matchedKey ? markets[matchedKey] : null) ||
+          Object.entries(markets).find(
+            ([k]) => String(k).toLowerCase() === String(marketId || '').toLowerCase(),
+          )?.[1] ||
+          null
+        if (block?.available) setResearchBlock(block)
+      })
+      .catch(() => {
+        /* keep prior researchBlock */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [marketId, matchedKey])
+
+  // Percentile/flow series — independent fetch so it cannot wipe markers/selection.
+  React.useEffect(() => {
+    let cancelled = false
+    fetch('/data/cot_weekly_inspector_latest.json', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((doc) => {
+        if (cancelled || !doc) return
+        const weeklyInspector = resolveWeeklyInspectorBlock(doc, marketId, matchedKey)
+        if (weeklyInspector) setWeeklyInspectorBlock(weeklyInspector)
+      })
+      .catch(() => {
+        /* keep prior weeklyInspectorBlock */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [marketId, matchedKey])
+
+  // Weekly Analysis — narrative layer over inspector + research (no recalc).
+  React.useEffect(() => {
+    let cancelled = false
+    fetch('/data/cot_analyst_intelligence_latest.json', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((doc) => {
+        if (cancelled || !doc) return
+        const block = resolveWeeklyAnalysisBlock(doc, marketId, matchedKey)
+        if (block) setWeeklyAnalysisBlock(block)
+      })
+      .catch(() => {
+        /* keep prior weeklyAnalysisBlock */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [marketId, matchedKey])
+
+  const researchWithInspector = React.useMemo(() => {
+    if (!researchBlock) return null
+    return weeklyInspectorBlock
+      ? { ...researchBlock, weekly_inspector: weeklyInspectorBlock }
+      : researchBlock
+  }, [researchBlock, weeklyInspectorBlock])
+
+  const weeklyModel = React.useMemo(
+    () =>
+      buildWeeklyViewModel({
+        timelineRows,
+        researchBlock: researchWithInspector,
+        instrument: marketId,
+        loadedLatestDate,
+        staleView: dataStale,
+      }),
+    [timelineRows, researchWithInspector, marketId, loadedLatestDate, dataStale],
+  )
+
+  const weeklyView = weeklyModel.weeklyView
+
+  const inspectorOpen = Boolean(selectedWeek)
+  const inspectedWeek = React.useMemo(
+    () =>
+      inspectorOpen
+        ? resolveInspectedWeek({
+            weeklyView,
+            selectedWeek,
+            hoveredWeek: null,
+            latestDate: null,
+          })
+        : null,
+    [weeklyView, selectedWeek, inspectorOpen],
+  )
+
+  const hoveredWeekData = React.useMemo(
+    () => (hoveredWeek && weeklyView?.[hoveredWeek] ? weeklyView[hoveredWeek] : null),
+    [hoveredWeek, weeklyView],
+  )
+
+  const highlightWeek = selectedWeek || null
+  const eventHighlightTime = React.useMemo(() => {
+    if (!highlightWeek) return null
+    return findTimeForDate(timelineRows, highlightWeek)
+  }, [highlightWeek, timelineRows])
+
+  // Pane routing: group-scoped events only (+ Comm↔NR divergence where intended).
+  // Rotations stay on their participant pane — not duplicated on price.
+  const commercialEvents = React.useMemo(
+    () =>
+      visibleResearchEvents.filter(
+        (e) =>
+          e.group === 'commercial' || e.event_type === 'comm_nr_divergence',
+      ),
+    [visibleResearchEvents],
+  )
+  const institutionalEvents = React.useMemo(
+    () => visibleResearchEvents.filter((e) => e.group === 'noncommercial'),
+    [visibleResearchEvents],
+  )
+  const retailEvents = React.useMemo(
+    () =>
+      visibleResearchEvents.filter(
+        (e) =>
+          e.group === 'nonreportable' || e.event_type === 'comm_nr_divergence',
+      ),
+    [visibleResearchEvents],
+  )
+  // Marker selection glow follows locked week only — hover stays tooltip-only.
+  const pinSelectedDate = selectedWeek || null
+  const commercialResearchPins = React.useMemo(
+    () =>
+      toResearchPins(
+        commercialEvents,
+        timelineRows,
+        pinSelectedDate,
+        selectedEventId,
+      ),
+    [commercialEvents, timelineRows, pinSelectedDate, selectedEventId],
+  )
+  const institutionalResearchPins = React.useMemo(
+    () =>
+      toResearchPins(
+        institutionalEvents,
+        timelineRows,
+        pinSelectedDate,
+        selectedEventId,
+      ),
+    [institutionalEvents, timelineRows, pinSelectedDate, selectedEventId],
+  )
+  const retailResearchPins = React.useMemo(
+    () =>
+      toResearchPins(retailEvents, timelineRows, pinSelectedDate, selectedEventId),
+    [retailEvents, timelineRows, pinSelectedDate, selectedEventId],
+  )
+  // Price pane: compact overview for Commercial extremes + DIV only (no rotations).
+  const priceEvents = React.useMemo(
+    () =>
+      visibleResearchEvents.filter((e) => {
+        if (e.event_type === 'comm_nr_divergence') return true
+        if (e.group !== 'commercial') return false
+        return (
+          e.event_type === 'absolute_extreme' || e.event_type === 'local_extreme'
+        )
+      }),
+    [visibleResearchEvents],
+  )
+  const priceResearchPins = React.useMemo(
+    () =>
+      toResearchPins(priceEvents, timelineRows, pinSelectedDate, selectedEventId),
+    [priceEvents, timelineRows, pinSelectedDate, selectedEventId],
+  )
+
+  const lockWeek = React.useCallback((date, eventId = null) => {
+    const d = String(date || '').slice(0, 10)
+    if (!d) return
+    setSelectedWeek(d)
+    setSelectedEventId(eventId)
+  }, [])
+
+  const handleTimeClick = React.useCallback(
+    (timeOrPin) => {
+      // Chart body click (unix time) or legacy pin time — lock week, never jump camera.
+      if (timeOrPin && typeof timeOrPin === 'object') {
+        lockWeek(timeOrPin.date, timeOrPin.eventId || null)
+        return
+      }
+      const date = dateByTime.get(timeOrPin)
+      if (!date) return
+      lockWeek(date, null)
+    },
+    [dateByTime, lockWeek],
+  )
+
+  const handlePinClick = React.useCallback(
+    (pin) => {
+      if (!pin?.date) return
+      // Marker click opens inspector only — no zoom / scroll change.
+      lockWeek(pin.date, pin.eventId || null)
+    },
+    [lockWeek],
+  )
+
+  const handleResearchEventSelect = React.useCallback(
+    (event) => {
+      if (!event) return
+      lockWeek(event.date, researchEventId(event))
+    },
+    [lockWeek],
+  )
+
+  const clearWeekSelection = React.useCallback(() => {
+    setSelectedWeek(null)
+    setSelectedEventId(null)
+  }, [])
+
+  const jumpToWeek = React.useCallback(
+    (date) => {
+      const time = findTimeForDate(timelineRows, date)
+      if (time == null) return
+      goToTime(time, 104)
+    },
+    [timelineRows, goToTime],
+  )
+
+  const handleInspectorEventSelect = React.useCallback(
+    (event) => {
+      if (!event) return
+      lockWeek(event.date, event.id || researchEventId(event))
+    },
+    [lockWeek],
+  )
 
   useMasterCameraGestures({
     containerRef: panelsStackRef,
@@ -512,9 +841,10 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         isFullscreen ? ' cot-workstation--fullscreen' : ''
       }${hasAnyOhlc ? '' : ' cot-workstation--no-ohlc'}${
         shellLoading ? ' cot-workstation--loading' : ''
-      }`}
+      }${inspectorOpen ? ' cot-workstation--inspector-open' : ''}`}
       data-market={marketId}
       data-charts-ready={chartsReady ? '1' : '0'}
+      data-inspector-open={inspectorOpen ? '1' : '0'}
       style={{
         '--ws-price-flex': priceFlex,
         '--ws-cot-group-flex': 100 - priceFlex,
@@ -599,7 +929,65 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         </div>
       </header>
 
-      <div className="cot-ws-canvas-scroll">
+      {researchBlock ? (
+        <div className="cot-ws-research-chrome">
+          <div className="cot-ws-research-bar-row">
+            <ResearchLayerBar
+              layerState={layerState}
+              onChange={setLayerState}
+              eventCounts={eventCounts}
+            />
+            <div className="cot-ws-research-chrome-actions">
+              <button
+                type="button"
+                className={`cot-ws-analysis-btn${weeklyAnalysisOpen ? ' is-open' : ''}`}
+                aria-pressed={weeklyAnalysisOpen}
+                onClick={() => setWeeklyAnalysisOpen((v) => !v)}
+                title="Open Weekly Analysis"
+              >
+                Analysis
+              </button>
+            </div>
+          </div>
+          <ResearchMarkerLegend />
+          <ResearchEventNavigator
+            events={visibleResearchEvents}
+            selectedDate={selectedWeek}
+            selectedEventId={selectedEventId}
+            onSelect={handleResearchEventSelect}
+            collapsed={eventNavCollapsed}
+            onCollapsedChange={setEventNavCollapsed}
+          />
+        </div>
+      ) : (
+        <div className="cot-ws-research-chrome cot-ws-research-chrome--analysis-only">
+          <div className="cot-ws-research-chrome-actions">
+            <button
+              type="button"
+              className={`cot-ws-analysis-btn${weeklyAnalysisOpen ? ' is-open' : ''}`}
+              aria-pressed={weeklyAnalysisOpen}
+              onClick={() => setWeeklyAnalysisOpen((v) => !v)}
+              title="Open Weekly Analysis"
+            >
+              Analysis
+            </button>
+          </div>
+        </div>
+      )}
+
+      <WeeklyInspector
+        week={inspectedWeek}
+        open={inspectorOpen}
+        selectedEventId={selectedEventId}
+        onClose={clearWeekSelection}
+        onJumpToWeek={jumpToWeek}
+        onSelectEvent={handleInspectorEventSelect}
+        analysisOpen={weeklyAnalysisOpen}
+        onToggleAnalysis={() => setWeeklyAnalysisOpen((v) => !v)}
+      />
+
+      <div className="cot-ws-research-stage">
+        <div className="cot-ws-canvas-scroll">
         <div
           className="cot-ws-panels cot-ws-panels--camera"
           ref={panelsStackRef}
@@ -659,6 +1047,11 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 latestMarkerTime={latestMarkerTime}
                 latestMarkerLabel={plottedLatestDate}
                 showLatestLabel
+                researchPins={priceResearchPins}
+                researchPinVariant="price"
+                eventHighlightTime={eventHighlightTime}
+                onTimeClick={handleTimeClick}
+                onPinClick={handlePinClick}
                 onFitY={fitVertical}
                 emptyMessage={
                   hasAnyOhlc && !hasVisibleOhlc
@@ -693,6 +1086,11 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                   lineColor={CHART_WS.commercial}
                   linePoints={commercialLinePoints}
                   latestMarkerTime={latestMarkerTime}
+                  researchPins={commercialResearchPins}
+                  researchPinVariant="cot"
+                  eventHighlightTime={eventHighlightTime}
+                  onTimeClick={handleTimeClick}
+                  onPinClick={handlePinClick}
                   valueBadge={commercialBadge}
                   onFitY={fitVertical}
                   zeroLine
@@ -717,6 +1115,11 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                   lineColor={CHART_WS.institutional}
                   linePoints={institutionalLinePoints}
                   latestMarkerTime={latestMarkerTime}
+                  researchPins={institutionalResearchPins}
+                  researchPinVariant="cot"
+                  eventHighlightTime={eventHighlightTime}
+                  onTimeClick={handleTimeClick}
+                  onPinClick={handlePinClick}
                   valueBadge={institutionalBadge}
                   onFitY={fitVertical}
                   zeroLine
@@ -744,6 +1147,11 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                   lineColor={CHART_WS.retail}
                   linePoints={retailLinePoints}
                   latestMarkerTime={latestMarkerTime}
+                  researchPins={retailResearchPins}
+                  researchPinVariant="cot"
+                  eventHighlightTime={eventHighlightTime}
+                  onTimeClick={handleTimeClick}
+                  onPinClick={handlePinClick}
                   valueBadge={retailBadge}
                   onFitY={fitVertical}
                   zeroLine
@@ -754,7 +1162,18 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             </PaneShell>
           </div>
         </div>
+        </div>
+
+        {hoveredWeekData && !inspectorOpen ? (
+          <WeeklyHoverTooltip week={hoveredWeekData} />
+        ) : null}
       </div>
+
+      <WeeklyAnalysisPanel
+        open={weeklyAnalysisOpen}
+        onClose={() => setWeeklyAnalysisOpen(false)}
+        intel={weeklyAnalysisBlock}
+      />
     </div>
   )
 }

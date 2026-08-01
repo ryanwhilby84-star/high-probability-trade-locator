@@ -33,10 +33,12 @@ def main() -> int:
     inst = doc.get("instrument") or {}
     print(f"Wrote {paths['data']}")
     print(
-        f"NG V1: wired={inst.get('wired')} spot={inst.get('spot_price')} "
+        f"NG V1 validated: wired={inst.get('wired')} spot={inst.get('spot_price')} "
         f"fair={inst.get('fair_value')} dev={inst.get('deviation_pct')} "
-        f"bias={inst.get('valuation_bias')} features={inst.get('active_features')}"
+        f"bias={inst.get('institutional_bias')} features={inst.get('active_features')}"
     )
+    print(f"experimental={inst.get('experimental_features')}")
+    print(f"informational={inst.get('informational_features')}")
     print(f"Awaiting: {inst.get('awaiting_drivers')}")
     return 0
 

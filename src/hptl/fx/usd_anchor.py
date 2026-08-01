@@ -34,48 +34,76 @@ def _load_macro_hub_usd() -> dict[str, Any] | None:
 
 
 def load_usd_price_block(*, allow_live: bool = False) -> dict[str, Any]:
-    """DXY / USD price — price_store first, then FRED broad-dollar proxy (labelled)."""
+    """ICE DX futures from price_store; FRED broad only under its own labelled id."""
     from hptl.macro_hub.price_history import fred_series_block, price_block_from_store
+    from hptl.markets.usd_index_identity import BROAD_USD_ID, ICE_DXY_ID
 
-    store = price_block_from_store(
-        DX_INSTRUMENT_ID,
-        label="US Dollar Index / DX",
+    for iid, label in (
+        (ICE_DXY_ID, "US Dollar Index / DXY — ICE DX futures"),
+        (DX_INSTRUMENT_ID, "US Dollar Index / DX"),
+    ):
+        store = price_block_from_store(
+            iid,
+            label=label,
+            stale_after_days=STALE_FRED_DAYS,
+        )
+        # Refuse FRED-broad bars mis-bound under DX/ICE ids
+        src = str(store.get("source") or "")
+        if store.get("latest_price") is not None and "fred" not in src.lower() and "DTWEX" not in src:
+            return {
+                "mode": "price_store",
+                "label": f"{label} (price_store)",
+                "current_close": store.get("latest_price"),
+                "as_of_date": store.get("latest_date"),
+                "source": store.get("source") or "price_store",
+                "series_id": None,
+                "is_fallback": False,
+                "fallback_note": None,
+                "freshness": store.get("freshness"),
+                "history": store.get("history"),
+                "confidence": "high" if store.get("freshness", {}).get("status") == "fresh" else "moderate",
+            }
+
+    broad_store = price_block_from_store(
+        BROAD_USD_ID,
+        label=BROAD_USD_ID,
         stale_after_days=STALE_FRED_DAYS,
     )
-    if store.get("latest_price") is not None:
+    if broad_store.get("latest_price") is not None:
         return {
-            "mode": "price_store",
-            "label": "US Dollar Index / DX (price_store)",
-            "current_close": store.get("latest_price"),
-            "as_of_date": store.get("latest_date"),
-            "source": store.get("source") or "price_store",
-            "series_id": None,
-            "is_fallback": False,
-            "fallback_note": None,
-            "freshness": store.get("freshness"),
-            "history": store.get("history"),
-            "confidence": "high" if store.get("freshness", {}).get("status") == "fresh" else "moderate",
+            "mode": "fred_broad_dollar",
+            "label": BROAD_USD_ID,
+            "current_close": broad_store.get("latest_price"),
+            "as_of_date": broad_store.get("latest_date"),
+            "source": broad_store.get("source") or "fred",
+            "series_id": FRED_USD_DXY.series_id,
+            "is_fallback": True,
+            "fallback_note": (
+                "Broad USD (DTWEXBGS) only — not substituted as ICE DX futures price."
+            ),
+            "freshness": broad_store.get("freshness"),
+            "history": broad_store.get("history"),
+            "confidence": "moderate",
         }
 
     fred = fred_series_block(
         FRED_USD_DXY.series_id,
-        label=FRED_USD_DXY.label,
+        label=BROAD_USD_ID,
         obs_start=FRED_USD_DXY.obs_start,
         stale_after_days=STALE_FRED_DAYS,
         allow_live=allow_live,
     )
     if fred.get("latest_value") is not None:
         return {
-            "mode": "fred_broad_dollar_proxy",
-            "label": "USD broad dollar proxy — not ICE DXY",
+            "mode": "fred_broad_dollar",
+            "label": BROAD_USD_ID,
             "current_close": fred.get("latest_value"),
             "as_of_date": fred.get("latest_date"),
             "source": fred.get("source") or "fred",
             "series_id": FRED_USD_DXY.series_id,
             "is_fallback": True,
             "fallback_note": (
-                "FRED DTWEXBGS nominal broad trade-weighted USD index — "
-                "not ICE U.S. Dollar Index (DX) futures price."
+                "FRED DTWEXBGS Nominal Broad USD — not ICE U.S. Dollar Index futures."
             ),
             "freshness": fred.get("freshness"),
             "history": fred.get("history"),

@@ -17,6 +17,7 @@ import {
   panCameraByPixels,
   cameraLogicalRange,
   zoomCameraAtPixel,
+  timeToIndex,
 } from './masterCamera.js'
 import { snapToTimelineTime } from './cotViewportUtils.js'
 import { POSITIONING_DEFAULT_RANGE_ID } from '../../cot/positioningChartMetrics.js'
@@ -312,6 +313,45 @@ export function useMasterCamera({
       }
     },
     [getPlotWidth, setCamera, anchorPanesToLatest],
+  )
+
+  /**
+   * Jump synchronized panes so `time` (unix sec) sits in-view for analogue inspection.
+   * Preserves stretch camera model (barSpacing + scrollToPosition).
+   */
+  const goToTime = React.useCallback(
+    (time, weeks = 104) => {
+      const timelineRows = timelineRowsRefInternal.current
+      if (!timelineRows.length || !Number.isFinite(Number(time))) return false
+      const plotWidth = getPlotWidth()
+      const span = Math.min(weeks ?? 104, timelineRows.length)
+      const next = cameraForWeekWindow(timelineRows, span, plotWidth)
+      if (!next) return false
+      setCamera(next, { force: true })
+
+      const idx = timeToIndex(timelineRows, Number(time))
+      const fromEnd = timelineRows.length - 1 - idx
+      // Place target ~40% from the right edge of the visible window.
+      const position = fromEnd - Math.floor(span * 0.4)
+      for (const pane of panesRef.current.values()) {
+        try {
+          pane.chart.timeScale().scrollToPosition(position, false)
+        } catch {
+          /* ignore stale chart */
+        }
+      }
+      // Sync crosshair to the historical week across all panes.
+      try {
+        syncingCrosshairRef.current = true
+        syncCrosshairToAll(panesRef.current, Number(time), null)
+        lastCrosshairTimeRef.current = Number(time)
+        emitCrosshairTime()
+      } finally {
+        syncingCrosshairRef.current = false
+      }
+      return true
+    },
+    [getPlotWidth, setCamera, emitCrosshairTime],
   )
 
   const resetCamera = React.useCallback(() => {
@@ -633,6 +673,7 @@ export function useMasterCamera({
     goHome,
     goAll,
     goPreset,
+    goToTime,
     resetCamera,
     panByPixels,
     panPaneVerticalByPixels,

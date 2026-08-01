@@ -1,0 +1,273 @@
+/* Commercial Attention — Phase 6 institutional presentation */
+
+.ca-panel {
+  margin: 0 0 2rem;
+}
+
+.ca-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.85rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.ca-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--hptl-text);
+}
+
+.ca-sub {
+  margin: 0;
+  max-width: 44rem;
+  color: var(--hptl-text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.ca-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--hptl-text-secondary);
+}
+
+.ca-list {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.ca-card {
+  padding: 1.25rem 1.35rem 1.15rem;
+  border: 1px solid var(--hptl-border);
+  border-radius: var(--hptl-radius);
+  background: var(--hptl-bg-elevated);
+  box-shadow: none;
+}
+
+.ca-card.ca-tier-high {
+  border-color: var(--hptl-attention-border);
+}
+
+.ca-card.ca-tier-developing {
+  border-color: var(--hptl-border-strong);
+}
+
+.ca-card-head {
+  margin-bottom: 0.95rem;
+}
+
+.ca-card-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--hptl-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.ca-card-week {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  color: var(--hptl-text-secondary);
+}
+
+.ca-summary {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--hptl-text);
+}
+
+.ca-tier-pill,
+.ca-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 4px;
+  background: var(--hptl-badge-bg);
+  border: 1px solid var(--hptl-badge-border);
+  color: var(--hptl-badge-text);
+  text-transform: none;
+}
+
+.ca-tier-high.ca-tier-pill,
+.ca-card.ca-tier-high .ca-tier-pill {
+  background: var(--hptl-attention-bg);
+  border-color: var(--hptl-attention-border);
+  color: var(--hptl-attention-text);
+}
+
+.ca-tier-developing.ca-tier-pill {
+  background: var(--hptl-badge-bg);
+  border-color: var(--hptl-badge-border);
+  color: var(--hptl-badge-text);
+}
+
+.ca-tier-watch.ca-tier-pill,
+.ca-tier-low.ca-tier-pill {
+  background: var(--hptl-badge-bg);
+  border-color: var(--hptl-border-strong);
+  color: var(--hptl-text-secondary);
+}
+
+.ca-events {
+  margin: 0 0 1rem;
+}
+
+.ca-events-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--hptl-text-secondary);
+  margin-bottom: 0.45rem;
+}
+
+.ca-events ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ca-events li {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 4px;
+  background: var(--hptl-badge-bg);
+  border: 1px solid var(--hptl-badge-border);
+  color: var(--hptl-badge-text);
+}
+
+.ca-details {
+  margin: 0 0 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--hptl-border);
+}
+
+.ca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.ca-grid h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--hptl-text-secondary);
+  text-transform: none;
+}
+
+.ca-subh {
+  margin-top: 0.85rem !important;
+}
+
+.ca-grid p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--hptl-text);
+}
+
+.ca-metrics {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--hptl-text-secondary);
+  line-height: 1.5;
+}
+
+.ca-metrics li {
+  margin: 0.12rem 0;
+}
+
+.ca-align {
+  margin: 0.15rem 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--hptl-text-secondary);
+}
+
+.ca-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.25rem;
+}
+
+.ca-btn {
+  appearance: none;
+  border: 1px solid var(--hptl-border-strong);
+  background: var(--hptl-bg-panel);
+  color: var(--hptl-text);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--hptl-radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.ca-btn:hover {
+  border-color: var(--hptl-badge-border);
+  background: var(--hptl-bg-muted);
+}
+
+.ca-btn-primary {
+  border-color: var(--hptl-border-strong);
+  background: #243044;
+  color: var(--hptl-text);
+}
+
+.ca-btn-primary:hover {
+  background: #2c3a52;
+  border-color: var(--hptl-badge-border);
+}
+
+.ca-why {
+  margin-top: 0.95rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--hptl-border);
+  font-size: 0.8rem;
+  color: var(--hptl-text-secondary);
+}
+
+.ca-why summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--hptl-text-secondary);
+}
+
+.ca-why ul {
+  margin: 0.45rem 0;
+  padding-left: 1.1rem;
+  line-height: 1.5;
+}
+
+.ca-evidence {
+  margin: 0.35rem 0 0;
+}
+
+.ca-empty .ca-meta {
+  align-items: flex-start;
+}

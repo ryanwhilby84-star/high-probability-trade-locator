@@ -5,7 +5,7 @@ Methodology (usd_broad_fair_value_v1):
   Plus historical percentile context for driver narrative.
 
 Inputs:
-  - Broad USD index (DTWEXBGS / canonical DX timeline)
+  - Broad USD index (FRED DTWEXBGS — never ICE DX futures)
   - Fed effective rate (DFF)
   - 10Y real yield (DFII10)
   - Average 2Y differential: mean(base_2Y − USD_2Y) across G10 legs
@@ -18,12 +18,13 @@ from datetime import datetime, timezone
 from typing import Any, Literal
 
 from hptl.fx.fx_macro_history import build_differential_series, currency_histories
+from hptl.markets.usd_index_identity import BROAD_USD_ID
 from hptl.prices.canonical_timeline import load_canonical_timeline
 from hptl.valuation.engine import BIAS_UNAVAILABLE
 
 MODEL_ID = "usd_broad_fair_value_v1"
 VALUATION_PHASE = "V3.8 USD Index"
-DXY_MARKET = "US Dollar Index / DX"
+DXY_MARKET = BROAD_USD_ID
 
 REAL_YIELD_SERIES = "DFII10"
 FED_FUNDS_SERIES = "DFF"

@@ -73,9 +73,39 @@ class UnifiedPriceAdapter:
         daily: list[OhlcBar] = []
         weekly: list[OhlcBar] = []
         err: str | None = None
+        price_scale = None
 
-        oanda_sym = OANDA_STORE_SYMBOL.get(instrument_id)
-        if oanda_sym and get_oanda_api_key():
+        # Softs / ICE DX: refresh Yahoo continuous futures (not monthly FRED / not broad USD).
+        if source == "yahoo_futures":
+            from hptl.markets.usd_index_identity import is_ice_dx_price_id
+            from hptl.prices.price_store import load_instrument_record
+
+            try:
+                if is_ice_dx_price_id(instrument_id):
+                    from hptl.prices.ice_dx_futures_backfill import promote_ice_dx_futures
+
+                    promote_ice_dx_futures((instrument_id,))
+                else:
+                    from hptl.prices.softs_futures_backfill import promote_soft_futures
+
+                    promote_soft_futures(instrument_id)
+                existing = load_instrument_record(instrument_id) or {}
+                daily = existing.get("daily") or []
+                weekly = existing.get("weekly") or []
+                price = existing.get("price")
+                price_scale = existing.get("price_scale")
+            except Exception as exc:
+                err = f"yahoo_futures:{type(exc).__name__}: {exc}"[:200]
+                # Never fall ICE DX back to FRED broad USD — that is a silent substitution.
+                if is_ice_dx_price_id(instrument_id):
+                    source = None
+                else:
+                    source = "fred"
+
+        oanda_sym = OANDA_STORE_SYMBOL.get(instrument_id) or (
+            oanda_symbol_for(spec, self._coverage) if source == "oanda" else None
+        )
+        if source == "oanda" and not daily and oanda_sym and get_oanda_api_key():
             try:
                 price, daily, weekly = oanda_fetch(oanda_sym)
                 if daily:
@@ -99,7 +129,7 @@ class UnifiedPriceAdapter:
                         if not sym:
                             raise OandaApiError(f"No OANDA symbol for {instrument_id}")
                         price, daily, weekly = oanda_fetch(sym)
-                    else:
+                    elif source not in ("yahoo_futures", "fred"):
                         price, daily, weekly = av_fetch(spec)
         except OandaApiError:
             if source == "oanda" and instrument_id in set(self._coverage.get("alpha_supported") or []):
@@ -116,12 +146,11 @@ class UnifiedPriceAdapter:
         range_52w = compute_range_52w(daily)
         history = build_history_meta(daily, weekly, range_52w) if daily or weekly else None
 
-        price_scale = None
-        if source == "oanda" and daily:
+        if price_scale is None and source == "oanda" and daily:
             sym = oanda_sym or (oanda_symbol_for(spec, self._coverage) if spec else None)
             if sym:
                 price_scale = {"source": "oanda", "symbol": sym}
-        elif source == "fred" and instrument_id in FRED_COT_FAIL_SERIES:
+        elif price_scale is None and source == "fred" and instrument_id in FRED_COT_FAIL_SERIES:
             price_scale = {"source": "fred", "series_id": FRED_COT_FAIL_SERIES[instrument_id]}
 
         return {

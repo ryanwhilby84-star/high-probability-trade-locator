@@ -22,6 +22,14 @@ export function parseRoute() {
 
     }
 
+    if (parts.length >= 3 && parts[parts.length - 1] === 'seasonality-workstation') {
+
+      const market = decodeURIComponent(parts.slice(1, -1).join('/')).trim()
+
+      return { view: 'seasonality-workstation', market }
+
+    }
+
     if (parts.length >= 2) {
 
       const market = decodeURIComponent(parts.slice(1).join('/')).trim()
@@ -83,6 +91,24 @@ export function parseRoute() {
   if (parts[0] === 'macro-hub' || parts[0] === 'macro') {
 
     return { view: 'macro-hub', market: null }
+
+  }
+
+  if (parts[0] === 'correlation-matrix' || parts[0] === 'correlation') {
+
+    return { view: 'correlation-matrix', market: null }
+
+  }
+
+  if (parts[0] === 'trade-basket-verify' || parts[0] === 'trade-basket') {
+
+    return { view: 'trade-basket', market: null }
+
+  }
+
+  if (parts[0] === 'macro-intelligence' || parts[0] === 'macro-intel') {
+
+    return { view: 'macro-intelligence', market: null }
 
   }
 
@@ -160,6 +186,48 @@ export function navigateToCotWorkstation(market) {
   const id = canonicalMarketId(market)
 
   window.location.hash = `#/instrument/${encodeURIComponent(id)}/cot-workstation`
+
+}
+
+
+
+export function navigateToSeasonalityWorkstation(market) {
+
+  const id = canonicalMarketId(market || 'Gold')
+
+  window.location.hash = `#/instrument/${encodeURIComponent(id)}/seasonality-workstation`
+
+}
+
+
+
+export function navigateToCorrelationMatrix() {
+
+  window.location.hash = '#/correlation-matrix'
+
+}
+
+
+
+export function navigateToTradeBasketVerify() {
+
+  window.location.hash = '#/trade-basket'
+
+}
+
+
+
+export function navigateToTradeBasket() {
+
+  window.location.hash = '#/trade-basket'
+
+}
+
+
+
+export function navigateToMacroIntelligence() {
+
+  window.location.hash = '#/macro-intelligence'
 
 }
 

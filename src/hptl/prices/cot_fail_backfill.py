@@ -42,7 +42,8 @@ FRED_COT_FAIL_SERIES: dict[str, str] = {
     "Cocoa": "PCOCOUSDM",
     "Coffee": "PCOFFOTMUSDM",
     "Cotton": "PCOTTINDUSDM",
-    "US Dollar Index / DX": "DTWEXBGS",
+    # Broad USD only — never bind FRED DTWEXBGS to ICE DX / DXY instrument ids.
+    "Broad US Dollar Index — DTWEXBGS": "DTWEXBGS",
 }
 
 
@@ -103,10 +104,17 @@ def backfill_fred_instrument(
         "price_scale": {
             "source": "fred",
             "series_id": series_id,
-            "is_fallback": store_key == "US Dollar Index / DX",
+            "is_fallback": False,
+            "is_proxy": False,
+            "is_fred_broad": store_key == "Broad US Dollar Index — DTWEXBGS",
             "fallback_note": (
-                "FRED DTWEXBGS broad USD index — not ICE DX futures price."
-                if store_key == "US Dollar Index / DX"
+                "FRED Nominal Broad U.S. Dollar Index (DTWEXBGS). Not ICE DX futures."
+                if store_key == "Broad US Dollar Index — DTWEXBGS"
+                else None
+            ),
+            "instrument_label": (
+                "Broad US Dollar Index — DTWEXBGS"
+                if store_key == "Broad US Dollar Index — DTWEXBGS"
                 else None
             ),
         },

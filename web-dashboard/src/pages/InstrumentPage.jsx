@@ -266,6 +266,14 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
       {!isCotRowResolved(row) ? <CotUnavailablePanel row={row} marketId={marketId} /> : null}
 
       <InstrumentWorkstationLayout>
+        {/* Research workstation first — below-the-fold embeds were invisible in normal use. */}
+        <InstrumentPositioningWorkspace
+          marketId={marketId}
+          headlineRow={row}
+          confluenceRecords={confluenceRecordsForMarket}
+          asOfDate={date}
+        />
+
         <InstrumentPricePanel
           instrumentId={marketId}
           prices={priceState.data}
@@ -274,13 +282,6 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
         />
 
         <ValuationInstrumentSection row={row} />
-
-        <InstrumentPositioningWorkspace
-          marketId={marketId}
-          headlineRow={row}
-          confluenceRecords={confluenceRecordsForMarket}
-          asOfDate={date}
-        />
 
         <details className="instrument-page-detail-collapse" id="valuation-evidence">
           <summary className="instrument-page-detail-summary">

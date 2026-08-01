@@ -73,6 +73,7 @@ CANONICAL_LEGACY_CODE: dict[str, str] = {
     "Platinum": "076651",
     "Palladium": "075651",
     "Bitcoin": "133741",
+    "Cotton": "033661",
     "US Dollar Index / DX": "098662",
 }
 

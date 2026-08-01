@@ -211,6 +211,7 @@ export function useConfluenceData() {
   const [cotFeedStatus, setCotFeedStatus] = React.useState(null)
   const [scannerAttentionWeek, setScannerAttentionWeek] = React.useState(null)
   const [priorityDebug, setPriorityDebug] = React.useState(null)
+  const [commercialAttention, setCommercialAttention] = React.useState(null)
   const [relativeStrength, setRelativeStrength] = React.useState(null)
   const [payloadGeneratedAt, setPayloadGeneratedAt] = React.useState(null)
 
@@ -372,6 +373,15 @@ export function useConfluenceData() {
           if (!cancelled) setPriorityDebug(null)
         })
 
+      fetch(`/data/cot_commercial_attention_latest.json${genQ}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((doc) => {
+          if (!cancelled) setCommercialAttention(doc && typeof doc === 'object' ? doc : null)
+        })
+        .catch(() => {
+          if (!cancelled) setCommercialAttention(null)
+        })
+
       fetch(`/data/relative_strength_latest.json${genQ}`)
         .then((r) => (r.ok ? r.json() : null))
         .then((doc) => {
@@ -415,6 +425,8 @@ export function useConfluenceData() {
       setScannerAttentionWeek(null)
 
       setPriorityDebug(null)
+
+      setCommercialAttention(null)
 
       setPayloadGeneratedAt(null)
 
@@ -720,6 +732,8 @@ export function useConfluenceData() {
     scannerAttentionWeek,
 
     priorityDebug,
+
+    commercialAttention,
 
     relativeStrength,
 

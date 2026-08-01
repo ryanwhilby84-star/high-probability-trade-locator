@@ -12,29 +12,42 @@ const bars = [
 ]
 
 describe('filterCompletedWorkstationOhlc', () => {
-  it('rejects partial current ISO week and bars after COT last', () => {
-    const asOf = new Date('2026-06-12T12:00:00Z')
+  it('does NOT truncate completed weeks after COT last', () => {
+    // asOf in W25 — W24 (2026-06-09) is completed and must be kept even though COT ended 2026-06-07.
+    const asOf = new Date('2026-06-20T12:00:00Z')
     const { bars: kept, rejected } = filterCompletedWorkstationOhlc(bars, {
       cotLastDate: '2026-06-07',
       asOf,
     })
+    expect(kept.map((b) => b.date)).toEqual(['2026-05-31', '2026-06-07', '2026-06-09'])
+    expect(rejected.some((r) => r.reason === 'after_cot_last')).toBe(false)
+  })
+
+  it('drops bars in the current ISO week', () => {
+    const asOf = new Date('2026-06-09T12:00:00Z')
+    const { bars: kept, rejected } = filterCompletedWorkstationOhlc(bars, {
+      cotLastDate: null,
+      asOf,
+    })
     expect(kept.map((b) => b.date)).toEqual(['2026-05-31', '2026-06-07'])
     expect(rejected.some((r) => r.reason === 'incomplete_iso_week')).toBe(true)
-    expect(rejected.some((r) => r.reason === 'after_cot_last')).toBe(false)
   })
 })
 
 describe('matchOhlcBarForCotWeek', () => {
   it('does not reuse the same OHLC bar for consecutive COT weeks', () => {
     const filtered = filterCompletedWorkstationOhlc(bars, {
-      cotLastDate: '2026-06-16',
+      cotLastDate: null,
       asOf: new Date('2026-06-20T12:00:00Z'),
     }).bars
 
-    const first = matchOhlcBarForCotWeek('2026-06-09', filtered, null)
-    const second = matchOhlcBarForCotWeek('2026-06-16', filtered, first?.date ?? null)
+    const first = matchOhlcBarForCotWeek('2026-06-07', filtered, null)
+    const second = matchOhlcBarForCotWeek('2026-06-14', filtered, first?.date ?? null)
+    const third = matchOhlcBarForCotWeek('2026-06-21', filtered, second?.date ?? null)
 
     expect(first?.date).toBe('2026-06-07')
-    expect(second).toBeNull()
+    expect(second?.date).toBe('2026-06-09')
+    // No unused bar remains for a later COT week.
+    expect(third).toBeNull()
   })
 })

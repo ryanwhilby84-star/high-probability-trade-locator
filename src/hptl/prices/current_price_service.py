@@ -364,8 +364,8 @@ def _build_current_price(
         if fallback_close is not None:
             status = STATUS_FALLBACK
             note = (
-                f"FRED {mapping.provider_symbol} daily close (not a live ICE DX / Dixie futures quote)"
-                if mapping.internal_key == "US Dollar Index / DX"
+                f"FRED {mapping.provider_symbol} daily close (Broad USD — not ICE DX futures)"
+                if mapping.internal_key == "Broad US Dollar Index — DTWEXBGS"
                 else f"FRED {mapping.provider_symbol} daily close (no streaming quote)"
             )
             return CurrentPrice(

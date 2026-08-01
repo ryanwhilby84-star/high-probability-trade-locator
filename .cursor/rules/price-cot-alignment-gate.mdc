@@ -1,0 +1,32 @@
+---
+description: Price ↔ COT alignment gate — no stale workstation OHLC
+alwaysApply: true
+---
+
+# Price ↔ COT Alignment Gate
+
+After every weekly refresh (and before research / Weekly Analysis intelligence), every `LEGACY_COT_MARKETS` instrument must PASS:
+
+```bash
+python scripts/run_price_cot_alignment_audit.py
+```
+
+Reports: `data/audits/price_cot_alignment_audit.md`, `data/price_cot_alignment_audit.md`
+
+## Hard requirements
+
+- Latest raw daily OHLC exists in the price store
+- Weekly aggregation rebuilt from that daily (no stale native weekly cache preferred over fresher derived)
+- `workstation_ohlc_latest.json` (processed + public + dist) matches freshly aggregated weekly
+- COT week within **5 calendar days** of workstation weekly last candle
+- Symbol mapping consistent (registry → store → displayed)
+- Frontend `WeeklyOHLCStore` must fetch with `cache: 'no-store'` and a cache-busting query
+
+## Fail fast
+
+If ANY instrument fails:
+
+- Weekly refresh stops before positioning research / weekly inspector / analyst intelligence
+- Overall status is **FAIL** (no warnings, no skips)
+
+Do not treat a STALE `price_quality` badge as acceptable — rebuild workstation OHLC and re-run the gate.

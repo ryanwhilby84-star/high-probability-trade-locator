@@ -652,7 +652,7 @@ def build_relative_strength(
             "USD score is synthesized from G10 COT legs, not a direct CFTC contract.",
             "Pairs not in OANDA registry appear in G10 audit but are flagged not_tradable_in_registry.",
             "EM crosses (TRY, ZAR, etc.) may lack COT-backed legs — see exclusion_reason in pair_audit_all.",
-            "JPY/CHF/CAD use invert_cot for USD/XXX futures quoting.",
+            "CHF/CAD use invert_cot for USD/XXX futures quoting; JPY uses CME 6J (yen-value) with invert_cot=False.",
             "Display board uses raw differential, not conviction-filtered subset.",
             "This layer does not generate entries, stops, or targets.",
         ],

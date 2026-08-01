@@ -80,7 +80,7 @@ FUTURES_REGISTRY: dict[str, FuturesSpec] = {
     "6B": FuturesSpec("6B", "British Pound / 6B", "GBP", True, "gbp_futures_macro_v1", "futures_ols_log_macro", "GBP_USD", ("y2_diff", "policy_diff")),
     "6A": FuturesSpec("6A", "Australian Dollar / 6A", "AUD", True, "aud_futures_macro_v1", "futures_ols_log_macro", "AUD_USD", ("y2_diff", "policy_diff")),
     "6C": FuturesSpec("6C", "Canadian Dollar / 6C", "CAD", False, "cad_futures_macro_v1", "futures_ols_log_macro", "USD_CAD", ("y2_diff", "policy_diff")),
-    "6J": FuturesSpec("6J", "Japanese Yen / 6J", "JPY", False, "jpy_futures_macro_v1", "futures_ols_log_macro", "USD_JPY", ("y2_diff", "policy_diff")),
+    "6J": FuturesSpec("6J", "Japanese Yen / 6J", "JPY", False, "jpy_futures_macro_v1", "futures_ols_log_macro", "097741", ("y2_diff", "policy_diff")),
     "6S": FuturesSpec(
         "6S",
         "Swiss Franc / 6S",

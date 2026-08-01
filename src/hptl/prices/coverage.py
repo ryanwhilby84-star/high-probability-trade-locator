@@ -29,8 +29,9 @@ def _instrument_coverage_row(audit: dict[str, Any], instrument_id: str) -> dict[
 
 
 def oanda_symbol_for(spec: InstrumentSpec, audit: dict[str, Any]) -> str | None:
-    if spec.id not in (audit.get("oanda_supported") or []):
-        return None
+    """Resolve OANDA symbol — registry/canonical wins over stale coverage audit rows."""
+    if spec.oanda_symbol:
+        return spec.oanda_symbol
     row = _instrument_coverage_row(audit, spec.id)
     if row:
         for src in row.get("sources") or []:
@@ -40,8 +41,8 @@ def oanda_symbol_for(spec: InstrumentSpec, audit: dict[str, Any]) -> str | None:
                 and src.get("coverage_status") == "supported"
             ):
                 return str(src["symbol"])
-    if spec.oanda_symbol:
-        return spec.oanda_symbol
+    if spec.id not in (audit.get("oanda_supported") or []):
+        return None
     reg = load_registry()
     oanda_names = {
         str(s.get("symbol"))
@@ -57,9 +58,37 @@ def select_price_source(
     instrument_id: str,
     audit: dict[str, Any] | None = None,
 ) -> str | None:
-    """Return ``oanda``, ``alpha_vantage``, ``fred``, or ``None``. Prefer OANDA when both."""
+    """Return ``oanda``, ``yahoo_futures``, ``alpha_vantage``, ``fred``, or ``None``.
+
+    Prefer registry OANDA symbols over stale Alpha Vantage ETF proxies.
+    Softs use Yahoo continuous futures once promoted (not monthly FRED).
+    """
     doc = audit or load_price_coverage()
     spec = get_instrument(instrument_id)
+
+    # Soft commodity COT charts — dense Yahoo futures, never monthly IMF/FRED.
+    try:
+        from hptl.prices.softs_futures_backfill import SOFTS_YAHOO
+
+        if instrument_id in SOFTS_YAHOO:
+            return "yahoo_futures"
+    except Exception:
+        pass
+
+    # ICE DX futures — never FRED broad USD (DTWEXBGS).
+    try:
+        from hptl.markets.usd_index_identity import is_ice_dx_price_id
+
+        if is_ice_dx_price_id(instrument_id):
+            return "yahoo_futures"
+    except Exception:
+        pass
+
+    # Canonical registry OANDA symbol beats a stale coverage audit that still
+    # lists NAS100USD/QQQ-era Alpha Vantage as primary for index futures.
+    if spec and spec.oanda_symbol:
+        return "oanda"
+
     oanda_set = set(doc.get("oanda_supported") or [])
     if spec and instrument_id in oanda_set and oanda_symbol_for(spec, doc):
         return "oanda"

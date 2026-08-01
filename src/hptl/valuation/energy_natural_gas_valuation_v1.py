@@ -1,7 +1,8 @@
 """Natural Gas Institutional Valuation — validated drivers only.
 
-Fair value uses only walk-forward-validated drivers with coherent economic signs.
-Seasonality and weather stay visible but are excluded unless they earn promotion.
+Fair value uses only walk-forward-validated drivers.
+Populated but unvalidated drivers are EXPERIMENTAL (displayed, not used).
+Seasonality is INFORMATIONAL ONLY and never enters fair value without OOS proof.
 """
 
 from __future__ import annotations
@@ -317,6 +318,7 @@ def _eval_spec(
 
 
 def _compare_and_select(bundle: NgDriverBundle) -> dict[str, Any]:
+    """Compare nested specs A–H; promote smallest stable evidence-backed model."""
     expectations = _load_sign_expectations()
     y = [math.log(p) for p in bundle.price]
     avail = set(bundle.features.keys())
@@ -324,35 +326,44 @@ def _compare_and_select(bundle: NgDriverBundle) -> dict[str, Any]:
     def has(*names: str) -> bool:
         return all(n in avail and len(bundle.features[n]) == bundle.n for n in names)
 
-    specs: list[tuple[str, list[str]]] = [("A_constant", [])]
+    # Required ladder (plus constant baseline for OOS reference):
+    # A storage · B storage+prod · C storage+LNG · D storage+prod+LNG
+    # E +weather · F +DXY · G full · H seasonality test-only
+    specs: list[tuple[str, list[str]]] = [("const_baseline", [])]
     if has("storage_surplus_bcf"):
-        specs.append(("B_storage", ["storage_surplus_bcf"]))
+        specs.append(("A_storage", ["storage_surplus_bcf"]))
     if has("storage_surplus_bcf", "dry_gas_production"):
-        specs.append(("C_storage_production", ["storage_surplus_bcf", "dry_gas_production"]))
+        specs.append(("B_storage_production", ["storage_surplus_bcf", "dry_gas_production"]))
+    if has("storage_surplus_bcf", "lng_exports"):
+        specs.append(("C_storage_lng", ["storage_surplus_bcf", "lng_exports"]))
     if has("storage_surplus_bcf", "dry_gas_production", "lng_exports"):
         specs.append(
             ("D_storage_production_lng", ["storage_surplus_bcf", "dry_gas_production", "lng_exports"])
         )
+    weather = [f for f in ("hdd_anomaly", "cdd_anomaly") if has(f)]
+    if has("storage_surplus_bcf", "dry_gas_production", "lng_exports") and weather:
+        specs.append(
+            (
+                "E_storage_production_lng_weather",
+                ["storage_surplus_bcf", "dry_gas_production", "lng_exports", *weather],
+            )
+        )
     if has("storage_surplus_bcf", "dry_gas_production", "lng_exports", "log_dxy"):
         specs.append(
             (
-                "E_plus_dxy",
+                "F_storage_production_lng_dxy",
                 ["storage_surplus_bcf", "dry_gas_production", "lng_exports", "log_dxy"],
             )
         )
-    if has("storage_surplus_bcf", "hdd_anomaly"):
-        specs.append(("F_storage_hdd", ["storage_surplus_bcf", "hdd_anomaly"]))
-    if has("storage_surplus_bcf", "cdd_anomaly"):
-        specs.append(("F_storage_cdd", ["storage_surplus_bcf", "cdd_anomaly"]))
     full = [
         f
         for f in (
             "storage_surplus_bcf",
             "dry_gas_production",
             "lng_exports",
-            "log_dxy",
             "hdd_anomaly",
             "cdd_anomaly",
+            "log_dxy",
         )
         if has(f)
     ]
@@ -363,8 +374,9 @@ def _compare_and_select(bundle: NgDriverBundle) -> dict[str, Any]:
 
     results = [_eval_spec(name, feats, bundle, y, expectations) for name, feats in specs]
 
-    baseline = next((r for r in results if r["spec"] == "A_constant" and r.get("ok")), None)
+    baseline = next((r for r in results if r["spec"] == "const_baseline" and r.get("ok")), None)
     base_rmse = baseline.get("oos_rmse") if baseline else None
+    storage_only = next((x for x in results if x["spec"] == "A_storage" and x.get("ok")), None)
     for r in results:
         if base_rmse is not None and r.get("oos_rmse") is not None:
             r["delta_oos_rmse_vs_baseline"] = round(r["oos_rmse"] - base_rmse, 6)
@@ -374,56 +386,62 @@ def _compare_and_select(bundle: NgDriverBundle) -> dict[str, Any]:
         else:
             r["delta_oos_rmse_vs_baseline"] = None
             r["oos_rmse_improvement_pct_vs_baseline"] = None
+        # vs storage-only for nested promotions
+        if (
+            storage_only
+            and storage_only.get("oos_rmse") is not None
+            and r.get("oos_rmse") is not None
+            and r["spec"] != "A_storage"
+        ):
+            r["delta_oos_rmse_vs_storage"] = round(r["oos_rmse"] - storage_only["oos_rmse"], 6)
+            r["oos_rmse_improvement_pct_vs_storage"] = round(
+                100.0 * (storage_only["oos_rmse"] - r["oos_rmse"]) / storage_only["oos_rmse"], 2
+            )
 
-    # Rank: require signs_ok, then prefer lower OOS RMSE vs baseline, then higher OOS R²
     eligible = []
     for r in results:
-        if not r.get("ok") or r["spec"] == "A_constant":
+        if not r.get("ok") or r["spec"] in {"const_baseline"}:
             continue
         if r["spec"].startswith("H_"):
-            # seasonality test only — never auto-promote
+            continue  # seasonality tested, never auto-promoted
+        if not r.get("signs_ok") or r.get("oos_rmse") is None:
             continue
-        if not r.get("signs_ok"):
-            continue
-        if r.get("oos_rmse") is None:
-            continue
-        # Must improve OOS RMSE vs constant baseline
         if base_rmse is not None and r["oos_rmse"] >= base_rmse:
             continue
-        # Reject specs with walk-forward sign flips on any coefficient
         stab = r.get("coefficient_stability") or {}
         if any(v.get("sign_flip") for v in stab.values()):
             continue
-        # Weather-only additions need clear OOS improvement over storage-only
-        storage_only = next((x for x in results if x["spec"] == "B_storage" and x.get("ok")), None)
-        if r["spec"].startswith("F_") and storage_only and storage_only.get("oos_rmse") is not None:
+        # Nested specs must beat storage-only by >2% OOS RMSE to justify extra drivers
+        if r["spec"] != "A_storage" and storage_only and storage_only.get("oos_rmse") is not None:
             if r["oos_rmse"] >= storage_only["oos_rmse"] * 0.98:
                 continue
         eligible.append(r)
 
-    # Prefer smallest feature count among those with best OOS RMSE band
     recommended = None
     if eligible:
         eligible.sort(key=lambda r: (r["oos_rmse"], len(r["features"]), -(r.get("oos_r2") or -99)))
         best_rmse = eligible[0]["oos_rmse"]
-        # among near-best RMSE, pick smallest
         near = [r for r in eligible if r["oos_rmse"] <= best_rmse * 1.02]
         near.sort(key=lambda r: (len(r["features"]), r["oos_rmse"]))
         recommended = near[0]
-    elif any(r.get("ok") and r["spec"] == "B_storage" and r.get("signs_ok") for r in results):
-        # Fall back to storage-only if signs ok even if OOS marginal
-        recommended = next(r for r in results if r["spec"] == "B_storage")
+    elif storage_only and storage_only.get("signs_ok"):
+        recommended = storage_only
 
     return {
         "baseline_oos_rmse": base_rmse,
+        "sample_period": {
+            "start": bundle.dates[0] if bundle.dates else None,
+            "end": bundle.dates[-1] if bundle.dates else None,
+            "n_observations": bundle.n,
+        },
         "specifications": results,
         "recommended_spec": recommended["spec"] if recommended else None,
         "validated_features": list(recommended["features"]) if recommended else [],
         "selection_rule": (
-            "Expanding-window walk-forward. Promote smallest nested spec with coherent "
-            "economic signs that improves OOS RMSE vs constant baseline. Seasonality (H) "
-            "is tested but never auto-promoted. Weather (F) requires >2% OOS improvement "
-            "over storage-only."
+            "Expanding-window walk-forward. Promote smallest nested A–G spec with coherent "
+            "economic signs, no walk-forward coefficient sign flips, OOS RMSE better than "
+            "constant baseline, and (for multi-driver specs) >2% OOS RMSE improvement over "
+            "storage-only. Seasonality (H) is tested but never auto-promoted."
         ),
     }
 
@@ -477,106 +495,258 @@ def _contribution_log_reconcile(
     }
 
 
+
+def _driver_validation_report(comparison: dict[str, Any], classifications: dict[str, Any]) -> dict[str, Any]:
+    """Per-candidate diagnostics for explainability (coef / sign / p / OOS / stability)."""
+    specs = {s.get("spec"): s for s in (comparison.get("specifications") or []) if s.get("ok")}
+    a = specs.get("A_storage") or {}
+    report: dict[str, Any] = {}
+    mapping = {
+        "storage_surplus_bcf": "A_storage",
+        "dry_gas_production": "B_storage_production",
+        "lng_exports": "C_storage_lng",
+        "hdd_anomaly": "E_storage_production_lng_weather",
+        "cdd_anomaly": "E_storage_production_lng_weather",
+        "log_dxy": "F_storage_production_lng_dxy",
+        "seasonality_factor": "H_storage_seasonality_test",
+    }
+    for feat, spec_name in mapping.items():
+        spec = specs.get(spec_name) or {}
+        coefs = spec.get("coefficients") or {}
+        pvals = spec.get("p_values") or {}
+        stab = (spec.get("coefficient_stability") or {}).get(feat) or {}
+        cls = classifications.get(feat) or {}
+        in_fv = bool(cls.get("in_fair_value"))
+        report[feat] = {
+            "classification": cls.get("classification"),
+            "in_fair_value": in_fv,
+            "coefficient": coefs.get(feat),
+            "sign": ("negative" if (coefs.get(feat) or 0) < 0 else "positive") if feat in coefs else None,
+            "p_value": pvals.get(feat),
+            "walk_forward_sign_flip": stab.get("sign_flip"),
+            "coef_stability_cv": stab.get("cv"),
+            "spec_tested": spec_name,
+            "spec_oos_r2": spec.get("oos_r2"),
+            "spec_oos_rmse": spec.get("oos_rmse"),
+            "oos_rmse_vs_storage": spec.get("delta_oos_rmse_vs_storage"),
+            "reason": cls.get("reason"),
+            "contribution_in_published_fv": in_fv,
+        }
+    if a:
+        report["storage_surplus_bcf"]["published_model_oos_r2"] = a.get("oos_r2")
+        report["storage_surplus_bcf"]["published_model_oos_rmse"] = a.get("oos_rmse")
+    return report
+
+def _spec_by_name(comparison: dict[str, Any], name: str) -> dict[str, Any] | None:
+    return next((s for s in (comparison.get("specifications") or []) if s.get("spec") == name), None)
+
+
 def _classify_drivers(
     comparison: dict[str, Any],
     bundle: NgDriverBundle,
 ) -> dict[str, Any]:
+    """Classify drivers as VALIDATED / EXPERIMENTAL / INFORMATIONAL ONLY."""
     validated = set(comparison.get("validated_features") or [])
     classifications: dict[str, Any] = {}
+    a = _spec_by_name(comparison, "A_storage")
+    b = _spec_by_name(comparison, "B_storage_production")
+    c = _spec_by_name(comparison, "C_storage_lng")
+    d = _spec_by_name(comparison, "D_storage_production_lng")
+    e = _spec_by_name(comparison, "E_storage_production_lng_weather")
+    f = _spec_by_name(comparison, "F_storage_production_lng_dxy")
+    h = _spec_by_name(comparison, "H_storage_seasonality_test")
 
-    # Storage level vs surplus
+    # Storage level (display) vs surplus (regression)
     classifications["working_gas_storage_level"] = {
         "classification": "INFORMATIONAL ONLY",
-        "reason": "Displayed on storage card; regression uses surplus/deficit transform, not the raw level.",
+        "badge": "INFORMATIONAL ONLY — NOT INCLUDED IN FAIR VALUE",
+        "reason": "Displayed on storage card; fair value uses surplus/deficit vs same-week 5y average, not raw level.",
         "in_fair_value": False,
     }
-    classifications["storage_surplus_bcf"] = {
-        "classification": (
-            "VALIDATED VALUATION DRIVER" if "storage_surplus_bcf" in validated else "EXPERIMENTAL DRIVER"
-        ),
-        "in_fair_value": "storage_surplus_bcf" in validated,
-        "reason": "Surplus/deficit vs trailing same-week 5y average (no look-ahead).",
-    }
-
-    # Reasons for non-promotion from nested walk-forward comparison
-    reject_notes: dict[str, str] = {}
-    for spec in comparison.get("specifications") or []:
-        if not spec.get("ok"):
-            continue
-        if spec.get("spec") == "C_storage_production" and not spec.get("signs_ok"):
-            reject_notes["dry_gas_production"] = (
-                "In C (storage+production) fitted sign is wrong vs economic expectation; "
-                "not promoted alone."
-            )
-        if spec.get("spec") == "D_storage_production_lng":
-            stab = spec.get("coefficient_stability") or {}
-            flips = [k for k, v in stab.items() if v.get("sign_flip")]
-            if flips:
-                for f in flips:
-                    reject_notes[f] = (
-                        "Improves OOS RMSE in D, but walk-forward coefficient sign flips — "
-                        "not stable enough for production fair value."
-                    )
-            elif not spec.get("signs_ok"):
-                reject_notes.setdefault(
-                    "lng_exports",
-                    "D signs not fully coherent; not promoted.",
-                )
-        if spec.get("spec") == "E_plus_dxy" and not spec.get("signs_ok"):
-            reject_notes["log_dxy"] = (
-                "Wrong economic sign in E (expected negative for stronger USD); "
-                "excluded from fair value."
-            )
-        if spec.get("spec") == "F_storage_hdd":
-            if (spec.get("oos_rmse") or 9) >= (
-                next(
-                    (
-                        x.get("oos_rmse") or 9
-                        for x in (comparison.get("specifications") or [])
-                        if x.get("spec") == "B_storage"
-                    ),
-                    9,
-                )
-            ) * 0.98:
-                reject_notes["hdd_anomaly"] = (
-                    "No material OOS improvement over storage-only; HDD insignificant (high p-value)."
-                )
-        if spec.get("spec") == "F_storage_cdd" and not spec.get("signs_ok"):
-            reject_notes["cdd_anomaly"] = (
-                "Wrong economic sign vs cooling-demand expectation; not promoted."
-            )
-
-    for feat, label in (
-        ("dry_gas_production", "US Dry Gas Production"),
-        ("lng_exports", "LNG Exports"),
-        ("log_dxy", "DXY"),
-    ):
-        in_v = feat in validated
-        classifications[feat] = {
-            "classification": "VALIDATED VALUATION DRIVER" if in_v else "EXPERIMENTAL DRIVER",
-            "in_fair_value": in_v,
-            "label": label,
-            "reason": reject_notes.get(feat)
-            or ("Included via walk-forward selection." if in_v else "Available but not walk-forward validated."),
+    if "storage_surplus_bcf" in validated:
+        classifications["storage_surplus_bcf"] = {
+            "classification": "VALIDATED VALUATION DRIVER",
+            "badge": "VALIDATED VALUATION DRIVER",
+            "in_fair_value": True,
+            "reason": (
+                "Surplus/deficit vs trailing same-week 5y average improves OOS RMSE "
+                f"{(a or {}).get('oos_rmse_improvement_pct_vs_baseline')}% vs constant, "
+                f"OOS R2={(a or {}).get('oos_r2')}, correct negative sign, no walk-forward sign flips."
+            ),
+        }
+    else:
+        classifications["storage_surplus_bcf"] = {
+            "classification": "EXPERIMENTAL DRIVER",
+            "badge": "EXPERIMENTAL DRIVER",
+            "in_fair_value": False,
+            "reason": "Storage surplus failed promotion gates; not included in fair value.",
         }
 
-    # Weather quality from cards
-    for feat, card_id in (("hdd_anomaly", "hdd"), ("cdd_anomaly", "cdd")):
+    # Production
+    if "dry_gas_production" in validated:
+        classifications["dry_gas_production"] = {
+            "classification": "VALIDATED VALUATION DRIVER",
+            "badge": "VALIDATED VALUATION DRIVER",
+            "in_fair_value": True,
+            "label": "US Dry Gas Production",
+            "reason": "Included via walk-forward selection.",
+        }
+    else:
+        reasons = []
+        if b and not b.get("signs_ok"):
+            reasons.append("wrong economic sign in B (storage+production)")
+        stab_b = (b or {}).get("coefficient_stability") or {}
+        stab_d = (d or {}).get("coefficient_stability") or {}
+        if stab_b.get("dry_gas_production", {}).get("sign_flip") or stab_d.get(
+            "dry_gas_production", {}
+        ).get("sign_flip"):
+            reasons.append("walk-forward coefficient sign flips")
+        if b and a and b.get("oos_rmse") is not None and a.get("oos_rmse") is not None:
+            if b["oos_rmse"] >= a["oos_rmse"]:
+                reasons.append("no OOS improvement vs storage-only")
+        if not reasons:
+            reasons.append("fails stability / nested promotion gates")
+        classifications["dry_gas_production"] = {
+            "classification": "EXPERIMENTAL DRIVER",
+            "badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+            "in_fair_value": False,
+            "label": "US Dry Gas Production",
+            "reason": (
+                "Not promoted: "
+                + "; ".join(reasons)
+                + ". Monthly EIA series also lags weekly price/storage. Displayed only."
+            ),
+        }
+
+    # LNG
+    if "lng_exports" in validated:
+        classifications["lng_exports"] = {
+            "classification": "VALIDATED VALUATION DRIVER",
+            "badge": "VALIDATED VALUATION DRIVER",
+            "in_fair_value": True,
+            "label": "LNG Exports",
+            "reason": "Included via walk-forward selection.",
+        }
+    else:
+        reasons = []
+        stab_c = (c or {}).get("coefficient_stability") or {}
+        stab_d = (d or {}).get("coefficient_stability") or {}
+        if stab_c.get("lng_exports", {}).get("sign_flip") or stab_d.get("lng_exports", {}).get(
+            "sign_flip"
+        ):
+            reasons.append("walk-forward coefficient sign flips in C/D")
+        if c and a and c.get("oos_rmse") is not None and a.get("oos_rmse") is not None:
+            impr = (c or {}).get("oos_rmse_improvement_pct_vs_storage")
+            if c["oos_rmse"] < a["oos_rmse"] * 0.98:
+                reasons.append(
+                    f"C OOS RMSE gain vs storage ({impr}%) fails stability gate"
+                )
+            else:
+                reasons.append(
+                    f"OOS RMSE gain vs storage-only ({impr}%) below 2% promotion threshold"
+                )
+        if not reasons:
+            reasons.append("fails nested promotion gates")
+        classifications["lng_exports"] = {
+            "classification": "EXPERIMENTAL DRIVER",
+            "badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+            "in_fair_value": False,
+            "label": "LNG Exports",
+            "reason": "Not promoted: " + "; ".join(reasons) + ". Displayed only.",
+        }
+
+    # DXY
+    if "log_dxy" in validated:
+        classifications["log_dxy"] = {
+            "classification": "VALIDATED VALUATION DRIVER",
+            "badge": "VALIDATED VALUATION DRIVER",
+            "in_fair_value": True,
+            "label": "DXY",
+            "reason": "Included via walk-forward selection.",
+        }
+    else:
+        reasons = []
+        if f and not f.get("signs_ok"):
+            reasons.append(
+                "wrong economic sign in F (coef>0; expect stronger USD to lower NG price)"
+            )
+        stab_f = (f or {}).get("coefficient_stability") or {}
+        if stab_f.get("log_dxy", {}).get("sign_flip"):
+            reasons.append("walk-forward coefficient sign flips")
+        if not reasons:
+            reasons.append("univariate OOS R2 negative; does not clear promotion gates")
+        classifications["log_dxy"] = {
+            "classification": "EXPERIMENTAL DRIVER",
+            "badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+            "in_fair_value": False,
+            "label": "DXY",
+            "reason": "Not promoted: " + "; ".join(reasons) + ". Displayed only.",
+        }
+
+    # Weather
+    for feat, card_id, label in (
+        ("hdd_anomaly", "hdd", "Heating Degree Days"),
+        ("cdd_anomaly", "cdd", "Cooling Degree Days"),
+    ):
         card = bundle.driver_cards.get(card_id) or {}
         dq = card.get("data_quality")
         if feat in validated:
-            cls = "VALIDATED VALUATION DRIVER"
-        elif dq in {"ANOMALY_INVALID_FOR_REGRESSION", "CLIMATOLOGY_INSUFFICIENT"}:
-            cls = "INVALID / DATA QUALITY FAILURE"
-        elif card.get("available"):
-            cls = "EXPERIMENTAL DRIVER"
+            classifications[feat] = {
+                "classification": "VALIDATED VALUATION DRIVER",
+                "badge": "VALIDATED VALUATION DRIVER",
+                "in_fair_value": True,
+                "label": label,
+                "data_quality": dq,
+                "reason": "Included via walk-forward selection.",
+            }
+            continue
+        if dq in {"ANOMALY_INVALID_FOR_REGRESSION", "CLIMATOLOGY_INSUFFICIENT"} or not card.get(
+            "available"
+        ):
+            classifications[feat] = {
+                "classification": "INSUFFICIENT HISTORY",
+                "badge": "INSUFFICIENT HISTORY — NOT INCLUDED",
+                "in_fair_value": False,
+                "label": label,
+                "data_quality": dq,
+                "reason": "Week-of-year climatology or series coverage insufficient for regression.",
+            }
+            continue
+        reasons = []
+        if feat == "hdd_anomaly":
+            # Check E weather block and univariate insignificance
+            p_hdd = None
+            if e:
+                p_hdd = (e.get("p_values") or {}).get("hdd_anomaly")
+            if e and not e.get("signs_ok"):
+                reasons.append("wrong / unstable sign in E")
+            if p_hdd is not None and p_hdd > 0.1:
+                reasons.append(f"insignificant (p={p_hdd})")
+            if a and e and e.get("oos_rmse") is not None and a.get("oos_rmse") is not None:
+                if e["oos_rmse"] >= a["oos_rmse"] * 0.98:
+                    reasons.append("no material OOS improvement vs storage-only in weather specs")
+            if not reasons:
+                reasons.append("fails weather promotion gate (>2% OOS gain vs storage-only)")
+            badge = "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE"
         else:
-            cls = "INVALID / DATA QUALITY FAILURE"
+            coef = (e.get("coefficients") or {}).get("cdd_anomaly") if e else None
+            if coef is not None and coef < 0:
+                reasons.append(
+                    "wrong economic sign (coef<0; expect cooling demand to raise price)"
+                )
+            p_cdd = (e.get("p_values") or {}).get("cdd_anomaly") if e else None
+            if p_cdd is not None and p_cdd > 0.1:
+                reasons.append(f"insignificant (p={p_cdd})")
+            if not reasons:
+                reasons.append("wrong sign and/or no OOS improvement")
+            badge = "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE"
         classifications[feat] = {
-            "classification": cls,
-            "in_fair_value": feat in validated,
+            "classification": "EXPERIMENTAL DRIVER",
+            "badge": badge,
+            "in_fair_value": False,
+            "label": label,
             "data_quality": dq,
-            "reason": reject_notes.get(feat),
+            "reason": "Not promoted: " + "; ".join(reasons) + ". Displayed only.",
             "hdd_zero_diagnosis": (
                 "Zero is a genuine midsummer HDD observation, not missing data. "
                 "Anomaly uses same ISO-week climatology (not annual sample mean)."
@@ -585,10 +755,22 @@ def _classify_drivers(
             ),
         }
 
+    # Seasonality — informational by design
+    h_note = ""
+    if h and h.get("ok"):
+        h_note = (
+            f" H-test OOS R2={h.get('oos_r2')}, OOS RMSE impr vs const="
+            f"{h.get('oos_rmse_improvement_pct_vs_baseline')}% — retained as context only."
+        )
     classifications["seasonality_factor"] = {
         "classification": "INFORMATIONAL ONLY",
+        "badge": "INFORMATIONAL ONLY — NOT INCLUDED IN FAIR VALUE",
         "in_fair_value": False,
-        "reason": "No validated Natural Gas seasonality valuation model; excluded from fair value.",
+        "reason": (
+            "Seasonality is contextual (week-of-year / calendar bias), not a validated "
+            "structural valuation driver; excluded from fair value by design."
+            + h_note
+        ),
     }
     return classifications
 
@@ -614,31 +796,22 @@ def _annotate_cards(
         if not card:
             continue
         meta = classifications.get(feat) or {}
-        role = meta.get("classification") or "EXPERIMENTAL DRIVER"
-        # Short dashboard labels
-        if "VALIDATED" in role:
-            short = "VALIDATED"
+        if feat in validated_set:
+            role = "VALIDATED VALUATION DRIVER"
+            badge = "VALIDATED VALUATION DRIVER"
             in_fv = True
             note = "Included in fair value"
-        elif "INVALID" in role:
-            short = "INVALID"
-            in_fv = False
-            note = "NOT INCLUDED IN FAIR VALUE"
-        elif "INFORMATIONAL" in role:
-            short = "INFORMATIONAL ONLY"
-            in_fv = False
-            note = "NOT INCLUDED IN FAIR VALUE"
         else:
-            short = "EXPERIMENTAL"
+            role = meta.get("classification") or "EXPERIMENTAL DRIVER"
+            badge = meta.get("badge") or role
             in_fv = False
             note = "NOT INCLUDED IN FAIR VALUE"
-        if feat in validated_set:
-            short, in_fv, note = "VALIDATED", True, "Included in fair value"
-            role = "VALIDATED VALUATION DRIVER"
         card["valuation_role"] = role
-        card["valuation_badge"] = short
+        card["valuation_badge"] = badge
         card["in_fair_value"] = in_fv
         card["valuation_note"] = note
+        if meta.get("reason"):
+            card["disposition_reason"] = meta["reason"]
 
 
 def _confidence(
@@ -722,7 +895,9 @@ def _build_summary(
     lines = [
         f"Validated-driver fair value implies Natural Gas is approximately {abs(dev_pct):.1f}% {direction}."
     ]
-    lines.append(f"Validated drivers: {', '.join(FEATURE_LABELS.get(f, f) for f in validated)}.")
+    lines.append(
+        f"Production model uses: {', '.join(FEATURE_LABELS.get(f, f) for f in validated)}."
+    )
     if contribution and contribution.get("drivers"):
         top = max(contribution["drivers"], key=lambda r: abs(r["log_contribution"]))
         lines.append(
@@ -730,7 +905,10 @@ def _build_summary(
         )
     if confidence in {"Low", "None"}:
         lines.append("Confidence is low — do not treat this as a high-conviction valuation signal.")
-    lines.append("Seasonality is informational only and is not included in fair value.")
+    lines.append(
+        "Only walk-forward-validated drivers enter fair value. "
+        "Other populated series remain experimental or informational and are displayed but not used."
+    )
     return " ".join(lines)
 
 
@@ -741,7 +919,7 @@ def compute_natural_gas_valuation(*, as_of_week: str | None = None) -> dict[str,
     awaiting = [c["label"] for c in cards.values() if not c.get("available")]
 
     previous_snapshot = {
-        "note": "Prior unvalidated full-driver fit (for audit contrast)",
+        "note": "Prior unvalidated full-driver fit (~29% undervaluation) — NOT the published model. Displayed for audit contrast only.",
         "fair_value": 4.1194,
         "deviation_pct": -29.02,
         "active_features": [
@@ -788,6 +966,7 @@ def compute_natural_gas_valuation(*, as_of_week: str | None = None) -> dict[str,
     _annotate_cards(cards, validated=validated, classifications=classifications)
     base["driver_cards"] = list(cards.values())
     base["driver_classifications"] = classifications
+    base["driver_validation"] = _driver_validation_report(comparison, classifications)
     base["model_comparison"] = comparison
 
     if not validated:
@@ -895,15 +1074,22 @@ def compute_natural_gas_valuation(*, as_of_week: str | None = None) -> dict[str,
             },
             "active_features": validated,
             "validated_features": validated,
+            "rejected_features": [],
+            "experimental_features_note": "Displayed drivers that failed promotion remain experimental",
             "experimental_features": [
                 k
                 for k, v in classifications.items()
-                if v.get("classification") == "EXPERIMENTAL DRIVER"
+                if "EXPERIMENTAL" in str(v.get("classification"))
             ],
             "informational_features": [
                 k
                 for k, v in classifications.items()
                 if v.get("classification") == "INFORMATIONAL ONLY"
+            ],
+            "insufficient_history_features": [
+                k
+                for k, v in classifications.items()
+                if "INSUFFICIENT HISTORY" in str(v.get("classification"))
             ],
             "invalid_features": [
                 k
@@ -960,8 +1146,10 @@ def build_natural_gas_valuation_document(*, as_of_week: str | None = None) -> di
             "wired": bool(block.get("wired")),
             "publish": bool(block.get("publish")),
             "validated_features": block.get("validated_features") or [],
+            "rejected_features": block.get("rejected_features") or [],
             "experimental_features": block.get("experimental_features") or [],
             "informational_features": block.get("informational_features") or [],
+            "insufficient_history_features": block.get("insufficient_history_features") or [],
             "invalid_features": block.get("invalid_features") or [],
             "recommended_spec": (block.get("model_comparison") or {}).get("recommended_spec"),
             "awaiting_drivers": block.get("awaiting_drivers") or [],

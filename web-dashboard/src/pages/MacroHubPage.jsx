@@ -3,8 +3,15 @@ import { AppShell } from '../components/AppShell.jsx'
 import { MacroPositioningPanel } from '../components/MacroPositioningPanel.jsx'
 import { useMacroHub } from '../hooks/useMacroHub.js'
 import { useTffMacroPositioning } from '../hooks/useTffMacroPositioning.js'
-import { navigateToScanner } from '../routing.js'
+import {
+  navigateToScanner,
+  navigateToInstrument,
+  navigateToCotWorkstation,
+  navigateToDxyMacroBias,
+} from '../routing.js'
 import { tffCotBlockFromDoc } from '../tffMacroPositioning.js'
+
+const DXY_MARKET = 'US Dollar Index / DX'
 
 const fmt = (v, digits = 2) => {
   if (v === null || v === undefined || v === '') return '—'
@@ -191,6 +198,17 @@ export function MacroHubPage({ sidebarClass, onSidebarClass }) {
           <section className="mh-section">
             <header className="mh-section-head">
               <h2>USD / DXY</h2>
+              <div className="mh-section-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button type="button" className="ws-btn ws-btn-primary" onClick={() => navigateToInstrument(DXY_MARKET)}>
+                  Open instrument
+                </button>
+                <button type="button" className="ws-btn" onClick={() => navigateToCotWorkstation(DXY_MARKET)}>
+                  COT workstation
+                </button>
+                <button type="button" className="ws-btn" onClick={navigateToDxyMacroBias}>
+                  DXY Macro Bias
+                </button>
+              </div>
             </header>
             <MetricRow
               label="DXY proxy (FRED broad USD)"

@@ -1,9 +1,9 @@
 body {
   margin: 0;
-  font-family: "Segoe UI", Inter, system-ui, sans-serif;
-  background: #070b14;
-  color: #e8edf5;
-  line-height: 1.45;
+  font-family: "Segoe UI", "IBM Plex Sans", system-ui, sans-serif;
+  background: #121826;
+  color: #e8e8e6;
+  line-height: 1.55;
 }
 
 .app {

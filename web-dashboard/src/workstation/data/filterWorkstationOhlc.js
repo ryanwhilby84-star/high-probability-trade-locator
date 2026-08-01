@@ -1,6 +1,8 @@
 /**
  * Workstation OHLC filters — visualization only.
- * Drops partial ISO weeks and bars beyond the latest closed COT date.
+ *
+ * Drops the incomplete current ISO week only.
+ * Price history must NEVER be truncated to the latest COT report.
  */
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
@@ -27,17 +29,6 @@ function daysBetween(a, b) {
   return Math.abs(db - da) / 86400000
 }
 
-/** Last calendar day (Sunday) of the ISO week containing `dateStr`. */
-function endOfIsoWeekDate(dateStr) {
-  const d = new Date(`${String(dateStr).slice(0, 10)}T12:00:00Z`)
-  if (Number.isNaN(d.getTime())) return null
-  const day = d.getUTCDay()
-  const daysToSunday = day === 0 ? 0 : 7 - day
-  const sun = new Date(d)
-  sun.setUTCDate(d.getUTCDate() + daysToSunday)
-  return sun.toISOString().slice(0, 10)
-}
-
 function isPlottableBar(bar) {
   if (!bar) return false
   const { open, high, low, close } = bar
@@ -45,17 +36,17 @@ function isPlottableBar(bar) {
 }
 
 /**
- * @param {Array} bars - normalized weekly bars { date, open, high, low, close, time? }
- * @param {object} opts
- * @param {string|null} opts.cotLastDate
- * @param {Date|null} opts.asOf
+ * Keep completed weekly OHLC only (drop the in-progress ISO week).
+ * `cotLastDate` is accepted for API compatibility but must not truncate price.
+ *
+ * @param {Array} bars
+ * @param {{ cotLastDate?: string|null, asOf?: Date|null }} [opts]
  */
 export function filterCompletedWorkstationOhlc(bars, { cotLastDate = null, asOf = null } = {}) {
+  void cotLastDate // intentionally unused — price must continue past COT
   const rejected = []
   const kept = []
   const curWeek = currentIsoWeekKey(asOf || new Date())
-  const cotLast = cotLastDate ? String(cotLastDate).slice(0, 10) : null
-  const cotCap = cotLast ? endOfIsoWeekDate(cotLast) : null
 
   for (const bar of bars || []) {
     if (!isPlottableBar(bar)) {
@@ -66,10 +57,6 @@ export function filterCompletedWorkstationOhlc(bars, { cotLastDate = null, asOf 
     const wk = isoWeekKey(date)
     if (wk >= curWeek) {
       rejected.push({ bar, reason: 'incomplete_iso_week', iso_week: wk })
-      continue
-    }
-    if (cotCap && date > cotCap) {
-      rejected.push({ bar, reason: 'after_cot_last', cot_last: cotLast, cot_cap: cotCap })
       continue
     }
     kept.push(bar)
@@ -114,9 +101,6 @@ export function matchOhlcBarForCotWeek(cotDate, priceBars, prevMatchedBarDate = 
 
 /**
  * OHLC slice end for chart visibility: extend through matched OHLC week for the final COT row.
- * @param {string} cotEndDate - last COT week in the visible range
- * @param {Array} priceBars - filtered weekly OHLC bars (OHLC week dates)
- * @param {string[]} cotDatesInRange - COT weeks in chart order (for prev-match chain)
  */
 export function resolveWorkstationVisibleOhlcEnd(cotEndDate, priceBars, cotDatesInRange) {
   const end = String(cotEndDate || '').slice(0, 10)
@@ -134,6 +118,12 @@ export function resolveWorkstationVisibleOhlcEnd(cotEndDate, priceBars, cotDates
       prevMatched = m.date
       lastMatch = m
     }
+  }
+
+  // Prefer the latest completed price bar when it is after the COT-matched tip.
+  const latestPrice = priceBars[priceBars.length - 1]
+  if (latestPrice?.date && (!lastMatch?.date || latestPrice.date > lastMatch.date)) {
+    return latestPrice.date
   }
 
   return lastMatch?.date || end

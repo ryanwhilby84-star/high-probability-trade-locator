@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-12",
-  "generated_at_utc": "2026-07-12T11:18:07Z",
+  "generated_at": "2026-07-25",
+  "generated_at_utc": "2026-07-25T05:35:18Z",
   "note": "FX Institutional Macro currency inputs: policy rates + sovereign yields from official central-bank adapters; CPI YoY from FRED OECD harmonized series. Fields marked live=False are carried forward. Run scripts/audit_fx_data_sources.py for PASS/WARN/FAIL.",
   "max_staleness_days": 10,
   "max_staleness_days_cpi": 400,
@@ -28,7 +28,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-07-01",
-      "fetched_at": "2026-07-12T11:17:40Z",
+      "fetched_at": "2026-07-25T05:35:00Z",
       "field_sources": {
         "policy_rate": "Federal Reserve (NY Fed EFFR)",
         "y2": "US Treasury (daily par yield curve)",
@@ -64,7 +64,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-06-30",
-      "fetched_at": "2026-07-12T11:17:40Z",
+      "fetched_at": "2026-07-25T05:35:00Z",
       "field_sources": {
         "policy_rate": "ECB (Deposit Facility Rate)",
         "y2": "ECB (euro-area AAA gov curve, 2Y)",
@@ -100,7 +100,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-06-30",
-      "fetched_at": "2026-07-12T11:17:40Z",
+      "fetched_at": "2026-07-25T05:35:00Z",
       "field_sources": {
         "policy_rate": "Bank of England (Bank Rate, IUDBEDR)",
         "y2": "Bank of England (GLC nominal spot curve) 2Y",
@@ -136,7 +136,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-07-03",
-      "fetched_at": "2026-07-12T11:17:40Z",
+      "fetched_at": "2026-07-25T05:35:00Z",
       "field_sources": {
         "policy_rate": "BIS WS_CBPOL (Bank of Japan)",
         "y2": "Japan MoF (JGB constant-maturity yields) 2Y",
@@ -151,8 +151,8 @@
       },
       "field_status": {
         "policy_rate": "PASS",
-        "y2": "PASS",
-        "y10": "PASS",
+        "y2": "WARN",
+        "y10": "WARN",
         "cpi_yoy": "WARN"
       },
       "errors": [],
@@ -174,7 +174,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-07-01",
-      "fetched_at": "2026-07-12T11:18:07Z",
+      "fetched_at": "2026-07-25T05:35:17Z",
       "field_sources": {
         "policy_rate": "RBA F1 (Cash Rate Target)",
         "y2": "RBA F2 (AGB 2Y)",
@@ -210,7 +210,7 @@
       "data_quality": "partial",
       "status": "WARN",
       "as_of": "2026-06-19",
-      "fetched_at": "2026-07-12T11:18:07Z",
+      "fetched_at": "2026-07-25T05:35:17Z",
       "field_sources": {
         "policy_rate": "BIS WS_CBPOL (Reserve Bank of New Zealand)",
         "y2": "FRED OECD IR3TIB01NZM156N (NZD 3M; RBNZ B2 unavailable) [carried]",
@@ -252,7 +252,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-07-03",
-      "fetched_at": "2026-07-12T11:18:07Z",
+      "fetched_at": "2026-07-25T05:35:17Z",
       "field_sources": {
         "policy_rate": "Bank of Canada (Valet) V39079",
         "y2": "Bank of Canada (Valet) 2Y benchmark",
@@ -267,8 +267,8 @@
       },
       "field_status": {
         "policy_rate": "PASS",
-        "y2": "PASS",
-        "y10": "PASS",
+        "y2": "WARN",
+        "y10": "WARN",
         "cpi_yoy": "WARN"
       },
       "errors": [],
@@ -288,7 +288,7 @@
       "data_quality": "live",
       "status": "WARN",
       "as_of": "2026-06-23",
-      "fetched_at": "2026-07-12T11:18:07Z",
+      "fetched_at": "2026-07-25T05:35:18Z",
       "field_sources": {
         "policy_rate": "BIS WS_CBPOL (Swiss National Bank)",
         "y2": "SNB (Confederation bond yields, rendoblid) 2Y",

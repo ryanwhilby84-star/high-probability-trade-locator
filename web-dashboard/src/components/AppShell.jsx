@@ -1,20 +1,19 @@
 import React from 'react'
 import { getAssetClasses, assetClassForMarket, assetClassLabel, marketsInAssetClass } from '../marketCatalog.js'
-import { canonicalMarketId } from '../marketResolution.js'
+import { allInstrumentIds } from '../instrumentRegistry.js'
+import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 import {
   navigateToJournal,
-  navigateToOandaCoverage,
-  navigateToCotProof,
-  navigateToCotSourceTruth,
-  navigateToDataLineage,
-  navigateToPriceCoverage,
   navigateToScanner,
-  navigateToThesisTracker,
   navigateToNaturalGasValuation,
   navigateToDxyMacroBias,
   navigateToGoldValuation,
   navigateToInstrument,
   navigateToMacroHub,
+  navigateToSeasonalityWorkstation,
+  navigateToCorrelationMatrix,
+  navigateToTradeBasket,
+  navigateToMacroIntelligence,
 } from '../routing.js'
 
 const DXY_MARKET = 'US Dollar Index / DX'
@@ -84,37 +83,20 @@ export function AppShell({
             )
           })}
         </nav>
-        <div style={{ padding: '8px 10px 14px', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+        {/* Phase 6: product nav only. Audit/debug routes remain routable but hidden. */}
+        <div className="ws-product-nav">
           <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>
             Scanner
           </button>
           <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>
             Macro Hub
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToThesisTracker}>
-            Thesis Tracker
-          </button>
           <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToJournal}>
             Trade Journal
           </button>
-          <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%', marginTop: 8 }} onClick={navigateToDataLineage}>
-            Data Lineage
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCotSourceTruth}>
-            COT Source Truth
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCotProof}>
-            COT Proof (HTPL)
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToPriceCoverage}>
-            Price Coverage Audit
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToOandaCoverage}>
-            OANDA coverage
-          </button>
           <button
             type="button"
-            className="ws-btn ws-btn-primary"
+            className="ws-btn"
             style={{ width: '100%', marginTop: 8 }}
             onClick={navigateToNaturalGasValuation}
           >
@@ -122,7 +104,7 @@ export function AppShell({
           </button>
           <button
             type="button"
-            className="ws-btn ws-btn-primary"
+            className="ws-btn"
             style={{ width: '100%', marginTop: 8 }}
             onClick={navigateToGoldValuation}
           >
@@ -130,7 +112,46 @@ export function AppShell({
           </button>
           <button
             type="button"
-            className="ws-btn ws-btn-primary"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={() => {
+              const universe = allInstrumentIds()
+              const first =
+                (universe && universe[0]) ||
+                (TRACKED_MARKET_IDS && TRACKED_MARKET_IDS[0]) ||
+                'NASDAQ / NQ'
+              navigateToSeasonalityWorkstation(first)
+            }}
+          >
+            Seasonality Workstation
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToCorrelationMatrix}
+          >
+            Correlation Matrix
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToTradeBasket}
+          >
+            Trade Basket
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToMacroIntelligence}
+          >
+            Macro Intelligence
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
             style={{ width: '100%', marginTop: 8 }}
             onClick={() => navigateToInstrument(DXY_MARKET)}
           >

@@ -67,15 +67,17 @@ def fetch_fred_instrument(instrument_id: str, *, observation_start: str = "2016-
     scale_meta: dict[str, Any] = {
         "source": "fred",
         "series_id": series_id,
-        "is_fallback": instrument_id == "US Dollar Index / DX",
-        "is_proxy": instrument_id == "US Dollar Index / DX",
+        "is_fallback": False,
+        "is_proxy": False,
     }
-    if instrument_id == "US Dollar Index / DX":
+    if instrument_id == "Broad US Dollar Index — DTWEXBGS":
+        scale_meta["is_fred_broad"] = True
         scale_meta["fallback_note"] = (
-            "FRED DTWEXBGS Trade-Weighted Broad USD Index — NOT ICE DX / Dixie futures. "
-            "Used as the charted USD-index proxy until an ICE DX futures price feed is wired."
+            "FRED Nominal Broad U.S. Dollar Index (DTWEXBGS). "
+            "Not ICE DX / Dixie futures — never substitute for DXY seasonality."
         )
-        scale_meta["instrument_label"] = "FRED Broad USD (DTWEXBGS) — proxy for DXY workstation"
+        scale_meta["instrument_label"] = "Broad US Dollar Index — DTWEXBGS"
+        scale_meta["canonical_note"] = scale_meta["fallback_note"]
 
     return {
         "instrument_id": instrument_id,
@@ -103,7 +105,7 @@ def _merge_fred_with_existing(
     by_date: dict[str, OhlcBar] = {str(b["date"]): dict(b) for b in existing}
     overlap = sorted(set(by_date) & {str(b["date"]) for b in incoming})
     scale = 1.0
-    if overlap and instrument_id == "US Dollar Index / DX":
+    if overlap and instrument_id == "Broad US Dollar Index — DTWEXBGS":
         anchor = overlap[-1]
         stored_close = float(by_date[anchor]["close"])
         fred_close = float(next(b["close"] for b in incoming if b["date"] == anchor))
@@ -113,9 +115,7 @@ def _merge_fred_with_existing(
     for bar in incoming:
         d = str(bar["date"])
         close = float(bar["close"]) * scale
-        if d in by_date and instrument_id != "US Dollar Index / DX":
-            continue
-        if d in by_date and instrument_id == "US Dollar Index / DX":
+        if d in by_date:
             continue
         by_date[d] = {
             "date": d,

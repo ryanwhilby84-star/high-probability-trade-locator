@@ -11,6 +11,14 @@ import { InstrumentPage } from './pages/InstrumentPage.jsx'
 
 import { CotWorkstationPage } from './pages/CotWorkstationPage.jsx'
 
+import { SeasonalityWorkstationPage } from './pages/SeasonalityWorkstationPage.jsx'
+
+import { CorrelationMatrixPage } from './pages/CorrelationMatrixPage.jsx'
+
+import { TradeBasketWorkstationPage } from './pages/TradeBasketWorkstationPage.jsx'
+
+import { MacroIntelligencePage } from './pages/MacroIntelligencePage.jsx'
+
 import { TradeJournalPage } from './pages/TradeJournalPage.jsx'
 
 import { ThesisTrackerPage } from './pages/ThesisTrackerPage.jsx'
@@ -295,6 +303,62 @@ export default function App() {
       />
 
     )
+
+  }
+
+
+
+  if (route.view === 'seasonality-workstation' && route.market) {
+
+    const marketId = canonicalMarketId(route.market)
+
+    if (!allowedMarkets.includes(marketId)) {
+
+      navigateToScanner()
+
+      return null
+
+    }
+
+    return (
+
+      <SeasonalityWorkstationPage
+
+        marketId={marketId}
+
+        trackedMarkets={allowedMarkets}
+
+        sidebarClass={sidebarClass}
+
+        onSidebarClass={setSidebarClass}
+
+      />
+
+    )
+
+  }
+
+
+
+  if (route.view === 'correlation-matrix') {
+
+    return <CorrelationMatrixPage />
+
+  }
+
+
+
+  if (route.view === 'trade-basket') {
+
+    return <TradeBasketWorkstationPage />
+
+  }
+
+
+
+  if (route.view === 'macro-intelligence') {
+
+    return <MacroIntelligencePage />
 
   }
 

@@ -20,6 +20,8 @@ const DEFAULT_WS_PATH = '/ws/prices'
 const BACKOFF_BASE_MS = 500
 const BACKOFF_MAX_MS = 15_000
 const SNAPSHOT_FETCH_TIMEOUT_MS = 8_000
+/** Dev/offline: stop hammering a dead backend after this many reconnect attempts. */
+const MAX_RECONNECT_ATTEMPTS = 8
 
 const _listeners = new Set()
 let _prices = Object.create(null)
@@ -31,6 +33,8 @@ let _lastError = null
 let _ws = null
 let _reconnectTimer = null
 let _backoffMs = BACKOFF_BASE_MS
+let _reconnectAttempts = 0
+let _reconnectGaveUp = false
 let _subscriberCount = 0
 let _intentionalClose = false
 let _snapshotCache = null
@@ -240,9 +244,20 @@ function clearReconnectTimer() {
 }
 
 function scheduleReconnect() {
-  if (_intentionalClose || _subscriberCount <= 0) return
+  if (_intentionalClose || _subscriberCount <= 0 || _reconnectGaveUp) return
+  if (_reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+    _reconnectGaveUp = true
+    _connectionState = 'disconnected'
+    _lastError = `WebSocket offline after ${MAX_RECONNECT_ATTEMPTS} attempts (backend :8787 unreachable)`
+    if (import.meta.env?.DEV) {
+      console.warn('[CurrentPriceStreamStore]', _lastError)
+    }
+    emit()
+    return
+  }
   clearReconnectTimer()
   _connectionState = 'reconnecting'
+  _reconnectAttempts += 1
   emit()
   const delay = _backoffMs
   _backoffMs = Math.min(_backoffMs * 2, BACKOFF_MAX_MS)
@@ -254,6 +269,7 @@ function scheduleReconnect() {
 
 function openSocket() {
   if (typeof window === 'undefined') return
+  if (_intentionalClose || _subscriberCount <= 0 || _reconnectGaveUp) return
   if (_ws && (_ws.readyState === WebSocket.OPEN || _ws.readyState === WebSocket.CONNECTING)) {
     return
   }
@@ -272,6 +288,8 @@ function openSocket() {
   _ws.onopen = () => {
     _connectionState = 'connected'
     _backoffMs = BACKOFF_BASE_MS
+    _reconnectAttempts = 0
+    _reconnectGaveUp = false
     _lastError = null
     emit()
   }
@@ -321,6 +339,9 @@ function stop() {
   }
   _connectionState = 'disconnected'
   _started = false
+  _reconnectAttempts = 0
+  _reconnectGaveUp = false
+  _backoffMs = BACKOFF_BASE_MS
   emit()
 }
 

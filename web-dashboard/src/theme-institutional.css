@@ -1,8 +1,8 @@
-/* Legacy dashboard + instrument detail — light institutional overrides */
+/* Legacy dashboard + instrument detail — institutional overrides */
 
 body {
-  background: var(--hptl-bg, #f6f4ef);
-  color: var(--hptl-text, #2c3238);
+  background: var(--hptl-bg, #121826);
+  color: var(--hptl-text, #e8e8e6);
 }
 
 .ws-root .app,
@@ -14,7 +14,7 @@ body {
 
 .ws-root .dashboard-header h1,
 .ws-content .dashboard-header h1 {
-  color: var(--hptl-navy);
+  color: var(--hptl-text);
 }
 
 .ws-root .dashboard-header .tagline,
@@ -72,7 +72,7 @@ body {
 .ws-root .expand-btn:hover,
 .ws-content .expand-btn:hover {
   background: var(--hptl-bg-panel);
-  color: var(--hptl-navy);
+  color: var(--hptl-text);
 }
 
 .ws-root .detail-panel,
@@ -350,7 +350,7 @@ body {
   margin: 0.4rem 0 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--hptl-navy);
+  color: var(--hptl-text);
   line-height: 1.35;
 }
 
@@ -359,7 +359,7 @@ body {
   overflow: hidden;
   border-radius: var(--hptl-radius);
   border: 1px solid var(--hptl-border);
-  background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+  background: linear-gradient(180deg, var(--hptl-bg-panel) 0%, var(--hptl-bg-elevated) 100%);
 }
 
 .mrm-chart-chrome {
@@ -415,7 +415,7 @@ body {
 .mrm-tip {
   border-radius: var(--hptl-radius-sm);
   border: 1px solid var(--hptl-border-strong);
-  background: #fff;
+  background: var(--hptl-bg-elevated);
   padding: 0.65rem 0.9rem;
   font-size: 0.8rem;
   box-shadow: var(--hptl-shadow-md);

@@ -20,6 +20,7 @@ import {
   recordChartMount,
   recordChartUnmount,
 } from './cotWsRenderDiagnostics.js'
+import { ResearchPinsOverlay } from './ResearchPinsOverlay.jsx'
 
 const LIVE_PRICE_LINE_COLOR = '#38bdf8'
 const LIVE_PRICE_STALE_LINE_COLOR = '#fbbf24'
@@ -123,6 +124,19 @@ export function SimpleChartPane({
   latestMarkerTime = null,
   latestMarkerLabel = null,
   showLatestLabel = false,
+  /** @type {Array<{ time: number, position?: string, color?: string, shape?: string, text?: string }>|null} */
+  eventMarkers = null,
+  /** Selected research event week — draws a synced vertical highlight line. */
+  eventHighlightTime = null,
+  /** Compact HTML research pins (primary visibility). */
+  researchPins = null,
+  researchPinVariant = 'cot',
+  /** Optional secondary line on a separate right scale (e.g. positioning spread). */
+  overlayLinePoints = null,
+  overlayLineColor = 'rgba(15, 118, 110, 0.9)',
+  onTimeClick = null,
+  /** Pin click — receives pin descriptor; must not mutate camera. */
+  onPinClick = null,
   valueBadge = null,
   legendLabel = null,
   onFitY = null,
@@ -131,10 +145,14 @@ export function SimpleChartPane({
   const containerRef = React.useRef(null)
   const chartRef = React.useRef(null)
   const primarySeriesRef = React.useRef(null)
+  const overlaySeriesRef = React.useRef(null)
   const anchorSeriesRef = React.useRef(null)
   const zeroSeriesRef = React.useRef(null)
   const livePriceLineRef = React.useRef(null)
   const latestLineRef = React.useRef(null)
+  const eventHighlightRef = React.useRef(null)
+  const onTimeClickRef = React.useRef(onTimeClick)
+  onTimeClickRef.current = onTimeClick
 
   const candlesRef = React.useRef([])
   const linePointsRef = React.useRef([])
@@ -162,6 +180,7 @@ export function SimpleChartPane({
     let chart = null
     let resizeObserver = null
     let unregisterPane = () => {}
+    let clickHandler = null
 
     const mount = () => {
       if (cancelled || chartRef.current) return
@@ -238,8 +257,15 @@ export function SimpleChartPane({
 
       chartRef.current = chart
       primarySeriesRef.current = primarySeries
+      overlaySeriesRef.current = null
       anchorSeriesRef.current = anchorSeries
       zeroSeriesRef.current = zeroSeries
+
+      clickHandler = (param) => {
+        if (param?.time == null) return
+        onTimeClickRef.current?.(param.time)
+      }
+      chart.subscribeClick(clickHandler)
 
       const resizeChart = createRafCoalescer(() => {
         const target = containerRef.current
@@ -288,12 +314,20 @@ export function SimpleChartPane({
       unregisterPane()
 
       if (chart) {
+        if (clickHandler) {
+          try {
+            chart.unsubscribeClick(clickHandler)
+          } catch {
+            // chart already torn down
+          }
+        }
         recordChartUnmount(panelId)
         chart.remove()
       }
 
       chartRef.current = null
       primarySeriesRef.current = null
+      overlaySeriesRef.current = null
       anchorSeriesRef.current = null
       zeroSeriesRef.current = null
       livePriceLineRef.current = null
@@ -426,6 +460,70 @@ export function SimpleChartPane({
     panelId,
     syncOnly,
   ])
+
+  // Intelligence V2 event markers — paint-only; never mutates camera.
+  React.useEffect(() => {
+    const primarySeries = primarySeriesRef.current
+    if (syncOnly || !primarySeries) return
+    const markers = Array.isArray(eventMarkers)
+      ? eventMarkers.filter((m) => isFiniteNumber(m?.time))
+      : []
+    try {
+      primarySeries.setMarkers(markers)
+    } catch (error) {
+      console.error('[cot-workstation] setMarkers failed', panelId, error)
+    }
+  }, [eventMarkers, syncOnly, panelId, mounted, linePoints, candleBars])
+
+  // Optional overlay line (separate price scale) — used for Comm↔NR spread.
+  React.useEffect(() => {
+    const chart = chartRef.current
+    if (!chart || syncOnly || mode === 'candle') return
+
+    const points = Array.isArray(overlayLinePoints)
+      ? prepareLightweightLinePoints(overlayLinePoints)
+      : []
+
+    if (!points.length) {
+      if (overlaySeriesRef.current) {
+        try {
+          chart.removeSeries(overlaySeriesRef.current)
+        } catch {
+          // ignore
+        }
+        overlaySeriesRef.current = null
+      }
+      return
+    }
+
+    if (!overlaySeriesRef.current) {
+      try {
+        overlaySeriesRef.current = chart.addLineSeries({
+          color: overlayLineColor,
+          lineWidth: 1,
+          lineStyle: 2,
+          priceScaleId: 'overlay',
+          priceLineVisible: false,
+          lastValueVisible: false,
+          crosshairMarkerVisible: false,
+        })
+        chart.priceScale('overlay').applyOptions({
+          scaleMargins: { top: 0.12, bottom: 0.12 },
+          borderVisible: false,
+        })
+      } catch (error) {
+        console.error('[cot-workstation] overlay series create failed', panelId, error)
+        return
+      }
+    }
+
+    try {
+      overlaySeriesRef.current.applyOptions({ color: overlayLineColor })
+      overlaySeriesRef.current.setData(points)
+    } catch (error) {
+      console.error('[cot-workstation] overlay setData failed', panelId, error)
+    }
+  }, [overlayLinePoints, overlayLineColor, syncOnly, mode, panelId, mounted])
 
   // Incremental live weekly-candle update — series.update only. Never setData,
   // fitContent, or camera resets. Preserves pan/zoom/drawings.
@@ -582,6 +680,58 @@ export function SimpleChartPane({
     }
   }, [latestMarkerTime, mounted])
 
+  // Selected research event — vertical highlight synced across panes.
+  React.useEffect(() => {
+    const chart = chartRef.current
+    const lineEl = eventHighlightRef.current
+    if (!chart || !lineEl) return undefined
+
+    const timeScale = chart.timeScale()
+
+    const positionLine = () => {
+      const current = eventHighlightRef.current
+      if (!current) return
+
+      if (!isFiniteNumber(eventHighlightTime)) {
+        current.style.display = 'none'
+        return
+      }
+
+      const x = timeScale.timeToCoordinate(eventHighlightTime)
+      if (x == null || !Number.isFinite(x)) {
+        current.style.display = 'none'
+        return
+      }
+
+      current.style.display = 'block'
+      current.style.left = `${Math.round(x)}px`
+    }
+
+    positionLine()
+
+    try {
+      timeScale.subscribeVisibleLogicalRangeChange(positionLine)
+    } catch {
+      // API differences
+    }
+
+    const resizeObserver = containerRef.current
+      ? new ResizeObserver(positionLine)
+      : null
+    if (resizeObserver && containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    return () => {
+      try {
+        timeScale.unsubscribeVisibleLogicalRangeChange(positionLine)
+      } catch {
+        // teardown
+      }
+      resizeObserver?.disconnect()
+    }
+  }, [eventHighlightTime, mounted, eventMarkers])
+
   return (
     <div
       className={`ws-chart-pane cot-ws-chart-pane ${className}`.trim()}
@@ -594,6 +744,17 @@ export function SimpleChartPane({
             mounted ? ' cot-ws-chart-canvas--ready' : ''
           }`}
         />
+
+        {!syncOnly && Array.isArray(researchPins) && researchPins.length ? (
+          <ResearchPinsOverlay
+            chartRef={chartRef}
+            containerRef={containerRef}
+            pins={researchPins}
+            mounted={mounted}
+            variant={researchPinVariant}
+            onPinClick={onPinClick || onTimeClick}
+          />
+        ) : null}
 
         <div
           className="cot-ws-drawing-host"
@@ -628,6 +789,15 @@ export function SimpleChartPane({
               LATEST — {latestMarkerLabel}
             </span>
           ) : null}
+        </div>
+
+        <div
+          ref={eventHighlightRef}
+          className="cot-ws-event-vline"
+          style={{ display: 'none' }}
+          aria-hidden="true"
+        >
+          <span className="cot-ws-event-vline-label">EVENT</span>
         </div>
 
         {legendLabel ||

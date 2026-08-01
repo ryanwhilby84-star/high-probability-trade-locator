@@ -47,6 +47,9 @@ FRED_PRICE_FALLBACK: dict[str, str] = {
 }
 
 OANDA_PRICE_FALLBACK: dict[str, str] = {
+    "NASDAQ / NQ": "NAS100_USD",
+    "S&P 500 / ES": "SPX500_USD",
+    "Dow / YM": "US30_USD",
     "Gold": "XAU_USD",
     "Silver": "XAG_USD",
     "Crude Oil / CL": "WTICO_USD",
@@ -235,6 +238,15 @@ def resolve_store_key(
 def _canonical_symbol(instrument_id: str, store_key: str | None, source: str) -> str:
     spec = get_instrument(instrument_id)
     cov = load_price_coverage()
+    if source in ("yahoo_futures", "yahoo"):
+        try:
+            from hptl.prices.softs_futures_backfill import SOFTS_YAHOO
+
+            yahoo_sym = (SOFTS_YAHOO.get(instrument_id) or {}).get("yahoo_symbol")
+            if yahoo_sym:
+                return f"yahoo:{yahoo_sym}"
+        except Exception:
+            pass
     if source == "oanda":
         if instrument_id in OANDA_PRICE_FALLBACK:
             return OANDA_PRICE_FALLBACK[instrument_id]
@@ -250,7 +262,8 @@ def _canonical_symbol(instrument_id: str, store_key: str | None, source: str) ->
         return f"fred:{FRED_PRICE_FALLBACK[instrument_id]}"
     if instrument_id in OANDA_PRICE_FALLBACK:
         return OANDA_PRICE_FALLBACK[instrument_id]
-    if instrument_id in FRED_PRICE_FALLBACK:
+    # Softs must not fall through to monthly FRED labels once on Yahoo futures.
+    if source not in ("yahoo_futures", "yahoo") and instrument_id in FRED_PRICE_FALLBACK:
         return f"fred:{FRED_PRICE_FALLBACK[instrument_id]}"
     return store_key or instrument_id
 
@@ -461,16 +474,24 @@ def build_canonical_timeline(
         load_instrument_record_internal(store_key) if store_key else None
     )
     fetched_via = (internal or {}).get("_fetched_via")
-    if fetched_via in ("oanda", "oanda_backfill"):
+    if fetched_via in ("oanda", "oanda_backfill", "oanda_workstation_promote"):
         source = "oanda"
+    elif fetched_via in ("yahoo_futures", "coffee_foundation_backfill"):
+        source = "yahoo_futures"
     elif fetched_via == "alpha_vantage":
         source = "alpha_vantage"
     elif fetched_via == "fred":
         source = "fred"
-    scale = record.get("price_scale") or {}
-    if scale.get("source") == "fred":
+    scale = record.get("price_scale") or (internal or {}).get("price_scale") or {}
+    if scale.get("source") == "yahoo" and scale.get("yahoo_symbol"):
+        source = "yahoo_futures"
+        symbol = f"yahoo:{scale['yahoo_symbol']}"
+    elif scale.get("source") == "fred":
         source = "fred"
         symbol = f"fred:{scale.get('series_id') or FRED_PRICE_FALLBACK.get(instrument_id, instrument_id)}"
+    elif scale.get("source") == "oanda" and scale.get("symbol"):
+        source = "oanda"
+        symbol = str(scale["symbol"])
     else:
         symbol = _canonical_symbol(instrument_id, store_key, source)
     proxy = store_key != instrument_id if store_key else False

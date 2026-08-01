@@ -208,6 +208,63 @@ def rebuild_pillar_exports() -> dict[str, Any]:
     except Exception as exc:
         meta.setdefault("warnings", []).append(f"seasonality export: {exc}")
 
+    # USD-index identity: FRED broad ≠ ICE DX — refresh each series separately.
+    try:
+        from hptl.markets.usd_index_identity import BROAD_USD_ID, ICE_DXY_ID
+        from hptl.prices.fred_prices import fetch_fred_instrument
+        from hptl.prices.ice_dx_futures_backfill import promote_ice_dx_futures
+        from hptl.prices.price_store import write_price_store_merged
+        from hptl.prices.run_price_refresh import refresh_instrument_record
+
+        promote_ice_dx_futures()
+        meta["ice_dx_price_refresh"] = "ok"
+
+        fetched = fetch_fred_instrument(BROAD_USD_ID)
+        rec = refresh_instrument_record(BROAD_USD_ID, fetched, fetched_via="fred")
+        write_price_store_merged({BROAD_USD_ID: rec})
+        meta["broad_usd_price_refresh"] = "ok"
+        meta["dxy_price_identity"] = {
+            "ice_dx": ICE_DXY_ID,
+            "broad_usd": BROAD_USD_ID,
+            "note": "Never substitute DTWEXBGS for ICE DX futures",
+        }
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"USD index identity price refresh: {exc}")
+
+    try:
+        from hptl.valuation.dxy_macro_bias_export import write_dxy_macro_bias_exports
+
+        write_dxy_macro_bias_exports()
+        meta["dxy_macro_bias"] = "ok"
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"DXY macro bias export: {exc}")
+
+    try:
+        from hptl.valuation.export import build_valuation_latest, write_valuation_exports
+        from hptl.valuation.macro_valuation_export import merge_rates_and_usd_into_valuation_latest
+
+        val = build_valuation_latest()
+        merged = merge_rates_and_usd_into_valuation_latest(val)
+        # Keep published USD FV research explicitly non-validated.
+        dx = (merged.get("instruments") or {}).get("US Dollar Index / DX") or {}
+        if dx:
+            dx = {
+                **dx,
+                "publication_status": "EXPERIMENTAL_RESEARCH",
+                "valuation_status": dx.get("valuation_status") or "NOT_YET_VALIDATED",
+                "note": (
+                    (dx.get("note") or "")
+                    + " Chart price = ICE DX futures (not FRED DTWEXBGS). "
+                    "Broad USD lives under 'Broad US Dollar Index — DTWEXBGS'. "
+                    "Prefer dxy_macro_bias_latest.json for workstation bias."
+                ).strip(),
+            }
+            merged.setdefault("instruments", {})["US Dollar Index / DX"] = dx
+        write_valuation_exports(merged)
+        meta["dxy_valuation_merge"] = "ok"
+    except Exception as exc:
+        meta.setdefault("warnings", []).append(f"DXY valuation merge: {exc}")
+
     return meta
 
 
@@ -235,15 +292,37 @@ def refresh_legacy_cot_if_stale() -> str:
     return str(refreshed)[:10] if refreshed is not None and not pd.isna(refreshed) else "—"
 
 
+def _dashboard_cot_export_behind_master() -> bool:
+    """True when confluence or cot_3y trails the tracked master COT week."""
+    master = _master_max()
+    if master == "—":
+        return False
+    conf = _confluence_latest()
+    graph = _cot3y_latest()
+    if conf == "—" or conf < master:
+        return True
+    if graph == "—" or graph < master:
+        return True
+    return False
+
+
 def pull_cot_and_master(*, force: bool = False) -> int:
-    """Live CFTC probe + legacy/master refresh; skips full confluence enrichment."""
+    """Live CFTC probe + legacy/master refresh.
+
+    Upstream freshness (CFTC vs master) and downstream freshness (master vs
+    dashboard JSON) are independent. When the dashboard trails master, do NOT
+    skip confluence/cot_3y republish merely because the master week already
+    matches CFTC.
+    """
     import os
 
     os.environ.setdefault("HPTL_SKIP_LIVE_FEEDS", "1")
     os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
     from hptl.cot.pipeline import run_full_pipeline
 
-    result = run_full_pipeline(force=force, skip_confluence=True)
+    # Skip heavy confluence rebuild only when dashboard exports already match master.
+    skip_confluence = not _dashboard_cot_export_behind_master()
+    result = run_full_pipeline(force=force, skip_confluence=skip_confluence)
     return int(result.exit_code or 0)
 
 
@@ -320,11 +399,30 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         report.markets_updated = catch.markets_exported
         if catch.error:
             report.errors.append(f"confluence catch-up: {catch.error}")
+        # Self-heal: if catch-up left dashboard behind master, force full republish.
+        if _dashboard_cot_export_behind_master():
+            from hptl.cot.pipeline import _republish_downstream_exports, CotPipelineResult
+
+            heal = CotPipelineResult(
+                latest_local_report_date=_master_max(),
+                latest_cftc_report_date=_master_max(),
+            )
+            _republish_downstream_exports(
+                heal,
+                export_week=_confluence_latest(),
+                cftc_week=_master_max(),
+            )
+            report.markets_updated = max(report.markets_updated, 1)
     except Exception as exc:
         report.errors.append(f"confluence catch-up failed: {exc}")
 
     try:
-        rebuild_chart_series_exports()
+        # Always rebuild chart series when behind master (independent of upstream).
+        if _dashboard_cot_export_behind_master() or _cot3y_latest() != _master_max():
+            rebuild_chart_series_exports()
+        else:
+            # Still refresh when already aligned so mirrors stay in sync with master content.
+            rebuild_chart_series_exports()
         report.chart_series_updated = _cot3y_market_count()
     except Exception as exc:
         report.errors.append(f"chart series export failed: {exc}")
@@ -333,6 +431,97 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         rebuild_workstation_exports()
     except Exception as exc:
         report.errors.append(f"workstation OHLC export failed: {exc}")
+
+    # Universal Price ↔ COT alignment gate — fail fast before intelligence layers.
+    try:
+        from hptl.prices.price_cot_alignment_audit import run_price_cot_alignment_gate
+
+        gate = run_price_cot_alignment_gate(live_provider=True)
+        if not gate.get("passed"):
+            report.errors.append("PRICE / COT ALIGNMENT FAILED")
+            for name in gate.get("failing_instruments") or []:
+                report.errors.append(f"alignment fail: {name}")
+            report.passed = False
+            # Stop before research / inspector / analyst intelligence on stale prices.
+            report.stale_cleared = clear_stale_dashboard_copies()
+            sync_dist_exports()
+            report.master_latest = _master_max()
+            report.cot_bundle_latest = _legacy_max()
+            report.confluence_latest = _confluence_latest()
+            report.graph_latest = _cot3y_latest(CHART_PROBE_MARKET)
+            return report
+    except Exception as exc:
+        report.errors.append(f"price/COT alignment audit failed: {exc}")
+        report.passed = False
+        report.stale_cleared = clear_stale_dashboard_copies()
+        sync_dist_exports()
+        return report
+
+    try:
+        from hptl.cot.positioning_research_export import run_positioning_research_export
+
+        # Full cot3y universe — never instrument-subset in weekly production.
+        research = run_positioning_research_export(markets=None)
+        s = research.get("summary") or {}
+        report.chart_series_updated = max(
+            report.chart_series_updated,
+            int(s.get("markets_available") or 0),
+        )
+        if int(s.get("markets_available") or 0) <= 0:
+            report.errors.append("positioning research: zero markets available")
+    except Exception as exc:
+        report.errors.append(f"positioning research export failed: {exc}")
+
+    wi = None
+    try:
+        from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
+
+        wi = run_weekly_inspector_export(markets=None)
+        ws = wi.get("summary") or {}
+        if int(ws.get("available") or 0) <= 0:
+            report.errors.append("weekly inspector: zero markets available")
+    except Exception as exc:
+        report.errors.append(f"weekly inspector export failed: {exc}")
+
+    # Derived COT integrity gate — fail fast before Weekly Analysis / scanner.
+    try:
+        from hptl.cot.derived_cot_integrity_audit import run_derived_cot_integrity_gate
+
+        dgate = run_derived_cot_integrity_gate(
+            weekly_inspector=wi if isinstance(wi, dict) else None,
+        )
+        if not dgate.get("passed"):
+            report.errors.append("DERIVED COT INTEGRITY FAILED")
+            for name in dgate.get("failing_instruments") or []:
+                report.errors.append(f"derived-cot fail: {name}")
+            report.passed = False
+            report.stale_cleared = clear_stale_dashboard_copies()
+            sync_dist_exports()
+            report.master_latest = _master_max()
+            report.cot_bundle_latest = _legacy_max()
+            report.confluence_latest = _confluence_latest()
+            report.graph_latest = _cot3y_latest(CHART_PROBE_MARKET)
+            return report
+    except Exception as exc:
+        report.errors.append(f"derived COT integrity audit failed: {exc}")
+        report.passed = False
+        report.stale_cleared = clear_stale_dashboard_copies()
+        sync_dist_exports()
+        return report
+
+    try:
+        from hptl.cot.analyst_intelligence_export import run_analyst_intelligence_export
+
+        ai = run_analyst_intelligence_export(
+            weekly_inspector=wi if isinstance(wi, dict) else None,
+            # Integrity already enforced by run_derived_cot_integrity_gate above.
+            skip_integrity_gate=True,
+        )
+        ais = ai.get("summary") or {}
+        if int(ais.get("markets_available") or 0) <= 0:
+            report.errors.append("analyst intelligence: zero markets available")
+    except Exception as exc:
+        report.errors.append(f"analyst intelligence export failed: {exc}")
 
     try:
         from hptl.thesis_tracker.opportunity_distribution_report import write_scanner_latest

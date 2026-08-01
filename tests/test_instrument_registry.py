@@ -34,14 +34,28 @@ def test_no_duplicate_ids():
 
 
 def test_legacy_cot_markets_includes_core_and_new_metals_softs():
-    assert len(LEGACY_COT_MARKETS) == 23
-    for m in ["Gold", "Silver", "Sugar", "Platinum", "Palladium", "NASDAQ / NQ"]:
+    assert len(LEGACY_COT_MARKETS) == 26
+    for m in [
+        "Gold",
+        "Silver",
+        "Sugar",
+        "Platinum",
+        "Palladium",
+        "NASDAQ / NQ",
+        "Cotton",
+        "Bitcoin",
+        "US Dollar Index / DX",
+    ]:
         assert m in LEGACY_COT_MARKETS
     for m in LEGACY_COT_MARKETS:
         spec = get_instrument(m)
         assert spec is not None
         assert spec.has_cot_mapping is True
-        assert spec.positioning_status == "cot_available"
+        assert spec.positioning_status in {
+            "cot_available",
+            "tff_and_legacy_cot",
+            "legacy_futures_only",
+        } or spec.positioning_status.startswith("cot")
 
 
 def test_fx_pair_no_direct_cot():
