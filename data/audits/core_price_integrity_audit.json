@@ -1,0 +1,2905 @@
+{
+  "generated_at": "2026-08-01T18:58:34.736018+00:00",
+  "command": "python scripts/run_core_price_integrity_audit.py",
+  "universe": "LEGACY_COT_MARKETS",
+  "universe_count": 26,
+  "universe_ids": [
+    "NASDAQ / NQ",
+    "S&P 500 / ES",
+    "Dow / YM",
+    "Euro FX / 6E",
+    "British Pound / 6B",
+    "Japanese Yen / 6J",
+    "Swiss Franc / 6S",
+    "Australian Dollar / 6A",
+    "Canadian Dollar / 6C",
+    "NZ Dollar / 6N",
+    "Gold",
+    "Silver",
+    "Copper / HG",
+    "Crude Oil / CL",
+    "Natural Gas / NG",
+    "Coffee",
+    "Cocoa",
+    "Cotton",
+    "Corn",
+    "Wheat",
+    "Soybeans",
+    "Sugar",
+    "Platinum",
+    "Palladium",
+    "Bitcoin",
+    "US Dollar Index / DX"
+  ],
+  "lookback": "15Y",
+  "summary": {
+    "PASS": 4,
+    "WARNING \u2014 ROADMAPS AVAILABLE": 22,
+    "FAIL \u2014 ROADMAPS UNAVAILABLE": 0
+  },
+  "instruments": [
+    {
+      "instrument": "NASDAQ / NQ",
+      "display_name": "NASDAQ / NQ",
+      "provider": "oanda",
+      "symbol": "NAS100_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-12-19",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 9.61,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2484,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "NASDAQ / NQ",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "NASDAQ / NQ",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "S&P 500 / ES",
+      "display_name": "S&P 500 / ES",
+      "provider": "oanda",
+      "symbol": "SPX500_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-12-19",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 9.61,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2484,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "S&P 500 / ES",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "S&P 500 / ES",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Dow / YM",
+      "display_name": "Dow / YM",
+      "provider": "oanda",
+      "symbol": "US30_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-12-19",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 9.61,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2484,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Dow / YM",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Dow / YM",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Euro FX / 6E",
+      "display_name": "Euro FX / 6E",
+      "provider": "oanda",
+      "symbol": "EUR_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2638,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Euro FX / 6E",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Euro FX / 6E",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "British Pound / 6B",
+      "display_name": "British Pound / 6B",
+      "provider": "oanda",
+      "symbol": "GBP_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2639,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "British Pound / 6B",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "British Pound / 6B",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Japanese Yen / 6J",
+      "display_name": "Japanese Yen / 6J",
+      "provider": "yahoo_futures",
+      "symbol": "6J=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:6J=F (provider roll adjustment; seasonality uses adjusted closes)",
+      "earliest_date": "2000-09-13",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 25.88,
+      "valid_years": [
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 25,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [
+        2000
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 2,
+      "bar_count": 6455,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:discontinuities:2",
+        "warning:thin_years:[2000]"
+      ],
+      "issues": [],
+      "warnings": [
+        "discontinuities:2",
+        "thin_years:[2000]"
+      ],
+      "price_instrument_id": "Japanese Yen / 6J",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Japanese Yen / 6J",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Swiss Franc / 6S",
+      "display_name": "Swiss Franc / 6S",
+      "provider": "oanda",
+      "symbol": "USD_CHF",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2643,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Swiss Franc / 6S",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Swiss Franc / 6S",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Australian Dollar / 6A",
+      "display_name": "Australian Dollar / 6A",
+      "provider": "oanda",
+      "symbol": "AUD_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2637,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Australian Dollar / 6A",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Australian Dollar / 6A",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Canadian Dollar / 6C",
+      "display_name": "Canadian Dollar / 6C",
+      "provider": "oanda",
+      "symbol": "USD_CAD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2649,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Canadian Dollar / 6C",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Canadian Dollar / 6C",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "NZ Dollar / 6N",
+      "display_name": "NZ Dollar / 6N",
+      "provider": "oanda",
+      "symbol": "NZD_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-05-30",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.17,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2647,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "NZ Dollar / 6N",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "NZ Dollar / 6N",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Gold",
+      "display_name": "Gold",
+      "provider": "oanda",
+      "symbol": "XAU_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-01",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2633,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Gold",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Gold",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Silver",
+      "display_name": "Silver",
+      "provider": "oanda",
+      "symbol": "XAG_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-09",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.14,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2624,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Silver",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Silver",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Copper / HG",
+      "display_name": "Copper / HG",
+      "provider": "yahoo_futures",
+      "symbol": "HG=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:HG=F (provider roll adjustment; seasonality uses adjusted closes)",
+      "earliest_date": "2000-08-30",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 25.92,
+      "valid_years": [
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 25,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [
+        2000
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 6508,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2000]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2000]"
+      ],
+      "price_instrument_id": "Copper / HG",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Copper / HG",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Crude Oil / CL",
+      "display_name": "Crude Oil / CL",
+      "provider": "oanda",
+      "symbol": "WTICO_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2626,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Crude Oil / CL",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Crude Oil / CL",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Natural Gas / NG",
+      "display_name": "Natural Gas / NG",
+      "provider": "oanda",
+      "symbol": "NATGAS_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2626,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Natural Gas / NG",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Natural Gas / NG",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Coffee",
+      "display_name": "Coffee",
+      "provider": "yahoo_futures",
+      "symbol": "KC=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:KC=F (provider roll adjustment; seasonality uses adjusted closes)",
+      "earliest_date": "2000-01-03",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 26.57,
+      "valid_years": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 26,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 6663,
+      "integrity_status": "PASS",
+      "classification": "PASS",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "valid",
+      "failure_reasons": [],
+      "issues": [],
+      "warnings": [],
+      "price_instrument_id": "Coffee",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Coffee",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Cocoa",
+      "display_name": "Cocoa",
+      "provider": "yahoo_futures",
+      "symbol": "CC=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:CC=F (provider roll adjustment; seasonality uses adjusted closes)",
+      "earliest_date": "2000-01-03",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 26.57,
+      "valid_years": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 26,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 6665,
+      "integrity_status": "PASS",
+      "classification": "PASS",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "valid",
+      "failure_reasons": [],
+      "issues": [],
+      "warnings": [],
+      "price_instrument_id": "Cocoa",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Cocoa",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Cotton",
+      "display_name": "Cotton",
+      "provider": "yahoo_futures",
+      "symbol": "CT=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:CT=F (provider roll adjustment; seasonality uses adjusted closes)",
+      "earliest_date": "2000-01-03",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 26.57,
+      "valid_years": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 26,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 6665,
+      "integrity_status": "PASS",
+      "classification": "PASS",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "valid",
+      "failure_reasons": [],
+      "issues": [],
+      "warnings": [],
+      "price_instrument_id": "Cotton",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Cotton",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Corn",
+      "display_name": "Corn",
+      "provider": "yahoo_futures",
+      "symbol": "ZC=F",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:ZC=F (cents\u2192USD/bushel; adjusted closes)",
+      "earliest_date": "2000-07-17",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 26.04,
+      "valid_years": [
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 25,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [
+        2000
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 6515,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2000]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2000]"
+      ],
+      "price_instrument_id": "Corn",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "Corn",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Wheat",
+      "display_name": "Wheat",
+      "provider": "oanda",
+      "symbol": "WHEAT_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2560,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Wheat",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Wheat",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Soybeans",
+      "display_name": "Soybeans",
+      "provider": "oanda",
+      "symbol": "SOYBN_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2561,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Soybeans",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Soybeans",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Sugar",
+      "display_name": "Sugar",
+      "provider": "oanda",
+      "symbol": "SUGAR_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2557,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Sugar",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Sugar",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Platinum",
+      "display_name": "Platinum",
+      "provider": "oanda",
+      "symbol": "XPT_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2621,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Platinum",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Platinum",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Palladium",
+      "display_name": "Palladium",
+      "provider": "oanda",
+      "symbol": "XPD_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2621,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Palladium",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Palladium",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "Bitcoin",
+      "display_name": "Bitcoin",
+      "provider": "oanda",
+      "symbol": "BTC_USD",
+      "exchange_symbol": null,
+      "continuous_futures_method": "oanda_cfd_continuous (broker CFD; not exchange roll-adjusted futures)",
+      "earliest_date": "2016-06-02",
+      "latest_date": "2026-07-30",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-30",
+        "raw_hptl_latest_date": "2026-07-30",
+        "canonical_latest_date": "2026-07-30",
+        "seasonality_payload_latest_date": "2026-07-30",
+        "rendered_latest_date": "2026-07-30",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 1,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 10.16,
+      "valid_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 9,
+      "excluded_years": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "excluded_year_causes": [
+        {
+          "year": 2011,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2012,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2013,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2014,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2015,
+          "reason": "source_begins_later_than_requested"
+        },
+        {
+          "year": 2016,
+          "reason": "incomplete_year_thin_weeks"
+        }
+      ],
+      "thin_years": [
+        2016
+      ],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 2947,
+      "integrity_status": "PASS",
+      "classification": "WARNING \u2014 ROADMAPS AVAILABLE",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "warning",
+      "failure_reasons": [
+        "warning:thin_years:[2016]"
+      ],
+      "issues": [],
+      "warnings": [
+        "thin_years:[2016]"
+      ],
+      "price_instrument_id": "Bitcoin",
+      "load_meta": {
+        "source": "oanda",
+        "error": null,
+        "price_instrument_id": "Bitcoin",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-30",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    },
+    {
+      "instrument": "US Dollar Index / DX",
+      "display_name": "US Dollar Index / DX",
+      "provider": "yahoo_futures",
+      "symbol": "DX-Y.NYB",
+      "exchange_symbol": null,
+      "continuous_futures_method": "yahoo_prestitched_continuous:DX-Y.NYB (ICE DX; adjusted closes)",
+      "earliest_date": "1971-01-04",
+      "latest_date": "2026-07-31",
+      "latest_date_layers": {
+        "provider_latest_date": "2026-07-31",
+        "raw_hptl_latest_date": "2026-07-31",
+        "canonical_latest_date": "2026-07-31",
+        "seasonality_payload_latest_date": "2026-07-31",
+        "rendered_latest_date": "2026-07-31",
+        "expected_completed_session": "2026-07-31",
+        "lag_calendar_days_vs_expected_session": 0,
+        "stale_ingestion": false,
+        "first_stale_layer": null
+      },
+      "requested_years": 15,
+      "requested_year_list": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "available_years": 55.57,
+      "valid_years": [
+        1971,
+        1972,
+        1973,
+        1974,
+        1975,
+        1976,
+        1977,
+        1978,
+        1979,
+        1980,
+        1981,
+        1982,
+        1983,
+        1984,
+        1985,
+        1986,
+        1987,
+        1988,
+        1989,
+        1990,
+        1991,
+        1992,
+        1993,
+        1994,
+        1995,
+        1996,
+        1997,
+        1998,
+        1999,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "valid_year_count": 55,
+      "excluded_years": [],
+      "excluded_year_causes": [],
+      "thin_years": [],
+      "missing_bars": null,
+      "gap_count": 0,
+      "discontinuity_count": 0,
+      "bar_count": 14112,
+      "integrity_status": "PASS",
+      "classification": "PASS",
+      "monthly_roadmap_status": "available",
+      "weekly_roadmap_status": "valid",
+      "failure_reasons": [],
+      "issues": [],
+      "warnings": [],
+      "price_instrument_id": "US Dollar Index / DXY \u2014 ICE DX futures",
+      "load_meta": {
+        "source": "yahoo_futures",
+        "error": null,
+        "price_instrument_id": "US Dollar Index / DXY \u2014 ICE DX futures",
+        "preferred_id": null
+      },
+      "seasonality_payload_latest": "2026-07-31",
+      "payload_status": "ok",
+      "seasonality_uses_adjusted_history": true
+    }
+  ]
+}

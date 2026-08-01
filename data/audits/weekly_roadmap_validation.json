@@ -1,0 +1,72 @@
+{
+  "as_of": "2026-07-27",
+  "method": "weekly_roadmap_v1",
+  "alignment": "iso_calendar_week",
+  "week_53_rule": "merge_into_week_52",
+  "markets": [
+    {
+      "instrument": "US Dollar Index / DX",
+      "monthly_direction": "Bullish",
+      "weekly_direction": "Neutral",
+      "agreement": "Mixed",
+      "weekly_quality": "valid",
+      "valid_years": 15,
+      "latest_price": "2026-07-23",
+      "calc_ms_weekly": 87.07,
+      "integrity": "PASS",
+      "jul_aug_note": "Weekly path shows alternating weekly returns in W27–W35 (4 down / 5 up weeks); cumulative softens after W30. More timing detail than monthly broad bullish 12w bias; not a mentor-method replica."
+    },
+    {
+      "instrument": "Gold",
+      "monthly_direction": "Bullish",
+      "weekly_direction": "Bullish",
+      "agreement": "Aligned bullish",
+      "weekly_quality": "warning",
+      "valid_years": 9,
+      "latest_price": "2026-07-23",
+      "calc_ms_weekly": 21.008,
+      "integrity": "PASS"
+    },
+    {
+      "instrument": "Swiss Franc / 6S",
+      "monthly_direction": "Bullish",
+      "weekly_direction": "Bearish",
+      "agreement": "Broad bullish / short-term bearish",
+      "weekly_quality": "warning",
+      "valid_years": 9,
+      "latest_price": "2026-07-23",
+      "calc_ms_weekly": 18.037,
+      "integrity": "PASS"
+    },
+    {
+      "instrument": "Crude Oil / CL",
+      "monthly_direction": "Bearish",
+      "weekly_direction": "Bearish",
+      "agreement": "Aligned bearish",
+      "weekly_quality": "warning",
+      "valid_years": 9,
+      "latest_price": "2026-07-23",
+      "calc_ms_weekly": 19.577,
+      "integrity": "PASS"
+    },
+    {
+      "instrument": "Soybeans",
+      "monthly_direction": "Bearish",
+      "weekly_direction": "Bearish",
+      "agreement": "Aligned bearish",
+      "weekly_quality": "warning",
+      "valid_years": 9,
+      "latest_price": "2026-07-23",
+      "calc_ms_weekly": 15.874,
+      "integrity": "PASS"
+    },
+    {
+      "instrument": "Copper / HG",
+      "status": "FAIL",
+      "integrity": "FAIL",
+      "monthly_direction": "Unavailable",
+      "weekly_direction": "Unavailable",
+      "note": "Price integrity gate rejects; Weekly Roadmap remains unavailable with gate reasons — no fabricated curve."
+    }
+  ]
+}

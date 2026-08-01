@@ -41,7 +41,8 @@ def main(argv: list[str] | None = None) -> int:
             flush=True,
         )
         return 1
-    print(json.dumps(payload), flush=True)
+    # stdout = JSON only (no log lines). Logs belong on stderr.
+    print(json.dumps(payload, allow_nan=False), flush=True)
     return 0 if payload.get("status") == "ok" else 3
 
 

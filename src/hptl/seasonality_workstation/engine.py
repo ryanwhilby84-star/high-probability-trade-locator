@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import sys
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -26,6 +27,7 @@ from hptl.seasonality_workstation.seasonal_price_path import (
 from hptl.seasonality_workstation.seasonal_roadmap import (
     build_seasonal_roadmap_curve,
 )
+from hptl.seasonality_workstation.weekly_roadmap import build_weekly_roadmap
 from hptl.seasonality_workstation.returns import (
     iso_week,
     weekly_closes_from_daily,
@@ -613,6 +615,11 @@ def build_seasonality_research(
     source = load_meta.get("source")
     load_err = load_meta.get("error")
     if load_err or not daily:
+        weekly_unavailable = build_weekly_roadmap(
+            [],
+            lookback_years=_lookback_years(lookback) or DEFAULT_LOOKBACK_YEARS,
+            integrity={"status": "FAIL", "issues": [load_err or "missing_source_data"]},
+        )
         return {
             "status": "FAIL",
             "instrument_id": instrument_id,
@@ -623,11 +630,21 @@ def build_seasonality_research(
                 "status": "FAIL",
                 "issues": [load_err or "no_daily_data"],
             },
+            "weekly_roadmap": weekly_unavailable,
+            "monthly_roadmap": None,
         }
 
     price_instrument_id = load_meta.get("price_instrument_id") or instrument_id
     integrity = audit_daily_series(price_instrument_id, daily, source=source)
     if integrity["status"] != "PASS" and fail_on_integrity:
+        # Still emit Weekly Roadmap unavailable payload with exact gate reasons
+        # (does not weaken the gate or invent a seasonal curve).
+        lookback_years = _lookback_years(lookback) or DEFAULT_LOOKBACK_YEARS
+        weekly_unavailable = build_weekly_roadmap(
+            daily,
+            lookback_years=lookback_years,
+            integrity=integrity,
+        )
         return {
             "status": "FAIL",
             "instrument_id": instrument_id,
@@ -639,6 +656,8 @@ def build_seasonality_research(
                 "Seasonality Workstation refused to compute — price integrity FAIL: "
                 + ", ".join(integrity.get("issues") or [])
             ),
+            "weekly_roadmap": weekly_unavailable,
+            "monthly_roadmap": None,
         }
 
     weekly = weekly_closes_from_daily(daily)
@@ -676,6 +695,23 @@ def build_seasonality_research(
         lookback_years=lookback_years,
         smooth=DEFAULT_SMOOTH,
     )
+    # Independent Weekly Roadmap — reuses the already-loaded ``daily`` series once.
+    weekly_roadmap = build_weekly_roadmap(
+        daily,
+        asof=anchor_date,
+        lookback_years=lookback_years,
+        integrity=integrity,
+        seasonal_roadmap=seasonal_roadmap,
+    )
+    if weekly_roadmap.get("calculation_ms") is not None:
+        # Dev log must not touch stdout — route CLI emits JSON on stdout only.
+        print(
+            f"[seasonality] weekly_roadmap {instrument_id}: "
+            f"{weekly_roadmap.get('calculation_ms')}ms "
+            f"status={weekly_roadmap.get('quality_status')} "
+            f"years={weekly_roadmap.get('valid_year_count')}",
+            file=sys.stderr,
+        )
     walk_forward = walk_forward_hit_rate(
         daily,
         lookback_years=lookback_years,
@@ -787,12 +823,16 @@ def build_seasonality_research(
         "normalised_seasonality": normalised,
         "seasonal_price_path": seasonal_price_path,
         "seasonal_roadmap": seasonal_roadmap,
+        "weekly_roadmap": weekly_roadmap,
+        "monthly_roadmap": seasonal_roadmap,  # alias for UI naming; same object, unchanged maths
         "walk_forward": walk_forward,
         "seasonality": {
             "primary": "indexed_year_path",
             "normalised": normalised,
             "seasonal_price_path": seasonal_price_path,
             "seasonal_roadmap": seasonal_roadmap,
+            "weekly_roadmap": weekly_roadmap,
+            "monthly_roadmap": seasonal_roadmap,
             "week_stats": block["week_stats"],
             "index_paths": block["index_paths"],
             "price_aligned": block["price_aligned"],

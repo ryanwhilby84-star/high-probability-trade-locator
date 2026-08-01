@@ -6,6 +6,7 @@ import {
   SeasonalPricePathChart,
   SeasonalRoadmapChart,
   SeasonalityCurveChart,
+  WeeklyRoadmapChart,
 } from './SeasonalityCharts.jsx'
 import {
   ROADMAP_HORIZON_WEEKS,
@@ -15,6 +16,7 @@ import {
   defaultSeasonalView,
   resolveRoadmapSeriesSource,
 } from './roadmapView.js'
+import { resolveWeeklyRoadmap } from './weeklyRoadmapContract.js'
 import './seasonalityWorkstation.css'
 
 const LOOKBACKS = ['5Y', '10Y', '15Y', '20Y', 'FULL']
@@ -199,6 +201,7 @@ function IntegrityBlock({ marketId, payload, error }) {
   const issues = payload?.integrity?.issues || []
   const warnings = payload?.integrity?.warnings || []
   const quality = payload?.integrity?.data_quality || payload?.data_quality
+  const weeklyReasons = payload?.weekly_roadmap?.quality_reasons || []
   return (
     <div className="sws-error">
       <h2>Seasonality unavailable — data quality gate</h2>
@@ -227,6 +230,16 @@ function IntegrityBlock({ marketId, payload, error }) {
           <p className="sws-muted">Warnings</p>
           <ul>
             {warnings.map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      {weeklyReasons.length ? (
+        <>
+          <p className="sws-muted">Weekly Roadmap</p>
+          <ul className="sws-weekly-reasons">
+            {weeklyReasons.map((i) => (
               <li key={i}>{i}</li>
             ))}
           </ul>
@@ -280,6 +293,8 @@ export function SeasonalityWorkstation({
   const pricePath =
     payload.seasonal_price_path || payload.seasonality?.seasonal_price_path || null
   const roadmap = payload.seasonal_roadmap || payload.seasonality?.seasonal_roadmap || null
+  // Canonical contract: payload.weekly_roadmap (snake_case). Nested seasonality copy is fallback only.
+  const weeklyRoadmap = resolveWeeklyRoadmap(payload)
   const advanced = payload.advanced || {}
   const forecast = advanced.price_unit_forecast || payload.seasonality?.forecast || {}
   const modelPath = (forecast.models && forecast.models[model]) || []
@@ -409,36 +424,98 @@ export function SeasonalityWorkstation({
           </button>
         </div>
 
-        <section className="sws-pane">
-          <h3>Price</h3>
-          <p className="sws-muted">
-            Actual market closes only. Separate from the seasonal views below.
-          </p>
-          <PriceHistoryChart
-            priceSeries={payload.price_series}
-            anchorDate={payload.anchor?.date}
-          />
-        </section>
-
-        {seasonalView === 'roadmap' ? (
-          <section className="sws-pane sws-pane-primary">
-            <h3>{ROADMAP_METHOD_LABEL}</h3>
-            <p className="sws-muted">{ROADMAP_METHOD_DESCRIPTION}</p>
+        <div className="sws-chart-stack" data-sws-equal-panels="3">
+          <section className="sws-pane sws-pane-chart" data-sws-panel="actual_price">
+            <h3>Price</h3>
             <p className="sws-muted">
-              Grey ≤ today · Blue &gt; today · price units · anchor{' '}
-              {anchorPrice != null ? Number(anchorPrice).toFixed(3) : '—'} ·{' '}
-              {roadmapSmoothed ? 'SMA(5) series' : 'Unsmoothed series'} ·{' '}
-              {roadMethod.lookback_years ?? 15}Y.
+              Actual market closes only. Separate from the seasonal views below.
             </p>
-            <SeasonalRoadmapChart
-              key={`chart-seasonal-roadmap-${roadmapSmoothed ? 'sma5' : 'raw'}`}
-              roadmap={roadmap}
-              anchorDate={payload.anchor?.date || roadmap?.asof}
-              anchorPrice={anchorPrice}
-              useSmoothed={roadmapSmoothed}
+            <PriceHistoryChart
+              priceSeries={payload.price_series}
+              anchorDate={payload.anchor?.date}
             />
           </section>
-        ) : null}
+
+          {seasonalView === 'roadmap' ? (
+            <section className="sws-pane sws-pane-chart sws-pane-primary" data-sws-panel="monthly_roadmap">
+              <h3>{ROADMAP_METHOD_LABEL}</h3>
+              <p className="sws-muted">{ROADMAP_METHOD_DESCRIPTION}</p>
+              <p className="sws-muted">
+                Grey ≤ today · Blue &gt; today · price units · anchor{' '}
+                {anchorPrice != null ? Number(anchorPrice).toFixed(3) : '—'} ·{' '}
+                {roadmapSmoothed ? 'SMA(5) series' : 'Unsmoothed series'} ·{' '}
+                {roadMethod.lookback_years ?? 15}Y.
+              </p>
+              <SeasonalRoadmapChart
+                key={`chart-seasonal-roadmap-${roadmapSmoothed ? 'sma5' : 'raw'}`}
+                roadmap={roadmap}
+                anchorDate={payload.anchor?.date || roadmap?.asof}
+                anchorPrice={anchorPrice}
+                useSmoothed={roadmapSmoothed}
+              />
+            </section>
+          ) : null}
+
+          {/* Weekly Roadmap — always beneath Monthly/Seasonal Roadmap; not behind a hiding tab */}
+          <section
+            className="sws-pane sws-pane-chart sws-pane-weekly"
+            aria-label="Weekly Roadmap"
+            data-sws-panel="weekly_roadmap"
+          >
+            <h3>Weekly Roadmap</h3>
+            <p className="sws-muted">
+              Independent ISO-week return path (≈52 weeks) · compounded average weekly returns · light
+              post-path smoothing only · not monthly interpolation.
+            </p>
+            {weeklyRoadmap?.comparison?.summary_lines?.length ? (
+              <div className="sws-weekly-summary">
+                {(weeklyRoadmap.comparison.summary_lines || []).map((line) => {
+                  const cls = /bullish/i.test(line)
+                    ? 'sws-bias-bull'
+                    : /bearish/i.test(line)
+                      ? 'sws-bias-bear'
+                      : /unavailable|warning|lag/i.test(line)
+                        ? 'sws-weekly-warn'
+                        : ''
+                  return (
+                    <div key={line} className={`sws-weekly-summary-line ${cls}`}>
+                      {line}
+                    </div>
+                  )
+                })}
+              </div>
+            ) : null}
+            <div className="sws-weekly-meta">
+              <Meta
+                label="Direction"
+                value={weeklyRoadmap?.current_direction || '—'}
+              />
+              <Meta label="Current week" value={weeklyRoadmap?.current_week != null ? `W${weeklyRoadmap.current_week}` : '—'} />
+              <Meta label="Valid years" value={weeklyRoadmap?.valid_year_count ?? '—'} />
+              <Meta label="Quality" value={weeklyRoadmap?.quality_status || '—'} />
+              <Meta
+                label="Smoothing"
+                value={
+                  weeklyRoadmap?.smoothing?.applied
+                    ? `SMA(${weeklyRoadmap.smoothing.window}) after compound`
+                    : 'Off'
+                }
+              />
+              <Meta
+                label="Latest price"
+                value={weeklyRoadmap?.actual_price?.latest_price_date || payload.report_date || '—'}
+              />
+            </div>
+            {weeklyRoadmap?.actual_price?.stale?.stale ? (
+              <p className="sws-weekly-warn">
+                Actual price may be stale relative to calendar (
+                {weeklyRoadmap.actual_price.stale.latest_price_date} vs{' '}
+                {weeklyRoadmap.actual_price.stale.as_of_calendar_date}).
+              </p>
+            ) : null}
+            <WeeklyRoadmapChart weeklyRoadmap={weeklyRoadmap} />
+          </section>
+        </div>
 
         {seasonalView === 'price_path' ? (
           <section className="sws-pane sws-pane-primary">

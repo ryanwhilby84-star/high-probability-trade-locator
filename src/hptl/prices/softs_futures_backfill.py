@@ -47,6 +47,15 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "Aligned with TradingView 6J / yen value. Replaces inverted OANDA USD_JPY."
         ),
     },
+    # COMEX Copper — replace mixed OANDA $/lb + AV tonne month-start contamination.
+    "Copper / HG": {
+        "yahoo_symbol": "HG=F",
+        "note": (
+            "COMEX Copper continuous futures (Yahoo HG=F) daily OHLC. "
+            "Yahoo pre-stitched continuous contract; replaces mixed-unit "
+            "OANDA XCU_USD / Alpha Vantage COPPER store contamination."
+        ),
+    },
 }
 
 

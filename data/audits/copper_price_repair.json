@@ -1,0 +1,65 @@
+{
+  "instrument": "Copper / HG",
+  "root_cause": "Mixed-unit store: OANDA XCU_USD $/lb daily interleaved with Alpha Vantage COPPER tonne / HG-chart month-start points.",
+  "fix": "Replace canonical history with Yahoo HG=F continuous futures.",
+  "before_integrity": {
+    "status": "FAIL",
+    "issues": [
+      "excessive_discontinuities:223"
+    ],
+    "discontinuity_count": 223,
+    "gap_count": 140,
+    "thin_years": [
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016
+    ],
+    "first_date": "2004-10-01",
+    "last_date": "2026-07-23",
+    "bar_count": 2795
+  },
+  "promotion": {
+    "instrument_id": "Copper / HG",
+    "previous_source": "oanda",
+    "corrected_source": "yahoo:HG=F",
+    "previous_latest_date": "2026-07-23",
+    "corrected_latest_date": "2026-07-31",
+    "previous_daily_bars": 2795,
+    "corrected_daily_bars": 6508,
+    "missing_rows_backfilled": 6,
+    "weekly_bars_rebuilt": 1353,
+    "years_spanned": 25.92,
+    "earliest_date": "2000-08-30",
+    "promoted_at": "2026-08-01T18:51:21.238800+00:00"
+  },
+  "after_integrity": {
+    "status": "PASS",
+    "issues": [],
+    "warnings": [
+      "thin_years:[2000]"
+    ],
+    "discontinuity_count": 0,
+    "gap_count": 0,
+    "thin_years": [
+      2000
+    ],
+    "usable_year_count": 25,
+    "first_date": "2000-08-30",
+    "last_date": "2026-07-31",
+    "bar_count": 6508,
+    "source": "yahoo_futures"
+  },
+  "scale_sanity_ok": true,
+  "close_min": 0.6039999723434448,
+  "close_max": 6.649499893188477
+}

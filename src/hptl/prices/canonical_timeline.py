@@ -26,9 +26,9 @@ Confidence = Literal["high", "medium", "low"]
 MatchType = Literal["exact", "prior_close", "null"]
 
 # Alternate price-store keys (same instrument, different id).
-PRICE_ALIASES: dict[str, list[str]] = {
-    "Copper / HG": ["Copper"],
-}
+# Copper / HG must NOT alias to standalone "Copper" (AV USD/tonne monthly) —
+# that mix caused unit-break discontinuities in the canonical store.
+PRICE_ALIASES: dict[str, list[str]] = {}
 
 # FRED / OANDA supplements when store history is shorter than required window.
 FRED_PRICE_FALLBACK: dict[str, str] = {

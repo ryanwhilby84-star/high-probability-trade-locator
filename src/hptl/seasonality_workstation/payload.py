@@ -27,6 +27,10 @@ def build_seasonality_workstation_payload(
             "error": research.get("error"),
             "message": research.get("message") or research.get("error"),
             "integrity": research.get("integrity"),
+            # Separate contract keys — Monthly remains unavailable on integrity FAIL.
+            "monthly_roadmap": research.get("monthly_roadmap"),
+            "weekly_roadmap": research.get("weekly_roadmap"),
+            "seasonal_roadmap": research.get("seasonal_roadmap"),
         }
 
     return {
@@ -48,6 +52,8 @@ def build_seasonality_workstation_payload(
         "normalised_seasonality": research.get("normalised_seasonality"),
         "seasonal_price_path": research.get("seasonal_price_path"),
         "seasonal_roadmap": research.get("seasonal_roadmap"),
+        "monthly_roadmap": research.get("monthly_roadmap"),
+        "weekly_roadmap": research.get("weekly_roadmap"),
         "walk_forward": research.get("walk_forward"),
         "seasonality": research.get("seasonality"),
         "lookback_agreement": research.get("lookback_agreement"),

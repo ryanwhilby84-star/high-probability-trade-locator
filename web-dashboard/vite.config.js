@@ -305,18 +305,40 @@ function seasonalityWorkstationRoutePlugin() {
           let body = null
           if (trimmed) {
             try {
+              // Prefer pure JSON; if a stray log polluted stdout, take the last
+              // JSON object so weekly_roadmap / seasonal_roadmap still arrive.
               body = JSON.parse(trimmed)
-            } catch (err) {
-              sendJson(
-                res,
-                502,
-                transportError(
-                  instrument,
-                  'route_builder_invalid_json',
-                  `${err?.message || err}; stderr=${stderr.slice(0, 200)}`,
-                ),
-              )
-              return
+            } catch {
+              const start = trimmed.lastIndexOf('\n{')
+              const brace = start >= 0 ? start + 1 : trimmed.indexOf('{')
+              const end = trimmed.lastIndexOf('}')
+              if (brace >= 0 && end > brace) {
+                try {
+                  body = JSON.parse(trimmed.slice(brace, end + 1))
+                } catch (err) {
+                  sendJson(
+                    res,
+                    502,
+                    transportError(
+                      instrument,
+                      'route_builder_invalid_json',
+                      `${err?.message || err}; stderr=${stderr.slice(0, 200)}`,
+                    ),
+                  )
+                  return
+                }
+              } else {
+                sendJson(
+                  res,
+                  502,
+                  transportError(
+                    instrument,
+                    'route_builder_invalid_json',
+                    `no_json_object; stderr=${stderr.slice(0, 200)}`,
+                  ),
+                )
+                return
+              }
             }
           }
           if (code === EXIT_INTEGRITY && body) {

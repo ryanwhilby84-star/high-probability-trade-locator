@@ -12,6 +12,15 @@ import {
   Scatter,
 } from 'recharts'
 
+import {
+  SWS_EQUAL_CHART_HEIGHT,
+  weeklyRoadmapRenderState,
+} from './weeklyRoadmapContract.js'
+
+/** Shared plot margins so Price / Monthly / Weekly align. */
+export const SWS_CHART_MARGIN = { top: 10, right: 16, left: 4, bottom: 4 }
+export { SWS_EQUAL_CHART_HEIGHT }
+
 function fmtPx(v) {
   if (v == null || !Number.isFinite(Number(v))) return '—'
   const n = Number(v)
@@ -51,45 +60,47 @@ export function PriceHistoryChart({ priceSeries, anchorDate }) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={data} margin={{ top: 8, right: 16, left: 4, bottom: 4 }}>
-        <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
-        <XAxis
-          dataKey="date"
-          tick={{ fill: '#94a3b8', fontSize: 10 }}
-          minTickGap={28}
-          tickFormatter={shortDate}
-        />
-        <YAxis
-          domain={['auto', 'auto']}
-          tick={{ fill: '#94a3b8', fontSize: 10 }}
-          width={68}
-          tickFormatter={fmtPx}
-        />
-        <Tooltip
-          contentStyle={{ background: '#0f172a', border: '1px solid #334155' }}
-          labelFormatter={(d) => String(d)}
-          formatter={(value) => [fmtPx(value), 'Close']}
-        />
-        {anchorDate ? (
-          <ReferenceLine
-            x={anchorDate}
-            stroke="#fbbf24"
-            strokeDasharray="4 3"
-            label={{ value: 'TODAY', fill: '#fbbf24', fontSize: 10, position: 'insideTopLeft' }}
+    <div className="sws-chart-frame" data-sws-chart="actual_price">
+      <ResponsiveContainer width="100%" height={SWS_EQUAL_CHART_HEIGHT}>
+        <LineChart data={data} margin={SWS_CHART_MARGIN}>
+          <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tick={{ fill: '#94a3b8', fontSize: 10 }}
+            minTickGap={28}
+            tickFormatter={shortDate}
           />
-        ) : null}
-        <Line
-          type="monotone"
-          dataKey="actual"
-          name="Close"
-          stroke="#e2e8f0"
-          dot={false}
-          strokeWidth={1.6}
-          connectNulls={false}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+          <YAxis
+            domain={['auto', 'auto']}
+            tick={{ fill: '#94a3b8', fontSize: 10 }}
+            width={68}
+            tickFormatter={fmtPx}
+          />
+          <Tooltip
+            contentStyle={{ background: '#0f172a', border: '1px solid #334155' }}
+            labelFormatter={(d) => String(d)}
+            formatter={(value) => [fmtPx(value), 'Close']}
+          />
+          {anchorDate ? (
+            <ReferenceLine
+              x={anchorDate}
+              stroke="#fbbf24"
+              strokeDasharray="4 3"
+              label={{ value: 'TODAY', fill: '#fbbf24', fontSize: 10, position: 'insideTopLeft' }}
+            />
+          ) : null}
+          <Line
+            type="monotone"
+            dataKey="actual"
+            name="Close"
+            stroke="#e2e8f0"
+            dot={false}
+            strokeWidth={1.6}
+            connectNulls={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   )
 }
 
@@ -215,12 +226,14 @@ function PriceUnitSeasonalChart({
 
   return (
     <div
+      className="sws-chart-frame"
+      data-sws-chart="monthly_roadmap"
       data-seasonal-dataset={binding?.datasetName || ''}
       data-seasonal-source={binding?.sourcePath || ''}
       data-seasonal-units="price"
     >
-      <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart data={data} margin={{ top: 12, right: 16, left: 4, bottom: 4 }}>
+      <ResponsiveContainer width="100%" height={SWS_EQUAL_CHART_HEIGHT}>
+        <ComposedChart data={data} margin={SWS_CHART_MARGIN}>
           <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
           <XAxis
             dataKey="date"
@@ -292,6 +305,130 @@ export function SeasonalRoadmapChart({
       useSmoothed={useSmoothed}
       unavailableLabel="Seasonal Roadmap"
     />
+  )
+}
+
+/**
+ * Weekly Roadmap — ISO-week average returns compounded to an annual path.
+ * Independent of Seasonal Roadmap maths; price-unit overlay via rebase.
+ */
+export function WeeklyRoadmapChart({ weeklyRoadmap }) {
+  const gate = weeklyRoadmapRenderState(weeklyRoadmap)
+  const data = React.useMemo(() => {
+    return (gate.points || []).map((p) => ({
+      week: p.week,
+      label: `W${p.week}`,
+      price: p.price,
+      cumulative_return: p.cumulative_return,
+      average_return: p.average_return,
+      sample_count: p.sample_count,
+      quality_flag: p.quality_flag,
+      segment: p.segment,
+      historical: p.segment === 'forward' ? null : p.price,
+      forward: p.segment === 'historical' ? null : p.price,
+    }))
+  }, [gate.points])
+
+  if (gate.mode === 'missing' || gate.mode === 'unavailable' || gate.mode === 'empty') {
+    return (
+      <div className="sws-weekly-unavailable">
+        <p className="sws-muted">{gate.message}</p>
+        {gate.reasons?.length ? (
+          <ul className="sws-weekly-reasons">
+            {gate.reasons.map((r) => (
+              <li key={r}>{r}</li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    )
+  }
+
+  const dir = weeklyRoadmap.current_direction || 'Neutral'
+  const stroke =
+    dir === 'Bullish' ? '#6a9a7e' : dir === 'Bearish' ? '#b07272' : '#94a3b8'
+  const cw = weeklyRoadmap.current_week
+  const warnReasons =
+    weeklyRoadmap.quality_status === 'warning' ? gate.reasons || [] : []
+
+  return (
+    <div
+      className="sws-chart-frame"
+      data-sws-chart="weekly_roadmap"
+      data-seasonal-dataset="weekly_roadmap_v1"
+      data-seasonal-source="payload.weekly_roadmap.weekly_points"
+      data-current-week={cw != null ? String(cw) : ''}
+    >
+      {warnReasons.length ? (
+        <p className="sws-weekly-warn">
+          Quality warning (chart still shown): {warnReasons.join('; ')}
+        </p>
+      ) : null}
+      <ResponsiveContainer width="100%" height={SWS_EQUAL_CHART_HEIGHT}>
+        <ComposedChart data={data} margin={SWS_CHART_MARGIN}>
+          <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
+          <XAxis
+            dataKey="week"
+            tick={{ fill: '#94a3b8', fontSize: 10 }}
+            ticks={[1, 10, 20, 30, 40, 52]}
+            tickFormatter={(w) => `W${w}`}
+          />
+          <YAxis
+            domain={['auto', 'auto']}
+            tick={{ fill: '#94a3b8', fontSize: 10 }}
+            width={68}
+            tickFormatter={fmtPx}
+          />
+          <Tooltip
+            contentStyle={{ background: '#0f172a', border: '1px solid #334155' }}
+            labelFormatter={(w) => `ISO week ${w}`}
+            formatter={(value, name, ctx) => {
+              const p = ctx?.payload || {}
+              if (name === 'Weekly path' || name === 'Forward path') {
+                return [
+                  `${fmtPx(value)} · avg ${fmtPct(p.average_return)} · cum ${fmtPct(p.cumulative_return)} · n=${p.sample_count ?? '—'} · ${p.quality_flag || '—'}`,
+                  name,
+                ]
+              }
+              return [fmtPx(value), name]
+            }}
+          />
+          {cw ? (
+            <ReferenceLine
+              x={cw}
+              stroke="#d4b483"
+              strokeDasharray="4 3"
+              label={{
+                value: `W${cw}`,
+                fill: '#d4b483',
+                fontSize: 10,
+                position: 'insideTopLeft',
+              }}
+            />
+          ) : null}
+          <Line
+            type="monotone"
+            dataKey="historical"
+            name="Weekly path"
+            stroke={stroke}
+            dot={false}
+            strokeWidth={2.2}
+            connectNulls
+          />
+          <Line
+            type="monotone"
+            dataKey="forward"
+            name="Forward path"
+            stroke={stroke}
+            strokeOpacity={0.55}
+            dot={false}
+            strokeWidth={2}
+            strokeDasharray="5 4"
+            connectNulls
+          />
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
   )
 }
 
