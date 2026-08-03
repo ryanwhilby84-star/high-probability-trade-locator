@@ -1,0 +1,569 @@
+{
+  "cooldown_weeks": 4,
+  "n_events": 63,
+  "events_sample": [
+    {
+      "index": 156,
+      "bucket": "materially_undervalued",
+      "week": "2019-06-02"
+    },
+    {
+      "index": 161,
+      "bucket": "undervalued",
+      "week": "2019-07-07"
+    },
+    {
+      "index": 169,
+      "bucket": "undervalued",
+      "week": "2019-09-01"
+    },
+    {
+      "index": 170,
+      "bucket": "near_fair",
+      "week": "2019-09-08"
+    },
+    {
+      "index": 176,
+      "bucket": "materially_undervalued",
+      "week": "2019-10-20"
+    },
+    {
+      "index": 178,
+      "bucket": "near_fair",
+      "week": "2019-11-03"
+    },
+    {
+      "index": 183,
+      "bucket": "materially_undervalued",
+      "week": "2019-12-08"
+    },
+    {
+      "index": 193,
+      "bucket": "undervalued",
+      "week": "2020-02-16"
+    },
+    {
+      "index": 218,
+      "bucket": "undervalued",
+      "week": "2020-08-09"
+    },
+    {
+      "index": 220,
+      "bucket": "near_fair",
+      "week": "2020-08-23"
+    },
+    {
+      "index": 224,
+      "bucket": "materially_undervalued",
+      "week": "2020-09-20"
+    },
+    {
+      "index": 229,
+      "bucket": "near_fair",
+      "week": "2020-10-25"
+    },
+    {
+      "index": 238,
+      "bucket": "materially_undervalued",
+      "week": "2020-12-27"
+    },
+    {
+      "index": 246,
+      "bucket": "materially_undervalued",
+      "week": "2021-02-21"
+    },
+    {
+      "index": 250,
+      "bucket": "undervalued",
+      "week": "2021-03-21"
+    },
+    {
+      "index": 254,
+      "bucket": "near_fair",
+      "week": "2021-04-18"
+    },
+    {
+      "index": 258,
+      "bucket": "materially_overvalued",
+      "week": "2021-05-16"
+    },
+    {
+      "index": 259,
+      "bucket": "overvalued",
+      "week": "2021-05-23"
+    },
+    {
+      "index": 344,
+      "bucket": "overvalued",
+      "week": "2023-01-08"
+    },
+    {
+      "index": 348,
+      "bucket": "near_fair",
+      "week": "2023-02-05"
+    },
+    {
+      "index": 355,
+      "bucket": "undervalued",
+      "week": "2023-03-26"
+    },
+    {
+      "index": 363,
+      "bucket": "overvalued",
+      "week": "2023-05-21"
+    },
+    {
+      "index": 368,
+      "bucket": "materially_overvalued",
+      "week": "2023-06-25"
+    },
+    {
+      "index": 375,
+      "bucket": "materially_overvalued",
+      "week": "2023-08-13"
+    },
+    {
+      "index": 376,
+      "bucket": "near_fair",
+      "week": "2023-08-20"
+    },
+    {
+      "index": 382,
+      "bucket": "undervalued",
+      "week": "2023-10-01"
+    },
+    {
+      "index": 383,
+      "bucket": "overvalued",
+      "week": "2023-10-08"
+    },
+    {
+      "index": 391,
+      "bucket": "near_fair",
+      "week": "2023-12-03"
+    },
+    {
+      "index": 392,
+      "bucket": "undervalued",
+      "week": "2023-12-10"
+    },
+    {
+      "index": 395,
+      "bucket": "overvalued",
+      "week": "2023-12-28"
+    },
+    {
+      "index": 396,
+      "bucket": "materially_overvalued",
+      "week": "2024-01-07"
+    },
+    {
+      "index": 398,
+      "bucket": "materially_undervalued",
+      "week": "2024-01-21"
+    },
+    {
+      "index": 403,
+      "bucket": "undervalued",
+      "week": "2024-02-25"
+    },
+    {
+      "index": 404,
+      "bucket": "overvalued",
+      "week": "2024-03-03"
+    },
+    {
+      "index": 405,
+      "bucket": "near_fair",
+      "week": "2024-03-10"
+    },
+    {
+      "index": 407,
+      "bucket": "materially_undervalued",
+      "week": "2024-03-24"
+    },
+    {
+      "index": 413,
+      "bucket": "near_fair",
+      "week": "2024-05-05"
+    },
+    {
+      "index": 414,
+      "bucket": "overvalued",
+      "week": "2024-05-12"
+    },
+    {
+      "index": 415,
+      "bucket": "materially_overvalued",
+      "week": "2024-05-19"
+    },
+    {
+      "index": 421,
+      "bucket": "overvalued",
+      "week": "2024-06-30"
+    },
+    {
+      "index": 423,
+      "bucket": "undervalued",
+      "week": "2024-07-14"
+    },
+    {
+      "index": 424,
+      "bucket": "near_fair",
+      "week": "2024-07-21"
+    },
+    {
+      "index": 426,
+      "bucket": "materially_undervalued",
+      "week": "2024-08-04"
+    },
+    {
+      "index": 433,
+      "bucket": "undervalued",
+      "week": "2024-09-22"
+    },
+    {
+      "index": 439,
+      "bucket": "undervalued",
+      "week": "2024-11-03"
+    },
+    {
+      "index": 440,
+      "bucket": "near_fair",
+      "week": "2024-11-10"
+    },
+    {
+      "index": 442,
+      "bucket": "overvalued",
+      "week": "2024-11-24"
+    },
+    {
+      "index": 446,
+      "bucket": "materially_overvalued",
+      "week": "2024-12-22"
+    },
+    {
+      "index": 451,
+      "bucket": "overvalued",
+      "week": "2025-01-26"
+    },
+    {
+      "index": 454,
+      "bucket": "near_fair",
+      "week": "2025-02-16"
+    }
+  ],
+  "bucket_forward_stats": {
+    "materially_undervalued": {
+      "1": {
+        "n_events": 9,
+        "mean_forward_return_pct": 4.6493,
+        "median_forward_return_pct": 5.3249,
+        "positive_return_frequency": 0.6667,
+        "std_dev": 7.4948,
+        "bootstrap_ci_95_mean": {
+          "low": -0.1948,
+          "high": 9.5926,
+          "mean": 4.6493
+        }
+      },
+      "2": {
+        "n_events": 9,
+        "mean_forward_return_pct": 6.5186,
+        "median_forward_return_pct": 5.8894,
+        "positive_return_frequency": 0.5556,
+        "std_dev": 11.7577,
+        "bootstrap_ci_95_mean": {
+          "low": -1.0434,
+          "high": 13.7616,
+          "mean": 6.5186
+        }
+      },
+      "4": {
+        "n_events": 9,
+        "mean_forward_return_pct": 2.9379,
+        "median_forward_return_pct": 8.7227,
+        "positive_return_frequency": 0.5556,
+        "std_dev": 20.3429,
+        "bootstrap_ci_95_mean": {
+          "low": -10.7523,
+          "high": 15.4014,
+          "mean": 2.9379
+        }
+      },
+      "8": {
+        "n_events": 9,
+        "mean_forward_return_pct": 11.4062,
+        "median_forward_return_pct": 4.3828,
+        "positive_return_frequency": 0.5556,
+        "std_dev": 30.6284,
+        "bootstrap_ci_95_mean": {
+          "low": -5.337,
+          "high": 31.8182,
+          "mean": 11.4062
+        }
+      },
+      "12": {
+        "n_events": 9,
+        "mean_forward_return_pct": 8.8652,
+        "median_forward_return_pct": 2.2479,
+        "positive_return_frequency": 0.5556,
+        "std_dev": 29.5669,
+        "bootstrap_ci_95_mean": {
+          "low": -6.6685,
+          "high": 27.9561,
+          "mean": 8.8652
+        }
+      }
+    },
+    "undervalued": {
+      "1": {
+        "n_events": 13,
+        "mean_forward_return_pct": 4.9905,
+        "median_forward_return_pct": 3.8717,
+        "positive_return_frequency": 0.6923,
+        "std_dev": 7.3782,
+        "bootstrap_ci_95_mean": {
+          "low": 1.6273,
+          "high": 8.9439,
+          "mean": 4.9905
+        }
+      },
+      "2": {
+        "n_events": 13,
+        "mean_forward_return_pct": 3.2252,
+        "median_forward_return_pct": 0.7576,
+        "positive_return_frequency": 0.5385,
+        "std_dev": 9.2491,
+        "bootstrap_ci_95_mean": {
+          "low": -1.2266,
+          "high": 8.1068,
+          "mean": 3.2252
+        }
+      },
+      "4": {
+        "n_events": 13,
+        "mean_forward_return_pct": 3.8906,
+        "median_forward_return_pct": 0.9376,
+        "positive_return_frequency": 0.6154,
+        "std_dev": 12.449,
+        "bootstrap_ci_95_mean": {
+          "low": -2.5624,
+          "high": 10.7297,
+          "mean": 3.8906
+        }
+      },
+      "8": {
+        "n_events": 13,
+        "mean_forward_return_pct": 7.1439,
+        "median_forward_return_pct": 1.742,
+        "positive_return_frequency": 0.6923,
+        "std_dev": 18.3758,
+        "bootstrap_ci_95_mean": {
+          "low": -0.3248,
+          "high": 18.0328,
+          "mean": 7.1439
+        }
+      },
+      "12": {
+        "n_events": 13,
+        "mean_forward_return_pct": 15.9681,
+        "median_forward_return_pct": 19.5499,
+        "positive_return_frequency": 0.6923,
+        "std_dev": 22.8297,
+        "bootstrap_ci_95_mean": {
+          "low": 5.0284,
+          "high": 27.2159,
+          "mean": 15.9681
+        }
+      }
+    },
+    "near_fair": {
+      "1": {
+        "n_events": 18,
+        "mean_forward_return_pct": 0.3398,
+        "median_forward_return_pct": 0.6084,
+        "positive_return_frequency": 0.5,
+        "std_dev": 5.6174,
+        "bootstrap_ci_95_mean": {
+          "low": -2.0276,
+          "high": 2.745,
+          "mean": 0.3398
+        }
+      },
+      "2": {
+        "n_events": 18,
+        "mean_forward_return_pct": 1.4118,
+        "median_forward_return_pct": -2.2455,
+        "positive_return_frequency": 0.3333,
+        "std_dev": 11.1407,
+        "bootstrap_ci_95_mean": {
+          "low": -3.2456,
+          "high": 6.7913,
+          "mean": 1.4118
+        }
+      },
+      "4": {
+        "n_events": 17,
+        "mean_forward_return_pct": 0.9795,
+        "median_forward_return_pct": 1.9086,
+        "positive_return_frequency": 0.6471,
+        "std_dev": 12.3319,
+        "bootstrap_ci_95_mean": {
+          "low": -4.7935,
+          "high": 6.3965,
+          "mean": 0.9795
+        }
+      },
+      "8": {
+        "n_events": 17,
+        "mean_forward_return_pct": 4.4738,
+        "median_forward_return_pct": 4.6688,
+        "positive_return_frequency": 0.6471,
+        "std_dev": 17.1502,
+        "bootstrap_ci_95_mean": {
+          "low": -3.6342,
+          "high": 11.67,
+          "mean": 4.4738
+        }
+      },
+      "12": {
+        "n_events": 17,
+        "mean_forward_return_pct": 4.9102,
+        "median_forward_return_pct": 0.0601,
+        "positive_return_frequency": 0.5294,
+        "std_dev": 24.8038,
+        "bootstrap_ci_95_mean": {
+          "low": -5.5718,
+          "high": 15.9172,
+          "mean": 4.9102
+        }
+      }
+    },
+    "overvalued": {
+      "1": {
+        "n_events": 14,
+        "mean_forward_return_pct": 0.4151,
+        "median_forward_return_pct": -1.7664,
+        "positive_return_frequency": 0.4286,
+        "std_dev": 9.105,
+        "bootstrap_ci_95_mean": {
+          "low": -4.3855,
+          "high": 5.1557,
+          "mean": 0.4151
+        }
+      },
+      "2": {
+        "n_events": 14,
+        "mean_forward_return_pct": -0.622,
+        "median_forward_return_pct": -2.165,
+        "positive_return_frequency": 0.4286,
+        "std_dev": 9.783,
+        "bootstrap_ci_95_mean": {
+          "low": -5.803,
+          "high": 4.1699,
+          "mean": -0.622
+        }
+      },
+      "4": {
+        "n_events": 14,
+        "mean_forward_return_pct": 0.0198,
+        "median_forward_return_pct": 1.8146,
+        "positive_return_frequency": 0.5,
+        "std_dev": 14.8265,
+        "bootstrap_ci_95_mean": {
+          "low": -7.7566,
+          "high": 7.3821,
+          "mean": 0.0198
+        }
+      },
+      "8": {
+        "n_events": 14,
+        "mean_forward_return_pct": -3.3446,
+        "median_forward_return_pct": 0.536,
+        "positive_return_frequency": 0.5,
+        "std_dev": 19.5626,
+        "bootstrap_ci_95_mean": {
+          "low": -13.1898,
+          "high": 6.5826,
+          "mean": -3.3446
+        }
+      },
+      "12": {
+        "n_events": 13,
+        "mean_forward_return_pct": -1.2007,
+        "median_forward_return_pct": 2.5561,
+        "positive_return_frequency": 0.5385,
+        "std_dev": 25.9731,
+        "bootstrap_ci_95_mean": {
+          "low": -13.0502,
+          "high": 12.1719,
+          "mean": -1.2007
+        }
+      }
+    },
+    "materially_overvalued": {
+      "1": {
+        "n_events": 9,
+        "mean_forward_return_pct": -2.7483,
+        "median_forward_return_pct": -4.5899,
+        "positive_return_frequency": 0.1111,
+        "std_dev": 7.3527,
+        "bootstrap_ci_95_mean": {
+          "low": -6.2707,
+          "high": 2.573,
+          "mean": -2.7483
+        }
+      },
+      "2": {
+        "n_events": 9,
+        "mean_forward_return_pct": -5.4424,
+        "median_forward_return_pct": -5.4427,
+        "positive_return_frequency": 0.2222,
+        "std_dev": 7.7934,
+        "bootstrap_ci_95_mean": {
+          "low": -9.9226,
+          "high": -0.4204,
+          "mean": -5.4424
+        }
+      },
+      "4": {
+        "n_events": 9,
+        "mean_forward_return_pct": -4.4808,
+        "median_forward_return_pct": -2.5399,
+        "positive_return_frequency": 0.4444,
+        "std_dev": 12.1599,
+        "bootstrap_ci_95_mean": {
+          "low": -11.8345,
+          "high": 2.3454,
+          "mean": -4.4808
+        }
+      },
+      "8": {
+        "n_events": 8,
+        "mean_forward_return_pct": -0.4563,
+        "median_forward_return_pct": 1.2381,
+        "positive_return_frequency": 0.5,
+        "std_dev": 20.7698,
+        "bootstrap_ci_95_mean": {
+          "low": -13.4275,
+          "high": 13.2176,
+          "mean": -0.4563
+        }
+      },
+      "12": {
+        "n_events": 8,
+        "mean_forward_return_pct": 4.1814,
+        "median_forward_return_pct": 3.5425,
+        "positive_return_frequency": 0.5,
+        "std_dev": 29.8912,
+        "bootstrap_ci_95_mean": {
+          "low": -14.2242,
+          "high": 25.3111,
+          "mean": 4.1814
+        }
+      }
+    }
+  },
+  "note": "Event = first week price enters a valuation bucket after \u22654 weeks outside that bucket. Reduces repeated counting of prolonged episodes."
+}

@@ -1,0 +1,667 @@
+/* Natural Gas Valuation Workstation — decisive research layout */
+
+.ngvw-ws-page {
+  --ngvw-bg: #0b1220;
+  --ngvw-panel: #0f172a;
+  --ngvw-text: #f1f5f9;
+  --ngvw-muted: #94a3b8;
+  --ngvw-border: rgba(148, 163, 184, 0.16);
+  --ngvw-green: #22c55e;
+  --ngvw-red: #ef4444;
+  color: var(--ngvw-text);
+  background: var(--ngvw-bg);
+}
+
+.ngvw-ws-body {
+  overflow: auto;
+  min-height: 0;
+}
+
+.ngvw-workstation {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 40px;
+}
+
+.ngvw-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--ngvw-border);
+  background: rgba(15, 23, 42, 0.96);
+}
+
+.ngvw-toolbar-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ngvw-toolbar-meta strong {
+  font-size: 13px;
+}
+
+.ngvw-toolbar-meta span {
+  font-size: 12px;
+  color: var(--ngvw-muted);
+}
+
+.ngvw-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ngvw-border);
+  background: #0f172a;
+}
+
+.ngvw-btn-group {
+  display: flex;
+  gap: 4px;
+}
+
+.ngvw-btn-group button,
+.ngvw-nav-btn {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: #020617;
+  color: #cbd5e1;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ngvw-btn-group button.is-active {
+  background: rgba(3, 105, 161, 0.65);
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #f0f9ff;
+}
+
+.ngvw-nav-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.ngvw-nav-btn--unlock {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #e0f2fe;
+}
+
+.ngvw-sign-legend {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #bae6fd;
+  background: rgba(12, 74, 110, 0.32);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.22);
+}
+
+.ngvw-section-pane {
+  width: 100%;
+  border-bottom: 1px solid var(--ngvw-border);
+  background: var(--ngvw-bg);
+}
+
+.ngvw-pane-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  padding: 8px 14px 4px;
+}
+
+.ngvw-pane-title h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+}
+
+.ngvw-pane-title h2 em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ngvw-muted);
+  font-size: 13px;
+}
+
+.ngvw-pane-title span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #7dd3fc;
+  font-variant-numeric: tabular-nums;
+}
+
+.ngvw-plot {
+  position: relative;
+  width: 100%;
+}
+
+.ngvw-plot--price {
+  height: max(300px, 34vh);
+}
+
+.ngvw-plot--valuation {
+  height: max(320px, 34vh);
+}
+
+.ngvw-plot .ws-chart-pane,
+.ngvw-plot .ws-chart-pane-plot,
+.ngvw-plot .ws-chart-pane-canvas {
+  height: 100%;
+  width: 100%;
+}
+
+.ngvw-plot.has-zones .ws-chart-pane-canvas {
+  background: transparent;
+}
+
+.ngvw-zone-layer {
+  position: absolute;
+  inset: 0 56px 0 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ngvw-zone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 14px;
+}
+
+.ngvw-zone span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0.72;
+}
+
+.ngvw-zone--mat_over {
+  background: rgba(127, 29, 29, 0.28);
+}
+.ngvw-zone--mat_over span {
+  color: #fecaca;
+}
+
+.ngvw-zone--over {
+  background: rgba(220, 38, 38, 0.16);
+}
+.ngvw-zone--over span {
+  color: #fca5a5;
+}
+
+.ngvw-zone--near {
+  background: rgba(100, 116, 139, 0.14);
+}
+.ngvw-zone--near span {
+  color: #cbd5e1;
+}
+
+.ngvw-zone--under {
+  background: rgba(22, 163, 74, 0.16);
+}
+.ngvw-zone--under span {
+  color: #86efac;
+}
+
+.ngvw-zone--mat_under {
+  background: rgba(6, 95, 70, 0.28);
+}
+.ngvw-zone--mat_under span {
+  color: #6ee7b7;
+}
+
+.ngvw-plot .ws-chart-pane {
+  position: relative;
+  z-index: 1;
+}
+
+.ngvw-lock-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(248, 250, 252, 0.55);
+  box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.35);
+  pointer-events: none;
+  z-index: 2;
+  /* Actual X position is handled by LWC crosshair; this is a subtle center cue when locked.
+     Disabled — rely on LWC markers. Kept for structure. */
+  display: none;
+}
+
+.ngvw-ws-page.is-locked .ngvw-plot {
+  /* Dim hover noise: keep charts fully readable; selection markers carry emphasis */
+}
+
+.ngvw-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.ngvw-status-badge--live {
+  border-color: rgba(34, 197, 94, 0.55);
+  color: #bbf7d0;
+  background: rgba(6, 78, 59, 0.45);
+}
+
+.ngvw-status-badge--snapshot {
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #bae6fd;
+  background: rgba(12, 74, 110, 0.45);
+}
+
+.ngvw-status-badge--forming-bar {
+  border-color: rgba(251, 191, 36, 0.55);
+  color: #fde68a;
+  background: rgba(120, 53, 15, 0.4);
+}
+
+.ngvw-status-badge--fallback,
+.ngvw-status-badge--stale {
+  border-color: rgba(248, 113, 113, 0.55);
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.4);
+}
+
+.ngvw-live-card {
+  margin: 0;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--ngvw-border);
+  background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+  /* Fixed min-height prevents layout jump when lock note / diag toggles. */
+  min-height: 280px;
+  box-sizing: border-box;
+}
+
+.ngvw-live-lock-note--spacer {
+  visibility: hidden;
+}
+
+.ngvw-live-diag {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 6px;
+  max-height: 140px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.ngvw-live-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ngvw-live-card-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.ngvw-live-card--under {
+  border-left: 4px solid #22c55e;
+}
+
+.ngvw-live-card--over {
+  border-left: 4px solid #ef4444;
+}
+
+.ngvw-live-card--near {
+  border-left: 4px solid #64748b;
+}
+
+.ngvw-live-card--stale {
+  border-left: 4px solid #f59e0b;
+}
+
+.ngvw-live-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px 14px;
+  margin: 12px 0 0;
+}
+
+.ngvw-live-meta dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.ngvw-live-meta dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.ngvw-live-lock-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.ngvw-ws-page.mode-hover_preview .ngvw-analysis,
+.ngvw-ws-page.mode-locked_history .ngvw-analysis {
+  outline: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.ngvw-hero-card {
+  margin: 0;
+  padding: 18px 20px 20px;
+  border-bottom: 1px solid var(--ngvw-border);
+  background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+}
+
+.ngvw-hero-card--strong_support,
+.ngvw-hero-card--weak_support {
+  border-left: 4px solid #22c55e;
+}
+
+.ngvw-hero-card--strong_contradiction,
+.ngvw-hero-card--weak_contradiction {
+  border-left: 4px solid #ef4444;
+}
+
+.ngvw-hero-card--neutral,
+.ngvw-hero-card--none {
+  border-left: 4px solid #64748b;
+}
+
+.ngvw-hero-date {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+  color: #e0f2fe;
+}
+
+.ngvw-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.ngvw-hero-metrics span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.ngvw-hero-metrics strong {
+  font-size: 28px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.ngvw-hero-dev {
+  color: #7dd3fc;
+}
+
+.ngvw-hero-state strong {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.ngvw-hero-state p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #cbd5e1;
+  max-width: 70rem;
+}
+
+.ngvw-bucket-strip {
+  display: flex;
+  width: 100%;
+  height: 18px;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  background: #020617;
+}
+
+.ngvw-strip-cell {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.92;
+}
+
+.ngvw-strip-cell:hover {
+  opacity: 1;
+  outline: 1px solid rgba(248, 250, 252, 0.55);
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+.ngvw-strip-cell.is-selected {
+  outline: 2px solid #f8fafc;
+  outline-offset: -2px;
+  z-index: 2;
+  opacity: 1;
+}
+
+.ngvw-strip-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 6px 14px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ngvw-muted);
+}
+
+.ngvw-strip-legend span::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+
+.ngvw-strip-legend .c-mu::before {
+  background: #065f46;
+}
+.ngvw-strip-legend .c-u::before {
+  background: #16a34a;
+}
+.ngvw-strip-legend .c-n::before {
+  background: #64748b;
+}
+.ngvw-strip-legend .c-o::before {
+  background: #dc2626;
+}
+.ngvw-strip-legend .c-mo::before {
+  background: #7f1d1d;
+}
+
+.ngvw-analysis {
+  width: 100%;
+  min-height: 280px;
+  padding: 18px 16px 32px;
+  background: #0f172a;
+  border-top: 1px solid var(--ngvw-border);
+}
+
+.ngvw-analysis-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ngvw-analysis-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.ngvw-hint {
+  font-size: 13px;
+  color: var(--ngvw-muted);
+}
+
+.ngvw-empty {
+  font-size: 15px;
+  color: var(--ngvw-muted);
+}
+
+.ngvw-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ngvw-card {
+  background: #020617;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.ngvw-card h3 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.ngvw-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.ngvw-card dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 3px;
+}
+
+.ngvw-card dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.ngvw-card dd.is-large {
+  font-size: 28px;
+  font-weight: 800;
+  color: #7dd3fc;
+}
+
+.ngvw-card-note {
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+
+.ngvw-returns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.ngvw-returns > div {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.ngvw-returns span {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.ngvw-returns strong {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ngvw-returns .tone-positive strong {
+  color: #4ade80;
+}
+.ngvw-returns .tone-negative strong {
+  color: #f87171;
+}
+.ngvw-returns .tone-neutral strong {
+  color: #e2e8f0;
+}
+
+@media (max-width: 1100px) {
+  .ngvw-cards,
+  .ngvw-hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .ngvw-plot--price,
+  .ngvw-plot--valuation {
+    height: 300px;
+  }
+
+  .ngvw-hero-metrics strong,
+  .ngvw-hero-state strong {
+    font-size: 22px;
+  }
+}

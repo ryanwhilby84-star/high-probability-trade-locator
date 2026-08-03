@@ -5551,6 +5551,14 @@
     {
       "date": "2026-07-16",
       "value": 0.0
+    },
+    {
+      "date": "2026-07-23",
+      "value": 0.0
+    },
+    {
+      "date": "2026-07-30",
+      "value": 0.0
     }
   ],
   "series": [
@@ -11097,17 +11105,25 @@
     {
       "date": "2026-07-16",
       "value": 0.0
+    },
+    {
+      "date": "2026-07-23",
+      "value": 0.0
+    },
+    {
+      "date": "2026-07-30",
+      "value": 0.0
     }
   ],
-  "latest_observation_date": "2026-07-16",
+  "latest_observation_date": "2026-07-30",
   "latest_value": 0.0,
-  "last_successful_refresh": "2026-07-16T12:22:47.159170+00:00",
-  "last_attempt": "2026-07-16T12:22:47.159185+00:00",
+  "last_successful_refresh": "2026-08-03T07:09:52.831553+00:00",
+  "last_attempt": "2026-08-03T07:09:52.831584+00:00",
   "status": "LIVE",
   "validation": {
-    "n": 1386,
+    "n": 1388,
     "flags": [],
     "min_date": "1999-12-30",
-    "max_date": "2026-07-16"
+    "max_date": "2026-07-30"
   }
 }

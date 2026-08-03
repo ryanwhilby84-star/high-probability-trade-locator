@@ -3455,6 +3455,18 @@
     {
       "date": "2026-07-03",
       "value": 2983.0
+    },
+    {
+      "date": "2026-07-10",
+      "value": 3024.0
+    },
+    {
+      "date": "2026-07-17",
+      "value": 3056.0
+    },
+    {
+      "date": "2026-07-24",
+      "value": 3084.0
     }
   ],
   "series": [
@@ -6905,17 +6917,29 @@
     {
       "date": "2026-07-03",
       "value": 2983.0
+    },
+    {
+      "date": "2026-07-10",
+      "value": 3024.0
+    },
+    {
+      "date": "2026-07-17",
+      "value": 3056.0
+    },
+    {
+      "date": "2026-07-24",
+      "value": 3084.0
     }
   ],
-  "latest_observation_date": "2026-07-03",
-  "latest_value": 2983.0,
-  "last_successful_refresh": "2026-07-16T12:22:15.110023+00:00",
-  "last_attempt": "2026-07-16T12:22:15.110036+00:00",
+  "latest_observation_date": "2026-07-24",
+  "latest_value": 3084.0,
+  "last_successful_refresh": "2026-08-03T07:09:22.479372+00:00",
+  "last_attempt": "2026-08-03T07:09:22.479388+00:00",
   "status": "LIVE",
   "validation": {
-    "n": 862,
+    "n": 865,
     "flags": [],
     "min_date": "2010-01-01",
-    "max_date": "2026-07-03"
+    "max_date": "2026-07-24"
   }
 }

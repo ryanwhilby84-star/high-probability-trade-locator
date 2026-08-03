@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T12:22:58.931902+00:00",
+  "generated_at": "2026-08-03T07:10:04.157834+00:00",
   "drivers": {
     "working_gas_storage": {
       "driver": "working_gas_storage",
@@ -8,9 +8,9 @@
       "status": "LIVE",
       "source": "EIA dnav hist_xls (official public download)",
       "series_id": "NW2_EPG0_SWO_R48_BCF_W",
-      "n_observations": 862,
-      "latest_date": "2026-07-03",
-      "latest_value": 2983.0,
+      "n_observations": 865,
+      "latest_date": "2026-07-24",
+      "latest_value": 3084.0,
       "error": null,
       "retained_previous_cache": false
     },
@@ -21,9 +21,9 @@
       "status": "LIVE",
       "source": "EIA dnav hist_xls (official public download)",
       "series_id": "N9070US2",
-      "n_observations": 352,
-      "latest_date": "2026-04-15",
-      "latest_value": 109.32946742451621,
+      "n_observations": 353,
+      "latest_date": "2026-05-15",
+      "latest_value": 112.31327003318329,
       "error": null,
       "retained_previous_cache": false
     },
@@ -34,9 +34,9 @@
       "status": "LIVE",
       "source": "EIA dnav hist_xls (official public download)",
       "series_id": "N9133US2",
-      "n_observations": 352,
-      "latest_date": "2026-04-15",
-      "latest_value": 17.673752340900876,
+      "n_observations": 353,
+      "latest_date": "2026-05-15",
+      "latest_value": 16.519762131616123,
       "error": null,
       "retained_previous_cache": false
     },
@@ -47,8 +47,8 @@
       "status": "LIVE",
       "source": "NOAA/CPC population-weighted degree days (public FTP)",
       "series_id": "CPC/Population/Heating/CONUS",
-      "n_observations": 1386,
-      "latest_date": "2026-07-16",
+      "n_observations": 1388,
+      "latest_date": "2026-07-30",
       "latest_value": 0.0,
       "error": null,
       "retained_previous_cache": false
@@ -60,9 +60,9 @@
       "status": "LIVE",
       "source": "NOAA/CPC population-weighted degree days (public FTP)",
       "series_id": "CPC/Population/Cooling/CONUS",
-      "n_observations": 1386,
-      "latest_date": "2026-07-16",
-      "latest_value": 24.0,
+      "n_observations": 1388,
+      "latest_date": "2026-07-30",
+      "latest_value": 25.0,
       "error": null,
       "retained_previous_cache": false
     }

@@ -37,10 +37,19 @@ export function WorkstationChartPane({
   mode = 'line',
   showTimeAxis = false,
   lineColor = '#38bdf8',
+  lineWidth = 1.75,
   linePoints = [],
+  overlayLinePoints = null,
+  overlayLineColor = '#f59e0b',
   candleBars = [],
   timelineRows = [],
   zeroLine = false,
+  /** Optional horizontal guides: [{ price, color, title?, lineWidth?, lineStyle? }] */
+  priceLines = null,
+  /** When true, Y-scale stays symmetric about zero (deviation panes). */
+  symmetricZero = false,
+  /** Fixed Y range (e.g. focus scale −40…+40). */
+  fixedPriceRange = null,
   registerPane,
   onCrosshairMove,
   onCrosshairClear,
@@ -52,6 +61,19 @@ export function WorkstationChartPane({
   onDrawingCommit,
   drawingMode = false,
   livePrice = null,
+  /** Distinct horizontal marker for live valuation deviation (not a historical point). */
+  liveDeviationMarker = null,
+  /** Hide right-edge last-value / price-line tabs that obscure the oscillator. */
+  hideFloatingLabels = false,
+  /** Transparent chart canvas so HTML zone layers can show through. */
+  transparentBackground = false,
+  /** Locked selection time (unix seconds) — draws a shared marker. */
+  selectedTime = null,
+  /** Overflow markers for clipped focus-scale extremes: [{time, direction}] */
+  overflowMarkers = null,
+  onChartClick = null,
+  /** When true, pane follows shared range/crosshair but does not accept pan/zoom. */
+  syncFollower = false,
   className = '',
 }) {
   const containerRef = React.useRef(null)
@@ -60,11 +82,16 @@ export function WorkstationChartPane({
   const [primarySeriesInstance, setPrimarySeriesInstance] = React.useState(null)
   const primaryRef = React.useRef(null)
   const livePriceLineRef = React.useRef(null)
+  const liveDeviationLineRef = React.useRef(null)
   const anchorRef = React.useRef(null)
   const zeroRef = React.useRef(null)
+  const overlayRef = React.useRef(null)
+  const guideLinesRef = React.useRef([])
   const candlesRef = React.useRef([])
   const lineRef = React.useRef([])
   const skipEmitRef = React.useRef(false)
+  const onChartClickRef = React.useRef(onChartClick)
+  onChartClickRef.current = onChartClick
 
   const onCrosshairMoveRef = React.useRef(onCrosshairMove)
   const onCrosshairClearRef = React.useRef(onCrosshairClear)
@@ -85,9 +112,26 @@ export function WorkstationChartPane({
           width: initialWidth,
           height: initialHeight,
           showTimeAxis,
-          interactionEnabled: true,
+          interactionEnabled: !syncFollower,
         }),
       )
+      if (hideFloatingLabels) {
+        chart.applyOptions({
+          crosshair: {
+            horzLine: { labelVisible: false },
+            vertLine: { labelVisible: showTimeAxis },
+          },
+        })
+      }
+      if (transparentBackground) {
+        chart.applyOptions({
+          layout: { background: { color: 'transparent' } },
+          grid: {
+            vertLines: { color: 'rgba(148, 163, 184, 0.08)' },
+            horzLines: { color: 'rgba(148, 163, 184, 0.1)' },
+          },
+        })
+      }
     } catch (err) {
       console.error('[workstation] pane createChart failed', panelId, err)
       return undefined
@@ -114,25 +158,67 @@ export function WorkstationChartPane({
         lastValueVisible: false,
       })
     } else {
+      const fixed =
+        fixedPriceRange &&
+        Number.isFinite(fixedPriceRange.min) &&
+        Number.isFinite(fixedPriceRange.max)
+          ? fixedPriceRange
+          : null
       primarySeries = chart.addLineSeries({
         color: lineColor,
-        lineWidth: 1.75,
+        lineWidth: lineWidth || 1.75,
         priceLineVisible: false,
-        lastValueVisible: true,
+        lastValueVisible: !hideFloatingLabels,
         crosshairMarkerVisible: true,
-        crosshairMarkerRadius: 4,
+        crosshairMarkerRadius: 5,
+        autoscaleInfoProvider: fixed
+          ? () => ({
+              priceRange: {
+                minValue: fixed.min,
+                maxValue: fixed.max,
+              },
+            })
+          : symmetricZero
+            ? (original) => {
+                const res = original()
+                if (!res?.priceRange) return res
+                const lo = Number(res.priceRange.minValue)
+                const hi = Number(res.priceRange.maxValue)
+                if (!Number.isFinite(lo) || !Number.isFinite(hi)) return res
+                const ext = Math.max(Math.abs(lo), Math.abs(hi), 5)
+                return {
+                  ...res,
+                  priceRange: { minValue: -ext, maxValue: ext },
+                }
+              }
+            : undefined,
       })
     }
 
     let zeroSeries = null
     if (zeroLine && mode === 'line') {
       zeroSeries = chart.addLineSeries({
-        color: 'rgba(203, 213, 225, 0.5)',
-        lineWidth: 1,
+        color: 'rgba(248, 250, 252, 0.85)',
+        lineWidth: 2,
+        lineStyle: 0,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        crosshairMarkerVisible: false,
+        autoscaleInfoProvider: () => null,
+      })
+    }
+
+    let overlaySeries = null
+    if (mode === 'line') {
+      overlaySeries = chart.addLineSeries({
+        color: overlayLineColor,
+        lineWidth: 1.5,
         lineStyle: 2,
         priceLineVisible: false,
         lastValueVisible: false,
         crosshairMarkerVisible: false,
+        visible: false,
+        autoscaleInfoProvider: () => null,
       })
     }
 
@@ -140,6 +226,7 @@ export function WorkstationChartPane({
     primaryRef.current = primarySeries
     anchorRef.current = anchorSeries
     zeroRef.current = zeroSeries
+    overlayRef.current = overlaySeries
     setChartInstance(chart)
     setPrimarySeriesInstance(primarySeries)
 
@@ -184,18 +271,46 @@ export function WorkstationChartPane({
         onCrosshairClear: () => onCrosshairClearRef.current?.(),
       }) || (() => {})
 
+    const onClick = (param) => {
+      if (!param?.time) return
+      onChartClickRef.current?.({ time: param.time, panelId })
+    }
+    chart.subscribeClick(onClick)
+
     return () => {
       ro.disconnect()
+      try {
+        chart.unsubscribeClick(onClick)
+      } catch {
+        /* ignore */
+      }
       unregister()
       chart.remove()
       chartRef.current = null
       primaryRef.current = null
       anchorRef.current = null
       zeroRef.current = null
+      overlayRef.current = null
+      guideLinesRef.current = []
       setChartInstance(null)
       setPrimarySeriesInstance(null)
     }
-  }, [panelId, mode, showTimeAxis, lineColor, zeroLine, registerPane])
+  }, [
+    panelId,
+    mode,
+    showTimeAxis,
+    lineColor,
+    lineWidth,
+    zeroLine,
+    registerPane,
+    symmetricZero,
+    overlayLineColor,
+    hideFloatingLabels,
+    transparentBackground,
+    fixedPriceRange?.min,
+    fixedPriceRange?.max,
+    syncFollower,
+  ])
 
   React.useEffect(() => {
     if (!anchorRef.current) return
@@ -223,14 +338,39 @@ export function WorkstationChartPane({
           color: '#f87171',
           lineWidth: 1,
           lineStyle: 2,
-          axisLabelVisible: true,
-          title: 'Live',
+          axisLabelVisible: !hideFloatingLabels,
+          title: hideFloatingLabels ? '' : 'Live',
         })
       } catch (err) {
         console.error('[workstation] live price line failed', panelId, err)
       }
     }
-  }, [livePrice, mode, panelId])
+  }, [livePrice, mode, panelId, hideFloatingLabels])
+
+  React.useEffect(() => {
+    if (!primaryRef.current || mode === 'candle') return
+    if (liveDeviationLineRef.current) {
+      try {
+        primaryRef.current.removePriceLine(liveDeviationLineRef.current)
+      } catch {
+        /* ignore */
+      }
+      liveDeviationLineRef.current = null
+    }
+    if (!isNum(liveDeviationMarker)) return
+    try {
+      liveDeviationLineRef.current = primaryRef.current.createPriceLine({
+        price: liveDeviationMarker,
+        color: '#f472b6',
+        lineWidth: 2,
+        lineStyle: 2,
+        axisLabelVisible: false,
+        title: '',
+      })
+    } catch {
+      /* ignore */
+    }
+  }, [liveDeviationMarker, mode, panelId])
 
   React.useEffect(() => {
     if (!primaryRef.current) return
@@ -268,6 +408,79 @@ export function WorkstationChartPane({
       /* ignore */
     }
   }, [timelineRows])
+
+  React.useEffect(() => {
+    if (!overlayRef.current || mode !== 'line') return
+    const pts = Array.isArray(overlayLinePoints) ? overlayLinePoints : []
+    const data = prepareLightweightLinePoints(pts)
+    try {
+      overlayRef.current.applyOptions({ visible: data.length > 0 })
+      overlayRef.current.setData(data)
+    } catch (err) {
+      console.error('[workstation] overlay setData failed', panelId, err)
+    }
+  }, [overlayLinePoints, mode, panelId])
+
+  React.useEffect(() => {
+    if (!primaryRef.current || mode !== 'line') return
+    for (const line of guideLinesRef.current) {
+      try {
+        primaryRef.current.removePriceLine(line)
+      } catch {
+        /* ignore */
+      }
+    }
+    guideLinesRef.current = []
+    if (!Array.isArray(priceLines) || !priceLines.length) return
+    for (const spec of priceLines) {
+      if (!isNum(spec?.price)) continue
+      try {
+        const line = primaryRef.current.createPriceLine({
+          price: spec.price,
+          color: spec.color || 'rgba(148, 163, 184, 0.35)',
+          lineWidth: spec.lineWidth ?? 1,
+          lineStyle: spec.lineStyle ?? 2,
+          axisLabelVisible:
+            spec.axisLabelVisible != null
+              ? Boolean(spec.axisLabelVisible)
+              : Boolean(spec.title) && !hideFloatingLabels,
+          title: spec.title || '',
+        })
+        guideLinesRef.current.push(line)
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [priceLines, mode, panelId, linePoints, hideFloatingLabels])
+
+  React.useEffect(() => {
+    if (!primaryRef.current || mode === 'candle') return
+    try {
+      const markers = []
+      for (const ov of overflowMarkers || []) {
+        if (!isNum(ov?.time)) continue
+        markers.push({
+          time: ov.time,
+          position: ov.direction === 'down' ? 'belowBar' : 'aboveBar',
+          color: '#fbbf24',
+          shape: ov.direction === 'down' ? 'arrowDown' : 'arrowUp',
+          size: 1,
+        })
+      }
+      if (selectedTime != null) {
+        markers.push({
+          time: selectedTime,
+          position: 'inBar',
+          color: '#f8fafc',
+          shape: 'circle',
+          size: 2.5,
+        })
+      }
+      primaryRef.current.setMarkers(markers)
+    } catch {
+      /* ignore */
+    }
+  }, [selectedTime, overflowMarkers, linePoints, mode, panelId])
 
   React.useEffect(() => {
     if (!chartRef.current || !primaryRef.current) return

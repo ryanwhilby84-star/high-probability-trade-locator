@@ -65,6 +65,8 @@ def _record_from_internal(doc: dict[str, Any]) -> InstrumentPriceRecord:
         "price": doc.get("price"),
         "daily": doc.get("daily") or [],
         "weekly": doc.get("weekly") or [],
+        "forming_daily": doc.get("forming_daily"),
+        "forming_weekly": doc.get("forming_weekly"),
         "range_52w": doc.get("range_52w"),
         "history": doc.get("history"),
         "error": doc.get("error"),
@@ -119,6 +121,12 @@ def merge_fetched_into_production(
         "price": fetched.get("price") if fetched.get("price") is not None else existing.get("price"),
         "daily": daily,
         "weekly": weekly,
+        "forming_daily": fetched.get("forming_daily")
+        if fetched.get("forming_daily") is not None
+        else existing.get("forming_daily"),
+        "forming_weekly": fetched.get("forming_weekly")
+        if fetched.get("forming_weekly") is not None
+        else existing.get("forming_weekly"),
         "range_52w": range_52w,
         "history": history,
         "error": err,
@@ -218,6 +226,8 @@ def load_all_instrument_records() -> dict[str, InstrumentPriceRecord]:
             "price": doc.get("price"),
             "daily": doc.get("daily") or [],
             "weekly": doc.get("weekly") or [],
+            "forming_daily": doc.get("forming_daily"),
+            "forming_weekly": doc.get("forming_weekly"),
             "range_52w": doc.get("range_52w"),
             "history": doc.get("history"),
             "error": doc.get("error"),

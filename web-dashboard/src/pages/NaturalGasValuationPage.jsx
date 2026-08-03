@@ -13,7 +13,17 @@ import {
 import { AppShell } from '../components/AppShell.jsx'
 import { fetchPublicJson } from '../utils/fetchPublicJson.js'
 import { useCanonicalCurrentPrice } from '../prices/canonicalCurrentPrice.js'
-import { navigateToCotWorkstation, navigateToInstrument, navigateToScanner } from '../routing.js'
+import {
+  navigateToCotWorkstation,
+  navigateToInstrument,
+  navigateToNaturalGasValuation,
+  navigateToScanner,
+} from '../routing.js'
+import {
+  NG_HEADLINE_V2,
+  contributionRows,
+  resolveNgValuationView,
+} from './naturalGasValuationModel.js'
 import './naturalGasValuation.css'
 
 const MARKET = 'Natural Gas / NG'
@@ -80,7 +90,7 @@ function ValuationScale({ scale, deviationPct }) {
   return (
     <section className="ngv-scale" aria-label="Valuation scale">
       <header className="ngv-section-head">
-        <h2>Institutional Valuation Scale</h2>
+        <h2>Valuation Scale</h2>
         <span className="ngv-scale-band">{band}</span>
       </header>
       <div className="ngv-scale-track">
@@ -106,15 +116,28 @@ function ValuationScale({ scale, deviationPct }) {
 function roleClass(badge) {
   const r = String(badge || '')
   if (r.includes('INCLUDED') || r.includes('VALIDATED')) return 'ngv-role-validated'
-  if (r.includes('REJECTED')) return 'ngv-role-rejected'
+  if (r.includes('REJECTED') || r.includes('FALLBACK')) return 'ngv-role-rejected'
   if (r.includes('INSUFFICIENT')) return 'ngv-role-invalid'
   if (r.includes('INVALID')) return 'ngv-role-invalid'
   if (r.includes('EXPERIMENTAL')) return 'ngv-role-experimental'
   return 'ngv-role-info'
 }
 
-function ContributionBreakdown({ breakdown }) {
-  if (!breakdown?.drivers?.length) {
+function ContributionBreakdown({ breakdown, contributions }) {
+  const rows =
+    Array.isArray(breakdown?.drivers) && breakdown.drivers.length
+      ? breakdown.drivers
+      : contributionRows({ contributions }).map((r) => ({
+          feature: r.feature,
+          label: r.label,
+          raw_observation: r.value,
+          transformed_input: r.value,
+          coefficient: r.coefficient,
+          log_contribution: r.logContribution,
+          direction: r.direction,
+        }))
+
+  if (!rows.length) {
     return (
       <div className="ngv-contrib-empty">
         Contribution breakdown appears once validated valuation drivers are selected.
@@ -127,10 +150,10 @@ function ContributionBreakdown({ breakdown }) {
         <thead>
           <tr>
             <th>Driver</th>
-            <th>Raw observation</th>
-            <th>Transformed x</th>
+            <th>Value</th>
             <th>Coefficient β</th>
             <th>Log contrib βx</th>
+            <th>Price impact %</th>
             <th>Direction</th>
           </tr>
         </thead>
@@ -139,18 +162,24 @@ function ContributionBreakdown({ breakdown }) {
             <td>Intercept / baseline</td>
             <td>—</td>
             <td>—</td>
+            <td>{fmtSigned(breakdown?.intercept_log_contribution, 4)}</td>
             <td>—</td>
-            <td>{fmtSigned(breakdown.intercept_log_contribution, 4)}</td>
             <td>—</td>
           </tr>
-          {breakdown.drivers.map((row) => (
+          {rows.map((row) => (
             <tr key={row.feature}>
-              <td>{row.label}</td>
+              <td>{row.label || row.feature}</td>
               <td>{row.raw_observation != null ? fmt(row.raw_observation, 3) : '—'}</td>
-              <td>{fmt(row.transformed_input, 4)}</td>
               <td>{fmtSigned(row.coefficient, 4)}</td>
               <td className={row.log_contribution >= 0 ? 'ngv-pos' : 'ngv-neg'}>
                 {fmtSigned(row.log_contribution, 4)}
+              </td>
+              <td>
+                {row.price_impact_pct != null
+                  ? fmtSigned(row.price_impact_pct, 2)
+                  : row.priceImpactPct != null
+                    ? fmtSigned(row.priceImpactPct, 2)
+                    : '—'}
               </td>
               <td>{row.direction}</td>
             </tr>
@@ -160,28 +189,28 @@ function ContributionBreakdown({ breakdown }) {
       <dl className="ngv-contrib-totals">
         <div>
           <dt>Σ log terms</dt>
-          <dd>{fmt(breakdown.sum_log_contributions, 4)}</dd>
+          <dd>{fmt(breakdown?.sum_log_contributions, 4)}</dd>
         </div>
         <div>
           <dt>Fair Value = exp(Σ)</dt>
-          <dd>{fmt(breakdown.reconstructed_fair_value, 3)}</dd>
+          <dd>{fmt(breakdown?.reconstructed_fair_value, 3)}</dd>
         </div>
         <div>
           <dt>Market Price</dt>
-          <dd>{fmt(breakdown.market_price, 3)}</dd>
+          <dd>{fmt(breakdown?.market_price, 3)}</dd>
         </div>
         <div>
           <dt>Deviation</dt>
-          <dd className={Number(breakdown.deviation_pct) < 0 ? 'ngv-pos' : 'ngv-neg'}>
-            {fmtSigned(breakdown.deviation_pct, 2)}%
+          <dd className={Number(breakdown?.deviation_pct) < 0 ? 'ngv-pos' : 'ngv-neg'}>
+            {fmtSigned(breakdown?.deviation_pct, 2)}%
           </dd>
         </div>
       </dl>
       <p className="ngv-contrib-note">
-        {breakdown.identity}
-        {breakdown.reconciliation_ok ? ' · Reconciliation OK.' : ' · Reconciliation FAILED.'}
+        {breakdown?.identity}
+        {breakdown?.reconciliation_ok ? ' · Reconciliation OK.' : ' · Reconciliation FAILED.'}
       </p>
-      <p className="ngv-contrib-note">{breakdown.note}</p>
+      <p className="ngv-contrib-note">{breakdown?.note}</p>
     </div>
   )
 }
@@ -222,9 +251,53 @@ function DriverCard({ card }) {
             <dd>{available && card.five_year_average != null ? `${fmt(card.five_year_average, 0)} Bcf` : '—'}</dd>
           </div>
           <div>
-            <dt>Difference</dt>
+            <dt>Surplus / deficit</dt>
             <dd>{available && card.difference != null ? `${fmtSigned(card.difference, 0)} Bcf` : '—'}</dd>
           </div>
+          {card.contribution_magnitude_log != null ? (
+            <div>
+              <dt>Log contribution</dt>
+              <dd>{fmtSigned(card.contribution_magnitude_log, 4)}</dd>
+            </div>
+          ) : null}
+        </dl>
+      ) : card?.id === 'production' ? (
+        <dl className="ngv-driver-metrics">
+          <div>
+            <dt>YoY change (model)</dt>
+            <dd>
+              {card.yoy_pct != null || card.current != null
+                ? `${fmtSigned(card.yoy_pct ?? card.current, 2)}%`
+                : '—'}
+            </dd>
+          </div>
+          <div>
+            <dt>Production level</dt>
+            <dd>
+              {card.production_level_bcf_d != null
+                ? `${fmt(card.production_level_bcf_d, 3)} ${card.production_level_unit || 'Bcf/d'}`
+                : '—'}
+            </dd>
+          </div>
+          <div>
+            <dt>Observation date</dt>
+            <dd>{card.observation_date || card.as_of || '—'}</dd>
+          </div>
+          <div>
+            <dt>Source cadence</dt>
+            <dd>{card.source_cadence || 'monthly'}</dd>
+          </div>
+          {card.contribution_direction ? (
+            <div>
+              <dt>Contribution</dt>
+              <dd>
+                {card.contribution_direction}
+                {card.contribution_magnitude_log != null
+                  ? ` (${fmtSigned(card.contribution_magnitude_log, 4)} log)`
+                  : ''}
+              </dd>
+            </div>
+          ) : null}
         </dl>
       ) : card?.id === 'hdd' || card?.id === 'cdd' ? (
         <dl className="ngv-driver-metrics">
@@ -251,12 +324,6 @@ function DriverCard({ card }) {
                 : '—'}
             </dd>
           </div>
-          {card.proxy || card.fallback ? (
-            <div>
-              <dt>Status</dt>
-              <dd>{card.fallback ? 'FALLBACK' : 'V1 proxy'}</dd>
-            </div>
-          ) : null}
         </dl>
       )}
 
@@ -268,7 +335,6 @@ function DriverCard({ card }) {
 function ChartPanel({ history }) {
   const data = React.useMemo(() => {
     const rows = Array.isArray(history) ? history : []
-    // Show last ~5 years for density
     const sliced = rows.length > 260 ? rows.slice(-260) : rows
     return sliced.map((r) => ({
       date: r.date,
@@ -313,7 +379,7 @@ function ChartPanel({ history }) {
           />
           <Legend
             wrapperStyle={{ color: '#cbd5e1', paddingTop: 8 }}
-            formatter={(value) => (value === 'spot' ? 'Weekly NG Price' : 'Institutional Fair Value')}
+            formatter={(value) => (value === 'spot' ? 'Weekly NG Price' : 'Model Fair Value')}
           />
           <Line
             type="monotone"
@@ -369,6 +435,7 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
   }, [])
 
   const inst = doc?.instrument || {}
+  const view = resolveNgValuationView(doc)
   const cards = Array.isArray(inst.driver_cards) ? inst.driver_cards : []
   const history = Array.isArray(inst.history) ? inst.history : []
   const tone = biasTone(inst.institutional_bias || inst.valuation_bias)
@@ -376,7 +443,7 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
   return (
     <AppShell
       title="Natural Gas Valuation"
-      subtitle="Institutional energy fair value"
+      subtitle="Validated two-driver fair value"
       sidebarClass={sidebarClass}
       onSidebarClass={onSidebarClass}
       topActions={
@@ -387,6 +454,13 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
           <button
             type="button"
             className="ws-btn ws-btn-primary"
+            onClick={() => navigateToNaturalGasValuation()}
+          >
+            Valuation workstation
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
             onClick={() => navigateToCotWorkstation(MARKET)}
           >
             Open COT Workstation
@@ -400,10 +474,11 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
       <div className="ngv-page">
         <header className="ngv-hero">
           <p className="ngv-eyebrow">HPTL · Energy · Validated Drivers Only</p>
-          <h1>Natural Gas Institutional Valuation</h1>
+          <h1>{view.headline || NG_HEADLINE_V2}</h1>
           <p className="ngv-hero-sub">
-            Fair value uses only walk-forward-validated valuation drivers. Experimental and
-            informational drivers are displayed for context but do not enter the calculation.
+            Active model uses only walk-forward-validated drivers. Storage surplus and production
+            year-over-year change enter fair value when available; experimental drivers stay
+            display-only.
           </p>
         </header>
 
@@ -411,87 +486,197 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
         {error ? (
           <div className="ngv-error">
             Could not load valuation export. Run{' '}
-            <code>python scripts/run_natural_gas_valuation_v1.py</code>
+            <code>python scripts/refresh_natural_gas_drivers.py</code>
             <div className="ngv-error-detail">{error}</div>
           </div>
         ) : null}
 
         {!loading && !error ? (
           <>
+            {view.fallback || (view.freshnessWarnings || []).length ? (
+              <div className="ngv-error" role="status">
+                {view.fallback
+                  ? `Fallback to ${view.activeModel}: ${view.fallbackReason || 'production YoY unavailable/stale'}`
+                  : null}
+                {(view.freshnessWarnings || []).map((w) => (
+                  <div key={w} className="ngv-error-detail">
+                    {w}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
             <section className="ngv-summary-grid" aria-label="Valuation summary">
               <SummaryCard
-                label="Current Price"
-                value={fmt(canonical.price ?? null, 3)}
-                sub={`USD / MMBtu · ${canonical.label}${
-                  inst.spot_price != null &&
-                  canonical.price != null &&
-                  Math.abs(Number(inst.spot_price) - Number(canonical.price)) > 0.01
-                    ? ` · model spot ${fmt(inst.spot_price, 3)} (valuation only)`
-                    : ''
-                }`}
+                label="Active Model"
+                value={view.activeModel || '—'}
+                sub={view.fallback ? 'v1 fallback active' : 'v2 published'}
                 tone="neutral"
               />
               <SummaryCard
-                label="Fair Value"
-                value={fmt(inst.fair_value, 3)}
-                sub={inst.model_id || 'energy_natural_gas_v1'}
+                label="Live / Market Quote"
+                value={fmt(canonical.price ?? view.livePrice ?? view.marketPrice, 3)}
+                sub={`${canonical.label || view.livePriceStatus || view.priceStatus || '—'} · ${view.priceSource || 'OANDA'}`}
+                tone={view.priceStatus === 'Stale' || !view.deviationTrusted ? 'bear' : 'neutral'}
+              />
+              <SummaryCard
+                label="v2 Fair Value"
+                value={fmt(view.v2FairValue ?? (view.activeModel?.includes('v2') ? view.fairValue : null), 3)}
+                sub="Storage + Production YoY"
                 tone="neutral"
               />
               <SummaryCard
-                label="Deviation %"
-                value={fmtSigned(inst.deviation_pct, 2)}
-                sub={inst.scale?.band || '—'}
-                tone={tone}
+                label="Trusted Deviation %"
+                value={view.deviationTrusted ? fmtSigned(view.deviationPct, 2) : 'Unavailable'}
+                sub={
+                  view.deviationTrusted
+                    ? inst.scale?.band || '—'
+                    : 'Price stale — fair value retained'
+                }
+                tone={view.deviationTrusted ? tone : 'bear'}
               />
               <SummaryCard
-                label="Institutional Bias"
-                value={inst.institutional_bias || inst.valuation_bias || '—'}
-                sub={inst.valuation_bias || '—'}
-                tone={tone}
-              />
-              <SummaryCard
-                label="Confidence"
-                value={inst.confidence || '—'}
-                sub={inst.regression?.r_squared != null ? `R² ${inst.regression.r_squared}` : '—'}
+                label="v1 Benchmark FV"
+                value={fmt(view.v1FairValue, 3)}
+                sub={
+                  view.v1V2Diff != null
+                    ? `v2 − v1 = ${fmtSigned(view.v1V2Diff, 3)}`
+                    : 'Storage-only'
+                }
                 tone="neutral"
               />
               <SummaryCard
-                label="Last Updated"
-                value={String(inst.generated_at || doc?.generated_at || '—').slice(0, 16).replace('T', ' ')}
-                sub={inst.as_of_week ? `As of ${inst.as_of_week}` : '—'}
-                tone="neutral"
+                label="Price Status"
+                value={view.priceStatus || canonical.status || '—'}
+                sub={
+                  view.dataAgeHours != null
+                    ? `Age ${fmt(view.dataAgeHours, 1)}h`
+                    : (view.confidenceReasons || [])[0] || '—'
+                }
+                tone={view.priceStatus === 'Current' ? 'bull' : 'bear'}
               />
+            </section>
+
+            <section className="ngv-narrative" aria-label="Price freshness">
+              <header className="ngv-section-head">
+                <h2>Price Freshness</h2>
+              </header>
+              <dl className="ngv-contrib-totals">
+                <div>
+                  <dt>Price source</dt>
+                  <dd>{view.priceSource || '—'}</dd>
+                </div>
+                <div>
+                  <dt>Live quote timestamp</dt>
+                  <dd>{view.livePriceAsOf || canonical.asOf || '—'}</dd>
+                </div>
+                <div>
+                  <dt>Latest completed daily</dt>
+                  <dd>
+                    {view.latestCompletedDaily?.date || '—'}
+                    {view.latestCompletedDaily?.close != null
+                      ? ` @ ${fmt(view.latestCompletedDaily.close, 3)}`
+                      : ''}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Latest weekly bar</dt>
+                  <dd>
+                    {view.latestCompletedWeekly?.date || '—'}
+                    {view.latestCompletedWeekly?.close != null
+                      ? ` @ ${fmt(view.latestCompletedWeekly.close, 3)}`
+                      : ''}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Model anchor (weekly)</dt>
+                  <dd>
+                    {fmt(view.modelAnchorPrice, 3)} · as of {view.asOfWeek || '—'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Forming daily (incomplete)</dt>
+                  <dd>
+                    {view.formingDaily?.date
+                      ? `${view.formingDaily.date} @ ${fmt(view.formingDaily.close, 3)}`
+                      : '—'}
+                  </dd>
+                </div>
+              </dl>
+              {!view.deviationTrusted ? (
+                <p className="ngv-error">
+                  Market comparison is stale or unavailable. Fair value is retained; do not treat
+                  over/undervaluation % as current.
+                  {view.deviationUntrusted != null
+                    ? ` (Untrusted illustrative deviation: ${fmtSigned(view.deviationUntrusted, 2)}%.)`
+                    : ''}
+                </p>
+              ) : null}
+            </section>
+
+            <section className="ngv-narrative">
+              <header className="ngv-section-head">
+                <h2>Model Status</h2>
+              </header>
+              <dl className="ngv-contrib-totals">
+                <div>
+                  <dt>Validated drivers</dt>
+                  <dd>{(view.validatedDrivers || []).join(', ') || '—'}</dd>
+                </div>
+                <div>
+                  <dt>Model as-of</dt>
+                  <dd>{view.asOfWeek || '—'}</dd>
+                </div>
+                <div>
+                  <dt>Production observation</dt>
+                  <dd>{view.productionObservationDate || '—'}</dd>
+                </div>
+                <div>
+                  <dt>Production cadence</dt>
+                  <dd>{view.productionSourceCadence || 'monthly'}</dd>
+                </div>
+              </dl>
+              {(view.confidenceReasons || []).length ? (
+                <ul className="ngv-model-note">
+                  {view.confidenceReasons.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {view.equation ? <p className="ngv-model-note">{view.equation}</p> : null}
             </section>
 
             <section className="ngv-chart-section">
               <header className="ngv-section-head">
-                <h2>Price vs Institutional Fair Value</h2>
+                <h2>Price vs Model Fair Value</h2>
                 <span className="ngv-chart-legend-hint">
-                  Solid = weekly NG · Dashed = model fair value
+                  Solid = weekly NG · Dashed = active model fair value
                 </span>
               </header>
               <ChartPanel history={history} />
             </section>
 
-            <ValuationScale scale={inst.scale} deviationPct={inst.deviation_pct} />
+            <ValuationScale scale={inst.scale} deviationPct={view.deviationPct} />
 
             <section className="ngv-contrib-section" aria-label="Valuation contribution breakdown">
               <header className="ngv-section-head">
-                <h2>Valuation Contribution Breakdown</h2>
+                <h2>Driver Contributions</h2>
                 <span className="ngv-section-meta">
-                  {(inst.validated_features || inst.active_features || []).length} validated drivers
+                  {(view.validatedDrivers || []).length} validated drivers
                 </span>
               </header>
-              <ContributionBreakdown breakdown={inst.contribution_breakdown} />
+              <ContributionBreakdown
+                breakdown={view.contributionBreakdown}
+                contributions={view.contributions}
+              />
             </section>
 
             <section className="ngv-drivers-section">
               <header className="ngv-section-head">
-                <h2>Institutional Driver Summary</h2>
+                <h2>Driver Summary</h2>
                 <span className="ngv-section-meta">
-                  {(inst.validated_features || []).length} validated ·{' '}
-                  {(inst.experimental_features || []).length} experimental ·{' '}
-                  {(inst.informational_features || ['seasonality']).length} informational
+                  transform={view.productionTransformation} · raw level in FV=
+                  {view.rawLevelUsed ? 'yes' : 'no'}
                 </span>
               </header>
               <div className="ngv-driver-grid">
@@ -505,7 +690,7 @@ export function NaturalGasValuationPage({ sidebarClass, onSidebarClass }) {
 
             <section className="ngv-narrative">
               <header className="ngv-section-head">
-                <h2>Institutional Summary</h2>
+                <h2>Summary</h2>
               </header>
               <p className="ngv-narrative-text">{inst.summary_text || '—'}</p>
               {inst.model_note ? <p className="ngv-model-note">{inst.model_note}</p> : null}

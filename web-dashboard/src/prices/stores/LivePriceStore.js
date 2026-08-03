@@ -9,6 +9,10 @@
  */
 
 import { CurrentPriceStreamStore } from './CurrentPriceStreamStore.js'
+import {
+  getPricesLatestFallbackQuote,
+  loadPricesLatestFallback,
+} from '../priceStoreFallback.js'
 
 const _listeners = new Set()
 let _unsubStream = null
@@ -73,6 +77,8 @@ export const LivePriceStore = {
   subscribe(listener) {
     _listeners.add(listener)
     ensureStreamSubscription()
+    // Warm canonical store fallback when the live backend is offline.
+    loadPricesLatestFallback().then(() => emit())
     return () => {
       _listeners.delete(listener)
       releaseStreamSubscription()
@@ -111,17 +117,29 @@ export const LivePriceStore = {
   },
 
   getQuote(marketId) {
-    return toLegacyQuote(CurrentPriceStreamStore.getPrice(marketId))
+    const live = toLegacyQuote(CurrentPriceStreamStore.getPrice(marketId))
+    if (live) return live
+    const streamStatus = CurrentPriceStreamStore.getDisplayStatus(marketId)
+    if (
+      streamStatus === 'BACKEND OFFLINE' ||
+      streamStatus === 'UNAVAILABLE' ||
+      streamStatus === 'RECONNECTING'
+    ) {
+      return getPricesLatestFallbackQuote(marketId)
+    }
+    return null
   },
 
   getFreshness(marketId) {
     const price = CurrentPriceStreamStore.getPrice(marketId)
     if (!price) {
+      const fb = getPricesLatestFallbackQuote(marketId)
       return {
         isStale: true,
         ageMs: null,
-        quoteAsOf: null,
+        quoteAsOf: fb?.asOf ?? null,
         docGeneratedAt: CurrentPriceStreamStore.getSnapshot().generatedAt,
+        status: fb ? 'FALLBACK' : CurrentPriceStreamStore.getDisplayStatus(marketId),
       }
     }
 
@@ -140,7 +158,16 @@ export const LivePriceStore = {
   },
 
   getStatus(marketId) {
-    return CurrentPriceStreamStore.getDisplayStatus(marketId)
+    const streamStatus = CurrentPriceStreamStore.getDisplayStatus(marketId)
+    if (
+      (streamStatus === 'BACKEND OFFLINE' ||
+        streamStatus === 'UNAVAILABLE' ||
+        streamStatus === 'RECONNECTING') &&
+      getPricesLatestFallbackQuote(marketId)
+    ) {
+      return 'FALLBACK'
+    }
+    return streamStatus
   },
 
   getActiveWeeklyCandle(marketId) {

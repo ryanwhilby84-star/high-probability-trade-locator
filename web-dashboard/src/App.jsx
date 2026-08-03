@@ -38,6 +38,7 @@ import { DiagnosticsPage } from './pages/DiagnosticsPage.jsx'
 import { MacroHubPage } from './pages/MacroHubPage.jsx'
 
 import { NaturalGasValuationPage } from './pages/NaturalGasValuationPage.jsx'
+import { NaturalGasValuationWorkstationPage } from './pages/NaturalGasValuationWorkstationPage.jsx'
 
 import { DxyMacroBiasPage } from './pages/DxyMacroBiasPage.jsx'
 
@@ -207,6 +208,15 @@ export default function App() {
   }
 
 
+
+  if (route.view === 'natural-gas-valuation-workstation') {
+    return (
+      <NaturalGasValuationWorkstationPage
+        sidebarClass={sidebarClass}
+        onSidebarClass={setSidebarClass}
+      />
+    )
+  }
 
   if (route.view === 'natural-gas-valuation') {
 

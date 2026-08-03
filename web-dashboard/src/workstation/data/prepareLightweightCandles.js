@@ -49,7 +49,10 @@ export function prepareLightweightCandles(bars) {
   return data
 }
 
-/** Normalize fair-value overlay points for lightweight-charts line series. */
+/** Normalize fair-value overlay points for lightweight-charts line series.
+ * Points with a time but no finite value are kept as whitespace so shared
+ * logical indices stay aligned across synchronized panes.
+ */
 export function prepareLightweightLinePoints(points) {
   const rejected = []
   const byTime = new Map()
@@ -57,8 +60,17 @@ export function prepareLightweightLinePoints(points) {
   for (const pt of points || []) {
     if (!pt) continue
     const time = isNum(pt.time) ? pt.time : null
+    if (time == null) {
+      rejected.push({ reason: 'invalid time', time: pt.time, value: pt.value })
+      continue
+    }
+    if (pt.value == null || pt.value === '') {
+      // Whitespace — do not overwrite a real value already stored for this time.
+      if (!byTime.has(time)) byTime.set(time, { time })
+      continue
+    }
     const value = Number(pt.value)
-    if (time == null || !isNum(value)) {
+    if (!isNum(value)) {
       rejected.push({ reason: 'invalid point', time: pt.time, value: pt.value })
       continue
     }

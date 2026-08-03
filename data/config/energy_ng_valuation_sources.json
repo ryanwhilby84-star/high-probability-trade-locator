@@ -2,8 +2,8 @@
   "version": 2,
   "phase": "energy_ng_v1",
   "market": "Natural Gas / NG",
-  "model_id": "energy_natural_gas_v1",
-  "note": "Official EIA/FRED/NOAA driver caches. Missing keys leave cards UNAVAILABLE; IPN213111S is FALLBACK only for production.",
+  "model_id": "ng_storage_production_v2",
+  "note": "Official EIA/FRED/NOAA driver caches. Published FV uses storage_surplus_bcf + production_yoy_pct. IPN213111S is FALLBACK only and cannot activate v2.",
   "fred_series": {
     "dxy_broad": "DTWEXBGS",
     "henry_hub_spot": "DHHNGSP",
@@ -33,6 +33,7 @@
   },
   "sign_expectations": {
     "storage_surplus_bcf": "negative",
+    "production_yoy_pct": "negative",
     "dry_gas_production": "negative",
     "lng_exports": "positive",
     "log_dxy": "negative",

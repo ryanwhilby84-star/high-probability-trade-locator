@@ -146,6 +146,49 @@ def _storage_surplus_vs_5y(storage_weekly: dict[str, float]) -> dict[str, float]
     return out
 
 
+def _monthly_production_yoy(prod_monthly: dict[str, float]) -> dict[str, float]:
+    """Point-in-time YoY % on native monthly observation dates (same calendar month prior year)."""
+    by_ym: dict[tuple[int, int], tuple[str, float]] = {}
+    for d, v in sorted(prod_monthly.items()):
+        try:
+            dt = datetime.strptime(str(d)[:10], "%Y-%m-%d")
+        except ValueError:
+            continue
+        by_ym[(dt.year, dt.month)] = (str(d)[:10], float(v))
+
+    out: dict[str, float] = {}
+    for (year, month), (d, v) in by_ym.items():
+        prev = by_ym.get((year - 1, month))
+        if not prev or prev[1] == 0:
+            continue
+        out[d] = 100.0 * (v - prev[1]) / prev[1]
+    return out
+
+
+def _asof_series_with_obs_date(
+    series: dict[str, float], weekly_dates: list[str]
+) -> tuple[dict[str, float], dict[str, str]]:
+    """As-of align series onto weekly dates; also return the observation date used."""
+    values: dict[str, float] = {}
+    obs_dates: dict[str, str] = {}
+    keys = sorted(series.keys())
+    if not keys:
+        return values, obs_dates
+    for d in weekly_dates:
+        best_k: str | None = None
+        best_v: float | None = None
+        for k in keys:
+            if k <= d:
+                best_k = k
+                best_v = series[k]
+            else:
+                break
+        if best_k is not None and best_v is not None:
+            values[d] = best_v
+            obs_dates[d] = best_k
+    return values, obs_dates
+
+
 def _seasonality_factor(weekly_dates: list[str]) -> dict[str, float]:
     """Week-of-year seasonal factor from multi-year NG price history (z-scored)."""
     tl = load_canonical_timeline(MARKET)
@@ -207,7 +250,7 @@ def _seasonality_export_bias() -> dict[str, Any]:
 class NgDriverBundle:
     dates: list[str] = field(default_factory=list)
     price: list[float] = field(default_factory=list)
-    features: dict[str, list[float]] = field(default_factory=dict)
+    features: dict[str, list[Any]] = field(default_factory=dict)
     driver_cards: dict[str, dict[str, Any]] = field(default_factory=dict)
     lineage: dict[str, dict[str, str]] = field(default_factory=dict)
     as_of: str = ""
@@ -418,64 +461,93 @@ def build_ng_driver_bundle(*, as_of_week: str | None = None) -> NgDriverBundle:
         prod_src_label = "FALLBACK: FRED IPN213111S (oil & gas extraction IP — not official dry-gas)"
         prod_series_id = fred_map.get("dry_gas_production_proxy", "IPN213111S")
     prod_weekly = _weekly_from_daily(prod_daily, dates)
+    # Validated Phase-2 transform: YoY on native monthly dates, then as-of to weeks.
+    prod_yoy_monthly = _monthly_production_yoy(prod_daily) if prod_daily else {}
+    prod_yoy_weekly, prod_yoy_obs = _asof_series_with_obs_date(prod_yoy_monthly, dates)
     if len(prod_weekly) >= MIN_WEEKS:
         vals = [prod_weekly[d] for d in dates]
         mean = sum(vals) / len(vals)
         std = math.sqrt(sum((v - mean) ** 2 for v in vals) / len(vals)) or 1.0
-        # Raw as-of levels for V2 standardisation; sample z retained for V1 compatibility
+        # Raw as-of levels retained for diagnostics / legacy; sample z is NOT used in published FV.
         bundle.features["dry_gas_production_level"] = list(vals)
         bundle.features["dry_gas_production"] = [(v - mean) / std for v in vals]
+        # PIT-safe validated production feature (None when monthly YoY not yet available).
+        yoy_aligned: list[float | None] = [prod_yoy_weekly.get(d) for d in dates]
+        bundle.features["production_yoy_pct"] = yoy_aligned  # type: ignore[assignment]
+        bundle.features["production_yoy_observation_date"] = [prod_yoy_obs.get(d) for d in dates]  # type: ignore[assignment]
         bundle.lineage["dry_gas_production"] = {
             "source_name": "FALLBACK proxy" if using_proxy else (prod_meta.get("official_source") or "Official"),
             "source_id": prod_series_id or prod_path,
             "source_date": max(prod_weekly.keys()),
         }
         bundle.lineage["dry_gas_production_level"] = dict(bundle.lineage["dry_gas_production"])
+        bundle.lineage["production_yoy_pct"] = {
+            "source_name": bundle.lineage["dry_gas_production"]["source_name"],
+            "source_id": prod_series_id or prod_path,
+            "source_date": max(prod_yoy_monthly.keys()) if prod_yoy_monthly else None,
+            "transformation": "production_yoy_pct",
+            "note": "YoY % on native monthly EIA dates; as-of to weekly price dates. Raw level not used in FV.",
+        }
         latest = vals[-1]
         prev = vals[-5] if len(vals) >= 5 else vals[-2] if len(vals) >= 2 else None
         avg4 = sum(vals[-4:]) / min(4, len(vals))
-        yoy = None
-        if len(vals) >= 53 and vals[-53]:
-            yoy = 100.0 * (latest - vals[-53]) / vals[-53]
-        recent = sum(vals[-13:]) / min(13, len(vals))
-        effect = "Bearish" if latest >= recent else "Bullish"
+        tip_yoy = yoy_aligned[-1] if yoy_aligned else None
+        tip_obs = (bundle.features["production_yoy_observation_date"] or [None])[-1]
+        effect = (
+            "Bearish"
+            if tip_yoy is not None and tip_yoy > 0
+            else "Bullish"
+            if tip_yoy is not None and tip_yoy < 0
+            else "Neutral"
+        )
         bundle.driver_cards["production"] = {
             "id": "production",
-            "label": "US Dry Gas Production",
-            "unit": "index" if using_proxy else (prod_meta.get("units") or "Bcf/d"),
-            "available": True,
-            "current": round(latest, 3),
+            "label": "US Dry Gas Production — YoY Change",
+            "unit": "% YoY",
+            "available": tip_yoy is not None and not using_proxy,
+            "current": round(float(tip_yoy), 3) if tip_yoy is not None else None,
+            "production_level_bcf_d": round(latest, 3),
+            "production_level_unit": "index" if using_proxy else (prod_meta.get("units") or "Bcf/d"),
             "previous": round(prev, 3) if prev is not None else None,
             "avg_4": round(avg4, 3),
-            "yoy_pct": round(yoy, 2) if yoy is not None else None,
-            "as_of": prod_meta.get("latest_observation_date") or as_of,
+            "yoy_pct": round(float(tip_yoy), 3) if tip_yoy is not None else None,
+            "as_of": tip_obs or prod_meta.get("latest_observation_date"),
+            "observation_date": tip_obs or prod_meta.get("latest_observation_date"),
             "source": prod_src_label,
             "series_id": prod_series_id,
+            "source_cadence": "monthly",
+            "production_transformation": "production_yoy_pct",
+            "raw_level_used_in_fair_value": False,
             "proxy": using_proxy,
             "fallback": using_proxy,
             "freshness": "FALLBACK" if using_proxy else (prod_meta.get("status") or "LIVE"),
             "institutional_effect": effect,
-            "tone": "bearish" if effect == "Bearish" else "bullish",
+            "tone": "bearish" if effect == "Bearish" else "bullish" if effect == "Bullish" else "neutral",
             "interpretation": (
-                "Elevated production is typically bearish for price. "
+                "Faster year-over-year production growth increases available supply and lowers "
+                "modeled fair value. "
                 + (
                     "FALLBACK only — oil & gas extraction IP is not official dry-gas production."
                     if using_proxy
-                    else "Official dry natural gas production."
+                    else "Validated transform: production_yoy_pct from official monthly EIA dry-gas."
                 )
             ),
         }
     else:
         bundle.driver_cards["production"] = {
             "id": "production",
-            "label": "US Dry Gas Production",
-            "unit": "Bcf/d",
+            "label": "US Dry Gas Production — YoY Change",
+            "unit": "% YoY",
             "available": False,
             "current": None,
+            "yoy_pct": None,
+            "production_transformation": "production_yoy_pct",
+            "raw_level_used_in_fair_value": False,
+            "source_cadence": "monthly",
             "institutional_effect": "UNAVAILABLE",
             "tone": "neutral",
             "freshness": "UNAVAILABLE",
-            "interpretation": "Production driver unavailable — run refresh_natural_gas_drivers.py",
+            "interpretation": "Production YoY unavailable — run refresh_natural_gas_drivers.py",
             "required_for_v2": True,
         }
 

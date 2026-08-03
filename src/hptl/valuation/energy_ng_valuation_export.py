@@ -1,4 +1,4 @@
-"""Export Natural Gas institutional valuation for the dashboard."""
+"""Export Natural Gas valuation for the dashboard (standalone; not weekly COT)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from hptl.config import PROJECT_ROOT
-from hptl.valuation.energy_natural_gas_valuation_v1 import build_natural_gas_valuation_document
+from hptl.valuation.ng_storage_production_v2 import build_natural_gas_valuation_document
 
 DATA_OUT = Path("data/natural_gas_valuation_latest.json")
 PUBLIC_OUT = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "natural_gas_valuation_latest.json"
@@ -33,13 +33,17 @@ def main() -> int:
     inst = doc.get("instrument") or {}
     print(f"Wrote {paths['data']}")
     print(
-        f"NG V1 validated: wired={inst.get('wired')} spot={inst.get('spot_price')} "
-        f"fair={inst.get('fair_value')} dev={inst.get('deviation_pct')} "
-        f"bias={inst.get('institutional_bias')} features={inst.get('active_features')}"
+        f"NG active={inst.get('active_model')} fallback={inst.get('fallback_to_v1')} "
+        f"spot={inst.get('spot_price')} fair={inst.get('fair_value')} "
+        f"dev={inst.get('deviation_pct')} confidence={inst.get('confidence')}"
     )
-    print(f"experimental={inst.get('experimental_features')}")
-    print(f"informational={inst.get('informational_features')}")
-    print(f"Awaiting: {inst.get('awaiting_drivers')}")
+    print(
+        f"v1_fair={inst.get('v1_fair_value')} v2_fair={inst.get('v2_fair_value')} "
+        f"drivers={inst.get('validated_drivers')} "
+        f"prod_yoy={inst.get('production_yoy_value')} "
+        f"prod_obs={inst.get('production_observation_date')}"
+    )
+    print(f"warnings={inst.get('freshness_warnings')}")
     return 0
 
 

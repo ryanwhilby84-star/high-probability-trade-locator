@@ -44,9 +44,12 @@ class InstrumentPriceRecord(TypedDict, total=False):
     price: PriceSnapshot | None
     daily: list[OhlcBar]
     weekly: list[OhlcBar]
+    forming_daily: OhlcBar | None
+    forming_weekly: OhlcBar | None
     range_52w: Range52w | None
     history: PriceHistoryMeta | None
     error: str | None
+    price_scale: dict[str, Any] | None
 
 
 DAILY_BAR_TARGET = 260
@@ -103,12 +106,17 @@ def bars_to_public(bars: list[OhlcBar]) -> list[dict[str, Any]]:
 
 def record_to_public(rec: InstrumentPriceRecord) -> dict[str, Any]:
     """Dashboard-facing record — no data-source fields."""
+    forming_d = rec.get("forming_daily")
+    forming_w = rec.get("forming_weekly")
     return {
         "instrument_id": rec.get("instrument_id"),
         "price": rec.get("price"),
         "daily": bars_to_public(rec.get("daily") or []),
         "weekly": bars_to_public(rec.get("weekly") or []),
+        "forming_daily": bars_to_public([forming_d])[0] if forming_d else None,
+        "forming_weekly": bars_to_public([forming_w])[0] if forming_w else None,
         "range_52w": rec.get("range_52w"),
         "history": rec.get("history"),
         "error": rec.get("error"),
+        "price_scale": rec.get("price_scale"),
     }

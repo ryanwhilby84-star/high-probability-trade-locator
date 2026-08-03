@@ -147,9 +147,19 @@ export function parseRoute() {
       key === 'ng' ||
       key === 'natural gas / ng' ||
       key === 'natural gas' ||
-      key.includes('natural gas')
+      key.includes('natural gas') ||
+      (key.includes('workstation') && (key.includes('ng') || key.includes('natural')))
     ) {
-      return { view: 'natural-gas-valuation', market: 'Natural Gas / NG' }
+      // Live tip card remains available; default Natural Gas valuation is the research workstation.
+      if (
+        key.includes('/live') ||
+        key.endsWith('live') ||
+        key === 'natural-gas/live' ||
+        key === 'ng/live'
+      ) {
+        return { view: 'natural-gas-valuation', market: 'Natural Gas / NG' }
+      }
+      return { view: 'natural-gas-valuation-workstation', market: 'Natural Gas / NG' }
     }
   }
 
@@ -316,9 +326,16 @@ export function navigateToMacroHub() {
 
 
 export function navigateToNaturalGasValuation() {
-
+  // Default Natural Gas valuation entry → historical research workstation.
   window.location.hash = `#/valuation/${encodeURIComponent('Natural Gas / NG')}`
+}
 
+export function navigateToNaturalGasValuationLive() {
+  window.location.hash = `#/valuation/${encodeURIComponent('Natural Gas / NG')}/live`
+}
+
+export function navigateToNaturalGasValuationWorkstation() {
+  window.location.hash = `#/valuation/${encodeURIComponent('Natural Gas / NG')}/workstation`
 }
 
 

@@ -2,7 +2,6 @@
 
 from hptl.prices.price_coverage_audit import build_price_coverage_audit, write_price_coverage_audit
 from hptl.prices.price_store import load_price_store, write_price_store
-from hptl.prices.unified_adapter import UnifiedPriceAdapter
 
 __all__ = [
     "UnifiedPriceAdapter",
@@ -11,3 +10,12 @@ __all__ = [
     "load_price_store",
     "write_price_store",
 ]
+
+
+def __getattr__(name: str):
+    # Lazy export avoids circular import: oanda_prices → prices.models → prices.__init__ → unified_adapter → oanda_prices
+    if name == "UnifiedPriceAdapter":
+        from hptl.prices.unified_adapter import UnifiedPriceAdapter
+
+        return UnifiedPriceAdapter
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

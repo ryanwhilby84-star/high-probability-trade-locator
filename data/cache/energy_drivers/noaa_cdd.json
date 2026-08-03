@@ -5550,7 +5550,15 @@
     },
     {
       "date": "2026-07-16",
-      "value": 24.0
+      "value": 88.0
+    },
+    {
+      "date": "2026-07-23",
+      "value": 74.0
+    },
+    {
+      "date": "2026-07-30",
+      "value": 25.0
     }
   ],
   "series": [
@@ -11096,16 +11104,24 @@
     },
     {
       "date": "2026-07-16",
-      "value": 24.0
+      "value": 88.0
+    },
+    {
+      "date": "2026-07-23",
+      "value": 74.0
+    },
+    {
+      "date": "2026-07-30",
+      "value": 25.0
     }
   ],
-  "latest_observation_date": "2026-07-16",
-  "latest_value": 24.0,
-  "last_successful_refresh": "2026-07-16T12:22:58.929488+00:00",
-  "last_attempt": "2026-07-16T12:22:58.929500+00:00",
+  "latest_observation_date": "2026-07-30",
+  "latest_value": 25.0,
+  "last_successful_refresh": "2026-08-03T07:10:04.151908+00:00",
+  "last_attempt": "2026-08-03T07:10:04.151937+00:00",
   "status": "LIVE",
   "validation": {
-    "n": 1386,
+    "n": 1388,
     "flags": [
       "spike_flag:2001-04-05",
       "spike_flag:2008-04-24",
@@ -11113,6 +11129,6 @@
       "spike_flag:2013-04-11"
     ],
     "min_date": "1999-12-30",
-    "max_date": "2026-07-16"
+    "max_date": "2026-07-30"
   }
 }

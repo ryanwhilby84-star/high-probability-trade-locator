@@ -105,15 +105,19 @@ class UnifiedPriceAdapter:
         oanda_sym = OANDA_STORE_SYMBOL.get(instrument_id) or (
             oanda_symbol_for(spec, self._coverage) if source == "oanda" else None
         )
+        forming_daily = None
+        forming_weekly = None
         if source == "oanda" and not daily and oanda_sym and get_oanda_api_key():
             try:
-                price, daily, weekly = oanda_fetch(oanda_sym)
+                price, daily, weekly, forming_daily, forming_weekly = oanda_fetch(oanda_sym)
                 if daily:
                     source = "oanda"
             except OandaApiError:
                 price = None
                 daily = []
                 weekly = []
+                forming_daily = None
+                forming_weekly = None
 
         try:
             if not daily:
@@ -128,7 +132,7 @@ class UnifiedPriceAdapter:
                         sym = oanda_symbol_for(spec, self._coverage) or oanda_sym
                         if not sym:
                             raise OandaApiError(f"No OANDA symbol for {instrument_id}")
-                        price, daily, weekly = oanda_fetch(sym)
+                        price, daily, weekly, forming_daily, forming_weekly = oanda_fetch(sym)
                     elif source not in ("yahoo_futures", "fred"):
                         price, daily, weekly = av_fetch(spec)
         except OandaApiError:
@@ -158,6 +162,8 @@ class UnifiedPriceAdapter:
             "price": price,
             "daily": daily,
             "weekly": weekly,
+            "forming_daily": forming_daily,
+            "forming_weekly": forming_weekly,
             "range_52w": range_52w,
             "history": history,
             "error": err,
