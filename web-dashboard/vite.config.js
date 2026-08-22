@@ -364,6 +364,87 @@ function seasonalityWorkstationRoutePlugin() {
   }
 }
 
+function ngLivePricePlugin() {
+  /** Dedicated fresh OANDA REST quote for NG valuation polling fallback (no static JSON). */
+  const cliPath = path.join(projectRoot, 'scripts', 'fetch_natural_gas_live_quote.py')
+  const pythonExecutable = process.env.HPTL_PYTHON || 'python'
+  const TIMEOUT_MS = 20_000
+
+  return {
+    name: 'hptl-ng-live-price',
+    configureServer(server) {
+      server.middlewares.use('/api/ng-live-price', (req, res, next) => {
+        if (req.method !== 'GET') {
+          next()
+          return
+        }
+        const child = spawn(pythonExecutable, [cliPath], {
+          cwd: projectRoot,
+          shell: true,
+          env: process.env,
+        })
+        let stdout = ''
+        let stderr = ''
+        let settled = false
+        const timer = setTimeout(() => {
+          if (settled) return
+          settled = true
+          try {
+            child.kill()
+          } catch {
+            /* ignore */
+          }
+          res.statusCode = 504
+          res.setHeader('Content-Type', 'application/json')
+          res.end(
+            JSON.stringify({
+              ok: false,
+              error: 'timeout',
+              detail: 'OANDA NG live quote fetch timed out',
+            }),
+          )
+        }, TIMEOUT_MS)
+
+        child.stdout.on('data', (d) => {
+          stdout += d.toString()
+        })
+        child.stderr.on('data', (d) => {
+          stderr += d.toString()
+        })
+        child.on('close', (code) => {
+          if (settled) return
+          settled = true
+          clearTimeout(timer)
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Cache-Control', 'no-store')
+          let body = null
+          try {
+            body = JSON.parse((stdout || '').trim().split('\n').filter(Boolean).pop() || '{}')
+          } catch {
+            body = null
+          }
+          if (!body || body.ok === false || code !== 0) {
+            res.statusCode = 502
+            res.end(
+              JSON.stringify(
+                body || {
+                  ok: false,
+                  error: 'fetch_failed',
+                  code,
+                  stderr: String(stderr || '').slice(0, 400),
+                },
+              ),
+            )
+            return
+          }
+          res.statusCode = 200
+          res.end(JSON.stringify(body))
+        })
+      })
+    },
+  }
+}
+
 function liveQuotesRefreshPlugin() {
   return {
     name: 'hptl-live-quotes-refresh',
@@ -872,6 +953,7 @@ export default defineConfig({
     tradeBasketRoutePlugin(),
     macroIntelligenceRoutePlugin(),
     liveQuotesRefreshPlugin(),
+    ngLivePricePlugin(),
   ],
   server: {
     host: '127.0.0.1',

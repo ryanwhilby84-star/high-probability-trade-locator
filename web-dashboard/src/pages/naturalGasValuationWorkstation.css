@@ -261,6 +261,12 @@
   background: rgba(15, 23, 42, 0.9);
 }
 
+.ngvw-heartbeat {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
 .ngvw-status-badge--live {
   border-color: rgba(34, 197, 94, 0.55);
   color: #bbf7d0;
@@ -271,6 +277,12 @@
   border-color: rgba(56, 189, 248, 0.5);
   color: #bae6fd;
   background: rgba(12, 74, 110, 0.45);
+}
+
+.ngvw-status-badge--polling {
+  border-color: rgba(250, 204, 21, 0.55);
+  color: #fef08a;
+  background: rgba(113, 63, 18, 0.45);
 }
 
 .ngvw-status-badge--forming-bar {

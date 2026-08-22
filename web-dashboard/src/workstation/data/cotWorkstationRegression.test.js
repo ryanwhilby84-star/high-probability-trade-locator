@@ -235,6 +235,30 @@ describe('percentiles', () => {
     expect(checked).toBeGreaterThan(0)
     expect(missing).toBe(0)
   })
+
+  it('Natural Gas inspector tip matches cot_3y tip and 1W change invariant', () => {
+    const wiPath = join(publicData, 'cot_weekly_inspector_latest.json')
+    const s3Path = join(publicData, 'cot_3y_series_latest.json')
+    if (!existsSync(wiPath) || !existsSync(s3Path)) return
+    const wi = JSON.parse(readFileSync(wiPath, 'utf8'))
+    const s3 = JSON.parse(readFileSync(s3Path, 'utf8'))
+    const rows = wi.markets?.['Natural Gas / NG']?.rows || []
+    const series = s3.markets?.['Natural Gas / NG']?.series || []
+    expect(rows.length).toBeGreaterThan(2)
+    expect(series.length).toBeGreaterThan(2)
+    const last = rows[rows.length - 1]
+    const prev = rows[rows.length - 2]
+    const tip = series[series.length - 1]
+    expect(last[0]).toBe(tip.date)
+    expect(last[2][0]).toBe(tip.institutional_net)
+    // current_net - previous_net == displayed_1w_change for C / NC / NR
+    for (const gi of [1, 2, 3]) {
+      expect(last[gi][0] - prev[gi][0]).toBeCloseTo(last[gi][1], 6)
+    }
+    // Final NC chart segment direction agrees with NC 1W sign
+    const ncDelta = tip.institutional_net - series[series.length - 2].institutional_net
+    expect(Math.sign(ncDelta)).toBe(Math.sign(last[2][1]) || 0)
+  })
 })
 
 describe('layout clipping guards', () => {

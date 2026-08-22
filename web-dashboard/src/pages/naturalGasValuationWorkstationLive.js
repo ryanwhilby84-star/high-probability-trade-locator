@@ -17,6 +17,17 @@ export const INTERACTION_MODE = {
   LOCKED_HISTORY: 'locked_history',
 }
 
+/** Visible update modes for the current-state card. */
+export const UPDATE_MODE = {
+  LIVE: 'LIVE',
+  POLLING: 'POLLING',
+  SNAPSHOT: 'SNAPSHOT',
+  STALE: 'STALE',
+}
+
+/** Live/polling quote becomes STALE beyond this age (matches backend CURRENT_PRICE_STALE_SECONDS). */
+export const LIVE_QUOTE_STALE_MS = 60_000
+
 /** Snapshot / forming comparison remains Current within this age. */
 export const COMPARISON_CURRENT_MAX_AGE_MS = 24 * 60 * 60 * 1000
 
@@ -448,5 +459,140 @@ export function assertSharedVisibleRange(priceRange, valuationRange) {
     valuation_from: valuationRange?.from ?? null,
     valuation_to: valuationRange?.to ?? null,
     invariant: 'priceRange.from === valuationRange.from && priceRange.to === valuationRange.to',
+  }
+}
+
+export function resolveUpdateMode({
+  streamIsLive = false,
+  hasPollingQuote = false,
+  quote = null,
+  nowMs = Date.now(),
+  staleMs = LIVE_QUOTE_STALE_MS,
+} = {}) {
+  if (streamIsLive && quote?.price != null) {
+    const age =
+      quote.ageSeconds != null
+        ? Number(quote.ageSeconds) * 1000
+        : quote.timestamp
+          ? Math.max(
+              0,
+              nowMs - (Date.parse(String(quote.timestamp).replace(/(\.\d{3})\d+/, '$1')) || nowMs),
+            )
+          : 0
+    if (age > staleMs) return UPDATE_MODE.STALE
+    return UPDATE_MODE.LIVE
+  }
+  if (hasPollingQuote && quote?.price != null) {
+    const age =
+      quote.receivedAtMs != null
+        ? Math.max(0, nowMs - quote.receivedAtMs)
+        : quote.timestamp
+          ? Math.max(
+              0,
+              nowMs - (Date.parse(String(quote.timestamp).replace(/(\.\d{3})\d+/, '$1')) || nowMs),
+            )
+          : null
+    if (age != null && age > staleMs) return UPDATE_MODE.STALE
+    return UPDATE_MODE.POLLING
+  }
+  if (quote?.price != null) {
+    const age = quote.timestamp
+      ? Math.max(
+          0,
+          nowMs - (Date.parse(String(quote.timestamp).replace(/(\.\d{3})\d+/, '$1')) || nowMs),
+        )
+      : null
+    if (age != null && age > staleMs) return UPDATE_MODE.STALE
+    return UPDATE_MODE.SNAPSHOT
+  }
+  return UPDATE_MODE.STALE
+}
+
+/** Apply a quote tick to live card state — fair value fixed; no historical mutation. */
+export function applyQuoteToLiveState({
+  marketPrice,
+  physicalFairValue,
+  updateMode = UPDATE_MODE.STALE,
+  source = '—',
+  sourceType = 'none',
+  timestamp = null,
+  ageMs = null,
+} = {}) {
+  const price = finitePrice(marketPrice)
+  const fair = finitePrice(physicalFairValue)
+  const rawDev = computeLiveDeviationPct(price, fair)
+  const trusted =
+    (updateMode === UPDATE_MODE.LIVE || updateMode === UPDATE_MODE.POLLING) && rawDev != null
+  const visual = decisiveInterpretation(rawDev)
+  return {
+    market_price: price,
+    physical_fair_value: fair,
+    live_deviation_pct: rawDev,
+    live_deviation_pct_display: reconcileDisplayedDeviation(price, fair, 2),
+    deviation_trusted: trusted,
+    bucket: rawDev != null ? valuationBucket(rawDev) : null,
+    bucket_label: bucketLabel(rawDev != null ? valuationBucket(rawDev) : null),
+    state_headline: visual.headline,
+    interpretation: trusted
+      ? visual.detail
+      : updateMode === UPDATE_MODE.STALE
+        ? 'Market price is stale — fair value retained; treat deviation as indicative only.'
+        : visual.detail,
+    strength: visual.strength,
+    price_source: source,
+    price_source_type: sourceType,
+    price_status: updateMode,
+    price_label: updateMode,
+    price_updated: timestamp,
+    price_age_ms: ageMs,
+    update_mode: updateMode,
+    // Only LIVE / POLLING count as current. SNAPSHOT / STALE are labelled fallbacks.
+    comparison_status:
+      updateMode === UPDATE_MODE.LIVE || updateMode === UPDATE_MODE.POLLING
+        ? 'Current'
+        : 'Stale',
+    fair_value_stable: true,
+    last_state_update: new Date().toISOString(),
+  }
+}
+
+export function buildHeartbeat({
+  updateMode,
+  ageMs,
+  connectionState = 'disconnected',
+  reconnectAttempts = 0,
+  lastError = null,
+} = {}) {
+  const ageSec = ageMs != null && Number.isFinite(Number(ageMs)) ? Math.round(Number(ageMs) / 1000) : null
+  const ageLabel = ageSec == null ? '—' : ageSec < 1 ? '<1s ago' : `${ageSec}s ago`
+  return {
+    update_mode: updateMode,
+    age_ms: ageMs,
+    age_seconds: ageSec,
+    age_label: ageLabel,
+    connection_status: connectionState,
+    reconnect_attempts: reconnectAttempts,
+    last_error: lastError,
+    badge: `${updateMode} · last update ${ageLabel}`,
+  }
+}
+
+/** Pure helper used in tests: WS quote tick updates price/deviation, not fair value. */
+export function reduceLiveQuoteTick(prev, nextQuote, physicalFairValue) {
+  const fair = physicalFairValue ?? prev?.physical_fair_value ?? null
+  const mode = nextQuote?.source_type === 'websocket' ? UPDATE_MODE.LIVE : UPDATE_MODE.POLLING
+  const next = applyQuoteToLiveState({
+    marketPrice: nextQuote?.price,
+    physicalFairValue: fair,
+    updateMode: mode,
+    source: nextQuote?.source || '—',
+    sourceType: nextQuote?.source_type || 'websocket',
+    timestamp: nextQuote?.timestamp || null,
+    ageMs: 0,
+  })
+  return {
+    ...next,
+    historical_lock_preserved: prev?.historical_lock_preserved !== false,
+    zoom_reset: false,
   }
 }

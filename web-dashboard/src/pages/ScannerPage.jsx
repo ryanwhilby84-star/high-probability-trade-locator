@@ -364,7 +364,17 @@ export function ScannerPage({
                       <p className="scanner-dominant-narrative">{r.narrative || '—'}</p>
                       {r.tactical ? <p className="scanner-tactical-line">{r.tactical}</p> : null}
                     </td>
-                    <td className="scanner-net-cell">{fmtNum(r.one_week_net_change)}</td>
+                    <td
+                      className={`scanner-net-cell${
+                        Number(r.one_week_net_change) > 0
+                          ? ' hptl-tone-bull'
+                          : Number(r.one_week_net_change) < 0
+                            ? ' hptl-tone-bear'
+                            : ''
+                      }`}
+                    >
+                      {fmtNum(r.one_week_net_change)}
+                    </td>
                     <td>
                       <button
                         type="button"

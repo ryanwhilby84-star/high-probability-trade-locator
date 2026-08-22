@@ -4,10 +4,13 @@
   --hptl-bg-elevated: #1a2233;
   --hptl-bg-muted: #1c2536;
   --hptl-bg-panel: #162032;
+  /* Surface / chrome (never use as body text on dark panels) */
   --hptl-navy: #0e1420;
   --hptl-navy-mid: #1a2233;
   --hptl-navy-soft: #2b3648;
+  /* Readable content text — always high contrast vs --hptl-bg* */
   --hptl-text: #e8e8e6;
+  --hptl-heading: #f3f4f6;
   --hptl-text-secondary: #a7b1c2;
   --hptl-text-muted: #8a95a8;
   --hptl-border: #2b3648;
@@ -21,20 +24,56 @@
   --hptl-attention-bg: #2a3240;
   --hptl-attention-border: #85715b;
   --hptl-attention-text: #eedfcb;
-  --hptl-positive: #5f8f74;
-  --hptl-positive-bg: rgba(95, 143, 116, 0.14);
-  --hptl-negative: #b06a6a;
-  --hptl-negative-bg: rgba(176, 106, 106, 0.14);
+  /* Muted desk-terminal semantics (not neon) */
+  --hptl-positive: #6a9a7e;
+  --hptl-positive-bg: rgba(106, 154, 126, 0.14);
+  --hptl-negative: #b07272;
+  --hptl-negative-bg: rgba(176, 114, 114, 0.14);
   --hptl-warn-bg: rgba(176, 141, 87, 0.14);
   --hptl-warn-text: #d4b483;
-  --hptl-info-bg: rgba(167, 177, 194, 0.1);
-  --hptl-info-text: #a7b1c2;
+  --hptl-info-bg: rgba(122, 154, 186, 0.12);
+  --hptl-info-text: #9bb0c7;
   --hptl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --hptl-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.28);
   --hptl-radius: 8px;
   --hptl-radius-sm: 5px;
   --hptl-font: 'Segoe UI', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   --hptl-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+/* Light theme guard — headings stay ink-dark; never near-black on dark panels */
+[data-theme='light'],
+html.theme-light,
+body.theme-light {
+  --hptl-bg: #eef1f5;
+  --hptl-bg-elevated: #ffffff;
+  --hptl-bg-muted: #f3f5f8;
+  --hptl-bg-panel: #f7f8fa;
+  --hptl-navy: #0e1420;
+  --hptl-navy-mid: #1a2233;
+  --hptl-navy-soft: #d5dbe6;
+  --hptl-text: #1a2233;
+  --hptl-heading: #0e1420;
+  --hptl-text-secondary: #4a5568;
+  --hptl-text-muted: #6b778c;
+  --hptl-border: #d5dbe6;
+  --hptl-border-strong: #b8c0ce;
+  --hptl-badge-bg: #eef1f5;
+  --hptl-badge-border: #c5ad8a;
+  --hptl-badge-text: #5c4a32;
+  --hptl-attention-bg: #f3efe6;
+  --hptl-attention-border: #c5ad8a;
+  --hptl-attention-text: #5c4a32;
+  --hptl-positive: #2f6b4f;
+  --hptl-positive-bg: rgba(47, 107, 79, 0.1);
+  --hptl-negative: #9b3d3d;
+  --hptl-negative-bg: rgba(155, 61, 61, 0.1);
+  --hptl-warn-bg: rgba(184, 151, 90, 0.14);
+  --hptl-warn-text: #8a6a2f;
+  --hptl-info-bg: rgba(70, 110, 150, 0.1);
+  --hptl-info-text: #3d5a73;
+  --hptl-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --hptl-shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 /* Shell */
@@ -917,10 +956,68 @@
 }
 
 .scanner-market {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--hptl-navy);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--hptl-heading);
   letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.scanner-net-cell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--hptl-text-secondary);
+}
+
+/* Shared muted semantic tones (presentation only) */
+.hptl-tone-bull {
+  color: var(--hptl-positive);
+}
+
+.hptl-tone-bear {
+  color: var(--hptl-negative);
+}
+
+.hptl-tone-warn {
+  color: var(--hptl-warn-text);
+}
+
+.hptl-tone-info {
+  color: var(--hptl-info-text);
+}
+
+.hptl-tone-neutral {
+  color: var(--hptl-text-secondary);
+}
+
+.hptl-tone-bull-soft {
+  background: var(--hptl-positive-bg);
+  color: var(--hptl-positive);
+  border-color: rgba(106, 154, 126, 0.35);
+}
+
+.hptl-tone-bear-soft {
+  background: var(--hptl-negative-bg);
+  color: var(--hptl-negative);
+  border-color: rgba(176, 114, 114, 0.35);
+}
+
+.hptl-tone-warn-soft {
+  background: var(--hptl-warn-bg);
+  color: var(--hptl-warn-text);
+  border-color: rgba(184, 151, 90, 0.4);
+}
+
+.hptl-tone-info-soft {
+  background: var(--hptl-info-bg);
+  color: var(--hptl-info-text);
+  border-color: rgba(122, 154, 186, 0.35);
+}
+
+.hptl-tone-neutral-soft {
+  background: var(--hptl-badge-bg);
+  color: var(--hptl-badge-text);
+  border-color: var(--hptl-badge-border);
 }
 
 .scanner-class {

@@ -100,7 +100,7 @@ body {
 
 .ws-root .snapshot-card .value,
 .ws-content .snapshot-card .value {
-  color: var(--hptl-navy);
+  color: var(--hptl-heading, var(--hptl-text));
 }
 
 .ws-root .lmc-section,

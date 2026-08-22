@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-11T12:14:03.700956+00:00",
+  "generated_at": "2026-08-01T19:55:27.312282+00:00",
   "instrument_id": "Dow / YM",
   "oanda_symbol": "US30_USD",
   "source": "oanda",
@@ -10382,6 +10382,141 @@
       "close": 52758.9,
       "volume": 148362.0,
       "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-12",
+      "open": 52641.9,
+      "high": 52899.0,
+      "low": 52396.0,
+      "close": 52522.5,
+      "volume": 225159.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-13",
+      "open": 52554.0,
+      "high": 52774.6,
+      "low": 52054.5,
+      "close": 52609.5,
+      "volume": 320079.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-14",
+      "open": 52605.5,
+      "high": 52895.0,
+      "low": 52495.0,
+      "close": 52718.5,
+      "volume": 187826.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-15",
+      "open": 52729.0,
+      "high": 52921.6,
+      "low": 52428.8,
+      "close": 52560.3,
+      "volume": 244640.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-16",
+      "open": 52594.3,
+      "high": 52653.8,
+      "low": 51992.8,
+      "close": 52196.3,
+      "volume": 311273.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-19",
+      "open": 52130.9,
+      "high": 52463.0,
+      "low": 51826.4,
+      "close": 51920.9,
+      "volume": 255830.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-20",
+      "open": 51901.9,
+      "high": 52419.4,
+      "low": 51863.4,
+      "close": 52242.4,
+      "volume": 162851.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-21",
+      "open": 52243.4,
+      "high": 52548.4,
+      "low": 52094.4,
+      "close": 52328.2,
+      "volume": 164179.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-22",
+      "open": 52259.2,
+      "high": 52354.2,
+      "low": 51570.2,
+      "close": 51753.3,
+      "volume": 294719.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-23",
+      "open": 51730.3,
+      "high": 52152.8,
+      "low": 51694.8,
+      "close": 51934.3,
+      "volume": 268598.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-26",
+      "open": 52278.8,
+      "high": 52629.8,
+      "low": 52016.0,
+      "close": 52263.5,
+      "volume": 271217.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-27",
+      "open": 52281.0,
+      "high": 52960.6,
+      "low": 52140.5,
+      "close": 52775.1,
+      "volume": 291949.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-28",
+      "open": 52792.1,
+      "high": 52889.6,
+      "low": 51498.5,
+      "close": 51604.5,
+      "volume": 402530.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-29",
+      "open": 51671.5,
+      "high": 52358.0,
+      "low": 51595.0,
+      "close": 52307.5,
+      "volume": 397252.0,
+      "source": "oanda:US30_USD"
+    },
+    {
+      "date": "2026-07-30",
+      "open": 52269.5,
+      "high": 52652.8,
+      "low": 51998.6,
+      "close": 52420.3,
+      "volume": 287862.0,
+      "source": "oanda:US30_USD"
     }
   ],
   "diagnostics": {
@@ -10395,11 +10530,11 @@
       "probe": {
         "http_status": 200,
         "error": null,
-        "candles_returned": 1153
+        "candles_returned": 1168
       },
-      "fetched_rows": 1153,
+      "fetched_rows": 1168,
       "earliest_date": "2022-01-24",
-      "latest_date": "2026-07-09"
+      "latest_date": "2026-07-30"
     }
   }
 }

@@ -432,6 +432,11 @@ export const CurrentPriceStreamStore = {
 
   /** Test / recovery helper — force a reconnect without dropping cached quotes. */
   reconnect() {
+    _intentionalClose = false
+    _reconnectGaveUp = false
+    _reconnectAttempts = 0
+    _backoffMs = BACKOFF_BASE_MS
+    clearReconnectTimer()
     if (_ws) {
       try {
         _ws.close()
@@ -440,8 +445,16 @@ export const CurrentPriceStreamStore = {
       }
       _ws = null
     }
-    _backoffMs = BACKOFF_BASE_MS
     if (_subscriberCount > 0) openSocket()
+    emit()
+  },
+
+  getReconnectAttempts() {
+    return _reconnectAttempts
+  },
+
+  getLastError() {
+    return _lastError
   },
 
   clearCache() {

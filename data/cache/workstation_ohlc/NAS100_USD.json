@@ -1,1190 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-12T11:16:27.769393+00:00",
+  "generated_at": "2026-08-01T19:55:24.465468+00:00",
   "instrument_id": "NASDAQ / NQ",
   "oanda_symbol": "NAS100_USD",
   "source": "oanda",
   "source_symbol": "NAS100_USD",
   "daily_bars": [
-    {
-      "date": "2016-06-19",
-      "open": 4393.1,
-      "high": 4443.6,
-      "low": 4391.0,
-      "close": 4414.8,
-      "volume": 114060.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-20",
-      "open": 4404.6,
-      "high": 4422.7,
-      "low": 4395.3,
-      "close": 4405.0,
-      "volume": 130280.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-21",
-      "open": 4403.2,
-      "high": 4440.9,
-      "low": 4398.2,
-      "close": 4402.2,
-      "volume": 121393.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-22",
-      "open": 4420.4,
-      "high": 4483.4,
-      "low": 4416.9,
-      "close": 4483.4,
-      "volume": 161122.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-23",
-      "open": 4488.5,
-      "high": 4500.8,
-      "low": 4240.8,
-      "close": 4268.9,
-      "volume": 544959.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-26",
-      "open": 4259.4,
-      "high": 4275.3,
-      "low": 4175.1,
-      "close": 4181.4,
-      "volume": 324462.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-27",
-      "open": 4183.9,
-      "high": 4291.4,
-      "low": 4183.9,
-      "close": 4288.7,
-      "volume": 175128.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-28",
-      "open": 4287.9,
-      "high": 4384.4,
-      "low": 4275.3,
-      "close": 4383.8,
-      "volume": 143688.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-29",
-      "open": 4381.4,
-      "high": 4416.9,
-      "low": 4345.6,
-      "close": 4408.3,
-      "volume": 176514.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-06-30",
-      "open": 4406.2,
-      "high": 4453.1,
-      "low": 4393.3,
-      "close": 4441.3,
-      "volume": 123287.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-03",
-      "open": 4444.8,
-      "high": 4458.5,
-      "low": 4433.3,
-      "close": 4446.7,
-      "volume": 31974.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-04",
-      "open": 4444.8,
-      "high": 4445.0,
-      "low": 4384.5,
-      "close": 4414.6,
-      "volume": 147833.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-05",
-      "open": 4413.0,
-      "high": 4446.4,
-      "low": 4372.5,
-      "close": 4441.9,
-      "volume": 210207.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-06",
-      "open": 4441.3,
-      "high": 4467.1,
-      "low": 4433.5,
-      "close": 4458.3,
-      "volume": 154539.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-07",
-      "open": 4457.6,
-      "high": 4529.4,
-      "low": 4445.9,
-      "close": 4523.3,
-      "volume": 146293.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-10",
-      "open": 4523.8,
-      "high": 4569.4,
-      "low": 4522.0,
-      "close": 4557.1,
-      "volume": 112635.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-11",
-      "open": 4557.0,
-      "high": 4587.9,
-      "low": 4552.7,
-      "close": 4576.1,
-      "volume": 101650.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-12",
-      "open": 4575.3,
-      "high": 4590.4,
-      "low": 4564.9,
-      "close": 4566.3,
-      "volume": 114953.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-13",
-      "open": 4564.9,
-      "high": 4614.1,
-      "low": 4559.7,
-      "close": 4595.8,
-      "volume": 119038.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-14",
-      "open": 4592.4,
-      "high": 4609.3,
-      "low": 4548.0,
-      "close": 4567.8,
-      "volume": 105362.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-17",
-      "open": 4587.4,
-      "high": 4627.6,
-      "low": 4585.6,
-      "close": 4613.8,
-      "volume": 87758.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-18",
-      "open": 4615.8,
-      "high": 4617.2,
-      "low": 4594.1,
-      "close": 4613.9,
-      "volume": 94318.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-19",
-      "open": 4613.2,
-      "high": 4665.1,
-      "low": 4603.6,
-      "close": 4662.2,
-      "volume": 70954.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-20",
-      "open": 4659.8,
-      "high": 4667.9,
-      "low": 4632.9,
-      "close": 4645.6,
-      "volume": 94322.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-21",
-      "open": 4643.6,
-      "high": 4670.4,
-      "low": 4634.6,
-      "close": 4663.9,
-      "volume": 76822.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-24",
-      "open": 4664.3,
-      "high": 4675.4,
-      "low": 4649.6,
-      "close": 4664.4,
-      "volume": 84684.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-25",
-      "open": 4663.6,
-      "high": 4694.1,
-      "low": 4646.9,
-      "close": 4692.4,
-      "volume": 101277.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-26",
-      "open": 4696.9,
-      "high": 4719.6,
-      "low": 4683.0,
-      "close": 4719.6,
-      "volume": 135181.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-27",
-      "open": 4716.4,
-      "high": 4737.8,
-      "low": 4695.7,
-      "close": 4737.4,
-      "volume": 126714.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-28",
-      "open": 4737.3,
-      "high": 4742.4,
-      "low": 4715.2,
-      "close": 4735.6,
-      "volume": 119230.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-07-31",
-      "open": 4743.9,
-      "high": 4766.4,
-      "low": 4727.1,
-      "close": 4752.6,
-      "volume": 101990.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-01",
-      "open": 4754.6,
-      "high": 4765.3,
-      "low": 4687.9,
-      "close": 4720.8,
-      "volume": 131057.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-02",
-      "open": 4719.4,
-      "high": 4734.4,
-      "low": 4704.1,
-      "close": 4732.6,
-      "volume": 110053.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-03",
-      "open": 4731.0,
-      "high": 4751.4,
-      "low": 4720.0,
-      "close": 4750.7,
-      "volume": 97356.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-04",
-      "open": 4749.0,
-      "high": 4800.2,
-      "low": 4748.2,
-      "close": 4786.7,
-      "volume": 81417.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-07",
-      "open": 4784.9,
-      "high": 4803.4,
-      "low": 4768.7,
-      "close": 4782.7,
-      "volume": 58915.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-08",
-      "open": 4782.3,
-      "high": 4810.2,
-      "low": 4780.3,
-      "close": 4795.7,
-      "volume": 64106.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-09",
-      "open": 4795.0,
-      "high": 4803.0,
-      "low": 4770.0,
-      "close": 4783.4,
-      "volume": 75260.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-10",
-      "open": 4783.4,
-      "high": 4813.5,
-      "low": 4778.2,
-      "close": 4803.8,
-      "volume": 66275.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-11",
-      "open": 4802.9,
-      "high": 4809.0,
-      "low": 4789.7,
-      "close": 4808.5,
-      "volume": 62170.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-14",
-      "open": 4809.5,
-      "high": 4837.8,
-      "low": 4807.7,
-      "close": 4826.8,
-      "volume": 49912.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-15",
-      "open": 4825.9,
-      "high": 4827.0,
-      "low": 4799.0,
-      "close": 4804.3,
-      "volume": 72431.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-16",
-      "open": 4803.2,
-      "high": 4812.2,
-      "low": 4774.6,
-      "close": 4810.4,
-      "volume": 81030.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-17",
-      "open": 4810.6,
-      "high": 4816.7,
-      "low": 4795.3,
-      "close": 4810.4,
-      "volume": 65876.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-18",
-      "open": 4810.7,
-      "high": 4818.2,
-      "low": 4786.7,
-      "close": 4810.0,
-      "volume": 71518.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-21",
-      "open": 4808.5,
-      "high": 4819.5,
-      "low": 4791.2,
-      "close": 4814.8,
-      "volume": 90573.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-22",
-      "open": 4811.7,
-      "high": 4838.2,
-      "low": 4809.4,
-      "close": 4821.1,
-      "volume": 73807.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-23",
-      "open": 4819.4,
-      "high": 4825.0,
-      "low": 4771.9,
-      "close": 4786.4,
-      "volume": 87509.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-24",
-      "open": 4787.3,
-      "high": 4794.9,
-      "low": 4769.4,
-      "close": 4784.3,
-      "volume": 94455.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-25",
-      "open": 4784.4,
-      "high": 4818.2,
-      "low": 4758.4,
-      "close": 4785.0,
-      "volume": 139189.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-28",
-      "open": 4787.1,
-      "high": 4806.3,
-      "low": 4775.1,
-      "close": 4796.3,
-      "volume": 69063.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-29",
-      "open": 4795.5,
-      "high": 4799.2,
-      "low": 4760.7,
-      "close": 4778.9,
-      "volume": 79662.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-30",
-      "open": 4779.4,
-      "high": 4779.6,
-      "low": 4752.2,
-      "close": 4772.8,
-      "volume": 85704.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-08-31",
-      "open": 4774.7,
-      "high": 4795.7,
-      "low": 4750.2,
-      "close": 4776.4,
-      "volume": 108663.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-01",
-      "open": 4777.8,
-      "high": 4818.2,
-      "low": 4774.8,
-      "close": 4799.2,
-      "volume": 109333.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-04",
-      "open": 4800.3,
-      "high": 4806.4,
-      "low": 4782.1,
-      "close": 4792.5,
-      "volume": 24298.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-05",
-      "open": 4794.1,
-      "high": 4831.4,
-      "low": 4789.4,
-      "close": 4830.9,
-      "volume": 77696.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-06",
-      "open": 4830.2,
-      "high": 4839.7,
-      "low": 4812.7,
-      "close": 4828.9,
-      "volume": 74931.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-07",
-      "open": 4828.4,
-      "high": 4837.0,
-      "low": 4789.7,
-      "close": 4797.1,
-      "volume": 101508.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-08",
-      "open": 4794.6,
-      "high": 4798.0,
-      "low": 4666.1,
-      "close": 4668.5,
-      "volume": 129921.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-11",
-      "open": 4670.1,
-      "high": 4772.2,
-      "low": 4629.4,
-      "close": 4766.7,
-      "volume": 168034.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-12",
-      "open": 4764.2,
-      "high": 4764.5,
-      "low": 4699.5,
-      "close": 4733.4,
-      "volume": 203839.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-13",
-      "open": 4732.7,
-      "high": 4770.5,
-      "low": 4723.4,
-      "close": 4735.5,
-      "volume": 189438.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-14",
-      "open": 4734.8,
-      "high": 4826.2,
-      "low": 4719.2,
-      "close": 4814.1,
-      "volume": 162197.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-15",
-      "open": 4813.2,
-      "high": 4822.2,
-      "low": 4791.4,
-      "close": 4818.7,
-      "volume": 150089.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-18",
-      "open": 4817.9,
-      "high": 4844.4,
-      "low": 4785.3,
-      "close": 4799.1,
-      "volume": 110554.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-19",
-      "open": 4799.8,
-      "high": 4823.4,
-      "low": 4792.7,
-      "close": 4801.7,
-      "volume": 110552.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-20",
-      "open": 4803.0,
-      "high": 4857.2,
-      "low": 4791.2,
-      "close": 4853.4,
-      "volume": 162324.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-21",
-      "open": 4852.2,
-      "high": 4894.9,
-      "low": 4845.6,
-      "close": 4891.4,
-      "volume": 81750.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-22",
-      "open": 4889.5,
-      "high": 4892.6,
-      "low": 4851.3,
-      "close": 4859.4,
-      "volume": 84278.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-25",
-      "open": 4854.3,
-      "high": 4862.4,
-      "low": 4810.2,
-      "close": 4817.0,
-      "volume": 96626.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-26",
-      "open": 4817.2,
-      "high": 4867.4,
-      "low": 4803.9,
-      "close": 4862.6,
-      "volume": 114795.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-27",
-      "open": 4861.4,
-      "high": 4876.1,
-      "low": 4847.7,
-      "close": 4871.5,
-      "volume": 114527.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-28",
-      "open": 4869.8,
-      "high": 4879.1,
-      "low": 4815.5,
-      "close": 4844.4,
-      "volume": 171912.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-09-29",
-      "open": 4839.8,
-      "high": 4888.1,
-      "low": 4814.8,
-      "close": 4866.3,
-      "volume": 122400.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-02",
-      "open": 4870.4,
-      "high": 4882.0,
-      "low": 4845.7,
-      "close": 4871.4,
-      "volume": 83685.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-03",
-      "open": 4870.1,
-      "high": 4890.6,
-      "low": 4838.8,
-      "close": 4857.7,
-      "volume": 148794.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-04",
-      "open": 4858.4,
-      "high": 4890.7,
-      "low": 4851.7,
-      "close": 4879.2,
-      "volume": 86271.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-05",
-      "open": 4877.7,
-      "high": 4883.1,
-      "low": 4847.9,
-      "close": 4873.2,
-      "volume": 89331.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-06",
-      "open": 4872.8,
-      "high": 4885.7,
-      "low": 4836.9,
-      "close": 4861.6,
-      "volume": 145949.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-09",
-      "open": 4874.2,
-      "high": 4903.7,
-      "low": 4864.7,
-      "close": 4895.1,
-      "volume": 66092.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-10",
-      "open": 4894.6,
-      "high": 4899.4,
-      "low": 4800.4,
-      "close": 4827.5,
-      "volume": 130372.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-11",
-      "open": 4826.6,
-      "high": 4842.4,
-      "low": 4802.7,
-      "close": 4810.1,
-      "volume": 123181.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-12",
-      "open": 4807.0,
-      "high": 4815.0,
-      "low": 4756.9,
-      "close": 4798.0,
-      "volume": 140344.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-13",
-      "open": 4799.2,
-      "high": 4843.2,
-      "low": 4788.5,
-      "close": 4804.8,
-      "volume": 128292.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-16",
-      "open": 4806.0,
-      "high": 4812.7,
-      "low": 4783.5,
-      "close": 4805.5,
-      "volume": 110947.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-17",
-      "open": 4807.1,
-      "high": 4858.9,
-      "low": 4802.1,
-      "close": 4828.4,
-      "volume": 87055.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-18",
-      "open": 4824.6,
-      "high": 4842.5,
-      "low": 4813.2,
-      "close": 4832.5,
-      "volume": 69940.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-19",
-      "open": 4830.0,
-      "high": 4849.4,
-      "low": 4801.2,
-      "close": 4846.7,
-      "volume": 106944.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-20",
-      "open": 4846.4,
-      "high": 4851.1,
-      "low": 4816.9,
-      "close": 4847.8,
-      "volume": 88757.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-23",
-      "open": 4849.2,
-      "high": 4910.8,
-      "low": 4845.0,
-      "close": 4910.5,
-      "volume": 68026.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-24",
-      "open": 4908.1,
-      "high": 4921.7,
-      "low": 4876.0,
-      "close": 4880.4,
-      "volume": 81419.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-25",
-      "open": 4875.8,
-      "high": 4883.9,
-      "low": 4841.9,
-      "close": 4855.9,
-      "volume": 99053.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-26",
-      "open": 4856.9,
-      "high": 4882.7,
-      "low": 4806.7,
-      "close": 4825.8,
-      "volume": 123429.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-27",
-      "open": 4822.6,
-      "high": 4845.6,
-      "low": 4788.9,
-      "close": 4807.4,
-      "volume": 181431.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-30",
-      "open": 4797.9,
-      "high": 4832.2,
-      "low": 4791.2,
-      "close": 4805.9,
-      "volume": 93193.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-10-31",
-      "open": 4806.7,
-      "high": 4819.2,
-      "low": 4720.9,
-      "close": 4757.7,
-      "volume": 134593.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-01",
-      "open": 4758.6,
-      "high": 4770.4,
-      "low": 4710.6,
-      "close": 4722.4,
-      "volume": 170869.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-02",
-      "open": 4702.6,
-      "high": 4731.5,
-      "low": 4671.0,
-      "close": 4673.4,
-      "volume": 129241.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-03",
-      "open": 4674.6,
-      "high": 4696.9,
-      "low": 4653.3,
-      "close": 4662.4,
-      "volume": 137850.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-06",
-      "open": 4720.8,
-      "high": 4783.1,
-      "low": 4717.1,
-      "close": 4782.4,
-      "volume": 80544.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-07",
-      "open": 4779.1,
-      "high": 4823.9,
-      "low": 4754.6,
-      "close": 4803.4,
-      "volume": 119954.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-08",
-      "open": 4809.2,
-      "high": 4839.1,
-      "low": 4559.6,
-      "close": 4822.2,
-      "volume": 710370.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-09",
-      "open": 4818.6,
-      "high": 4881.0,
-      "low": 4680.9,
-      "close": 4741.1,
-      "volume": 381999.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-10",
-      "open": 4742.0,
-      "high": 4759.1,
-      "low": 4683.5,
-      "close": 4743.8,
-      "volume": 247136.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-13",
-      "open": 4755.6,
-      "high": 4785.8,
-      "low": 4674.3,
-      "close": 4695.6,
-      "volume": 236649.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-14",
-      "open": 4695.3,
-      "high": 4780.3,
-      "low": 4689.3,
-      "close": 4767.1,
-      "volume": 148189.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-15",
-      "open": 4767.1,
-      "high": 4795.8,
-      "low": 4737.5,
-      "close": 4784.4,
-      "volume": 134443.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-16",
-      "open": 4783.6,
-      "high": 4831.8,
-      "low": 4779.4,
-      "close": 4831.5,
-      "volume": 122334.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-17",
-      "open": 4830.4,
-      "high": 4841.1,
-      "low": 4803.7,
-      "close": 4811.2,
-      "volume": 97899.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-20",
-      "open": 4810.5,
-      "high": 4862.6,
-      "low": 4804.3,
-      "close": 4858.6,
-      "volume": 89761.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-21",
-      "open": 4858.3,
-      "high": 4885.4,
-      "low": 4857.8,
-      "close": 4879.0,
-      "volume": 79595.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-22",
-      "open": 4878.1,
-      "high": 4883.2,
-      "low": 4831.2,
-      "close": 4851.4,
-      "volume": 83640.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-23",
-      "open": 4851.6,
-      "high": 4863.3,
-      "low": 4840.2,
-      "close": 4863.0,
-      "volume": 20292.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-24",
-      "open": 4862.4,
-      "high": 4870.5,
-      "low": 4852.8,
-      "close": 4869.9,
-      "volume": 44176.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-27",
-      "open": 4864.2,
-      "high": 4879.6,
-      "low": 4842.8,
-      "close": 4858.9,
-      "volume": 93660.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-28",
-      "open": 4860.4,
-      "high": 4897.6,
-      "low": 4847.7,
-      "close": 4874.4,
-      "volume": 91961.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-29",
-      "open": 4873.1,
-      "high": 4885.6,
-      "low": 4812.8,
-      "close": 4818.8,
-      "volume": 121588.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-11-30",
-      "open": 4819.5,
-      "high": 4827.3,
-      "low": 4722.9,
-      "close": 4735.3,
-      "volume": 174915.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-01",
-      "open": 4735.8,
-      "high": 4758.9,
-      "low": 4707.4,
-      "close": 4733.8,
-      "volume": 132598.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-04",
-      "open": 4714.6,
-      "high": 4795.7,
-      "low": 4701.6,
-      "close": 4782.6,
-      "volume": 141508.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-05",
-      "open": 4781.2,
-      "high": 4796.4,
-      "low": 4767.9,
-      "close": 4789.8,
-      "volume": 102431.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-06",
-      "open": 4789.0,
-      "high": 4854.9,
-      "low": 4763.6,
-      "close": 4844.6,
-      "volume": 127644.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-07",
-      "open": 4844.3,
-      "high": 4869.2,
-      "low": 4836.3,
-      "close": 4862.6,
-      "volume": 122846.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-08",
-      "open": 4862.4,
-      "high": 4897.3,
-      "low": 4852.7,
-      "close": 4894.6,
-      "volume": 65589.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-11",
-      "open": 4895.4,
-      "high": 4916.8,
-      "low": 4852.4,
-      "close": 4867.2,
-      "volume": 81494.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-12",
-      "open": 4866.2,
-      "high": 4963.1,
-      "low": 4861.3,
-      "close": 4941.8,
-      "volume": 122387.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-13",
-      "open": 4940.6,
-      "high": 4958.7,
-      "low": 4912.4,
-      "close": 4933.5,
-      "volume": 193088.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-14",
-      "open": 4930.3,
-      "high": 4963.0,
-      "low": 4919.7,
-      "close": 4940.3,
-      "volume": 202836.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-15",
-      "open": 4939.3,
-      "high": 4953.1,
-      "low": 4905.8,
-      "close": 4916.5,
-      "volume": 117332.0,
-      "source": "oanda:NAS100_USD"
-    },
-    {
-      "date": "2016-12-18",
-      "open": 4916.8,
-      "high": 4967.5,
-      "low": 4913.8,
-      "close": 4942.1,
-      "volume": 82110.0,
-      "source": "oanda:NAS100_USD"
-    },
     {
       "date": "2016-12-19",
       "open": 4940.8,
@@ -23405,6 +22226,141 @@
       "close": 29885.7,
       "volume": 898482.0,
       "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-12",
+      "open": 29798.2,
+      "high": 29862.3,
+      "low": 29215.8,
+      "close": 29259.5,
+      "volume": 1126371.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-13",
+      "open": 29303.1,
+      "high": 29749.8,
+      "low": 29132.3,
+      "close": 29633.4,
+      "volume": 1323805.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-14",
+      "open": 29629.6,
+      "high": 29895.9,
+      "low": 29235.6,
+      "close": 29556.7,
+      "volume": 1029074.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-15",
+      "open": 29556.2,
+      "high": 29634.8,
+      "low": 28921.5,
+      "close": 29018.0,
+      "volume": 1120223.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-16",
+      "open": 29052.8,
+      "high": 29061.8,
+      "low": 28250.8,
+      "close": 28614.8,
+      "volume": 1330955.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-19",
+      "open": 28651.2,
+      "high": 29034.7,
+      "low": 28552.9,
+      "close": 28627.2,
+      "volume": 1223291.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-20",
+      "open": 28612.3,
+      "high": 29205.0,
+      "low": 28544.0,
+      "close": 29127.7,
+      "volume": 865667.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-21",
+      "open": 29142.0,
+      "high": 29184.7,
+      "low": 28803.4,
+      "close": 29032.4,
+      "volume": 947098.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-22",
+      "open": 28965.0,
+      "high": 29138.2,
+      "low": 28289.2,
+      "close": 28607.6,
+      "volume": 1303678.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-23",
+      "open": 28555.1,
+      "high": 28599.2,
+      "low": 28078.1,
+      "close": 28170.0,
+      "volume": 1281959.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-26",
+      "open": 28511.2,
+      "high": 28627.7,
+      "low": 27804.2,
+      "close": 28075.6,
+      "volume": 1306906.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-27",
+      "open": 28088.8,
+      "high": 28091.3,
+      "low": 27479.8,
+      "close": 27838.4,
+      "volume": 1415001.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-28",
+      "open": 27854.2,
+      "high": 28057.3,
+      "low": 27093.2,
+      "close": 27160.6,
+      "volume": 1601477.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-29",
+      "open": 27179.8,
+      "high": 28292.6,
+      "low": 27177.4,
+      "close": 28221.0,
+      "volume": 1559813.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-07-30",
+      "open": 28233.8,
+      "high": 28612.4,
+      "low": 27966.8,
+      "close": 28191.8,
+      "volume": 1313716.0,
+      "source": "oanda:NAS100_USD"
     }
   ],
   "diagnostics": {
@@ -23418,11 +22374,11 @@
       "probe": {
         "http_status": 200,
         "error": null,
-        "candles_returned": 2600
+        "candles_returned": 2484
       },
-      "fetched_rows": 2600,
-      "earliest_date": "2016-06-19",
-      "latest_date": "2026-07-09"
+      "fetched_rows": 2484,
+      "earliest_date": "2016-12-19",
+      "latest_date": "2026-07-30"
     }
   }
 }

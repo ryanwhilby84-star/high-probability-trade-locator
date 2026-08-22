@@ -9,7 +9,8 @@
     "supported_by_both_count": 60,
     "unsupported_count": 2,
     "oanda_only_count": 21,
-    "alpha_only_count": 42
+    "alpha_only_count": 42,
+    "fred_supported_count": 4
   },
   "oanda_supported": [
     "AUD/CAD",
@@ -4641,5 +4642,11 @@
         }
       ]
     }
+  ],
+  "fred_supported": [
+    "Cocoa",
+    "Coffee",
+    "Cotton",
+    "US Dollar Index / DX"
   ]
 }

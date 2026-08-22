@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-11T08:30:09.638647+00:00",
-  "global_latest_valid_cot_week": "2026-07-07",
+  "generated_at": "2026-08-15T06:42:45.229956+00:00",
+  "global_latest_valid_cot_week": "2026-08-11",
   "canonical_entities_total": 23,
   "canonical_entities_with_valid_rows": [
     "Australian Dollar / 6A",
@@ -31,150 +31,150 @@
     "Wheat"
   ],
   "integrity": {
-    "total_rows": 12324,
-    "valid_rows": 12324,
+    "total_rows": 12454,
+    "valid_rows": 12454,
     "invalid_rows": 0,
     "by_market": {
       "Australian Dollar / 6A": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Bitcoin": {
-        "valid_rows": 431,
+        "valid_rows": 436,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "British Pound / 6B": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Canadian Dollar / 6C": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Cocoa": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Coffee": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Copper / HG": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Corn": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Cotton": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Crude Oil / CL": {
-        "valid_rows": 231,
+        "valid_rows": 236,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Dow / YM": {
-        "valid_rows": 231,
+        "valid_rows": 236,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Euro FX / 6E": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Gold": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Japanese Yen / 6J": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "NASDAQ / NQ": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "NZ Dollar / 6N": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Natural Gas / NG": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Palladium": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Platinum": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "S&P 500 / ES": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Silver": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Soybeans": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Sugar": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Swiss Franc / 6S": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "US Dollar Index / DX": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       },
       "Wheat": {
-        "valid_rows": 497,
+        "valid_rows": 502,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-07-07"
+        "latest_valid_cot_week": "2026-08-11"
       }
     },
     "reason_tally": {}
   },
   "summary": {
-    "instruments_total": 138,
+    "instruments_total": 140,
     "direct_cot": 26,
     "leg_derived_cot": 14,
     "proxy_cot": 23,
     "macro_only": 26,
-    "no_cot_available": 44,
+    "no_cot_available": 46,
     "broken_mapping": 5,
     "invalid_data": 0,
     "data_quality": {
@@ -183,7 +183,7 @@
       "duplicate": 23,
       "invalid_rows_detected": 0,
       "stale": 0,
-      "missing": 49,
+      "missing": 51,
       "broken": 0
     },
     "invalid_cot_rows_detected": 0,
@@ -225,8 +225,8 @@
       "direct_cot_market": "NASDAQ / NQ",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -241,8 +241,8 @@
       "direct_cot_market": "S&P 500 / ES",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -257,8 +257,8 @@
       "direct_cot_market": "Dow / YM",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 231,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 236,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -273,8 +273,8 @@
       "direct_cot_market": "Euro FX / 6E",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -289,8 +289,8 @@
       "direct_cot_market": "British Pound / 6B",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -305,8 +305,8 @@
       "direct_cot_market": "Japanese Yen / 6J",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -321,8 +321,8 @@
       "direct_cot_market": "Swiss Franc / 6S",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -337,8 +337,8 @@
       "direct_cot_market": "Australian Dollar / 6A",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -353,8 +353,8 @@
       "direct_cot_market": "Canadian Dollar / 6C",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -369,8 +369,8 @@
       "direct_cot_market": "NZ Dollar / 6N",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -385,8 +385,8 @@
       "direct_cot_market": "Gold",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -401,8 +401,8 @@
       "direct_cot_market": "Silver",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -417,8 +417,8 @@
       "direct_cot_market": "Copper / HG",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -433,8 +433,8 @@
       "direct_cot_market": "Crude Oil / CL",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 231,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 236,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -449,8 +449,8 @@
       "direct_cot_market": "Natural Gas / NG",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -465,8 +465,8 @@
       "direct_cot_market": "Coffee",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -481,8 +481,8 @@
       "direct_cot_market": "Cocoa",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -497,8 +497,8 @@
       "direct_cot_market": "Cotton",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -513,8 +513,8 @@
       "direct_cot_market": "Corn",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -529,8 +529,8 @@
       "direct_cot_market": "Wheat",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -545,8 +545,8 @@
       "direct_cot_market": "Soybeans",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -561,8 +561,8 @@
       "direct_cot_market": "Sugar",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -577,8 +577,8 @@
       "direct_cot_market": "Platinum",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -593,8 +593,8 @@
       "direct_cot_market": "Palladium",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -609,8 +609,8 @@
       "direct_cot_market": "Bitcoin",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 431,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 436,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -625,8 +625,8 @@
       "direct_cot_market": "US Dollar Index / DX",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-07-07",
-      "valid_rows_count": 497,
+      "latest_valid_cot_week": "2026-08-11",
+      "valid_rows_count": 502,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -879,6 +879,22 @@
       "instrument_id": "Brent Crude Oil",
       "display_name": "Brent Crude Oil",
       "asset_class": "commodities",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "Broad US Dollar Index — DTWEXBGS",
+      "display_name": "Broad US Dollar Index — DTWEXBGS",
+      "asset_class": "fx",
       "cot_status": "no_cot_available",
       "direct_cot_market": null,
       "leg_cot_markets": [],
@@ -2173,6 +2189,22 @@
       "instrument_id": "US 5Y T-Note",
       "display_name": "US 5Y T-Note",
       "asset_class": "bonds",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "US Dollar Index / DXY — ICE DX futures",
+      "display_name": "US Dollar Index / DXY — ICE DX futures",
+      "asset_class": "fx",
       "cot_status": "no_cot_available",
       "direct_cot_market": null,
       "leg_cot_markets": [],

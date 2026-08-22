@@ -1,0 +1,1786 @@
+{
+  "generated_at": "2026-07-30T08:49:03.358266+00:00",
+  "universe": [
+    "NASDAQ / NQ",
+    "S&P 500 / ES",
+    "Dow / YM",
+    "Euro FX / 6E",
+    "British Pound / 6B",
+    "Japanese Yen / 6J",
+    "Swiss Franc / 6S",
+    "Australian Dollar / 6A",
+    "Canadian Dollar / 6C",
+    "NZ Dollar / 6N",
+    "Gold",
+    "Silver",
+    "Copper / HG",
+    "Crude Oil / CL",
+    "Natural Gas / NG",
+    "Coffee",
+    "Cocoa",
+    "Cotton",
+    "Corn",
+    "Wheat",
+    "Soybeans",
+    "Sugar",
+    "Platinum",
+    "Palladium",
+    "Bitcoin",
+    "US Dollar Index / DX"
+  ],
+  "canonical_cftc_codes": {
+    "NASDAQ / NQ": "209742",
+    "S&P 500 / ES": "13874A",
+    "Dow / YM": "124603",
+    "Euro FX / 6E": "099741",
+    "British Pound / 6B": "096742",
+    "Japanese Yen / 6J": "097741",
+    "Swiss Franc / 6S": "092741",
+    "Australian Dollar / 6A": "232741",
+    "Canadian Dollar / 6C": "090741",
+    "NZ Dollar / 6N": "112741",
+    "Gold": "088691",
+    "Silver": "084691",
+    "Copper / HG": "085692",
+    "Crude Oil / CL": "067651",
+    "Natural Gas / NG": "023651",
+    "Coffee": "083731",
+    "Cocoa": "073732",
+    "Cotton": "033661",
+    "Corn": "002602",
+    "Wheat": "001602",
+    "Soybeans": "005602",
+    "Sugar": "080732",
+    "Platinum": "076651",
+    "Palladium": "075651",
+    "Bitcoin": "133741",
+    "US Dollar Index / DX": "098662"
+  },
+  "universe_issues": [],
+  "summary": {
+    "total_markets": 26,
+    "passed": 26,
+    "warnings": 0,
+    "failed": 0,
+    "manual_review_required": [],
+    "gate_open": true
+  },
+  "instruments": [
+    {
+      "instrument_id": "NASDAQ / NQ",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "NASDAQ / NQ",
+            "display_name": "NASDAQ / NQ",
+            "exchange_symbol": "NQ",
+            "price_provider_symbol": "NAS100_USD",
+            "cftc_market_code": "209742",
+            "cftc_market_name": "NASDAQ-100 STOCK INDEX - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "indices"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "NASDAQ / NQ",
+            "canonical_symbol": "NAS100_USD",
+            "bar_count": 2479,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -12011.0,
+            "latest_nc_net": 4546.0,
+            "latest_nr_net": 7465.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 183,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "S&P 500 / ES",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "S&P 500 / ES",
+            "display_name": "S&P 500 / ES",
+            "exchange_symbol": "ES",
+            "price_provider_symbol": "SPX500_USD",
+            "cftc_market_code": "13874A",
+            "cftc_market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "indices"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "S&P 500 / ES",
+            "canonical_symbol": "SPX500_USD",
+            "bar_count": 2479,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -106919.0,
+            "latest_nc_net": -16784.0,
+            "latest_nr_net": 123703.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 143,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Dow / YM",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Dow / YM",
+            "display_name": "Dow / YM",
+            "exchange_symbol": "YM",
+            "price_provider_symbol": "US30_USD",
+            "cftc_market_code": "124603",
+            "cftc_market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
+            "asset_class": "indices"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Dow / YM",
+            "canonical_symbol": "US30_USD",
+            "bar_count": 2479,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 233
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 233,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -21604.0,
+            "latest_nc_net": 13927.0,
+            "latest_nr_net": 7677.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 56,
+            "inspector_weeks": 233
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Euro FX / 6E",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Euro FX / 6E",
+            "display_name": "Euro FX / 6E",
+            "exchange_symbol": "6E",
+            "price_provider_symbol": "EUR_USD",
+            "cftc_market_code": "099741",
+            "cftc_market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Euro FX / 6E",
+            "canonical_symbol": "EUR_USD",
+            "bar_count": 2633,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 17975.0,
+            "latest_nc_net": -41338.0,
+            "latest_nr_net": 23363.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 135,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "British Pound / 6B",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "British Pound / 6B",
+            "display_name": "British Pound / 6B",
+            "exchange_symbol": "6B",
+            "price_provider_symbol": "GBP_USD",
+            "cftc_market_code": "096742",
+            "cftc_market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "British Pound / 6B",
+            "canonical_symbol": "GBP_USD",
+            "bar_count": 2634,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 56299.0,
+            "latest_nc_net": -55561.0,
+            "latest_nr_net": -738.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 158,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Japanese Yen / 6J",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Japanese Yen / 6J",
+            "display_name": "Japanese Yen / 6J",
+            "exchange_symbol": "6J",
+            "price_provider_symbol": "6J=F",
+            "cftc_market_code": "097741",
+            "cftc_market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Japanese Yen / 6J",
+            "canonical_symbol": "yahoo:6J=F",
+            "bar_count": 6451,
+            "latest_price_bar_date": "2026-07-24",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 154898.0,
+            "latest_nc_net": -152125.0,
+            "latest_nr_net": -2773.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 161,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Swiss Franc / 6S",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Swiss Franc / 6S",
+            "display_name": "Swiss Franc / 6S",
+            "exchange_symbol": "6S",
+            "price_provider_symbol": "USD_CHF",
+            "cftc_market_code": "092741",
+            "cftc_market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Swiss Franc / 6S",
+            "canonical_symbol": "USD_CHF",
+            "bar_count": 2638,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 48269.0,
+            "latest_nc_net": -34242.0,
+            "latest_nr_net": -14027.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 115,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Australian Dollar / 6A",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Australian Dollar / 6A",
+            "display_name": "Australian Dollar / 6A",
+            "exchange_symbol": "6A",
+            "price_provider_symbol": "AUD_USD",
+            "cftc_market_code": "232741",
+            "cftc_market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Australian Dollar / 6A",
+            "canonical_symbol": "AUD_USD",
+            "bar_count": 2632,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 16087.0,
+            "latest_nc_net": -37685.0,
+            "latest_nr_net": 21598.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 145,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Canadian Dollar / 6C",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Canadian Dollar / 6C",
+            "display_name": "Canadian Dollar / 6C",
+            "exchange_symbol": "6C",
+            "price_provider_symbol": "USD_CAD",
+            "cftc_market_code": "090741",
+            "cftc_market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Canadian Dollar / 6C",
+            "canonical_symbol": "USD_CAD",
+            "bar_count": 2644,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 187001.0,
+            "latest_nc_net": -174448.0,
+            "latest_nr_net": -12553.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 140,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "NZ Dollar / 6N",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "NZ Dollar / 6N",
+            "display_name": "NZ Dollar / 6N",
+            "exchange_symbol": "6N",
+            "price_provider_symbol": "NZD_USD",
+            "cftc_market_code": "112741",
+            "cftc_market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "NZ Dollar / 6N",
+            "canonical_symbol": "NZD_USD",
+            "bar_count": 2642,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 52623.0,
+            "latest_nc_net": -49969.0,
+            "latest_nr_net": -2654.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 165,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Gold",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Gold",
+            "display_name": "Gold",
+            "exchange_symbol": "GC",
+            "price_provider_symbol": "XAU_USD",
+            "cftc_market_code": "088691",
+            "cftc_market_name": "GOLD - COMMODITY EXCHANGE INC.",
+            "asset_class": "metals"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Gold",
+            "canonical_symbol": "XAU_USD",
+            "bar_count": 2628,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -213199.0,
+            "latest_nc_net": 183910.0,
+            "latest_nr_net": 29289.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 128,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Silver",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Silver",
+            "display_name": "Silver",
+            "exchange_symbol": "SI",
+            "price_provider_symbol": "XAG_USD",
+            "cftc_market_code": "084691",
+            "cftc_market_name": "SILVER - COMMODITY EXCHANGE INC.",
+            "asset_class": "metals"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Silver",
+            "canonical_symbol": "XAG_USD",
+            "bar_count": 2619,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -40453.0,
+            "latest_nc_net": 23465.0,
+            "latest_nr_net": 16988.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 134,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Copper / HG",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Copper / HG",
+            "display_name": "Copper / HG",
+            "exchange_symbol": "HG",
+            "price_provider_symbol": "XCU_USD",
+            "cftc_market_code": "085692",
+            "cftc_market_name": "COPPER-GRADE #1 - COMMODITY EXCHANGE INC.",
+            "asset_class": "metals"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Copper / HG",
+            "canonical_symbol": "XCU_USD",
+            "bar_count": 2795,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -82112.0,
+            "latest_nc_net": 73977.0,
+            "latest_nr_net": 8135.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 173,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Crude Oil / CL",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Crude Oil / CL",
+            "display_name": "Crude Oil / CL",
+            "exchange_symbol": "CL",
+            "price_provider_symbol": "WTICO_USD",
+            "cftc_market_code": "067651",
+            "cftc_market_name": "CRUDE OIL, LIGHT SWEET-WTI - NEW YORK MERCANTILE EXCHANGE",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Crude Oil / CL",
+            "canonical_symbol": "WTICO_USD",
+            "bar_count": 2621,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 233
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 233,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -108601.0,
+            "latest_nc_net": 81689.0,
+            "latest_nr_net": 26912.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 81,
+            "inspector_weeks": 233
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Natural Gas / NG",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Natural Gas / NG",
+            "display_name": "Natural Gas / NG",
+            "exchange_symbol": "NG",
+            "price_provider_symbol": "NATGAS_USD",
+            "cftc_market_code": "023651",
+            "cftc_market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Natural Gas / NG",
+            "canonical_symbol": "NATGAS_USD",
+            "bar_count": 2621,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 159102.0,
+            "latest_nc_net": -171138.0,
+            "latest_nr_net": 12036.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 160,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Coffee",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Coffee",
+            "display_name": "Coffee",
+            "exchange_symbol": "KC",
+            "price_provider_symbol": "KC=F",
+            "cftc_market_code": "083731",
+            "cftc_market_name": "COFFEE C - ICE FUTURES U.S.",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Coffee",
+            "canonical_symbol": "yahoo:KC=F",
+            "bar_count": 6658,
+            "latest_price_bar_date": "2026-07-24",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -29089.0,
+            "latest_nc_net": 27255.0,
+            "latest_nr_net": 1834.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 132,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Cocoa",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Cocoa",
+            "display_name": "Cocoa",
+            "exchange_symbol": "CC",
+            "price_provider_symbol": "CC=F",
+            "cftc_market_code": "073732",
+            "cftc_market_name": "COCOA - ICE FUTURES U.S.",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Cocoa",
+            "canonical_symbol": "yahoo:CC=F",
+            "bar_count": 6660,
+            "latest_price_bar_date": "2026-07-24",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 2157.0,
+            "latest_nc_net": -3907.0,
+            "latest_nr_net": 1750.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 153,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Cotton",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Cotton",
+            "display_name": "Cotton",
+            "exchange_symbol": "CT",
+            "price_provider_symbol": "CT=F",
+            "cftc_market_code": "033661",
+            "cftc_market_name": "COTTON NO. 2 - ICE FUTURES U.S.",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Cotton",
+            "canonical_symbol": "yahoo:CT=F",
+            "bar_count": 6660,
+            "latest_price_bar_date": "2026-07-24",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -102678.0,
+            "latest_nc_net": 95112.0,
+            "latest_nr_net": 7566.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 158,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Corn",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Corn",
+            "display_name": "Corn",
+            "exchange_symbol": "ZC",
+            "price_provider_symbol": "ZC=F",
+            "cftc_market_code": "002602",
+            "cftc_market_name": "CORN - CHICAGO BOARD OF TRADE",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Corn",
+            "canonical_symbol": "yahoo:ZC=F",
+            "bar_count": 6510,
+            "latest_price_bar_date": "2026-07-24",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -139254.0,
+            "latest_nc_net": 186650.0,
+            "latest_nr_net": -47396.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 160,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Wheat",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Wheat",
+            "display_name": "Wheat",
+            "exchange_symbol": "ZW",
+            "price_provider_symbol": "WHEAT_USD",
+            "cftc_market_code": "001602",
+            "cftc_market_name": "WHEAT - CHICAGO BOARD OF TRADE",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Wheat",
+            "canonical_symbol": "WHEAT_USD",
+            "bar_count": 2555,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 12187.0,
+            "latest_nc_net": -7009.0,
+            "latest_nr_net": -5178.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 137,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Soybeans",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Soybeans",
+            "display_name": "Soybeans",
+            "exchange_symbol": "ZS",
+            "price_provider_symbol": "SOYBN_USD",
+            "cftc_market_code": "005602",
+            "cftc_market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Soybeans",
+            "canonical_symbol": "SOYBN_USD",
+            "bar_count": 2556,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -152981.0,
+            "latest_nc_net": 175646.0,
+            "latest_nr_net": -22665.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 136,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Sugar",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Sugar",
+            "display_name": "Sugar",
+            "exchange_symbol": "SB",
+            "price_provider_symbol": "SUGAR_USD",
+            "cftc_market_code": "080732",
+            "cftc_market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
+            "asset_class": "commodities"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Sugar",
+            "canonical_symbol": "SUGAR_USD",
+            "bar_count": 2552,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 60615.0,
+            "latest_nc_net": -64490.0,
+            "latest_nr_net": 3875.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 154,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Platinum",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Platinum",
+            "display_name": "Platinum",
+            "exchange_symbol": "PL",
+            "price_provider_symbol": "XPT_USD",
+            "cftc_market_code": "076651",
+            "cftc_market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
+            "asset_class": "metals"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Platinum",
+            "canonical_symbol": "XPT_USD",
+            "bar_count": 2616,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -16779.0,
+            "latest_nc_net": 12484.0,
+            "latest_nr_net": 4295.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 173,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Palladium",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Palladium",
+            "display_name": "Palladium",
+            "exchange_symbol": "PA",
+            "price_provider_symbol": "XPD_USD",
+            "cftc_market_code": "075651",
+            "cftc_market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
+            "asset_class": "metals"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Palladium",
+            "canonical_symbol": "XPD_USD",
+            "bar_count": 2616,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": 4701.0,
+            "latest_nc_net": -5003.0,
+            "latest_nr_net": 302.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 129,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "Bitcoin",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "Bitcoin",
+            "display_name": "Bitcoin",
+            "exchange_symbol": "BTC",
+            "price_provider_symbol": "BTC_USD",
+            "cftc_market_code": "133741",
+            "cftc_market_name": "BITCOIN - CHICAGO MERCANTILE EXCHANGE",
+            "asset_class": "crypto"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "Bitcoin",
+            "canonical_symbol": "BTC_USD",
+            "bar_count": 2942,
+            "latest_price_bar_date": "2026-07-23",
+            "latest_price_lag_days": 0,
+            "priced_weeks": 433
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 433,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -2986.0,
+            "latest_nc_net": 3054.0,
+            "latest_nr_net": -68.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 181,
+            "inspector_weeks": 433
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    },
+    {
+      "instrument_id": "US Dollar Index / DX",
+      "status": "PASS",
+      "phases": {
+        "identity": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "instrument_id": "US Dollar Index / DX",
+            "display_name": "US Dollar Index / DX",
+            "exchange_symbol": "DX",
+            "price_provider_symbol": null,
+            "cftc_market_code": "098662",
+            "cftc_market_name": "USD INDEX - ICE FUTURES U.S.",
+            "asset_class": "fx"
+          }
+        },
+        "price": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "price_store_key": "US Dollar Index / DX",
+            "canonical_symbol": "fred:DTWEXBGS",
+            "bar_count": 2628,
+            "latest_price_bar_date": "2026-07-17",
+            "latest_price_lag_days": 4,
+            "priced_weeks": 499
+          }
+        },
+        "cot": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "weeks": 499,
+            "latest_date": "2026-07-21",
+            "latest_commercial_net": -18347.0,
+            "latest_nc_net": 15614.0,
+            "latest_nr_net": 2733.0
+          }
+        },
+        "alignment": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "cot_3y": true,
+            "research": true,
+            "weekly_inspector": true
+          }
+        },
+        "derived": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "marker_count": 116,
+            "inspector_weeks": 499
+          }
+        },
+        "ui": {
+          "status": "pass",
+          "issues": [],
+          "details": {
+            "in_tracked_market_ids": true
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,3490 @@
+{
+  "version": "price_cot_alignment_audit_v2_series",
+  "generated_at": "2026-08-15T07:30:26.279520+00:00",
+  "max_alignment_gap_days": 5,
+  "universe": [
+    "NASDAQ / NQ",
+    "S&P 500 / ES",
+    "Dow / YM",
+    "Euro FX / 6E",
+    "British Pound / 6B",
+    "Japanese Yen / 6J",
+    "Swiss Franc / 6S",
+    "Australian Dollar / 6A",
+    "Canadian Dollar / 6C",
+    "NZ Dollar / 6N",
+    "Gold",
+    "Silver",
+    "Copper / HG",
+    "Crude Oil / CL",
+    "Natural Gas / NG",
+    "Coffee",
+    "Cocoa",
+    "Cotton",
+    "Corn",
+    "Wheat",
+    "Soybeans",
+    "Sugar",
+    "Platinum",
+    "Palladium",
+    "Bitcoin",
+    "US Dollar Index / DX"
+  ],
+  "summary": {
+    "markets_total": 26,
+    "pass_count": 0,
+    "fail_count": 26,
+    "overall_status": "FAIL",
+    "gate_open": false
+  },
+  "frontend_cache": {
+    "weekly_ohlc_store_path": "web-dashboard/src/prices/stores/WeeklyOHLCStore.js",
+    "uses_cache_no_store": true,
+    "uses_cache_bust_query": true,
+    "url": "/data/workstation_ohlc_latest.json",
+    "status": "PASS"
+  },
+  "instruments": [
+    {
+      "instrument": "NASDAQ / NQ",
+      "provider": "oanda",
+      "symbol": "NAS100_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 28511.2,
+        "high": 28627.7,
+        "low": 27093.2,
+        "close": 28191.8
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "NASDAQ / NQ",
+          "provider": "oanda",
+          "registry_symbol": "NAS100_USD",
+          "canonical_provider_symbol": "NAS100_USD",
+          "registry_oanda_symbol": "NAS100_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 28233.8,
+            "high": 28612.4,
+            "low": 27966.8,
+            "close": 28191.8
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 28511.2,
+            "high": 28627.7,
+            "low": 27093.2,
+            "close": 28191.8
+          },
+          "daily_bars": 2484,
+          "weekly_bars": 553,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 28088.8,
+            "high": 28612.4,
+            "low": 27093.2,
+            "close": 28191.8
+          },
+          "derived_rows": 502,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 28511.2,
+            "high": 28627.7,
+            "low": 27093.2,
+            "close": 28191.8
+          },
+          "price_source": "oanda:NAS100_USD",
+          "canonical_symbol": "NAS100_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "NAS100_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "NAS100_USD",
+          "canonical_symbol": "NAS100_USD",
+          "store_symbol": null,
+          "displayed_symbol": "NAS100_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 29767.6,
+            "high": 30198.0,
+            "low": 29446.6,
+            "close": 30066.2
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 28511.2,
+            "high": 28627.7,
+            "low": 27093.2,
+            "close": 28191.8
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "S&P 500 / ES",
+      "provider": "oanda",
+      "symbol": "SPX500_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 7474.2,
+        "high": 7518.2,
+        "low": 7299.6,
+        "close": 7483.6
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "S&P 500 / ES",
+          "provider": "oanda",
+          "registry_symbol": "SPX500_USD",
+          "canonical_provider_symbol": "SPX500_USD",
+          "registry_oanda_symbol": "SPX500_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 7448.0,
+            "high": 7518.2,
+            "low": 7404.4,
+            "close": 7483.6
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 7474.2,
+            "high": 7518.2,
+            "low": 7299.6,
+            "close": 7483.6
+          },
+          "daily_bars": 2484,
+          "weekly_bars": 553,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 7428.0,
+            "high": 7518.2,
+            "low": 7299.6,
+            "close": 7483.6
+          },
+          "derived_rows": 502,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 7474.2,
+            "high": 7518.2,
+            "low": 7299.6,
+            "close": 7483.6
+          },
+          "price_source": "oanda:SPX500_USD",
+          "canonical_symbol": "SPX500_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "SPX500_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "SPX500_USD",
+          "canonical_symbol": "SPX500_USD",
+          "store_symbol": null,
+          "displayed_symbol": "SPX500_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 7753.2,
+            "high": 7821.6,
+            "low": 7722.2,
+            "close": 7786.4
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 7474.2,
+            "high": 7518.2,
+            "low": 7299.6,
+            "close": 7483.6
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Dow / YM",
+      "provider": "oanda",
+      "symbol": "US30_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 52278.8,
+        "high": 52960.6,
+        "low": 51498.5,
+        "close": 52420.3
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Dow / YM",
+          "provider": "oanda",
+          "registry_symbol": "US30_USD",
+          "canonical_provider_symbol": "US30_USD",
+          "registry_oanda_symbol": "US30_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 52269.5,
+            "high": 52652.8,
+            "low": 51998.6,
+            "close": 52420.3
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 52278.8,
+            "high": 52960.6,
+            "low": 51498.5,
+            "close": 52420.3
+          },
+          "daily_bars": 2484,
+          "weekly_bars": 553,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 52281.0,
+            "high": 52960.6,
+            "low": 51498.5,
+            "close": 52420.3
+          },
+          "derived_rows": 502,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 52278.8,
+            "high": 52960.6,
+            "low": 51498.5,
+            "close": 52420.3
+          },
+          "price_source": "oanda:US30_USD",
+          "canonical_symbol": "US30_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "US30_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "US30_USD",
+          "canonical_symbol": "US30_USD",
+          "store_symbol": null,
+          "displayed_symbol": "US30_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 53969.9,
+            "high": 54238.6,
+            "low": 53641.2,
+            "close": 53720.1
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 52278.8,
+            "high": 52960.6,
+            "low": 51498.5,
+            "close": 52420.3
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Euro FX / 6E",
+      "provider": "oanda",
+      "symbol": "EUR_USD",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 1.13958,
+        "high": 1.15476,
+        "low": 1.13532,
+        "close": 1.15306
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Euro FX / 6E",
+          "provider": "oanda",
+          "registry_symbol": "EUR_USD",
+          "canonical_provider_symbol": "EUR_USD",
+          "registry_oanda_symbol": "EUR_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 1.15286,
+            "high": 1.15854,
+            "low": 1.15265,
+            "close": 1.15704
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 1.15664,
+            "high": 1.15854,
+            "low": 1.15118,
+            "close": 1.15704
+          },
+          "daily_bars": 2648,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 1.15429,
+            "high": 1.15854,
+            "low": 1.15118,
+            "close": 1.15704
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 1.13958,
+            "high": 1.15476,
+            "low": 1.13532,
+            "close": 1.15306
+          },
+          "price_source": "Euro FX / 6E",
+          "canonical_symbol": "EUR_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "EUR_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "EUR_USD",
+          "canonical_symbol": "EUR_USD",
+          "store_symbol": null,
+          "displayed_symbol": "EUR_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 1.15664,
+            "high": 1.15854,
+            "low": 1.15118,
+            "close": 1.15704
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 1.13958,
+            "high": 1.15476,
+            "low": 1.13532,
+            "close": 1.15306
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "British Pound / 6B",
+      "provider": "oanda",
+      "symbol": "GBP_USD",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 1.33478,
+        "high": 1.34954,
+        "low": 1.32735,
+        "close": 1.34836
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "British Pound / 6B",
+          "provider": "oanda",
+          "registry_symbol": "GBP_USD",
+          "canonical_provider_symbol": "GBP_USD",
+          "registry_oanda_symbol": "GBP_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 1.34862,
+            "high": 1.3562,
+            "low": 1.34834,
+            "close": 1.35336
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 1.34971,
+            "high": 1.3562,
+            "low": 1.34743,
+            "close": 1.35336
+          },
+          "daily_bars": 2649,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 1.35068,
+            "high": 1.3562,
+            "low": 1.34743,
+            "close": 1.35336
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 1.33478,
+            "high": 1.34954,
+            "low": 1.32735,
+            "close": 1.34836
+          },
+          "price_source": "British Pound / 6B",
+          "canonical_symbol": "GBP_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "GBP_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "GBP_USD",
+          "canonical_symbol": "GBP_USD",
+          "store_symbol": null,
+          "displayed_symbol": "GBP_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 1.34971,
+            "high": 1.3562,
+            "low": 1.34743,
+            "close": 1.35336
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 1.33478,
+            "high": 1.34954,
+            "low": 1.32735,
+            "close": 1.34836
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Japanese Yen / 6J",
+      "provider": "yahoo_futures",
+      "symbol": "6J=F",
+      "raw_daily_date": "2026-08-14",
+      "store_weekly_date": "2026-08-14",
+      "weekly_aggregation_date": "2026-08-14",
+      "workstation_weekly_date": "2026-07-30",
+      "cot_date": "2026-08-11",
+      "gap_days": 12,
+      "gap_weeks": 1.71,
+      "latest_ohlc": {
+        "date": "2026-07-30",
+        "open": 0.006120999809354544,
+        "high": 0.006337999831885099,
+        "low": 0.00610999995842576,
+        "close": 0.006300999782979488
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-30 store_weekly=2026-08-14 derived=2026-08-14)",
+        "price behind COT by 12d exceeds max 5d (weekly=2026-07-30 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-30 trails provider tip 2026-08-07 by 8d",
+        "OHLC mismatch near 2026-07-31 (high): provider=0.006360999774187803 workstation=0.006337999831885099 (ws_date=2026-07-30)",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Japanese Yen / 6J",
+          "provider": "yahoo_futures",
+          "registry_symbol": "6J=F",
+          "canonical_provider_symbol": "6J=F",
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-14",
+            "open": 0.0062699997797608376,
+            "high": 0.006302000023424625,
+            "low": 0.006269000004976988,
+            "close": 0.006275000050663948
+          },
+          "store_weekly_last": {
+            "date": "2026-08-14",
+            "open": 0.0063390000723302364,
+            "high": 0.0063390000723302364,
+            "low": 0.006269000004976988,
+            "close": 0.006275000050663948
+          },
+          "daily_bars": 6466,
+          "weekly_bars": 1352,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-14",
+            "open": 0.0063390000723302364,
+            "high": 0.0063390000723302364,
+            "low": 0.006269000004976988,
+            "close": 0.006275000050663948
+          },
+          "derived_rows": 1336,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-30",
+          "weekly_last": {
+            "date": "2026-07-30",
+            "open": 0.006120999809354544,
+            "high": 0.006337999831885099,
+            "low": 0.00610999995842576,
+            "close": 0.006300999782979488
+          },
+          "price_source": "Japanese Yen / 6J",
+          "canonical_symbol": "yahoo:6J=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-30",
+            "latest_age_days": 2,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:6J=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "6J=F",
+          "canonical_symbol": "6J=F",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:6J=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-30",
+          "cot_date": "2026-08-11",
+          "gap_days": 12,
+          "gap_weeks": 1.71,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "yahoo_live_weekly_from_daily",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 0.006360999774187803,
+            "high": 0.0064489999786019325,
+            "low": 0.006312999874353409,
+            "close": 0.006351000163704157
+          },
+          "provider_count": 1335,
+          "workstation_last": {
+            "date": "2026-07-30",
+            "open": 0.006120999809354544,
+            "high": 0.006337999831885099,
+            "low": 0.00610999995842576,
+            "close": 0.006300999782979488
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-30 trails provider tip 2026-08-07 by 8d",
+            "OHLC mismatch near 2026-07-31 (high): provider=0.006360999774187803 workstation=0.006337999831885099 (ws_date=2026-07-30)",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Swiss Franc / 6S",
+      "provider": "oanda",
+      "symbol": "USD_CHF",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 0.816,
+        "high": 0.8207,
+        "low": 0.80391,
+        "close": 0.80705
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Swiss Franc / 6S",
+          "provider": "oanda",
+          "registry_symbol": "USD_CHF",
+          "canonical_provider_symbol": "USD_CHF",
+          "registry_oanda_symbol": "USD_CHF",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 0.8135,
+            "high": 0.81449,
+            "low": 0.81035,
+            "close": 0.81341
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 0.80838,
+            "high": 0.81471,
+            "low": 0.80689,
+            "close": 0.81341
+          },
+          "daily_bars": 2653,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 0.81015,
+            "high": 0.81471,
+            "low": 0.80882,
+            "close": 0.81341
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 0.816,
+            "high": 0.8207,
+            "low": 0.80391,
+            "close": 0.80705
+          },
+          "price_source": "Swiss Franc / 6S",
+          "canonical_symbol": "USD_CHF",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "USD_CHF",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "USD_CHF",
+          "canonical_symbol": "USD_CHF",
+          "store_symbol": null,
+          "displayed_symbol": "USD_CHF"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 0.80838,
+            "high": 0.81471,
+            "low": 0.80689,
+            "close": 0.81341
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 0.816,
+            "high": 0.8207,
+            "low": 0.80391,
+            "close": 0.80705
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Australian Dollar / 6A",
+      "provider": "oanda",
+      "symbol": "AUD_USD",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 0.70016,
+        "high": 0.70447,
+        "low": 0.69222,
+        "close": 0.70302
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Australian Dollar / 6A",
+          "provider": "oanda",
+          "registry_symbol": "AUD_USD",
+          "canonical_provider_symbol": "AUD_USD",
+          "registry_oanda_symbol": "AUD_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 0.70592,
+            "high": 0.70958,
+            "low": 0.70555,
+            "close": 0.70852
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 0.70656,
+            "high": 0.70958,
+            "low": 0.70394,
+            "close": 0.70852
+          },
+          "daily_bars": 2647,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 0.70581,
+            "high": 0.70958,
+            "low": 0.70394,
+            "close": 0.70852
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 0.70016,
+            "high": 0.70447,
+            "low": 0.69222,
+            "close": 0.70302
+          },
+          "price_source": "Australian Dollar / 6A",
+          "canonical_symbol": "AUD_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "AUD_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "AUD_USD",
+          "canonical_symbol": "AUD_USD",
+          "store_symbol": null,
+          "displayed_symbol": "AUD_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 0.70656,
+            "high": 0.70958,
+            "low": 0.70394,
+            "close": 0.70852
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 0.70016,
+            "high": 0.70447,
+            "low": 0.69222,
+            "close": 0.70302
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Canadian Dollar / 6C",
+      "provider": "oanda",
+      "symbol": "USD_CAD",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 1.40884,
+        "high": 1.41292,
+        "low": 1.3991,
+        "close": 1.40136
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Canadian Dollar / 6C",
+          "provider": "oanda",
+          "registry_symbol": "USD_CAD",
+          "canonical_provider_symbol": "USD_CAD",
+          "registry_oanda_symbol": "USD_CAD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 1.39326,
+            "high": 1.39362,
+            "low": 1.38644,
+            "close": 1.38745
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 1.395,
+            "high": 1.3964,
+            "low": 1.38644,
+            "close": 1.38745
+          },
+          "daily_bars": 2659,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 1.3939,
+            "high": 1.39587,
+            "low": 1.38644,
+            "close": 1.38745
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 1.40884,
+            "high": 1.41292,
+            "low": 1.3991,
+            "close": 1.40136
+          },
+          "price_source": "Canadian Dollar / 6C",
+          "canonical_symbol": "USD_CAD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "USD_CAD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "USD_CAD",
+          "canonical_symbol": "USD_CAD",
+          "store_symbol": null,
+          "displayed_symbol": "USD_CAD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 1.395,
+            "high": 1.3964,
+            "low": 1.38644,
+            "close": 1.38745
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 1.40884,
+            "high": 1.41292,
+            "low": 1.3991,
+            "close": 1.40136
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "NZ Dollar / 6N",
+      "provider": "oanda",
+      "symbol": "NZD_USD",
+      "raw_daily_date": "2026-08-13",
+      "store_weekly_date": "2026-08-07",
+      "weekly_aggregation_date": "2026-08-13",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 0.58035,
+        "high": 0.58958,
+        "low": 0.5762,
+        "close": 0.58892
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)",
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "NZ Dollar / 6N",
+          "provider": "oanda",
+          "registry_symbol": "NZD_USD",
+          "canonical_provider_symbol": "NZD_USD",
+          "registry_oanda_symbol": "NZD_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-13",
+            "open": 0.58491,
+            "high": 0.58984,
+            "low": 0.58469,
+            "close": 0.5891
+          },
+          "store_weekly_last": {
+            "date": "2026-08-07",
+            "open": 0.58925,
+            "high": 0.59002,
+            "low": 0.58216,
+            "close": 0.5891
+          },
+          "daily_bars": 2657,
+          "weekly_bars": 208,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-13",
+            "open": 0.58816,
+            "high": 0.58984,
+            "low": 0.58216,
+            "close": 0.5891
+          },
+          "derived_rows": 533,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 0.58035,
+            "high": 0.58958,
+            "low": 0.5762,
+            "close": 0.58892
+          },
+          "price_source": "NZ Dollar / 6N",
+          "canonical_symbol": "NZD_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "NZD_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "NZD_USD",
+          "canonical_symbol": "NZD_USD",
+          "store_symbol": null,
+          "displayed_symbol": "NZD_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 0.58925,
+            "high": 0.59002,
+            "low": 0.58216,
+            "close": 0.5891
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 0.58035,
+            "high": 0.58958,
+            "low": 0.5762,
+            "close": 0.58892
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Gold",
+      "provider": "oanda",
+      "symbol": "XAU_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 4090.16,
+        "high": 4120.495,
+        "low": 3996.055,
+        "close": 4045.165
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Gold",
+          "provider": "oanda",
+          "registry_symbol": "XAU_USD",
+          "canonical_provider_symbol": "XAU_USD",
+          "registry_oanda_symbol": "XAU_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 4103.36,
+            "high": 4112.01,
+            "low": 4020.975,
+            "close": 4045.165
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 4090.16,
+            "high": 4120.495,
+            "low": 3996.055,
+            "close": 4045.165
+          },
+          "daily_bars": 2633,
+          "weekly_bars": 207,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 4080.685,
+            "high": 4120.495,
+            "low": 3996.055,
+            "close": 4045.165
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 4090.16,
+            "high": 4120.495,
+            "low": 3996.055,
+            "close": 4045.165
+          },
+          "price_source": "Gold",
+          "canonical_symbol": "XAU_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "XAU_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "XAU_USD",
+          "canonical_symbol": "XAU_USD",
+          "store_symbol": null,
+          "displayed_symbol": "XAU_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 4340.28,
+            "high": 4449.83,
+            "low": 4311.04,
+            "close": 4376.82
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 4090.16,
+            "high": 4120.495,
+            "low": 3996.055,
+            "close": 4045.165
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Silver",
+      "provider": "oanda",
+      "symbol": "XAG_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 59.44875,
+        "high": 60.0955,
+        "low": 56.6405,
+        "close": 57.6325
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Silver",
+          "provider": "oanda",
+          "registry_symbol": "XAG_USD",
+          "canonical_provider_symbol": "XAG_USD",
+          "registry_oanda_symbol": "XAG_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 59.0331,
+            "high": 59.174,
+            "low": 57.03,
+            "close": 57.6325
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 59.44875,
+            "high": 60.0955,
+            "low": 56.6405,
+            "close": 57.6325
+          },
+          "daily_bars": 2624,
+          "weekly_bars": 60,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 58.51975,
+            "high": 59.316,
+            "low": 56.6405,
+            "close": 57.6325
+          },
+          "derived_rows": 530,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 59.44875,
+            "high": 60.0955,
+            "low": 56.6405,
+            "close": 57.6325
+          },
+          "price_source": "Silver",
+          "canonical_symbol": "XAG_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "XAG_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "XAG_USD",
+          "canonical_symbol": "XAG_USD",
+          "store_symbol": null,
+          "displayed_symbol": "XAG_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 63.63875,
+            "high": 66.8025,
+            "low": 62.991,
+            "close": 64.688
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 59.44875,
+            "high": 60.0955,
+            "low": 56.6405,
+            "close": 57.6325
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Copper / HG",
+      "provider": "yahoo_futures",
+      "symbol": "HG=F",
+      "raw_daily_date": "2026-07-31",
+      "store_weekly_date": "2026-07-31",
+      "weekly_aggregation_date": "2026-07-31",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 6.340000152587891,
+        "high": 6.515500068664551,
+        "low": 6.253499984741211,
+        "close": 6.435999870300293
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Copper / HG",
+          "provider": "yahoo_futures",
+          "registry_symbol": "HG=F",
+          "canonical_provider_symbol": "XCU_USD",
+          "registry_oanda_symbol": "XCU_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-31",
+            "open": 6.451499938964844,
+            "high": 6.515500068664551,
+            "low": 6.4095001220703125,
+            "close": 6.435999870300293
+          },
+          "store_weekly_last": {
+            "date": "2026-07-31",
+            "open": 6.340000152587891,
+            "high": 6.515500068664551,
+            "low": 6.253499984741211,
+            "close": 6.435999870300293
+          },
+          "daily_bars": 6508,
+          "weekly_bars": 1353,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-31",
+            "open": 6.340000152587891,
+            "high": 6.515500068664551,
+            "low": 6.253499984741211,
+            "close": 6.435999870300293
+          },
+          "derived_rows": 1353,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 6.340000152587891,
+            "high": 6.515500068664551,
+            "low": 6.253499984741211,
+            "close": 6.435999870300293
+          },
+          "price_source": "Copper / HG",
+          "canonical_symbol": "yahoo:HG=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:HG=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "HG=F",
+          "canonical_symbol": "XCU_USD",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:HG=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "yahoo_live_weekly_from_daily",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 6.5295000076293945,
+            "high": 6.728000164031982,
+            "low": 6.434000015258789,
+            "close": 6.570499897003174
+          },
+          "provider_count": 1354,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 6.340000152587891,
+            "high": 6.515500068664551,
+            "low": 6.253499984741211,
+            "close": 6.435999870300293
+          },
+          "last_10_failures": [
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Crude Oil / CL",
+      "provider": "oanda",
+      "symbol": "WTICO_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 84.55,
+        "high": 87.364,
+        "low": 78.355,
+        "close": 86.921
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Crude Oil / CL",
+          "provider": "oanda",
+          "registry_symbol": "WTICO_USD",
+          "canonical_provider_symbol": "WTICO_USD",
+          "registry_oanda_symbol": "WTICO_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 84.511,
+            "high": 87.364,
+            "low": 81.704,
+            "close": 86.921
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 84.55,
+            "high": 87.364,
+            "low": 78.355,
+            "close": 86.921
+          },
+          "daily_bars": 2626,
+          "weekly_bars": 56,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 82.485,
+            "high": 87.364,
+            "low": 78.355,
+            "close": 86.921
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 84.55,
+            "high": 87.364,
+            "low": 78.355,
+            "close": 86.921
+          },
+          "price_source": "Crude Oil / CL",
+          "canonical_symbol": "WTICO_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "WTICO_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "WTICO_USD",
+          "canonical_symbol": "WTICO_USD",
+          "store_symbol": null,
+          "displayed_symbol": "WTICO_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 78.827,
+            "high": 84.869,
+            "low": 78.051,
+            "close": 82.532
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 84.55,
+            "high": 87.364,
+            "low": 78.355,
+            "close": 86.921
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Natural Gas / NG",
+      "provider": "oanda",
+      "symbol": "NATGAS_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 2.87,
+        "high": 2.87,
+        "low": 2.676,
+        "close": 2.799
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Natural Gas / NG",
+          "provider": "oanda",
+          "registry_symbol": "NATGAS_USD",
+          "canonical_provider_symbol": "NATGAS_USD",
+          "registry_oanda_symbol": "NATGAS_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 2.752,
+            "high": 2.81,
+            "low": 2.72,
+            "close": 2.799
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 2.87,
+            "high": 2.87,
+            "low": 2.676,
+            "close": 2.799
+          },
+          "daily_bars": 2626,
+          "weekly_bars": 60,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 2.776,
+            "high": 2.81,
+            "low": 2.676,
+            "close": 2.799
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 2.87,
+            "high": 2.87,
+            "low": 2.676,
+            "close": 2.799
+          },
+          "price_source": "Natural Gas / NG",
+          "canonical_symbol": "NATGAS_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "NATGAS_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "NATGAS_USD",
+          "canonical_symbol": "NATGAS_USD",
+          "store_symbol": null,
+          "displayed_symbol": "NATGAS_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 2.712,
+            "high": 2.832,
+            "low": 2.712,
+            "close": 2.718
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 2.87,
+            "high": 2.87,
+            "low": 2.676,
+            "close": 2.799
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Coffee",
+      "provider": "yahoo_futures",
+      "symbol": "KC=F",
+      "raw_daily_date": "2026-07-31",
+      "store_weekly_date": "2026-07-31",
+      "weekly_aggregation_date": "2026-07-31",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 314.0,
+        "high": 346.6499938964844,
+        "low": 313.8999938964844,
+        "close": 332.1000061035156
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)",
+        "missing workstation weekly candle for provider week 2026-06-25",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Coffee",
+          "provider": "yahoo_futures",
+          "registry_symbol": "KC=F",
+          "canonical_provider_symbol": "KC=F",
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-31",
+            "open": 325.75,
+            "high": 334.3999938964844,
+            "low": 320.8999938964844,
+            "close": 332.1000061035156
+          },
+          "store_weekly_last": {
+            "date": "2026-07-31",
+            "open": 314.0,
+            "high": 346.6499938964844,
+            "low": 313.8999938964844,
+            "close": 332.1000061035156
+          },
+          "daily_bars": 6663,
+          "weekly_bars": 1387,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-31",
+            "open": 314.0,
+            "high": 346.6499938964844,
+            "low": 313.8999938964844,
+            "close": 332.1000061035156
+          },
+          "derived_rows": 1387,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 314.0,
+            "high": 346.6499938964844,
+            "low": 313.8999938964844,
+            "close": 332.1000061035156
+          },
+          "price_source": "Coffee",
+          "canonical_symbol": "yahoo:KC=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:KC=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "KC=F",
+          "canonical_symbol": "KC=F",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:KC=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "yahoo_live_weekly_from_daily",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 332.0,
+            "high": 342.0,
+            "low": 317.25,
+            "close": 335.54998779296875
+          },
+          "provider_count": 1388,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 314.0,
+            "high": 346.6499938964844,
+            "low": 313.8999938964844,
+            "close": 332.1000061035156
+          },
+          "last_10_failures": [
+            "missing workstation weekly candle for provider week 2026-06-25",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Cocoa",
+      "provider": "yahoo_futures",
+      "symbol": "CC=F",
+      "raw_daily_date": "2026-07-31",
+      "store_weekly_date": "2026-07-31",
+      "weekly_aggregation_date": "2026-07-31",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 5332.0,
+        "high": 5561.0,
+        "low": 4992.0,
+        "close": 5397.0
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Cocoa",
+          "provider": "yahoo_futures",
+          "registry_symbol": "CC=F",
+          "canonical_provider_symbol": "CC=F",
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-31",
+            "open": 5168.0,
+            "high": 5510.0,
+            "low": 5138.0,
+            "close": 5397.0
+          },
+          "store_weekly_last": {
+            "date": "2026-07-31",
+            "open": 5332.0,
+            "high": 5561.0,
+            "low": 4992.0,
+            "close": 5397.0
+          },
+          "daily_bars": 6665,
+          "weekly_bars": 1387,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-31",
+            "open": 5332.0,
+            "high": 5561.0,
+            "low": 4992.0,
+            "close": 5397.0
+          },
+          "derived_rows": 1387,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 5332.0,
+            "high": 5561.0,
+            "low": 4992.0,
+            "close": 5397.0
+          },
+          "price_source": "Cocoa",
+          "canonical_symbol": "yahoo:CC=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:CC=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "CC=F",
+          "canonical_symbol": "CC=F",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:CC=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "yahoo_live_weekly_from_daily",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 5435.0,
+            "high": 6222.0,
+            "low": 5378.0,
+            "close": 5782.0
+          },
+          "provider_count": 1388,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 5332.0,
+            "high": 5561.0,
+            "low": 4992.0,
+            "close": 5397.0
+          },
+          "last_10_failures": [
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Cotton",
+      "provider": "yahoo_futures",
+      "symbol": "CT=F",
+      "raw_daily_date": "2026-07-31",
+      "store_weekly_date": "2026-07-31",
+      "weekly_aggregation_date": "2026-07-31",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 78.62999725341797,
+        "high": 80.48999786376953,
+        "low": 77.86000061035156,
+        "close": 80.5
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Cotton",
+          "provider": "yahoo_futures",
+          "registry_symbol": "CT=F",
+          "canonical_provider_symbol": "CT=F",
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-31",
+            "open": 79.75,
+            "high": 80.48999786376953,
+            "low": 79.5999984741211,
+            "close": 80.5
+          },
+          "store_weekly_last": {
+            "date": "2026-07-31",
+            "open": 78.62999725341797,
+            "high": 80.48999786376953,
+            "low": 77.86000061035156,
+            "close": 80.5
+          },
+          "daily_bars": 6665,
+          "weekly_bars": 1387,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-31",
+            "open": 78.62999725341797,
+            "high": 80.48999786376953,
+            "low": 77.86000061035156,
+            "close": 80.5
+          },
+          "derived_rows": 1387,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 78.62999725341797,
+            "high": 80.48999786376953,
+            "low": 77.86000061035156,
+            "close": 80.5
+          },
+          "price_source": "Cotton",
+          "canonical_symbol": "yahoo:CT=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:CT=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "CT=F",
+          "canonical_symbol": "CT=F",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:CT=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "yahoo_live_weekly_from_daily",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 79.9000015258789,
+            "high": 83.7300033569336,
+            "low": 79.68000030517578,
+            "close": 83.22000122070312
+          },
+          "provider_count": 1388,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 78.62999725341797,
+            "high": 80.48999786376953,
+            "low": 77.86000061035156,
+            "close": 80.5
+          },
+          "last_10_failures": [
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Corn",
+      "provider": "alpha_vantage",
+      "symbol": "ZC=F",
+      "raw_daily_date": "2026-07-31",
+      "store_weekly_date": null,
+      "weekly_aggregation_date": "2026-07-31",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 4.5925,
+        "high": 4.6225,
+        "low": 4.38,
+        "close": 4.4075
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Corn",
+          "provider": "alpha_vantage",
+          "registry_symbol": "ZC=F",
+          "canonical_provider_symbol": "ZC=F",
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-31",
+            "open": 4.455,
+            "high": 4.47,
+            "low": 4.38,
+            "close": 4.4075
+          },
+          "store_weekly_last": null,
+          "daily_bars": 6515,
+          "weekly_bars": 0,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-31",
+            "open": 4.5925,
+            "high": 4.6225,
+            "low": 4.38,
+            "close": 4.4075
+          },
+          "derived_rows": 1353,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 4.5925,
+            "high": 4.6225,
+            "low": 4.38,
+            "close": 4.4075
+          },
+          "price_source": "Corn",
+          "canonical_symbol": "yahoo:ZC=F",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:ZC=F",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "ZC=F",
+          "canonical_symbol": "ZC=F",
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:ZC=F"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "derived_weekly_fallback",
+          "provider_last": {
+            "date": "2026-07-31",
+            "open": 4.5925,
+            "high": 4.6225,
+            "low": 4.38,
+            "close": 4.4075
+          },
+          "provider_count": 1353,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 4.5925,
+            "high": 4.6225,
+            "low": 4.38,
+            "close": 4.4075
+          },
+          "last_10_failures": []
+        },
+        "pipeline_break": "alignment"
+      }
+    },
+    {
+      "instrument": "Wheat",
+      "provider": "oanda",
+      "symbol": "WHEAT_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 6.673,
+        "high": 6.794,
+        "low": 6.284,
+        "close": 6.319
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Wheat",
+          "provider": "oanda",
+          "registry_symbol": "WHEAT_USD",
+          "canonical_provider_symbol": "WHEAT_USD",
+          "registry_oanda_symbol": "WHEAT_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 6.574,
+            "high": 6.584,
+            "low": 6.284,
+            "close": 6.319
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 6.673,
+            "high": 6.794,
+            "low": 6.284,
+            "close": 6.319
+          },
+          "daily_bars": 2560,
+          "weekly_bars": 56,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 6.531,
+            "high": 6.794,
+            "low": 6.284,
+            "close": 6.319
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 6.673,
+            "high": 6.794,
+            "low": 6.284,
+            "close": 6.319
+          },
+          "price_source": "Wheat",
+          "canonical_symbol": "WHEAT_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "WHEAT_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "WHEAT_USD",
+          "canonical_symbol": "WHEAT_USD",
+          "store_symbol": null,
+          "displayed_symbol": "WHEAT_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 6.359,
+            "high": 6.724,
+            "low": 6.222,
+            "close": 6.694
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 6.673,
+            "high": 6.794,
+            "low": 6.284,
+            "close": 6.319
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Soybeans",
+      "provider": "oanda",
+      "symbol": "SOYBN_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 12.225,
+        "high": 12.294,
+        "low": 11.622,
+        "close": 11.691
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Soybeans",
+          "provider": "oanda",
+          "registry_symbol": "SOYBN_USD",
+          "canonical_provider_symbol": "SOYBN_USD",
+          "registry_oanda_symbol": "SOYBN_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 11.706,
+            "high": 11.772,
+            "low": 11.622,
+            "close": 11.691
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 12.225,
+            "high": 12.294,
+            "low": 11.622,
+            "close": 11.691
+          },
+          "daily_bars": 2561,
+          "weekly_bars": 56,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 11.962,
+            "high": 12.055,
+            "low": 11.622,
+            "close": 11.691
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 12.225,
+            "high": 12.294,
+            "low": 11.622,
+            "close": 11.691
+          },
+          "price_source": "Soybeans",
+          "canonical_symbol": "SOYBN_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "SOYBN_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "SOYBN_USD",
+          "canonical_symbol": "SOYBN_USD",
+          "store_symbol": null,
+          "displayed_symbol": "SOYBN_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 11.584,
+            "high": 11.819,
+            "low": 11.493,
+            "close": 11.745
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 12.225,
+            "high": 12.294,
+            "low": 11.622,
+            "close": 11.691
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Sugar",
+      "provider": "oanda",
+      "symbol": "SUGAR_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 0.14366,
+        "high": 0.14456,
+        "low": 0.1406,
+        "close": 0.1433
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Sugar",
+          "provider": "oanda",
+          "registry_symbol": "SUGAR_USD",
+          "canonical_provider_symbol": "SUGAR_USD",
+          "registry_oanda_symbol": "SUGAR_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 0.14104,
+            "high": 0.14456,
+            "low": 0.14074,
+            "close": 0.1433
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 0.14366,
+            "high": 0.14456,
+            "low": 0.1406,
+            "close": 0.1433
+          },
+          "daily_bars": 2557,
+          "weekly_bars": 56,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 0.14216,
+            "high": 0.14456,
+            "low": 0.1406,
+            "close": 0.1433
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 0.14366,
+            "high": 0.14456,
+            "low": 0.1406,
+            "close": 0.1433
+          },
+          "price_source": "Sugar",
+          "canonical_symbol": "SUGAR_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "SUGAR_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "SUGAR_USD",
+          "canonical_symbol": "SUGAR_USD",
+          "store_symbol": null,
+          "displayed_symbol": "SUGAR_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 0.16136,
+            "high": 0.16808,
+            "low": 0.15944,
+            "close": 0.1634
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 0.14366,
+            "high": 0.14456,
+            "low": 0.1406,
+            "close": 0.1433
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Platinum",
+      "provider": "oanda",
+      "symbol": "XPT_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 1612.423,
+        "high": 1657.322,
+        "low": 1568.545,
+        "close": 1639.938
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Platinum",
+          "provider": "oanda",
+          "registry_symbol": "XPT_USD",
+          "canonical_provider_symbol": "XPT_USD",
+          "registry_oanda_symbol": "XPT_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 1652.986,
+            "high": 1654.422,
+            "low": 1610.026,
+            "close": 1639.938
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 1612.423,
+            "high": 1657.322,
+            "low": 1568.545,
+            "close": 1639.938
+          },
+          "daily_bars": 2621,
+          "weekly_bars": 53,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 1614.777,
+            "high": 1657.322,
+            "low": 1568.545,
+            "close": 1639.938
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 1612.423,
+            "high": 1657.322,
+            "low": 1568.545,
+            "close": 1639.938
+          },
+          "price_source": "Platinum",
+          "canonical_symbol": "XPT_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "XPT_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "XPT_USD",
+          "canonical_symbol": "XPT_USD",
+          "store_symbol": null,
+          "displayed_symbol": "XPT_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 1745.052,
+            "high": 1794.281,
+            "low": 1690.008,
+            "close": 1743.173
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 1612.423,
+            "high": 1657.322,
+            "low": 1568.545,
+            "close": 1639.938
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Palladium",
+      "provider": "oanda",
+      "symbol": "XPD_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 1248.383,
+        "high": 1306.954,
+        "low": 1226.557,
+        "close": 1264.91
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Palladium",
+          "provider": "oanda",
+          "registry_symbol": "XPD_USD",
+          "canonical_provider_symbol": "XPD_USD",
+          "registry_oanda_symbol": "XPD_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 1298.28,
+            "high": 1306.954,
+            "low": 1248.034,
+            "close": 1264.91
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 1248.383,
+            "high": 1306.954,
+            "low": 1226.557,
+            "close": 1264.91
+          },
+          "daily_bars": 2621,
+          "weekly_bars": 53,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 1275.05,
+            "high": 1306.954,
+            "low": 1226.557,
+            "close": 1264.91
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 1248.383,
+            "high": 1306.954,
+            "low": 1226.557,
+            "close": 1264.91
+          },
+          "price_source": "Palladium",
+          "canonical_symbol": "XPD_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "XPD_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "XPD_USD",
+          "canonical_symbol": "XPD_USD",
+          "store_symbol": null,
+          "displayed_symbol": "XPD_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 1367.406,
+            "high": 1396.082,
+            "low": 1289.751,
+            "close": 1305.034
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 1248.383,
+            "high": 1306.954,
+            "low": 1226.557,
+            "close": 1264.91
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "Bitcoin",
+      "provider": "oanda",
+      "symbol": "BTC_USD",
+      "raw_daily_date": "2026-07-30",
+      "store_weekly_date": "2026-07-24",
+      "weekly_aggregation_date": "2026-07-30",
+      "workstation_weekly_date": "2026-07-24",
+      "cot_date": "2026-08-11",
+      "gap_days": 18,
+      "gap_weeks": 2.57,
+      "latest_ohlc": {
+        "date": "2026-07-24",
+        "open": 64098.0,
+        "high": 65683.5,
+        "low": 62361.5,
+        "close": 62886.5
+      },
+      "status": "FAIL",
+      "failures": [
+        "price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+        "missing workstation weekly candle for provider week 2026-07-31",
+        "missing workstation weekly candle for provider week 2026-08-07"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "Bitcoin",
+          "provider": "oanda",
+          "registry_symbol": "BTC_USD",
+          "canonical_provider_symbol": "BTC_USD",
+          "registry_oanda_symbol": "BTC_USD",
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-07-30",
+            "open": 64719.5,
+            "high": 65344.5,
+            "low": 62361.5,
+            "close": 62886.5
+          },
+          "store_weekly_last": {
+            "date": "2026-07-24",
+            "open": 64098.0,
+            "high": 65683.5,
+            "low": 62361.5,
+            "close": 62886.5
+          },
+          "daily_bars": 2947,
+          "weekly_bars": 94,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-07-30",
+            "open": 64898.5,
+            "high": 65344.5,
+            "low": 62361.5,
+            "close": 62886.5
+          },
+          "derived_rows": 531,
+          "store_weekly_matches_derived": false
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-24",
+          "weekly_last": {
+            "date": "2026-07-24",
+            "open": 64098.0,
+            "high": 65683.5,
+            "low": 62361.5,
+            "close": 62886.5
+          },
+          "price_source": "Bitcoin",
+          "canonical_symbol": "BTC_USD",
+          "canonical_source": "oanda",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-24",
+            "latest_age_days": 8,
+            "source": "oanda",
+            "symbol": "BTC_USD",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": "BTC_USD",
+          "canonical_symbol": "BTC_USD",
+          "store_symbol": null,
+          "displayed_symbol": "BTC_USD"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-24",
+          "cot_date": "2026-08-11",
+          "gap_days": 18,
+          "gap_weeks": 2.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "oanda_live",
+          "provider_last": {
+            "date": "2026-08-07",
+            "open": 64941.5,
+            "high": 65429.5,
+            "low": 62469.5,
+            "close": 62842.0
+          },
+          "provider_count": 12,
+          "workstation_last": {
+            "date": "2026-07-24",
+            "open": 64098.0,
+            "high": 65683.5,
+            "low": 62361.5,
+            "close": 62886.5
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d",
+            "missing workstation weekly candle for provider week 2026-07-31",
+            "missing workstation weekly candle for provider week 2026-08-07"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    },
+    {
+      "instrument": "US Dollar Index / DX",
+      "provider": "yahoo_futures",
+      "symbol": null,
+      "raw_daily_date": "2026-08-14",
+      "store_weekly_date": "2026-08-14",
+      "weekly_aggregation_date": "2026-08-14",
+      "workstation_weekly_date": "2026-07-31",
+      "cot_date": "2026-08-11",
+      "gap_days": 11,
+      "gap_weeks": 1.57,
+      "latest_ohlc": {
+        "date": "2026-07-31",
+        "open": 101.31999969482422,
+        "high": 101.63999938964844,
+        "low": 99.69000244140625,
+        "close": 99.80000305175781
+      },
+      "status": "FAIL",
+      "failures": [
+        "workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-31 store_weekly=2026-08-14 derived=2026-08-14)",
+        "price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)",
+        "workstation weekly tip 2026-07-31 trails provider tip 2026-08-14 by 14d",
+        "missing workstation weekly candle for provider week 2026-08-07",
+        "missing workstation weekly candle for provider week 2026-08-14"
+      ],
+      "stages": {
+        "registry": {
+          "instrument_id": "US Dollar Index / DX",
+          "provider": "yahoo_futures",
+          "registry_symbol": null,
+          "canonical_provider_symbol": null,
+          "registry_oanda_symbol": null,
+          "present": true
+        },
+        "price_download_storage": {
+          "raw_daily_last": {
+            "date": "2026-08-14",
+            "open": 99.93000030517578,
+            "high": 99.94000244140625,
+            "low": 99.4800033569336,
+            "close": 99.66999816894531
+          },
+          "store_weekly_last": {
+            "date": "2026-08-14",
+            "open": 99.58999633789062,
+            "high": 100.08000183105469,
+            "low": 99.4800033569336,
+            "close": 99.66999816894531
+          },
+          "daily_bars": 14122,
+          "weekly_bars": 2902,
+          "store_symbol": null,
+          "fetched_via": null
+        },
+        "weekly_aggregation": {
+          "derived_weekly_last": {
+            "date": "2026-08-14",
+            "open": 99.58999633789062,
+            "high": 100.08000183105469,
+            "low": 99.4800033569336,
+            "close": 99.66999816894531
+          },
+          "derived_rows": 2902,
+          "store_weekly_matches_derived": true
+        },
+        "cot": {
+          "latest_cot_report_date": "2026-08-11"
+        },
+        "workstation_export": {
+          "ohlc_last_date": "2026-07-31",
+          "weekly_last": {
+            "date": "2026-07-31",
+            "open": 101.31999969482422,
+            "high": 101.63999938964844,
+            "low": 99.69000244140625,
+            "close": 99.80000305175781
+          },
+          "price_source": "US Dollar Index / DX",
+          "canonical_symbol": "yahoo:DX-Y.NYB",
+          "canonical_source": "yahoo_futures",
+          "price_quality": {
+            "status": "PASS",
+            "latest_date": "2026-07-31",
+            "latest_age_days": 1,
+            "source": "yahoo_futures",
+            "symbol": "yahoo:DX-Y.NYB",
+            "warning": null
+          },
+          "public_matches_processed": true,
+          "dist_matches_processed": true
+        },
+        "symbol_mapping": {
+          "registry_symbol": null,
+          "canonical_symbol": null,
+          "store_symbol": null,
+          "displayed_symbol": "yahoo:DX-Y.NYB"
+        },
+        "alignment": {
+          "weekly_ohlc_date": "2026-07-31",
+          "cot_date": "2026-08-11",
+          "gap_days": 11,
+          "gap_weeks": 1.57,
+          "price_may_lead_cot": true,
+          "price_behind_cot": true,
+          "max_allowed_days_when_price_behind": 5
+        },
+        "provider_series_cross_check": {
+          "mode": "store_weekly_fallback",
+          "provider_last": {
+            "date": "2026-08-14",
+            "open": 99.58999633789062,
+            "high": 100.08000183105469,
+            "low": 99.4800033569336,
+            "close": 99.66999816894531
+          },
+          "provider_count": 2902,
+          "workstation_last": {
+            "date": "2026-07-31",
+            "open": 101.31999969482422,
+            "high": 101.63999938964844,
+            "low": 99.69000244140625,
+            "close": 99.80000305175781
+          },
+          "last_10_failures": [
+            "workstation weekly tip 2026-07-31 trails provider tip 2026-08-14 by 14d",
+            "missing workstation weekly candle for provider week 2026-08-07",
+            "missing workstation weekly candle for provider week 2026-08-14"
+          ]
+        },
+        "pipeline_break": "provider_series_cross_check"
+      }
+    }
+  ],
+  "failing_instruments": [
+    "NASDAQ / NQ",
+    "S&P 500 / ES",
+    "Dow / YM",
+    "Euro FX / 6E",
+    "British Pound / 6B",
+    "Japanese Yen / 6J",
+    "Swiss Franc / 6S",
+    "Australian Dollar / 6A",
+    "Canadian Dollar / 6C",
+    "NZ Dollar / 6N",
+    "Gold",
+    "Silver",
+    "Copper / HG",
+    "Crude Oil / CL",
+    "Natural Gas / NG",
+    "Coffee",
+    "Cocoa",
+    "Cotton",
+    "Corn",
+    "Wheat",
+    "Soybeans",
+    "Sugar",
+    "Platinum",
+    "Palladium",
+    "Bitcoin",
+    "US Dollar Index / DX"
+  ]
+}

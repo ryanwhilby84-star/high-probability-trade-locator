@@ -1,6 +1,7 @@
 import React from 'react'
-import { createChart } from 'lightweight-charts'
+import { CrosshairMode, createChart } from 'lightweight-charts'
 
+import { PANEL_IDS } from '../../charts/chartTheme.js'
 import { cotDateToBarTime } from '../../charts/positioningTimelineAlign.js'
 import {
   prepareLightweightCandles,
@@ -10,6 +11,35 @@ import { createWorkstationChartOptions } from './workstationChartOptions.js'
 import { WorkstationLwcDrawingOverlay } from './WorkstationLwcDrawingOverlay.jsx'
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
+
+/** TradingView-style camera on valuation price panes only (not deviation / sync followers). */
+function isPriceCameraPane(panelId, syncFollower) {
+  return panelId === PANEL_IDS.price && !syncFollower
+}
+
+const CAMERA_BTN_STYLE = {
+  appearance: 'none',
+  border: '1px solid rgba(148, 163, 184, 0.35)',
+  background: 'rgba(15, 23, 42, 0.82)',
+  color: '#e2e8f0',
+  fontSize: 11,
+  fontWeight: 600,
+  letterSpacing: '0.02em',
+  lineHeight: 1.2,
+  padding: '4px 8px',
+  borderRadius: 4,
+  cursor: 'pointer',
+}
+
+const CAMERA_BAR_STYLE = {
+  position: 'absolute',
+  top: 8,
+  right: 64,
+  zIndex: 5,
+  display: 'flex',
+  gap: 6,
+  pointerEvents: 'auto',
+}
 
 function buildAnchorPoints(timelineRows) {
   return (timelineRows || [])
@@ -76,6 +106,7 @@ export function WorkstationChartPane({
   syncFollower = false,
   className = '',
 }) {
+  const priceCamera = isPriceCameraPane(panelId, syncFollower)
   const containerRef = React.useRef(null)
   const chartRef = React.useRef(null)
   const [chartInstance, setChartInstance] = React.useState(null)
@@ -90,6 +121,9 @@ export function WorkstationChartPane({
   const candlesRef = React.useRef([])
   const lineRef = React.useRef([])
   const skipEmitRef = React.useRef(false)
+  const homeLogicalRangeRef = React.useRef(null)
+  const homeCaptureTimerRef = React.useRef(null)
+  const lastSizeRef = React.useRef({ width: 0, height: 0 })
   const onChartClickRef = React.useRef(onChartClick)
   onChartClickRef.current = onChartClick
 
@@ -97,6 +131,33 @@ export function WorkstationChartPane({
   const onCrosshairClearRef = React.useRef(onCrosshairClear)
   onCrosshairMoveRef.current = onCrosshairMove
   onCrosshairClearRef.current = onCrosshairClear
+
+  const resetPriceCamera = React.useCallback(() => {
+    const chart = chartRef.current
+    if (!chart) return
+    const home = homeLogicalRangeRef.current
+    try {
+      if (home && Number.isFinite(home.from) && Number.isFinite(home.to)) {
+        chart.timeScale().setVisibleLogicalRange({ from: home.from, to: home.to })
+      } else {
+        chart.timeScale().fitContent()
+      }
+      chart.priceScale('right').applyOptions({ autoScale: true })
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  const returnPriceCameraToLive = React.useCallback(() => {
+    const chart = chartRef.current
+    if (!chart) return
+    try {
+      chart.timeScale().scrollToRealTime()
+      chart.priceScale('right').applyOptions({ autoScale: true })
+    } catch {
+      /* ignore */
+    }
+  }, [])
 
   React.useEffect(() => {
     const el = containerRef.current
@@ -106,6 +167,7 @@ export function WorkstationChartPane({
     try {
       const initialWidth = Math.max(el.clientWidth, 1)
       const initialHeight = Math.max(el.clientHeight, 1)
+      lastSizeRef.current = { width: initialWidth, height: initialHeight }
       chart = createChart(
         el,
         createWorkstationChartOptions({
@@ -115,7 +177,7 @@ export function WorkstationChartPane({
           interactionEnabled: !syncFollower,
         }),
       )
-      if (hideFloatingLabels) {
+      if (hideFloatingLabels && !priceCamera) {
         chart.applyOptions({
           crosshair: {
             horzLine: { labelVisible: false },
@@ -130,6 +192,32 @@ export function WorkstationChartPane({
             vertLines: { color: 'rgba(148, 163, 184, 0.08)' },
             horzLines: { color: 'rgba(148, 163, 184, 0.1)' },
           },
+        })
+      }
+      if (priceCamera) {
+        chart.applyOptions({
+          handleScroll: {
+            mouseWheel: false,
+            pressedMouseMove: true,
+            horzTouchDrag: true,
+            vertTouchDrag: false,
+          },
+          handleScale: {
+            mouseWheel: true,
+            pinch: true,
+            axisPressedMouseMove: { time: true, price: true },
+            axisDoubleClickReset: { time: true, price: true },
+          },
+          kineticScroll: {
+            touch: true,
+            mouse: true,
+          },
+          crosshair: {
+            mode: CrosshairMode.Normal,
+            vertLine: { visible: true, labelVisible: true },
+            horzLine: { visible: true, labelVisible: true },
+          },
+          rightPriceScale: { autoScale: true },
         })
       }
     } catch (err) {
@@ -233,12 +321,27 @@ export function WorkstationChartPane({
     const ro = new ResizeObserver(() => {
       if (!containerRef.current || !chartRef.current) return
       const { clientWidth, clientHeight } = containerRef.current
-      chartRef.current.applyOptions({
-        width: Math.max(clientWidth, 1),
-        height: Math.max(clientHeight, 1),
-      })
+      const width = Math.max(clientWidth, 1)
+      const height = Math.max(clientHeight, 1)
+      const prev = lastSizeRef.current
+      if (prev.width === width && prev.height === height) return
+      lastSizeRef.current = { width, height }
+      chartRef.current.applyOptions({ width, height })
     })
     ro.observe(el)
+
+    if (priceCamera) {
+      homeCaptureTimerRef.current = window.setTimeout(() => {
+        try {
+          const range = chart.timeScale().getVisibleLogicalRange()
+          if (range && Number.isFinite(range.from) && Number.isFinite(range.to)) {
+            homeLogicalRangeRef.current = { from: range.from, to: range.to }
+          }
+        } catch {
+          /* ignore */
+        }
+      }, 900)
+    }
 
     const unregister =
       registerPane?.(panelId, {
@@ -279,6 +382,10 @@ export function WorkstationChartPane({
 
     return () => {
       ro.disconnect()
+      if (homeCaptureTimerRef.current != null) {
+        window.clearTimeout(homeCaptureTimerRef.current)
+        homeCaptureTimerRef.current = null
+      }
       try {
         chart.unsubscribeClick(onClick)
       } catch {
@@ -292,6 +399,7 @@ export function WorkstationChartPane({
       zeroRef.current = null
       overlayRef.current = null
       guideLinesRef.current = []
+      homeLogicalRangeRef.current = null
       setChartInstance(null)
       setPrimarySeriesInstance(null)
     }
@@ -310,6 +418,7 @@ export function WorkstationChartPane({
     fixedPriceRange?.min,
     fixedPriceRange?.max,
     syncFollower,
+    priceCamera,
   ])
 
   React.useEffect(() => {
@@ -519,9 +628,39 @@ export function WorkstationChartPane({
     <div
       className={`ws-chart-pane ${drawingMode ? 'ws-chart-pane--drawing' : ''} ${className}`.trim()}
       data-panel={panelId}
+      data-price-camera={priceCamera ? 'on' : undefined}
     >
-      <div className="ws-chart-pane-plot ws-chart-pane-plot--overlay-host">
+      <div
+        className="ws-chart-pane-plot ws-chart-pane-plot--overlay-host"
+        style={priceCamera ? { position: 'relative' } : undefined}
+      >
         <div className="ws-chart-pane-canvas" ref={containerRef} />
+        {priceCamera ? (
+          <div
+            className="ws-price-camera-controls"
+            style={CAMERA_BAR_STYLE}
+            data-testid="ws-price-camera-controls"
+          >
+            <button
+              type="button"
+              style={CAMERA_BTN_STYLE}
+              data-testid="ws-price-camera-reset"
+              title="Reset camera to the default window and auto Y scale"
+              onClick={resetPriceCamera}
+            >
+              Reset Camera
+            </button>
+            <button
+              type="button"
+              style={CAMERA_BTN_STYLE}
+              data-testid="ws-price-camera-live"
+              title="Scroll to the live / latest bars"
+              onClick={returnPriceCameraToLive}
+            >
+              Return to Live
+            </button>
+          </div>
+        ) : null}
         <WorkstationLwcDrawingOverlay
           chart={chartInstance}
           primarySeries={primarySeriesInstance}

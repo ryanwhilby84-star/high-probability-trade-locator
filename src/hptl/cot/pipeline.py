@@ -304,6 +304,18 @@ def _republish_downstream_exports(
         )
     except Exception as exc:
         logger.warning("positioning research export failed (confluence OK): %s", exc)
+    # Weekly inspector must track cot_3y tip — otherwise chart and drawer diverge.
+    try:
+        from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
+
+        wi = run_weekly_inspector_export(markets=None)
+        log_kv(
+            "weekly inspector",
+            f"available={(wi.get('summary') or {}).get('available')}/"
+            f"{(wi.get('summary') or {}).get('markets')}",
+        )
+    except Exception as exc:
+        logger.warning("weekly inspector export failed (confluence OK): %s", exc)
 
 def _read_probe_cache() -> dict[str, Any] | None:
     if not PROBE_CACHE_PATH.exists():

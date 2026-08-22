@@ -7,7 +7,6 @@ import {
   rangePresetById,
 } from '../cot/positioningChartMetrics.js'
 import { fetchPublicJson } from '../utils/fetchPublicJson.js'
-import { useLivePrice } from '../prices/usePriceStores.js'
 import {
   navigateToCotWorkstation,
   navigateToInstrument,
@@ -39,15 +38,15 @@ import {
 } from './naturalGasValuationWorkstationModel.js'
 import {
   INTERACTION_MODE,
+  UPDATE_MODE,
   alignPointsToTimeline,
   assertSharedVisibleRange,
-  buildLiveValuationState,
   extractPhysicalFairValueTip,
   formatClock,
   historicalSeriesFingerprint,
-  resolveCurrentPriceSource,
   resolveInteractionMode,
 } from './naturalGasValuationWorkstationLive.js'
+import { useNaturalGasLiveMarket } from './useNaturalGasLiveMarket.js'
 import './naturalGasValuationWorkstation.css'
 import '../workstation/cotWorkstationPage.css'
 import '../workstation/cotWorkstation.css'
@@ -110,11 +109,8 @@ export function NaturalGasValuationWorkstationPage() {
   const [bottomSeries, setBottomSeries] = React.useState(BOTTOM_SERIES.deviation)
   const [modelMode, setModelMode] = React.useState('walkforward')
   const [scaleMode, setScaleMode] = React.useState(DEFAULT_SCALE_MODE)
-  const [pricesLatestSnapshot, setPricesLatestSnapshot] = React.useState(null)
   const sharedVisibleRangeRef = React.useRef(null)
   const lockedTimeStableRef = React.useRef(null)
-
-  const liveHook = useLivePrice(MARKET)
 
   React.useEffect(() => {
     let cancelled = false
@@ -122,13 +118,10 @@ export function NaturalGasValuationWorkstationPage() {
       Promise.all([
         fetchPublicJson(HISTORY_URL),
         fetchPublicJson(VALUATION_URL).catch(() => null),
-        fetchPublicJson('/data/prices_latest.json').catch(() => null),
-      ]).then(([hist, val, prices]) => {
+      ]).then(([hist, val]) => {
         if (cancelled) return
         setHistoryDoc(hist)
         setValuationDoc(val)
-        const snap = prices?.instruments?.[MARKET]?.price || null
-        setPricesLatestSnapshot(snap)
         setError(null)
       })
 
@@ -136,18 +129,14 @@ export function NaturalGasValuationWorkstationPage() {
       if (!cancelled) setError(err?.message || String(err))
     })
 
-    // Reactive snapshot path when WebSocket is down — never requires weekly rebuild.
+    // Refresh tip metadata only — live price comes from WS / OANDA REST poll.
     const pollId = window.setInterval(() => {
-      Promise.all([
-        fetchPublicJson(VALUATION_URL).catch(() => null),
-        fetchPublicJson('/data/prices_latest.json').catch(() => null),
-      ]).then(([val, prices]) => {
-        if (cancelled) return
-        if (val) setValuationDoc(val)
-        const snap = prices?.instruments?.[MARKET]?.price || null
-        if (snap) setPricesLatestSnapshot(snap)
-      })
-    }, 15_000)
+      fetchPublicJson(VALUATION_URL)
+        .then((val) => {
+          if (!cancelled && val) setValuationDoc(val)
+        })
+        .catch(() => {})
+    }, 60_000)
 
     return () => {
       cancelled = true
@@ -177,38 +166,24 @@ export function NaturalGasValuationWorkstationPage() {
     [valuationDoc, weeks, modelMode],
   )
 
-  const priceSource = React.useMemo(
-    () =>
-      resolveCurrentPriceSource({
-        connected: Boolean(liveHook?.connected),
-        streamPrice: liveHook?.streamPrice || null,
-        quote: liveHook?.quote || null,
-        status: liveHook?.status || null,
-        freshness: liveHook?.freshness || null,
-        valuationPriceFreshness: physicalTip.price_freshness,
-        pricesLatestSnapshot,
-      }),
-    [
-      liveHook?.connected,
-      liveHook?.streamPrice,
-      liveHook?.quote,
-      liveHook?.status,
-      liveHook?.freshness,
-      physicalTip.price_freshness,
-      pricesLatestSnapshot,
-    ],
-  )
+  const liveMarket = useNaturalGasLiveMarket({
+    physicalFairValue: physicalTip.physical_fair_value,
+    lockedHistory: lockedTime != null,
+    initialSnapshot: physicalTip.price_freshness?.live_quote || null,
+  })
 
-  const liveState = React.useMemo(
-    () =>
-      buildLiveValuationState({
-        physicalTip,
-        priceSource,
-        historicalSeriesFingerprint: fingerprint,
-        researchVerdict: historyDoc?.verdict?.verdict || physicalTip.model_verdict,
-      }),
-    [physicalTip, priceSource, fingerprint, historyDoc?.verdict?.verdict],
-  )
+  const liveState = React.useMemo(() => {
+    const base = liveMarket.liveState || {}
+    return {
+      ...base,
+      model_verdict: historyDoc?.verdict?.verdict || physicalTip.model_verdict || base.model_verdict,
+      model_as_of: physicalTip.model_as_of || null,
+      storage_as_of: physicalTip.storage_as_of || null,
+      production_as_of: physicalTip.production_as_of || null,
+      published_model_id: physicalTip.published_model_id || base.published_model_id,
+      historical_series_fingerprint: fingerprint,
+    }
+  }, [liveMarket.liveState, physicalTip, fingerprint, historyDoc?.verdict?.verdict])
 
   const interactionMode = resolveInteractionMode({ lockedTime, hoverTime })
   // Preserve lock across live quote ticks (price updates must not clear selection).
@@ -224,10 +199,25 @@ export function NaturalGasValuationWorkstationPage() {
   )
   const allEventIndexes = React.useMemo(() => events.map((e) => e.index), [events])
 
-  const pricePoints = React.useMemo(
-    () => alignPointsToTimeline(timelineRows, buildPricePoints(weeks)),
-    [timelineRows, weeks],
-  )
+  const pricePoints = React.useMemo(() => {
+    const pts = alignPointsToTimeline(timelineRows, buildPricePoints(weeks))
+    const live = liveState.market_price
+    const mode = liveMarket.updateMode
+    if (
+      live == null ||
+      !Number.isFinite(Number(live)) ||
+      !pts.length ||
+      (mode !== UPDATE_MODE.LIVE && mode !== UPDATE_MODE.POLLING)
+    ) {
+      return pts
+    }
+    // Update only the tip point — history preserved; chart setData keeps camera.
+    const out = pts.slice()
+    const last = out[out.length - 1]
+    if (!last?.time) return pts
+    out[out.length - 1] = { time: last.time, value: Number(live) }
+    return out
+  }, [timelineRows, weeks, liveState.market_price, liveMarket.updateMode])
   const rawDeviation = React.useMemo(
     () => alignPointsToTimeline(timelineRows, buildDeviationPoints(weeks, modelMode)),
     [timelineRows, weeks, modelMode],
@@ -449,6 +439,9 @@ export function NaturalGasValuationWorkstationPage() {
             data-testid="ngvw-price-badge"
           >
             {liveState.price_label}
+          </span>
+          <span className="ngvw-heartbeat" data-testid="ngvw-heartbeat">
+            {liveMarket.heartbeat?.badge || '—'}
           </span>
           <button
             type="button"
