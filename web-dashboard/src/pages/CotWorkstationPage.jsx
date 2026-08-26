@@ -13,6 +13,7 @@ import {
 } from '../routing.js'
 
 import '../workstation/cotWorkstationPage.css'
+import '../workstation/cotWorkstationSoft.css'
 
 class CotWorkstationErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { error: null, retryToken: 0 } }
