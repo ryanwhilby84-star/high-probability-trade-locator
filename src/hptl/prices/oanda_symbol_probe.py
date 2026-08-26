@@ -8,16 +8,49 @@ from hptl.markets.instrument_registry import get_instrument
 from hptl.oanda.oanda_client import fetch_account_instruments, instrument_names_set
 from hptl.prices.coverage import load_price_coverage, oanda_symbol_for
 
+DEFAULT_FAILED_COHORT = [
+    "Australia 200",
+    "Bitcoin Cash",
+    "China A50",
+    "Ether/Ether",
+    "Europe 50",
+    "France 40",
+    "Germany 30",
+    "Hong Kong 33",
+    "India 50",
+    "Japan 225",
+    "Litecoin",
+    "Netherlands 25",
+    "Singapore 30",
+    "Taiwan Index",
+    "UK 100",
+    "UK 10Y Gilt",
+    "US 10Y T-Note",
+    "US 2Y T-Note",
+    "US 5Y T-Note",
+    "US Nas 100",
+    "US Russ 2000",
+    "US SPX 500",
+    "US T-Bond",
+    "US Wall St 30",
+    "West Texas Oil",
+]
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Check HPTL OANDA symbols against the connected OANDA account")
     parser.add_argument("--instrument", action="append", default=[], help="Instrument id; repeat for a targeted batch")
+    parser.add_argument(
+        "--failed-cohort",
+        action="store_true",
+        help="Probe the known OANDA-related failures from the latest full-universe health run",
+    )
     args = parser.parse_args(argv)
 
     ids = [str(i).strip() for i in args.instrument if str(i).strip()]
+    if args.failed_cohort or not ids:
+        ids.extend(DEFAULT_FAILED_COHORT)
     ids = list(dict.fromkeys(ids))
-    if not ids:
-        raise SystemExit("Pass at least one --instrument")
 
     coverage = load_price_coverage()
     account_rows = fetch_account_instruments()
