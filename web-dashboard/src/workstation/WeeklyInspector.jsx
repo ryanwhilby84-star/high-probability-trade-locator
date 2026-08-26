@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fmtPctile, shortSampleQuality, fmtRet } from './researchEventUi.js'
+import { BasicLookbackPanel } from './BasicLookbackPanel.jsx'
 
 function fmtNum(v) {
   if (v == null || !Number.isFinite(Number(v))) return 'Unavailable'
@@ -332,6 +333,8 @@ export function WeeklyInspector({
             selectedEventId={selectedEventId}
             onSelectEvent={onSelectEvent}
           />
+
+          <BasicLookbackPanel week={week} />
 
           <div className="cot-ws-insp-columns" role="group" aria-label="Weekly breakdown">
             <ParticipantColumn title="Commercial" p={week.commercial} />
