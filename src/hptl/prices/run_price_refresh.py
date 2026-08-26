@@ -9,7 +9,6 @@ from hptl.price_config import PriceApiConfigError, validate_price_api_keys
 from hptl.prices.cot_fail_backfill import FRED_COT_FAIL_SERIES
 from hptl.prices.coverage import load_price_coverage, supported_instrument_ids
 from hptl.prices.price_store import (
-    load_instrument_record,
     load_instrument_record_internal,
     merge_fetched_into_production,
     write_instrument_record,
@@ -24,22 +23,22 @@ def refresh_instrument_record(
     *,
     fetched_via: str,
 ) -> dict:
-    """Merge a live fetch into the stored production record (or return fetch on empty store)."""
+    """Merge a live fetch into the stored production record.
+
+    Last-known-good bars are retained on provider failure, but the failed fetch
+    itself is persisted as an explicit error so stale data cannot masquerade as
+    a successful refresh.
+    """
     existing = load_instrument_record_internal(instrument_id)
     has_incoming = bool(fetched.get("daily") or fetched.get("weekly"))
 
     if fetched_via == "fred" and instrument_id in FRED_COT_FAIL_SERIES and has_incoming:
         existing = None
 
-    if fetched.get("error") and not has_incoming:
-        if existing:
-            rec = load_instrument_record(instrument_id)
-            if rec is not None:
-                rec["error"] = fetched.get("error")
-            return rec or fetched
-        return fetched
-
     if not existing and not has_incoming:
+        # Nothing useful exists yet, but still persist the failure record so the
+        # operational audit can explain why this instrument has no history.
+        write_instrument_record(fetched, fetched_via=fetched_via)
         return fetched
 
     merged, meta = merge_fetched_into_production(existing, fetched, fetched_via=fetched_via)
@@ -57,9 +56,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--instrument", type=str, default="", help="Refresh single instrument id")
     parser.add_argument("--skip-validation", action="store_true")
     parser.add_argument(
-        "--strict-health",
+        "--require-healthy",
         action="store_true",
-        help="Return non-zero when refreshed canonical prices fail freshness/integrity checks",
+        help="Exit non-zero when the post-refresh price health audit has failures",
     )
     args = parser.parse_args(argv)
 
@@ -80,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         ):
             try:
                 probe()
-            except Exception as exc:  # noqa: BLE001 — advisory probe, never fatal
+            except Exception as exc:
                 probe_warnings.append(f"{name} live probe: {exc}")
                 print(f"WARNING (price source probe, non-fatal): {name}: {exc}", file=sys.stderr)
 
@@ -93,52 +92,50 @@ def main(argv: list[str] | None = None) -> int:
     records: dict = {}
 
     def progress(i: int, total: int, iid: str, rec: dict) -> None:
-        has_history = bool(rec.get("daily") or rec.get("weekly"))
-        status = "ok" if has_history and not rec.get("error") else ("kept" if has_history else "fail")
-        daily_n = len(rec.get("daily") or [])
-        last_bar = ((rec.get("daily") or [{}])[-1] or {}).get("date") if rec.get("daily") else None
-        suffix = f" last={last_bar}" if last_bar else ""
-        if rec.get("error"):
-            suffix += f" error={str(rec.get('error'))[:100]}"
-        print(f"[{i}/{total}] {iid}: {status} daily_bars={daily_n}{suffix}", flush=True)
+        daily = rec.get("daily") or []
+        status = "ok" if daily and not rec.get("error") else "fail"
+        last_bar = daily[-1].get("date") if daily else "—"
+        src = rec.get("_fetched_via") or adapter.source_for(iid) or "none"
+        err = f" error={rec.get('error')}" if rec.get("error") else ""
+        print(
+            f"[{i}/{total}] {iid}: {status} source={src} daily_bars={len(daily)} last_bar={last_bar}{err}",
+            flush=True,
+        )
 
     for iid in ids:
         fetched = adapter.fetch(iid)
         src = str(fetched.get("_fetched_via") or adapter.source_for(iid) or "none")
         rec = refresh_instrument_record(iid, fetched, fetched_via=src)
+        rec["_fetched_via"] = src
         records[iid] = rec
         progress(len(records), len(ids), iid, rec)
 
-    path = write_price_store_merged(
-        records,
-        coverage_generated_at=coverage.get("generated_at"),
-    )
+    path = write_price_store_merged(records, coverage_generated_at=coverage.get("generated_at"))
     ok = sum(1 for r in records.values() if r.get("daily") and not r.get("error"))
-    kept = sum(1 for r in records.values() if r.get("daily") and r.get("error"))
-    failed = sum(1 for r in records.values() if not r.get("daily"))
-    print(f"\nStored {len(records)} refreshed instruments ({ok} clean, {kept} kept-with-error, {failed} no daily history)")
+    print(f"\nStored {len(records)} refreshed instruments ({ok} healthy fetches with daily bars)")
     print(f"Canonical: {path}")
     print("Dashboard: web-dashboard/public/data/prices_latest.json")
 
     if probe_warnings:
         print(f"\nPrice source probe warnings ({len(probe_warnings)}, non-fatal):")
-        for warning in probe_warnings:
-            print(f"  - {warning}")
+        for w in probe_warnings:
+            print(f"  - {w}")
 
-    # A fetch returning bars is not enough. Verify the resulting canonical store
-    # for freshness, gaps, duplicates and OHLC sanity every time we refresh.
     from hptl.prices.price_health import write_health_audit
 
-    health = write_health_audit(ids)
-    hs = health["summary"]
-    print(f"\nPrice health: PASS={hs['pass']} WARN={hs['warn']} FAIL={hs['fail']} TOTAL={hs['total']}")
+    health_ids = ids if args.instrument.strip() or args.limit > 0 else None
+    health = write_health_audit(health_ids)
+    summary = health["summary"]
+    print(
+        f"\nPost-refresh health: PASS={summary['pass']} WARN={summary['warn']} "
+        f"FAIL={summary['fail']} TOTAL={summary['total']}"
+    )
     for row in health["rows"]:
         if row["status"] != "PASS":
             detail = "; ".join(row["issues"] + row["warnings"])
             print(f"  {row['status']:4} {row['instrument']}: {detail}")
 
-    if args.strict_health and hs["fail"]:
-        print("ERROR: strict price health gate failed", file=sys.stderr)
+    if args.require_healthy and summary["fail"]:
         return 2
     return 0
 
