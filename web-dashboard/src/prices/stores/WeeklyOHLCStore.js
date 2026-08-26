@@ -1,14 +1,20 @@
 /**
  * WeeklyOHLCStore — completed weekly OHLC only.
  * Never used as live price.
+ *
+ * Canonical HPTL price history is the primary source. The legacy workstation
+ * OHLC export is retained only as a metadata/history fallback so the chart
+ * cannot quietly lag behind a successful canonical price refresh.
  */
 
 import { normalizeWeeklyOhlc } from '../../workstation/data/normalizeWeeklyTimeline.js'
 
-const OHLC_URL = '/data/workstation_ohlc_latest.json'
+const CANONICAL_URL = '/data/prices_latest.json'
+const LEGACY_OHLC_URL = '/data/workstation_ohlc_latest.json'
 
 const _listeners = new Set()
 let _doc = null
+let _legacyDoc = null
 let _loadPromise = null
 let _lastFetchUrl = null
 let _subscriberCount = 0
@@ -27,8 +33,6 @@ function isPlottableBar(bar) {
   if (!bar) return false
   const { open, high, low, close } = bar
   if (![open, high, low, close].every(isNum) || !(high > low)) return false
-  // Reject mixed-unit weeks (e.g. Copper $/lb OHLC mixed with tonne/HG×1000 scale).
-  // Those paint as full-height candle "forests" that obscure price.
   if (high / Math.max(low, 1e-12) > 2.5) return false
   const mid = (high + low) / 2
   if (mid > 0) {
@@ -45,11 +49,6 @@ function median(vals) {
   return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2
 }
 
-/**
- * Keep one coherent price scale for the series.
- * Copper history mixes OANDA $/lb (~2–10) with legacy HG chart scale
- * (USD/lb × 1000, ~2k–10k). Prefer the recent regime; convert when safe.
- */
 function coerceConsistentPriceScale(bars) {
   if (!bars.length) return bars
   const recent = bars.slice(-Math.min(104, bars.length))
@@ -65,20 +64,18 @@ function coerceConsistentPriceScale(bars) {
   })
 
   if (med < 50) {
-    // Spot / $/lb regime — convert HG×1000 bars down to $/lb when whole bar is high-scale.
     return bars
       .map((b) => {
         const allHigh = b.open > 100 && b.high > 100 && b.low > 100 && b.close > 100
         const allLow = b.open < 100 && b.high < 100 && b.low < 100 && b.close < 100
         if (allLow) return b
         if (allHigh) return scaleBar(b, 1 / 1000)
-        return null // mixed intra-bar already rejected by isPlottableBar
+        return null
       })
       .filter(Boolean)
       .filter((b) => isPlottableBar(b))
   }
   if (med > 200) {
-    // HG chart regime — convert raw $/lb up when whole bar is low-scale.
     return bars
       .map((b) => {
         const allHigh = b.open > 100 && b.high > 100 && b.low > 100 && b.close > 100
@@ -107,35 +104,58 @@ function normalizeExportWeekly(bars) {
   return normalizeWeeklyOhlc(coerceConsistentPriceScale(mapped))
 }
 
+async function fetchJson(url) {
+  const r = await fetch(url, { cache: 'no-store' })
+  if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  return r.json()
+}
+
 async function fetchDoc({ bustCache = false } = {}) {
   if (_doc && !bustCache) return _doc
   if (_loadPromise && !bustCache) return _loadPromise
 
   if (bustCache) {
     _doc = null
+    _legacyDoc = null
     _loadPromise = null
   }
 
-  const fetchUrl = `${OHLC_URL}?v=${Date.now()}`
-  _lastFetchUrl = fetchUrl
-  _loadPromise = fetch(fetchUrl, { cache: 'no-store' })
-    .then((r) => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`)
-      return r.json()
-    })
-    .then((doc) => {
-      _doc = doc && typeof doc === 'object' ? doc : { instruments: {} }
+  const stamp = Date.now()
+  const canonicalUrl = `${CANONICAL_URL}?v=${stamp}`
+  const legacyUrl = `${LEGACY_OHLC_URL}?v=${stamp}`
+  _lastFetchUrl = canonicalUrl
+
+  _loadPromise = Promise.allSettled([
+    fetchJson(canonicalUrl),
+    fetchJson(legacyUrl),
+  ])
+    .then(([canonical, legacy]) => {
+      _doc = canonical.status === 'fulfilled' && canonical.value && typeof canonical.value === 'object'
+        ? canonical.value
+        : { instruments: {} }
+      _legacyDoc = legacy.status === 'fulfilled' && legacy.value && typeof legacy.value === 'object'
+        ? legacy.value
+        : { instruments: {} }
       _loadPromise = null
       emit()
       return _doc
     })
     .catch(() => {
       _doc = { instruments: {} }
+      _legacyDoc = { instruments: {} }
       _loadPromise = null
       emit()
       return _doc
     })
   return _loadPromise
+}
+
+function canonicalRecord(marketId) {
+  return marketId && _doc?.instruments ? _doc.instruments[marketId] ?? null : null
+}
+
+function legacyBlock(marketId) {
+  return marketId && _legacyDoc?.instruments ? _legacyDoc.instruments[marketId] ?? null : null
 }
 
 export const WeeklyOHLCStore = {
@@ -154,7 +174,7 @@ export const WeeklyOHLCStore = {
   },
 
   getSnapshot() {
-    const key = `${_doc?.generated_at ?? ''}|${_lastFetchUrl ?? ''}`
+    const key = `${_doc?.generated_at ?? ''}|${_legacyDoc?.generated_at ?? ''}|${_lastFetchUrl ?? ''}`
     if (_snapshotCache && _snapshotCacheKey === key) return _snapshotCache
     _snapshotCacheKey = key
     _snapshotCache = {
@@ -168,8 +188,23 @@ export const WeeklyOHLCStore = {
   },
 
   getExportBlock(marketId) {
-    if (!marketId || !_doc?.instruments) return null
-    return _doc.instruments[marketId] ?? null
+    if (!marketId) return null
+    const canonical = canonicalRecord(marketId)
+    const legacy = legacyBlock(marketId)
+
+    if (canonical?.weekly?.length) {
+      return {
+        ...(legacy || {}),
+        weekly_ohlc: canonical.weekly,
+        forming_weekly: canonical.forming_weekly ?? null,
+        price_source: 'canonical prices_latest.json',
+        canonical_source: 'prices_latest.json',
+        price_quality: canonical.error ? 'provider_error' : 'canonical_fresh',
+        canonical_history: canonical.history ?? null,
+      }
+    }
+
+    return legacy
   },
 
   getWeeklyBars(marketId) {
@@ -178,7 +213,6 @@ export const WeeklyOHLCStore = {
     return normalizeExportWeekly(block.weekly_ohlc)
   },
 
-  /** Latest completed weekly candle — authoritative weekly close. */
   getCompletedWeekly(marketId) {
     const bars = this.getWeeklyBars(marketId)
     const latest = bars[bars.length - 1]
@@ -195,12 +229,16 @@ export const WeeklyOHLCStore = {
   },
 
   getPriceSource(marketId) {
-    const block = this.getExportBlock(marketId)
+    const canonical = canonicalRecord(marketId)
+    if (canonical?.weekly?.length) return 'canonical prices_latest.json'
+    const block = legacyBlock(marketId)
     return block?.price_source || block?.canonical_source || 'workstation_ohlc_latest.json'
   },
 
   getPriceQuality(marketId) {
-    return this.getExportBlock(marketId)?.price_quality ?? null
+    const canonical = canonicalRecord(marketId)
+    if (canonical?.weekly?.length) return canonical.error ? 'provider_error' : 'canonical_fresh'
+    return legacyBlock(marketId)?.price_quality ?? null
   },
 
   async refresh({ bustCache = true } = {}) {
@@ -208,13 +246,13 @@ export const WeeklyOHLCStore = {
   },
 }
 
-/** @deprecated use WeeklyOHLCStore */
 export function loadWorkstationOhlcStore(opts) {
   return fetchDoc(opts)
 }
 
 export function clearWorkstationOhlcCache() {
   _doc = null
+  _legacyDoc = null
   _loadPromise = null
   emit()
 }
@@ -228,10 +266,13 @@ export function resolveWorkstationWeeklyOhlc(marketId, _priceRec, ohlcExportBloc
   const weeklyBars = block?.weekly_ohlc?.length
     ? normalizeExportWeekly(block.weekly_ohlc)
     : WeeklyOHLCStore.getWeeklyBars(marketId)
+  const canonical = canonicalRecord(marketId)
   return {
     weeklyBars,
-    priceSource: block?.price_source || WeeklyOHLCStore.getPriceSource(marketId),
-    resolvedFrom: weeklyBars.length ? 'workstation_ohlc_latest.json' : 'none',
+    priceSource: canonical?.weekly?.length
+      ? 'canonical prices_latest.json'
+      : block?.price_source || WeeklyOHLCStore.getPriceSource(marketId),
+    resolvedFrom: canonical?.weekly?.length ? 'prices_latest.json' : (weeklyBars.length ? 'workstation_ohlc_latest.json' : 'none'),
     exportMeta: block,
   }
 }
