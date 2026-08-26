@@ -10,22 +10,16 @@ from __future__ import annotations
 import argparse
 import json
 from datetime import date, datetime, timezone
-from pathlib import Path
 from typing import Any
 
 from hptl.config import PROCESSED_DIR
 from hptl.prices.coverage import load_price_coverage, supported_instrument_ids
-from hptl.prices.price_store import load_instrument_record
+from hptl.prices.price_store import load_instrument_record_internal
 
 OUT_JSON = PROCESSED_DIR / "price_health_latest.json"
 OUT_MD = PROCESSED_DIR / "price_health_latest.md"
 
-# Five calendar days allows normal weekends and a long holiday weekend while
-# still catching the kind of one/two-week stale series that must never be
-# silently treated as current.
 MAX_STALE_CALENDAR_DAYS = 5
-# A gap larger than this inside recent daily history is suspicious. Holidays
-# can produce 3-4 calendar-day gaps; seven gives a conservative safety margin.
 MAX_RECENT_GAP_DAYS = 7
 RECENT_GAP_WINDOW_BARS = 90
 
@@ -53,10 +47,13 @@ def _finite_number(value: Any) -> bool:
 
 def audit_record(instrument_id: str, *, today: date | None = None) -> dict[str, Any]:
     today = today or datetime.now(timezone.utc).date()
-    rec = load_instrument_record(instrument_id) or {}
+    rec = load_instrument_record_internal(instrument_id) or {}
     daily = list(rec.get("daily") or [])
     issues: list[str] = []
     warnings: list[str] = []
+    source = rec.get("_fetched_via") or "unknown"
+    historical_source = rec.get("_historical_via")
+    stored_at = rec.get("stored_at")
 
     if not daily:
         return {
@@ -65,6 +62,9 @@ def audit_record(instrument_id: str, *, today: date | None = None) -> dict[str, 
             "bars": 0,
             "last_bar": None,
             "age_days": None,
+            "source": source,
+            "historical_source": historical_source,
+            "stored_at": stored_at,
             "issues": ["no_daily_history"],
             "warnings": [],
             "source_error": rec.get("error"),
@@ -94,10 +94,11 @@ def audit_record(instrument_id: str, *, today: date | None = None) -> dict[str, 
         issues.append(f"invalid_ohlc:{invalid_ohlc}")
     if impossible_ohlc:
         issues.append(f"impossible_ohlc:{impossible_ohlc}")
+
+    last_bar = None
+    age_days = None
     if not parsed:
         issues.append("no_parseable_daily_dates")
-        last_bar = None
-        age_days = None
     else:
         dates = [d for d, _ in parsed]
         unique_dates = set(dates)
@@ -126,7 +127,9 @@ def audit_record(instrument_id: str, *, today: date | None = None) -> dict[str, 
 
     source_error = rec.get("error")
     if source_error:
-        warnings.append(f"latest_fetch_error:{source_error}")
+        # A failed current provider fetch is operationally important even when
+        # last-known-good bars remain available.
+        issues.append(f"latest_fetch_error:{source_error}")
 
     return {
         "instrument": instrument_id,
@@ -134,6 +137,9 @@ def audit_record(instrument_id: str, *, today: date | None = None) -> dict[str, 
         "bars": len(daily),
         "last_bar": last_bar.isoformat() if last_bar else None,
         "age_days": age_days,
+        "source": source,
+        "historical_source": historical_source,
+        "stored_at": stored_at,
         "issues": issues,
         "warnings": warnings,
         "source_error": source_error,
@@ -169,13 +175,14 @@ def render_md(report: dict[str, Any]) -> str:
         f"Generated: {report['generated_at']}",
         f"PASS {s['pass']} | WARN {s['warn']} | FAIL {s['fail']} | TOTAL {s['total']}",
         "",
-        "| Instrument | Status | Last bar | Age | Bars | Detail |",
-        "|---|---|---|---:|---:|---|",
+        "| Instrument | Status | Source | Last bar | Age | Bars | Detail |",
+        "|---|---|---|---|---:|---:|---|",
     ]
     for row in report["rows"]:
         detail = "; ".join(row["issues"] + row["warnings"]) or "ok"
         lines.append(
-            f"| {row['instrument']} | {row['status']} | {row.get('last_bar') or '—'} | "
+            f"| {row['instrument']} | {row['status']} | {row.get('source') or '—'} | "
+            f"{row.get('last_bar') or '—'} | "
             f"{row.get('age_days') if row.get('age_days') is not None else '—'} | "
             f"{row.get('bars', 0)} | {detail} |"
         )
@@ -201,7 +208,10 @@ def main(argv: list[str] | None = None) -> int:
     for row in report["rows"]:
         if row["status"] != "PASS":
             detail = "; ".join(row["issues"] + row["warnings"])
-            print(f"  {row['status']:4} {row['instrument']}: {detail}")
+            print(
+                f"  {row['status']:4} {row['instrument']}: source={row.get('source')} "
+                f"last_bar={row.get('last_bar')} {detail}"
+            )
     print(f"JSON: {OUT_JSON}")
     print(f"MD:   {OUT_MD}")
     return 1 if s["fail"] else 0
