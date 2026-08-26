@@ -94,6 +94,9 @@ def merge_fetched_into_production(
     """Merge a live API fetch into the stored production record.
 
     Preserves older historical bars; incoming bars replace same-date entries.
+    Crucially, a failed latest fetch remains visible even when old stored bars are
+    retained. Stale last-known-good history must never turn a provider failure
+    into an apparently healthy record.
     """
     from hptl.prices.fx_daily_backfill import merge_daily_bars_refresh
     from hptl.seasonality.seasonality_v2 import normalize_daily_bars
@@ -112,9 +115,9 @@ def merge_fetched_into_production(
     err = fetched.get("error")
     has_incoming = bool(fetched.get("daily") or fetched.get("weekly"))
     if err in ("unsupported_instrument", "unknown_instrument") and daily and not has_incoming:
-        err = existing.get("error")
-    elif err and daily:
-        err = None
+        # Keep an explicit failure. Existing bars may still be useful for
+        # display/research, but they do not prove the latest refresh succeeded.
+        err = str(err)
 
     rec: InstrumentPriceRecord = {
         "instrument_id": fetched["instrument_id"],
