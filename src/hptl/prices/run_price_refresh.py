@@ -56,14 +56,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int, default=0, help="Max instruments (0 = all supported)")
     parser.add_argument("--instrument", type=str, default="", help="Refresh single instrument id")
     parser.add_argument("--skip-validation", action="store_true")
+    parser.add_argument(
+        "--strict-health",
+        action="store_true",
+        help="Return non-zero when refreshed canonical prices fail freshness/integrity checks",
+    )
     args = parser.parse_args(argv)
 
     probe_warnings: list[str] = []
     if not args.skip_validation:
-        # Missing API keys are fatal (nothing can fetch). Live-source probes are
-        # advisory only: a rate-limited or unavailable source (e.g. an Alpha
-        # Vantage informational/quota response) must NOT abort the refresh, so
-        # OANDA/FRED instruments still fetch and last-known-good data is kept.
         try:
             validate_price_api_keys(probe_live=False)
         except (PriceApiConfigError, RuntimeError) as exc:
@@ -92,9 +93,14 @@ def main(argv: list[str] | None = None) -> int:
     records: dict = {}
 
     def progress(i: int, total: int, iid: str, rec: dict) -> None:
-        status = "ok" if (rec.get("daily") or rec.get("weekly")) and not rec.get("error") else "fail"
+        has_history = bool(rec.get("daily") or rec.get("weekly"))
+        status = "ok" if has_history and not rec.get("error") else ("kept" if has_history else "fail")
         daily_n = len(rec.get("daily") or [])
-        print(f"[{i}/{total}] {iid}: {status} daily_bars={daily_n}", flush=True)
+        last_bar = ((rec.get("daily") or [{}])[-1] or {}).get("date") if rec.get("daily") else None
+        suffix = f" last={last_bar}" if last_bar else ""
+        if rec.get("error"):
+            suffix += f" error={str(rec.get('error'))[:100]}"
+        print(f"[{i}/{total}] {iid}: {status} daily_bars={daily_n}{suffix}", flush=True)
 
     for iid in ids:
         fetched = adapter.fetch(iid)
@@ -107,16 +113,33 @@ def main(argv: list[str] | None = None) -> int:
         records,
         coverage_generated_at=coverage.get("generated_at"),
     )
-    s = records
-    ok = sum(1 for r in s.values() if r.get("daily") and not r.get("error"))
-    print(f"\nStored {len(records)} refreshed instruments ({ok} with daily bars)")
+    ok = sum(1 for r in records.values() if r.get("daily") and not r.get("error"))
+    kept = sum(1 for r in records.values() if r.get("daily") and r.get("error"))
+    failed = sum(1 for r in records.values() if not r.get("daily"))
+    print(f"\nStored {len(records)} refreshed instruments ({ok} clean, {kept} kept-with-error, {failed} no daily history)")
     print(f"Canonical: {path}")
-    print(f"Dashboard: web-dashboard/public/data/prices_latest.json")
+    print("Dashboard: web-dashboard/public/data/prices_latest.json")
 
     if probe_warnings:
         print(f"\nPrice source probe warnings ({len(probe_warnings)}, non-fatal):")
-        for w in probe_warnings:
-            print(f"  - {w}")
+        for warning in probe_warnings:
+            print(f"  - {warning}")
+
+    # A fetch returning bars is not enough. Verify the resulting canonical store
+    # for freshness, gaps, duplicates and OHLC sanity every time we refresh.
+    from hptl.prices.price_health import write_health_audit
+
+    health = write_health_audit(ids)
+    hs = health["summary"]
+    print(f"\nPrice health: PASS={hs['pass']} WARN={hs['warn']} FAIL={hs['fail']} TOTAL={hs['total']}")
+    for row in health["rows"]:
+        if row["status"] != "PASS":
+            detail = "; ".join(row["issues"] + row["warnings"])
+            print(f"  {row['status']:4} {row['instrument']}: {detail}")
+
+    if args.strict_health and hs["fail"]:
+        print("ERROR: strict price health gate failed", file=sys.stderr)
+        return 2
     return 0
 
 
