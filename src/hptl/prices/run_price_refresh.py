@@ -36,8 +36,6 @@ def refresh_instrument_record(
         existing = None
 
     if not existing and not has_incoming:
-        # Nothing useful exists yet, but still persist the failure record so the
-        # operational audit can explain why this instrument has no history.
         write_instrument_record(fetched, fetched_via=fetched_via)
         return fetched
 
@@ -51,9 +49,14 @@ def refresh_instrument_record(
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Refresh HTPL canonical price store (OANDA + Alpha Vantage)")
+    parser = argparse.ArgumentParser(description="Refresh HTPL canonical price store")
     parser.add_argument("--limit", type=int, default=0, help="Max instruments (0 = all supported)")
-    parser.add_argument("--instrument", type=str, default="", help="Refresh single instrument id")
+    parser.add_argument(
+        "--instrument",
+        action="append",
+        default=[],
+        help="Refresh only this instrument id; repeat to refresh a targeted batch",
+    )
     parser.add_argument("--skip-validation", action="store_true")
     parser.add_argument(
         "--require-healthy",
@@ -61,6 +64,9 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit non-zero when the post-refresh price health audit has failures",
     )
     args = parser.parse_args(argv)
+
+    requested = [str(i).strip() for i in args.instrument if str(i).strip()]
+    requested = list(dict.fromkeys(requested))
 
     probe_warnings: list[str] = []
     if not args.skip_validation:
@@ -84,9 +90,12 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"WARNING (price source probe, non-fatal): {name}: {exc}", file=sys.stderr)
 
     coverage = load_price_coverage()
-    ids = [args.instrument.strip()] if args.instrument.strip() else supported_instrument_ids(coverage)
+    ids = requested or supported_instrument_ids(coverage)
     if args.limit > 0:
         ids = ids[: args.limit]
+
+    if requested:
+        print(f"Targeted price refresh: {len(ids)} instrument(s)")
 
     adapter = UnifiedPriceAdapter(coverage)
     records: dict = {}
@@ -98,12 +107,27 @@ def main(argv: list[str] | None = None) -> int:
         src = rec.get("_fetched_via") or adapter.source_for(iid) or "none"
         err = f" error={rec.get('error')}" if rec.get("error") else ""
         print(
-            f"[{i}/{total}] {iid}: {status} source={src} daily_bars={len(daily)} last_bar={last_bar}{err}",
+            f"[{i}/{total}] {iid}: {status} source={src} daily_bars={len(daily)} "
+            f"last_bar={last_bar}{err}",
             flush=True,
         )
 
     for iid in ids:
-        fetched = adapter.fetch(iid)
+        try:
+            fetched = adapter.fetch(iid)
+        except KeyboardInterrupt:
+            print(f"\nInterrupted while refreshing {iid}; no further instruments attempted.", file=sys.stderr)
+            return 130
+        except Exception as exc:
+            fetched = {
+                "instrument_id": iid,
+                "price": None,
+                "daily": [],
+                "weekly": [],
+                "range_52w": None,
+                "history": None,
+                "error": f"unhandled_fetch_error:{type(exc).__name__}: {exc}"[:240],
+            }
         src = str(fetched.get("_fetched_via") or adapter.source_for(iid) or "none")
         rec = refresh_instrument_record(iid, fetched, fetched_via=src)
         rec["_fetched_via"] = src
@@ -118,12 +142,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if probe_warnings:
         print(f"\nPrice source probe warnings ({len(probe_warnings)}, non-fatal):")
-        for w in probe_warnings:
-            print(f"  - {w}")
+        for warning in probe_warnings:
+            print(f"  - {warning}")
 
     from hptl.prices.price_health import write_health_audit
 
-    health_ids = ids if args.instrument.strip() or args.limit > 0 else None
+    health_ids = ids if requested or args.limit > 0 else None
     health = write_health_audit(health_ids)
     summary = health["summary"]
     print(
