@@ -197,7 +197,6 @@ def rebuild_pillar_exports() -> dict[str, Any]:
     except Exception as exc:
         meta["fx_valuation_error"] = f"{type(exc).__name__}: {exc}"
 
-    # Independent pillars — always run regardless of the FX valuation outcome.
     try:
         write_location_exports()
     except Exception as exc:
@@ -208,7 +207,6 @@ def rebuild_pillar_exports() -> dict[str, Any]:
     except Exception as exc:
         meta.setdefault("warnings", []).append(f"seasonality export: {exc}")
 
-    # USD-index identity: FRED broad ≠ ICE DX — refresh each series separately.
     try:
         from hptl.markets.usd_index_identity import BROAD_USD_ID, ICE_DXY_ID
         from hptl.prices.fred_prices import fetch_fred_instrument
@@ -245,7 +243,6 @@ def rebuild_pillar_exports() -> dict[str, Any]:
 
         val = build_valuation_latest()
         merged = merge_rates_and_usd_into_valuation_latest(val)
-        # Keep published USD FV research explicitly non-validated.
         dx = (merged.get("instruments") or {}).get("US Dollar Index / DX") or {}
         if dx:
             dx = {
@@ -320,7 +317,6 @@ def pull_cot_and_master(*, force: bool = False) -> int:
     os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
     from hptl.cot.pipeline import run_full_pipeline
 
-    # Skip heavy confluence rebuild only when dashboard exports already match master.
     skip_confluence = not _dashboard_cot_export_behind_master()
     result = run_full_pipeline(force=force, skip_confluence=skip_confluence)
     return int(result.exit_code or 0)
@@ -378,8 +374,6 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         meta = rebuild_pillar_exports()
         if meta.get("warnings"):
             report.errors.extend(meta["warnings"])
-        # FX valuation is isolated: record its outcome but do NOT fail the
-        # dashboard refresh when only the FX macro workbook is broken.
         if meta.get("fx_valuation_error"):
             report.fx_valuation_status = "FAILED"
             report.fx_valuation_error = str(meta["fx_valuation_error"])
@@ -389,7 +383,6 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         else:
             report.fx_valuation_status = "OK"
     except Exception as exc:
-        # Non-FX pillar failure (location/seasonality) — preserve prior strictness.
         report.errors.append(f"pillar export failed: {exc}")
 
     try:
@@ -399,7 +392,6 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         report.markets_updated = catch.markets_exported
         if catch.error:
             report.errors.append(f"confluence catch-up: {catch.error}")
-        # Self-heal: if catch-up left dashboard behind master, force full republish.
         if _dashboard_cot_export_behind_master():
             from hptl.cot.pipeline import _republish_downstream_exports, CotPipelineResult
 
@@ -417,12 +409,7 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         report.errors.append(f"confluence catch-up failed: {exc}")
 
     try:
-        # Always rebuild chart series when behind master (independent of upstream).
-        if _dashboard_cot_export_behind_master() or _cot3y_latest() != _master_max():
-            rebuild_chart_series_exports()
-        else:
-            # Still refresh when already aligned so mirrors stay in sync with master content.
-            rebuild_chart_series_exports()
+        rebuild_chart_series_exports()
         report.chart_series_updated = _cot3y_market_count()
     except Exception as exc:
         report.errors.append(f"chart series export failed: {exc}")
@@ -432,46 +419,9 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
     except Exception as exc:
         report.errors.append(f"workstation OHLC export failed: {exc}")
 
-    # Universal Price ↔ COT alignment gate — fail fast before intelligence layers.
-    try:
-        from hptl.prices.price_cot_alignment_audit import run_price_cot_alignment_gate
-
-        gate = run_price_cot_alignment_gate(live_provider=True)
-        if not gate.get("passed"):
-            report.errors.append("PRICE / COT ALIGNMENT FAILED")
-            for name in gate.get("failing_instruments") or []:
-                report.errors.append(f"alignment fail: {name}")
-            report.passed = False
-            # Stop before research / inspector / analyst intelligence on stale prices.
-            report.stale_cleared = clear_stale_dashboard_copies()
-            sync_dist_exports()
-            report.master_latest = _master_max()
-            report.cot_bundle_latest = _legacy_max()
-            report.confluence_latest = _confluence_latest()
-            report.graph_latest = _cot3y_latest(CHART_PROBE_MARKET)
-            return report
-    except Exception as exc:
-        report.errors.append(f"price/COT alignment audit failed: {exc}")
-        report.passed = False
-        report.stale_cleared = clear_stale_dashboard_copies()
-        sync_dist_exports()
-        return report
-
-    try:
-        from hptl.cot.positioning_research_export import run_positioning_research_export
-
-        # Full cot3y universe — never instrument-subset in weekly production.
-        research = run_positioning_research_export(markets=None)
-        s = research.get("summary") or {}
-        report.chart_series_updated = max(
-            report.chart_series_updated,
-            int(s.get("markets_available") or 0),
-        )
-        if int(s.get("markets_available") or 0) <= 0:
-            report.errors.append("positioning research: zero markets available")
-    except Exception as exc:
-        report.errors.append(f"positioning research export failed: {exc}")
-
+    # Weekly Inspector is derived entirely from the freshly rebuilt COT series.
+    # Keep it current even when an unrelated price-alignment failure prevents
+    # price-dependent research/intelligence from publishing later in the run.
     wi = None
     try:
         from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
@@ -483,7 +433,8 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
     except Exception as exc:
         report.errors.append(f"weekly inspector export failed: {exc}")
 
-    # Derived COT integrity gate — fail fast before Weekly Analysis / scanner.
+    # Derived COT integrity is also COT-only. Enforce it before any price gate so
+    # a stale price source can never strand the inspector several COT weeks behind.
     try:
         from hptl.cot.derived_cot_integrity_audit import run_derived_cot_integrity_gate
 
@@ -509,12 +460,50 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
         sync_dist_exports()
         return report
 
+    # Universal Price ↔ COT alignment gate — price-dependent intelligence remains
+    # blocked on failure, but COT-only derived data above has already been refreshed.
+    try:
+        from hptl.prices.price_cot_alignment_audit import run_price_cot_alignment_gate
+
+        gate = run_price_cot_alignment_gate(live_provider=True)
+        if not gate.get("passed"):
+            report.errors.append("PRICE / COT ALIGNMENT FAILED")
+            for name in gate.get("failing_instruments") or []:
+                report.errors.append(f"alignment fail: {name}")
+            report.passed = False
+            report.stale_cleared = clear_stale_dashboard_copies()
+            sync_dist_exports()
+            report.master_latest = _master_max()
+            report.cot_bundle_latest = _legacy_max()
+            report.confluence_latest = _confluence_latest()
+            report.graph_latest = _cot3y_latest(CHART_PROBE_MARKET)
+            return report
+    except Exception as exc:
+        report.errors.append(f"price/COT alignment audit failed: {exc}")
+        report.passed = False
+        report.stale_cleared = clear_stale_dashboard_copies()
+        sync_dist_exports()
+        return report
+
+    try:
+        from hptl.cot.positioning_research_export import run_positioning_research_export
+
+        research = run_positioning_research_export(markets=None)
+        s = research.get("summary") or {}
+        report.chart_series_updated = max(
+            report.chart_series_updated,
+            int(s.get("markets_available") or 0),
+        )
+        if int(s.get("markets_available") or 0) <= 0:
+            report.errors.append("positioning research: zero markets available")
+    except Exception as exc:
+        report.errors.append(f"positioning research export failed: {exc}")
+
     try:
         from hptl.cot.analyst_intelligence_export import run_analyst_intelligence_export
 
         ai = run_analyst_intelligence_export(
             weekly_inspector=wi if isinstance(wi, dict) else None,
-            # Integrity already enforced by run_derived_cot_integrity_gate above.
             skip_integrity_gate=True,
         )
         ais = ai.get("summary") or {}
@@ -546,7 +535,6 @@ def run_weekly_refresh(*, force_cot: bool = False, skip_cot_pull: bool = False) 
     report.passed = ok and not any(
         e for e in report.errors if not e.startswith("confluence catch-up") or "No master weeks" not in e
     )
-    # Strict pass: no errors at all
     report.passed = ok and len(report.errors) == 0
     return report
 
