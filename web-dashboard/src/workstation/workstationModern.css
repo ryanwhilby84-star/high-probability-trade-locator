@@ -1,0 +1,178 @@
+/* Front Stack workstation polish: stable chart canvas, softer graphite shell, right-side inspector overlay. */
+.cot-workstation {
+  --ws-canvas-bg: #101418;
+  --ws-separator: rgba(185, 197, 210, 0.07);
+  --ws-separator-strong: rgba(185, 197, 210, 0.12);
+  --ws-label: #d8dee6;
+  --ws-label-muted: #88929f;
+  background: #101418;
+}
+
+.cot-ws-toolbar {
+  background: rgba(20, 25, 30, 0.96);
+  border-bottom-color: rgba(185, 197, 210, 0.08);
+  padding: 4px 10px;
+}
+
+.cot-ws-research-chrome {
+  background: rgba(18, 23, 28, 0.96);
+  border-bottom: 1px solid rgba(185, 197, 210, 0.08);
+  padding: 3px 10px 4px;
+}
+
+.cot-ws-range-btn,
+.cot-ws-reload-btn,
+.cot-ws-research-toggle,
+.cot-ws-event-nav-toggle,
+.cot-ws-insp-btn {
+  background: rgba(28, 34, 40, 0.88);
+  border-color: rgba(185, 197, 210, 0.14);
+  border-radius: 6px;
+}
+
+.cot-ws-range-btn.active {
+  color: #eaf7ff;
+  background: rgba(43, 116, 145, 0.5);
+  border-color: rgba(93, 183, 219, 0.62);
+}
+
+.cot-ws-panel-body .cot-ws-chart-canvas {
+  filter: contrast(1.01) saturate(0.94);
+}
+
+/* Inspector must never consume chart height. */
+.cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer,
+.cot-ws-weekly-inspector--drawer {
+  position: absolute;
+  top: 34px;
+  right: 10px;
+  bottom: 10px;
+  left: auto;
+  z-index: 80;
+  width: min(430px, calc(100vw - 24px));
+  height: auto;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: none;
+  border: 1px solid rgba(185, 197, 210, 0.13);
+  border-radius: 12px;
+  background: rgba(20, 25, 30, 0.97);
+  box-shadow: 0 18px 56px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(12px);
+  animation: cot-ws-insp-slide-in 160ms ease-out;
+}
+
+.cot-ws-weekly-inspector--drawer.is-expanded {
+  height: auto;
+  max-height: none;
+}
+
+@keyframes cot-ws-insp-slide-in {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.cot-ws-insp-top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: rgba(20, 25, 30, 0.98);
+  border-bottom-color: rgba(185, 197, 210, 0.09);
+  padding: 8px 10px;
+}
+
+.cot-ws-insp-head-actions {
+  width: 100%;
+  margin-left: 0;
+  justify-content: flex-end;
+}
+
+.cot-ws-insp-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 8px;
+}
+
+.cot-ws-insp-col {
+  min-width: 0;
+  width: 100%;
+  padding: 9px 10px 10px;
+  border: 1px solid rgba(185, 197, 210, 0.08);
+  border-radius: 9px;
+  background: rgba(28, 34, 40, 0.72);
+}
+
+.cot-ws-insp-col-title {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #aeb7c2;
+}
+
+.cot-ws-insp-flow {
+  background: rgba(13, 17, 21, 0.46);
+  border-color: rgba(185, 197, 210, 0.1);
+  border-radius: 7px;
+  padding: 4px 7px;
+}
+
+.cot-ws-insp-metrics {
+  gap: 4px 12px;
+}
+
+.cot-ws-insp-metric-label {
+  color: #7f8995;
+}
+
+.cot-ws-insp-metric-value {
+  color: #dbe2ea;
+}
+
+.cot-ws-insp-narratives {
+  padding: 8px 8px 0;
+}
+
+.cot-ws-insp-narrative {
+  min-width: 0;
+  flex: 1 1 100%;
+  background: rgba(28, 34, 40, 0.76);
+  border-color: rgba(93, 183, 219, 0.18);
+  border-radius: 8px;
+}
+
+.cot-ws-insp-summary-row {
+  margin: 0 8px 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(185, 197, 210, 0.07);
+  border-radius: 8px;
+  background: rgba(13, 17, 21, 0.34);
+}
+
+.cot-ws-insp-detail {
+  grid-template-columns: 1fr;
+  margin: 0 8px 8px;
+  border: 1px solid rgba(185, 197, 210, 0.08);
+  border-radius: 8px;
+  background: rgba(13, 17, 21, 0.4);
+}
+
+.cot-ws-pane-legend {
+  text-shadow: none;
+}
+
+.cot-ws-live-price-hud {
+  background: rgba(18, 23, 28, 0.78);
+  border-color: rgba(93, 183, 219, 0.16);
+  border-radius: 7px;
+}
+
+@media (max-width: 760px) {
+  .cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer,
+  .cot-ws-weekly-inspector--drawer {
+    top: 30px;
+    right: 6px;
+    bottom: 6px;
+    width: calc(100vw - 12px);
+  }
+}
