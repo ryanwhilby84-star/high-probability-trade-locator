@@ -16,6 +16,33 @@ from hptl.prices.price_store import (
 )
 from hptl.prices.unified_adapter import UnifiedPriceAdapter
 
+OANDA_REPAIR_COHORT = [
+    "Australia 200",
+    "Bitcoin Cash",
+    "China A50",
+    "Ether/Ether",
+    "Europe 50",
+    "France 40",
+    "Germany 30",
+    "Hong Kong 33",
+    "India 50",
+    "Japan 225",
+    "Litecoin",
+    "Netherlands 25",
+    "Singapore 30",
+    "UK 100",
+    "UK 10Y Gilt",
+    "US 10Y T-Note",
+    "US 2Y T-Note",
+    "US 5Y T-Note",
+    "US Nas 100",
+    "US Russ 2000",
+    "US SPX 500",
+    "US T-Bond",
+    "US Wall St 30",
+    "West Texas Oil",
+]
+
 
 def refresh_instrument_record(
     instrument_id: str,
@@ -57,6 +84,11 @@ def main(argv: list[str] | None = None) -> int:
         default=[],
         help="Refresh only this instrument id; repeat to refresh a targeted batch",
     )
+    parser.add_argument(
+        "--oanda-repair-cohort",
+        action="store_true",
+        help="Refresh only the live-account OANDA symbol repair cohort",
+    )
     parser.add_argument("--skip-validation", action="store_true")
     parser.add_argument(
         "--require-healthy",
@@ -66,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     requested = [str(i).strip() for i in args.instrument if str(i).strip()]
+    if args.oanda_repair_cohort:
+        requested.extend(OANDA_REPAIR_COHORT)
     requested = list(dict.fromkeys(requested))
 
     probe_warnings: list[str] = []
