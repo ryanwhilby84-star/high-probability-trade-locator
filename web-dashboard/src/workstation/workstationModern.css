@@ -1,178 +1,32 @@
-/* Front Stack workstation polish: stable chart canvas, softer graphite shell, right-side inspector overlay. */
-.cot-workstation {
-  --ws-canvas-bg: #101418;
-  --ws-separator: rgba(185, 197, 210, 0.07);
-  --ws-separator-strong: rgba(185, 197, 210, 0.12);
-  --ws-label: #d8dee6;
-  --ws-label-muted: #88929f;
-  background: #101418;
-}
-
-.cot-ws-toolbar {
-  background: rgba(20, 25, 30, 0.96);
-  border-bottom-color: rgba(185, 197, 210, 0.08);
-  padding: 4px 10px;
-}
-
-.cot-ws-research-chrome {
-  background: rgba(18, 23, 28, 0.96);
-  border-bottom: 1px solid rgba(185, 197, 210, 0.08);
-  padding: 3px 10px 4px;
-}
-
-.cot-ws-range-btn,
-.cot-ws-reload-btn,
-.cot-ws-research-toggle,
-.cot-ws-event-nav-toggle,
-.cot-ws-insp-btn {
-  background: rgba(28, 34, 40, 0.88);
-  border-color: rgba(185, 197, 210, 0.14);
-  border-radius: 6px;
-}
-
-.cot-ws-range-btn.active {
-  color: #eaf7ff;
-  background: rgba(43, 116, 145, 0.5);
-  border-color: rgba(93, 183, 219, 0.62);
-}
-
-.cot-ws-panel-body .cot-ws-chart-canvas {
-  filter: contrast(1.01) saturate(0.94);
-}
-
-/* Inspector must never consume chart height. */
-.cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer,
-.cot-ws-weekly-inspector--drawer {
-  position: absolute;
-  top: 34px;
-  right: 10px;
-  bottom: 10px;
-  left: auto;
-  z-index: 80;
-  width: min(430px, calc(100vw - 24px));
-  height: auto;
-  max-height: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  flex: none;
-  border: 1px solid rgba(185, 197, 210, 0.13);
-  border-radius: 12px;
-  background: rgba(20, 25, 30, 0.97);
-  box-shadow: 0 18px 56px rgba(0, 0, 0, 0.48);
-  backdrop-filter: blur(12px);
-  animation: cot-ws-insp-slide-in 160ms ease-out;
-}
-
-.cot-ws-weekly-inspector--drawer.is-expanded {
-  height: auto;
-  max-height: none;
-}
-
-@keyframes cot-ws-insp-slide-in {
-  from { opacity: 0; transform: translateX(14px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.cot-ws-insp-top {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  background: rgba(20, 25, 30, 0.98);
-  border-bottom-color: rgba(185, 197, 210, 0.09);
-  padding: 8px 10px;
-}
-
-.cot-ws-insp-head-actions {
-  width: 100%;
-  margin-left: 0;
-  justify-content: flex-end;
-}
-
-.cot-ws-insp-columns {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  padding: 8px;
-}
-
-.cot-ws-insp-col {
-  min-width: 0;
-  width: 100%;
-  padding: 9px 10px 10px;
-  border: 1px solid rgba(185, 197, 210, 0.08);
-  border-radius: 9px;
-  background: rgba(28, 34, 40, 0.72);
-}
-
-.cot-ws-insp-col-title {
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  color: #aeb7c2;
-}
-
-.cot-ws-insp-flow {
-  background: rgba(13, 17, 21, 0.46);
-  border-color: rgba(185, 197, 210, 0.1);
-  border-radius: 7px;
-  padding: 4px 7px;
-}
-
-.cot-ws-insp-metrics {
-  gap: 4px 12px;
-}
-
-.cot-ws-insp-metric-label {
-  color: #7f8995;
-}
-
-.cot-ws-insp-metric-value {
-  color: #dbe2ea;
-}
-
-.cot-ws-insp-narratives {
-  padding: 8px 8px 0;
-}
-
-.cot-ws-insp-narrative {
-  min-width: 0;
-  flex: 1 1 100%;
-  background: rgba(28, 34, 40, 0.76);
-  border-color: rgba(93, 183, 219, 0.18);
-  border-radius: 8px;
-}
-
-.cot-ws-insp-summary-row {
-  margin: 0 8px 8px;
-  padding: 8px 10px;
-  border: 1px solid rgba(185, 197, 210, 0.07);
-  border-radius: 8px;
-  background: rgba(13, 17, 21, 0.34);
-}
-
-.cot-ws-insp-detail {
-  grid-template-columns: 1fr;
-  margin: 0 8px 8px;
-  border: 1px solid rgba(185, 197, 210, 0.08);
-  border-radius: 8px;
-  background: rgba(13, 17, 21, 0.4);
-}
-
-.cot-ws-pane-legend {
-  text-shadow: none;
-}
-
-.cot-ws-live-price-hud {
-  background: rgba(18, 23, 28, 0.78);
-  border-color: rgba(93, 183, 219, 0.16);
-  border-radius: 7px;
-}
-
-@media (max-width: 760px) {
-  .cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer,
-  .cot-ws-weekly-inspector--drawer {
-    top: 30px;
-    right: 6px;
-    bottom: 6px;
-    width: calc(100vw - 12px);
-  }
-}
+/* Modern workstation skin. Intentionally high-specificity because the legacy workstation
+   stylesheet is imported by the component later in the module graph. */
+html body .cot-workstation{--ws-canvas-bg:#111417!important;--ws-separator:rgba(201,211,221,.055)!important;--ws-separator-strong:rgba(201,211,221,.09)!important;--ws-label:#d6dce3!important;--ws-label-muted:#818b96!important;background:#111417!important}
+html body .cot-workstation .cot-ws-toolbar{background:#171b1f!important;border-bottom:1px solid rgba(201,211,221,.07)!important;padding:5px 10px!important;min-height:30px!important}
+html body .cot-workstation .cot-ws-research-chrome{background:#15191d!important;border-bottom:1px solid rgba(201,211,221,.065)!important;padding:4px 10px!important;gap:3px!important}
+html body .cot-workstation .cot-ws-range-btn,html body .cot-workstation .cot-ws-reload-btn,html body .cot-workstation .cot-ws-research-toggle,html body .cot-workstation .cot-ws-event-nav-toggle,html body .cot-workstation .cot-ws-insp-btn,html body .cot-workstation .cot-ws-analysis-btn{background:#20252a!important;border-color:rgba(201,211,221,.12)!important;border-radius:7px!important;color:#aeb7c0!important;box-shadow:none!important}
+html body .cot-workstation .cot-ws-range-btn:hover,html body .cot-workstation .cot-ws-reload-btn:hover,html body .cot-workstation .cot-ws-research-toggle:hover,html body .cot-workstation .cot-ws-event-nav-toggle:hover,html body .cot-workstation .cot-ws-analysis-btn:hover{background:#282e34!important;color:#eef2f6!important;border-color:rgba(201,211,221,.22)!important}
+html body .cot-workstation .cot-ws-range-btn.active,html body .cot-workstation .cot-ws-analysis-btn.is-open{color:#eaf8ff!important;background:#244553!important;border-color:rgba(104,190,221,.48)!important}
+html body .cot-workstation .cot-ws-canvas-scroll,html body .cot-workstation .cot-ws-panel,html body .cot-workstation .cot-ws-panel-body,html body .cot-workstation .cot-ws-cot-group{background:#111417!important}
+html body .cot-workstation .cot-ws-panel,html body .cot-workstation .cot-ws-panel--price,html body .cot-workstation .cot-ws-cot-group{border-color:rgba(201,211,221,.06)!important}
+html body .cot-workstation .cot-ws-panel-body .cot-ws-chart-canvas{filter:contrast(1.01) saturate(.91)!important}
+html body .cot-workstation .cot-ws-pane-legend{text-shadow:none!important}
+html body .cot-workstation .cot-ws-live-price-hud{background:rgba(22,27,31,.9)!important;border-color:rgba(104,190,221,.14)!important;border-radius:8px!important;box-shadow:0 6px 24px rgba(0,0,0,.18)!important}
+html body .cot-workstation .cot-ws-weekly-inspector--drawer,html body .cot-workstation.cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer{position:absolute!important;top:38px!important;right:12px!important;bottom:12px!important;left:auto!important;z-index:100!important;width:min(440px,calc(100vw - 28px))!important;height:auto!important;max-height:none!important;min-height:0!important;flex:none!important;overflow-x:hidden!important;overflow-y:auto!important;border:1px solid rgba(201,211,221,.12)!important;border-radius:14px!important;background:rgba(24,29,33,.985)!important;box-shadow:0 24px 70px rgba(0,0,0,.52)!important;backdrop-filter:blur(14px)!important;animation:modern-inspector-in 150ms ease-out!important}
+html body .cot-workstation .cot-ws-weekly-inspector--drawer.is-expanded{height:auto!important;max-height:none!important}
+@keyframes modern-inspector-in{from{opacity:0;transform:translateX(16px) scale(.992)}to{opacity:1;transform:translateX(0) scale(1)}}
+html body .cot-workstation .cot-ws-insp-top{position:sticky!important;top:0!important;z-index:4!important;background:rgba(24,29,33,.99)!important;border-bottom:1px solid rgba(201,211,221,.08)!important;padding:9px 11px!important;gap:6px 9px!important}
+html body .cot-workstation .cot-ws-insp-kicker{color:#737e89!important;letter-spacing:.11em!important}
+html body .cot-workstation .cot-ws-insp-title{color:#f1f4f7!important;font-size:12px!important}
+html body .cot-workstation .cot-ws-insp-head-actions{width:100%!important;margin-left:0!important;justify-content:flex-end!important;padding-top:2px!important}
+html body .cot-workstation .cot-ws-insp-columns{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;padding:8px!important;overflow:visible!important}
+html body .cot-workstation .cot-ws-insp-col{width:100%!important;min-width:0!important;max-width:none!important;padding:10px 11px!important;margin:0!important;border:1px solid rgba(201,211,221,.075)!important;border-radius:10px!important;background:#1d2227!important}
+html body .cot-workstation .cot-ws-insp-col-title{color:#a8b1ba!important;font-size:9px!important;letter-spacing:.1em!important;margin-bottom:6px!important}
+html body .cot-workstation .cot-ws-insp-flow{background:#161a1e!important;border:1px solid rgba(201,211,221,.08)!important;border-radius:8px!important;padding:5px 7px!important}
+html body .cot-workstation .cot-ws-insp-metrics{gap:5px 14px!important}
+html body .cot-workstation .cot-ws-insp-metric-label{color:#78838e!important}
+html body .cot-workstation .cot-ws-insp-metric-value{color:#dce2e8!important}
+html body .cot-workstation .cot-ws-insp-narratives{padding:8px 8px 0!important;gap:7px!important}
+html body .cot-workstation .cot-ws-insp-narrative{min-width:0!important;flex:1 1 100%!important;background:#1d2227!important;border-color:rgba(104,190,221,.16)!important;border-radius:9px!important;padding:8px 9px!important}
+html body .cot-workstation .cot-ws-insp-summary-row{margin:0 8px 8px!important;padding:9px 10px!important;border:1px solid rgba(201,211,221,.065)!important;border-radius:9px!important;background:#161a1e!important}
+html body .cot-workstation .cot-ws-insp-detail{grid-template-columns:1fr!important;margin:0 8px 8px!important;border:1px solid rgba(201,211,221,.07)!important;border-radius:9px!important;background:#161a1e!important}
+@media(max-width:760px){html body .cot-workstation .cot-ws-weekly-inspector--drawer,html body .cot-workstation.cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer{top:34px!important;right:6px!important;bottom:6px!important;width:calc(100vw - 12px)!important}}
