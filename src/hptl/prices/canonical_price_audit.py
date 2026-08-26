@@ -13,7 +13,6 @@ from hptl.prices.canonical_timeline import (
     COT_MATCH_METHOD,
     DERIVED_WEEKLY_ISO,
     build_canonical_timeline,
-    load_canonical_timeline,
 )
 
 COT_PATH = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "cot_3y_series_latest.json"
@@ -60,9 +59,9 @@ def audit_instrument(instrument_id: str) -> dict[str, Any]:
             "used_by_valuation": bool(val_blk.get("wired")),
             "status": "FAIL",
             "reason": "no_canonical_timeline",
+            "reasons": ["no_canonical_timeline"],
         }
 
-    summary = tl.to_summary()
     cot_audit = cot_blk.get("price_audit") or {}
     cot_store = cot_audit.get("price_store_key")
     sea_store = sea_blk.get("price_store_key")
@@ -139,7 +138,7 @@ def render_md(report: dict[str, Any]) -> str:
         "| Instrument | Canonical source | Canonical symbol | Date range | Bars | Proxy? | COT | Seasonality | Valuation | Status |",
         "|---|---|---|---|---:|---|---|---|---|---|",
     ]
-    for iid, row in report["acceptance_instruments"].items():
+    for row in report["acceptance_instruments"].values():
         lines.append(
             f"| {row['instrument']} | {row.get('canonical_source') or '—'} | "
             f"{row.get('canonical_symbol') or '—'} | {row.get('date_range') or '—'} | "
@@ -166,3 +165,23 @@ def write_audit(instrument_ids: list[str] | None = None) -> Path:
     OUT_JSON.write_text(json.dumps(report, indent=2), encoding="utf-8")
     OUT_MD.write_text(render_md(report), encoding="utf-8")
     return OUT_JSON
+
+
+def main() -> int:
+    report = run_audit()
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    OUT_JSON.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    OUT_MD.write_text(render_md(report), encoding="utf-8")
+    s = report["summary"]
+    print(f"Canonical consumer audit: PASS={s['pass']} FAIL={s['fail']} TOTAL={s['total']}")
+    for row in report["rows"]:
+        if row["status"] == "FAIL":
+            detail = "; ".join(row.get("reasons") or [row.get("reason") or "unknown"])
+            print(f"  FAIL {row['instrument']}: {detail}")
+    print(f"JSON: {OUT_JSON}")
+    print(f"MD:   {OUT_MD}")
+    return 1 if s["fail"] else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
