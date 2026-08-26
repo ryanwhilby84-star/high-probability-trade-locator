@@ -1,0 +1,32 @@
+/* Final light-workstation softening pass. Keep this after cotWorkstationPage.css. */
+.cot-ws-page{--ui-bg:#eef1ef;--ui-border:#e4e9e7;background:#eef1ef!important}
+.cot-ws-page-topbar{background:#fafbfa!important;border-bottom-color:#e5e9e7!important;box-shadow:none!important}
+.cot-ws-page-body{background:#eef1ef!important}
+.cot-ws-page .cot-workstation{--ws-canvas-bg:#fbfcfa!important;--ws-separator:#edf1ef!important;--ws-separator-strong:#e3e8e5!important;background:#fbfcfa!important;border-color:#e4e9e7!important;box-shadow:0 5px 18px rgba(28,42,36,.035)!important}
+.cot-ws-page .cot-ws-toolbar{background:#f8faf8!important;border-bottom-color:#e8ecea!important}
+/* Replace the old navy research/control slab with a neutral charcoal rail. */
+.cot-ws-page .cot-ws-research-chrome{background:#343a38!important;color:#edf2ef!important;border-bottom:0!important;box-shadow:inset 0 -1px 0 rgba(255,255,255,.04)!important}
+.cot-ws-page .cot-ws-research-bar,.cot-ws-page .cot-ws-event-nav,.cot-ws-page .cot-ws-research-legend{color:#dbe2df!important}
+.cot-ws-page .cot-ws-research-toggle,.cot-ws-page .cot-ws-event-nav-toggle,.cot-ws-page .cot-ws-analysis-btn,.cot-ws-page .cot-ws-insp-btn{background:#414846!important;color:#dce4e0!important;border-color:#555e5b!important;box-shadow:none!important}
+.cot-ws-page .cot-ws-research-toggle:hover,.cot-ws-page .cot-ws-event-nav-toggle:hover,.cot-ws-page .cot-ws-analysis-btn:hover,.cot-ws-page .cot-ws-insp-btn:hover{background:#4b5350!important;color:#fff!important;border-color:#66716d!important}
+.cot-ws-page .cot-ws-research-toggle.is-on{background:#4b5551!important;color:#fff!important;border-color:#6f7d77!important}
+.cot-ws-page .cot-ws-research-toggle-count,.cot-ws-page .cot-ws-event-nav-total{color:#aeb9b5!important}
+.cot-ws-page .cot-ws-research-legend-item{color:#cbd5d1!important}
+/* Softer chart field: warm-white rather than monitor-white. */
+.cot-ws-page .cot-ws-panel,.cot-ws-page .cot-ws-panel-body,.cot-ws-page .cot-ws-panels,.cot-ws-page .cot-ws-canvas-scroll,.cot-ws-page .cot-ws-cot-group,.cot-ws-page .cot-ws-chart-canvas{background:#fbfcfa!important}
+/* Remove the heavy black separators; preserve a very obvious draggable splitter only. */
+.cot-ws-page .cot-ws-panel,.cot-ws-page .cot-ws-panel--price,.cot-ws-page .cot-ws-cot-group{border-color:#e7ece9!important}
+.cot-ws-page .cot-ws-panel-resize-handle{height:9px!important;background:#fbfcfa!important;border:0!important}
+.cot-ws-page .cot-ws-panel-resize-handle::after{left:44%!important;right:44%!important;top:4px!important;height:2px!important;background:#cfd8d4!important;border-radius:999px!important}
+.cot-ws-page .cot-ws-panel-resize-handle:hover::after,body.cot-ws-panel-resizing .cot-ws-page .cot-ws-panel-resize-handle::after{background:#65b895!important;height:3px!important}
+/* Readouts sit directly on the plot. No white chips/boxes. */
+.cot-ws-page .cot-ws-pane-legend{background:transparent!important;border:0!important;box-shadow:none!important;text-shadow:none!important;color:#44524d!important}
+.cot-ws-page .cot-ws-pane-legend-label{color:#53615d!important}.cot-ws-page .cot-ws-pane-legend-value{color:#1e2925!important}
+.cot-ws-page .cot-ws-pane-legend-chg{background:transparent!important;border:0!important;padding:0!important}
+.cot-ws-page .cot-ws-pane-legend-chg-key{color:#87938f!important}
+.cot-ws-page .cot-ws-live-price-hud{background:rgba(250,252,250,.94)!important;border-color:#e1e7e4!important;box-shadow:none!important}
+.cot-ws-page .cot-ws-fit-y-btn{background:rgba(250,252,250,.9)!important;border-color:#e1e7e4!important;box-shadow:none!important}
+.cot-ws-page .cot-ws-panel-stats{background:#f8faf8!important;border-top-color:#edf1ef!important}
+/* Give the three COT panes a faint stream bed so the coloured line has depth without glare. */
+.cot-ws-page .cot-ws-panel--cot .cot-ws-chart-plot::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(255,255,255,0) 38%,rgba(111,132,124,.025) 72%,rgba(111,132,124,.05) 100%)}
+.cot-ws-page .cot-ws-panel--cot .cot-ws-chart-canvas{position:relative;z-index:1}
