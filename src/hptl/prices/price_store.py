@@ -25,6 +25,38 @@ def _safe_filename(instrument_id: str) -> str:
     return s.strip("_") or "instrument"
 
 
+def _finite(value: Any) -> bool:
+    try:
+        x = float(value)
+    except (TypeError, ValueError):
+        return False
+    return x == x and x not in (float("inf"), float("-inf"))
+
+
+def _valid_ohlc_bar(bar: dict[str, Any]) -> bool:
+    """Return True only for structurally valid OHLC bars.
+
+    We deliberately drop corrupt historical bars rather than silently repairing
+    high/low values. Fabricating OHLC is worse than leaving a detectable gap.
+    """
+    vals = [bar.get("open"), bar.get("high"), bar.get("low"), bar.get("close")]
+    if not all(_finite(v) for v in vals):
+        return False
+    o, h, l, c = map(float, vals)
+    return h >= max(o, c, l) and l <= min(o, c, h) and h >= l
+
+
+def _sanitize_bars(bars: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int]:
+    clean: list[dict[str, Any]] = []
+    dropped = 0
+    for bar in bars:
+        if not isinstance(bar, dict) or not bar.get("date") or not _valid_ohlc_bar(bar):
+            dropped += 1
+            continue
+        clean.append(bar)
+    return clean, dropped
+
+
 def write_instrument_record(
     record: InstrumentPriceRecord,
     *,
@@ -94,9 +126,8 @@ def merge_fetched_into_production(
     """Merge a live API fetch into the stored production record.
 
     Preserves older historical bars; incoming bars replace same-date entries.
-    Crucially, a failed latest fetch remains visible even when old stored bars are
-    retained. Stale last-known-good history must never turn a provider failure
-    into an apparently healthy record.
+    Failed latest fetches remain visible, and malformed historical OHLC bars are
+    quarantined rather than silently carried forever.
     """
     from hptl.prices.fx_daily_backfill import merge_daily_bars_refresh
     from hptl.seasonality.seasonality_v2 import normalize_daily_bars
@@ -107,17 +138,22 @@ def merge_fetched_into_production(
 
     merged_daily, _ = merge_daily_bars_refresh(existing_daily, fetched.get("daily") or [])
     merged_weekly, _ = merge_daily_bars_refresh(existing_weekly, fetched.get("weekly") or [])
-    daily = normalize_daily_bars(merged_daily)
-    weekly = normalize_daily_bars(merged_weekly)
+    normalized_daily = normalize_daily_bars(merged_daily)
+    normalized_weekly = normalize_daily_bars(merged_weekly)
+    daily, dropped_daily = _sanitize_bars(normalized_daily)
+    weekly, dropped_weekly = _sanitize_bars(normalized_weekly)
+
     range_52w = compute_range_52w(daily)
     history = build_history_meta(daily, weekly, range_52w) if daily or weekly else None
 
     err = fetched.get("error")
     has_incoming = bool(fetched.get("daily") or fetched.get("weekly"))
     if err in ("unsupported_instrument", "unknown_instrument") and daily and not has_incoming:
-        # Keep an explicit failure. Existing bars may still be useful for
-        # display/research, but they do not prove the latest refresh succeeded.
         err = str(err)
+
+    sanitation_note = None
+    if dropped_daily or dropped_weekly:
+        sanitation_note = f"dropped_invalid_ohlc:daily={dropped_daily},weekly={dropped_weekly}"
 
     rec: InstrumentPriceRecord = {
         "instrument_id": fetched["instrument_id"],
@@ -135,6 +171,8 @@ def merge_fetched_into_production(
         "error": err,
         "price_scale": fetched.get("price_scale") or existing.get("price_scale"),
     }
+    if sanitation_note:
+        rec["sanitation_note"] = sanitation_note  # type: ignore[typeddict-unknown-key]
     meta = {
         "fetched_via": fetched_via,
         "historical_via": _resolve_historical_via(existing),
