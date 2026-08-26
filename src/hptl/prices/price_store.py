@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +18,8 @@ PUBLIC_PATH = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "prices_lates
 DIST_PUBLIC_PATH = PROJECT_ROOT / "web-dashboard" / "dist" / "data" / "prices_latest.json"
 
 SCHEMA_VERSION = 1
+AUTHORITATIVE_RESET_GAP_DAYS = 365
+AUTHORITATIVE_RESET_MIN_BARS = 200
 
 
 def _safe_filename(instrument_id: str) -> str:
@@ -55,6 +57,39 @@ def _sanitize_bars(bars: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], in
             continue
         clean.append(bar)
     return clean, dropped
+
+
+def _bar_date(bar: dict[str, Any]) -> date | None:
+    try:
+        return date.fromisoformat(str(bar.get("date") or "")[:10])
+    except ValueError:
+        return None
+
+
+def _should_reset_disjoint_history(
+    existing_daily: list[dict[str, Any]],
+    incoming_daily: list[dict[str, Any]],
+) -> tuple[bool, int | None]:
+    """Detect an old disconnected legacy segment ahead of a healthy fresh series.
+
+    A multi-year hole between the old store and a substantial incoming provider
+    history is not useful continuity.  Merging those segments makes downstream
+    integrity checks and rolling analytics believe the series is continuous.
+    In that case the incoming provider history becomes canonical and the stale
+    disconnected legacy segment is discarded.
+    """
+    if len(incoming_daily) < AUTHORITATIVE_RESET_MIN_BARS or not existing_daily:
+        return False, None
+    existing_dates = [d for b in existing_daily if (d := _bar_date(b)) is not None]
+    incoming_dates = [d for b in incoming_daily if (d := _bar_date(b)) is not None]
+    if not existing_dates or not incoming_dates:
+        return False, None
+    existing_last = max(existing_dates)
+    incoming_first = min(incoming_dates)
+    if existing_last >= incoming_first:
+        return False, None
+    gap_days = (incoming_first - existing_last).days
+    return gap_days > AUTHORITATIVE_RESET_GAP_DAYS, gap_days
 
 
 def write_instrument_record(
@@ -125,9 +160,11 @@ def merge_fetched_into_production(
 ) -> tuple[InstrumentPriceRecord, dict[str, str | None]]:
     """Merge a live API fetch into the stored production record.
 
-    Preserves older historical bars; incoming bars replace same-date entries.
-    Failed latest fetches remain visible, and malformed historical OHLC bars are
-    quarantined rather than silently carried forever.
+    Preserves older historical bars when they genuinely connect to the current
+    series.  If a substantial fresh provider history is separated from the old
+    store by more than a year, the disconnected legacy segment is discarded so
+    the canonical timeline remains coherent.  Failed latest fetches remain
+    visible, and malformed OHLC bars are quarantined rather than repaired.
     """
     from hptl.prices.fx_daily_backfill import merge_daily_bars_refresh
     from hptl.seasonality.seasonality_v2 import normalize_daily_bars
@@ -135,9 +172,17 @@ def merge_fetched_into_production(
     existing = existing or {}
     existing_daily = existing.get("daily") or []
     existing_weekly = existing.get("weekly") or []
+    incoming_daily = fetched.get("daily") or []
+    incoming_weekly = fetched.get("weekly") or []
 
-    merged_daily, _ = merge_daily_bars_refresh(existing_daily, fetched.get("daily") or [])
-    merged_weekly, _ = merge_daily_bars_refresh(existing_weekly, fetched.get("weekly") or [])
+    reset_history, reset_gap_days = _should_reset_disjoint_history(existing_daily, incoming_daily)
+    if reset_history:
+        merged_daily = list(incoming_daily)
+        merged_weekly = list(incoming_weekly)
+    else:
+        merged_daily, _ = merge_daily_bars_refresh(existing_daily, incoming_daily)
+        merged_weekly, _ = merge_daily_bars_refresh(existing_weekly, incoming_weekly)
+
     normalized_daily = normalize_daily_bars(merged_daily)
     normalized_weekly = normalize_daily_bars(merged_weekly)
     daily, dropped_daily = _sanitize_bars(normalized_daily)
@@ -147,35 +192,33 @@ def merge_fetched_into_production(
     history = build_history_meta(daily, weekly, range_52w) if daily or weekly else None
 
     err = fetched.get("error")
-    has_incoming = bool(fetched.get("daily") or fetched.get("weekly"))
+    has_incoming = bool(incoming_daily or incoming_weekly)
     if err in ("unsupported_instrument", "unknown_instrument") and daily and not has_incoming:
         err = str(err)
 
-    sanitation_note = None
+    notes: list[str] = []
     if dropped_daily or dropped_weekly:
-        sanitation_note = f"dropped_invalid_ohlc:daily={dropped_daily},weekly={dropped_weekly}"
+        notes.append(f"dropped_invalid_ohlc:daily={dropped_daily},weekly={dropped_weekly}")
+    if reset_history:
+        notes.append(f"reset_disjoint_legacy_history:gap_days={reset_gap_days}")
 
     rec: InstrumentPriceRecord = {
         "instrument_id": fetched["instrument_id"],
         "price": fetched.get("price") if fetched.get("price") is not None else existing.get("price"),
         "daily": daily,
         "weekly": weekly,
-        "forming_daily": fetched.get("forming_daily")
-        if fetched.get("forming_daily") is not None
-        else existing.get("forming_daily"),
-        "forming_weekly": fetched.get("forming_weekly")
-        if fetched.get("forming_weekly") is not None
-        else existing.get("forming_weekly"),
+        "forming_daily": fetched.get("forming_daily") if fetched.get("forming_daily") is not None else existing.get("forming_daily"),
+        "forming_weekly": fetched.get("forming_weekly") if fetched.get("forming_weekly") is not None else existing.get("forming_weekly"),
         "range_52w": range_52w,
         "history": history,
         "error": err,
         "price_scale": fetched.get("price_scale") or existing.get("price_scale"),
     }
-    if sanitation_note:
-        rec["sanitation_note"] = sanitation_note  # type: ignore[typeddict-unknown-key]
+    if notes:
+        rec["sanitation_note"] = ";".join(notes)  # type: ignore[typeddict-unknown-key]
     meta = {
         "fetched_via": fetched_via,
-        "historical_via": _resolve_historical_via(existing),
+        "historical_via": None if reset_history else _resolve_historical_via(existing),
     }
     return rec, meta
 
