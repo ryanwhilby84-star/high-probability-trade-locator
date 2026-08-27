@@ -1,165 +1,71 @@
 import React from 'react'
+import { Line, LineChart, ResponsiveContainer, CartesianGrid, Tooltip, XAxis, YAxis, Legend } from 'recharts'
 
+import { AppShell } from '../components/AppShell.jsx'
 import { fetchPublicJson } from '../utils/fetchPublicJson.js'
+import { useCanonicalCurrentPrice } from '../prices/canonicalCurrentPrice.js'
 import { navigateToCotWorkstation, navigateToInstrument, navigateToScanner } from '../routing.js'
-import './soybeanValuationResearch.css'
+import './naturalGasValuation.css'
 
 const MARKET = 'Soybeans'
-const PRICE_URL = '/data/prices_latest.json'
 const MODEL_URL = '/data/soybean_valuation_research_latest.json'
 
-function n(v) {
-  const x = Number(v)
-  return Number.isFinite(x) ? x : null
+const num = (v) => Number.isFinite(Number(v)) ? Number(v) : null
+const fmt = (v, d = 2) => num(v) == null ? '—' : num(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
+const signed = (v, d = 1) => num(v) == null ? '—' : `${num(v) > 0 ? '+' : ''}${fmt(v, d)}`
+
+function valuationState(dev) {
+  if (dev == null) return { label: 'AWAITING FUNDAMENTALS', tone: 'neutral' }
+  if (dev <= -20) return { label: 'MATERIALLY UNDERVALUED', tone: 'bull' }
+  if (dev <= -8) return { label: 'UNDERVALUED', tone: 'bull' }
+  if (dev >= 20) return { label: 'MATERIALLY OVERVALUED', tone: 'bear' }
+  if (dev >= 8) return { label: 'OVERVALUED', tone: 'bear' }
+  return { label: 'NEAR FAIR VALUE', tone: 'neutral' }
 }
 
-function fmt(v, digits = 2) {
-  const x = n(v)
-  return x == null ? '—' : x.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
+function SummaryCard({ label, value, sub, tone = 'neutral' }) {
+  return <article className={`ngv-summary-card ngv-summary-card--${tone}`}><span className="ngv-summary-label">{label}</span><strong className="ngv-summary-value">{value}</strong><span className="ngv-summary-sub">{sub}</span></article>
 }
 
-function fmtPct(v) {
-  const x = n(v)
-  return x == null ? '—' : `${x > 0 ? '+' : ''}${fmt(x * 100, 1)}%`
+function Scale({ deviation }) {
+  const p = deviation == null ? 50 : Math.max(3, Math.min(97, 50 + deviation * 1.5))
+  return <section className="ngv-scale"><header className="ngv-section-head"><h2>Valuation Scale</h2><span className="ngv-scale-band">Soybean fundamental value</span></header><div className="ngv-scale-track"><div className="ngv-scale-gradient"/><div className="ngv-scale-marker" style={{ left: `${p}%` }}><span className="ngv-scale-pin"/><span className="ngv-scale-pin-label">Today {deviation == null ? '—' : `${signed(deviation)}%`}</span></div></div><div className="ngv-scale-labels"><span>Strongly<br/>Undervalued</span><span>Moderately<br/>Undervalued</span><span>Fair<br/>Value</span><span>Moderately<br/>Overvalued</span><span>Strongly<br/>Overvalued</span></div></section>
 }
 
-function tone(deviation) {
-  const d = n(deviation)
-  if (d == null) return 'neutral'
-  if (d <= -0.1) return 'cheap'
-  if (d >= 0.1) return 'rich'
-  return 'neutral'
+function Driver({ title, value, source, copy }) {
+  return <article className="ngv-driver-card"><header className="ngv-driver-head"><span className="ngv-driver-icon">●</span><div><h3>{title}</h3><span className="ngv-driver-source">{source}</span></div></header><dl className="ngv-driver-metrics"><div><dt>Current</dt><dd>{value}</dd></div></dl><p className="ngv-driver-copy">{copy}</p></article>
 }
 
-function MiniChart({ priceRows, fairRows }) {
-  const rows = React.useMemo(() => {
-    const fairByDate = new Map((fairRows || []).map((r) => [String(r.date || r.as_of || '').slice(0, 10), n(r.fair_value)]))
-    return (priceRows || []).slice(-260).map((r) => ({
-      date: String(r.date || '').slice(0, 10),
-      price: n(r.close),
-      fair: fairByDate.get(String(r.date || '').slice(0, 10)) ?? null,
-    })).filter((r) => r.price != null)
-  }, [priceRows, fairRows])
-
-  if (rows.length < 2) return <div className="svr-empty">No soybean weekly price history available.</div>
-
-  const vals = rows.flatMap((r) => [r.price, r.fair]).filter((v) => v != null)
-  const lo = Math.min(...vals)
-  const hi = Math.max(...vals)
-  const span = Math.max(hi - lo, 1e-9)
-  const x = (i) => 28 + (i / Math.max(rows.length - 1, 1)) * 944
-  const y = (v) => 300 - ((v - lo) / span) * 250
-  const pricePath = rows.map((r, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(r.price).toFixed(1)}`).join(' ')
-  const fairSegments = []
-  let seg = []
-  rows.forEach((r, i) => {
-    if (r.fair == null) {
-      if (seg.length > 1) fairSegments.push(seg)
-      seg = []
-    } else seg.push([x(i), y(r.fair)])
-  })
-  if (seg.length > 1) fairSegments.push(seg)
-
-  return (
-    <div className="svr-chart-wrap">
-      <svg viewBox="0 0 1000 330" className="svr-chart" role="img" aria-label="Soybean market price versus fair value">
-        {[0, 1, 2, 3, 4].map((k) => <line key={k} x1="28" x2="972" y1={50 + k * 62.5} y2={50 + k * 62.5} className="svr-grid" />)}
-        <path d={pricePath} className="svr-price-line" />
-        {fairSegments.map((s, idx) => <path key={idx} d={s.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')} className="svr-fair-line" />)}
-      </svg>
-      <div className="svr-legend"><span><i className="price" />Market price</span><span><i className="fair" />Blended fair value</span></div>
-    </div>
-  )
+function HistoryChart({ history }) {
+  const data = (Array.isArray(history) ? history : []).slice(-260).map(r => ({ date: r.date || r.as_of || r.model_week, price: num(r.market_price ?? r.price ?? r.close), fair: num(r.fair_value) })).filter(r => r.price != null || r.fair != null)
+  if (!data.length) return <div className="ngv-chart-empty">Historical fair-value series will appear here as the point-in-time soybean model history is generated.</div>
+  return <div className="ngv-chart-wrap"><ResponsiveContainer width="100%" height={380}><LineChart data={data} margin={{ top: 12, right: 18, left: 4, bottom: 8 }}><CartesianGrid stroke="rgba(148,163,184,0.12)" strokeDasharray="3 6"/><XAxis dataKey="date" minTickGap={48} tick={{ fill:'#94a3b8', fontSize:11 }}/><YAxis domain={['auto','auto']} width={55} tick={{ fill:'#94a3b8', fontSize:11 }}/><Tooltip/><Legend/><Line type="monotone" dataKey="price" name="Soybean Price" stroke="#38bdf8" strokeWidth={2} dot={false} isAnimationActive={false}/><Line type="monotone" dataKey="fair" name="Fair Value" stroke="#fbbf24" strokeWidth={2} strokeDasharray="6 4" dot={false} isAnimationActive={false}/></LineChart></ResponsiveContainer></div>
 }
 
-export function SoybeanValuationResearchPage() {
-  const [priceDoc, setPriceDoc] = React.useState(null)
-  const [modelDoc, setModelDoc] = React.useState(null)
+export function SoybeanValuationResearchPage({ sidebarClass, onSidebarClass }) {
+  const [doc, setDoc] = React.useState(null)
   const [error, setError] = React.useState(null)
+  const canonical = useCanonicalCurrentPrice(MARKET)
+  React.useEffect(() => { let live = true; fetchPublicJson(MODEL_URL).then(x => live && setDoc(x)).catch(e => live && setError(e?.message || String(e))); return () => { live = false } }, [])
 
-  React.useEffect(() => {
-    let cancelled = false
-    Promise.all([
-      fetchPublicJson(PRICE_URL),
-      fetchPublicJson(MODEL_URL).catch(() => null),
-    ]).then(([p, m]) => {
-      if (cancelled) return
-      setPriceDoc(p)
-      setModelDoc(m)
-      setError(null)
-    }).catch((e) => !cancelled && setError(e?.message || String(e)))
-    return () => { cancelled = true }
-  }, [])
+  const c = doc?.current || {}
+  const market = num(c.market_price) ?? num(canonical.price)
+  const fair = num(c.fair_value)
+  const deviation = fair && market != null ? (market / fair - 1) * 100 : num(c.deviation_pct) ?? (num(c.deviation) != null ? num(c.deviation) * 100 : null)
+  const state = valuationState(deviation)
+  const history = doc?.history || []
 
-  const record = priceDoc?.instruments?.[MARKET] || priceDoc?.instruments?.['Soybeans / ZS'] || null
-  const weekly = Array.isArray(record?.weekly) ? record.weekly : []
-  const last = weekly[weekly.length - 1]
-  const market = n(modelDoc?.current?.market_price) ?? n(record?.price?.mid) ?? n(last?.close)
-  const fair = n(modelDoc?.current?.fair_value)
-  const scarcity = n(modelDoc?.current?.scarcity_fair_value)
-  const crush = n(modelDoc?.current?.crush_implied_value)
-  const dev = fair != null && market != null && fair !== 0 ? market / fair - 1 : n(modelDoc?.current?.deviation)
-  const state = tone(dev)
-  const history = Array.isArray(modelDoc?.history) ? modelDoc.history : []
-  const status = modelDoc?.status || (history.length ? 'research' : 'awaiting_inputs')
-
-  return (
-    <main className="svr-root">
-      <header className="svr-topbar">
-        <div>
-          <div className="svr-eyebrow">INSTITUTIONAL EDGE · FUNDAMENTAL RESEARCH</div>
-          <h1>Soybean Valuation</h1>
-          <p>Dual-anchor research: USDA stocks-to-use scarcity value + board-crush processing value.</p>
-        </div>
-        <div className="svr-actions">
-          <button onClick={() => navigateToCotWorkstation(MARKET)}>COT</button>
-          <button onClick={() => navigateToInstrument(MARKET)}>Instrument</button>
-          <button onClick={navigateToScanner}>Scanner</button>
-        </div>
-      </header>
-
-      {error ? <div className="svr-warning">{error}</div> : null}
-
-      <section className="svr-hero-grid">
-        <article className="svr-card svr-primary">
-          <span>Market</span><strong>{fmt(market)}</strong><small>canonical soybean price</small>
-        </article>
-        <article className="svr-card">
-          <span>Fundamental fair value</span><strong>{fmt(fair)}</strong><small>blended anchor</small>
-        </article>
-        <article className={`svr-card svr-state ${state}`}>
-          <span>Valuation gap</span><strong>{fmtPct(dev)}</strong><small>{dev == null ? 'waiting for model inputs' : state === 'cheap' ? 'market below fair value' : state === 'rich' ? 'market above fair value' : 'near fair value'}</small>
-        </article>
-        <article className="svr-card">
-          <span>Model status</span><strong className="svr-status-text">{String(status).replaceAll('_', ' ')}</strong><small>{modelDoc?.as_of || 'no fundamental snapshot yet'}</small>
-        </article>
-      </section>
-
-      <section className="svr-panel">
-        <div className="svr-panel-head"><div><span className="svr-eyebrow">VALUATION VS PRICE</span><h2>Manual lookback</h2></div><div className="svr-panel-note">Last ~5 years of weekly price; fair-value line appears as point-in-time model history is generated.</div></div>
-        <MiniChart priceRows={weekly} fairRows={history} />
-      </section>
-
-      <section className="svr-anchor-grid">
-        <article className="svr-panel svr-anchor"><span className="svr-eyebrow">ANCHOR 01</span><h3>Scarcity value</h3><strong>{fmt(scarcity)}</strong><p>Nonlinear inverse stocks-to-use relationship. Tight balance sheets should reprice faster than comfortable inventories.</p><dl><div><dt>Stocks / use</dt><dd>{modelDoc?.current?.stocks_to_use == null ? '—' : fmtPct(modelDoc.current.stocks_to_use)}</dd></div><div><dt>USDA vintage</dt><dd>{modelDoc?.current?.wasde_as_of || '—'}</dd></div></dl></article>
-        <article className="svr-panel svr-anchor"><span className="svr-eyebrow">ANCHOR 02</span><h3>Crush-implied value</h3><strong>{fmt(crush)}</strong><p>Joint product economics from soybean meal and soybean oil, net of the processing margin allowance.</p><dl><div><dt>Meal</dt><dd>{fmt(modelDoc?.current?.meal_price)}</dd></div><div><dt>Oil</dt><dd>{fmt(modelDoc?.current?.oil_price)}</dd></div></dl></article>
-      </section>
-
-      <section className="svr-panel svr-drivers">
-        <div className="svr-panel-head"><div><span className="svr-eyebrow">DRIVER AUDIT</span><h2>What is moving fair value?</h2></div></div>
-        <div className="svr-driver-grid">
-          {[
-            ['Ending stocks', modelDoc?.current?.ending_stocks, 'USDA'],
-            ['Total use', modelDoc?.current?.total_use, 'USDA'],
-            ['Crush', modelDoc?.current?.crush_use, 'USDA'],
-            ['Exports', modelDoc?.current?.exports, 'USDA'],
-            ['BRL / USD adj.', modelDoc?.current?.fx_adjustment, 'secondary'],
-            ['Biofuel adj.', modelDoc?.current?.biofuel_adjustment, 'secondary'],
-          ].map(([label, value, source]) => <div key={label}><span>{label}</span><strong>{fmt(value)}</strong><small>{source}</small></div>)}
-        </div>
-      </section>
-
-      {status === 'awaiting_inputs' ? <div className="svr-warning">Research UI is wired to the canonical soybean price history. Fundamental values remain deliberately blank until real point-in-time USDA + crush inputs are generated; no synthetic fair value is shown.</div> : null}
+  return <AppShell active="soybean-valuation" sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}>
+    <main className="ngv-page">
+      <header className="ngv-header"><div><span className="ngv-kicker">INSTITUTIONAL EDGE · SOYBEAN FUNDAMENTALS</span><h1>Soybean Valuation</h1><p>Stocks-to-use scarcity + board-crush economics, with global competitiveness and biofuel context.</p></div><div className="ngv-header-actions"><button onClick={() => navigateToCotWorkstation(MARKET)}>COT Workstation</button><button onClick={() => navigateToInstrument(MARKET)}>Instrument</button><button onClick={navigateToScanner}>Scanner</button></div></header>
+      {error ? <div className="ngv-error">{error}</div> : null}
+      <section className="ngv-summary-grid"><SummaryCard label="Market Price" value={fmt(market)} sub={canonical.label || 'canonical soybean price'}/><SummaryCard label="Fundamental Fair Value" value={fmt(fair)} sub="blended soybean model"/><SummaryCard label="Valuation Deviation" value={deviation == null ? '—' : `${signed(deviation,2)}%`} sub={state.label} tone={state.tone}/><SummaryCard label="Model As Of" value={doc?.as_of || c.wasde_as_of || '—'} sub={doc?.status || 'point-in-time research'}/></section>
+      <Scale deviation={deviation}/>
+      <section className="ngv-section"><header className="ngv-section-head"><div><span className="ngv-kicker">CORE ANCHORS</span><h2>What is soybean worth?</h2></div></header><div className="ngv-driver-grid"><Driver title="Stocks-to-Use Scarcity" value={fmt(c.scarcity_fair_value)} source="USDA / WASDE" copy={`Ending stocks ${fmt(c.ending_stocks,0)} · Total use ${fmt(c.total_use,0)}. Non-linear scarcity anchor for the US balance sheet.`}/><Driver title="Board Crush Value" value={fmt(c.crush_implied_value)} source="Soybean meal + soybean oil" copy={`Meal ${fmt(c.meal_price)} · Oil ${fmt(c.oil_price)}. Processing economics provide the commercial value anchor.`}/></div></section>
+      <section className="ngv-section"><header className="ngv-section-head"><div><span className="ngv-kicker">DRIVER AUDIT</span><h2>What is moving fair value?</h2></div></header><div className="ngv-driver-grid"><Driver title="Exports" value={fmt(c.exports,0)} source="USDA" copy="Export demand and global offtake tighten or loosen the US balance sheet."/><Driver title="Crush Demand" value={fmt(c.crush_use,0)} source="USDA" copy="Domestic processing demand links raw beans to meal and oil economics."/><Driver title="BRL / USD Competitiveness" value={fmt(c.fx_adjustment,3)} source="Secondary adjustment" copy="Brazilian competitiveness changes the relative attractiveness of US export supply."/><Driver title="Biofuel / Soy Oil" value={fmt(c.biofuel_adjustment,3)} source="Secondary adjustment" copy="Renewable diesel and biofuel demand can alter soybean-oil economics and crush value."/></div></section>
+      <section className="ngv-section"><header className="ngv-section-head"><div><span className="ngv-kicker">VALUATION VS PRICE</span><h2>Historical Research</h2></div><span className="ngv-scale-band">Point-in-time only</span></header><HistoryChart history={history}/></section>
     </main>
-  )
+  </AppShell>
 }
+
+export default SoybeanValuationResearchPage
