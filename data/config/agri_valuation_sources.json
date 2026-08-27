@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "note": "Agriculture valuation data manifest — balance sheet paths are ingest targets (not yet populated).",
+  "balance_sheet_dir": "data/processed/agri_balance_sheet",
+  "balance_sheet_source_expected": "USDA WASDE / PSD",
+  "instruments": {
+    "Soybeans": {
+      "priority": 1,
+      "futures": "ZS",
+      "subgroup": "grains",
+      "model_family": "grains_stocks_to_use",
+      "balance_sheet_file": "Soybeans.json",
+      "price_sources": ["oanda:SOYBN_USD", "price_store"]
+    },
+    "Wheat": {
+      "priority": 2,
+      "futures": "ZW",
+      "subgroup": "grains",
+      "model_family": "grains_stocks_to_use",
+      "balance_sheet_file": "Wheat.json",
+      "price_sources": ["oanda:WHEAT_USD", "price_store"]
+    },
+    "Corn": {
+      "priority": 3,
+      "futures": "ZC",
+      "subgroup": "grains",
+      "model_family": "grains_stocks_to_use",
+      "balance_sheet_file": "Corn.json",
+      "price_sources": ["alpha_vantage:CORN", "price_store"]
+    },
+    "Sugar": {
+      "priority": 4,
+      "futures": "SB",
+      "subgroup": "soft",
+      "model_family": "softs_balance_sheet",
+      "balance_sheet_file": "Sugar.json",
+      "price_sources": ["oanda:SUGAR_USD", "price_store"]
+    },
+    "Cotton": {
+      "priority": 5,
+      "futures": "CT",
+      "subgroup": "soft",
+      "model_family": "softs_balance_sheet",
+      "balance_sheet_file": "Cotton.json",
+      "price_sources": ["fred:PCOTTINDUSDM", "price_store"]
+    },
+    "Coffee": {
+      "priority": 6,
+      "futures": "KC",
+      "subgroup": "soft",
+      "model_family": "softs_balance_sheet",
+      "balance_sheet_file": "Coffee.json",
+      "optional": true,
+      "price_sources": ["fred:PCOFFOTMUSDM", "price_store"]
+    },
+    "Cocoa": {
+      "priority": 7,
+      "futures": "CC",
+      "subgroup": "soft",
+      "model_family": "softs_balance_sheet",
+      "balance_sheet_file": "Cocoa.json",
+      "optional": true,
+      "price_sources": ["fred:PCOCOUSDM", "price_store"]
+    }
+  }
+}

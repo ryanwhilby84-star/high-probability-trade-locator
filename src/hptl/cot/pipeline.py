@@ -33,6 +33,15 @@ logger = logging.getLogger(__name__)
 
 PROBE_CACHE_PATH = Path("data/processed/cot_probe_cache.json")
 
+# The probe cache lets repeated same-day runs skip the (slow) live CFTC download.
+# It MUST expire, otherwise once local data matches a cached week the pipeline
+# trusts that cache forever and never notices a newly published CFTC report.
+# Override with HPTL_PROBE_CACHE_TTL_HOURS (0 = always re-check the live source).
+try:
+    PROBE_CACHE_TTL_HOURS = float(os.environ.get("HPTL_PROBE_CACHE_TTL_HOURS", "12"))
+except (TypeError, ValueError):
+    PROBE_CACHE_TTL_HOURS = 12.0
+
 
 @dataclass
 class CotPipelineResult:
@@ -157,6 +166,157 @@ def _confluence_export_latest_week() -> str | None:
         return None
 
 
+
+def _downstream_export_stale(local_iso: str | None, export_week: str | None) -> bool:
+    """True when dashboard/confluence export trails the local/master COT week."""
+    if not local_iso:
+        return False
+    if not export_week:
+        return True
+    return str(export_week)[:10] < str(local_iso)[:10]
+
+
+def _scanner_export_week() -> str | None:
+    """Latest week advertised by scanner_latest.json (public or data copy)."""
+    for path in (
+        Path("web-dashboard/public/data/scanner_latest.json"),
+        Path("data/scanner_latest.json"),
+    ):
+        if not path.exists():
+            continue
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        week = doc.get("latest_week")
+        if not week:
+            att = doc.get("scanner_attention_week") or {}
+            if isinstance(att, dict):
+                week = att.get("calendar_week")
+        if week:
+            return str(week)[:10]
+    return None
+
+
+def _publish_scanner_latest(*, confluence_path: str | Path | None = None) -> Path:
+    """Write scanner_latest.json from confluence and mirror into dist/data."""
+    from hptl.thesis_tracker.opportunity_distribution_report import write_scanner_latest
+
+    scanner_path = write_scanner_latest(Path(confluence_path or OUT_PATH))
+    dist_scanner = Path("web-dashboard/dist/data/scanner_latest.json")
+    if scanner_path.exists():
+        dist_scanner.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(scanner_path, dist_scanner)
+    return scanner_path
+
+
+def _republish_downstream_exports(
+    result: CotPipelineResult,
+    *,
+    export_week: str | None,
+    cftc_week: str | None,
+) -> None:
+    """Republish confluence + cot_3y + mirrors when master is ahead of dashboard.
+
+    Prefers incremental catch-up (missing weeks only); falls back to a full
+    confluence rebuild if catch-up cannot advance the export week.
+    """
+    log_step(
+        f"Downstream stale: export ({export_week or '—'}) < master "
+        f"({result.latest_local_report_date}) — republishing dashboard JSON."
+    )
+    from hptl.confluence.export_from_masters import catch_up_confluence_export
+
+    new_week: str | None = None
+    try:
+        catch = catch_up_confluence_export(
+            cot_feed_meta={
+                "latest_cftc_report_date": cftc_week or result.latest_local_report_date,
+                "cot_data_stale": False,
+            }
+        )
+        new_week = catch.confluence_after
+        if catch.error or _downstream_export_stale(result.latest_local_report_date, new_week):
+            raise RuntimeError(
+                catch.error
+                or f"catch-up left export at {new_week}, master={result.latest_local_report_date}"
+            )
+        result.export_confluence_path = catch.export_path or str(Path(OUT_PATH).resolve())
+        log_step(f"Incremental catch-up advanced dashboard to {new_week}")
+    except Exception as exc:
+        log_step(f"Incremental catch-up insufficient ({exc}); full confluence rebuild.")
+        conf_path, new_week = _safe_rebuild_confluence(
+            previous_latest=export_week,
+            cftc_week=cftc_week or result.latest_local_report_date,
+        )
+        result.export_confluence_path = str(conf_path.resolve())
+
+    result.export_latest_cot_week = new_week
+    result.cot_data_stale = False
+    result.update_performed = True
+    log_kv("confluence export path", result.export_confluence_path)
+    log_kv("latest week in JSON", new_week)
+    try:
+        cot3_path = _export_cot_workstation_series()
+        log_kv("cot_3y series path", str(cot3_path.resolve()))
+        synced = _sync_confluence_dashboard_exports()
+        if synced:
+            log_step("Synced public JSON → dist/data.")
+    except Exception as exc:
+        logger.warning("cot_3y export failed (confluence OK): %s", exc)
+    # Scanner slice is a separate publish artifact; confluence alone does not refresh it.
+    try:
+        scanner_path = _publish_scanner_latest(
+            confluence_path=result.export_confluence_path or OUT_PATH
+        )
+        log_kv("scanner_latest path", str(scanner_path.resolve()))
+        log_kv("scanner_latest week", _scanner_export_week())
+    except Exception as exc:
+        logger.warning("scanner_latest export failed (confluence OK): %s", exc)
+    try:
+        from hptl.cot.commercial_attention_export import run_commercial_attention_export
+
+        attn = run_commercial_attention_export(as_of=result.latest_local_report_date)
+        log_kv(
+            "commercial attention board",
+            f"week={attn.get('source_week')} events={(attn.get('summary') or {}).get('with_events')}",
+        )
+    except Exception as exc:
+        logger.warning("commercial attention export failed (confluence OK): %s", exc)
+    try:
+        from hptl.cot.workstation_intelligence_export import run_workstation_intelligence_export
+
+        intel = run_workstation_intelligence_export()
+        log_kv(
+            "workstation intelligence",
+            f"available={(intel.get('summary') or {}).get('markets_available')}",
+        )
+    except Exception as exc:
+        logger.warning("workstation intelligence export failed (confluence OK): %s", exc)
+    try:
+        from hptl.cot.positioning_research_export import run_positioning_research_export
+
+        research = run_positioning_research_export(markets=None)
+        log_kv(
+            "positioning research",
+            f"available={(research.get('summary') or {}).get('markets_available')}/"
+            f"{(research.get('summary') or {}).get('markets_requested')}",
+        )
+    except Exception as exc:
+        logger.warning("positioning research export failed (confluence OK): %s", exc)
+    # Weekly inspector must track cot_3y tip — otherwise chart and drawer diverge.
+    try:
+        from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
+
+        wi = run_weekly_inspector_export(markets=None)
+        log_kv(
+            "weekly inspector",
+            f"available={(wi.get('summary') or {}).get('available')}/"
+            f"{(wi.get('summary') or {}).get('markets')}",
+        )
+    except Exception as exc:
+        logger.warning("weekly inspector export failed (confluence OK): %s", exc)
+
 def _read_probe_cache() -> dict[str, Any] | None:
     if not PROBE_CACHE_PATH.exists():
         return None
@@ -166,8 +326,23 @@ def _read_probe_cache() -> dict[str, Any] | None:
         return None
 
 
+def _probe_cache_age_hours(cache: dict[str, Any] | None) -> float | None:
+    """Age of the probe cache in hours (None when timestamp missing/unparseable)."""
+    if not cache:
+        return None
+    ts = pd.to_datetime(cache.get("probed_at_utc"), errors="coerce", utc=True)
+    if pd.isna(ts):
+        return None
+    return max(0.0, (pd.Timestamp.now(tz="UTC") - ts).total_seconds() / 3600.0)
+
+
 def _probe_cache_is_trusted(cache: dict[str, Any] | None, local_max: pd.Timestamp | None) -> bool:
-    """Reject test fixtures or cache older than local processed data."""
+    """Trust cache only when it is CFTC-sourced, matches local data, and is fresh.
+
+    Rejects test fixtures, caches older than the local processed week, and caches
+    older than ``PROBE_CACHE_TTL_HOURS`` so a newly published CFTC report is
+    detected on the next run without requiring ``--force``.
+    """
     if not cache:
         return False
     week = cache.get("latest_cftc_report_date")
@@ -182,6 +357,14 @@ def _probe_cache_is_trusted(cache: dict[str, Any] | None, local_max: pd.Timestam
             f"Ignoring probe cache (cached {week} != local processed max {_iso(local_max)})."
         )
         return False
+    age_hours = _probe_cache_age_hours(cache)
+    if age_hours is None or age_hours > PROBE_CACHE_TTL_HOURS:
+        age_txt = "unknown" if age_hours is None else f"{age_hours:.1f}h"
+        log_step(
+            f"Ignoring probe cache (age {age_txt} > TTL {PROBE_CACHE_TTL_HOURS:g}h) — "
+            "re-checking live CFTC source for a newer weekly report."
+        )
+        return False
     return True
 
 
@@ -189,6 +372,74 @@ def _clear_probe_cache() -> None:
     if PROBE_CACHE_PATH.exists():
         PROBE_CACHE_PATH.unlink(missing_ok=True)
         log_step(f"Removed stale probe cache: {PROBE_CACHE_PATH.resolve()}")
+
+
+def _legacy_latest_report_date() -> pd.Timestamp | None:
+    """Max report date across instruments in ``legacy_cot_latest.json``."""
+    from hptl.cot.legacy_cot_loader import legacy_cot_latest_path, load_legacy_cot_document
+
+    path = legacy_cot_latest_path()
+    if not path.exists():
+        return None
+    try:
+        doc = load_legacy_cot_document(str(path))
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return None
+    max_dt: pd.Timestamp | None = None
+    for block in (doc.get("instruments") or {}).values():
+        weeks = ((block.get("groups") or {}).get("noncommercials") or {}).get("weeks") or []
+        if not weeks:
+            continue
+        last = weeks[-1].get("report_date")
+        ts = pd.to_datetime(last, errors="coerce")
+        if pd.isna(ts):
+            continue
+        ts = pd.Timestamp(ts).normalize()
+        if max_dt is None or ts > max_dt:
+            max_dt = ts
+    return max_dt
+
+
+def _refresh_legacy_positioning(*, cftc_max: pd.Timestamp | None = None) -> None:
+    """Re-download Legacy Futures-Only ZIPs and rebuild ``legacy_cot_latest.json``.
+
+    Confluence/master positioning reads exclusively from legacy exports — workbook
+    disaggregated/TFF downloads do not feed the dashboard bundle.
+    """
+    from datetime import datetime as dt, timezone as tz
+
+    from hptl.cot.legacy_cot import default_history_years, ensure_legacy_futures_only_year, run_legacy_cot_reset
+
+    year = dt.now(tz.utc).year
+    legacy_max = _legacy_latest_report_date()
+    needs_zip = (
+        cftc_max is not None
+        and not pd.isna(cftc_max)
+        and (legacy_max is None or legacy_max < cftc_max.normalize())
+    )
+    if needs_zip:
+        log_step(f"Refreshing Legacy COT year {year} ZIP (CFTC {_iso(cftc_max)} > legacy {_iso(legacy_max)})…")
+        ensure_legacy_futures_only_year(year, download=True, force_refresh=True)
+    elif legacy_max is not None and cftc_max is not None and legacy_max >= cftc_max.normalize():
+        log_step(f"Legacy COT already at {_iso(legacy_max)} — skipping ZIP re-download.")
+    else:
+        log_step(f"Ensuring Legacy COT year {year} ZIP is present…")
+        ensure_legacy_futures_only_year(year, download=True, force_refresh=bool(needs_zip))
+
+    if legacy_max is not None and cftc_max is not None and legacy_max >= cftc_max.normalize():
+        log_step("Legacy COT JSON current — skipping full legacy rebuild.")
+        return
+
+    log_step("Rebuilding legacy_cot_latest.json (positioning source for master + confluence)…")
+    run_legacy_cot_reset(years=default_history_years())
+
+
+def _export_cot_workstation_series() -> Path:
+    """Write ``cot_3y_series_latest.json`` to processed + public dashboard paths."""
+    from hptl.cot.cot_3y_series_export import run as run_cot_3y_export
+
+    log_step("Writing cot_3y_series_latest.json (COT workstation charts)…")
+    return run_cot_3y_export()
 
 
 def _sync_confluence_dashboard_exports(source: Path | None = None) -> list[Path]:
@@ -207,6 +458,11 @@ def _safe_rebuild_confluence(*, previous_latest: str | None, cftc_week: str | No
         shutil.copy2(out, backup)
 
     os.environ.setdefault("HPTL_SKIP_LIVE_FEEDS", "1")
+    # Weekly COT refresh legitimately exceeds the 120s stage watchdog during confluence export.
+    os.environ.setdefault("HPTL_DISABLE_WATCHDOG", "1")
+    # Restore Jul-15 fast-export gate: Stage 4 must not re-enter FX V3 / RBA Excel parsing
+    # for every market-week. Valuation exports run as a separate pillar stage.
+    os.environ.setdefault("HPTL_SKIP_VALUATION", "1")
     bdt.run(
         cot_feed_meta={
             "latest_cftc_report_date": cftc_week,
@@ -294,59 +550,74 @@ def run_full_pipeline(
                 result.rows_fetched = 0
                 export_week = _confluence_export_latest_week()
                 local_iso = result.latest_local_report_date
-                needs_json = bool(local_iso and export_week and export_week < local_iso)
+                needs_json = _downstream_export_stale(local_iso, export_week)
                 if probe_only:
                     result.update_needed = False
                     result.export_latest_cot_week = export_week or local_iso
+                    result.cot_data_stale = needs_json
                     _print_banner("HPTL COT PIPELINE — PROBE ONLY (cached)")
                     for line in _human_lines(result):
                         print(line)
                     return result
+                # Upstream current (CFTC == local) is independent of dashboard freshness.
+                result.update_needed = False
                 if needs_json and not skip_confluence:
-                    log_step(
-                        f"Export ({export_week}) < local ({local_iso}) — rebuilding confluence JSON only."
-                    )
                     try:
-                        conf_path, new_week = _safe_rebuild_confluence(
-                            previous_latest=export_week,
-                            cftc_week=cached_week,
+                        _republish_downstream_exports(
+                            result, export_week=export_week, cftc_week=cached_week
                         )
-                        result.export_confluence_path = str(conf_path.resolve())
-                        result.export_latest_cot_week = new_week
-                        result.cot_data_stale = False
-                        result.update_performed = True
-                        log_kv("confluence export path", result.export_confluence_path)
-                        log_kv("latest week in JSON", new_week)
                     except Exception as exc:
                         result.error = f"Confluence rebuild failed: {exc}"
                         result.exit_code = 1
-                    _print_banner("HPTL COT PIPELINE — COMPLETE")
+                        result.cot_data_stale = True
+                    _print_banner("HPTL COT PIPELINE — DOWNSTREAM REPUBLISHED")
                     for line in _human_lines(result):
                         print(line)
                     print("=" * 72)
                     return result
-                elif not needs_json:
-                    log_step(
-                        f"No new CFTC week (cached probe {cached_week} matches local {local_iso}). "
-                        "Use --force to re-download."
-                    )
-                    result.update_needed = False
-                    result.cot_data_stale = bool(export_week and cached_week and export_week < cached_week)
+                if needs_json and skip_confluence:
+                    result.cot_data_stale = True
                     result.export_latest_cot_week = export_week or local_iso
-                    if export_week and local_iso and export_week >= local_iso:
-                        synced = _sync_confluence_dashboard_exports()
-                        if synced:
-                            log_step("Synced public JSON → dist/data (preview build was behind).")
                     _mark_confluence_stale_flag(
-                        is_stale=result.cot_data_stale,
+                        is_stale=True,
                         export_week=result.export_latest_cot_week,
                         cftc_week=cached_week,
                     )
-                    _print_banner("HPTL COT PIPELINE — UP TO DATE")
+                    _print_banner("HPTL COT PIPELINE — UPSTREAM CURRENT, DASHBOARD STALE")
                     for line in _human_lines(result):
                         print(line)
                     print("=" * 72)
                     return result
+                log_step(
+                    f"No new CFTC week (cached probe {cached_week} matches local {local_iso}); "
+                    "dashboard export is current."
+                )
+                result.cot_data_stale = False
+                result.export_latest_cot_week = export_week or local_iso
+                synced = _sync_confluence_dashboard_exports()
+                if synced:
+                    log_step("Synced public JSON → dist/data (preview build was behind).")
+                # Confluence can be current while scanner_latest.json is still stale.
+                if _downstream_export_stale(local_iso, _scanner_export_week()):
+                    try:
+                        scanner_path = _publish_scanner_latest(confluence_path=OUT_PATH)
+                        log_step(
+                            f"Refreshed stale scanner_latest → {_scanner_export_week()} "
+                            f"({scanner_path})"
+                        )
+                        result.update_performed = True
+                    except Exception as exc:
+                        logger.warning("scanner_latest refresh failed: %s", exc)
+                _mark_confluence_stale_flag(
+                    is_stale=False,
+                    export_week=result.export_latest_cot_week,
+                    cftc_week=cached_week,
+                )
+                _print_banner("HPTL COT PIPELINE — UP TO DATE")
+                for line in _human_lines(result):
+                    print(line)
+                print("=" * 72)
+                return result
             elif cached_week and not _probe_cache_is_trusted(cache, local_max):
                 _clear_probe_cache()
 
@@ -390,46 +661,45 @@ def run_full_pipeline(
     cftc_iso = result.latest_cftc_report_date
 
     if not force and local_max is not None and cftc_max <= local_max:
+        # Upstream ingestion not needed — but dashboard may still be behind master.
         result.update_needed = False
-        needs_json_rebuild = bool(
-            local_iso
-            and export_week
-            and export_week < local_iso
-        )
-        result.cot_data_stale = bool(
-            (cftc_iso and export_week and export_week < cftc_iso)
-            or needs_json_rebuild
+        needs_json_rebuild = _downstream_export_stale(local_iso, export_week)
+        result.cot_data_stale = needs_json_rebuild or bool(
+            cftc_iso and export_week and str(export_week)[:10] < str(cftc_iso)[:10]
         )
         result.export_latest_cot_week = export_week or local_iso
 
         if needs_json_rebuild and not skip_confluence:
-            _print_banner("HPTL COT PIPELINE — REBUILD CONFLUENCE (local data newer than export)")
-            log_step("Rebuilding confluence JSON (export behind local master)…")
+            _print_banner("HPTL COT PIPELINE — DOWNSTREAM REPUBLISH (master newer than dashboard)")
             try:
-                conf_path, new_week = _safe_rebuild_confluence(
-                    previous_latest=export_week,
-                    cftc_week=cftc_iso,
+                _republish_downstream_exports(
+                    result, export_week=export_week, cftc_week=cftc_iso
                 )
-                result.export_confluence_path = str(conf_path.resolve())
-                result.export_latest_cot_week = new_week
-                result.cot_data_stale = False
-                result.update_performed = True
                 print(f"Wrote confluence: {result.export_confluence_path}")
             except Exception as exc:
                 result.error = f"Confluence rebuild failed: {exc}"
                 result.exit_code = 1
                 _mark_confluence_stale_flag(is_stale=True, export_week=export_week, cftc_week=cftc_iso)
-
-        elif result.cot_data_stale:
+        elif needs_json_rebuild and skip_confluence:
+            result.cot_data_stale = True
             _mark_confluence_stale_flag(is_stale=True, export_week=export_week, cftc_week=cftc_iso)
+            _print_banner("HPTL COT PIPELINE — UPSTREAM CURRENT, DASHBOARD STALE")
+            for line in _human_lines(result):
+                print(line)
+            print("=" * 72)
+            return result
         else:
-            _mark_confluence_stale_flag(is_stale=False, export_week=result.export_latest_cot_week, cftc_week=cftc_iso)
+            _mark_confluence_stale_flag(
+                is_stale=False, export_week=result.export_latest_cot_week, cftc_week=cftc_iso
+            )
 
-        _print_banner("HPTL COT PIPELINE — NO NEW CFTC WEEK")
+        _print_banner(
+            "HPTL COT PIPELINE — DOWNSTREAM REPUBLISHED"
+            if result.update_performed
+            else "HPTL COT PIPELINE — NO NEW CFTC WEEK"
+        )
         for line in _human_lines(result):
             print(line)
-        if result.cot_data_stale and not needs_json_rebuild:
-            print("TIP: run with --force to re-download, or rebuild confluence if master CSV is current.")
         print("=" * 72)
         return result
 
@@ -447,6 +717,18 @@ def run_full_pipeline(
         print(f"Wrote processed:  {result.export_processed_csv}")
     except Exception as exc:
         result.error = f"COT download/export failed: {exc}"
+        logger.exception(result.error)
+        result.exit_code = 1
+        _print_banner("HPTL COT PIPELINE — FAILED")
+        for line in _human_lines(result):
+            print(line)
+        return result
+
+    _print_banner("HPTL COT PIPELINE — LEGACY POSITIONING REFRESH")
+    try:
+        _refresh_legacy_positioning(cftc_max=cftc_max)
+    except Exception as exc:
+        result.error = f"Legacy COT refresh failed: {exc}"
         logger.exception(result.error)
         result.exit_code = 1
         _print_banner("HPTL COT PIPELINE — FAILED")
@@ -513,6 +795,12 @@ def run_full_pipeline(
             for line in _human_lines(result):
                 print(line)
             return result
+
+        try:
+            cot3_path = _export_cot_workstation_series()
+            print(f"Wrote COT workstation: {cot3_path.resolve()}")
+        except Exception as exc:
+            logger.warning("cot_3y export failed (confluence OK): %s", exc)
 
         if with_live_feeds:
             _print_banner("HPTL COT PIPELINE — LIVE ENVIRONMENT FEEDS")

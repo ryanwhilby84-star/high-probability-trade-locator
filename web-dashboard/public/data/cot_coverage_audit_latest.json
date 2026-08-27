@@ -1,15 +1,17 @@
 {
-  "generated_at": "2026-06-03T05:26:26.733998+00:00",
-  "global_latest_valid_cot_week": "2026-05-26",
+  "generated_at": "2026-08-22T05:13:10.076939+00:00",
+  "global_latest_valid_cot_week": "2026-08-18",
   "canonical_entities_total": 23,
   "canonical_entities_with_valid_rows": [
     "Australian Dollar / 6A",
+    "Bitcoin",
     "British Pound / 6B",
     "Canadian Dollar / 6C",
     "Cocoa",
     "Coffee",
     "Copper / HG",
     "Corn",
+    "Cotton",
     "Crude Oil / CL",
     "Dow / YM",
     "Euro FX / 6E",
@@ -25,152 +27,194 @@
     "Soybeans",
     "Sugar",
     "Swiss Franc / 6S",
+    "US Dollar Index / DX",
     "Wheat"
   ],
   "integrity": {
-    "total_rows": 299,
-    "valid_rows": 299,
+    "total_rows": 12480,
+    "valid_rows": 12480,
     "invalid_rows": 0,
     "by_market": {
       "Australian Dollar / 6A": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
+      },
+      "Bitcoin": {
+        "valid_rows": 437,
+        "invalid_rows": 0,
+        "latest_valid_cot_week": "2026-08-18"
       },
       "British Pound / 6B": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Canadian Dollar / 6C": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Cocoa": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Coffee": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Copper / HG": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Corn": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
+      },
+      "Cotton": {
+        "valid_rows": 503,
+        "invalid_rows": 0,
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Crude Oil / CL": {
-        "valid_rows": 13,
+        "valid_rows": 237,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Dow / YM": {
-        "valid_rows": 13,
+        "valid_rows": 237,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Euro FX / 6E": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Gold": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Japanese Yen / 6J": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "NASDAQ / NQ": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "NZ Dollar / 6N": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Natural Gas / NG": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Palladium": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Platinum": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "S&P 500 / ES": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Silver": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Soybeans": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Sugar": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Swiss Franc / 6S": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
+      },
+      "US Dollar Index / DX": {
+        "valid_rows": 503,
+        "invalid_rows": 0,
+        "latest_valid_cot_week": "2026-08-18"
       },
       "Wheat": {
-        "valid_rows": 13,
+        "valid_rows": 503,
         "invalid_rows": 0,
-        "latest_valid_cot_week": "2026-05-26"
+        "latest_valid_cot_week": "2026-08-18"
       }
     },
     "reason_tally": {}
   },
   "summary": {
-    "instruments_total": 125,
-    "direct_cot": 23,
-    "leg_derived_cot": 13,
+    "instruments_total": 140,
+    "direct_cot": 26,
+    "leg_derived_cot": 14,
     "proxy_cot": 23,
     "macro_only": 26,
-    "no_cot_available": 40,
-    "broken_mapping": 0,
+    "no_cot_available": 46,
+    "broken_mapping": 5,
     "invalid_data": 0,
     "data_quality": {
-      "clean": 36,
+      "clean": 40,
       "incomplete": 26,
       "duplicate": 23,
       "invalid_rows_detected": 0,
       "stale": 0,
-      "missing": 40,
+      "missing": 51,
       "broken": 0
     },
     "invalid_cot_rows_detected": 0,
     "duplicate_mappings_flagged": 23,
-    "top_unresolved_mapping_issues": []
+    "top_unresolved_mapping_issues": [
+      {
+        "instrument_id": "US 10-Year T-Note / ZN",
+        "cot_status": "broken_mapping",
+        "reason": "canonical_entity_absent_from_cot_master"
+      },
+      {
+        "instrument_id": "US 2-Year T-Note / ZT",
+        "cot_status": "broken_mapping",
+        "reason": "canonical_entity_absent_from_cot_master"
+      },
+      {
+        "instrument_id": "US 30-Year T-Bond / ZB",
+        "cot_status": "broken_mapping",
+        "reason": "canonical_entity_absent_from_cot_master"
+      },
+      {
+        "instrument_id": "US 5-Year T-Note / ZF",
+        "cot_status": "broken_mapping",
+        "reason": "canonical_entity_absent_from_cot_master"
+      },
+      {
+        "instrument_id": "Ultra 10-Year T-Note / TN",
+        "cot_status": "broken_mapping",
+        "reason": "canonical_entity_absent_from_cot_master"
+      }
+    ]
   },
   "instruments": [
     {
@@ -181,8 +225,8 @@
       "direct_cot_market": "NASDAQ / NQ",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -197,8 +241,8 @@
       "direct_cot_market": "S&P 500 / ES",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -213,8 +257,8 @@
       "direct_cot_market": "Dow / YM",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 237,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -229,8 +273,8 @@
       "direct_cot_market": "Euro FX / 6E",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -245,8 +289,8 @@
       "direct_cot_market": "British Pound / 6B",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -261,8 +305,8 @@
       "direct_cot_market": "Japanese Yen / 6J",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -277,8 +321,8 @@
       "direct_cot_market": "Swiss Franc / 6S",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -293,8 +337,8 @@
       "direct_cot_market": "Australian Dollar / 6A",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -309,8 +353,8 @@
       "direct_cot_market": "Canadian Dollar / 6C",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -325,8 +369,8 @@
       "direct_cot_market": "NZ Dollar / 6N",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -341,8 +385,8 @@
       "direct_cot_market": "Gold",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -357,8 +401,8 @@
       "direct_cot_market": "Silver",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -373,8 +417,8 @@
       "direct_cot_market": "Copper / HG",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -389,8 +433,8 @@
       "direct_cot_market": "Crude Oil / CL",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 237,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -405,8 +449,8 @@
       "direct_cot_market": "Natural Gas / NG",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -421,8 +465,8 @@
       "direct_cot_market": "Coffee",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -437,13 +481,29 @@
       "direct_cot_market": "Cocoa",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
       "exclusion_reason": null,
       "note": "Direct canonical CFTC entity: Cocoa."
+    },
+    {
+      "instrument_id": "Cotton",
+      "display_name": "Cotton",
+      "asset_class": "commodities",
+      "cot_status": "direct_cot",
+      "direct_cot_market": "Cotton",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "clean",
+      "exclusion_reason": null,
+      "note": "Direct canonical CFTC entity: Cotton."
     },
     {
       "instrument_id": "Corn",
@@ -453,8 +513,8 @@
       "direct_cot_market": "Corn",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -469,8 +529,8 @@
       "direct_cot_market": "Wheat",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -485,8 +545,8 @@
       "direct_cot_market": "Soybeans",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -501,8 +561,8 @@
       "direct_cot_market": "Sugar",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -517,8 +577,8 @@
       "direct_cot_market": "Platinum",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
@@ -533,13 +593,125 @@
       "direct_cot_market": "Palladium",
       "leg_cot_markets": [],
       "proxy_cot_markets": [],
-      "latest_valid_cot_week": "2026-05-26",
-      "valid_rows_count": 13,
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
       "invalid_rows_count": 0,
       "duplicate_of": null,
       "data_quality_status": "clean",
       "exclusion_reason": null,
       "note": "Direct canonical CFTC entity: Palladium."
+    },
+    {
+      "instrument_id": "Bitcoin",
+      "display_name": "Bitcoin",
+      "asset_class": "crypto",
+      "cot_status": "direct_cot",
+      "direct_cot_market": "Bitcoin",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 437,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "clean",
+      "exclusion_reason": null,
+      "note": "Direct canonical CFTC entity: Bitcoin."
+    },
+    {
+      "instrument_id": "US Dollar Index / DX",
+      "display_name": "US Dollar Index / DX",
+      "asset_class": "fx",
+      "cot_status": "direct_cot",
+      "direct_cot_market": "US Dollar Index / DX",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": "2026-08-18",
+      "valid_rows_count": 503,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "clean",
+      "exclusion_reason": null,
+      "note": "Direct canonical CFTC entity: US Dollar Index / DX."
+    },
+    {
+      "instrument_id": "US 2-Year Treasury Yield",
+      "display_name": "US 2-Year Treasury Yield",
+      "asset_class": "macro",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "US 10-Year Treasury Yield",
+      "display_name": "US 10-Year Treasury Yield",
+      "asset_class": "macro",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "US 30-Year Treasury Yield",
+      "display_name": "US 30-Year Treasury Yield",
+      "asset_class": "macro",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "2s10s Yield Curve",
+      "display_name": "2s10s Yield Curve",
+      "asset_class": "macro",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "10-Year Real Yield",
+      "display_name": "10-Year Real Yield",
+      "asset_class": "macro",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
     },
     {
       "instrument_id": "AUD/CAD",
@@ -688,22 +860,6 @@
       "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
     },
     {
-      "instrument_id": "Bitcoin",
-      "display_name": "Bitcoin",
-      "asset_class": "crypto",
-      "cot_status": "no_cot_available",
-      "direct_cot_market": null,
-      "leg_cot_markets": [],
-      "proxy_cot_markets": [],
-      "latest_valid_cot_week": null,
-      "valid_rows_count": 0,
-      "invalid_rows_count": 0,
-      "duplicate_of": null,
-      "data_quality_status": "missing",
-      "exclusion_reason": "no_cot_mapping",
-      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
-    },
-    {
       "instrument_id": "Bitcoin Cash",
       "display_name": "Bitcoin Cash",
       "asset_class": "crypto",
@@ -723,6 +879,22 @@
       "instrument_id": "Brent Crude Oil",
       "display_name": "Brent Crude Oil",
       "asset_class": "commodities",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "Broad US Dollar Index — DTWEXBGS",
+      "display_name": "Broad US Dollar Index — DTWEXBGS",
+      "asset_class": "fx",
       "cot_status": "no_cot_available",
       "direct_cot_market": null,
       "leg_cot_markets": [],
@@ -911,6 +1083,25 @@
       "data_quality_status": "incomplete",
       "exclusion_reason": "no_direct_or_leg_cot_macro_only",
       "note": "Only one currency leg has CFTC COT (other leg has no contract); macro-only until both legs resolve."
+    },
+    {
+      "instrument_id": "EUR/GBP",
+      "display_name": "EUR/GBP",
+      "asset_class": "fx",
+      "cot_status": "leg_derived_cot",
+      "direct_cot_market": null,
+      "leg_cot_markets": [
+        "Euro FX / 6E",
+        "British Pound / 6B"
+      ],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "clean",
+      "exclusion_reason": null,
+      "note": "Derived from currency leg COT (no direct pair COT exists)."
     },
     {
       "instrument_id": "EUR/HKD",
@@ -1899,6 +2090,22 @@
       "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
     },
     {
+      "instrument_id": "US 10-Year T-Note / ZN",
+      "display_name": "US 10-Year T-Note / ZN",
+      "asset_class": "macro",
+      "cot_status": "broken_mapping",
+      "direct_cot_market": "US 10-Year T-Note / ZN",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "canonical_entity_absent_from_cot_master",
+      "note": "Direct COT mapping declared but no valid rows for canonical entity 'US 10-Year T-Note / ZN'."
+    },
+    {
       "instrument_id": "US 10Y T-Note",
       "display_name": "US 10Y T-Note",
       "asset_class": "bonds",
@@ -1913,6 +2120,22 @@
       "data_quality_status": "missing",
       "exclusion_reason": "no_cot_mapping",
       "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "US 2-Year T-Note / ZT",
+      "display_name": "US 2-Year T-Note / ZT",
+      "asset_class": "macro",
+      "cot_status": "broken_mapping",
+      "direct_cot_market": "US 2-Year T-Note / ZT",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "canonical_entity_absent_from_cot_master",
+      "note": "Direct COT mapping declared but no valid rows for canonical entity 'US 2-Year T-Note / ZT'."
     },
     {
       "instrument_id": "US 2Y T-Note",
@@ -1931,9 +2154,57 @@
       "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
     },
     {
+      "instrument_id": "US 30-Year T-Bond / ZB",
+      "display_name": "US 30-Year T-Bond / ZB",
+      "asset_class": "macro",
+      "cot_status": "broken_mapping",
+      "direct_cot_market": "US 30-Year T-Bond / ZB",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "canonical_entity_absent_from_cot_master",
+      "note": "Direct COT mapping declared but no valid rows for canonical entity 'US 30-Year T-Bond / ZB'."
+    },
+    {
+      "instrument_id": "US 5-Year T-Note / ZF",
+      "display_name": "US 5-Year T-Note / ZF",
+      "asset_class": "macro",
+      "cot_status": "broken_mapping",
+      "direct_cot_market": "US 5-Year T-Note / ZF",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "canonical_entity_absent_from_cot_master",
+      "note": "Direct COT mapping declared but no valid rows for canonical entity 'US 5-Year T-Note / ZF'."
+    },
+    {
       "instrument_id": "US 5Y T-Note",
       "display_name": "US 5Y T-Note",
       "asset_class": "bonds",
+      "cot_status": "no_cot_available",
+      "direct_cot_market": null,
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "no_cot_mapping",
+      "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "US Dollar Index / DXY — ICE DX futures",
+      "display_name": "US Dollar Index / DXY — ICE DX futures",
+      "asset_class": "fx",
       "cot_status": "no_cot_available",
       "direct_cot_market": null,
       "leg_cot_markets": [],
@@ -2271,6 +2542,22 @@
       "data_quality_status": "missing",
       "exclusion_reason": "no_cot_mapping",
       "note": "No direct COT, no COT-backed legs, no proxy — macro/driver context only."
+    },
+    {
+      "instrument_id": "Ultra 10-Year T-Note / TN",
+      "display_name": "Ultra 10-Year T-Note / TN",
+      "asset_class": "macro",
+      "cot_status": "broken_mapping",
+      "direct_cot_market": "Ultra 10-Year T-Note / TN",
+      "leg_cot_markets": [],
+      "proxy_cot_markets": [],
+      "latest_valid_cot_week": null,
+      "valid_rows_count": 0,
+      "invalid_rows_count": 0,
+      "duplicate_of": null,
+      "data_quality_status": "missing",
+      "exclusion_reason": "canonical_entity_absent_from_cot_master",
+      "note": "Direct COT mapping declared but no valid rows for canonical entity 'Ultra 10-Year T-Note / TN'."
     },
     {
       "instrument_id": "West Texas Oil",

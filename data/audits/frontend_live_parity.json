@@ -1,0 +1,75 @@
+{
+  "ok": false,
+  "results": [
+    {
+      "label": "Gold",
+      "internal_key": "Gold",
+      "ok": false,
+      "backend_mid": 4026.045,
+      "backend_status": "LIVE",
+      "backend_symbol": "XAU_USD",
+      "store_mid": 4025.955,
+      "store_status": "LIVE",
+      "stream_mid": 4025.955,
+      "rendered_mid": 4025.955,
+      "rendered_text": "4,025.955",
+      "connection": "connected"
+    },
+    {
+      "label": "Natural Gas",
+      "internal_key": "Natural Gas / NG",
+      "ok": true,
+      "backend_mid": 2.866,
+      "backend_status": "LIVE",
+      "backend_symbol": "NATGAS_USD",
+      "store_mid": 2.866,
+      "store_status": "BACKEND OFFLINE",
+      "stream_mid": 2.866,
+      "rendered_mid": 2.866,
+      "rendered_text": "2.866",
+      "connection": "disconnected"
+    },
+    {
+      "label": "WTI",
+      "internal_key": "Crude Oil / CL",
+      "ok": false,
+      "backend_mid": 79.543,
+      "backend_status": "LIVE",
+      "backend_symbol": "WTICO_USD",
+      "store_mid": 79.548,
+      "store_status": "BACKEND OFFLINE",
+      "stream_mid": 79.548,
+      "rendered_mid": 79.548,
+      "rendered_text": "79.548",
+      "connection": "disconnected"
+    },
+    {
+      "label": "EUR/USD",
+      "internal_key": "Euro FX / 6E",
+      "ok": true,
+      "backend_mid": 1.14682,
+      "backend_status": "LIVE",
+      "backend_symbol": "EUR_USD",
+      "store_mid": 1.14682,
+      "store_status": "BACKEND OFFLINE",
+      "stream_mid": 1.14682,
+      "rendered_mid": 1.14682,
+      "rendered_text": "1.14682",
+      "connection": "disconnected"
+    },
+    {
+      "label": "S&P 500",
+      "internal_key": "S&P 500 / ES",
+      "ok": false,
+      "backend_mid": 7575.35,
+      "backend_status": "LIVE",
+      "backend_symbol": "SPX500_USD",
+      "store_mid": 7575.75,
+      "store_status": "BACKEND OFFLINE",
+      "stream_mid": 7575.75,
+      "rendered_mid": 7575.75,
+      "rendered_text": "7,575.8",
+      "connection": "disconnected"
+    }
+  ]
+}

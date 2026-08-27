@@ -60,6 +60,11 @@ def get_finnhub_api_key() -> str:
     return os.getenv("FINNHUB_API_KEY", "").strip()
 
 
+def get_fmp_api_key() -> str:
+    """Financial Modeling Prep API key (optional). Used by index price audit/backfill helpers."""
+    return os.getenv("FMP_API_KEY", "").strip()
+
+
 def get_openweather_api_key() -> str:
     """OpenWeather API key (optional). Used by ``hptl.intelligence.weather_adapter``."""
     return os.getenv("OPENWEATHER_API_KEY", "").strip()
@@ -89,6 +94,22 @@ def get_oanda_api_host() -> str:
     if env in {"live", "production", "fxtrade"}:
         return "https://api-fxtrade.oanda.com"
     return "https://api-fxpractice.oanda.com"
+
+
+def get_oanda_stream_host() -> str:
+    """OANDA v20 pricing-stream base URL. Mirrors :func:`get_oanda_api_host` env selection.
+
+    ``OANDA_STREAM_URL`` overrides; otherwise the streaming host is derived from the
+    same ``OANDA_ENVIRONMENT`` used for REST (``stream-fxtrade`` for live,
+    ``stream-fxpractice`` for practice).
+    """
+    explicit = os.getenv("OANDA_STREAM_URL", "").strip().rstrip("/")
+    if explicit:
+        return explicit
+    host = get_oanda_api_host()
+    if "fxtrade" in host:
+        return "https://stream-fxtrade.oanda.com"
+    return "https://stream-fxpractice.oanda.com"
 
 
 def get_alpha_vantage_api_key() -> str:

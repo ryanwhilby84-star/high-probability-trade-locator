@@ -1,0 +1,98 @@
+[
+  {
+    "instrument": "NASDAQ / NQ",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "warning",
+    "current_direction": "Bullish",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": [
+      "integrity_warning:thin_years:[2016]"
+    ]
+  },
+  {
+    "instrument": "US Dollar Index / DX",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "valid",
+    "current_direction": "Neutral",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": []
+  },
+  {
+    "instrument": "Gold",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "warning",
+    "current_direction": "Bullish",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": [
+      "integrity_warning:thin_years:[2016]"
+    ]
+  },
+  {
+    "instrument": "Swiss Franc / 6S",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "warning",
+    "current_direction": "Bearish",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": [
+      "integrity_warning:thin_years:[2016]"
+    ]
+  },
+  {
+    "instrument": "Crude Oil / CL",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "warning",
+    "current_direction": "Bearish",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": [
+      "integrity_warning:thin_years:[2016]"
+    ]
+  },
+  {
+    "instrument": "Soybeans",
+    "stdout_pure_json": true,
+    "api_status": "ok",
+    "point_count": 52,
+    "chart_rendered": true,
+    "quality_status": "warning",
+    "current_direction": "Bearish",
+    "latest_price_date": "2026-07-23",
+    "available": true,
+    "reasons": [
+      "integrity_warning:thin_years:[2016]"
+    ]
+  },
+  {
+    "instrument": "Copper / HG",
+    "stdout_pure_json": true,
+    "api_status": "integrity_error",
+    "point_count": 0,
+    "chart_rendered": false,
+    "quality_status": "unavailable",
+    "current_direction": "Neutral",
+    "latest_price_date": null,
+    "available": false,
+    "reasons": [
+      "excessive_discontinuities:223"
+    ]
+  }
+]

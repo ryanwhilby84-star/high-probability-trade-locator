@@ -1,0 +1,310 @@
+/* Weekly Analysis — floating window over the chart workspace */
+
+.cwa-float {
+  position: absolute;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  min-height: 280px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(15, 23, 42, 0.98);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  overflow: hidden;
+}
+
+.cwa-float-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.28);
+  background: rgba(30, 41, 59, 0.9);
+  cursor: grab;
+  user-select: none;
+}
+
+.cwa-float-head:active {
+  cursor: grabbing;
+}
+
+.cwa-title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 750;
+  color: #f8fafc;
+}
+
+.cwa-week,
+.cwa-muted,
+.cwa-disclaimer,
+.cwa-block-q {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin: 0.2rem 0 0;
+}
+
+.cwa-close {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.7);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cwa-close:hover {
+  border-color: #fbbf24;
+  color: #fde68a;
+}
+
+.cwa-float-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.55rem 0.7rem 0.9rem;
+  overscroll-behavior: contain;
+}
+
+.cwa-disclaimer {
+  margin: 0 0 0.55rem;
+  line-height: 1.35;
+}
+
+.cwa-block {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.45);
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.cwa-block-title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+
+.cwa-block-q {
+  margin: 0.15rem 0 0.4rem;
+  font-style: italic;
+}
+
+.cwa-narrative,
+.cwa-next-current,
+.cwa-next-bridge {
+  margin: 0;
+  color: #f1f5f9;
+  font-size: 0.82rem;
+}
+
+.cwa-story-label {
+  margin: 0 0 0.35rem;
+  font-weight: 750;
+  color: #fde68a;
+  font-size: 0.84rem;
+}
+
+.cwa-rf-score {
+  margin: 0 0 0.35rem;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+}
+
+.cwa-next-bridge {
+  margin-top: 0.4rem;
+  color: #cbd5e1;
+}
+
+.cwa-next-current {
+  margin-bottom: 0.35rem;
+}
+
+.cwa-list {
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.cwa-list li + li {
+  margin-top: 0.28rem;
+}
+
+.cwa-prog-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.cwa-prog-card {
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  padding-top: 0.35rem;
+}
+
+.cwa-prog-card:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.cwa-prog-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #cbd5e1;
+  font-size: 0.75rem;
+}
+
+.cwa-prog-state {
+  margin: 0.15rem 0 0.3rem;
+  font-weight: 700;
+  color: #fde68a;
+}
+
+.cwa-ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.cwa-ladder-step {
+  font-size: 0.62rem;
+  padding: 1px 5px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #64748b;
+  border-radius: 2px;
+}
+
+.cwa-ladder-step.is-past {
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.cwa-ladder-step.is-current {
+  color: #0f172a;
+  background: #fbbf24;
+  border-color: #fbbf24;
+  font-weight: 750;
+}
+
+.cwa-status {
+  margin: 0 0 0.4rem;
+  font-weight: 650;
+  color: #fde68a;
+}
+
+.cwa-check-cols {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.cwa-check-heading {
+  margin: 0.35rem 0 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cwa-check-list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.cwa-check-list li + li {
+  margin-top: 0.2rem;
+}
+
+.cwa-check-list--ok li {
+  color: #6ee7b7;
+}
+
+.cwa-check-list--miss li {
+  color: #fda4af;
+}
+
+.cwa-confidence {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cwa-confidence > li + li {
+  margin-top: 0.4rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.cwa-confidence-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 650;
+}
+
+.cwa-stars {
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.cwa-star {
+  color: #475569;
+}
+
+.cwa-star.is-on {
+  color: #fbbf24;
+}
+
+.cwa-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    rgba(251, 191, 36, 0.55) 50%
+  );
+}
+
+.cot-ws-analysis-btn {
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(120, 53, 15, 0.35);
+  color: #fde68a;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.cot-ws-analysis-btn:hover,
+.cot-ws-analysis-btn.is-open {
+  border-color: #fbbf24;
+  background: rgba(180, 83, 9, 0.45);
+  color: #fffbeb;
+}
+
+.cot-ws-research-chrome-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}

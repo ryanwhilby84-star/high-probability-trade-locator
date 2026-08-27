@@ -1,0 +1,1443 @@
+{
+  "version": 1,
+  "generated_at": "2026-07-03T11:07:51.046379+00:00",
+  "generated_from": "hptl.prices.price_integrity_audit",
+  "fetch_live": true,
+  "thresholds": {
+    "max_completed_ohlc_age_days": 10,
+    "mismatch_threshold_pct": 5.0
+  },
+  "summary": {
+    "targets": 26,
+    "pass": 22,
+    "stale": 4,
+    "mismatch": 0,
+    "wrong_symbol": 0,
+    "missing": 0
+  },
+  "instruments": [
+    {
+      "instrument": "NASDAQ / NQ",
+      "status": "PASS",
+      "hptl_displayed_close": 29356.2,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 29356.2,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "NAS100_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "NAS100_USD",
+      "raw_source_latest_close": 29356.2,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 712.6,
+      "processed_latest_date": "2026-07-02",
+      "weekly_ohlc_export_close": 29356.2,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\NASDAQ_NQ.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 29673.0,
+      "reference_live_source": "oanda:NAS100_USD",
+      "reference_live_as_of": "2026-07-03T11:07:50.762830623Z",
+      "difference_pct": -1.0676,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": "NASDAQ 100 index/futures proxy; OANDA NAS100_USD preferred for workstation OHLC.",
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "NAS100USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NAS100USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "QQQ",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "QQQ"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "S&P 500 / ES",
+      "status": "PASS",
+      "hptl_displayed_close": 7482.6,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 7482.6,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "SPX500_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "SPX500_USD",
+      "raw_source_latest_close": 7482.6,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 744.78,
+      "processed_latest_date": "2026-07-02",
+      "weekly_ohlc_export_close": 7482.6,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\S_P_500_ES.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 7507.25,
+      "reference_live_source": "oanda:SPX500_USD",
+      "reference_live_as_of": "2026-07-03T11:07:48.101880594Z",
+      "difference_pct": -0.3283,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "SPX500USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "SPX500USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SPY",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "SPY"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Dow / YM",
+      "status": "PASS",
+      "hptl_displayed_close": 52916.0,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 52916.0,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "US30_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "US30_USD",
+      "raw_source_latest_close": 52916.0,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 527.88,
+      "processed_latest_date": "2026-07-02",
+      "weekly_ohlc_export_close": 52916.0,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Dow_YM.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 52839.05,
+      "reference_live_source": "oanda:US30_USD",
+      "reference_live_as_of": "2026-07-03T11:07:46.680800857Z",
+      "difference_pct": 0.1456,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "US30USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "US30USD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "DIA",
+          "endpoint": "https://www.alphavantage.co/query?function=GLOBAL_QUOTE",
+          "function": "GLOBAL_QUOTE",
+          "params": {
+            "symbol": "DIA"
+          },
+          "category": "index",
+          "last_successful_response": "2026-06-01T08:30:26.708852+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Euro FX / 6E",
+      "status": "PASS",
+      "hptl_displayed_close": 1.14337,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 1.14337,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "EUR_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "EUR_USD",
+      "raw_source_latest_close": 1.14337,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 1.14337,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 1.14337,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Euro_FX_6E.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 1.144885,
+      "reference_live_source": "oanda:EUR_USD",
+      "reference_live_as_of": "2026-07-03T11:07:39.409228906Z",
+      "difference_pct": -0.1323,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "EUR_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "EUR_USD"
+          ],
+          "oanda_display_name": "EUR/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "EUR/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "EUR",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "British Pound / 6B",
+      "status": "PASS",
+      "hptl_displayed_close": 1.3347,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 1.3347,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "GBP_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "GBP_USD",
+      "raw_source_latest_close": 1.3347,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 1.3347,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 1.3347,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\British_Pound_6B.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 1.3357,
+      "reference_live_source": "oanda:GBP_USD",
+      "reference_live_as_of": "2026-07-03T11:07:49.211395725Z",
+      "difference_pct": -0.0749,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "GBP_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "GBP_USD"
+          ],
+          "oanda_display_name": "GBP/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GBP/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "GBP",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Japanese Yen / 6J",
+      "status": "PASS",
+      "hptl_displayed_close": 161.121,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 161.121,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "USD_JPY",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "USD_JPY",
+      "raw_source_latest_close": 161.121,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 161.121,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 161.121,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Japanese_Yen_6J.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 161.0985,
+      "reference_live_source": "oanda:USD_JPY",
+      "reference_live_as_of": "2026-07-03T11:07:52.100967649Z",
+      "difference_pct": 0.014,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_JPY",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_JPY"
+          ],
+          "oanda_display_name": "USD/JPY",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/JPY",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "JPY"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Swiss Franc / 6S",
+      "status": "PASS",
+      "hptl_displayed_close": 0.80351,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 0.80351,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "USD_CHF",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "USD_CHF",
+      "raw_source_latest_close": 0.80351,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 0.80351,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 0.80351,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Swiss_Franc_6S.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 0.803205,
+      "reference_live_source": "oanda:USD_CHF",
+      "reference_live_as_of": "2026-07-03T11:07:49.010811454Z",
+      "difference_pct": 0.038,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CHF",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CHF"
+          ],
+          "oanda_display_name": "USD/CHF",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CHF",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CHF"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Australian Dollar / 6A",
+      "status": "PASS",
+      "hptl_displayed_close": 0.6922,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 0.6922,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "AUD_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "AUD_USD",
+      "raw_source_latest_close": 0.6922,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 0.6922,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 0.6922,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Australian_Dollar_6A.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 0.6938949999999999,
+      "reference_live_source": "oanda:AUD_USD",
+      "reference_live_as_of": "2026-07-03T11:07:50.511179288Z",
+      "difference_pct": -0.2443,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "AUD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "AUD_USD"
+          ],
+          "oanda_display_name": "AUD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "AUD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "AUD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Canadian Dollar / 6C",
+      "status": "PASS",
+      "hptl_displayed_close": 1.41816,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 1.41816,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "USD_CAD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "USD_CAD",
+      "raw_source_latest_close": 1.41816,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 1.41816,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 1.41816,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Canadian_Dollar_6C.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 1.4189150000000001,
+      "reference_live_source": "oanda:USD_CAD",
+      "reference_live_as_of": "2026-07-03T11:07:51.062726205Z",
+      "difference_pct": -0.0532,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "USD_CAD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "USD_CAD"
+          ],
+          "oanda_display_name": "USD/CAD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "USD/CAD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "USD",
+            "to_currency": "CAD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "NZ Dollar / 6N",
+      "status": "PASS",
+      "hptl_displayed_close": 0.5698,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 0.5698,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "NZD_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "NZD_USD",
+      "raw_source_latest_close": 0.5698,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 0.5698,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 0.5698,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\NZ_Dollar_6N.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 0.57118,
+      "reference_live_source": "oanda:NZD_USD",
+      "reference_live_as_of": "2026-07-03T11:07:38.974970768Z",
+      "difference_pct": -0.2416,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "NZD_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "NZD_USD"
+          ],
+          "oanda_display_name": "NZD/USD",
+          "oanda_type": "CURRENCY",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NZD/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE",
+          "function": "CURRENCY_EXCHANGE_RATE",
+          "params": {
+            "from_currency": "NZD",
+            "to_currency": "USD"
+          },
+          "category": "fx",
+          "last_successful_response": "2026-06-01T08:27:45.124414+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Gold",
+      "status": "PASS",
+      "hptl_displayed_close": 4123.605,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 4123.605,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "XAU_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "XAU_USD",
+      "raw_source_latest_close": 4123.605,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 4123.605,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 4123.605,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Gold.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 4178.514999999999,
+      "reference_live_source": "oanda:XAU_USD",
+      "reference_live_as_of": "2026-07-03T11:07:47.677797403Z",
+      "difference_pct": -1.3141,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": "OANDA XAU_USD spot.",
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAU_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "XAU_USD"
+          ],
+          "oanda_display_name": "Gold",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Silver",
+      "status": "PASS",
+      "hptl_displayed_close": 60.973,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 60.973,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "XAG_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "XAG_USD",
+      "raw_source_latest_close": 60.973,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 60.973,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 60.973,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Silver.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 62.3945,
+      "reference_live_source": "oanda:XAG_USD",
+      "reference_live_as_of": "2026-07-03T11:07:51.620842667Z",
+      "difference_pct": -2.2782,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "XAG_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "XAG_USD"
+          ],
+          "oanda_display_name": "Silver",
+          "oanda_type": "METAL",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Copper / HG",
+      "status": "PASS",
+      "hptl_displayed_close": 6.08662,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 6.08662,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "Copper / HG",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "XCU_USD",
+      "raw_source_latest_close": 6.08662,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 6.08662,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 6.08662,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Copper_HG.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 6.135025000000001,
+      "reference_live_source": "oanda:XCU_USD",
+      "reference_live_as_of": "2026-07-03T11:07:51.571969694Z",
+      "difference_pct": -0.789,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [
+            "XCUUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COPPER",
+          "endpoint": "https://www.alphavantage.co/query?function=COPPER",
+          "function": "COPPER",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:38.900270+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Crude Oil / CL",
+      "status": "PASS",
+      "hptl_displayed_close": 69.127,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 69.127,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "WTICO_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "WTICO_USD",
+      "raw_source_latest_close": 69.127,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 69.127,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 69.127,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Crude_Oil_CL.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 69.353,
+      "reference_live_source": "oanda:WTICO_USD",
+      "reference_live_as_of": "2026-07-03T11:07:38.648259310Z",
+      "difference_pct": -0.3259,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": "WTI crude reference for NYMEX CL; OANDA WTICO_USD preferred.",
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [
+            "WTICOUSD",
+            "BCOUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "WTI",
+          "endpoint": "https://www.alphavantage.co/query?function=WTI",
+          "function": "WTI",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:27:58.490182+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Natural Gas / NG",
+      "status": "PASS",
+      "hptl_displayed_close": 3.17,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 3.17,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "NATGAS_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "NATGAS_USD",
+      "raw_source_latest_close": 3.17,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 3.17,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 3.17,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Natural_Gas_NG.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 3.2125000000000004,
+      "reference_live_source": "oanda:NATGAS_USD",
+      "reference_live_as_of": "2026-07-03T11:07:50.633208454Z",
+      "difference_pct": -1.323,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "NATGAS_USD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "primary_preference",
+          "candidates_tried": [
+            "NATGAS_USD"
+          ],
+          "oanda_display_name": "Natural Gas",
+          "oanda_type": "CFD",
+          "last_successful_response": "2026-06-01T08:27:45.124270+00:00",
+          "coverage_status": "supported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "NATURAL_GAS",
+          "endpoint": "https://www.alphavantage.co/query?function=NATURAL_GAS",
+          "function": "NATURAL_GAS",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:25.473675+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Coffee",
+      "status": "STALE",
+      "hptl_displayed_close": null,
+      "hptl_displayed_date": null,
+      "hptl_latest_close": 317.5338461538462,
+      "hptl_latest_date": "2026-05-01",
+      "hptl_latest_age_days": 63,
+      "source_provider": "fred",
+      "source_symbol": "fred:PCOFFOTMUSDM",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": null,
+      "raw_source_latest_close": null,
+      "raw_source_latest_date": null,
+      "processed_latest_close": 317.5338461538462,
+      "processed_latest_date": "2026-05-01",
+      "weekly_ohlc_export_close": null,
+      "weekly_ohlc_export_date": null,
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Coffee.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 317.5338461538462,
+      "reference_live_source": "alpha_vantage:Coffee",
+      "reference_live_as_of": "2026-05-01",
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": null,
+      "responsible_file": "OANDA mapping / API",
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COFFEE",
+          "endpoint": "https://www.alphavantage.co/query?function=COFFEE",
+          "function": "COFFEE",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:46.379088+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Latest HPTL OHLC is 63 days old."
+      ]
+    },
+    {
+      "instrument": "Cocoa",
+      "status": "STALE",
+      "hptl_displayed_close": null,
+      "hptl_displayed_date": null,
+      "hptl_latest_close": 4141.707294836567,
+      "hptl_latest_date": "2026-05-01",
+      "hptl_latest_age_days": 63,
+      "source_provider": "fred",
+      "source_symbol": "fred:PCOCOUSDM",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": null,
+      "raw_source_latest_close": null,
+      "raw_source_latest_date": null,
+      "processed_latest_close": 4141.707294836567,
+      "processed_latest_date": "2026-05-01",
+      "weekly_ohlc_export_close": null,
+      "weekly_ohlc_export_date": null,
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Cocoa.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 4141.707294836567,
+      "reference_live_source": "alpha_vantage:Cocoa",
+      "reference_live_as_of": "2026-05-01",
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": null,
+      "responsible_file": "OANDA mapping / API",
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "COTTON",
+          "endpoint": "https://www.alphavantage.co/query?function=COTTON",
+          "function": "COTTON",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:59.859353+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Latest HPTL OHLC is 63 days old."
+      ]
+    },
+    {
+      "instrument": "Cotton",
+      "status": "STALE",
+      "hptl_displayed_close": null,
+      "hptl_displayed_date": null,
+      "hptl_latest_close": 92.00769230769232,
+      "hptl_latest_date": "2026-05-01",
+      "hptl_latest_age_days": 63,
+      "source_provider": "fred",
+      "source_symbol": "fred:PCOTTINDUSDM",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": null,
+      "raw_source_latest_close": null,
+      "raw_source_latest_date": null,
+      "processed_latest_close": 92.00769230769232,
+      "processed_latest_date": "2026-05-01",
+      "weekly_ohlc_export_close": null,
+      "weekly_ohlc_export_date": null,
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Cotton.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 92.00769230769232,
+      "reference_live_source": "price_store:Cotton",
+      "reference_live_as_of": "2026-05-01",
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": null,
+      "responsible_file": "OANDA mapping / API",
+      "expected_contract": null,
+      "coverage_sources": [],
+      "notes": [
+        "Latest HPTL OHLC is 63 days old."
+      ]
+    },
+    {
+      "instrument": "Corn",
+      "status": "STALE",
+      "hptl_displayed_close": 4.4425,
+      "hptl_displayed_date": "2026-06-18",
+      "hptl_latest_close": 4.4425,
+      "hptl_latest_date": "2026-06-18",
+      "hptl_latest_age_days": 15,
+      "source_provider": "alpha_vantage",
+      "source_symbol": "Corn",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": null,
+      "raw_source_latest_close": null,
+      "raw_source_latest_date": null,
+      "processed_latest_close": 4.4425,
+      "processed_latest_date": "2026-06-18",
+      "weekly_ohlc_export_close": 4.4425,
+      "weekly_ohlc_export_date": "2026-06-18",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Corn.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 215.6206469812925,
+      "reference_live_source": "alpha_vantage:Corn",
+      "reference_live_as_of": "2026-05-01",
+      "difference_pct": -97.9397,
+      "raw_vs_displayed_pct": null,
+      "responsible_file": "OANDA mapping / API",
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CORN",
+          "endpoint": "https://www.alphavantage.co/query?function=CORN",
+          "function": "CORN",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:05.883249+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Latest HPTL OHLC is 15 days old."
+      ]
+    },
+    {
+      "instrument": "Wheat",
+      "status": "PASS",
+      "hptl_displayed_close": 5.904,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 5.904,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "WHEAT_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "WHEAT_USD",
+      "raw_source_latest_close": 5.904,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 5.904,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 5.904,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Wheat.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 5.904,
+      "reference_live_source": "alpha_vantage:Wheat",
+      "reference_live_as_of": "2026-07-02T18:19:05.052758196Z",
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "WHEAT",
+          "endpoint": "https://www.alphavantage.co/query?function=WHEAT",
+          "function": "WHEAT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:28:52.380931+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Soybeans",
+      "status": "PASS",
+      "hptl_displayed_close": 11.243,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 11.243,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "SOYBN_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "SOYBN_USD",
+      "raw_source_latest_close": 11.243,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 11.243,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 11.243,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Soybeans.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 11.243,
+      "reference_live_source": "oanda:SOYBN_USD",
+      "reference_live_as_of": "2026-07-02T18:19:05.052857406Z",
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": "Soybeans reference; OANDA SOYBN_USD preferred.",
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "CORN",
+          "endpoint": "https://www.alphavantage.co/query?function=CORN",
+          "function": "CORN",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:05.883249+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Sugar",
+      "status": "PASS",
+      "hptl_displayed_close": 0.14358,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 0.14358,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "SUGAR_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "SUGAR_USD",
+      "raw_source_latest_close": 0.14358,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 0.14358,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 0.14358,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Sugar.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 0.143575,
+      "reference_live_source": "oanda:SUGAR_USD",
+      "reference_live_as_of": "2026-07-02T16:59:05.102928540Z",
+      "difference_pct": 0.0035,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": "Sugar No. 11 reference; OANDA SUGAR_USD preferred.",
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "SUGAR",
+          "endpoint": "https://www.alphavantage.co/query?function=SUGAR",
+          "function": "SUGAR",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": "2026-06-01T08:29:32.893566+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Platinum",
+      "status": "PASS",
+      "hptl_displayed_close": 1611.095,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 1611.095,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "XPT_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "XPT_USD",
+      "raw_source_latest_close": 1611.095,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 1611.095,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 1611.095,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Platinum.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 1611.095,
+      "reference_live_source": "oanda:XPT_USD",
+      "reference_live_as_of": null,
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Palladium",
+      "status": "PASS",
+      "hptl_displayed_close": 1246.986,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 1246.986,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "XPD_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "XPD_USD",
+      "raw_source_latest_close": 1246.986,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 1246.986,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 1246.986,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Palladium.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 1246.986,
+      "reference_live_source": "oanda:XPD_USD",
+      "reference_live_as_of": null,
+      "difference_pct": 0.0,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": null,
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "none",
+          "candidates_tried": [],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "GOLD_SILVER_SPOT",
+          "endpoint": "https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT",
+          "function": "GOLD_SILVER_SPOT",
+          "params": {},
+          "category": "commodity",
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "Bitcoin",
+      "status": "PASS",
+      "hptl_displayed_close": 61526.5,
+      "hptl_displayed_date": "2026-07-01",
+      "hptl_latest_close": 61526.5,
+      "hptl_latest_date": "2026-07-01",
+      "hptl_latest_age_days": 2,
+      "source_provider": "oanda",
+      "source_symbol": "BTC_USD",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": "BTC_USD",
+      "raw_source_latest_close": 61526.5,
+      "raw_source_latest_date": "2026-07-01",
+      "processed_latest_close": 61526.5,
+      "processed_latest_date": "2026-07-01",
+      "weekly_ohlc_export_close": 61526.5,
+      "weekly_ohlc_export_date": "2026-07-01",
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\Bitcoin.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 61844.5,
+      "reference_live_source": "alpha_vantage:Bitcoin",
+      "reference_live_as_of": "2026-07-03T10:59:34.196734127Z",
+      "difference_pct": -0.5142,
+      "raw_vs_displayed_pct": 0.0,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [
+        {
+          "source": "oanda",
+          "symbol": "BTCUSD",
+          "endpoint": "/v3/accounts/{accountId}/instruments",
+          "mapping_source": "registry",
+          "candidates_tried": [
+            "BTCUSD"
+          ],
+          "oanda_display_name": null,
+          "oanda_type": null,
+          "last_successful_response": null,
+          "coverage_status": "unsupported"
+        },
+        {
+          "source": "alpha_vantage",
+          "symbol": "BTC/USD",
+          "endpoint": "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY",
+          "function": "DIGITAL_CURRENCY_DAILY",
+          "params": {
+            "symbol": "BTC",
+            "market": "USD"
+          },
+          "category": "crypto",
+          "last_successful_response": "2026-06-01T08:30:40.062925+00:00",
+          "coverage_status": "supported"
+        }
+      ],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    },
+    {
+      "instrument": "US Dollar Index / DX",
+      "status": "PASS",
+      "hptl_displayed_close": null,
+      "hptl_displayed_date": null,
+      "hptl_latest_close": 120.8866,
+      "hptl_latest_date": "2026-06-26",
+      "hptl_latest_age_days": 7,
+      "source_provider": "fred",
+      "source_symbol": "fred:DTWEXBGS",
+      "raw_source_provider": "oanda",
+      "raw_source_symbol": null,
+      "raw_source_latest_close": null,
+      "raw_source_latest_date": null,
+      "processed_latest_close": 120.8866,
+      "processed_latest_date": "2026-06-26",
+      "weekly_ohlc_export_close": null,
+      "weekly_ohlc_export_date": null,
+      "source_file": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\prices\\US_Dollar_Index_DX.json",
+      "workstation_ohlc_export": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\processed\\workstation_ohlc_latest.json",
+      "reference_live_price": 120.3958,
+      "reference_live_source": "price_store:US Dollar Index / DX",
+      "reference_live_as_of": "2026-06-18",
+      "difference_pct": 0.4077,
+      "raw_vs_displayed_pct": null,
+      "responsible_file": null,
+      "expected_contract": null,
+      "coverage_sources": [],
+      "notes": [
+        "Displayed price matches raw source within threshold."
+      ]
+    }
+  ]
+}

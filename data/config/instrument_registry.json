@@ -5,12 +5,12 @@
     {
       "id": "NASDAQ / NQ",
       "display_name": "NASDAQ / NQ",
-      "oanda_symbol": "NAS100USD",
+      "oanda_symbol": "NAS100_USD",
       "asset_class": "indices",
       "subgroup": "us_index",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "NAS100USD",
+      "cot_market_code": "209742",
       "cot_report_type": "financial",
       "macro_driver_profile": "equity",
       "usd_sensitivity": 0.3,
@@ -21,17 +21,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.85,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "S&P 500 / ES",
       "display_name": "S&P 500 / ES",
-      "oanda_symbol": "SPX500USD",
+      "oanda_symbol": "SPX500_USD",
       "asset_class": "indices",
       "subgroup": "us_index",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "SPX500USD",
+      "cot_market_code": "13874A",
       "cot_report_type": "financial",
       "macro_driver_profile": "equity",
       "usd_sensitivity": 0.3,
@@ -42,17 +44,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.85,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Dow / YM",
       "display_name": "Dow / YM",
-      "oanda_symbol": "US30USD",
+      "oanda_symbol": "US30_USD",
       "asset_class": "indices",
       "subgroup": "us_index",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "US30USD",
+      "cot_market_code": "124603",
       "cot_report_type": "financial",
       "macro_driver_profile": "equity",
       "usd_sensitivity": 0.3,
@@ -63,7 +67,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Euro FX / 6E",
@@ -73,7 +79,7 @@
       "subgroup": "fx_major",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "EUR_USD",
+      "cot_market_code": "099741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.9,
@@ -84,7 +90,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "British Pound / 6B",
@@ -94,7 +102,7 @@
       "subgroup": "fx_major",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "GBP_USD",
+      "cot_market_code": "096742",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.85,
@@ -105,17 +113,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Japanese Yen / 6J",
       "display_name": "Japanese Yen / 6J",
-      "oanda_symbol": "USD_JPY",
+      "oanda_symbol": null,
       "asset_class": "fx",
       "subgroup": "fx_major",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "USD_JPY",
+      "cot_market_code": "097741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.9,
@@ -126,7 +136,9 @@
       "safe_haven_score": 0.75,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Swiss Franc / 6S",
@@ -136,7 +148,7 @@
       "subgroup": "fx_major",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "USD_CHF",
+      "cot_market_code": "092741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.85,
@@ -147,7 +159,9 @@
       "safe_haven_score": 0.8,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Australian Dollar / 6A",
@@ -157,7 +171,7 @@
       "subgroup": "fx_commodity",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "AUD_USD",
+      "cot_market_code": "232741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.8,
@@ -168,7 +182,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.7,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Canadian Dollar / 6C",
@@ -178,7 +194,7 @@
       "subgroup": "fx_commodity",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "USD_CAD",
+      "cot_market_code": "090741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.85,
@@ -189,7 +205,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZ Dollar / 6N",
@@ -199,7 +217,7 @@
       "subgroup": "fx_commodity",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "NZD_USD",
+      "cot_market_code": "112741",
       "cot_report_type": "financial",
       "macro_driver_profile": "fx",
       "usd_sensitivity": 0.8,
@@ -210,17 +228,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.65,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold",
       "display_name": "Gold",
-      "oanda_symbol": null,
+      "oanda_symbol": "XAU_USD",
       "asset_class": "metals",
       "subgroup": "precious",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Gold",
+      "cot_market_code": "088691",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "gold",
       "usd_sensitivity": 0.75,
@@ -231,17 +251,19 @@
       "safe_haven_score": 0.85,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver",
       "display_name": "Silver",
-      "oanda_symbol": null,
+      "oanda_symbol": "XAG_USD",
       "asset_class": "metals",
       "subgroup": "precious",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Silver",
+      "cot_market_code": "084691",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "silver",
       "usd_sensitivity": 0.7,
@@ -252,17 +274,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Copper / HG",
       "display_name": "Copper / HG",
-      "oanda_symbol": null,
+      "oanda_symbol": "XCU_USD",
       "asset_class": "metals",
       "subgroup": "industrial",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Copper / HG",
+      "cot_market_code": "085692",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "copper",
       "usd_sensitivity": 0.65,
@@ -273,17 +297,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Crude Oil / CL",
       "display_name": "Crude Oil / CL",
-      "oanda_symbol": null,
+      "oanda_symbol": "WTICO_USD",
       "asset_class": "commodities",
       "subgroup": "energy",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Crude Oil / CL",
+      "cot_market_code": "067651",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "oil",
       "usd_sensitivity": 0.7,
@@ -294,17 +320,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Natural Gas / NG",
       "display_name": "Natural Gas / NG",
-      "oanda_symbol": null,
+      "oanda_symbol": "NATGAS_USD",
       "asset_class": "commodities",
       "subgroup": "energy",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Natural Gas / NG",
+      "cot_market_code": "023651",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "natgas",
       "usd_sensitivity": 0.5,
@@ -315,7 +343,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Coffee",
@@ -325,7 +355,7 @@
       "subgroup": "soft",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Coffee",
+      "cot_market_code": "083731",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "soft",
       "usd_sensitivity": 0.55,
@@ -336,7 +366,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Cocoa",
@@ -346,7 +378,7 @@
       "subgroup": "soft",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Cocoa",
+      "cot_market_code": "073732",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "soft",
       "usd_sensitivity": 0.55,
@@ -357,7 +389,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "Cotton",
+      "display_name": "Cotton",
+      "oanda_symbol": null,
+      "asset_class": "commodities",
+      "subgroup": "soft",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "033661",
+      "cot_report_type": "disaggregated",
+      "macro_driver_profile": "soft",
+      "usd_sensitivity": 0.55,
+      "rates_sensitivity": 0.5,
+      "risk_sensitivity": 0.5,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.7,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "cot_available",
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Corn",
@@ -367,7 +424,7 @@
       "subgroup": "ag",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Corn",
+      "cot_market_code": "002602",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "ag",
       "usd_sensitivity": 0.5,
@@ -378,17 +435,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Wheat",
       "display_name": "Wheat",
-      "oanda_symbol": null,
+      "oanda_symbol": "WHEAT_USD",
       "asset_class": "commodities",
       "subgroup": "ag",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Wheat",
+      "cot_market_code": "001602",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "ag",
       "usd_sensitivity": 0.5,
@@ -399,17 +458,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Soybeans",
       "display_name": "Soybeans",
-      "oanda_symbol": null,
+      "oanda_symbol": "SOYBN_USD",
       "asset_class": "commodities",
       "subgroup": "ag",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Soybeans",
+      "cot_market_code": "005602",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "ag",
       "usd_sensitivity": 0.5,
@@ -420,17 +481,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Sugar",
       "display_name": "Sugar",
-      "oanda_symbol": null,
+      "oanda_symbol": "SUGAR_USD",
       "asset_class": "commodities",
       "subgroup": "soft",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Sugar",
+      "cot_market_code": "080732",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "soft",
       "usd_sensitivity": 0.55,
@@ -441,17 +504,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Platinum",
       "display_name": "Platinum",
-      "oanda_symbol": null,
+      "oanda_symbol": "XPT_USD",
       "asset_class": "metals",
       "subgroup": "precious",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Platinum",
+      "cot_market_code": "076651",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "gold",
       "usd_sensitivity": 0.7,
@@ -462,17 +527,19 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Palladium",
       "display_name": "Palladium",
-      "oanda_symbol": null,
+      "oanda_symbol": "XPD_USD",
       "asset_class": "metals",
       "subgroup": "precious",
       "tradeable": true,
       "has_cot_mapping": true,
-      "cot_market_code": "Palladium",
+      "cot_market_code": "075651",
       "cot_report_type": "disaggregated",
       "macro_driver_profile": "gold",
       "usd_sensitivity": 0.65,
@@ -483,7 +550,170 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "cot_available",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "Bitcoin",
+      "display_name": "Bitcoin",
+      "oanda_symbol": "BTC_USD",
+      "asset_class": "crypto",
+      "subgroup": "major",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "133741",
+      "cot_report_type": "legacy_futures_only",
+      "macro_driver_profile": "crypto",
+      "usd_sensitivity": 0.8,
+      "rates_sensitivity": 0.75,
+      "risk_sensitivity": 0.9,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.95,
+      "positioning_status": "cot_available",
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US Dollar Index / DX",
+      "display_name": "US Dollar Index / DX",
+      "oanda_symbol": null,
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "098662",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "usd_index",
+      "usd_sensitivity": 1.0,
+      "rates_sensitivity": 0.85,
+      "risk_sensitivity": 0.7,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.6,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_and_legacy_cot",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": true
+    },
+    {
+      "id": "US 2-Year Treasury Yield",
+      "display_name": "US 2-Year Treasury Yield",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "us_2y",
+      "usd_sensitivity": 0.7,
+      "rates_sensitivity": 0.95,
+      "risk_sensitivity": 0.75,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "macro_institutional",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 10-Year Treasury Yield",
+      "display_name": "US 10-Year Treasury Yield",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "us_10y",
+      "usd_sensitivity": 0.7,
+      "rates_sensitivity": 1.0,
+      "risk_sensitivity": 0.75,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "macro_institutional",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 30-Year Treasury Yield",
+      "display_name": "US 30-Year Treasury Yield",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "us_30y",
+      "usd_sensitivity": 0.7,
+      "rates_sensitivity": 0.9,
+      "risk_sensitivity": 0.75,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "macro_institutional",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "2s10s Yield Curve",
+      "display_name": "2s10s Yield Curve",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "curve_2s10s",
+      "usd_sensitivity": 0.7,
+      "rates_sensitivity": 0.85,
+      "risk_sensitivity": 0.75,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "macro_institutional",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "10-Year Real Yield",
+      "display_name": "10-Year Real Yield",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "real_yield",
+      "usd_sensitivity": 0.7,
+      "rates_sensitivity": 0.95,
+      "risk_sensitivity": 0.75,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "macro_institutional",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/CAD",
@@ -504,7 +734,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/CHF",
@@ -525,7 +757,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/HKD",
@@ -546,7 +780,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/JPY",
@@ -567,7 +803,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/NZD",
@@ -588,7 +826,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/SGD",
@@ -609,7 +849,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "AUD/USD",
@@ -630,7 +872,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Australian Dollar / 6A"
+      "cot_proxy_of": "Australian Dollar / 6A",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Australia 200",
@@ -651,28 +895,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
-    },
-    {
-      "id": "Bitcoin",
-      "display_name": "Bitcoin",
-      "oanda_symbol": "BTCUSD",
-      "asset_class": "crypto",
-      "subgroup": "major",
-      "tradeable": true,
-      "has_cot_mapping": false,
-      "cot_market_code": null,
-      "cot_report_type": null,
-      "macro_driver_profile": "crypto",
-      "usd_sensitivity": 0.8,
-      "rates_sensitivity": 0.75,
-      "risk_sensitivity": 0.9,
-      "china_sensitivity": 0.0,
-      "commodity_linkage": 0.0,
-      "safe_haven_score": 0.0,
-      "risk_on_score": 0.95,
-      "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Bitcoin Cash",
@@ -693,7 +918,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.95,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Brent Crude Oil",
@@ -714,7 +941,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "Broad US Dollar Index \u2014 DTWEXBGS",
+      "display_name": "Broad US Dollar Index \u2014 DTWEXBGS",
+      "oanda_symbol": null,
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "usd_broad",
+      "usd_sensitivity": 1.0,
+      "rates_sensitivity": 0.85,
+      "risk_sensitivity": 0.7,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.55,
+      "risk_on_score": 0.5,
+      "positioning_status": "fred_broad_only",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "Bund",
@@ -735,7 +987,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "CAD/HKD",
@@ -756,7 +1010,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "CAD/SGD",
@@ -777,7 +1033,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "CHF/HKD",
@@ -798,7 +1056,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "CHF/ZAR",
@@ -819,7 +1079,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "China A50",
@@ -840,7 +1102,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Copper",
@@ -861,7 +1125,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Copper / HG"
+      "cot_proxy_of": "Copper / HG",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/AUD",
@@ -882,7 +1148,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/CZK",
@@ -903,7 +1171,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/DKK",
@@ -924,7 +1194,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "EUR/GBP",
+      "display_name": "EUR/GBP",
+      "oanda_symbol": "EUR_GBP",
+      "asset_class": "fx",
+      "subgroup": "fx_cross",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "fx",
+      "usd_sensitivity": 0.55,
+      "rates_sensitivity": 0.6,
+      "risk_sensitivity": 0.55,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "no_direct_pair_cot",
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/HKD",
@@ -945,7 +1240,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/HUF",
@@ -966,7 +1263,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/NOK",
@@ -987,7 +1286,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/NZD",
@@ -1008,7 +1309,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/SEK",
@@ -1029,7 +1332,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/SGD",
@@ -1050,7 +1355,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/TRY",
@@ -1071,7 +1378,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "EUR/ZAR",
@@ -1092,7 +1401,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Ethereum/Ether",
@@ -1113,7 +1424,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.95,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Europe 50",
@@ -1134,7 +1447,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "France 40",
@@ -1155,7 +1470,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/AUD",
@@ -1176,7 +1493,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/HKD",
@@ -1197,7 +1516,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/NZD",
@@ -1218,7 +1539,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/PLN",
@@ -1239,7 +1562,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/SGD",
@@ -1260,7 +1585,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "GBP/ZAR",
@@ -1281,7 +1608,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Germany 30",
@@ -1302,7 +1631,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/AUD",
@@ -1323,7 +1654,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/CAD",
@@ -1344,7 +1677,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/CHF",
@@ -1365,7 +1700,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/EUR",
@@ -1386,7 +1723,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/GBP",
@@ -1407,7 +1746,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/HKD",
@@ -1428,7 +1769,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/JPY",
@@ -1449,7 +1792,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/NZD",
@@ -1470,7 +1815,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/SGD",
@@ -1491,7 +1838,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Gold"
+      "cot_proxy_of": "Gold",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Gold/Silver",
@@ -1512,7 +1861,9 @@
       "safe_haven_score": 0.7,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "HKD/JPY",
@@ -1533,7 +1884,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Hong Kong 33",
@@ -1554,7 +1907,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "India 50",
@@ -1575,7 +1930,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Japan 225",
@@ -1596,7 +1953,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Litecoin",
@@ -1617,7 +1976,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.95,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/CAD",
@@ -1638,7 +1999,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/CHF",
@@ -1659,7 +2022,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/HKD",
@@ -1680,7 +2045,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/JPY",
@@ -1701,7 +2068,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/SGD",
@@ -1722,7 +2091,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "NZD/USD",
@@ -1743,7 +2114,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "NZ Dollar / 6N"
+      "cot_proxy_of": "NZ Dollar / 6N",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Netherlands 25",
@@ -1764,7 +2137,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "SGD/CHF",
@@ -1785,7 +2160,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "SGD/JPY",
@@ -1806,7 +2183,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/AUD",
@@ -1827,7 +2206,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/CAD",
@@ -1848,7 +2229,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/CHF",
@@ -1869,7 +2252,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/EUR",
@@ -1890,7 +2275,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/GBP",
@@ -1911,7 +2298,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/HKD",
@@ -1932,7 +2321,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/JPY",
@@ -1953,7 +2344,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/NZD",
@@ -1974,7 +2367,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Silver/SGD",
@@ -1995,7 +2390,9 @@
       "safe_haven_score": 0.3,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Silver"
+      "cot_proxy_of": "Silver",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Singapore 30",
@@ -2016,7 +2413,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "TRY/JPY",
@@ -2037,7 +2436,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "Taiwan Index",
@@ -2058,7 +2459,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "UK 100",
@@ -2079,7 +2482,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "UK 10Y Gilt",
@@ -2100,7 +2505,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 10-Year T-Note / ZN",
+      "display_name": "US 10-Year T-Note / ZN",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "043602",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "us_10y_futures",
+      "usd_sensitivity": 0.75,
+      "rates_sensitivity": 1.0,
+      "risk_sensitivity": 0.8,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_positioning",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "US 10Y T-Note",
@@ -2121,7 +2551,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 2-Year T-Note / ZT",
+      "display_name": "US 2-Year T-Note / ZT",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "042601",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "us_2y_futures",
+      "usd_sensitivity": 0.75,
+      "rates_sensitivity": 0.95,
+      "risk_sensitivity": 0.8,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_positioning",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "US 2Y T-Note",
@@ -2142,7 +2597,55 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 30-Year T-Bond / ZB",
+      "display_name": "US 30-Year T-Bond / ZB",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "020601",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "us_30y_futures",
+      "usd_sensitivity": 0.75,
+      "rates_sensitivity": 0.9,
+      "risk_sensitivity": 0.8,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_positioning",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US 5-Year T-Note / ZF",
+      "display_name": "US 5-Year T-Note / ZF",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "044601",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "us_5y_futures",
+      "usd_sensitivity": 0.75,
+      "rates_sensitivity": 0.95,
+      "risk_sensitivity": 0.8,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_positioning",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "US 5Y T-Note",
@@ -2163,7 +2666,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "US Dollar Index / DXY \u2014 ICE DX futures",
+      "display_name": "US Dollar Index / DXY \u2014 ICE DX futures",
+      "oanda_symbol": null,
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "tradeable": true,
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "macro_driver_profile": "usd_index",
+      "usd_sensitivity": 1.0,
+      "rates_sensitivity": 0.85,
+      "risk_sensitivity": 0.7,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.6,
+      "risk_on_score": 0.5,
+      "positioning_status": "price_only_ice_dx",
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "US Nas 100",
@@ -2184,7 +2712,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "NASDAQ / NQ"
+      "cot_proxy_of": "NASDAQ / NQ",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "US Russ 2000",
@@ -2205,7 +2735,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "US SPX 500",
@@ -2226,7 +2758,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "S&P 500 / ES"
+      "cot_proxy_of": "S&P 500 / ES",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "US T-Bond",
@@ -2247,7 +2781,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "US Wall St 30",
@@ -2268,7 +2804,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.8,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Dow / YM"
+      "cot_proxy_of": "Dow / YM",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/CNH",
@@ -2289,7 +2827,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/CZK",
@@ -2310,7 +2850,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/DKK",
@@ -2331,7 +2873,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/HKD",
@@ -2352,7 +2896,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/HUF",
@@ -2373,7 +2919,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/INR",
@@ -2394,7 +2942,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/MXN",
@@ -2415,7 +2965,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/NOK",
@@ -2436,7 +2988,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/PLN",
@@ -2457,7 +3011,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/SAR",
@@ -2478,7 +3034,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/SEK",
@@ -2499,7 +3057,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/SGD",
@@ -2520,7 +3080,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/THB",
@@ -2541,7 +3103,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/TRY",
@@ -2562,7 +3126,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "USD/ZAR",
@@ -2583,7 +3149,32 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
+    },
+    {
+      "id": "Ultra 10-Year T-Note / TN",
+      "display_name": "Ultra 10-Year T-Note / TN",
+      "oanda_symbol": null,
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "tradeable": true,
+      "has_cot_mapping": true,
+      "cot_market_code": "043607",
+      "cot_report_type": "financial_futures_tff",
+      "macro_driver_profile": "us_ultra_10y_futures",
+      "usd_sensitivity": 0.75,
+      "rates_sensitivity": 0.9,
+      "risk_sensitivity": 0.8,
+      "china_sensitivity": 0.0,
+      "commodity_linkage": 0.0,
+      "safe_haven_score": 0.0,
+      "risk_on_score": 0.5,
+      "positioning_status": "tff_positioning",
+      "cot_proxy_of": null,
+      "is_macro_driver": true,
+      "is_fx_anchor": false
     },
     {
       "id": "West Texas Oil",
@@ -2604,7 +3195,9 @@
       "safe_haven_score": 0.0,
       "risk_on_score": 0.5,
       "positioning_status": "proxy_required",
-      "cot_proxy_of": "Crude Oil / CL"
+      "cot_proxy_of": "Crude Oil / CL",
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     },
     {
       "id": "ZAR/JPY",
@@ -2625,7 +3218,9 @@
       "safe_haven_score": 0.5,
       "risk_on_score": 0.5,
       "positioning_status": "no_direct_pair_cot",
-      "cot_proxy_of": null
+      "cot_proxy_of": null,
+      "is_macro_driver": false,
+      "is_fx_anchor": false
     }
   ],
   "legacy_cot_markets": [
@@ -2646,12 +3241,23 @@
     "Natural Gas / NG",
     "Coffee",
     "Cocoa",
+    "Cotton",
     "Corn",
     "Wheat",
     "Soybeans",
     "Sugar",
     "Platinum",
-    "Palladium"
+    "Palladium",
+    "Bitcoin",
+    "US Dollar Index / DX"
   ],
-  "total": 125
+  "macro_institutional_markets": [
+    "US Dollar Index / DX",
+    "US 2-Year Treasury Yield",
+    "US 10-Year Treasury Yield",
+    "US 30-Year Treasury Yield",
+    "2s10s Yield Curve",
+    "10-Year Real Yield"
+  ],
+  "total": 140
 }

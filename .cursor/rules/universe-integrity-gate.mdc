@@ -1,0 +1,36 @@
+---
+description: Block new features until the 26-market universe integrity audit passes
+alwaysApply: true
+---
+
+# Universe Integrity Gate
+
+No new features may be developed until every instrument in `LEGACY_COT_MARKETS` passes the universe integrity audit.
+
+## Required command
+
+```bash
+python scripts/run_universe_integrity_audit.py
+```
+
+Report: `data/audits/universe_integrity_audit.md`
+
+## Gate rules
+
+- If any instrument fails **identity**, **price**, **COT**, **alignment**, or **derived** validation: **stop**.
+- Fix the root cause (do not paper over with aliases or fallback joins).
+- Re-run the audit.
+- Only proceed with new feature work when the gate is open (`failed == 0`).
+
+## Identity rules
+
+- Canonical join key is HTPL `instrument_id` (e.g. `Gold`, `Japanese Yen / 6J`).
+- `cot_market_code` must be the real CFTC contract code — never an OANDA symbol.
+- `oanda_symbol` / price provider symbol must be separate from the CFTC code.
+- Source of truth: `src/hptl/markets/canonical_identity.py`.
+
+## Do not
+
+- Add fallback mappings or fuzzy aliases to “make the audit pass”
+- Join price↔COT on display names or polluted registry fields
+- Ship UI/derived work on top of failing instruments

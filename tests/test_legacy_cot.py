@@ -35,6 +35,8 @@ REGRESSION = [
     "Canadian Dollar / 6C",
     "NZ Dollar / 6N",
     "Swiss Franc / 6S",
+    "Bitcoin",
+    "US Dollar Index / DX",
 ]
 
 
@@ -45,7 +47,7 @@ def legacy_bundle():
 
 def test_all_cot_markets_in_reconciliation(legacy_bundle):
     recon = legacy_bundle["reconciliation"]
-    assert recon["instrument_count"] == 23
+    assert recon["instrument_count"] == 25
     for iid in CANONICAL_LEGACY_CODE:
         assert iid in recon["instruments"]
 
@@ -90,7 +92,7 @@ def test_exports_exist(legacy_bundle):
 
 def test_deliverable_report_counts(legacy_bundle):
     report = legacy_bundle["report"]
-    assert report["total_instruments_checked"] == 23
-    assert report["pass_count"] == 23
+    assert report["total_instruments_checked"] == 24
+    assert report["pass_count"] == 24
     assert report["fail_count"] == 0
     assert report["tests_passed"] is True

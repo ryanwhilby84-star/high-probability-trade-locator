@@ -3,6 +3,9 @@
   "private": true,
   "scripts": {
     "dev": "npm run dev --prefix web-dashboard",
+    "dev:up": "powershell -ExecutionPolicy Bypass -File scripts/start_hptl_dev.ps1",
+    "dev:down": "powershell -ExecutionPolicy Bypass -File scripts/stop_hptl_dev.ps1",
+    "dev:status": "powershell -ExecutionPolicy Bypass -File scripts/status_hptl_dev.ps1",
     "build": "npm run build --prefix web-dashboard",
     "preview": "npm run preview --prefix web-dashboard"
   }

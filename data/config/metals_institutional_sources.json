@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "phase": "4B",
+  "note": "Metal-specific institutional drivers. Missing required series → publish_gate=false.",
+  "fred_series": {
+    "real_yield_10y": "DFII10",
+    "dxy_broad": "DTWEXBGS",
+    "china_pmi": "CHINAMANUFPMIMEI",
+    "us_industrial_production": "INDPRO",
+    "us_vehicle_sales": "TOTALSA",
+    "brent_crude": "DCOILBRENTEU",
+    "copper_price_index": "PCOPPUSDM",
+    "sa_gold_production_proxy": "ZAFPROINDMISMEI"
+  },
+  "cache_paths": {
+    "central_bank_gold_net_purchases": "data/cache/metals_drivers/wgc_cb_gold_net_purchases.json",
+    "gold_etf_holdings": "data/cache/metals_drivers/gold_etf_holdings.json",
+    "gold_etf_flows": "data/cache/metals_drivers/gold_etf_flows.json",
+    "silver_etf_holdings": "data/cache/metals_drivers/silver_etf_holdings.json",
+    "silver_etf_flows": "data/cache/metals_drivers/silver_etf_flows.json",
+    "lme_copper_inventory": "data/cache/metals_drivers/lme_copper_inventory.json",
+    "shfe_copper_inventory": "data/cache/metals_drivers/shfe_copper_inventory.json",
+    "copper_mine_deficit": "data/cache/metals_drivers/copper_mine_deficit.json",
+    "silver_industrial_demand": "data/cache/metals_drivers/silver_industrial_demand.json",
+    "silver_inventory": "data/cache/metals_drivers/silver_inventory.json",
+    "platinum_jewelry_demand": "data/cache/metals_drivers/platinum_jewelry_demand.json",
+    "sa_platinum_supply": "data/cache/metals_drivers/sa_platinum_supply.json",
+    "palladium_russia_supply": "data/cache/metals_drivers/palladium_russia_supply.json",
+    "ev_adoption_proxy": "data/cache/metals_drivers/ev_adoption_proxy.json"
+  },
+  "models": {
+    "Gold": {
+      "model_name": "gold_institutional_fair_value_v1",
+      "required": [
+        "real_yield_10y",
+        "dxy_broad",
+        "central_bank_net_purchases",
+        "etf_holdings_or_flows"
+      ],
+      "optional": ["reserve_demand_proxy"]
+    },
+    "Silver": {
+      "model_name": "silver_institutional_fair_value_v1",
+      "required": [
+        "gold_silver_ratio",
+        "real_yield_10y",
+        "dxy_broad",
+        "etf_holdings_or_flows",
+        "industrial_demand_proxy"
+      ],
+      "optional": ["inventory_proxy"]
+    },
+    "Copper / HG": {
+      "model_name": "copper_institutional_fair_value_v1",
+      "required": [
+        "china_pmi",
+        "lme_inventory",
+        "dxy_broad",
+        "real_yield_10y"
+      ],
+      "optional": ["shfe_inventory", "mine_deficit_proxy"]
+    },
+    "Platinum": {
+      "model_name": "platinum_institutional_fair_value_v1",
+      "required": [
+        "autocat_demand_proxy",
+        "real_yield_10y",
+        "dxy_broad",
+        "pt_pd_substitution_spread"
+      ],
+      "optional": ["jewelry_demand_proxy", "sa_supply_proxy"]
+    },
+    "Palladium": {
+      "model_name": "palladium_institutional_fair_value_v1",
+      "required": [
+        "autocat_demand_proxy",
+        "pt_pd_substitution",
+        "real_yield_10y",
+        "dxy_broad"
+      ],
+      "optional": ["russia_supply_proxy", "ev_erosion_proxy"]
+    }
+  }
+}

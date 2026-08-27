@@ -1,0 +1,281 @@
+/* Positioning chart workstation — premium dark institutional layout */
+
+.pos-chart-card {
+  background: linear-gradient(180deg, #070b12 0%, #06080d 100%);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 14px 14px 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.pos-chart-chrome {
+  margin-bottom: 12px;
+}
+
+.pos-chart-chrome-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 10px;
+}
+
+.pos-range-group {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  background: #0f172a;
+  border: 1px solid #243044;
+  border-radius: 8px;
+}
+
+.pos-range-btn {
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.pos-range-btn:hover {
+  color: #e2e8f0;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.pos-range-btn.active {
+  color: #f8fafc;
+  background: #1e3a5f;
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.35);
+}
+
+.pos-freshness {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.pos-freshness strong {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.pos-freshness code {
+  font-size: 0.68rem;
+  color: #7dd3fc;
+}
+
+.pos-freshness-status--fresh {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.pos-movement-panel {
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #243044;
+  border-radius: 8px;
+}
+
+.pos-movement-title {
+  margin: 0 0 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+.pos-movement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .pos-movement-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pos-move-cell {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #0b1220;
+  border: 1px solid #1e293b;
+}
+
+.pos-move-k {
+  display: block;
+  font-size: 0.65rem;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.pos-move-v {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.pos-move-cell--up .pos-move-v {
+  color: #34d399;
+}
+
+.pos-move-cell--down .pos-move-v {
+  color: #f87171;
+}
+
+.pos-move-cell--flat .pos-move-v {
+  color: #cbd5e1;
+}
+
+.pos-movement-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.pos-movement-dates strong {
+  color: #e2e8f0;
+}
+
+.pos-chart-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pos-chart-panel {
+  border-top: 1px solid rgba(36, 48, 68, 0.6);
+  padding-top: 6px;
+}
+
+.pos-chart-panel:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.pos-chart-panel-head {
+  margin-bottom: 4px;
+}
+
+.pos-chart-panel-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.pos-chart-panel-body {
+  display: grid;
+  grid-template-columns: 1fr minmax(148px, 168px);
+  gap: 8px;
+  align-items: stretch;
+}
+
+@media (max-width: 860px) {
+  .pos-chart-panel-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pos-chart-panel-plot {
+  min-width: 0;
+}
+
+.pos-chart-panel-empty,
+.pos-chart-panel-warn {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  padding: 8px 0;
+}
+
+.pos-series-badge {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 12px;
+  background: #0b1220;
+  border: 1px solid #243044;
+  border-left: 3px solid var(--series-color, #38bdf8);
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pos-series-badge-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--series-color, #38bdf8);
+  margin-bottom: 4px;
+}
+
+.pos-series-badge-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.pos-series-badge-deltas {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.pos-series-badge-deltas span {
+  display: block;
+}
+
+.pos-chart-tooltip {
+  padding: 8px 10px;
+  background: rgba(8, 12, 20, 0.96);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  font-size: 0.75rem;
+}
+
+.pos-chart-tooltip-date {
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.pos-chart-tooltip-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.pos-chart-tooltip-sub {
+  margin-top: 2px;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+}
+
+.pos-latest-dot circle {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.positioning-chart-stack--cot3y .chart-ws-readout {
+  margin: 8px 0 10px;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 6px;
+  border: 1px solid #243044;
+}

@@ -20,33 +20,42 @@ def _float(v: Any) -> float | None:
         return None
 
 
-def _parse_candles(payload: dict[str, Any]) -> list[OhlcBar]:
+def _candle_to_bar(c: dict[str, Any]) -> OhlcBar | None:
+    mid = c.get("mid") or c.get("bid") or c.get("ask") or {}
+    t = str(c.get("time") or "")[:10]
+    if not t:
+        return None
+    o = _float(mid.get("o"))
+    h = _float(mid.get("h"))
+    l = _float(mid.get("l"))
+    cl = _float(mid.get("c"))
+    if o is None or h is None or l is None or cl is None:
+        return None
+    return {
+        "date": t,
+        "open": o,
+        "high": h,
+        "low": l,
+        "close": cl,
+        "volume": _float(c.get("volume")),
+    }
+
+
+def _parse_candles(payload: dict[str, Any]) -> tuple[list[OhlcBar], OhlcBar | None]:
+    """Return completed bars plus the latest incomplete forming bar (if any)."""
     out: list[OhlcBar] = []
+    forming: OhlcBar | None = None
     for c in payload.get("candles") or []:
-        if not c.get("complete", True):
+        bar = _candle_to_bar(c)
+        if bar is None:
             continue
-        mid = c.get("mid") or c.get("bid") or c.get("ask") or {}
-        t = str(c.get("time") or "")[:10]
-        if not t:
-            continue
-        o = _float(mid.get("o"))
-        h = _float(mid.get("h"))
-        l = _float(mid.get("l"))
-        cl = _float(mid.get("c"))
-        if o is None or h is None or l is None or cl is None:
-            continue
-        out.append(
-            {
-                "date": t,
-                "open": o,
-                "high": h,
-                "low": l,
-                "close": cl,
-                "volume": _float(c.get("volume")),
-            }
-        )
+        if c.get("complete", True):
+            out.append(bar)
+        else:
+            # Keep the newest incomplete tip for live/forming display only.
+            forming = bar
     out.sort(key=lambda b: b["date"])
-    return out
+    return out, forming
 
 
 def fetch_candles(
@@ -55,6 +64,25 @@ def fetch_candles(
     granularity: str = "D",
     count: int = DAILY_BAR_TARGET,
 ) -> list[OhlcBar]:
+    g = _GRANULARITY.get(granularity, granularity)
+    doc = api_get(
+        f"/v3/instruments/{instrument}/candles",
+        params={
+            "granularity": g,
+            "count": str(count),
+            "price": "M",
+        },
+    )
+    complete, _forming = _parse_candles(doc)
+    return complete
+
+
+def fetch_candles_with_forming(
+    instrument: str,
+    *,
+    granularity: str = "D",
+    count: int = DAILY_BAR_TARGET,
+) -> tuple[list[OhlcBar], OhlcBar | None]:
     g = _GRANULARITY.get(granularity, granularity)
     doc = api_get(
         f"/v3/instruments/{instrument}/candles",
@@ -101,13 +129,19 @@ def fetch_pricing(instruments: list[str]) -> dict[str, PriceSnapshot]:
     return out
 
 
-def fetch_instrument_prices(symbol: str) -> tuple[PriceSnapshot | None, list[OhlcBar], list[OhlcBar]]:
-    """Current price + daily + weekly candles for one OANDA instrument."""
+def fetch_instrument_prices(
+    symbol: str,
+) -> tuple[PriceSnapshot | None, list[OhlcBar], list[OhlcBar], OhlcBar | None, OhlcBar | None]:
+    """Current price + completed daily/weekly candles + forming (incomplete) tips."""
     try:
         pricing = fetch_pricing([symbol])
         price = pricing.get(symbol)
-        daily = fetch_candles(symbol, granularity="D", count=DAILY_BAR_TARGET)
-        weekly = fetch_candles(symbol, granularity="W", count=WEEKLY_BAR_TARGET)
-        return price, daily, weekly
+        daily, forming_daily = fetch_candles_with_forming(
+            symbol, granularity="D", count=DAILY_BAR_TARGET
+        )
+        weekly, forming_weekly = fetch_candles_with_forming(
+            symbol, granularity="W", count=WEEKLY_BAR_TARGET
+        )
+        return price, daily, weekly, forming_daily, forming_weekly
     except OandaApiError:
         raise

@@ -1,0 +1,2228 @@
+{
+  "generated_at": "2026-08-03T08:28:14+00:00",
+  "ok": true,
+  "phase": "ng_driver_validation_phase5_real_yield",
+  "scope": {
+    "candidate_driver": "US 10-Year Real Yield",
+    "series_id": "DFII10",
+    "baseline_storage": "storage_surplus_bcf",
+    "baseline_v2": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "not_tested": [
+      "Nominal Treasury yields",
+      "Inflation expectations / breakevens",
+      "Liquidity",
+      "Broad USD (already rejected Phase 4)",
+      "LNG (already rejected Phase 3)"
+    ],
+    "walk_forward": {
+      "min_train": 156,
+      "step": 13
+    },
+    "promotion_thresholds": {
+      "min_oos_rmse_improvement_pct_vs_v2": 2.0,
+      "dm_alpha_one_sided": 0.1,
+      "expected_real_yield_sign": "negative",
+      "no_sign_flip": true,
+      "no_leakage": true,
+      "not_single_regime": true
+    }
+  },
+  "real_yield_dataset": {
+    "driver": "us_10y_real_yield",
+    "series_name": "Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, Quoted on an Investment Basis, Inflation-Indexed",
+    "symbol": "DFII10",
+    "provider": "FRED (U.S. Treasury / Board of Governors via FRED)",
+    "data_source": "FRED API / resilient macro_cache (load_fred_daily_map)",
+    "source_url": "https://fred.stlouisfed.org/series/DFII10",
+    "frequency": "Daily (business days)",
+    "release_cadence": "Daily Treasury constant-maturity TIPS yield; typically available same day or next business day via FRED.",
+    "history_available": {
+      "n_observations": 2644,
+      "start": "2016-01-04",
+      "end": "2026-07-30"
+    },
+    "current_observation_date": "2026-07-30",
+    "latest_value": 2.41,
+    "missing_periods": [],
+    "missing_period_count": 0,
+    "point_in_time_safety": {
+      "native_frequency": "daily",
+      "safe_for_asof_weekly_join": true,
+      "alignment": "Daily real-yield levels as-of joined to Friday NG weeks (last observation on or before week date). Transforms use only past weekly as-of levels \u2014 no full-sample z-score. YoY uses absolute pp change (safe when yields cross zero)."
+    },
+    "revisions_policy": "Treasury constant-maturity yields via FRED are market quotes; material delayed revision risk is low. Research treats downloaded daily values as point-in-time as-of.",
+    "alignment_with_ng_history": {
+      "ng_panel_uses_weekly_asof": true,
+      "sufficient_history_for_walk_forward": true,
+      "note": "Daily DFII10 covers the post-2016 NG weekly valuation panel. Safe to align with storage + production YoY history via as-of join."
+    },
+    "expected_economic_sign": "negative",
+    "economic_rationale": "Higher 10Y real yields raise the opportunity cost of holding commodities and often coincide with tighter financial conditions, so the coefficient on log(NG price) should be negative."
+  },
+  "storage_only_model": {
+    "spec": "A_storage",
+    "ok": true,
+    "features": [
+      "storage_surplus_bcf"
+    ],
+    "n_observations": 531,
+    "sample_start": "2016-06-05",
+    "sample_end": "2026-07-30",
+    "r_squared": 0.239,
+    "adj_r_squared": 0.2375,
+    "intercept": 1.131379,
+    "coefficients": {
+      "storage_surplus_bcf": -0.000544
+    },
+    "expected_signs": {
+      "storage_surplus_bcf": "negative"
+    },
+    "fitted_signs": {
+      "storage_surplus_bcf": "negative"
+    },
+    "signs_ok": true,
+    "sign_detail": {
+      "storage_surplus_bcf": true
+    },
+    "p_values": {
+      "storage_surplus_bcf": 0.0
+    },
+    "t_stats": {
+      "storage_surplus_bcf": -12.888
+    },
+    "oos_r2": 0.1962,
+    "oos_rmse": 0.359504,
+    "oos_mae": 0.264547,
+    "n_oos": 375,
+    "coefficient_stability": {
+      "storage_surplus_bcf": {
+        "mean": -0.000389,
+        "std": 0.000176,
+        "cv": 0.4533,
+        "sign_flip": false,
+        "n_windows": 29,
+        "path_head": [
+          -5.9e-05,
+          -5.6e-05,
+          -6.4e-05
+        ],
+        "path_tail": [
+          -0.000553,
+          -0.000544,
+          -0.000545
+        ]
+      }
+    },
+    "v1_helper_oos_rmse": 0.359504,
+    "v1_helper_oos_r2": 0.1962
+  },
+  "v2_storage_production_yoy_model": {
+    "spec": "B_storage_production_yoy",
+    "ok": true,
+    "features": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "n_observations": 531,
+    "sample_start": "2016-06-05",
+    "sample_end": "2026-07-30",
+    "r_squared": 0.3075,
+    "adj_r_squared": 0.3049,
+    "intercept": 1.231183,
+    "coefficients": {
+      "storage_surplus_bcf": -0.000799,
+      "production_yoy_pct": -0.021977
+    },
+    "expected_signs": {
+      "storage_surplus_bcf": "negative",
+      "production_yoy_pct": "negative"
+    },
+    "fitted_signs": {
+      "storage_surplus_bcf": "negative",
+      "production_yoy_pct": "negative"
+    },
+    "signs_ok": true,
+    "sign_detail": {
+      "storage_surplus_bcf": true,
+      "production_yoy_pct": true
+    },
+    "p_values": {
+      "storage_surplus_bcf": 0.0,
+      "production_yoy_pct": 0.0
+    },
+    "t_stats": {
+      "storage_surplus_bcf": -14.9201,
+      "production_yoy_pct": -7.2314
+    },
+    "oos_r2": 0.256,
+    "oos_rmse": 0.34586,
+    "oos_mae": 0.255877,
+    "n_oos": 375,
+    "coefficient_stability": {
+      "storage_surplus_bcf": {
+        "mean": -0.000687,
+        "std": 0.000193,
+        "cv": 0.2807,
+        "sign_flip": false,
+        "n_windows": 29,
+        "path_head": [
+          -0.00024,
+          -0.000317,
+          -0.000355
+        ],
+        "path_tail": [
+          -0.000828,
+          -0.000801,
+          -0.000801
+        ]
+      },
+      "production_yoy_pct": {
+        "mean": -0.021814,
+        "std": 0.004311,
+        "cv": 0.1976,
+        "sign_flip": false,
+        "n_windows": 29,
+        "path_head": [
+          -0.011287,
+          -0.016194,
+          -0.018251
+        ],
+        "path_tail": [
+          -0.023485,
+          -0.022048,
+          -0.022017
+        ]
+      }
+    },
+    "v1_helper_oos_rmse": 0.34586,
+    "v1_helper_oos_r2": 0.256
+  },
+  "real_yield_transforms_tested": [
+    {
+      "id": "raw_yield",
+      "label": "raw 10Y real yield level (%, as-of weekly)",
+      "expected_sign": "negative"
+    },
+    {
+      "id": "yoy_chg",
+      "label": "year-over-year change in real yield (percentage points)",
+      "expected_sign": "negative"
+    },
+    {
+      "id": "chg_4w",
+      "label": "4-week change in real yield (pp)",
+      "expected_sign": "negative"
+    },
+    {
+      "id": "chg_12w",
+      "label": "12-week change in real yield (pp)",
+      "expected_sign": "negative"
+    },
+    {
+      "id": "rolling_zscore_156",
+      "label": "trailing 156-week z-score (past-only mean/sd)",
+      "expected_sign": "negative"
+    },
+    {
+      "id": "trend_deviation_260",
+      "label": "deviation from trailing 260-week (~5y) linear trend (past-only)",
+      "expected_sign": "negative"
+    }
+  ],
+  "candidates": [
+    {
+      "transform_id": "raw_yield",
+      "label": "raw 10Y real yield level (%, as-of weekly)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 531,
+      "sample_start": "2016-06-05",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 531,
+        "sample_start": "2016-06-05",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.239,
+        "adj_r_squared": 0.2375,
+        "intercept": 1.131379,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000544
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -12.888
+        },
+        "oos_r2": 0.1962,
+        "oos_rmse": 0.359504,
+        "oos_mae": 0.264547,
+        "n_oos": 375,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000389,
+            "std": 0.000176,
+            "cv": 0.4533,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -5.9e-05,
+              -5.6e-05,
+              -6.4e-05
+            ],
+            "path_tail": [
+              -0.000553,
+              -0.000544,
+              -0.000545
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.359504,
+        "v1_helper_oos_r2": 0.1962
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 531,
+        "sample_start": "2016-06-05",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3075,
+        "adj_r_squared": 0.3049,
+        "intercept": 1.231183,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000799,
+          "production_yoy_pct": -0.021977
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -14.9201,
+          "production_yoy_pct": -7.2314
+        },
+        "oos_r2": 0.256,
+        "oos_rmse": 0.34586,
+        "oos_mae": 0.255877,
+        "n_oos": 375,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000687,
+            "std": 0.000193,
+            "cv": 0.2807,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.00024,
+              -0.000317,
+              -0.000355
+            ],
+            "path_tail": [
+              -0.000828,
+              -0.000801,
+              -0.000801
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.021814,
+            "std": 0.004311,
+            "cv": 0.1976,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.011287,
+              -0.016194,
+              -0.018251
+            ],
+            "path_tail": [
+              -0.023485,
+              -0.022048,
+              -0.022017
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.34586,
+        "v1_helper_oos_r2": 0.256
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_raw_yield",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__raw_yield"
+        ],
+        "n_observations": 531,
+        "sample_start": "2016-06-05",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3219,
+        "adj_r_squared": 0.3181,
+        "intercept": 1.213564,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000849,
+          "production_yoy_pct": -0.024608,
+          "real_yield__raw_yield": 0.041273
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__raw_yield": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__raw_yield": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__raw_yield": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0,
+          "real_yield__raw_yield": 0.0008
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -15.4047,
+          "production_yoy_pct": -7.9095,
+          "real_yield__raw_yield": 3.3457
+        },
+        "oos_r2": 0.1896,
+        "oos_rmse": 0.360958,
+        "oos_mae": 0.258107,
+        "n_oos": 375,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000605,
+            "std": 0.000323,
+            "cv": 0.5333,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -7.5e-05,
+              -4.8e-05,
+              -5.9e-05
+            ],
+            "path_tail": [
+              -0.000866,
+              -0.000852,
+              -0.000849
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.021981,
+            "std": 0.005296,
+            "cv": 0.2409,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.012586,
+              -0.014861,
+              -0.014509
+            ],
+            "path_tail": [
+              -0.025554,
+              -0.024807,
+              -0.024617
+            ]
+          },
+          "real_yield__raw_yield": {
+            "mean": 0.114274,
+            "std": 0.163803,
+            "cv": 1.4334,
+            "sign_flip": true,
+            "n_windows": 29,
+            "path_head": [
+              0.293267,
+              0.391421,
+              0.364071
+            ],
+            "path_tail": [
+              0.034778,
+              0.04408,
+              0.041501
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.360958,
+        "v1_helper_oos_r2": 0.1896
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 375,
+        "mean_loss_diff": -0.01067168,
+        "hac_lag": 7,
+        "t_stat": -1.0958,
+        "p_value_one_sided": 0.8634,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.203242,
+          "late_mean": 0.031237,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 187,
+            "date_start": "2019-06-02",
+            "date_end": "2022-12-22",
+            "v2_oos_rmse": 0.45258,
+            "candidate_oos_rmse": 0.478376,
+            "improvement_pct": -5.7,
+            "improves": false
+          },
+          "late": {
+            "n": 188,
+            "date_start": "2022-12-29",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.186715,
+            "candidate_oos_rmse": 0.179616,
+            "improvement_pct": 3.8,
+            "improves": true
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": false,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": false,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": false,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": -4.37,
+        "reasons": [
+          "OOS RMSE improvement vs v2 is -4.37% (need \u2265 2%)",
+          "Real Yield coefficient sign not economically sensible (got 0.041273; expect negative)",
+          "walk-forward Real Yield coefficient sign flips",
+          "OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.8634; need p < 0.1)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'raw_yield' does not deserve promotion. OOS RMSE improvement vs v2 is -4.37% (need \u2265 2%); Real Yield coefficient sign not economically sensible (got 0.041273; expect negative); walk-forward Real Yield coefficient sign flips; OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.8634; need p < 0.1); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 29,
+        "mean": 0.114274,
+        "sign_flip": true
+      }
+    },
+    {
+      "transform_id": "yoy_chg",
+      "label": "year-over-year change in real yield (percentage points)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 479,
+      "sample_start": "2017-06-04",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 479,
+        "sample_start": "2017-06-04",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.2525,
+        "adj_r_squared": 0.2509,
+        "intercept": 1.119634,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000592
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -12.6934
+        },
+        "oos_r2": 0.1077,
+        "oos_rmse": 0.374834,
+        "oos_mae": 0.270752,
+        "n_oos": 323,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000551,
+            "std": 8.7e-05,
+            "cv": 0.1577,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              -0.000441,
+              -0.000479,
+              -0.000436
+            ],
+            "path_tail": [
+              -0.000607,
+              -0.000593,
+              -0.000594
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.374834,
+        "v1_helper_oos_r2": 0.1077
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 479,
+        "sample_start": "2017-06-04",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3222,
+        "adj_r_squared": 0.3194,
+        "intercept": 1.24083,
+        "coefficients": {
+          "storage_surplus_bcf": -0.00086,
+          "production_yoy_pct": -0.02436
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -14.6538,
+          "production_yoy_pct": -6.9984
+        },
+        "oos_r2": 0.1661,
+        "oos_rmse": 0.36236,
+        "oos_mae": 0.265851,
+        "n_oos": 323,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000834,
+            "std": 0.000147,
+            "cv": 0.1759,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              -0.000688,
+              -0.000627,
+              -0.000669
+            ],
+            "path_tail": [
+              -0.000894,
+              -0.000862,
+              -0.000862
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.023061,
+            "std": 0.006136,
+            "cv": 0.2661,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              -0.025862,
+              -0.012353,
+              -0.016835
+            ],
+            "path_tail": [
+              -0.025853,
+              -0.024429,
+              -0.024368
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.36236,
+        "v1_helper_oos_r2": 0.1661
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_yoy_chg",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__yoy_chg"
+        ],
+        "n_observations": 479,
+        "sample_start": "2017-06-04",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.5064,
+        "adj_r_squared": 0.5033,
+        "intercept": 1.222613,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000831,
+          "production_yoy_pct": -0.027645,
+          "real_yield__yoy_chg": 0.188104
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__yoy_chg": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__yoy_chg": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__yoy_chg": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0,
+          "real_yield__yoy_chg": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -16.5478,
+          "production_yoy_pct": -9.2647,
+          "real_yield__yoy_chg": 13.3119
+        },
+        "oos_r2": 0.3104,
+        "oos_rmse": 0.329513,
+        "oos_mae": 0.263277,
+        "n_oos": 323,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000617,
+            "std": 0.000267,
+            "cv": 0.4324,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              -0.00026,
+              -0.000216,
+              -0.000387
+            ],
+            "path_tail": [
+              -0.000868,
+              -0.000833,
+              -0.000832
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.023049,
+            "std": 0.008471,
+            "cv": 0.3675,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              -0.007034,
+              -0.001684,
+              -0.014444
+            ],
+            "path_tail": [
+              -0.02952,
+              -0.027708,
+              -0.027638
+            ]
+          },
+          "real_yield__yoy_chg": {
+            "mean": 0.22589,
+            "std": 0.058203,
+            "cv": 0.2577,
+            "sign_flip": false,
+            "n_windows": 25,
+            "path_head": [
+              0.216545,
+              0.230222,
+              0.190327
+            ],
+            "path_tail": [
+              0.19703,
+              0.188768,
+              0.18825
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.329513,
+        "v1_helper_oos_r2": 0.3104
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 323,
+        "mean_loss_diff": 0.02272573,
+        "hac_lag": 6,
+        "t_stat": 0.9614,
+        "p_value_one_sided": 0.1682,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.251335,
+          "late_mean": 0.202403,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 161,
+            "date_start": "2020-05-31",
+            "date_end": "2023-06-25",
+            "v2_oos_rmse": 0.471857,
+            "candidate_oos_rmse": 0.406053,
+            "improvement_pct": 13.95,
+            "improves": true
+          },
+          "late": {
+            "n": 162,
+            "date_start": "2023-07-02",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.201306,
+            "candidate_oos_rmse": 0.229405,
+            "improvement_pct": -13.96,
+            "improves": false
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": true,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": true,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": false,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": 9.06,
+        "reasons": [
+          "Real Yield coefficient sign not economically sensible (got 0.188104; expect negative)",
+          "OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.1682; need p < 0.1)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'yoy_chg' does not deserve promotion. Real Yield coefficient sign not economically sensible (got 0.188104; expect negative); OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.1682; need p < 0.1); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 25,
+        "mean": 0.22589,
+        "sign_flip": false
+      }
+    },
+    {
+      "transform_id": "chg_4w",
+      "label": "4-week change in real yield (pp)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 527,
+      "sample_start": "2016-07-03",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 527,
+        "sample_start": "2016-07-03",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.2403,
+        "adj_r_squared": 0.2388,
+        "intercept": 1.130231,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000555
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -12.8856
+        },
+        "oos_r2": 0.1961,
+        "oos_rmse": 0.360589,
+        "oos_mae": 0.264863,
+        "n_oos": 371,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000407,
+            "std": 0.00018,
+            "cv": 0.4423,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -4e-05,
+              -4.5e-05,
+              -6e-05
+            ],
+            "path_tail": [
+              -0.000561,
+              -0.000556,
+              -0.000556
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.360589,
+        "v1_helper_oos_r2": 0.1961
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 527,
+        "sample_start": "2016-07-03",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3101,
+        "adj_r_squared": 0.3075,
+        "intercept": 1.230703,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000815,
+          "production_yoy_pct": -0.022173
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -14.9777,
+          "production_yoy_pct": -7.2828
+        },
+        "oos_r2": 0.2535,
+        "oos_rmse": 0.347489,
+        "oos_mae": 0.256307,
+        "n_oos": 371,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000717,
+            "std": 0.000193,
+            "cv": 0.2686,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.00025,
+              -0.00033,
+              -0.000386
+            ],
+            "path_tail": [
+              -0.000831,
+              -0.000817,
+              -0.000816
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.022315,
+            "std": 0.004318,
+            "cv": 0.1935,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.012345,
+              -0.016832,
+              -0.01956
+            ],
+            "path_tail": [
+              -0.022904,
+              -0.022228,
+              -0.022211
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.347489,
+        "v1_helper_oos_r2": 0.2535
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_chg_4w",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__chg_4w"
+        ],
+        "n_observations": 527,
+        "sample_start": "2016-07-03",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3406,
+        "adj_r_squared": 0.3368,
+        "intercept": 1.213195,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000765,
+          "production_yoy_pct": -0.019595,
+          "real_yield__chg_4w": 0.308082
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__chg_4w": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__chg_4w": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__chg_4w": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0,
+          "real_yield__chg_4w": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -14.1122,
+          "production_yoy_pct": -6.4777,
+          "real_yield__chg_4w": 4.9192
+        },
+        "oos_r2": 0.273,
+        "oos_rmse": 0.342911,
+        "oos_mae": 0.255953,
+        "n_oos": 371,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000661,
+            "std": 0.000168,
+            "cv": 0.254,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.00025,
+              -0.00032,
+              -0.000379
+            ],
+            "path_tail": [
+              -0.000779,
+              -0.000764,
+              -0.000765
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.019678,
+            "std": 0.003631,
+            "cv": 0.1845,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              -0.012211,
+              -0.016116,
+              -0.019036
+            ],
+            "path_tail": [
+              -0.020272,
+              -0.01959,
+              -0.019604
+            ]
+          },
+          "real_yield__chg_4w": {
+            "mean": 0.291337,
+            "std": 0.103193,
+            "cv": 0.3542,
+            "sign_flip": false,
+            "n_windows": 29,
+            "path_head": [
+              0.101775,
+              0.185822,
+              0.170059
+            ],
+            "path_tail": [
+              0.314149,
+              0.314922,
+              0.30817
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.342911,
+        "v1_helper_oos_r2": 0.273
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 371,
+        "mean_loss_diff": 0.00316061,
+        "hac_lag": 7,
+        "t_stat": 0.4908,
+        "p_value_one_sided": 0.3118,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.227156,
+          "late_mean": 0.351239,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 185,
+            "date_start": "2019-06-30",
+            "date_end": "2023-01-08",
+            "v2_oos_rmse": 0.454214,
+            "candidate_oos_rmse": 0.443516,
+            "improvement_pct": 2.36,
+            "improves": true
+          },
+          "late": {
+            "n": 186,
+            "date_start": "2023-01-15",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.188804,
+            "candidate_oos_rmse": 0.197218,
+            "improvement_pct": -4.46,
+            "improves": false
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": false,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": true,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": false,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": 1.32,
+        "reasons": [
+          "OOS RMSE improvement vs v2 is 1.32% (need \u2265 2%)",
+          "Real Yield coefficient sign not economically sensible (got 0.308082; expect negative)",
+          "OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.3118; need p < 0.1)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'chg_4w' does not deserve promotion. OOS RMSE improvement vs v2 is 1.32% (need \u2265 2%); Real Yield coefficient sign not economically sensible (got 0.308082; expect negative); OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.3118; need p < 0.1); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 29,
+        "mean": 0.291337,
+        "sign_flip": false
+      }
+    },
+    {
+      "transform_id": "chg_12w",
+      "label": "12-week change in real yield (pp)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 519,
+      "sample_start": "2016-08-28",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 519,
+        "sample_start": "2016-08-28",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.2433,
+        "adj_r_squared": 0.2418,
+        "intercept": 1.128114,
+        "coefficients": {
+          "storage_surplus_bcf": -0.00057
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -12.8928
+        },
+        "oos_r2": 0.1977,
+        "oos_rmse": 0.361618,
+        "oos_mae": 0.265429,
+        "n_oos": 363,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000434,
+            "std": 0.000176,
+            "cv": 0.4044,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              -3.1e-05,
+              -5.1e-05,
+              -0.000116
+            ],
+            "path_tail": [
+              -0.000583,
+              -0.000571,
+              -0.000571
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.361618,
+        "v1_helper_oos_r2": 0.1977
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 519,
+        "sample_start": "2016-08-28",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.3131,
+        "adj_r_squared": 0.3104,
+        "intercept": 1.228749,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000829,
+          "production_yoy_pct": -0.022167
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -14.9956,
+          "production_yoy_pct": -7.2411
+        },
+        "oos_r2": 0.2551,
+        "oos_rmse": 0.348443,
+        "oos_mae": 0.257277,
+        "n_oos": 363,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.000762,
+            "std": 0.000176,
+            "cv": 0.2311,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              -0.000324,
+              -0.000383,
+              -0.000503
+            ],
+            "path_tail": [
+              -0.000865,
+              -0.000831,
+              -0.000831
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.023149,
+            "std": 0.003774,
+            "cv": 0.163,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              -0.016256,
+              -0.018995,
+              -0.024239
+            ],
+            "path_tail": [
+              -0.023918,
+              -0.022252,
+              -0.022213
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.348443,
+        "v1_helper_oos_r2": 0.2551
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_chg_12w",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__chg_12w"
+        ],
+        "n_observations": 519,
+        "sample_start": "2016-08-28",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.4664,
+        "adj_r_squared": 0.4633,
+        "intercept": 1.171796,
+        "coefficients": {
+          "storage_surplus_bcf": -0.000658,
+          "production_yoy_pct": -0.014683,
+          "real_yield__chg_12w": 0.417568
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__chg_12w": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__chg_12w": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__chg_12w": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0,
+          "real_yield__chg_12w": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -12.9618,
+          "production_yoy_pct": -5.3007,
+          "real_yield__chg_12w": 12.162
+        },
+        "oos_r2": 0.404,
+        "oos_rmse": 0.311691,
+        "oos_mae": 0.242335,
+        "n_oos": 363,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.00054,
+            "std": 0.000134,
+            "cv": 0.2485,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              -0.000201,
+              -0.000257,
+              -0.0004
+            ],
+            "path_tail": [
+              -0.000685,
+              -0.000651,
+              -0.000651
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.01428,
+            "std": 0.003039,
+            "cv": 0.2128,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              -0.009584,
+              -0.01211,
+              -0.018484
+            ],
+            "path_tail": [
+              -0.016155,
+              -0.014508,
+              -0.014474
+            ]
+          },
+          "real_yield__chg_12w": {
+            "mean": 0.407002,
+            "std": 0.104296,
+            "cv": 0.2563,
+            "sign_flip": false,
+            "n_windows": 28,
+            "path_head": [
+              0.283534,
+              0.276062,
+              0.250672
+            ],
+            "path_tail": [
+              0.415524,
+              0.426797,
+              0.42519
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.311691,
+        "v1_helper_oos_r2": 0.404
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 363,
+        "mean_loss_diff": 0.0242612,
+        "hac_lag": 7,
+        "t_stat": 1.7146,
+        "p_value_one_sided": 0.0432,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.345793,
+          "late_mean": 0.468212,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 181,
+            "date_start": "2019-08-25",
+            "date_end": "2023-02-05",
+            "v2_oos_rmse": 0.454375,
+            "candidate_oos_rmse": 0.384808,
+            "improvement_pct": 15.31,
+            "improves": true
+          },
+          "late": {
+            "n": 182,
+            "date_start": "2023-02-12",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.191926,
+            "candidate_oos_rmse": 0.215651,
+            "improvement_pct": -12.36,
+            "improves": false
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": true,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": true,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": true,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": 10.55,
+        "reasons": [
+          "Real Yield coefficient sign not economically sensible (got 0.417568; expect negative)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'chg_12w' does not deserve promotion. Real Yield coefficient sign not economically sensible (got 0.417568; expect negative); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 28,
+        "mean": 0.407002,
+        "sign_flip": false
+      }
+    },
+    {
+      "transform_id": "rolling_zscore_156",
+      "label": "trailing 156-week z-score (past-only mean/sd)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 375,
+      "sample_start": "2019-06-02",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 375,
+        "sample_start": "2019-06-02",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.5613,
+        "adj_r_squared": 0.5601,
+        "intercept": 1.25554,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001253
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -21.8445
+        },
+        "oos_r2": 0.4973,
+        "oos_rmse": 0.278518,
+        "oos_mae": 0.212245,
+        "n_oos": 219,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001396,
+            "std": 0.000144,
+            "cv": 0.1031,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              -0.001305,
+              -0.001542,
+              -0.00165
+            ],
+            "path_tail": [
+              -0.001267,
+              -0.001257,
+              -0.001253
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.278518,
+        "v1_helper_oos_r2": 0.4973
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 375,
+        "sample_start": "2019-06-02",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.5678,
+        "adj_r_squared": 0.5655,
+        "intercept": 1.287928,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001308,
+          "production_yoy_pct": -0.00809
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0178
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -21.2563,
+          "production_yoy_pct": -2.3706
+        },
+        "oos_r2": 0.4767,
+        "oos_rmse": 0.284149,
+        "oos_mae": 0.223792,
+        "n_oos": 219,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001497,
+            "std": 0.000177,
+            "cv": 0.1185,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              -0.001469,
+              -0.001719,
+              -0.001829
+            ],
+            "path_tail": [
+              -0.001333,
+              -0.001311,
+              -0.001308
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.012165,
+            "std": 0.002696,
+            "cv": 0.2216,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              -0.014158,
+              -0.016707,
+              -0.01704
+            ],
+            "path_tail": [
+              -0.009741,
+              -0.008061,
+              -0.008111
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.284149,
+        "v1_helper_oos_r2": 0.4767
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_rolling_zscore_156",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__rolling_zscore_156"
+        ],
+        "n_observations": 375,
+        "sample_start": "2019-06-02",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.7111,
+        "adj_r_squared": 0.7087,
+        "intercept": 1.287105,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001296,
+          "production_yoy_pct": -0.010923,
+          "real_yield__rolling_zscore_156": 0.096807
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__rolling_zscore_156": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__rolling_zscore_156": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__rolling_zscore_156": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.0001,
+          "real_yield__rolling_zscore_156": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -25.7175,
+          "production_yoy_pct": -3.8988,
+          "real_yield__rolling_zscore_156": 13.5638
+        },
+        "oos_r2": 0.6546,
+        "oos_rmse": 0.230869,
+        "oos_mae": 0.18462,
+        "n_oos": 219,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001239,
+            "std": 0.000234,
+            "cv": 0.1886,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              -0.000634,
+              -0.000709,
+              -0.000953
+            ],
+            "path_tail": [
+              -0.001317,
+              -0.001295,
+              -0.001292
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.013496,
+            "std": 0.002376,
+            "cv": 0.176,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              -0.008873,
+              -0.009491,
+              -0.011468
+            ],
+            "path_tail": [
+              -0.012594,
+              -0.010897,
+              -0.010876
+            ]
+          },
+          "real_yield__rolling_zscore_156": {
+            "mean": 0.122598,
+            "std": 0.043492,
+            "cv": 0.3548,
+            "sign_flip": false,
+            "n_windows": 17,
+            "path_head": [
+              0.242022,
+              0.222874,
+              0.16513
+            ],
+            "path_tail": [
+              0.099808,
+              0.099738,
+              0.099359
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.230869,
+        "v1_helper_oos_r2": 0.6546
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 219,
+        "mean_loss_diff": 0.02744014,
+        "hac_lag": 6,
+        "t_stat": 1.9617,
+        "p_value_one_sided": 0.0249,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.147737,
+          "late_mean": 0.100252,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 109,
+            "date_start": "2022-05-29",
+            "date_end": "2024-06-23",
+            "v2_oos_rmse": 0.353953,
+            "candidate_oos_rmse": 0.259933,
+            "improvement_pct": 26.56,
+            "improves": true
+          },
+          "late": {
+            "n": 110,
+            "date_start": "2024-06-30",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.19132,
+            "candidate_oos_rmse": 0.197902,
+            "improvement_pct": -3.44,
+            "improves": false
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": true,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": true,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": true,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": 18.75,
+        "reasons": [
+          "Real Yield coefficient sign not economically sensible (got 0.096807; expect negative)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'rolling_zscore_156' does not deserve promotion. Real Yield coefficient sign not economically sensible (got 0.096807; expect negative); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 17,
+        "mean": 0.122598,
+        "sign_flip": false
+      }
+    },
+    {
+      "transform_id": "trend_deviation_260",
+      "label": "deviation from trailing 260-week (~5y) linear trend (past-only)",
+      "expected_sign": "negative",
+      "leaky": false,
+      "ok": true,
+      "n_aligned": 271,
+      "sample_start": "2021-05-30",
+      "sample_end": "2026-07-30",
+      "storage_only_aligned": {
+        "spec": "A_storage_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf"
+        ],
+        "n_observations": 271,
+        "sample_start": "2021-05-30",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.751,
+        "adj_r_squared": 0.7501,
+        "intercept": 1.37053,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001381
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -28.484
+        },
+        "oos_r2": -0.023,
+        "oos_rmse": 0.205168,
+        "oos_mae": 0.168372,
+        "n_oos": 115,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001417,
+            "std": 3.3e-05,
+            "cv": 0.0235,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              -0.001492,
+              -0.001424,
+              -0.001444
+            ],
+            "path_tail": [
+              -0.001401,
+              -0.001384,
+              -0.001378
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.205168,
+        "v1_helper_oos_r2": -0.023
+      },
+      "v2_storage_prod_yoy_aligned": {
+        "spec": "B_storage_production_yoy_aligned",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct"
+        ],
+        "n_observations": 271,
+        "sample_start": "2021-05-30",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.751,
+        "adj_r_squared": 0.7492,
+        "intercept": 1.374026,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001385,
+          "production_yoy_pct": -0.000834
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative"
+        },
+        "signs_ok": true,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.8713
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -25.1728,
+          "production_yoy_pct": -0.162
+        },
+        "oos_r2": -0.1305,
+        "oos_rmse": 0.215681,
+        "oos_mae": 0.177853,
+        "n_oos": 115,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001456,
+            "std": 6.2e-05,
+            "cv": 0.0424,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              -0.001569,
+              -0.001538,
+              -0.001487
+            ],
+            "path_tail": [
+              -0.001422,
+              -0.001388,
+              -0.001383
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.00764,
+            "std": 0.006995,
+            "cv": 0.9156,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              -0.017402,
+              -0.022179,
+              -0.007784
+            ],
+            "path_tail": [
+              -0.004279,
+              -0.000803,
+              -0.000832
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.215681,
+        "v1_helper_oos_r2": -0.1305
+      },
+      "candidate_storage_prod_yoy_real_yield": {
+        "spec": "C_storage_prod_yoy_ry_trend_deviation_260",
+        "ok": true,
+        "features": [
+          "storage_surplus_bcf",
+          "production_yoy_pct",
+          "real_yield__trend_deviation_260"
+        ],
+        "n_observations": 271,
+        "sample_start": "2021-05-30",
+        "sample_end": "2026-07-30",
+        "r_squared": 0.7767,
+        "adj_r_squared": 0.7742,
+        "intercept": 1.356372,
+        "coefficients": {
+          "storage_surplus_bcf": -0.001378,
+          "production_yoy_pct": -0.001512,
+          "real_yield__trend_deviation_260": 0.063753
+        },
+        "expected_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__trend_deviation_260": "negative"
+        },
+        "fitted_signs": {
+          "storage_surplus_bcf": "negative",
+          "production_yoy_pct": "negative",
+          "real_yield__trend_deviation_260": "positive"
+        },
+        "signs_ok": false,
+        "sign_detail": {
+          "storage_surplus_bcf": true,
+          "production_yoy_pct": true,
+          "real_yield__trend_deviation_260": false
+        },
+        "p_values": {
+          "storage_surplus_bcf": 0.0,
+          "production_yoy_pct": 0.757,
+          "real_yield__trend_deviation_260": 0.0
+        },
+        "t_stats": {
+          "storage_surplus_bcf": -26.3868,
+          "production_yoy_pct": -0.3094,
+          "real_yield__trend_deviation_260": 5.5416
+        },
+        "oos_r2": -0.1909,
+        "oos_rmse": 0.221367,
+        "oos_mae": 0.174284,
+        "n_oos": 115,
+        "coefficient_stability": {
+          "storage_surplus_bcf": {
+            "mean": -0.001461,
+            "std": 5.9e-05,
+            "cv": 0.0407,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              -0.001567,
+              -0.00152,
+              -0.001488
+            ],
+            "path_tail": [
+              -0.001423,
+              -0.001382,
+              -0.001377
+            ]
+          },
+          "production_yoy_pct": {
+            "mean": -0.010095,
+            "std": 0.005813,
+            "cv": 0.5759,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              -0.012277,
+              -0.020386,
+              -0.012205
+            ],
+            "path_tail": [
+              -0.006865,
+              -0.001448,
+              -0.001504
+            ]
+          },
+          "real_yield__trend_deviation_260": {
+            "mean": 0.086195,
+            "std": 0.018434,
+            "cv": 0.2139,
+            "sign_flip": false,
+            "n_windows": 9,
+            "path_head": [
+              0.105004,
+              0.085456,
+              0.105885
+            ],
+            "path_tail": [
+              0.073675,
+              0.052882,
+              0.062623
+            ]
+          }
+        },
+        "v1_helper_oos_rmse": 0.221367,
+        "v1_helper_oos_r2": -0.1909
+      },
+      "diebold_mariano_vs_v2": {
+        "n": 115,
+        "mean_loss_diff": -0.00248533,
+        "hac_lag": 4,
+        "t_stat": -0.3037,
+        "p_value_one_sided": 0.6193,
+        "ok": true,
+        "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+      },
+      "regime_stability": {
+        "ok": false,
+        "coefficient_halves": {
+          "early_mean": 0.098585,
+          "late_mean": 0.076283,
+          "same_sign": true,
+          "tip_sign_positive": true
+        },
+        "both_halves_improve": false,
+        "not_single_regime": false,
+        "reason": "improvement_or_sign_concentrated_in_one_regime",
+        "halves": {
+          "early": {
+            "n": 57,
+            "date_start": "2024-05-26",
+            "date_end": "2025-06-22",
+            "v2_oos_rmse": 0.235911,
+            "candidate_oos_rmse": 0.218715,
+            "improvement_pct": 7.29,
+            "improves": true
+          },
+          "late": {
+            "n": 58,
+            "date_start": "2025-06-29",
+            "date_end": "2026-07-30",
+            "v2_oos_rmse": 0.193753,
+            "candidate_oos_rmse": 0.223944,
+            "improvement_pct": -15.58,
+            "improves": false
+          }
+        }
+      },
+      "decision": {
+        "recommendation": "Reject",
+        "promote": false,
+        "gates": {
+          "oos_improves_vs_v2_gt_2pct": false,
+          "real_yield_sign_ok": false,
+          "real_yield_coef_stable_no_flip": true,
+          "no_point_in_time_leakage": true,
+          "statistically_meaningful_vs_v2": false,
+          "not_driven_by_one_regime": false
+        },
+        "oos_rmse_improvement_pct_vs_v2": -2.64,
+        "reasons": [
+          "OOS RMSE improvement vs v2 is -2.64% (need \u2265 2%)",
+          "Real Yield coefficient sign not economically sensible (got 0.063753; expect negative)",
+          "OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.6193; need p < 0.1)",
+          "improvement_or_sign_concentrated_in_one_regime"
+        ],
+        "plain_english": "Transform 'trend_deviation_260' does not deserve promotion. OOS RMSE improvement vs v2 is -2.64% (need \u2265 2%); Real Yield coefficient sign not economically sensible (got 0.063753; expect negative); OOS MSE improvement vs v2 not statistically meaningful (DM one-sided p=0.6193; need p < 0.1); improvement_or_sign_concentrated_in_one_regime"
+      },
+      "real_yield_coef_path_summary": {
+        "n_windows": 9,
+        "mean": 0.086195,
+        "sign_flip": false
+      }
+    }
+  ],
+  "best_candidate": {
+    "transform_id": "rolling_zscore_156",
+    "label": "trailing 156-week z-score (past-only mean/sd)",
+    "decision": {
+      "recommendation": "Reject",
+      "promote": false,
+      "gates": {
+        "oos_improves_vs_v2_gt_2pct": true,
+        "real_yield_sign_ok": false,
+        "real_yield_coef_stable_no_flip": true,
+        "no_point_in_time_leakage": true,
+        "statistically_meaningful_vs_v2": true,
+        "not_driven_by_one_regime": false
+      },
+      "oos_rmse_improvement_pct_vs_v2": 18.75,
+      "reasons": [
+        "Real Yield coefficient sign not economically sensible (got 0.096807; expect negative)",
+        "improvement_or_sign_concentrated_in_one_regime"
+      ],
+      "plain_english": "Transform 'rolling_zscore_156' does not deserve promotion. Real Yield coefficient sign not economically sensible (got 0.096807; expect negative); improvement_or_sign_concentrated_in_one_regime"
+    },
+    "candidate_metrics": {
+      "oos_rmse": 0.230869,
+      "oos_mae": 0.18462,
+      "oos_r2": 0.6546,
+      "coefficients": {
+        "storage_surplus_bcf": -0.001296,
+        "production_yoy_pct": -0.010923,
+        "real_yield__rolling_zscore_156": 0.096807
+      },
+      "signs_ok": false
+    },
+    "regime_stability": {
+      "ok": false,
+      "coefficient_halves": {
+        "early_mean": 0.147737,
+        "late_mean": 0.100252,
+        "same_sign": true,
+        "tip_sign_positive": true
+      },
+      "both_halves_improve": false,
+      "not_single_regime": false,
+      "reason": "improvement_or_sign_concentrated_in_one_regime",
+      "halves": {
+        "early": {
+          "n": 109,
+          "date_start": "2022-05-29",
+          "date_end": "2024-06-23",
+          "v2_oos_rmse": 0.353953,
+          "candidate_oos_rmse": 0.259933,
+          "improvement_pct": 26.56,
+          "improves": true
+        },
+        "late": {
+          "n": 110,
+          "date_start": "2024-06-30",
+          "date_end": "2026-07-30",
+          "v2_oos_rmse": 0.19132,
+          "candidate_oos_rmse": 0.197902,
+          "improvement_pct": -3.44,
+          "improves": false
+        }
+      }
+    },
+    "diebold_mariano_vs_v2": {
+      "n": 219,
+      "mean_loss_diff": 0.02744014,
+      "hac_lag": 6,
+      "t_stat": 1.9617,
+      "p_value_one_sided": 0.0249,
+      "ok": true,
+      "interprets": "Positive mean_loss_diff means Storage+ProdYoY+RealYield has lower MSE than v2."
+    }
+  },
+  "real_yield_recommendation": "Reject",
+  "research_status": "Reject",
+  "plain_english": "Reject Real Yield for fair value. No transform improves Storage+Production YoY with a stable, economically sensible coefficient under walk-forward. Keep published model ng_storage_production_v2.",
+  "published_model_unchanged": true,
+  "published_model_id": "ng_storage_production_v2",
+  "proposed_model_id_if_promoted": "ng_storage_production_real_yield_v3",
+  "note": "Research-only. Weekly COT untouched. No nominal yields / inflation expectations / liquidity tested."
+}

@@ -1,0 +1,80 @@
+{
+  "generated_at": "2026-08-03T07:10:04.157834+00:00",
+  "drivers": {
+    "working_gas_storage": {
+      "driver": "working_gas_storage",
+      "driver_name": "Working Gas Storage (Lower 48)",
+      "cache_path": "data/cache/energy_drivers/eia_working_gas_storage.json",
+      "status": "LIVE",
+      "source": "EIA dnav hist_xls (official public download)",
+      "series_id": "NW2_EPG0_SWO_R48_BCF_W",
+      "n_observations": 865,
+      "latest_date": "2026-07-24",
+      "latest_value": 3084.0,
+      "error": null,
+      "retained_previous_cache": false
+    },
+    "dry_gas_production": {
+      "driver": "dry_gas_production",
+      "driver_name": "US Dry Natural Gas Production",
+      "cache_path": "data/cache/energy_drivers/eia_dry_gas_production.json",
+      "status": "LIVE",
+      "source": "EIA dnav hist_xls (official public download)",
+      "series_id": "N9070US2",
+      "n_observations": 353,
+      "latest_date": "2026-05-15",
+      "latest_value": 112.31327003318329,
+      "error": null,
+      "retained_previous_cache": false
+    },
+    "lng_exports": {
+      "driver": "lng_exports",
+      "driver_name": "US LNG Exports",
+      "cache_path": "data/cache/energy_drivers/eia_lng_exports.json",
+      "status": "LIVE",
+      "source": "EIA dnav hist_xls (official public download)",
+      "series_id": "N9133US2",
+      "n_observations": 353,
+      "latest_date": "2026-05-15",
+      "latest_value": 16.519762131616123,
+      "error": null,
+      "retained_previous_cache": false
+    },
+    "hdd": {
+      "driver": "hdd",
+      "driver_name": "Heating Degree Days (Contiguous US)",
+      "cache_path": "data/cache/energy_drivers/noaa_hdd.json",
+      "status": "LIVE",
+      "source": "NOAA/CPC population-weighted degree days (public FTP)",
+      "series_id": "CPC/Population/Heating/CONUS",
+      "n_observations": 1388,
+      "latest_date": "2026-07-30",
+      "latest_value": 0.0,
+      "error": null,
+      "retained_previous_cache": false
+    },
+    "cdd": {
+      "driver": "cdd",
+      "driver_name": "Cooling Degree Days (Contiguous US)",
+      "cache_path": "data/cache/energy_drivers/noaa_cdd.json",
+      "status": "LIVE",
+      "source": "NOAA/CPC population-weighted degree days (public FTP)",
+      "series_id": "CPC/Population/Cooling/CONUS",
+      "n_observations": 1388,
+      "latest_date": "2026-07-30",
+      "latest_value": 25.0,
+      "error": null,
+      "retained_previous_cache": false
+    }
+  },
+  "live": 5,
+  "stale": 0,
+  "unavailable": 0,
+  "error": 0,
+  "required_keys": [],
+  "keys_present": {
+    "EIA_API_KEY": false,
+    "NOAA_API_TOKEN": false,
+    "FRED_API_KEY": true
+  }
+}

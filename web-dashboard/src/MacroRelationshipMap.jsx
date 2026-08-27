@@ -295,7 +295,7 @@ function LiveMacroOverlay({ rm, compact = false }) {
             />
             <Tooltip content={tip} cursor={{ stroke: '#475569', strokeWidth: 1, strokeDasharray: '4 4' }} />
             <Line
-              type="monotone"
+              type="linear"
               dataKey="nq"
               name={priceLabel}
               stroke="#38bdf8"
@@ -305,7 +305,7 @@ function LiveMacroOverlay({ rm, compact = false }) {
               activeDot={{ r: 4, strokeWidth: 0, fill: '#7dd3fc' }}
             />
             <Line
-              type="monotone"
+              type="linear"
               dataKey="y10"
               name={driverLabel}
               stroke="#c4b5fd"

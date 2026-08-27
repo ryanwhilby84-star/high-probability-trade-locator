@@ -26,7 +26,7 @@ export const MARKET_MACRO_PROFILES = {
     channels: [
       'Front-end yields (2Y) and the path of Fed expectations often dominate multiples and high-duration growth.',
       '10Y–30Y shape matters for discount-rate narratives; curve inflections can shift “growth vs safety” tone faster than single prints.',
-      'Broad USD (DXY when wired) affects overseas earnings translation and global liquidity recycling — positioning rarely ignores it.',
+      'Broad USD (DXY when wired) affects overseas earnings translation and global liquidity recycling — cohort positioning rarely ignores it.',
       'Liquidity / financial conditions: when conditions tighten, correlation rises and gap risk tends to increase even without a COT regime change.',
     ],
   },
@@ -57,7 +57,7 @@ export const MARKET_MACRO_PROFILES = {
     headline: 'Hybrid: precious metal + industrial beta',
     channels: [
       'Shares gold’s sensitivity to real yields and USD, but often carries more industrial / growth cyclicality than gold alone.',
-      'Cross-read copper and risk appetite when silver diverges from gold — the positioning story may be “dual use,” not a single theme.',
+      'Cross-read copper and risk appetite when silver diverges from gold — the cohort story may be “dual use,” not a single theme.',
     ],
   },
   'Copper / HG': {
@@ -80,7 +80,7 @@ export const MARKET_MACRO_PROFILES = {
     channels: [
       'Henry Hub often trades storage trajectory vs heating/cooling degree expectations — EIA prints can move implied vol sharply.',
       'LNG / export demand and supply disruptions can override a quiet macro week for broader risk assets.',
-      'Heavy short interest in the data plus a volatile inventory path is a classic squeeze-prone setup into releases — not a forecast, a fragility note.',
+      'Elevated short interest in the cohort plus a volatile inventory path is a classic squeeze-prone setup on data — not a forecast, a fragility note.',
     ],
   },
   Wheat: {
@@ -145,22 +145,10 @@ function resolvedRates(row, globalRegime) {
   return { rm, audit, rr, g, sig, liq, infl, ratesBias, policy, curve }
 }
 
-function tapeConstructiveRow(row) {
-  const c = low([row?.institutional_flow_summary, row?.flow_change_summary, row?.zone_focus].filter(has).join(' '))
-  return /(rally|demand|cover|lift|ease|improv|accumul|constructive|less bearish|bid|reversal)/i.test(c)
-}
-
-function macroRestrictiveRow(row) {
-  const mr = low(row?.macro_regime)
-  const ms = num(row?.macro_score)
-  return mr.includes('risk_off') || (Number.isFinite(ms) && ms <= 3)
-}
-
 /**
  * Macro regime classification — interpretive labels on top of existing JSON signals.
- * @param {string} [participationCategory] — optional UI participation label from COT history enrichment.
  */
-export function classifyMacroRegimeState(row, globalRegime, eventRisk, participationCategory = '') {
+export function classifyMacroRegimeState(row, globalRegime, eventRisk) {
   const { sig, liq, infl, ratesBias, policy, g, curve } = resolvedRates(row, globalRegime)
   const ms = num(row?.macro_score)
   const cot = num(row?.cot_score)
@@ -179,16 +167,15 @@ export function classifyMacroRegimeState(row, globalRegime, eventRisk, participa
     tags.push('event-heavy')
   }
 
+  if (restrictiveLiq && !eventRisk?.level === 'high') {
+    /* eslint-disable no-self-compare */ /* keep structure explicit */
+  }
   if (restrictiveLiq && primary === 'Macro backdrop indeterminate') {
     primary = 'Restrictive Liquidity'
     rationale.push('Liquidity language skews restrictive — financial conditions may punish leverage and lengthen correlation spikes across risk assets.')
     tags.push('liquidity-tight')
-  } else if (restrictiveLiq && primary === 'Event-Driven Volatility') {
-    secondary = secondary || 'Restrictive Liquidity'
-    rationale.push('Liquidity language still reads tight — event volatility can stack on top of an already fragile funding backdrop.')
-    tags.push('liquidity-tight')
-  } else if (easyLiq && sig.includes('risk_on') && primary === 'Macro backdrop indeterminate') {
-    primary = 'Liquidity Expansion'
+  } else if (easyLiq && sig.includes('risk_on')) {
+    if (primary === 'Macro backdrop indeterminate') primary = 'Liquidity Expansion'
     rationale.push('Liquidity reads supportive alongside a constructive rates snapshot — carry and multiples often get a friendlier default volatility backdrop (not a guarantee).')
     tags.push('liquidity-easy')
   }
@@ -200,18 +187,13 @@ export function classifyMacroRegimeState(row, globalRegime, eventRisk, participa
   }
 
   if (sig.includes('risk_off') || ratesBias.includes('bear')) {
-    if (primary === 'Event-Driven Volatility') {
-      secondary = secondary || 'Risk-Off Pressure'
-      rationale.push('Rates / resolved signal skews risk-off while the week is also event-heavy — two volatility engines can overlap.')
-    } else if (primary === 'Macro backdrop indeterminate' || primary === 'Liquidity Expansion') {
+    if (primary === 'Macro backdrop indeterminate' || primary === 'Liquidity Expansion') {
       primary = 'Risk-Off Pressure'
-      rationale.push('Resolved / rates signal skews risk-off or bearish rates bias — duration and beta often face a higher hurdle rate for narrative follow-through.')
-    } else {
-      rationale.push('Risk-off or bearish rates bias remains visible in the snapshot — keep it in frame even when other labels dominate.')
     }
+    rationale.push('Resolved / rates signal skews risk-off or bearish rates bias — duration and beta often face a higher hurdle rate for narrative follow-through.')
     tags.push('risk-off')
-  } else if (sig.includes('risk_on') && ratesBias.includes('bull') && primary === 'Macro backdrop indeterminate') {
-    primary = 'Risk-On Expansion'
+  } else if (sig.includes('risk_on') && ratesBias.includes('bull')) {
+    if (primary === 'Macro backdrop indeterminate') primary = 'Risk-On Expansion'
     rationale.push('Risk-on alignment in the rates snapshot — macro filter is supportive for typical risk-beta framing this week.')
     tags.push('risk-on')
   }
@@ -232,51 +214,17 @@ export function classifyMacroRegimeState(row, globalRegime, eventRisk, participa
     tags.push('curve-story')
   }
 
-  const inter = row?.intermarket_impulse_context && typeof row.intermarket_impulse_context === 'object' ? row.intermarket_impulse_context : {}
-  const conf = String(inter.intermarket_confirmation || '').toUpperCase()
-  const ps = low(row?.positioning_state)
-  const netPct = num(row?.full_loaded_history_context?.current_net_percentile ?? row?.current_net_percentile)
-  const mkt = low(row?.market)
-  const corp = [row?.institutional_flow_summary, row?.instrument_intel_context?.news_catalysts].filter(has).join(' ').toUpperCase()
-
-  if ((mkt.includes('crude') || mkt.includes('wheat') || mkt.includes('natural gas')) && /OPEC|BLACK SEA|GEOPOL|WAR|EMBARGO/.test(corp)) {
-    secondary = secondary || 'Supply Shock Regime'
-    rationale.push('Geopolitical or producer-group language appears near energy/ag — balances can reprice faster than broad macro shifts this week.')
-    tags.push('supply-shock-narrative')
-  }
-
-  if (
-    (Number.isFinite(netPct) && (netPct >= 90 || netPct <= 10) && /short|squeeze|cover|inventory|storage/i.test(corp))
-    || (participationCategory === 'Short Covering' && eventRisk?.level === 'high')
-  ) {
-    secondary = secondary || 'Squeeze-Prone Environment'
-    rationale.push('Positioning is historically stretched and catalyst language is active — path-dependent squeezes are a mechanical risk, not a directional promise.')
-    tags.push('squeeze-prone')
-  }
-
-  if ((ps.includes('strengthening') || ps.includes('distribution') || ps.includes('accumulation')) && conf === 'MIXED') {
-    secondary = secondary || 'Fragile Trend Conditions'
-    rationale.push('Directional positioning language sits alongside mixed intermarket confirmation — trends can exist without clean cross-asset sponsorship.')
-    tags.push('fragile-trend')
-  }
-
-  if (Number.isFinite(ms) && ms <= 3 && tapeConstructiveRow(row) && macroRestrictiveRow(row)) {
-    secondary = secondary || 'Momentum Despite Restriction'
-    rationale.push('Soft macro score coexists with constructive flow wording — positioning can run ahead of macro until data or liquidity rebuts it.')
-    tags.push('momentum-vs-macro')
-  }
-
   if (Number.isFinite(ms) && ms <= 3 && Number.isFinite(cot) && cot >= 7) {
     secondary = secondary || 'Macro Conflict'
-    rationale.push('Macro score is soft while COT conviction reads elevated — a classic filter-versus-positioning tension: trends can continue on positioning alone while macro disagrees.')
+    rationale.push('Dashboard macro_score is soft while COT conviction reads elevated — a classic “filter vs positioning” tension: trends can continue on positioning alone while macro disagrees.')
     tags.push('macro-cot-tension')
   }
 
   if (rationale.length === 0) {
-    rationale.push('Macro fields are sparse or mixed — use the rates detail block when available; avoid forcing a single regime label.')
+    rationale.push('Macro fields are sparse or mixed — treat the rates audit block (when available) as the authoritative bridge; avoid forcing a single regime label.')
   }
 
-  return { primary, secondary, rationale: rationale.slice(0, 8), tags: [...new Set(tags)] }
+  return { primary, secondary, rationale: rationale.slice(0, 6), tags: [...new Set(tags)] }
 }
 
 /** Heuristic “tape language” vs macro backdrop — uses confluence text only (no OHLC). */
@@ -307,31 +255,43 @@ export function interpretMacroVsTapeTension(row, participationCategory) {
   let label = 'Macro–tape relationship: unclear'
 
   if (macroRestrictive && tapeConstructive) {
-    label = 'Constructive flow vs cautious macro'
+    label = 'Momentum despite restriction (plausible)'
     lines.push(
-      `${clip(row?.market || 'This market', 32)}: flow/zone language reads constructive while the macro filter on this row reads tight or risk-off.`,
+      `${clip(row?.market || 'This market', 32)}: flow and decision-layer language sounds constructive or demand-leaning while the macro filter reads restrictive or soft on the dashboard bridge.`,
+    )
+    lines.push(
+      'That combination often appears when positioning rotation, short-covering, or forward repricing of policy runs ahead of the slow macro score — it can also reflect squeeze-style mechanics into catalysts. It is not evidence that macro “stopped mattering.”',
     )
   } else if (macroSupportive && tapeDefensive) {
-    label = 'Cautious flow vs friendlier macro'
+    label = 'Soft tape response despite supportive macro (plausible)'
     lines.push(
-      'Macro labels skew supportive, but flow language reads cautious — often levels, events, or balance-sheet risk dominating the tape.',
+      'Macro labels read supportive, but flow / zone language skews cautious or supply-leaning — participants may be prioritizing location, event risk, or micro balance sheets over the generic risk-on tag.',
+    )
+    lines.push(
+      'This is a useful conflict flag: execution quality often depends on whether the disconnect resolves via data or via price cleaning out one side of positioning.',
     )
   } else if (macroRestrictive && tapeDefensive) {
-    label = 'Macro and flow both cautious'
-    lines.push('Macro filter and flow language both skew defensive — needs a clear catalyst for clean follow-through.')
+    label = 'Aligned stress (macro and tape both cautious)'
+    lines.push(
+      'Macro filter and positioning-flow language both skew cautious — trend continuation, if any, may rely more on idiosyncratic catalysts than broad beta tailwinds.',
+    )
   } else if (macroSupportive && tapeConstructive) {
-    label = 'Macro and flow aligned (text)'
-    lines.push('Macro filter and flow language point the same way in this export — fewer mixed messages in text alone.')
+    label = 'Broad alignment (macro and tape language agree)'
+    lines.push(
+      'Macro filter and positioning-flow language broadly agree — this is what “cleaner backdrop” tends to look like in text, not proof of direction.',
+    )
   }
 
   if (participationCategory === 'Two-Way Expansion' || participationCategory === 'Participation Collapse') {
     lines.push(
-      `Participation reads «${participationCategory}» — open-interest dynamics can add chop even when bias directionally agrees.`,
+      `Participation flow reads «${participationCategory}» — open-interest dynamics can add chop even when macro and positioning bias agree on direction.`,
     )
   }
 
   if (!lines.length) {
-    lines.push('Flow/macro text on this row is too thin to tag a clean macro-vs-tape story — use rates, intermarket, and chart.')
+    lines.push(
+      'Not enough consistent language in flow / zone fields to classify a macro–tape tension — rely on rates audit, intermarket, and your price chart for discretion.',
+    )
   }
 
   return { label, lines: lines.slice(0, 5) }
@@ -493,7 +453,7 @@ export function computeMacroInterpretationConviction(row, globalRegime, particip
 
 export function buildMacroInstitutionalBriefing(market, row, pack, globalRegime, participationCategory) {
   const profile = getMarketMacroProfile(market)
-  const regime = classifyMacroRegimeState(row, globalRegime, assessEventRisk(row, pack || row?.ui_pack || {}), participationCategory || '')
+  const regime = classifyMacroRegimeState(row, globalRegime, assessEventRisk(row, pack || row?.ui_pack || {}))
   const tension = interpretMacroVsTapeTension(row, participationCategory)
   const events = buildExpandedEventIntel(market, row, pack)
   const conv = computeMacroInterpretationConviction(row, globalRegime, participationCategory)
@@ -524,7 +484,7 @@ export function buildMacroInstitutionalBriefing(market, row, pack, globalRegime,
 export function computeMacroIntelligenceBundle(market, row, pack, globalRegime, participationCategory) {
   const p = pack || row?.ui_pack || {}
   const eventRisk = assessEventRisk(row, p)
-  const regime = classifyMacroRegimeState(row, globalRegime, eventRisk, participationCategory || '')
+  const regime = classifyMacroRegimeState(row, globalRegime, eventRisk)
   const tension = interpretMacroVsTapeTension(row, participationCategory)
   const events = buildExpandedEventIntel(market, row, p)
   const conviction = computeMacroInterpretationConviction(row, globalRegime, participationCategory)

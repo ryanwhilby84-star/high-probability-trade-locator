@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 import requests
@@ -25,32 +26,48 @@ def _session() -> requests.Session:
         raise OandaApiError(
             "OANDA_API_KEY not set — add your personal access token to .env (see .env.example)."
         )
-    s = requests.Session()
-    s.headers.update(
+    session = requests.Session()
+    session.headers.update(
         {
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
         }
     )
-    return s
+    return session
+
+
+def _request_timeout() -> tuple[float, float]:
+    """Short bounded connect/read timeout for operational price refreshes.
+
+    Provider-specific env vars can loosen this if needed, but a single slow
+    endpoint must never stall an entire 100+ instrument refresh indefinitely.
+    """
+    base = max(1.0, float(get_settings().request_timeout_seconds))
+    read = max(1.0, float(os.getenv("OANDA_REQUEST_TIMEOUT_SECONDS", str(min(base, 12.0)))))
+    connect = max(1.0, float(os.getenv("OANDA_CONNECT_TIMEOUT_SECONDS", str(min(read, 5.0)))))
+    return connect, read
 
 
 def api_get(path: str, *, params: dict[str, str] | None = None) -> dict[str, Any]:
     host = get_oanda_api_host().rstrip("/")
     url = f"{host}{path}"
-    timeout = get_settings().request_timeout_seconds
+    timeout = _request_timeout()
     try:
-        r = _session().get(url, params=params, timeout=timeout)
+        response = _session().get(url, params=params, timeout=timeout)
+    except requests.Timeout as exc:
+        raise OandaApiError(
+            f"OANDA request timed out for {path} (connect={timeout[0]}s read={timeout[1]}s)"
+        ) from exc
     except requests.RequestException as exc:
         raise OandaApiError(f"OANDA request failed: {type(exc).__name__}: {exc}") from exc
-    if r.status_code >= 400:
+    if response.status_code >= 400:
         raise OandaApiError(
-            f"OANDA HTTP {r.status_code} for {path}",
-            status_code=r.status_code,
-            body=(r.text or "")[:2000],
+            f"OANDA HTTP {response.status_code} for {path}",
+            status_code=response.status_code,
+            body=(response.text or "")[:2000],
         )
     try:
-        return r.json()
+        return response.json()
     except ValueError as exc:
         raise OandaApiError(f"OANDA response not JSON for {path}") from exc
 
@@ -70,10 +87,10 @@ def resolve_account_id() -> str:
     accounts = list_accounts()
     if not accounts:
         raise OandaApiError("No OANDA accounts returned for this API token.")
-    aid = str(accounts[0].get("id") or "").strip()
-    if not aid:
+    account_id = str(accounts[0].get("id") or "").strip()
+    if not account_id:
         raise OandaApiError("First OANDA account has no id.")
-    return aid
+    return account_id
 
 
 def fetch_account_instruments(account_id: str | None = None) -> list[dict[str, Any]]:

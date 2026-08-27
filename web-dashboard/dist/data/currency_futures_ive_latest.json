@@ -1,0 +1,1456 @@
+{
+  "model_id": "currency_futures_ive_v1",
+  "valuation_phase": "1C Currency Futures IVE",
+  "generated_at": "2026-08-15T07:23:41.567447+00:00",
+  "engine": "currency_futures_ive_v1",
+  "note": "Futures-native IVE \u2014 OLS on continuous futures close; no pair fair value or fx_carry_real_yield_v3.",
+  "roll_method_default": "oanda_backfill continuous (front-month implicit)",
+  "symbols": [
+    "DX",
+    "6E",
+    "6B",
+    "6A",
+    "6C",
+    "6J",
+    "6S",
+    "6N"
+  ],
+  "instruments": {
+    "US Dollar Index / DX": {
+      "instrument": "US Dollar Index / DX",
+      "current_price": 99.66999816894531,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "dx_futures_broad_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "FRED DFF",
+        "FRED DFII10"
+      ],
+      "source_dates": [
+        "2026-08-14",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "avg_g10_2y_vs_usd": -1.8766,
+        "fed_funds": 3.63,
+        "real_yield_10y": 2.47,
+        "futures_symbol": "DX",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "098662",
+        "regression": {
+          "ok": true,
+          "n": 2670,
+          "r_squared": 0.4491,
+          "features": [
+            "avg_g10_2y_vs_usd",
+            "fed_funds",
+            "real_yield_10y"
+          ],
+          "coefficients": {
+            "intercept": 4.550876727320679,
+            "avg_g10_2y_vs_usd": -0.0046491809666264,
+            "fed_funds": 0.011090112735192337,
+            "real_yield_10y": 0.011225509666790201
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2670,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "US Dollar Index / DX",
+          "bar_count": 14122,
+          "earliest": "1971-01-04",
+          "latest": "2026-08-14",
+          "roll_method": "yahoo:DX-Y.NYB",
+          "price_as_of": "2026-08-14",
+          "stored_at": "2026-08-15T07:22:37.112450+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "US Dollar Index / DX",
+          "source_date": "2026-08-14",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "FRED DFF",
+          "source_id": "DFF",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "fed_funds"
+        },
+        {
+          "source_name": "FRED DFII10",
+          "source_id": "DFII10",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "real_yield_10y"
+        }
+      ],
+      "futures_symbol": "DX",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "dx_futures_broad_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "Euro FX / 6E": {
+      "instrument": "Euro FX / 6E",
+      "current_price": 1.157045,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "eur_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "EUR 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": -1.5169,
+        "policy_diff": -1.38,
+        "futures_symbol": "6E",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "EUR_USD",
+        "regression": {
+          "ok": true,
+          "n": 2648,
+          "r_squared": 0.0333,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.14019185530173373,
+            "y2_diff": 0.012247706344172195,
+            "policy_diff": 0.0008319312968803616
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2648,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "EUR.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Euro FX / 6E",
+          "bar_count": 2648,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.055177583Z",
+          "stored_at": "2026-08-15T07:22:38.568015+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Euro FX / 6E",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "EUR 2Y yield",
+          "source_id": "2026-06-30",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "EUR.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6E",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "eur_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "British Pound / 6B": {
+      "instrument": "British Pound / 6B",
+      "current_price": 1.35336,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "gbp_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "GBP 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": -0.1395,
+        "policy_diff": 0.12,
+        "futures_symbol": "6B",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "GBP_USD",
+        "regression": {
+          "ok": true,
+          "n": 2649,
+          "r_squared": 0.0817,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.2690119384431162,
+            "y2_diff": 0.02936277378392615,
+            "policy_diff": -0.02739908596906543
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2649,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "GBP.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "British Pound / 6B",
+          "bar_count": 2649,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.054923919Z",
+          "stored_at": "2026-08-15T07:22:39.944693+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "British Pound / 6B",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "GBP 2Y yield",
+          "source_id": "2026-06-30",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "GBP.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6B",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "gbp_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "Australian Dollar / 6A": {
+      "instrument": "Australian Dollar / 6A",
+      "current_price": 0.70852,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "aud_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "AUD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-24",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 0.215,
+        "policy_diff": 0.72,
+        "futures_symbol": "6A",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "AUD_USD",
+        "regression": {
+          "ok": true,
+          "n": 2647,
+          "r_squared": 0.3098,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": -0.338787784297655,
+            "y2_diff": -0.006757535956636421,
+            "policy_diff": 0.06033659045156614
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2647,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "AUD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Australian Dollar / 6A",
+          "bar_count": 2647,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.050425856Z",
+          "stored_at": "2026-08-15T07:22:41.225407+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Australian Dollar / 6A",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "AUD 2Y yield",
+          "source_id": "2026-06-24",
+          "source_date": "2026-06-24",
+          "last_refresh": "2026-08-15",
+          "field": "AUD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6A",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "aud_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "Canadian Dollar / 6C": {
+      "instrument": "Canadian Dollar / 6C",
+      "current_price": 1.38745,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "cad_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "CAD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-07-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 1.38,
+        "policy_diff": 1.38,
+        "futures_symbol": "6C",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "USD_CAD",
+        "regression": {
+          "ok": true,
+          "n": 2659,
+          "r_squared": 0.5077,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.26068118613175284,
+            "y2_diff": 0.06303543002229907,
+            "policy_diff": -0.005235979273778557
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2659,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "CAD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Canadian Dollar / 6C",
+          "bar_count": 2659,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.060570496Z",
+          "stored_at": "2026-08-15T07:22:42.750323+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Canadian Dollar / 6C",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "CAD 2Y yield",
+          "source_id": "2026-07-30",
+          "source_date": "2026-07-30",
+          "last_refresh": "2026-08-15",
+          "field": "CAD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6C",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "cad_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "Japanese Yen / 6J": {
+      "instrument": "Japanese Yen / 6J",
+      "current_price": 0.006275000050663948,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "jpy_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "JPY 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-14",
+        "2026-07-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 2.733,
+        "policy_diff": 2.63,
+        "futures_symbol": "6J",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "097741",
+        "regression": {
+          "ok": false,
+          "n": 38,
+          "error": "insufficient_aligned_obs"
+        },
+        "panel_observations": 2670,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "JPY.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Japanese Yen / 6J",
+          "bar_count": 6466,
+          "earliest": "2000-09-13",
+          "latest": "2026-08-14",
+          "roll_method": "yahoo:6J=F",
+          "price_as_of": "2026-08-14",
+          "stored_at": "2026-08-15T07:22:44.288807+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Japanese Yen / 6J",
+          "source_date": "2026-08-14",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "JPY 2Y yield",
+          "source_id": "2026-07-30",
+          "source_date": "2026-07-30",
+          "last_refresh": "2026-08-15",
+          "field": "JPY.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6J",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "jpy_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "Swiss Franc / 6S": {
+      "instrument": "Swiss Franc / 6S",
+      "current_price": 0.81341,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "chf_futures_safe_haven_v1",
+      "source_names": [
+        "Futures price store",
+        "CHF 2Y yield",
+        "USD 2Y yield",
+        "FRED DTWEXBGS"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2025-07-31",
+        "2026-07-01",
+        "2026-08-15"
+      ],
+      "inputs": {
+        "y2_diff": 4.313,
+        "policy_diff": 3.63,
+        "broad_usd_index": 119.7034,
+        "futures_symbol": "6S",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "USD_CHF",
+        "regression": {
+          "ok": false,
+          "n": 38,
+          "error": "insufficient_panel"
+        },
+        "panel_observations": 38,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "CHF.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Swiss Franc / 6S",
+          "bar_count": 2653,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.061180188Z",
+          "stored_at": "2026-08-15T07:22:45.575371+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Swiss Franc / 6S",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "CHF 2Y yield",
+          "source_id": "2025-07-31",
+          "source_date": "2025-07-31",
+          "last_refresh": "2026-08-15",
+          "field": "CHF.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        },
+        {
+          "source_name": "FRED DTWEXBGS",
+          "source_id": "DTWEXBGS",
+          "source_date": "2026-08-15",
+          "last_refresh": "2026-08-15",
+          "field": "broad_usd_index"
+        }
+      ],
+      "futures_symbol": "6S",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_safe_haven",
+      "model_id": "chf_futures_safe_haven_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false,
+      "chf_dedicated_model": true,
+      "usdchf_pair_model_used": false
+    },
+    "NZ Dollar / 6N": {
+      "instrument": "NZ Dollar / 6N",
+      "current_price": 0.5890949999999999,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "nzd_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "NZD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-05-01",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "futures_symbol": "6N",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "NZD_USD",
+        "regression": {
+          "ok": false,
+          "n": 0,
+          "error": "insufficient_panel"
+        },
+        "panel_observations": 0,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "NZD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "NZ Dollar / 6N",
+          "bar_count": 2657,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.044794912Z",
+          "stored_at": "2026-08-15T07:22:47.048287+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "NZ Dollar / 6N",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "NZD 2Y yield",
+          "source_id": "2026-05-01",
+          "source_date": "2026-05-01",
+          "last_refresh": "2026-08-15",
+          "field": "NZD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6N",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "nzd_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    }
+  },
+  "by_symbol": {
+    "DX": {
+      "instrument": "US Dollar Index / DX",
+      "current_price": 99.66999816894531,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "dx_futures_broad_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "FRED DFF",
+        "FRED DFII10"
+      ],
+      "source_dates": [
+        "2026-08-14",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "avg_g10_2y_vs_usd": -1.8766,
+        "fed_funds": 3.63,
+        "real_yield_10y": 2.47,
+        "futures_symbol": "DX",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "098662",
+        "regression": {
+          "ok": true,
+          "n": 2670,
+          "r_squared": 0.4491,
+          "features": [
+            "avg_g10_2y_vs_usd",
+            "fed_funds",
+            "real_yield_10y"
+          ],
+          "coefficients": {
+            "intercept": 4.550876727320679,
+            "avg_g10_2y_vs_usd": -0.0046491809666264,
+            "fed_funds": 0.011090112735192337,
+            "real_yield_10y": 0.011225509666790201
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2670,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "US Dollar Index / DX",
+          "bar_count": 14122,
+          "earliest": "1971-01-04",
+          "latest": "2026-08-14",
+          "roll_method": "yahoo:DX-Y.NYB",
+          "price_as_of": "2026-08-14",
+          "stored_at": "2026-08-15T07:22:37.112450+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "US Dollar Index / DX",
+          "source_date": "2026-08-14",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "FRED DFF",
+          "source_id": "DFF",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "fed_funds"
+        },
+        {
+          "source_name": "FRED DFII10",
+          "source_id": "DFII10",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "real_yield_10y"
+        }
+      ],
+      "futures_symbol": "DX",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "dx_futures_broad_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6E": {
+      "instrument": "Euro FX / 6E",
+      "current_price": 1.157045,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "eur_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "EUR 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": -1.5169,
+        "policy_diff": -1.38,
+        "futures_symbol": "6E",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "EUR_USD",
+        "regression": {
+          "ok": true,
+          "n": 2648,
+          "r_squared": 0.0333,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.14019185530173373,
+            "y2_diff": 0.012247706344172195,
+            "policy_diff": 0.0008319312968803616
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2648,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "EUR.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Euro FX / 6E",
+          "bar_count": 2648,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.055177583Z",
+          "stored_at": "2026-08-15T07:22:38.568015+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Euro FX / 6E",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "EUR 2Y yield",
+          "source_id": "2026-06-30",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "EUR.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6E",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "eur_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6B": {
+      "instrument": "British Pound / 6B",
+      "current_price": 1.35336,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "gbp_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "GBP 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": -0.1395,
+        "policy_diff": 0.12,
+        "futures_symbol": "6B",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "GBP_USD",
+        "regression": {
+          "ok": true,
+          "n": 2649,
+          "r_squared": 0.0817,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.2690119384431162,
+            "y2_diff": 0.02936277378392615,
+            "policy_diff": -0.02739908596906543
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2649,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "GBP.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "British Pound / 6B",
+          "bar_count": 2649,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.054923919Z",
+          "stored_at": "2026-08-15T07:22:39.944693+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "British Pound / 6B",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "GBP 2Y yield",
+          "source_id": "2026-06-30",
+          "source_date": "2026-06-30",
+          "last_refresh": "2026-08-15",
+          "field": "GBP.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6B",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "gbp_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6A": {
+      "instrument": "Australian Dollar / 6A",
+      "current_price": 0.70852,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "aud_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "AUD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-06-24",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 0.215,
+        "policy_diff": 0.72,
+        "futures_symbol": "6A",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "AUD_USD",
+        "regression": {
+          "ok": true,
+          "n": 2647,
+          "r_squared": 0.3098,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": -0.338787784297655,
+            "y2_diff": -0.006757535956636421,
+            "policy_diff": 0.06033659045156614
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2647,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "AUD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Australian Dollar / 6A",
+          "bar_count": 2647,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.050425856Z",
+          "stored_at": "2026-08-15T07:22:41.225407+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Australian Dollar / 6A",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "AUD 2Y yield",
+          "source_id": "2026-06-24",
+          "source_date": "2026-06-24",
+          "last_refresh": "2026-08-15",
+          "field": "AUD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6A",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "aud_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6C": {
+      "instrument": "Canadian Dollar / 6C",
+      "current_price": 1.38745,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "cad_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "CAD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-07-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 1.38,
+        "policy_diff": 1.38,
+        "futures_symbol": "6C",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "USD_CAD",
+        "regression": {
+          "ok": true,
+          "n": 2659,
+          "r_squared": 0.5077,
+          "features": [
+            "y2_diff",
+            "policy_diff"
+          ],
+          "coefficients": {
+            "intercept": 0.26068118613175284,
+            "y2_diff": 0.06303543002229907,
+            "policy_diff": -0.005235979273778557
+          },
+          "dependent_series": "log_continuous_futures_close",
+          "legacy_fixed_betas_used": false,
+          "legacy_fx_v3_used": false,
+          "legacy_pair_model_used": false
+        },
+        "panel_observations": 2659,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "CAD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Canadian Dollar / 6C",
+          "bar_count": 2659,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.060570496Z",
+          "stored_at": "2026-08-15T07:22:42.750323+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Canadian Dollar / 6C",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "CAD 2Y yield",
+          "source_id": "2026-07-30",
+          "source_date": "2026-07-30",
+          "last_refresh": "2026-08-15",
+          "field": "CAD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6C",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "cad_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6J": {
+      "instrument": "Japanese Yen / 6J",
+      "current_price": 0.006275000050663948,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "jpy_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "JPY 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-14",
+        "2026-07-30",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "y2_diff": 2.733,
+        "policy_diff": 2.63,
+        "futures_symbol": "6J",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "097741",
+        "regression": {
+          "ok": false,
+          "n": 38,
+          "error": "insufficient_aligned_obs"
+        },
+        "panel_observations": 2670,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "JPY.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Japanese Yen / 6J",
+          "bar_count": 6466,
+          "earliest": "2000-09-13",
+          "latest": "2026-08-14",
+          "roll_method": "yahoo:6J=F",
+          "price_as_of": "2026-08-14",
+          "stored_at": "2026-08-15T07:22:44.288807+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Japanese Yen / 6J",
+          "source_date": "2026-08-14",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "JPY 2Y yield",
+          "source_id": "2026-07-30",
+          "source_date": "2026-07-30",
+          "last_refresh": "2026-08-15",
+          "field": "JPY.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6J",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "jpy_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    },
+    "6S": {
+      "instrument": "Swiss Franc / 6S",
+      "current_price": 0.81341,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "chf_futures_safe_haven_v1",
+      "source_names": [
+        "Futures price store",
+        "CHF 2Y yield",
+        "USD 2Y yield",
+        "FRED DTWEXBGS"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2025-07-31",
+        "2026-07-01",
+        "2026-08-15"
+      ],
+      "inputs": {
+        "y2_diff": 4.313,
+        "policy_diff": 3.63,
+        "broad_usd_index": 119.7034,
+        "futures_symbol": "6S",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "USD_CHF",
+        "regression": {
+          "ok": false,
+          "n": 38,
+          "error": "insufficient_panel"
+        },
+        "panel_observations": 38,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "CHF.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "Swiss Franc / 6S",
+          "bar_count": 2653,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.061180188Z",
+          "stored_at": "2026-08-15T07:22:45.575371+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "Swiss Franc / 6S",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "CHF 2Y yield",
+          "source_id": "2025-07-31",
+          "source_date": "2025-07-31",
+          "last_refresh": "2026-08-15",
+          "field": "CHF.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        },
+        {
+          "source_name": "FRED DTWEXBGS",
+          "source_id": "DTWEXBGS",
+          "source_date": "2026-08-15",
+          "last_refresh": "2026-08-15",
+          "field": "broad_usd_index"
+        }
+      ],
+      "futures_symbol": "6S",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_safe_haven",
+      "model_id": "chf_futures_safe_haven_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false,
+      "chf_dedicated_model": true,
+      "usdchf_pair_model_used": false
+    },
+    "6N": {
+      "instrument": "NZ Dollar / 6N",
+      "current_price": 0.5890949999999999,
+      "fair_value": null,
+      "valuation_pct": null,
+      "valuation_label": "\u2014",
+      "valuation_grade": "FAIR",
+      "model_name": "nzd_futures_macro_v1",
+      "source_names": [
+        "Futures price store",
+        "NZD 2Y yield",
+        "USD 2Y yield"
+      ],
+      "source_dates": [
+        "2026-08-13",
+        "2026-05-01",
+        "2026-07-01"
+      ],
+      "inputs": {
+        "futures_symbol": "6N",
+        "dependent_series": "log_continuous_futures_close",
+        "cot_market_code": "NZD_USD",
+        "regression": {
+          "ok": false,
+          "n": 0,
+          "error": "insufficient_panel"
+        },
+        "panel_observations": 0,
+        "_missing_inputs": [],
+        "_stale_inputs": [
+          "NZD.y2",
+          "USD.y2"
+        ],
+        "price_history": {
+          "instrument_id": "NZ Dollar / 6N",
+          "bar_count": 2657,
+          "earliest": "2016-05-30",
+          "latest": "2026-08-13",
+          "roll_method": "oanda_backfill",
+          "price_as_of": "2026-08-14T20:59:05.044794912Z",
+          "stored_at": "2026-08-15T07:22:47.048287+00:00"
+        }
+      },
+      "calculation_breakdown": [],
+      "last_updated": "2026-08-14",
+      "model_status": "DATA_STALE",
+      "source_lineage": [
+        {
+          "source_name": "Futures price store",
+          "source_id": "NZ Dollar / 6N",
+          "source_date": "2026-08-13",
+          "last_refresh": "2026-08-15",
+          "field": "current_price"
+        },
+        {
+          "source_name": "NZD 2Y yield",
+          "source_id": "2026-05-01",
+          "source_date": "2026-05-01",
+          "last_refresh": "2026-08-15",
+          "field": "NZD.y2"
+        },
+        {
+          "source_name": "USD 2Y yield",
+          "source_id": "2026-07-01",
+          "source_date": "2026-07-01",
+          "last_refresh": "2026-08-15",
+          "field": "USD.y2"
+        }
+      ],
+      "futures_symbol": "6N",
+      "dependent_series": "log_continuous_futures_close",
+      "model_family": "futures_ols_log_macro",
+      "model_id": "nzd_futures_macro_v1",
+      "wired": false,
+      "legacy_pair_model_used": false,
+      "legacy_fx_v3_used": false,
+      "pair_derived": false
+    }
+  }
+}

@@ -194,11 +194,12 @@ def write_scanner_latest(confluence_path: Path | None = None) -> Path:
 
     path = confluence_path or root / "web-dashboard/public/data/confluence_history_latest.json"
     doc = json.loads(path.read_text(encoding="utf-8"))
+    latest_week = doc.get("latest_week") or doc.get("latest_cot_report_date")
     payload = {
         "version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scanner_attention_week": doc.get("scanner_attention_week"),
-        "latest_week": doc.get("latest_week"),
+        "latest_week": latest_week,
     }
     text = json.dumps(payload, indent=2, ensure_ascii=False)
     for out in (SCANNER_OUT, root / "data/scanner_latest.json"):

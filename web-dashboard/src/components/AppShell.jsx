@@ -1,16 +1,22 @@
 import React from 'react'
 import { getAssetClasses, assetClassForMarket, assetClassLabel, marketsInAssetClass } from '../marketCatalog.js'
-import { canonicalMarketId } from '../marketResolution.js'
+import { allInstrumentIds } from '../instrumentRegistry.js'
+import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 import {
   navigateToJournal,
-  navigateToOandaCoverage,
-  navigateToCotProof,
-  navigateToCotSourceTruth,
-  navigateToDataLineage,
-  navigateToPriceCoverage,
   navigateToScanner,
-  navigateToThesisTracker,
+  navigateToNaturalGasValuation,
+  navigateToDxyMacroBias,
+  navigateToGoldValuation,
+  navigateToInstrument,
+  navigateToMacroHub,
+  navigateToSeasonalityWorkstation,
+  navigateToCorrelationMatrix,
+  navigateToTradeBasket,
+  navigateToMacroIntelligence,
 } from '../routing.js'
+
+const DXY_MARKET = 'US Dollar Index / DX'
 
 export function AppShell({
   children,
@@ -25,6 +31,7 @@ export function AppShell({
   onSidebarClass,
   marketSwitcher,
   topActions,
+  contentClassName = '',
 }) {
   const weekDates = Array.isArray(dates) ? dates : []
   const showWeekPicker = weekDates.length > 0 && typeof onDateChange === 'function'
@@ -76,30 +83,87 @@ export function AppShell({
             )
           })}
         </nav>
-        <div style={{ padding: '8px 10px 14px', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+        {/* Phase 6: product nav only. Audit/debug routes remain routable but hidden. */}
+        <div className="ws-product-nav">
           <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>
             Scanner
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToThesisTracker}>
-            Thesis Tracker
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>
+            Macro Hub
           </button>
           <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToJournal}>
             Trade Journal
           </button>
-          <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%', marginTop: 8 }} onClick={navigateToDataLineage}>
-            Data Lineage
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToNaturalGasValuation}
+          >
+            NG Valuation
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCotSourceTruth}>
-            COT Source Truth
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToGoldValuation}
+          >
+            Gold Valuation
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCotProof}>
-            COT Proof (HTPL)
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={() => {
+              const universe = allInstrumentIds()
+              const first =
+                (universe && universe[0]) ||
+                (TRACKED_MARKET_IDS && TRACKED_MARKET_IDS[0]) ||
+                'NASDAQ / NQ'
+              navigateToSeasonalityWorkstation(first)
+            }}
+          >
+            Seasonality Workstation
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToPriceCoverage}>
-            Price Coverage Audit
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToCorrelationMatrix}
+          >
+            Correlation Matrix
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToOandaCoverage}>
-            OANDA coverage
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToTradeBasket}
+          >
+            Trade Basket
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToMacroIntelligence}
+          >
+            Macro Intelligence
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={() => navigateToInstrument(DXY_MARKET)}
+          >
+            US Dollar Index / DX
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            style={{ width: '100%', marginTop: 8 }}
+            onClick={navigateToDxyMacroBias}
+          >
+            DXY Macro Bias
           </button>
         </div>
       </aside>
@@ -145,7 +209,7 @@ export function AppShell({
           {marketSwitcher}
           {topActions}
         </header>
-        <main className="ws-content">{children}</main>
+        <main className={`ws-content${contentClassName ? ` ${contentClassName}` : ''}`}>{children}</main>
       </div>
     </div>
   )

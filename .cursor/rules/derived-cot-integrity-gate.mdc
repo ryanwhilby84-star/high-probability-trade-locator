@@ -1,0 +1,34 @@
+---
+description: Derived COT integrity gate — Weekly Inspector must be complete
+alwaysApply: true
+---
+
+# Derived COT Integrity Gate
+
+After weekly inspector export (and before Weekly Analysis / scanner / intelligence publish), every `LEGACY_COT_MARKETS` instrument must PASS:
+
+```bash
+python scripts/run_derived_cot_integrity_audit.py
+```
+
+Reports: `data/audits/derived_cot_integrity_audit.md`, `data/derived_cot_integrity_audit.md`
+
+## Hard requirements
+
+- Latest report week **and** prior 12 weeks have finite derived fields for Commercial, Non-commercial, Non-reportable
+- Required: net, 1W/4W/12W changes, percentiles, percentile movements, observation count, temperature/state, direction
+- Cross-group: participant percentiles, C–NC / C–NR spreads, relationship, flow
+- Spreads must match participant percentile arithmetic
+- No NaN / Infinity / null / `"Unavailable"` for required fields
+- Frontend must as-of join Friday price weeks to Tuesday COT weeks (`resolveInspectorWeekForDate`); never exact-match-only
+- Incomplete inspector → blocking **DATA INTEGRITY FAILURE** banner (not columns of Unavailable)
+
+## Fail fast
+
+If ANY instrument fails:
+
+- Message: **DERIVED COT INTEGRITY FAILED**
+- Weekly refresh stops before analyst intelligence
+- `run_analyst_intelligence_export` raises if gate is not PASS
+
+Do not treat missing percentiles as a harmless UI fallback when historical COT exists.

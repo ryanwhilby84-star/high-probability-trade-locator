@@ -1,0 +1,6002 @@
+[
+  {
+    "model_week": "2019-06-02",
+    "coefficients": {
+      "intercept": 1.120406,
+      "storage_surplus_bcf": -0.00024,
+      "production_yoy_pct": -0.011287
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-05-26",
+      "n": 156,
+      "in_sample_r2": 0.176
+    },
+    "fair_value": 2.862136,
+    "deviation_pct": -16.0767
+  },
+  {
+    "model_week": "2019-06-09",
+    "coefficients": {
+      "intercept": 1.120655,
+      "storage_surplus_bcf": -0.000244,
+      "production_yoy_pct": -0.011594
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-06-02",
+      "n": 157,
+      "in_sample_r2": 0.1783
+    },
+    "fair_value": 2.849032,
+    "deviation_pct": -17.3755
+  },
+  {
+    "model_week": "2019-06-16",
+    "coefficients": {
+      "intercept": 1.120976,
+      "storage_surplus_bcf": -0.000249,
+      "production_yoy_pct": -0.011941
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-06-09",
+      "n": 158,
+      "in_sample_r2": 0.1811
+    },
+    "fair_value": 2.828542,
+    "deviation_pct": -16.1405
+  },
+  {
+    "model_week": "2019-06-23",
+    "coefficients": {
+      "intercept": 1.121331,
+      "storage_surplus_bcf": -0.000254,
+      "production_yoy_pct": -0.012278
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-06-16",
+      "n": 159,
+      "in_sample_r2": 0.1848
+    },
+    "fair_value": 2.799262,
+    "deviation_pct": -17.9069
+  },
+  {
+    "model_week": "2019-06-30",
+    "coefficients": {
+      "intercept": 1.121902,
+      "storage_surplus_bcf": -0.00026,
+      "production_yoy_pct": -0.012703
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-06-23",
+      "n": 160,
+      "in_sample_r2": 0.1901
+    },
+    "fair_value": 2.777236,
+    "deviation_pct": -17.832
+  },
+  {
+    "model_week": "2019-07-07",
+    "coefficients": {
+      "intercept": 1.122567,
+      "storage_surplus_bcf": -0.000267,
+      "production_yoy_pct": -0.013149
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-06-30",
+      "n": 161,
+      "in_sample_r2": 0.1963
+    },
+    "fair_value": 2.76099,
+    "deviation_pct": -12.64
+  },
+  {
+    "model_week": "2019-07-14",
+    "coefficients": {
+      "intercept": 1.123056,
+      "storage_surplus_bcf": -0.000272,
+      "production_yoy_pct": -0.013461
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-07-07",
+      "n": 162,
+      "in_sample_r2": 0.2021
+    },
+    "fair_value": 2.754611,
+    "deviation_pct": -12.7282
+  },
+  {
+    "model_week": "2019-07-21",
+    "coefficients": {
+      "intercept": 1.123541,
+      "storage_surplus_bcf": -0.000277,
+      "production_yoy_pct": -0.013772
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-07-14",
+      "n": 163,
+      "in_sample_r2": 0.2079
+    },
+    "fair_value": 2.812796,
+    "deviation_pct": -17.5554
+  },
+  {
+    "model_week": "2019-07-28",
+    "coefficients": {
+      "intercept": 1.123555,
+      "storage_surplus_bcf": -0.000281,
+      "production_yoy_pct": -0.014047
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-07-21",
+      "n": 164,
+      "in_sample_r2": 0.2103
+    },
+    "fair_value": 2.784943,
+    "deviation_pct": -23.5173
+  },
+  {
+    "model_week": "2019-08-04",
+    "coefficients": {
+      "intercept": 1.123791,
+      "storage_surplus_bcf": -0.000288,
+      "production_yoy_pct": -0.014487
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-07-28",
+      "n": 165,
+      "in_sample_r2": 0.2132
+    },
+    "fair_value": 2.768575,
+    "deviation_pct": -24.1487
+  },
+  {
+    "model_week": "2019-08-11",
+    "coefficients": {
+      "intercept": 1.124108,
+      "storage_surplus_bcf": -0.000296,
+      "production_yoy_pct": -0.014956
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-08-04",
+      "n": 166,
+      "in_sample_r2": 0.2166
+    },
+    "fair_value": 2.760669,
+    "deviation_pct": -23.3519
+  },
+  {
+    "model_week": "2019-08-18",
+    "coefficients": {
+      "intercept": 1.124398,
+      "storage_surplus_bcf": -0.000303,
+      "production_yoy_pct": -0.015399
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-08-11",
+      "n": 167,
+      "in_sample_r2": 0.2201
+    },
+    "fair_value": 2.724742,
+    "deviation_pct": -19.0382
+  },
+  {
+    "model_week": "2019-08-25",
+    "coefficients": {
+      "intercept": 1.124885,
+      "storage_surplus_bcf": -0.00031,
+      "production_yoy_pct": -0.015809
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-08-18",
+      "n": 168,
+      "in_sample_r2": 0.2256
+    },
+    "fair_value": 2.715698,
+    "deviation_pct": -18.1058
+  },
+  {
+    "model_week": "2019-09-01",
+    "coefficients": {
+      "intercept": 1.125346,
+      "storage_surplus_bcf": -0.000317,
+      "production_yoy_pct": -0.016194
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-08-25",
+      "n": 169,
+      "in_sample_r2": 0.231
+    },
+    "fair_value": 2.694311,
+    "deviation_pct": -14.4865
+  },
+  {
+    "model_week": "2019-09-08",
+    "coefficients": {
+      "intercept": 1.125774,
+      "storage_surplus_bcf": -0.000322,
+      "production_yoy_pct": -0.016511
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-09-01",
+      "n": 170,
+      "in_sample_r2": 0.2367
+    },
+    "fair_value": 2.687521,
+    "deviation_pct": -3.1077
+  },
+  {
+    "model_week": "2019-09-15",
+    "coefficients": {
+      "intercept": 1.12586,
+      "storage_surplus_bcf": -0.000323,
+      "production_yoy_pct": -0.016574
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-09-08",
+      "n": 171,
+      "in_sample_r2": 0.2394
+    },
+    "fair_value": 2.743661,
+    "deviation_pct": -2.1016
+  },
+  {
+    "model_week": "2019-09-22",
+    "coefficients": {
+      "intercept": 1.12586,
+      "storage_surplus_bcf": -0.000324,
+      "production_yoy_pct": -0.016603
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-09-15",
+      "n": 172,
+      "in_sample_r2": 0.2407
+    },
+    "fair_value": 2.715883,
+    "deviation_pct": -6.4393
+  },
+  {
+    "model_week": "2019-09-29",
+    "coefficients": {
+      "intercept": 1.125917,
+      "storage_surplus_bcf": -0.000326,
+      "production_yoy_pct": -0.016709
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-09-22",
+      "n": 173,
+      "in_sample_r2": 0.2435
+    },
+    "fair_value": 2.690429,
+    "deviation_pct": -14.1401
+  },
+  {
+    "model_week": "2019-10-06",
+    "coefficients": {
+      "intercept": 1.126159,
+      "storage_surplus_bcf": -0.000331,
+      "production_yoy_pct": -0.016979
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-09-29",
+      "n": 174,
+      "in_sample_r2": 0.2486
+    },
+    "fair_value": 2.679658,
+    "deviation_pct": -14.7652
+  },
+  {
+    "model_week": "2019-10-13",
+    "coefficients": {
+      "intercept": 1.126437,
+      "storage_surplus_bcf": -0.000336,
+      "production_yoy_pct": -0.017265
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-10-06",
+      "n": 175,
+      "in_sample_r2": 0.2538
+    },
+    "fair_value": 2.652226,
+    "deviation_pct": -14.1099
+  },
+  {
+    "model_week": "2019-10-20",
+    "coefficients": {
+      "intercept": 1.1268,
+      "storage_surplus_bcf": -0.000341,
+      "production_yoy_pct": -0.017561
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-10-13",
+      "n": 176,
+      "in_sample_r2": 0.2599
+    },
+    "fair_value": 2.654575,
+    "deviation_pct": -15.768
+  },
+  {
+    "model_week": "2019-10-27",
+    "coefficients": {
+      "intercept": 1.127116,
+      "storage_surplus_bcf": -0.000348,
+      "production_yoy_pct": -0.017873
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-10-20",
+      "n": 177,
+      "in_sample_r2": 0.2657
+    },
+    "fair_value": 2.624678,
+    "deviation_pct": -7.7982
+  },
+  {
+    "model_week": "2019-11-03",
+    "coefficients": {
+      "intercept": 1.127322,
+      "storage_surplus_bcf": -0.000351,
+      "production_yoy_pct": -0.018034
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-10-27",
+      "n": 178,
+      "in_sample_r2": 0.2706
+    },
+    "fair_value": 2.64188,
+    "deviation_pct": 2.2
+  },
+  {
+    "model_week": "2019-11-10",
+    "coefficients": {
+      "intercept": 1.127281,
+      "storage_surplus_bcf": -0.00035,
+      "production_yoy_pct": -0.017995
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-11-03",
+      "n": 179,
+      "in_sample_r2": 0.2713
+    },
+    "fair_value": 2.666816,
+    "deviation_pct": -4.0429
+  },
+  {
+    "model_week": "2019-11-17",
+    "coefficients": {
+      "intercept": 1.127328,
+      "storage_surplus_bcf": -0.000351,
+      "production_yoy_pct": -0.01806
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-11-10",
+      "n": 180,
+      "in_sample_r2": 0.2738
+    },
+    "fair_value": 2.725168,
+    "deviation_pct": -8.446
+  },
+  {
+    "model_week": "2019-11-24",
+    "coefficients": {
+      "intercept": 1.127268,
+      "storage_surplus_bcf": -0.000353,
+      "production_yoy_pct": -0.018159
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-11-17",
+      "n": 181,
+      "in_sample_r2": 0.2757
+    },
+    "fair_value": 2.693496,
+    "deviation_pct": -6.7012
+  },
+  {
+    "model_week": "2019-12-01",
+    "coefficients": {
+      "intercept": 1.127281,
+      "storage_surplus_bcf": -0.000355,
+      "production_yoy_pct": -0.018251
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-11-24",
+      "n": 182,
+      "in_sample_r2": 0.2782
+    },
+    "fair_value": 2.675865,
+    "deviation_pct": -14.1212
+  },
+  {
+    "model_week": "2019-12-08",
+    "coefficients": {
+      "intercept": 1.127378,
+      "storage_surplus_bcf": -0.000359,
+      "production_yoy_pct": -0.018468
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-12-01",
+      "n": 183,
+      "in_sample_r2": 0.2818
+    },
+    "fair_value": 2.661047,
+    "deviation_pct": -16.7245
+  },
+  {
+    "model_week": "2019-12-15",
+    "coefficients": {
+      "intercept": 1.127549,
+      "storage_surplus_bcf": -0.000364,
+      "production_yoy_pct": -0.01874
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-12-08",
+      "n": 184,
+      "in_sample_r2": 0.2859
+    },
+    "fair_value": 2.61738,
+    "deviation_pct": -10.8269
+  },
+  {
+    "model_week": "2019-12-22",
+    "coefficients": {
+      "intercept": 1.127809,
+      "storage_surplus_bcf": -0.000368,
+      "production_yoy_pct": -0.018944
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-12-15",
+      "n": 185,
+      "in_sample_r2": 0.2907
+    },
+    "fair_value": 2.676837,
+    "deviation_pct": -17.3652
+  },
+  {
+    "model_week": "2019-12-29",
+    "coefficients": {
+      "intercept": 1.127897,
+      "storage_surplus_bcf": -0.000373,
+      "production_yoy_pct": -0.019194
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-12-22",
+      "n": 186,
+      "in_sample_r2": 0.2935
+    },
+    "fair_value": 2.658279,
+    "deviation_pct": -17.7663
+  },
+  {
+    "model_week": "2020-01-05",
+    "coefficients": {
+      "intercept": 1.128061,
+      "storage_surplus_bcf": -0.000378,
+      "production_yoy_pct": -0.019466
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2019-12-29",
+      "n": 187,
+      "in_sample_r2": 0.2968
+    },
+    "fair_value": 2.498812,
+    "deviation_pct": -13.9591
+  },
+  {
+    "model_week": "2020-01-12",
+    "coefficients": {
+      "intercept": 1.128829,
+      "storage_surplus_bcf": -0.000385,
+      "production_yoy_pct": -0.019831
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-01-05",
+      "n": 188,
+      "in_sample_r2": 0.3062
+    },
+    "fair_value": 2.419838,
+    "deviation_pct": -9.4981
+  },
+  {
+    "model_week": "2020-01-19",
+    "coefficients": {
+      "intercept": 1.129524,
+      "storage_surplus_bcf": -0.000391,
+      "production_yoy_pct": -0.020116
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-01-12",
+      "n": 189,
+      "in_sample_r2": 0.3168
+    },
+    "fair_value": 2.283345,
+    "deviation_pct": -15.0369
+  },
+  {
+    "model_week": "2020-01-26",
+    "coefficients": {
+      "intercept": 1.131265,
+      "storage_surplus_bcf": -0.000403,
+      "production_yoy_pct": -0.020713
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-01-19",
+      "n": 190,
+      "in_sample_r2": 0.3367
+    },
+    "fair_value": 2.340632,
+    "deviation_pct": -19.338
+  },
+  {
+    "model_week": "2020-02-02",
+    "coefficients": {
+      "intercept": 1.133049,
+      "storage_surplus_bcf": -0.000416,
+      "production_yoy_pct": -0.021369
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-01-26",
+      "n": 191,
+      "in_sample_r2": 0.3534
+    },
+    "fair_value": 2.322283,
+    "deviation_pct": -21.1552
+  },
+  {
+    "model_week": "2020-02-09",
+    "coefficients": {
+      "intercept": 1.134968,
+      "storage_surplus_bcf": -0.00043,
+      "production_yoy_pct": -0.022073
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-02-02",
+      "n": 192,
+      "in_sample_r2": 0.37
+    },
+    "fair_value": 2.27793,
+    "deviation_pct": -22.1223
+  },
+  {
+    "model_week": "2020-02-16",
+    "coefficients": {
+      "intercept": 1.137078,
+      "storage_surplus_bcf": -0.000445,
+      "production_yoy_pct": -0.022826
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-02-09",
+      "n": 193,
+      "in_sample_r2": 0.3876
+    },
+    "fair_value": 2.235893,
+    "deviation_pct": -13.0101
+  },
+  {
+    "model_week": "2020-02-23",
+    "coefficients": {
+      "intercept": 1.138372,
+      "storage_surplus_bcf": -0.000454,
+      "production_yoy_pct": -0.023259
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-02-16",
+      "n": 194,
+      "in_sample_r2": 0.4023
+    },
+    "fair_value": 2.267527,
+    "deviation_pct": -17.9723
+  },
+  {
+    "model_week": "2020-03-01",
+    "coefficients": {
+      "intercept": 1.139961,
+      "storage_surplus_bcf": -0.000465,
+      "production_yoy_pct": -0.023811
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-02-23",
+      "n": 195,
+      "in_sample_r2": 0.4162
+    },
+    "fair_value": 2.250877,
+    "deviation_pct": -21.6305
+  },
+  {
+    "model_week": "2020-03-08",
+    "coefficients": {
+      "intercept": 1.141875,
+      "storage_surplus_bcf": -0.000477,
+      "production_yoy_pct": -0.024474
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-03-01",
+      "n": 196,
+      "in_sample_r2": 0.4302
+    },
+    "fair_value": 2.170569,
+    "deviation_pct": -15.9667
+  },
+  {
+    "model_week": "2020-03-15",
+    "coefficients": {
+      "intercept": 1.14343,
+      "storage_surplus_bcf": -0.000487,
+      "production_yoy_pct": -0.024985
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-03-08",
+      "n": 197,
+      "in_sample_r2": 0.4453
+    },
+    "fair_value": 2.355368,
+    "deviation_pct": -23.3665
+  },
+  {
+    "model_week": "2020-03-22",
+    "coefficients": {
+      "intercept": 1.143927,
+      "storage_surplus_bcf": -0.000498,
+      "production_yoy_pct": -0.025412
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-03-15",
+      "n": 198,
+      "in_sample_r2": 0.4521
+    },
+    "fair_value": 2.340791,
+    "deviation_pct": -32.0742
+  },
+  {
+    "model_week": "2020-03-29",
+    "coefficients": {
+      "intercept": 1.144654,
+      "storage_surplus_bcf": -0.000513,
+      "production_yoy_pct": -0.026025
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-03-22",
+      "n": 199,
+      "in_sample_r2": 0.4564
+    },
+    "fair_value": 2.344003,
+    "deviation_pct": -29.7782
+  },
+  {
+    "model_week": "2020-04-05",
+    "coefficients": {
+      "intercept": 1.145174,
+      "storage_surplus_bcf": -0.000526,
+      "production_yoy_pct": -0.026547
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-03-29",
+      "n": 200,
+      "in_sample_r2": 0.4606
+    },
+    "fair_value": 2.290238,
+    "deviation_pct": -25.4226
+  },
+  {
+    "model_week": "2020-04-12",
+    "coefficients": {
+      "intercept": 1.145806,
+      "storage_surplus_bcf": -0.000538,
+      "production_yoy_pct": -0.027017
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-04-05",
+      "n": 201,
+      "in_sample_r2": 0.4674
+    },
+    "fair_value": 2.232281,
+    "deviation_pct": -23.8895
+  },
+  {
+    "model_week": "2020-04-19",
+    "coefficients": {
+      "intercept": 1.146602,
+      "storage_surplus_bcf": -0.00055,
+      "production_yoy_pct": -0.027492
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-04-12",
+      "n": 202,
+      "in_sample_r2": 0.4758
+    },
+    "fair_value": 2.289386,
+    "deviation_pct": -16.2221
+  },
+  {
+    "model_week": "2020-04-26",
+    "coefficients": {
+      "intercept": 1.146799,
+      "storage_surplus_bcf": -0.000556,
+      "production_yoy_pct": -0.027736
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-04-19",
+      "n": 203,
+      "in_sample_r2": 0.4817
+    },
+    "fair_value": 2.295645,
+    "deviation_pct": -22.1134
+  },
+  {
+    "model_week": "2020-05-03",
+    "coefficients": {
+      "intercept": 1.147015,
+      "storage_surplus_bcf": -0.000565,
+      "production_yoy_pct": -0.028061
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-04-26",
+      "n": 204,
+      "in_sample_r2": 0.4869
+    },
+    "fair_value": 2.235949,
+    "deviation_pct": -15.8299
+  },
+  {
+    "model_week": "2020-05-10",
+    "coefficients": {
+      "intercept": 1.147308,
+      "storage_surplus_bcf": -0.000571,
+      "production_yoy_pct": -0.028312
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-05-03",
+      "n": 205,
+      "in_sample_r2": 0.4935
+    },
+    "fair_value": 2.215812,
+    "deviation_pct": -19.6683
+  },
+  {
+    "model_week": "2020-05-17",
+    "coefficients": {
+      "intercept": 1.14772,
+      "storage_surplus_bcf": -0.00058,
+      "production_yoy_pct": -0.028635
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-05-10",
+      "n": 206,
+      "in_sample_r2": 0.5003
+    },
+    "fair_value": 2.832307,
+    "deviation_pct": -40.2607
+  },
+  {
+    "model_week": "2020-05-24",
+    "coefficients": {
+      "intercept": 1.140829,
+      "storage_surplus_bcf": -0.000579,
+      "production_yoy_pct": -0.02796
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-05-17",
+      "n": 207,
+      "in_sample_r2": 0.4791
+    },
+    "fair_value": 2.786707,
+    "deviation_pct": -40.8262
+  },
+  {
+    "model_week": "2020-05-31",
+    "coefficients": {
+      "intercept": 1.13407,
+      "storage_surplus_bcf": -0.000579,
+      "production_yoy_pct": -0.027312
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-05-24",
+      "n": 208,
+      "in_sample_r2": 0.4595
+    },
+    "fair_value": 2.762253,
+    "deviation_pct": -41.135
+  },
+  {
+    "model_week": "2020-06-07",
+    "coefficients": {
+      "intercept": 1.127354,
+      "storage_surplus_bcf": -0.000579,
+      "production_yoy_pct": -0.026668
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-05-31",
+      "n": 209,
+      "in_sample_r2": 0.4415
+    },
+    "fair_value": 2.734084,
+    "deviation_pct": -38.0048
+  },
+  {
+    "model_week": "2020-06-14",
+    "coefficients": {
+      "intercept": 1.121417,
+      "storage_surplus_bcf": -0.000579,
+      "production_yoy_pct": -0.0261
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-06-07",
+      "n": 210,
+      "in_sample_r2": 0.4281
+    },
+    "fair_value": 2.710908,
+    "deviation_pct": -40.6841
+  },
+  {
+    "model_week": "2020-06-21",
+    "coefficients": {
+      "intercept": 1.115046,
+      "storage_surplus_bcf": -0.000579,
+      "production_yoy_pct": -0.025492
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-06-14",
+      "n": 211,
+      "in_sample_r2": 0.4136
+    },
+    "fair_value": 2.440692,
+    "deviation_pct": -34.199
+  },
+  {
+    "model_week": "2020-06-28",
+    "coefficients": {
+      "intercept": 1.112283,
+      "storage_surplus_bcf": -0.000587,
+      "production_yoy_pct": -0.025442
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-06-21",
+      "n": 212,
+      "in_sample_r2": 0.4117
+    },
+    "fair_value": 2.43064,
+    "deviation_pct": -34.5851
+  },
+  {
+    "model_week": "2020-07-05",
+    "coefficients": {
+      "intercept": 1.109491,
+      "storage_surplus_bcf": -0.000594,
+      "production_yoy_pct": -0.025385
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-06-28",
+      "n": 213,
+      "in_sample_r2": 0.4098
+    },
+    "fair_value": 2.433763,
+    "deviation_pct": -28.2592
+  },
+  {
+    "model_week": "2020-07-12",
+    "coefficients": {
+      "intercept": 1.107247,
+      "storage_surplus_bcf": -0.000599,
+      "production_yoy_pct": -0.025324
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-07-05",
+      "n": 214,
+      "in_sample_r2": 0.4097
+    },
+    "fair_value": 2.434824,
+    "deviation_pct": -31.3297
+  },
+  {
+    "model_week": "2020-07-19",
+    "coefficients": {
+      "intercept": 1.104672,
+      "storage_surplus_bcf": -0.000604,
+      "production_yoy_pct": -0.025241
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-07-12",
+      "n": 215,
+      "in_sample_r2": 0.4087
+    },
+    "fair_value": 2.450627,
+    "deviation_pct": -34.2209
+  },
+  {
+    "model_week": "2020-07-26",
+    "coefficients": {
+      "intercept": 1.101476,
+      "storage_surplus_bcf": -0.000609,
+      "production_yoy_pct": -0.025084
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-07-19",
+      "n": 216,
+      "in_sample_r2": 0.4062
+    },
+    "fair_value": 2.445827,
+    "deviation_pct": -29.5126
+  },
+  {
+    "model_week": "2020-08-02",
+    "coefficients": {
+      "intercept": 1.098796,
+      "storage_surplus_bcf": -0.000613,
+      "production_yoy_pct": -0.024945
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-07-26",
+      "n": 217,
+      "in_sample_r2": 0.4053
+    },
+    "fair_value": 2.445119,
+    "deviation_pct": -16.4049
+  },
+  {
+    "model_week": "2020-08-09",
+    "coefficients": {
+      "intercept": 1.097412,
+      "storage_surplus_bcf": -0.000614,
+      "production_yoy_pct": -0.024869
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-08-02",
+      "n": 218,
+      "in_sample_r2": 0.4063
+    },
+    "fair_value": 2.419226,
+    "deviation_pct": -12.2033
+  },
+  {
+    "model_week": "2020-08-16",
+    "coefficients": {
+      "intercept": 1.09646,
+      "storage_surplus_bcf": -0.000616,
+      "production_yoy_pct": -0.024822
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-08-09",
+      "n": 219,
+      "in_sample_r2": 0.4076
+    },
+    "fair_value": 2.555121,
+    "deviation_pct": -9.4368
+  },
+  {
+    "model_week": "2020-08-23",
+    "coefficients": {
+      "intercept": 1.095372,
+      "storage_surplus_bcf": -0.000616,
+      "production_yoy_pct": -0.024717
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-08-16",
+      "n": 220,
+      "in_sample_r2": 0.4078
+    },
+    "fair_value": 2.567494,
+    "deviation_pct": -2.3951
+  },
+  {
+    "model_week": "2020-08-30",
+    "coefficients": {
+      "intercept": 1.095104,
+      "storage_surplus_bcf": -0.000616,
+      "production_yoy_pct": -0.024691
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-08-23",
+      "n": 221,
+      "in_sample_r2": 0.4079
+    },
+    "fair_value": 2.620523,
+    "deviation_pct": -2.9965
+  },
+  {
+    "model_week": "2020-09-06",
+    "coefficients": {
+      "intercept": 1.09475,
+      "storage_surplus_bcf": -0.000616,
+      "production_yoy_pct": -0.024654
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-08-30",
+      "n": 222,
+      "in_sample_r2": 0.4079
+    },
+    "fair_value": 2.626395,
+    "deviation_pct": -5.4217
+  },
+  {
+    "model_week": "2020-09-13",
+    "coefficients": {
+      "intercept": 1.094107,
+      "storage_surplus_bcf": -0.000616,
+      "production_yoy_pct": -0.024586
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-09-06",
+      "n": 223,
+      "in_sample_r2": 0.4079
+    },
+    "fair_value": 2.607404,
+    "deviation_pct": -13.0936
+  },
+  {
+    "model_week": "2020-09-20",
+    "coefficients": {
+      "intercept": 1.092543,
+      "storage_surplus_bcf": -0.000615,
+      "production_yoy_pct": -0.024424
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-09-13",
+      "n": 224,
+      "in_sample_r2": 0.4073
+    },
+    "fair_value": 2.574483,
+    "deviation_pct": -27.5971
+  },
+  {
+    "model_week": "2020-09-27",
+    "coefficients": {
+      "intercept": 1.089254,
+      "storage_surplus_bcf": -0.000615,
+      "production_yoy_pct": -0.024104
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-09-20",
+      "n": 225,
+      "in_sample_r2": 0.4042
+    },
+    "fair_value": 2.578401,
+    "deviation_pct": -17.0028
+  },
+  {
+    "model_week": "2020-10-04",
+    "coefficients": {
+      "intercept": 1.087341,
+      "storage_surplus_bcf": -0.000615,
+      "production_yoy_pct": -0.023914
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-09-27",
+      "n": 226,
+      "in_sample_r2": 0.4034
+    },
+    "fair_value": 2.596113,
+    "deviation_pct": -16.7602
+  },
+  {
+    "model_week": "2020-10-11",
+    "coefficients": {
+      "intercept": 1.085421,
+      "storage_surplus_bcf": -0.000614,
+      "production_yoy_pct": -0.023717
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-10-04",
+      "n": 227,
+      "in_sample_r2": 0.4025
+    },
+    "fair_value": 2.647371,
+    "deviation_pct": -6.6243
+  },
+  {
+    "model_week": "2020-10-18",
+    "coefficients": {
+      "intercept": 1.084659,
+      "storage_surplus_bcf": -0.000614,
+      "production_yoy_pct": -0.023633
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-10-11",
+      "n": 228,
+      "in_sample_r2": 0.4022
+    },
+    "fair_value": 2.847353,
+    "deviation_pct": -7.8794
+  },
+  {
+    "model_week": "2020-10-25",
+    "coefficients": {
+      "intercept": 1.083406,
+      "storage_surplus_bcf": -0.000612,
+      "production_yoy_pct": -0.023466
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-10-18",
+      "n": 229,
+      "in_sample_r2": 0.4016
+    },
+    "fair_value": 2.903096,
+    "deviation_pct": -0.0033
+  },
+  {
+    "model_week": "2020-11-01",
+    "coefficients": {
+      "intercept": 1.083406,
+      "storage_surplus_bcf": -0.000612,
+      "production_yoy_pct": -0.023466
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-10-25",
+      "n": 230,
+      "in_sample_r2": 0.4021
+    },
+    "fair_value": 3.050322,
+    "deviation_pct": -2.6004
+  },
+  {
+    "model_week": "2020-11-08",
+    "coefficients": {
+      "intercept": 1.082959,
+      "storage_surplus_bcf": -0.000611,
+      "production_yoy_pct": -0.023401
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-11-01",
+      "n": 231,
+      "in_sample_r2": 0.4029
+    },
+    "fair_value": 3.07365,
+    "deviation_pct": -12.4819
+  },
+  {
+    "model_week": "2020-11-15",
+    "coefficients": {
+      "intercept": 1.080719,
+      "storage_surplus_bcf": -0.000607,
+      "production_yoy_pct": -0.023077
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-11-08",
+      "n": 232,
+      "in_sample_r2": 0.4012
+    },
+    "fair_value": 2.821911,
+    "deviation_pct": -8.4663
+  },
+  {
+    "model_week": "2020-11-22",
+    "coefficients": {
+      "intercept": 1.079577,
+      "storage_surplus_bcf": -0.000606,
+      "production_yoy_pct": -0.02293
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-11-15",
+      "n": 233,
+      "in_sample_r2": 0.4004
+    },
+    "fair_value": 2.79359,
+    "deviation_pct": -5.2832
+  },
+  {
+    "model_week": "2020-11-29",
+    "coefficients": {
+      "intercept": 1.078903,
+      "storage_surplus_bcf": -0.000605,
+      "production_yoy_pct": -0.022845
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-11-22",
+      "n": 234,
+      "in_sample_r2": 0.4001
+    },
+    "fair_value": 2.734315,
+    "deviation_pct": 2.1828
+  },
+  {
+    "model_week": "2020-12-06",
+    "coefficients": {
+      "intercept": 1.079152,
+      "storage_surplus_bcf": -0.000605,
+      "production_yoy_pct": -0.022875
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-11-29",
+      "n": 235,
+      "in_sample_r2": 0.4002
+    },
+    "fair_value": 2.739506,
+    "deviation_pct": -14.6562
+  },
+  {
+    "model_week": "2020-12-13",
+    "coefficients": {
+      "intercept": 1.077341,
+      "storage_surplus_bcf": -0.000604,
+      "production_yoy_pct": -0.022653
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-12-06",
+      "n": 236,
+      "in_sample_r2": 0.3986
+    },
+    "fair_value": 2.71239,
+    "deviation_pct": -4.1436
+  },
+  {
+    "model_week": "2020-12-20",
+    "coefficients": {
+      "intercept": 1.076875,
+      "storage_surplus_bcf": -0.000603,
+      "production_yoy_pct": -0.022597
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-12-13",
+      "n": 237,
+      "in_sample_r2": 0.3985
+    },
+    "fair_value": 2.721484,
+    "deviation_pct": -2.1857
+  },
+  {
+    "model_week": "2020-12-27",
+    "coefficients": {
+      "intercept": 1.076641,
+      "storage_surplus_bcf": -0.000603,
+      "production_yoy_pct": -0.022569
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-12-20",
+      "n": 238,
+      "in_sample_r2": 0.3984
+    },
+    "fair_value": 2.780076,
+    "deviation_pct": -15.5778
+  },
+  {
+    "model_week": "2021-01-03",
+    "coefficients": {
+      "intercept": 1.074756,
+      "storage_surplus_bcf": -0.000601,
+      "production_yoy_pct": -0.022334
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2020-12-27",
+      "n": 239,
+      "in_sample_r2": 0.3964
+    },
+    "fair_value": 2.773699,
+    "deviation_pct": -6.5147
+  },
+  {
+    "model_week": "2021-01-10",
+    "coefficients": {
+      "intercept": 1.074015,
+      "storage_surplus_bcf": -0.0006,
+      "production_yoy_pct": -0.022242
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-01-03",
+      "n": 240,
+      "in_sample_r2": 0.3959
+    },
+    "fair_value": 2.905331,
+    "deviation_pct": -4.1073
+  },
+  {
+    "model_week": "2021-01-17",
+    "coefficients": {
+      "intercept": 1.073498,
+      "storage_surplus_bcf": -0.000599,
+      "production_yoy_pct": -0.022172
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-01-10",
+      "n": 241,
+      "in_sample_r2": 0.3959
+    },
+    "fair_value": 3.004856,
+    "deviation_pct": -12.9076
+  },
+  {
+    "model_week": "2021-01-24",
+    "coefficients": {
+      "intercept": 1.071617,
+      "storage_surplus_bcf": -0.000595,
+      "production_yoy_pct": -0.021902
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-01-17",
+      "n": 242,
+      "in_sample_r2": 0.394
+    },
+    "fair_value": 2.914724,
+    "deviation_pct": -10.8663
+  },
+  {
+    "model_week": "2021-01-31",
+    "coefficients": {
+      "intercept": 1.070178,
+      "storage_surplus_bcf": -0.000593,
+      "production_yoy_pct": -0.021703
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-01-24",
+      "n": 243,
+      "in_sample_r2": 0.3927
+    },
+    "fair_value": 2.995827,
+    "deviation_pct": -5.602
+  },
+  {
+    "model_week": "2021-02-07",
+    "coefficients": {
+      "intercept": 1.069418,
+      "storage_surplus_bcf": -0.000592,
+      "production_yoy_pct": -0.021594
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-01-31",
+      "n": 244,
+      "in_sample_r2": 0.3927
+    },
+    "fair_value": 3.042517,
+    "deviation_pct": -5.2101
+  },
+  {
+    "model_week": "2021-02-14",
+    "coefficients": {
+      "intercept": 1.0687,
+      "storage_surplus_bcf": -0.00059,
+      "production_yoy_pct": -0.021488
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-02-07",
+      "n": 245,
+      "in_sample_r2": 0.3929
+    },
+    "fair_value": 3.231979,
+    "deviation_pct": -6.8373
+  },
+  {
+    "model_week": "2021-02-21",
+    "coefficients": {
+      "intercept": 1.067645,
+      "storage_surplus_bcf": -0.000588,
+      "production_yoy_pct": -0.021325
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-02-14",
+      "n": 246,
+      "in_sample_r2": 0.3934
+    },
+    "fair_value": 4.358224,
+    "deviation_pct": -30.591
+  },
+  {
+    "model_week": "2021-02-28",
+    "coefficients": {
+      "intercept": 1.058449,
+      "storage_surplus_bcf": -0.000559,
+      "production_yoy_pct": -0.019638
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-02-21",
+      "n": 247,
+      "in_sample_r2": 0.3824
+    },
+    "fair_value": 4.22703,
+    "deviation_pct": -32.2456
+  },
+  {
+    "model_week": "2021-03-07",
+    "coefficients": {
+      "intercept": 1.049507,
+      "storage_surplus_bcf": -0.000531,
+      "production_yoy_pct": -0.017996
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-02-28",
+      "n": 248,
+      "in_sample_r2": 0.3688
+    },
+    "fair_value": 3.996875,
+    "deviation_pct": -31.9969
+  },
+  {
+    "model_week": "2021-03-14",
+    "coefficients": {
+      "intercept": 1.041549,
+      "storage_surplus_bcf": -0.000506,
+      "production_yoy_pct": -0.016543
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-03-07",
+      "n": 249,
+      "in_sample_r2": 0.3549
+    },
+    "fair_value": 3.740996,
+    "deviation_pct": -32.2908
+  },
+  {
+    "model_week": "2021-03-21",
+    "coefficients": {
+      "intercept": 1.034354,
+      "storage_surplus_bcf": -0.000485,
+      "production_yoy_pct": -0.015244
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-03-14",
+      "n": 250,
+      "in_sample_r2": 0.3407
+    },
+    "fair_value": 3.022159,
+    "deviation_pct": -14.2004
+  },
+  {
+    "model_week": "2021-03-28",
+    "coefficients": {
+      "intercept": 1.032903,
+      "storage_surplus_bcf": -0.000482,
+      "production_yoy_pct": -0.015048
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-03-21",
+      "n": 251,
+      "in_sample_r2": 0.3383
+    },
+    "fair_value": 2.93947,
+    "deviation_pct": -11.2085
+  },
+  {
+    "model_week": "2021-04-04",
+    "coefficients": {
+      "intercept": 1.031857,
+      "storage_surplus_bcf": -0.00048,
+      "production_yoy_pct": -0.014914
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-03-28",
+      "n": 252,
+      "in_sample_r2": 0.3369
+    },
+    "fair_value": 2.90436,
+    "deviation_pct": -14.1291
+  },
+  {
+    "model_week": "2021-04-11",
+    "coefficients": {
+      "intercept": 1.030567,
+      "storage_surplus_bcf": -0.000477,
+      "production_yoy_pct": -0.014753
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-04-04",
+      "n": 253,
+      "in_sample_r2": 0.3348
+    },
+    "fair_value": 2.830209,
+    "deviation_pct": -10.254
+  },
+  {
+    "model_week": "2021-04-18",
+    "coefficients": {
+      "intercept": 1.029715,
+      "storage_surplus_bcf": -0.000476,
+      "production_yoy_pct": -0.014654
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-04-11",
+      "n": 254,
+      "in_sample_r2": 0.3337
+    },
+    "fair_value": 2.786083,
+    "deviation_pct": -2.0489
+  },
+  {
+    "model_week": "2021-04-25",
+    "coefficients": {
+      "intercept": 1.029568,
+      "storage_surplus_bcf": -0.000476,
+      "production_yoy_pct": -0.014639
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-04-18",
+      "n": 255,
+      "in_sample_r2": 0.3338
+    },
+    "fair_value": 2.836205,
+    "deviation_pct": -1.4881
+  },
+  {
+    "model_week": "2021-05-02",
+    "coefficients": {
+      "intercept": 1.029457,
+      "storage_surplus_bcf": -0.000476,
+      "production_yoy_pct": -0.014626
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-04-25",
+      "n": 256,
+      "in_sample_r2": 0.3339
+    },
+    "fair_value": 2.860237,
+    "deviation_pct": 1.2154
+  },
+  {
+    "model_week": "2021-05-09",
+    "coefficients": {
+      "intercept": 1.029548,
+      "storage_surplus_bcf": -0.000476,
+      "production_yoy_pct": -0.014637
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-05-02",
+      "n": 257,
+      "in_sample_r2": 0.3345
+    },
+    "fair_value": 2.868434,
+    "deviation_pct": 0.4032
+  },
+  {
+    "model_week": "2021-05-16",
+    "coefficients": {
+      "intercept": 1.029578,
+      "storage_surplus_bcf": -0.000476,
+      "production_yoy_pct": -0.01464
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-05-09",
+      "n": 258,
+      "in_sample_r2": 0.335
+    },
+    "fair_value": 2.576182,
+    "deviation_pct": 20.0614
+  },
+  {
+    "model_week": "2021-05-23",
+    "coefficients": {
+      "intercept": 1.029992,
+      "storage_surplus_bcf": -0.000475,
+      "production_yoy_pct": -0.014571
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-05-16",
+      "n": 259,
+      "in_sample_r2": 0.3332
+    },
+    "fair_value": 2.540267,
+    "deviation_pct": 13.5314
+  },
+  {
+    "model_week": "2021-05-30",
+    "coefficients": {
+      "intercept": 1.030237,
+      "storage_surplus_bcf": -0.000474,
+      "production_yoy_pct": -0.014513
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-05-23",
+      "n": 260,
+      "in_sample_r2": 0.3321
+    },
+    "fair_value": 2.539989,
+    "deviation_pct": 17.2052
+  },
+  {
+    "model_week": "2021-06-06",
+    "coefficients": {
+      "intercept": 1.030541,
+      "storage_surplus_bcf": -0.000473,
+      "production_yoy_pct": -0.014441
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-05-30",
+      "n": 261,
+      "in_sample_r2": 0.3305
+    },
+    "fair_value": 2.54061,
+    "deviation_pct": 19.8531
+  },
+  {
+    "model_week": "2021-06-13",
+    "coefficients": {
+      "intercept": 1.030883,
+      "storage_surplus_bcf": -0.000472,
+      "production_yoy_pct": -0.014358
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-06-06",
+      "n": 262,
+      "in_sample_r2": 0.3285
+    },
+    "fair_value": 2.630276,
+    "deviation_pct": 26.1464
+  },
+  {
+    "model_week": "2021-06-20",
+    "coefficients": {
+      "intercept": 1.031485,
+      "storage_surplus_bcf": -0.000471,
+      "production_yoy_pct": -0.014293
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-06-13",
+      "n": 263,
+      "in_sample_r2": 0.3265
+    },
+    "fair_value": 2.800799,
+    "deviation_pct": 13.539
+  },
+  {
+    "model_week": "2021-06-27",
+    "coefficients": {
+      "intercept": 1.032144,
+      "storage_surplus_bcf": -0.000472,
+      "production_yoy_pct": -0.014337
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-06-20",
+      "n": 264,
+      "in_sample_r2": 0.3271
+    },
+    "fair_value": 2.799069,
+    "deviation_pct": 27.1851
+  },
+  {
+    "model_week": "2021-07-04",
+    "coefficients": {
+      "intercept": 1.033378,
+      "storage_surplus_bcf": -0.000474,
+      "production_yoy_pct": -0.014418
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-06-27",
+      "n": 265,
+      "in_sample_r2": 0.3271
+    },
+    "fair_value": 2.870282,
+    "deviation_pct": 30.6492
+  },
+  {
+    "model_week": "2021-07-11",
+    "coefficients": {
+      "intercept": 1.034877,
+      "storage_surplus_bcf": -0.000477,
+      "production_yoy_pct": -0.014541
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-07-04",
+      "n": 266,
+      "in_sample_r2": 0.328
+    },
+    "fair_value": 2.884273,
+    "deviation_pct": 29.2873
+  },
+  {
+    "model_week": "2021-07-18",
+    "coefficients": {
+      "intercept": 1.036326,
+      "storage_surplus_bcf": -0.00048,
+      "production_yoy_pct": -0.014663
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-07-11",
+      "n": 267,
+      "in_sample_r2": 0.329
+    },
+    "fair_value": 2.835806,
+    "deviation_pct": 32.6607
+  },
+  {
+    "model_week": "2021-07-25",
+    "coefficients": {
+      "intercept": 1.037694,
+      "storage_surplus_bcf": -0.000483,
+      "production_yoy_pct": -0.014744
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-07-18",
+      "n": 268,
+      "in_sample_r2": 0.329
+    },
+    "fair_value": 2.826311,
+    "deviation_pct": 44.747
+  },
+  {
+    "model_week": "2021-08-01",
+    "coefficients": {
+      "intercept": 1.039441,
+      "storage_surplus_bcf": -0.000486,
+      "production_yoy_pct": -0.014841
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-07-25",
+      "n": 269,
+      "in_sample_r2": 0.3277
+    },
+    "fair_value": 2.851078,
+    "deviation_pct": 39.1754
+  },
+  {
+    "model_week": "2021-08-08",
+    "coefficients": {
+      "intercept": 1.041041,
+      "storage_surplus_bcf": -0.000489,
+      "production_yoy_pct": -0.014939
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-08-01",
+      "n": 270,
+      "in_sample_r2": 0.3273
+    },
+    "fair_value": 2.841784,
+    "deviation_pct": 42.4457
+  },
+  {
+    "model_week": "2021-08-15",
+    "coefficients": {
+      "intercept": 1.042711,
+      "storage_surplus_bcf": -0.000492,
+      "production_yoy_pct": -0.015034
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-08-08",
+      "n": 271,
+      "in_sample_r2": 0.3264
+    },
+    "fair_value": 2.831533,
+    "deviation_pct": 39.2885
+  },
+  {
+    "model_week": "2021-08-22",
+    "coefficients": {
+      "intercept": 1.044202,
+      "storage_surplus_bcf": -0.000494,
+      "production_yoy_pct": -0.015107
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-08-15",
+      "n": 272,
+      "in_sample_r2": 0.3256
+    },
+    "fair_value": 2.852639,
+    "deviation_pct": 37.8373
+  },
+  {
+    "model_week": "2021-08-29",
+    "coefficients": {
+      "intercept": 1.045677,
+      "storage_surplus_bcf": -0.000497,
+      "production_yoy_pct": -0.015187
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-08-22",
+      "n": 273,
+      "in_sample_r2": 0.3252
+    },
+    "fair_value": 2.901267,
+    "deviation_pct": 48.28
+  },
+  {
+    "model_week": "2021-09-05",
+    "coefficients": {
+      "intercept": 1.047593,
+      "storage_surplus_bcf": -0.000501,
+      "production_yoy_pct": -0.015315
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-08-29",
+      "n": 274,
+      "in_sample_r2": 0.3247
+    },
+    "fair_value": 2.913964,
+    "deviation_pct": 60.6746
+  },
+  {
+    "model_week": "2021-09-12",
+    "coefficients": {
+      "intercept": 1.049909,
+      "storage_surplus_bcf": -0.000506,
+      "production_yoy_pct": -0.015473
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-09-05",
+      "n": 275,
+      "in_sample_r2": 0.3232
+    },
+    "fair_value": 2.908032,
+    "deviation_pct": 78.1273
+  },
+  {
+    "model_week": "2021-09-19",
+    "coefficients": {
+      "intercept": 1.052665,
+      "storage_surplus_bcf": -0.000512,
+      "production_yoy_pct": -0.015652
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-09-12",
+      "n": 276,
+      "in_sample_r2": 0.3195
+    },
+    "fair_value": 2.940119,
+    "deviation_pct": 68.4286
+  },
+  {
+    "model_week": "2021-09-26",
+    "coefficients": {
+      "intercept": 1.055282,
+      "storage_surplus_bcf": -0.000517,
+      "production_yoy_pct": -0.015848
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-09-19",
+      "n": 277,
+      "in_sample_r2": 0.3178
+    },
+    "fair_value": 2.912332,
+    "deviation_pct": 99.0157
+  },
+  {
+    "model_week": "2021-10-03",
+    "coefficients": {
+      "intercept": 1.058567,
+      "storage_surplus_bcf": -0.000524,
+      "production_yoy_pct": -0.016065
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-09-26",
+      "n": 278,
+      "in_sample_r2": 0.3118
+    },
+    "fair_value": 2.866958,
+    "deviation_pct": 101.0493
+  },
+  {
+    "model_week": "2021-10-10",
+    "coefficients": {
+      "intercept": 1.06165,
+      "storage_surplus_bcf": -0.000529,
+      "production_yoy_pct": -0.016221
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-10-03",
+      "n": 279,
+      "in_sample_r2": 0.3046
+    },
+    "fair_value": 2.882851,
+    "deviation_pct": 86.0658
+  },
+  {
+    "model_week": "2021-10-17",
+    "coefficients": {
+      "intercept": 1.064407,
+      "storage_surplus_bcf": -0.000533,
+      "production_yoy_pct": -0.016367
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-10-10",
+      "n": 280,
+      "in_sample_r2": 0.3
+    },
+    "fair_value": 2.698106,
+    "deviation_pct": 84.2033
+  },
+  {
+    "model_week": "2021-10-24",
+    "coefficients": {
+      "intercept": 1.065565,
+      "storage_surplus_bcf": -0.000531,
+      "production_yoy_pct": -0.016132
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-10-17",
+      "n": 281,
+      "in_sample_r2": 0.2916
+    },
+    "fair_value": 2.676501,
+    "deviation_pct": 120.6613
+  },
+  {
+    "model_week": "2021-10-31",
+    "coefficients": {
+      "intercept": 1.066907,
+      "storage_surplus_bcf": -0.000528,
+      "production_yoy_pct": -0.015789
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-10-24",
+      "n": 282,
+      "in_sample_r2": 0.2779
+    },
+    "fair_value": 2.67837,
+    "deviation_pct": 89.0329
+  },
+  {
+    "model_week": "2021-11-07",
+    "coefficients": {
+      "intercept": 1.067946,
+      "storage_surplus_bcf": -0.000525,
+      "production_yoy_pct": -0.015504
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-10-31",
+      "n": 283,
+      "in_sample_r2": 0.2693
+    },
+    "fair_value": 2.714272,
+    "deviation_pct": 95.2642
+  },
+  {
+    "model_week": "2021-11-14",
+    "coefficients": {
+      "intercept": 1.069152,
+      "storage_surplus_bcf": -0.000523,
+      "production_yoy_pct": -0.015239
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-11-07",
+      "n": 284,
+      "in_sample_r2": 0.261
+    },
+    "fair_value": 2.703597,
+    "deviation_pct": 84.569
+  },
+  {
+    "model_week": "2021-11-21",
+    "coefficients": {
+      "intercept": 1.070175,
+      "storage_surplus_bcf": -0.00052,
+      "production_yoy_pct": -0.014977
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-11-14",
+      "n": 285,
+      "in_sample_r2": 0.2539
+    },
+    "fair_value": 2.757122,
+    "deviation_pct": 72.9702
+  },
+  {
+    "model_week": "2021-11-28",
+    "coefficients": {
+      "intercept": 1.071702,
+      "storage_surplus_bcf": -0.00052,
+      "production_yoy_pct": -0.014888
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-11-21",
+      "n": 286,
+      "in_sample_r2": 0.2492
+    },
+    "fair_value": 2.793641,
+    "deviation_pct": 72.0335
+  },
+  {
+    "model_week": "2021-12-05",
+    "coefficients": {
+      "intercept": 1.073315,
+      "storage_surplus_bcf": -0.00052,
+      "production_yoy_pct": -0.014829
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-11-28",
+      "n": 287,
+      "in_sample_r2": 0.2453
+    },
+    "fair_value": 2.849749,
+    "deviation_pct": 27.8709
+  },
+  {
+    "model_week": "2021-12-12",
+    "coefficients": {
+      "intercept": 1.074122,
+      "storage_surplus_bcf": -0.00052,
+      "production_yoy_pct": -0.014823
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-12-05",
+      "n": 288,
+      "in_sample_r2": 0.2451
+    },
+    "fair_value": 2.84736,
+    "deviation_pct": 33.2813
+  },
+  {
+    "model_week": "2021-12-19",
+    "coefficients": {
+      "intercept": 1.075052,
+      "storage_surplus_bcf": -0.000521,
+      "production_yoy_pct": -0.014814
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-12-12",
+      "n": 289,
+      "in_sample_r2": 0.2446
+    },
+    "fair_value": 2.701735,
+    "deviation_pct": 41.4646
+  },
+  {
+    "model_week": "2021-12-26",
+    "coefficients": {
+      "intercept": 1.075814,
+      "storage_surplus_bcf": -0.00052,
+      "production_yoy_pct": -0.014709
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-12-19",
+      "n": 290,
+      "in_sample_r2": 0.242
+    },
+    "fair_value": 2.697078,
+    "deviation_pct": 50.4221
+  },
+  {
+    "model_week": "2022-01-02",
+    "coefficients": {
+      "intercept": 1.076684,
+      "storage_surplus_bcf": -0.000518,
+      "production_yoy_pct": -0.014581
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2021-12-26",
+      "n": 291,
+      "in_sample_r2": 0.2387
+    },
+    "fair_value": 2.621116,
+    "deviation_pct": 49.1731
+  },
+  {
+    "model_week": "2022-01-09",
+    "coefficients": {
+      "intercept": 1.077316,
+      "storage_surplus_bcf": -0.000514,
+      "production_yoy_pct": -0.014399
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-01-02",
+      "n": 292,
+      "in_sample_r2": 0.2345
+    },
+    "fair_value": 2.62243,
+    "deviation_pct": 59.5467
+  },
+  {
+    "model_week": "2022-01-16",
+    "coefficients": {
+      "intercept": 1.078039,
+      "storage_surplus_bcf": -0.00051,
+      "production_yoy_pct": -0.014184
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-01-09",
+      "n": 293,
+      "in_sample_r2": 0.2293
+    },
+    "fair_value": 2.835837,
+    "deviation_pct": 51.6307
+  },
+  {
+    "model_week": "2022-01-23",
+    "coefficients": {
+      "intercept": 1.07989,
+      "storage_surplus_bcf": -0.000511,
+      "production_yoy_pct": -0.014286
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-01-16",
+      "n": 294,
+      "in_sample_r2": 0.2276
+    },
+    "fair_value": 2.930241,
+    "deviation_pct": 37.2583
+  },
+  {
+    "model_week": "2022-01-30",
+    "coefficients": {
+      "intercept": 1.081471,
+      "storage_surplus_bcf": -0.000513,
+      "production_yoy_pct": -0.01441
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-01-23",
+      "n": 295,
+      "in_sample_r2": 0.2277
+    },
+    "fair_value": 3.116886,
+    "deviation_pct": 63.8815
+  },
+  {
+    "model_week": "2022-02-06",
+    "coefficients": {
+      "intercept": 1.084455,
+      "storage_surplus_bcf": -0.000521,
+      "production_yoy_pct": -0.014743
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-01-30",
+      "n": 296,
+      "in_sample_r2": 0.2297
+    },
+    "fair_value": 3.224899,
+    "deviation_pct": 36.6554
+  },
+  {
+    "model_week": "2022-02-13",
+    "coefficients": {
+      "intercept": 1.086491,
+      "storage_surplus_bcf": -0.000527,
+      "production_yoy_pct": -0.014996
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-02-06",
+      "n": 297,
+      "in_sample_r2": 0.2329
+    },
+    "fair_value": 3.306912,
+    "deviation_pct": 28.6397
+  },
+  {
+    "model_week": "2022-02-20",
+    "coefficients": {
+      "intercept": 1.088212,
+      "storage_surplus_bcf": -0.000532,
+      "production_yoy_pct": -0.015223
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-02-13",
+      "n": 298,
+      "in_sample_r2": 0.2366
+    },
+    "fair_value": 2.807983,
+    "deviation_pct": 70.1933
+  },
+  {
+    "model_week": "2022-02-27",
+    "coefficients": {
+      "intercept": 1.08841,
+      "storage_surplus_bcf": -0.00053,
+      "production_yoy_pct": -0.014867
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-02-20",
+      "n": 299,
+      "in_sample_r2": 0.2331
+    },
+    "fair_value": 2.884854,
+    "deviation_pct": 55.8831
+  },
+  {
+    "model_week": "2022-03-06",
+    "coefficients": {
+      "intercept": 1.088745,
+      "storage_surplus_bcf": -0.00053,
+      "production_yoy_pct": -0.014618
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-02-27",
+      "n": 300,
+      "in_sample_r2": 0.2315
+    },
+    "fair_value": 2.951473,
+    "deviation_pct": 65.4089
+  },
+  {
+    "model_week": "2022-03-13",
+    "coefficients": {
+      "intercept": 1.089286,
+      "storage_surplus_bcf": -0.000531,
+      "production_yoy_pct": -0.014382
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-03-06",
+      "n": 301,
+      "in_sample_r2": 0.2304
+    },
+    "fair_value": 2.959131,
+    "deviation_pct": 59.5063
+  },
+  {
+    "model_week": "2022-03-20",
+    "coefficients": {
+      "intercept": 1.089776,
+      "storage_surplus_bcf": -0.000531,
+      "production_yoy_pct": -0.014162
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-03-13",
+      "n": 302,
+      "in_sample_r2": 0.2296
+    },
+    "fair_value": 3.283378,
+    "deviation_pct": 51.5208
+  },
+  {
+    "model_week": "2022-03-27",
+    "coefficients": {
+      "intercept": 1.092207,
+      "storage_surplus_bcf": -0.000539,
+      "production_yoy_pct": -0.014446
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-03-20",
+      "n": 303,
+      "in_sample_r2": 0.2332
+    },
+    "fair_value": 3.19462,
+    "deviation_pct": 70.9749
+  },
+  {
+    "model_week": "2022-04-03",
+    "coefficients": {
+      "intercept": 1.095055,
+      "storage_surplus_bcf": -0.000547,
+      "production_yoy_pct": -0.014737
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-03-27",
+      "n": 304,
+      "in_sample_r2": 0.2353
+    },
+    "fair_value": 3.263169,
+    "deviation_pct": 76.6381
+  },
+  {
+    "model_week": "2022-04-10",
+    "coefficients": {
+      "intercept": 1.098213,
+      "storage_surplus_bcf": -0.000556,
+      "production_yoy_pct": -0.015087
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-04-03",
+      "n": 305,
+      "in_sample_r2": 0.2381
+    },
+    "fair_value": 3.291766,
+    "deviation_pct": 103.1129
+  },
+  {
+    "model_week": "2022-04-17",
+    "coefficients": {
+      "intercept": 1.102164,
+      "storage_surplus_bcf": -0.000569,
+      "production_yoy_pct": -0.015533
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-04-10",
+      "n": 306,
+      "in_sample_r2": 0.2406
+    },
+    "fair_value": 3.28267,
+    "deviation_pct": 136.3016
+  },
+  {
+    "model_week": "2022-04-24",
+    "coefficients": {
+      "intercept": 1.106747,
+      "storage_surplus_bcf": -0.000582,
+      "production_yoy_pct": -0.016025
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-04-17",
+      "n": 307,
+      "in_sample_r2": 0.2414
+    },
+    "fair_value": 3.305165,
+    "deviation_pct": 106.2227
+  },
+  {
+    "model_week": "2022-05-01",
+    "coefficients": {
+      "intercept": 1.110584,
+      "storage_surplus_bcf": -0.000594,
+      "production_yoy_pct": -0.016438
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-04-24",
+      "n": 308,
+      "in_sample_r2": 0.2434
+    },
+    "fair_value": 3.321049,
+    "deviation_pct": 123.4836
+  },
+  {
+    "model_week": "2022-05-08",
+    "coefficients": {
+      "intercept": 1.114813,
+      "storage_surplus_bcf": -0.000607,
+      "production_yoy_pct": -0.016893
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-05-01",
+      "n": 309,
+      "in_sample_r2": 0.2449
+    },
+    "fair_value": 3.347631,
+    "deviation_pct": 108.0277
+  },
+  {
+    "model_week": "2022-05-15",
+    "coefficients": {
+      "intercept": 1.118661,
+      "storage_surplus_bcf": -0.000618,
+      "production_yoy_pct": -0.01731
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-05-08",
+      "n": 310,
+      "in_sample_r2": 0.2469
+    },
+    "fair_value": 3.359767,
+    "deviation_pct": 135.8199
+  },
+  {
+    "model_week": "2022-05-22",
+    "coefficients": {
+      "intercept": 1.123066,
+      "storage_surplus_bcf": -0.000632,
+      "production_yoy_pct": -0.017779
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-05-15",
+      "n": 311,
+      "in_sample_r2": 0.2481
+    },
+    "fair_value": 3.391405,
+    "deviation_pct": 156.8257
+  },
+  {
+    "model_week": "2022-05-29",
+    "coefficients": {
+      "intercept": 1.127915,
+      "storage_surplus_bcf": -0.000646,
+      "production_yoy_pct": -0.018302
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-05-22",
+      "n": 312,
+      "in_sample_r2": 0.2489
+    },
+    "fair_value": 3.45316,
+    "deviation_pct": 150.3794
+  },
+  {
+    "model_week": "2022-06-05",
+    "coefficients": {
+      "intercept": 1.132726,
+      "storage_surplus_bcf": -0.000662,
+      "production_yoy_pct": -0.018845
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-05-29",
+      "n": 313,
+      "in_sample_r2": 0.2506
+    },
+    "fair_value": 3.480515,
+    "deviation_pct": 166.2825
+  },
+  {
+    "model_week": "2022-06-12",
+    "coefficients": {
+      "intercept": 1.137833,
+      "storage_surplus_bcf": -0.000678,
+      "production_yoy_pct": -0.019422
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-06-05",
+      "n": 314,
+      "in_sample_r2": 0.2521
+    },
+    "fair_value": 3.470945,
+    "deviation_pct": 148.5202
+  },
+  {
+    "model_week": "2022-06-19",
+    "coefficients": {
+      "intercept": 1.142439,
+      "storage_surplus_bcf": -0.000693,
+      "production_yoy_pct": -0.019924
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-06-12",
+      "n": 315,
+      "in_sample_r2": 0.2535
+    },
+    "fair_value": 3.465143,
+    "deviation_pct": 92.7193
+  },
+  {
+    "model_week": "2022-06-26",
+    "coefficients": {
+      "intercept": 1.145503,
+      "storage_surplus_bcf": -0.000702,
+      "production_yoy_pct": -0.020227
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-06-19",
+      "n": 316,
+      "in_sample_r2": 0.2557
+    },
+    "fair_value": 3.478093,
+    "deviation_pct": 83.7789
+  },
+  {
+    "model_week": "2022-07-03",
+    "coefficients": {
+      "intercept": 1.148323,
+      "storage_surplus_bcf": -0.000711,
+      "production_yoy_pct": -0.020505
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-06-26",
+      "n": 317,
+      "in_sample_r2": 0.2581
+    },
+    "fair_value": 3.496797,
+    "deviation_pct": 66.4666
+  },
+  {
+    "model_week": "2022-07-10",
+    "coefficients": {
+      "intercept": 1.150678,
+      "storage_surplus_bcf": -0.000718,
+      "production_yoy_pct": -0.020739
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-07-03",
+      "n": 318,
+      "in_sample_r2": 0.2605
+    },
+    "fair_value": 3.513934,
+    "deviation_pct": 84.6648
+  },
+  {
+    "model_week": "2022-07-17",
+    "coefficients": {
+      "intercept": 1.153503,
+      "storage_surplus_bcf": -0.000727,
+      "production_yoy_pct": -0.021022
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-07-10",
+      "n": 319,
+      "in_sample_r2": 0.2629
+    },
+    "fair_value": 3.574608,
+    "deviation_pct": 107.6311
+  },
+  {
+    "model_week": "2022-07-24",
+    "coefficients": {
+      "intercept": 1.156985,
+      "storage_surplus_bcf": -0.000738,
+      "production_yoy_pct": -0.021395
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-07-17",
+      "n": 320,
+      "in_sample_r2": 0.2654
+    },
+    "fair_value": 3.633021,
+    "deviation_pct": 141.8924
+  },
+  {
+    "model_week": "2022-07-31",
+    "coefficients": {
+      "intercept": 1.161262,
+      "storage_surplus_bcf": -0.000753,
+      "production_yoy_pct": -0.021872
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-07-24",
+      "n": 321,
+      "in_sample_r2": 0.2677
+    },
+    "fair_value": 3.63012,
+    "deviation_pct": 129.5241
+  },
+  {
+    "model_week": "2022-08-07",
+    "coefficients": {
+      "intercept": 1.165197,
+      "storage_surplus_bcf": -0.000766,
+      "production_yoy_pct": -0.022299
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-07-31",
+      "n": 322,
+      "in_sample_r2": 0.2699
+    },
+    "fair_value": 3.648752,
+    "deviation_pct": 111.8807
+  },
+  {
+    "model_week": "2022-08-14",
+    "coefficients": {
+      "intercept": 1.168723,
+      "storage_surplus_bcf": -0.000778,
+      "production_yoy_pct": -0.022681
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-08-07",
+      "n": 323,
+      "in_sample_r2": 0.2724
+    },
+    "fair_value": 3.753979,
+    "deviation_pct": 136.3359
+  },
+  {
+    "model_week": "2022-08-21",
+    "coefficients": {
+      "intercept": 1.172912,
+      "storage_surplus_bcf": -0.000792,
+      "production_yoy_pct": -0.023172
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-08-14",
+      "n": 324,
+      "in_sample_r2": 0.2754
+    },
+    "fair_value": 3.7019,
+    "deviation_pct": 164.6208
+  },
+  {
+    "model_week": "2022-08-28",
+    "coefficients": {
+      "intercept": 1.177303,
+      "storage_surplus_bcf": -0.000807,
+      "production_yoy_pct": -0.023636
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-08-21",
+      "n": 325,
+      "in_sample_r2": 0.2769
+    },
+    "fair_value": 3.678693,
+    "deviation_pct": 153.2964
+  },
+  {
+    "model_week": "2022-09-04",
+    "coefficients": {
+      "intercept": 1.181363,
+      "storage_surplus_bcf": -0.000821,
+      "production_yoy_pct": -0.024044
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-08-28",
+      "n": 326,
+      "in_sample_r2": 0.2781
+    },
+    "fair_value": 3.718484,
+    "deviation_pct": 136.3866
+  },
+  {
+    "model_week": "2022-09-11",
+    "coefficients": {
+      "intercept": 1.185132,
+      "storage_surplus_bcf": -0.000833,
+      "production_yoy_pct": -0.02443
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-09-04",
+      "n": 327,
+      "in_sample_r2": 0.2799
+    },
+    "fair_value": 3.743329,
+    "deviation_pct": 124.693
+  },
+  {
+    "model_week": "2022-09-18",
+    "coefficients": {
+      "intercept": 1.188662,
+      "storage_surplus_bcf": -0.000845,
+      "production_yoy_pct": -0.024793
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-09-11",
+      "n": 328,
+      "in_sample_r2": 0.2819
+    },
+    "fair_value": 3.627668,
+    "deviation_pct": 117.3297
+  },
+  {
+    "model_week": "2022-09-25",
+    "coefficients": {
+      "intercept": 1.191528,
+      "storage_surplus_bcf": -0.000854,
+      "production_yoy_pct": -0.025007
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-09-18",
+      "n": 329,
+      "in_sample_r2": 0.2829
+    },
+    "fair_value": 3.547894,
+    "deviation_pct": 94.9889
+  },
+  {
+    "model_week": "2022-10-02",
+    "coefficients": {
+      "intercept": 1.193843,
+      "storage_surplus_bcf": -0.00086,
+      "production_yoy_pct": -0.025145
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-09-25",
+      "n": 330,
+      "in_sample_r2": 0.2835
+    },
+    "fair_value": 3.439456,
+    "deviation_pct": 86.7156
+  },
+  {
+    "model_week": "2022-10-09",
+    "coefficients": {
+      "intercept": 1.19583,
+      "storage_surplus_bcf": -0.000864,
+      "production_yoy_pct": -0.02522
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-10-02",
+      "n": 331,
+      "in_sample_r2": 0.2835
+    },
+    "fair_value": 3.334526,
+    "deviation_pct": 93.7907
+  },
+  {
+    "model_week": "2022-10-16",
+    "coefficients": {
+      "intercept": 1.197756,
+      "storage_surplus_bcf": -0.000868,
+      "production_yoy_pct": -0.025244
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-10-09",
+      "n": 332,
+      "in_sample_r2": 0.2825
+    },
+    "fair_value": 3.393688,
+    "deviation_pct": 75.2076
+  },
+  {
+    "model_week": "2022-10-23",
+    "coefficients": {
+      "intercept": 1.199845,
+      "storage_surplus_bcf": -0.000871,
+      "production_yoy_pct": -0.025374
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-10-16",
+      "n": 333,
+      "in_sample_r2": 0.2823
+    },
+    "fair_value": 3.452079,
+    "deviation_pct": 49.1855
+  },
+  {
+    "model_week": "2022-10-30",
+    "coefficients": {
+      "intercept": 1.201376,
+      "storage_surplus_bcf": -0.000874,
+      "production_yoy_pct": -0.025481
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-10-23",
+      "n": 334,
+      "in_sample_r2": 0.2829
+    },
+    "fair_value": 3.314849,
+    "deviation_pct": 73.9446
+  },
+  {
+    "model_week": "2022-11-06",
+    "coefficients": {
+      "intercept": 1.203309,
+      "storage_surplus_bcf": -0.000877,
+      "production_yoy_pct": -0.025572
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-10-30",
+      "n": 335,
+      "in_sample_r2": 0.2822
+    },
+    "fair_value": 3.145273,
+    "deviation_pct": 99.2832
+  },
+  {
+    "model_week": "2022-11-13",
+    "coefficients": {
+      "intercept": 1.205425,
+      "storage_surplus_bcf": -0.000877,
+      "production_yoy_pct": -0.025593
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-11-06",
+      "n": 336,
+      "in_sample_r2": 0.2797
+    },
+    "fair_value": 3.010154,
+    "deviation_pct": 92.8805
+  },
+  {
+    "model_week": "2022-11-20",
+    "coefficients": {
+      "intercept": 1.207206,
+      "storage_surplus_bcf": -0.000876,
+      "production_yoy_pct": -0.025538
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-11-13",
+      "n": 337,
+      "in_sample_r2": 0.2765
+    },
+    "fair_value": 3.171975,
+    "deviation_pct": 107.4102
+  },
+  {
+    "model_week": "2022-11-27",
+    "coefficients": {
+      "intercept": 1.209747,
+      "storage_surplus_bcf": -0.000877,
+      "production_yoy_pct": -0.025633
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-11-20",
+      "n": 338,
+      "in_sample_r2": 0.2738
+    },
+    "fair_value": 3.297212,
+    "deviation_pct": 107.7513
+  },
+  {
+    "model_week": "2022-12-04",
+    "coefficients": {
+      "intercept": 1.212487,
+      "storage_surplus_bcf": -0.00088,
+      "production_yoy_pct": -0.025793
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-11-27",
+      "n": 339,
+      "in_sample_r2": 0.272
+    },
+    "fair_value": 3.28488,
+    "deviation_pct": 62.5021
+  },
+  {
+    "model_week": "2022-12-11",
+    "coefficients": {
+      "intercept": 1.214278,
+      "storage_surplus_bcf": -0.000882,
+      "production_yoy_pct": -0.025892
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-12-04",
+      "n": 340,
+      "in_sample_r2": 0.2714
+    },
+    "fair_value": 3.205297,
+    "deviation_pct": 96.3624
+  },
+  {
+    "model_week": "2022-12-18",
+    "coefficients": {
+      "intercept": 1.216628,
+      "storage_surplus_bcf": -0.000883,
+      "production_yoy_pct": -0.025986
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-12-11",
+      "n": 341,
+      "in_sample_r2": 0.2694
+    },
+    "fair_value": 3.311493,
+    "deviation_pct": 74.7248
+  },
+  {
+    "model_week": "2022-12-22",
+    "coefficients": {
+      "intercept": 1.219185,
+      "storage_surplus_bcf": -0.000886,
+      "production_yoy_pct": -0.026215
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-12-18",
+      "n": 342,
+      "in_sample_r2": 0.2686
+    },
+    "fair_value": 3.319099,
+    "deviation_pct": 53.7164
+  },
+  {
+    "model_week": "2022-12-29",
+    "coefficients": {
+      "intercept": 1.221148,
+      "storage_surplus_bcf": -0.000888,
+      "production_yoy_pct": -0.026391
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-12-22",
+      "n": 343,
+      "in_sample_r2": 0.2683
+    },
+    "fair_value": 3.605283,
+    "deviation_pct": 24.6781
+  },
+  {
+    "model_week": "2023-01-08",
+    "coefficients": {
+      "intercept": 1.222281,
+      "storage_surplus_bcf": -0.00089,
+      "production_yoy_pct": -0.026524
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2022-12-29",
+      "n": 344,
+      "in_sample_r2": 0.2692
+    },
+    "fair_value": 3.412218,
+    "deviation_pct": 14.1779
+  },
+  {
+    "model_week": "2023-01-15",
+    "coefficients": {
+      "intercept": 1.222904,
+      "storage_surplus_bcf": -0.000891,
+      "production_yoy_pct": -0.026586
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-01-08",
+      "n": 345,
+      "in_sample_r2": 0.2694
+    },
+    "fair_value": 2.742743,
+    "deviation_pct": 30.8909
+  },
+  {
+    "model_week": "2023-01-22",
+    "coefficients": {
+      "intercept": 1.223153,
+      "storage_surplus_bcf": -0.000888,
+      "production_yoy_pct": -0.026438
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-01-15",
+      "n": 346,
+      "in_sample_r2": 0.2682
+    },
+    "fair_value": 2.531107,
+    "deviation_pct": 35.9879
+  },
+  {
+    "model_week": "2023-01-29",
+    "coefficients": {
+      "intercept": 1.223251,
+      "storage_surplus_bcf": -0.000883,
+      "production_yoy_pct": -0.026211
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-01-22",
+      "n": 347,
+      "in_sample_r2": 0.2665
+    },
+    "fair_value": 2.458436,
+    "deviation_pct": 15.0732
+  },
+  {
+    "model_week": "2023-02-05",
+    "coefficients": {
+      "intercept": 1.223263,
+      "storage_surplus_bcf": -0.000881,
+      "production_yoy_pct": -0.026097
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-01-29",
+      "n": 348,
+      "in_sample_r2": 0.2663
+    },
+    "fair_value": 2.549202,
+    "deviation_pct": 1.5612
+  },
+  {
+    "model_week": "2023-02-12",
+    "coefficients": {
+      "intercept": 1.223269,
+      "storage_surplus_bcf": -0.00088,
+      "production_yoy_pct": -0.026086
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-02-05",
+      "n": 349,
+      "in_sample_r2": 0.2669
+    },
+    "fair_value": 2.412371,
+    "deviation_pct": 2.9278
+  },
+  {
+    "model_week": "2023-02-19",
+    "coefficients": {
+      "intercept": 1.223267,
+      "storage_surplus_bcf": -0.00088,
+      "production_yoy_pct": -0.026062
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-02-12",
+      "n": 350,
+      "in_sample_r2": 0.2677
+    },
+    "fair_value": 2.268303,
+    "deviation_pct": 1.4856
+  },
+  {
+    "model_week": "2023-02-26",
+    "coefficients": {
+      "intercept": 1.223267,
+      "storage_surplus_bcf": -0.000879,
+      "production_yoy_pct": -0.026049
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-02-19",
+      "n": 351,
+      "in_sample_r2": 0.2691
+    },
+    "fair_value": 2.182958,
+    "deviation_pct": 23.9602
+  },
+  {
+    "model_week": "2023-03-05",
+    "coefficients": {
+      "intercept": 1.223209,
+      "storage_surplus_bcf": -0.000874,
+      "production_yoy_pct": -0.025848
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-02-26",
+      "n": 352,
+      "in_sample_r2": 0.2686
+    },
+    "fair_value": 2.162176,
+    "deviation_pct": 19.8792
+  },
+  {
+    "model_week": "2023-03-12",
+    "coefficients": {
+      "intercept": 1.223144,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.025675
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-03-05",
+      "n": 353,
+      "in_sample_r2": 0.2685
+    },
+    "fair_value": 2.115069,
+    "deviation_pct": 24.0149
+  },
+  {
+    "model_week": "2023-03-19",
+    "coefficients": {
+      "intercept": 1.223029,
+      "storage_surplus_bcf": -0.000864,
+      "production_yoy_pct": -0.025461
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-03-12",
+      "n": 354,
+      "in_sample_r2": 0.2681
+    },
+    "fair_value": 2.183954,
+    "deviation_pct": 2.4747
+  },
+  {
+    "model_week": "2023-03-26",
+    "coefficients": {
+      "intercept": 1.223024,
+      "storage_surplus_bcf": -0.000863,
+      "production_yoy_pct": -0.025439
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-03-19",
+      "n": 355,
+      "in_sample_r2": 0.2697
+    },
+    "fair_value": 2.24082,
+    "deviation_pct": -6.195
+  },
+  {
+    "model_week": "2023-04-02",
+    "coefficients": {
+      "intercept": 1.223026,
+      "storage_surplus_bcf": -0.000865,
+      "production_yoy_pct": -0.025492
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-03-26",
+      "n": 356,
+      "in_sample_r2": 0.272
+    },
+    "fair_value": 2.269186,
+    "deviation_pct": -10.5847
+  },
+  {
+    "model_week": "2023-04-09",
+    "coefficients": {
+      "intercept": 1.22302,
+      "storage_surplus_bcf": -0.000867,
+      "production_yoy_pct": -0.025581
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-04-02",
+      "n": 357,
+      "in_sample_r2": 0.2744
+    },
+    "fair_value": 2.264486,
+    "deviation_pct": -6.4247
+  },
+  {
+    "model_week": "2023-04-16",
+    "coefficients": {
+      "intercept": 1.223016,
+      "storage_surplus_bcf": -0.000869,
+      "production_yoy_pct": -0.025633
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-04-09",
+      "n": 358,
+      "in_sample_r2": 0.2765
+    },
+    "fair_value": 2.312403,
+    "deviation_pct": -2.2662
+  },
+  {
+    "model_week": "2023-04-23",
+    "coefficients": {
+      "intercept": 1.222995,
+      "storage_surplus_bcf": -0.000869,
+      "production_yoy_pct": -0.025646
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-04-16",
+      "n": 359,
+      "in_sample_r2": 0.278
+    },
+    "fair_value": 2.224023,
+    "deviation_pct": 1.8874
+  },
+  {
+    "model_week": "2023-04-30",
+    "coefficients": {
+      "intercept": 1.223007,
+      "storage_surplus_bcf": -0.000869,
+      "production_yoy_pct": -0.025634
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-04-23",
+      "n": 360,
+      "in_sample_r2": 0.2795
+    },
+    "fair_value": 2.272125,
+    "deviation_pct": -4.6707
+  },
+  {
+    "model_week": "2023-05-07",
+    "coefficients": {
+      "intercept": 1.22297,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.025663
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-04-30",
+      "n": 361,
+      "in_sample_r2": 0.2813
+    },
+    "fair_value": 2.286912,
+    "deviation_pct": -6.5989
+  },
+  {
+    "model_week": "2023-05-14",
+    "coefficients": {
+      "intercept": 1.222915,
+      "storage_surplus_bcf": -0.000871,
+      "production_yoy_pct": -0.025703
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-05-07",
+      "n": 362,
+      "in_sample_r2": 0.2832
+    },
+    "fair_value": 2.277494,
+    "deviation_pct": 0.6369
+  },
+  {
+    "model_week": "2023-05-21",
+    "coefficients": {
+      "intercept": 1.22292,
+      "storage_surplus_bcf": -0.000871,
+      "production_yoy_pct": -0.025699
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-05-14",
+      "n": 363,
+      "in_sample_r2": 0.2846
+    },
+    "fair_value": 2.22945,
+    "deviation_pct": 5.8557
+  },
+  {
+    "model_week": "2023-05-28",
+    "coefficients": {
+      "intercept": 1.222938,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.02566
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-05-21",
+      "n": 364,
+      "in_sample_r2": 0.2856
+    },
+    "fair_value": 2.211076,
+    "deviation_pct": -0.32
+  },
+  {
+    "model_week": "2023-06-04",
+    "coefficients": {
+      "intercept": 1.222937,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.025662
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-05-28",
+      "n": 365,
+      "in_sample_r2": 0.2872
+    },
+    "fair_value": 2.208309,
+    "deviation_pct": -2.4593
+  },
+  {
+    "model_week": "2023-06-11",
+    "coefficients": {
+      "intercept": 1.222931,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.025679
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-06-04",
+      "n": 366,
+      "in_sample_r2": 0.289
+    },
+    "fair_value": 2.199669,
+    "deviation_pct": -0.1214
+  },
+  {
+    "model_week": "2023-06-18",
+    "coefficients": {
+      "intercept": 1.222931,
+      "storage_surplus_bcf": -0.00087,
+      "production_yoy_pct": -0.02568
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-06-11",
+      "n": 367,
+      "in_sample_r2": 0.2907
+    },
+    "fair_value": 2.267156,
+    "deviation_pct": 14.9458
+  },
+  {
+    "model_week": "2023-06-25",
+    "coefficients": {
+      "intercept": 1.22307,
+      "storage_surplus_bcf": -0.000868,
+      "production_yoy_pct": -0.02561
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-06-18",
+      "n": 368,
+      "in_sample_r2": 0.2907
+    },
+    "fair_value": 2.294618,
+    "deviation_pct": 20.1071
+  },
+  {
+    "model_week": "2023-07-02",
+    "coefficients": {
+      "intercept": 1.223265,
+      "storage_surplus_bcf": -0.000865,
+      "production_yoy_pct": -0.025523
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-06-25",
+      "n": 369,
+      "in_sample_r2": 0.2903
+    },
+    "fair_value": 2.269839,
+    "deviation_pct": 15.1183
+  },
+  {
+    "model_week": "2023-07-09",
+    "coefficients": {
+      "intercept": 1.223401,
+      "storage_surplus_bcf": -0.000862,
+      "production_yoy_pct": -0.025453
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-07-02",
+      "n": 370,
+      "in_sample_r2": 0.2903
+    },
+    "fair_value": 2.2948,
+    "deviation_pct": 13.5611
+  },
+  {
+    "model_week": "2023-07-16",
+    "coefficients": {
+      "intercept": 1.223532,
+      "storage_surplus_bcf": -0.00086,
+      "production_yoy_pct": -0.025393
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-07-09",
+      "n": 371,
+      "in_sample_r2": 0.2904
+    },
+    "fair_value": 2.3105,
+    "deviation_pct": 8.3748
+  },
+  {
+    "model_week": "2023-07-23",
+    "coefficients": {
+      "intercept": 1.223619,
+      "storage_surplus_bcf": -0.000859,
+      "production_yoy_pct": -0.025356
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-07-16",
+      "n": 372,
+      "in_sample_r2": 0.2909
+    },
+    "fair_value": 2.339209,
+    "deviation_pct": 14.8252
+  },
+  {
+    "model_week": "2023-07-30",
+    "coefficients": {
+      "intercept": 1.223779,
+      "storage_surplus_bcf": -0.000856,
+      "production_yoy_pct": -0.025297
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-07-23",
+      "n": 373,
+      "in_sample_r2": 0.2909
+    },
+    "fair_value": 2.385474,
+    "deviation_pct": 10.2087
+  },
+  {
+    "model_week": "2023-08-06",
+    "coefficients": {
+      "intercept": 1.223905,
+      "storage_surplus_bcf": -0.000855,
+      "production_yoy_pct": -0.025259
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-07-30",
+      "n": 374,
+      "in_sample_r2": 0.291
+    },
+    "fair_value": 2.421671,
+    "deviation_pct": 12.4017
+  },
+  {
+    "model_week": "2023-08-13",
+    "coefficients": {
+      "intercept": 1.224069,
+      "storage_surplus_bcf": -0.000853,
+      "production_yoy_pct": -0.025218
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-08-06",
+      "n": 375,
+      "in_sample_r2": 0.291
+    },
+    "fair_value": 2.435577,
+    "deviation_pct": 15.2088
+  },
+  {
+    "model_week": "2023-08-20",
+    "coefficients": {
+      "intercept": 1.224271,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.025169
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-08-13",
+      "n": 376,
+      "in_sample_r2": 0.2908
+    },
+    "fair_value": 2.503497,
+    "deviation_pct": 4.3341
+  },
+  {
+    "model_week": "2023-08-27",
+    "coefficients": {
+      "intercept": 1.224341,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025157
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-08-20",
+      "n": 377,
+      "in_sample_r2": 0.2911
+    },
+    "fair_value": 2.54492,
+    "deviation_pct": 1.6928
+  },
+  {
+    "model_week": "2023-09-03",
+    "coefficients": {
+      "intercept": 1.224371,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025153
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-08-27",
+      "n": 378,
+      "in_sample_r2": 0.2916
+    },
+    "fair_value": 2.598981,
+    "deviation_pct": -0.1916
+  },
+  {
+    "model_week": "2023-09-10",
+    "coefficients": {
+      "intercept": 1.224367,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025153
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-09-03",
+      "n": 379,
+      "in_sample_r2": 0.292
+    },
+    "fair_value": 2.639971,
+    "deviation_pct": -2.802
+  },
+  {
+    "model_week": "2023-09-17",
+    "coefficients": {
+      "intercept": 1.224309,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025158
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-09-10",
+      "n": 380,
+      "in_sample_r2": 0.2924
+    },
+    "fair_value": 2.787321,
+    "deviation_pct": -3.4916
+  },
+  {
+    "model_week": "2023-09-24",
+    "coefficients": {
+      "intercept": 1.224203,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025157
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-09-17",
+      "n": 381,
+      "in_sample_r2": 0.2927
+    },
+    "fair_value": 2.765668,
+    "deviation_pct": -3.893
+  },
+  {
+    "model_week": "2023-10-01",
+    "coefficients": {
+      "intercept": 1.224088,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.025155
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-09-24",
+      "n": 382,
+      "in_sample_r2": 0.2929
+    },
+    "fair_value": 2.814177,
+    "deviation_pct": -5.7273
+  },
+  {
+    "model_week": "2023-10-08",
+    "coefficients": {
+      "intercept": 1.223909,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.025151
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-10-01",
+      "n": 383,
+      "in_sample_r2": 0.2932
+    },
+    "fair_value": 2.837149,
+    "deviation_pct": 13.4942
+  },
+  {
+    "model_week": "2023-10-15",
+    "coefficients": {
+      "intercept": 1.2243,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025162
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-10-08",
+      "n": 384,
+      "in_sample_r2": 0.2929
+    },
+    "fair_value": 2.793726,
+    "deviation_pct": 8.2783
+  },
+  {
+    "model_week": "2023-10-22",
+    "coefficients": {
+      "intercept": 1.224526,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025164
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-10-15",
+      "n": 385,
+      "in_sample_r2": 0.2928
+    },
+    "fair_value": 2.776993,
+    "deviation_pct": 4.5735
+  },
+  {
+    "model_week": "2023-10-29",
+    "coefficients": {
+      "intercept": 1.224651,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.025165
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-10-22",
+      "n": 386,
+      "in_sample_r2": 0.2928
+    },
+    "fair_value": 2.749711,
+    "deviation_pct": 9.9388
+  },
+  {
+    "model_week": "2023-11-05",
+    "coefficients": {
+      "intercept": 1.224906,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.025165
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-10-29",
+      "n": 387,
+      "in_sample_r2": 0.2926
+    },
+    "fair_value": 2.835718,
+    "deviation_pct": 8.3324
+  },
+  {
+    "model_week": "2023-11-12",
+    "coefficients": {
+      "intercept": 1.22514,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.025169
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-11-05",
+      "n": 388,
+      "in_sample_r2": 0.2925
+    },
+    "fair_value": 2.7604,
+    "deviation_pct": 9.1146
+  },
+  {
+    "model_week": "2023-11-19",
+    "coefficients": {
+      "intercept": 1.225375,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.02517
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-11-12",
+      "n": 389,
+      "in_sample_r2": 0.2924
+    },
+    "fair_value": 2.547646,
+    "deviation_pct": 7.0792
+  },
+  {
+    "model_week": "2023-11-26",
+    "coefficients": {
+      "intercept": 1.225478,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.025151
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-11-19",
+      "n": 390,
+      "in_sample_r2": 0.2925
+    },
+    "fair_value": 2.424038,
+    "deviation_pct": 11.1781
+  },
+  {
+    "model_week": "2023-12-03",
+    "coefficients": {
+      "intercept": 1.225593,
+      "storage_surplus_bcf": -0.000847,
+      "production_yoy_pct": -0.025111
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-11-26",
+      "n": 391,
+      "in_sample_r2": 0.2925
+    },
+    "fair_value": 2.605479,
+    "deviation_pct": -3.3575
+  },
+  {
+    "model_week": "2023-12-10",
+    "coefficients": {
+      "intercept": 1.225536,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.025119
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-12-03",
+      "n": 392,
+      "in_sample_r2": 0.2931
+    },
+    "fair_value": 2.55956,
+    "deviation_pct": -9.0078
+  },
+  {
+    "model_week": "2023-12-17",
+    "coefficients": {
+      "intercept": 1.225393,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.025144
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-12-10",
+      "n": 393,
+      "in_sample_r2": 0.2939
+    },
+    "fair_value": 2.422788,
+    "deviation_pct": -2.0137
+  },
+  {
+    "model_week": "2023-12-21",
+    "coefficients": {
+      "intercept": 1.225384,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.025154
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-12-17",
+      "n": 394,
+      "in_sample_r2": 0.2948
+    },
+    "fair_value": 2.422473,
+    "deviation_pct": 0.352
+  },
+  {
+    "model_week": "2023-12-28",
+    "coefficients": {
+      "intercept": 1.225385,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.025152
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-12-21",
+      "n": 395,
+      "in_sample_r2": 0.2956
+    },
+    "fair_value": 2.312033,
+    "deviation_pct": 6.3999
+  },
+  {
+    "model_week": "2024-01-07",
+    "coefficients": {
+      "intercept": 1.22539,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.025115
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2023-12-28",
+      "n": 396,
+      "in_sample_r2": 0.2962
+    },
+    "fair_value": 2.220544,
+    "deviation_pct": 31.049
+  },
+  {
+    "model_week": "2024-01-14",
+    "coefficients": {
+      "intercept": 1.225317,
+      "storage_surplus_bcf": -0.000843,
+      "production_yoy_pct": -0.024935
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-01-07",
+      "n": 397,
+      "in_sample_r2": 0.2948
+    },
+    "fair_value": 2.265977,
+    "deviation_pct": 26.1707
+  },
+  {
+    "model_week": "2024-01-21",
+    "coefficients": {
+      "intercept": 1.225289,
+      "storage_surplus_bcf": -0.000839,
+      "production_yoy_pct": -0.02479
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-01-14",
+      "n": 398,
+      "in_sample_r2": 0.2939
+    },
+    "fair_value": 3.019964,
+    "deviation_pct": -21.2573
+  },
+  {
+    "model_week": "2024-01-28",
+    "coefficients": {
+      "intercept": 1.2243,
+      "storage_surplus_bcf": -0.000839,
+      "production_yoy_pct": -0.024704
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-01-21",
+      "n": 399,
+      "in_sample_r2": 0.2937
+    },
+    "fair_value": 3.016957,
+    "deviation_pct": -25.5541
+  },
+  {
+    "model_week": "2024-02-04",
+    "coefficients": {
+      "intercept": 1.223084,
+      "storage_surplus_bcf": -0.000839,
+      "production_yoy_pct": -0.024599
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-01-28",
+      "n": 400,
+      "in_sample_r2": 0.2934
+    },
+    "fair_value": 2.720616,
+    "deviation_pct": -18.9154
+  },
+  {
+    "model_week": "2024-02-11",
+    "coefficients": {
+      "intercept": 1.222402,
+      "storage_surplus_bcf": -0.00084,
+      "production_yoy_pct": -0.024567
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-02-04",
+      "n": 401,
+      "in_sample_r2": 0.294
+    },
+    "fair_value": 2.520062,
+    "deviation_pct": -27.1447
+  },
+  {
+    "model_week": "2024-02-18",
+    "coefficients": {
+      "intercept": 1.221577,
+      "storage_surplus_bcf": -0.000843,
+      "production_yoy_pct": -0.024567
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-02-11",
+      "n": 402,
+      "in_sample_r2": 0.2956
+    },
+    "fair_value": 1.933361,
+    "deviation_pct": -17.2943
+  },
+  {
+    "model_week": "2024-02-25",
+    "coefficients": {
+      "intercept": 1.22197,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024768
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-02-18",
+      "n": 403,
+      "in_sample_r2": 0.3005
+    },
+    "fair_value": 1.8797,
+    "deviation_pct": -8.7088
+  },
+  {
+    "model_week": "2024-03-03",
+    "coefficients": {
+      "intercept": 1.222173,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024867
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-02-25",
+      "n": 404,
+      "in_sample_r2": 0.3046
+    },
+    "fair_value": 1.777826,
+    "deviation_pct": 6.4221
+  },
+  {
+    "model_week": "2024-03-10",
+    "coefficients": {
+      "intercept": 1.222011,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024794
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-03-03",
+      "n": 405,
+      "in_sample_r2": 0.3074
+    },
+    "fair_value": 1.677268,
+    "deviation_pct": 3.0843
+  },
+  {
+    "model_week": "2024-03-17",
+    "coefficients": {
+      "intercept": 1.221919,
+      "storage_surplus_bcf": -0.000847,
+      "production_yoy_pct": -0.024756
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-03-10",
+      "n": 406,
+      "in_sample_r2": 0.3115
+    },
+    "fair_value": 1.929816,
+    "deviation_pct": -11.7014
+  },
+  {
+    "model_week": "2024-03-24",
+    "coefficients": {
+      "intercept": 1.221827,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024806
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-03-17",
+      "n": 407,
+      "in_sample_r2": 0.3154
+    },
+    "fair_value": 1.961874,
+    "deviation_pct": -15.1832
+  },
+  {
+    "model_week": "2024-03-31",
+    "coefficients": {
+      "intercept": 1.221683,
+      "storage_surplus_bcf": -0.000853,
+      "production_yoy_pct": -0.024865
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-03-24",
+      "n": 408,
+      "in_sample_r2": 0.3194
+    },
+    "fair_value": 2.009126,
+    "deviation_pct": -13.7934
+  },
+  {
+    "model_week": "2024-04-07",
+    "coefficients": {
+      "intercept": 1.221525,
+      "storage_surplus_bcf": -0.000856,
+      "production_yoy_pct": -0.024911
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-03-31",
+      "n": 409,
+      "in_sample_r2": 0.3228
+    },
+    "fair_value": 2.020513,
+    "deviation_pct": -12.7944
+  },
+  {
+    "model_week": "2024-04-14",
+    "coefficients": {
+      "intercept": 1.221373,
+      "storage_surplus_bcf": -0.000859,
+      "production_yoy_pct": -0.024951
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-04-07",
+      "n": 410,
+      "in_sample_r2": 0.326
+    },
+    "fair_value": 2.045391,
+    "deviation_pct": -19.6731
+  },
+  {
+    "model_week": "2024-04-21",
+    "coefficients": {
+      "intercept": 1.221108,
+      "storage_surplus_bcf": -0.000862,
+      "production_yoy_pct": -0.025009
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-04-14",
+      "n": 411,
+      "in_sample_r2": 0.3296
+    },
+    "fair_value": 1.979389,
+    "deviation_pct": -7.7493
+  },
+  {
+    "model_week": "2024-04-28",
+    "coefficients": {
+      "intercept": 1.221027,
+      "storage_surplus_bcf": -0.000864,
+      "production_yoy_pct": -0.025034
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-04-21",
+      "n": 412,
+      "in_sample_r2": 0.3325
+    },
+    "fair_value": 2.008009,
+    "deviation_pct": -7.6697
+  },
+  {
+    "model_week": "2024-05-05",
+    "coefficients": {
+      "intercept": 1.220939,
+      "storage_surplus_bcf": -0.000865,
+      "production_yoy_pct": -0.025056
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-04-28",
+      "n": 413,
+      "in_sample_r2": 0.3352
+    },
+    "fair_value": 2.004028,
+    "deviation_pct": 1.4457
+  },
+  {
+    "model_week": "2024-05-12",
+    "coefficients": {
+      "intercept": 1.220955,
+      "storage_surplus_bcf": -0.000865,
+      "production_yoy_pct": -0.025052
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-05-05",
+      "n": 414,
+      "in_sample_r2": 0.337
+    },
+    "fair_value": 2.043932,
+    "deviation_pct": 9.5927
+  },
+  {
+    "model_week": "2024-05-19",
+    "coefficients": {
+      "intercept": 1.221067,
+      "storage_surplus_bcf": -0.000863,
+      "production_yoy_pct": -0.02503
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-05-12",
+      "n": 415,
+      "in_sample_r2": 0.3379
+    },
+    "fair_value": 2.110836,
+    "deviation_pct": 25.9217
+  },
+  {
+    "model_week": "2024-05-26",
+    "coefficients": {
+      "intercept": 1.221459,
+      "storage_surplus_bcf": -0.00086,
+      "production_yoy_pct": -0.025001
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-05-19",
+      "n": 416,
+      "in_sample_r2": 0.3371
+    },
+    "fair_value": 2.147988,
+    "deviation_pct": 18.064
+  },
+  {
+    "model_week": "2024-06-02",
+    "coefficients": {
+      "intercept": 1.221759,
+      "storage_surplus_bcf": -0.000858,
+      "production_yoy_pct": -0.024984
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-05-26",
+      "n": 417,
+      "in_sample_r2": 0.337
+    },
+    "fair_value": 2.168032,
+    "deviation_pct": 17.9872
+  },
+  {
+    "model_week": "2024-06-09",
+    "coefficients": {
+      "intercept": 1.222066,
+      "storage_surplus_bcf": -0.000856,
+      "production_yoy_pct": -0.02497
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-06-02",
+      "n": 418,
+      "in_sample_r2": 0.3368
+    },
+    "fair_value": 2.177629,
+    "deviation_pct": 29.866
+  },
+  {
+    "model_week": "2024-06-16",
+    "coefficients": {
+      "intercept": 1.222552,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024948
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-06-09",
+      "n": 419,
+      "in_sample_r2": 0.3357
+    },
+    "fair_value": 2.082471,
+    "deviation_pct": 30.0858
+  },
+  {
+    "model_week": "2024-06-23",
+    "coefficients": {
+      "intercept": 1.222715,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024856
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-06-16",
+      "n": 420,
+      "in_sample_r2": 0.3346
+    },
+    "fair_value": 2.147667,
+    "deviation_pct": 30.5603
+  },
+  {
+    "model_week": "2024-06-30",
+    "coefficients": {
+      "intercept": 1.222941,
+      "storage_surplus_bcf": -0.000845,
+      "production_yoy_pct": -0.024777
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-06-23",
+      "n": 421,
+      "in_sample_r2": 0.3335
+    },
+    "fair_value": 2.20623,
+    "deviation_pct": 8.1483
+  },
+  {
+    "model_week": "2024-07-07",
+    "coefficients": {
+      "intercept": 1.223023,
+      "storage_surplus_bcf": -0.000843,
+      "production_yoy_pct": -0.024757
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-06-30",
+      "n": 422,
+      "in_sample_r2": 0.334
+    },
+    "fair_value": 2.197876,
+    "deviation_pct": 5.056
+  },
+  {
+    "model_week": "2024-07-14",
+    "coefficients": {
+      "intercept": 1.223073,
+      "storage_surplus_bcf": -0.000843,
+      "production_yoy_pct": -0.024744
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-07-07",
+      "n": 423,
+      "in_sample_r2": 0.3347
+    },
+    "fair_value": 2.266059,
+    "deviation_pct": -5.8718
+  },
+  {
+    "model_week": "2024-07-21",
+    "coefficients": {
+      "intercept": 1.222997,
+      "storage_surplus_bcf": -0.000844,
+      "production_yoy_pct": -0.024757
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-07-14",
+      "n": 424,
+      "in_sample_r2": 0.336
+    },
+    "fair_value": 2.248225,
+    "deviation_pct": -1.3444
+  },
+  {
+    "model_week": "2024-07-28",
+    "coefficients": {
+      "intercept": 1.222984,
+      "storage_surplus_bcf": -0.000844,
+      "production_yoy_pct": -0.02476
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-07-21",
+      "n": 425,
+      "in_sample_r2": 0.3371
+    },
+    "fair_value": 2.274346,
+    "deviation_pct": -10.7436
+  },
+  {
+    "model_week": "2024-08-04",
+    "coefficients": {
+      "intercept": 1.22286,
+      "storage_surplus_bcf": -0.000845,
+      "production_yoy_pct": -0.024787
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-07-28",
+      "n": 426,
+      "in_sample_r2": 0.3386
+    },
+    "fair_value": 2.313385,
+    "deviation_pct": -16.7454
+  },
+  {
+    "model_week": "2024-08-11",
+    "coefficients": {
+      "intercept": 1.222635,
+      "storage_surplus_bcf": -0.000847,
+      "production_yoy_pct": -0.024824
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-08-04",
+      "n": 427,
+      "in_sample_r2": 0.3402
+    },
+    "fair_value": 2.405139,
+    "deviation_pct": -10.4833
+  },
+  {
+    "model_week": "2024-08-18",
+    "coefficients": {
+      "intercept": 1.222462,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024839
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-08-11",
+      "n": 428,
+      "in_sample_r2": 0.3412
+    },
+    "fair_value": 2.512601,
+    "deviation_pct": -10.9289
+  },
+  {
+    "model_week": "2024-08-25",
+    "coefficients": {
+      "intercept": 1.222175,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024831
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-08-18",
+      "n": 429,
+      "in_sample_r2": 0.342
+    },
+    "fair_value": 2.52962,
+    "deviation_pct": -20.8577
+  },
+  {
+    "model_week": "2024-09-01",
+    "coefficients": {
+      "intercept": 1.221585,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024813
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-08-25",
+      "n": 430,
+      "in_sample_r2": 0.3428
+    },
+    "fair_value": 2.611179,
+    "deviation_pct": -19.8063
+  },
+  {
+    "model_week": "2024-09-08",
+    "coefficients": {
+      "intercept": 1.220969,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.024783
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-09-01",
+      "n": 431,
+      "in_sample_r2": 0.3434
+    },
+    "fair_value": 2.68306,
+    "deviation_pct": -22.5138
+  },
+  {
+    "model_week": "2024-09-15",
+    "coefficients": {
+      "intercept": 1.220199,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024736
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-09-08",
+      "n": 432,
+      "in_sample_r2": 0.3438
+    },
+    "fair_value": 2.800124,
+    "deviation_pct": -16.0394
+  },
+  {
+    "model_week": "2024-09-22",
+    "coefficients": {
+      "intercept": 1.219554,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024678
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-09-15",
+      "n": 433,
+      "in_sample_r2": 0.3439
+    },
+    "fair_value": 2.899461,
+    "deviation_pct": -11.8112
+  },
+  {
+    "model_week": "2024-09-29",
+    "coefficients": {
+      "intercept": 1.219055,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.02463
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-09-22",
+      "n": 434,
+      "in_sample_r2": 0.3439
+    },
+    "fair_value": 3.021937,
+    "deviation_pct": -12.1094
+  },
+  {
+    "model_week": "2024-10-06",
+    "coefficients": {
+      "intercept": 1.218498,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.02457
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-09-29",
+      "n": 435,
+      "in_sample_r2": 0.3437
+    },
+    "fair_value": 3.047604,
+    "deviation_pct": -16.3277
+  },
+  {
+    "model_week": "2024-10-13",
+    "coefficients": {
+      "intercept": 1.21772,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.024486
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-10-06",
+      "n": 436,
+      "in_sample_r2": 0.3435
+    },
+    "fair_value": 3.081687,
+    "deviation_pct": -23.3212
+  },
+  {
+    "model_week": "2024-10-20",
+    "coefficients": {
+      "intercept": 1.216539,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024356
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-10-13",
+      "n": 437,
+      "in_sample_r2": 0.3429
+    },
+    "fair_value": 2.960722,
+    "deviation_pct": -20.9652
+  },
+  {
+    "model_week": "2024-10-27",
+    "coefficients": {
+      "intercept": 1.215678,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024281
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-10-20",
+      "n": 438,
+      "in_sample_r2": 0.3426
+    },
+    "fair_value": 2.944297,
+    "deviation_pct": -17.8751
+  },
+  {
+    "model_week": "2024-11-03",
+    "coefficients": {
+      "intercept": 1.214967,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.02422
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-10-27",
+      "n": 439,
+      "in_sample_r2": 0.3424
+    },
+    "fair_value": 2.816621,
+    "deviation_pct": -12.6613
+  },
+  {
+    "model_week": "2024-11-10",
+    "coefficients": {
+      "intercept": 1.21453,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024188
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-11-03",
+      "n": 440,
+      "in_sample_r2": 0.3425
+    },
+    "fair_value": 2.794365,
+    "deviation_pct": -3.2338
+  },
+  {
+    "model_week": "2024-11-17",
+    "coefficients": {
+      "intercept": 1.214426,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024181
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-11-10",
+      "n": 441,
+      "in_sample_r2": 0.3426
+    },
+    "fair_value": 2.820785,
+    "deviation_pct": -0.8078
+  },
+  {
+    "model_week": "2024-11-24",
+    "coefficients": {
+      "intercept": 1.214396,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024178
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-11-17",
+      "n": 442,
+      "in_sample_r2": 0.3426
+    },
+    "fair_value": 2.742234,
+    "deviation_pct": 14.5052
+  },
+  {
+    "model_week": "2024-12-01",
+    "coefficients": {
+      "intercept": 1.214868,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.02422
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-11-24",
+      "n": 443,
+      "in_sample_r2": 0.3423
+    },
+    "fair_value": 2.712778,
+    "deviation_pct": 10.3666
+  },
+  {
+    "model_week": "2024-12-08",
+    "coefficients": {
+      "intercept": 1.215201,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024248
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-12-01",
+      "n": 444,
+      "in_sample_r2": 0.3422
+    },
+    "fair_value": 3.001527,
+    "deviation_pct": 1.0153
+  },
+  {
+    "model_week": "2024-12-15",
+    "coefficients": {
+      "intercept": 1.215244,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024253
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-12-08",
+      "n": 445,
+      "in_sample_r2": 0.3422
+    },
+    "fair_value": 2.965812,
+    "deviation_pct": 4.8617
+  },
+  {
+    "model_week": "2024-12-22",
+    "coefficients": {
+      "intercept": 1.215411,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024267
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-12-15",
+      "n": 446,
+      "in_sample_r2": 0.3422
+    },
+    "fair_value": 2.826565,
+    "deviation_pct": 22.1978
+  },
+  {
+    "model_week": "2024-12-29",
+    "coefficients": {
+      "intercept": 1.216034,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024311
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-12-22",
+      "n": 447,
+      "in_sample_r2": 0.3417
+    },
+    "fair_value": 2.897416,
+    "deviation_pct": 37.3638
+  },
+  {
+    "model_week": "2025-01-05",
+    "coefficients": {
+      "intercept": 1.217082,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024393
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2024-12-29",
+      "n": 448,
+      "in_sample_r2": 0.341
+    },
+    "fair_value": 2.702472,
+    "deviation_pct": 39.0579
+  },
+  {
+    "model_week": "2025-01-12",
+    "coefficients": {
+      "intercept": 1.217971,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024438
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-01-05",
+      "n": 449,
+      "in_sample_r2": 0.3398
+    },
+    "fair_value": 2.971107,
+    "deviation_pct": 33.4183
+  },
+  {
+    "model_week": "2025-01-19",
+    "coefficients": {
+      "intercept": 1.218973,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024523
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-01-12",
+      "n": 450,
+      "in_sample_r2": 0.3393
+    },
+    "fair_value": 2.949884,
+    "deviation_pct": 30.5814
+  },
+  {
+    "model_week": "2025-01-26",
+    "coefficients": {
+      "intercept": 1.219687,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024553
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-01-19",
+      "n": 451,
+      "in_sample_r2": 0.3388
+    },
+    "fair_value": 3.266027,
+    "deviation_pct": 10.2257
+  },
+  {
+    "model_week": "2025-02-02",
+    "coefficients": {
+      "intercept": 1.22003,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024581
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-01-26",
+      "n": 452,
+      "in_sample_r2": 0.3391
+    },
+    "fair_value": 3.293709,
+    "deviation_pct": 8.9653
+  },
+  {
+    "model_week": "2025-02-09",
+    "coefficients": {
+      "intercept": 1.220337,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024606
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-02-02",
+      "n": 453,
+      "in_sample_r2": 0.3393
+    },
+    "fair_value": 3.186647,
+    "deviation_pct": 14.2267
+  },
+  {
+    "model_week": "2025-02-16",
+    "coefficients": {
+      "intercept": 1.220775,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024638
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-02-09",
+      "n": 454,
+      "in_sample_r2": 0.3395
+    },
+    "fair_value": 3.810167,
+    "deviation_pct": -2.3665
+  },
+  {
+    "model_week": "2025-02-23",
+    "coefficients": {
+      "intercept": 1.220617,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024615
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-02-16",
+      "n": 455,
+      "in_sample_r2": 0.34
+    },
+    "fair_value": 4.325613,
+    "deviation_pct": -4.9846
+  },
+  {
+    "model_week": "2025-03-02",
+    "coefficients": {
+      "intercept": 1.220232,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024554
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-02-23",
+      "n": 456,
+      "in_sample_r2": 0.3411
+    },
+    "fair_value": 4.315719,
+    "deviation_pct": -1.152
+  },
+  {
+    "model_week": "2025-03-09",
+    "coefficients": {
+      "intercept": 1.220146,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024541
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-03-02",
+      "n": 457,
+      "in_sample_r2": 0.3425
+    },
+    "fair_value": 4.392574,
+    "deviation_pct": 3.2879
+  },
+  {
+    "model_week": "2025-03-16",
+    "coefficients": {
+      "intercept": 1.220386,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024579
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-03-09",
+      "n": 458,
+      "in_sample_r2": 0.3444
+    },
+    "fair_value": 3.483742,
+    "deviation_pct": 16.0821
+  },
+  {
+    "model_week": "2025-03-23",
+    "coefficients": {
+      "intercept": 1.220846,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024605
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-03-16",
+      "n": 459,
+      "in_sample_r2": 0.345
+    },
+    "fair_value": 3.336426,
+    "deviation_pct": 17.6109
+  },
+  {
+    "model_week": "2025-03-30",
+    "coefficients": {
+      "intercept": 1.221289,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.024623
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-03-23",
+      "n": 460,
+      "in_sample_r2": 0.3453
+    },
+    "fair_value": 3.205968,
+    "deviation_pct": 28.3544
+  },
+  {
+    "model_week": "2025-04-06",
+    "coefficients": {
+      "intercept": 1.221892,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024633
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-03-30",
+      "n": 461,
+      "in_sample_r2": 0.3454
+    },
+    "fair_value": 3.141932,
+    "deviation_pct": 15.0884
+  },
+  {
+    "model_week": "2025-04-13",
+    "coefficients": {
+      "intercept": 1.222208,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024634
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-04-06",
+      "n": 462,
+      "in_sample_r2": 0.3455
+    },
+    "fair_value": 3.25686,
+    "deviation_pct": 2.2457
+  },
+  {
+    "model_week": "2025-04-20",
+    "coefficients": {
+      "intercept": 1.222264,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024636
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-04-13",
+      "n": 463,
+      "in_sample_r2": 0.3456
+    },
+    "fair_value": 3.120742,
+    "deviation_pct": -1.3696
+  },
+  {
+    "model_week": "2025-04-27",
+    "coefficients": {
+      "intercept": 1.222236,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024637
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-04-20",
+      "n": 464,
+      "in_sample_r2": 0.3456
+    },
+    "fair_value": 3.008408,
+    "deviation_pct": 6.6345
+  },
+  {
+    "model_week": "2025-05-04",
+    "coefficients": {
+      "intercept": 1.222347,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.02463
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-04-27",
+      "n": 465,
+      "in_sample_r2": 0.3456
+    },
+    "fair_value": 2.957521,
+    "deviation_pct": 17.4632
+  },
+  {
+    "model_week": "2025-05-11",
+    "coefficients": {
+      "intercept": 1.222603,
+      "storage_surplus_bcf": -0.000852,
+      "production_yoy_pct": -0.024609
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-05-04",
+      "n": 466,
+      "in_sample_r2": 0.3454
+    },
+    "fair_value": 2.900244,
+    "deviation_pct": 24.7137
+  },
+  {
+    "model_week": "2025-05-18",
+    "coefficients": {
+      "intercept": 1.222919,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.024573
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-05-11",
+      "n": 467,
+      "in_sample_r2": 0.3449
+    },
+    "fair_value": 2.86842,
+    "deviation_pct": 7.3762
+  },
+  {
+    "model_week": "2025-05-25",
+    "coefficients": {
+      "intercept": 1.223026,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.024563
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-05-18",
+      "n": 468,
+      "in_sample_r2": 0.3448
+    },
+    "fair_value": 2.858659,
+    "deviation_pct": 16.908
+  },
+  {
+    "model_week": "2025-06-01",
+    "coefficients": {
+      "intercept": 1.223255,
+      "storage_surplus_bcf": -0.000851,
+      "production_yoy_pct": -0.02454
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-05-25",
+      "n": 469,
+      "in_sample_r2": 0.3446
+    },
+    "fair_value": 2.807638,
+    "deviation_pct": 24.0901
+  },
+  {
+    "model_week": "2025-06-08",
+    "coefficients": {
+      "intercept": 1.223541,
+      "storage_surplus_bcf": -0.00085,
+      "production_yoy_pct": -0.024502
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-06-01",
+      "n": 470,
+      "in_sample_r2": 0.344
+    },
+    "fair_value": 2.721692,
+    "deviation_pct": 25.9511
+  },
+  {
+    "model_week": "2025-06-15",
+    "coefficients": {
+      "intercept": 1.22379,
+      "storage_surplus_bcf": -0.000849,
+      "production_yoy_pct": -0.024449
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-06-08",
+      "n": 471,
+      "in_sample_r2": 0.3433
+    },
+    "fair_value": 2.699134,
+    "deviation_pct": 34.5617
+  },
+  {
+    "model_week": "2025-06-22",
+    "coefficients": {
+      "intercept": 1.224116,
+      "storage_surplus_bcf": -0.000848,
+      "production_yoy_pct": -0.024385
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-06-15",
+      "n": 472,
+      "in_sample_r2": 0.3423
+    },
+    "fair_value": 2.669942,
+    "deviation_pct": 36.3326
+  },
+  {
+    "model_week": "2025-06-29",
+    "coefficients": {
+      "intercept": 1.224428,
+      "storage_surplus_bcf": -0.000846,
+      "production_yoy_pct": -0.024312
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-06-22",
+      "n": 473,
+      "in_sample_r2": 0.3411
+    },
+    "fair_value": 2.660612,
+    "deviation_pct": 25.7605
+  },
+  {
+    "model_week": "2025-07-06",
+    "coefficients": {
+      "intercept": 1.224649,
+      "storage_surplus_bcf": -0.000845,
+      "production_yoy_pct": -0.024256
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-06-29",
+      "n": 474,
+      "in_sample_r2": 0.3404
+    },
+    "fair_value": 2.670517,
+    "deviation_pct": 24.7698
+  },
+  {
+    "model_week": "2025-07-13",
+    "coefficients": {
+      "intercept": 1.224868,
+      "storage_surplus_bcf": -0.000843,
+      "production_yoy_pct": -0.024204
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-07-06",
+      "n": 475,
+      "in_sample_r2": 0.3397
+    },
+    "fair_value": 2.648445,
+    "deviation_pct": 28.0752
+  },
+  {
+    "model_week": "2025-07-20",
+    "coefficients": {
+      "intercept": 1.225095,
+      "storage_surplus_bcf": -0.000842,
+      "production_yoy_pct": -0.024142
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-07-13",
+      "n": 476,
+      "in_sample_r2": 0.3388
+    },
+    "fair_value": 2.708283,
+    "deviation_pct": 21.4792
+  },
+  {
+    "model_week": "2025-07-27",
+    "coefficients": {
+      "intercept": 1.225356,
+      "storage_surplus_bcf": -0.000841,
+      "production_yoy_pct": -0.024112
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-07-20",
+      "n": 477,
+      "in_sample_r2": 0.3383
+    },
+    "fair_value": 2.651947,
+    "deviation_pct": 15.3869
+  },
+  {
+    "model_week": "2025-08-03",
+    "coefficients": {
+      "intercept": 1.225524,
+      "storage_surplus_bcf": -0.00084,
+      "production_yoy_pct": -0.024085
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-07-27",
+      "n": 478,
+      "in_sample_r2": 0.3379
+    },
+    "fair_value": 2.716675,
+    "deviation_pct": 7.4844
+  },
+  {
+    "model_week": "2025-08-10",
+    "coefficients": {
+      "intercept": 1.225621,
+      "storage_surplus_bcf": -0.00084,
+      "production_yoy_pct": -0.024074
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-08-03",
+      "n": 479,
+      "in_sample_r2": 0.3379
+    },
+    "fair_value": 2.658922,
+    "deviation_pct": 11.3233
+  },
+  {
+    "model_week": "2025-08-17",
+    "coefficients": {
+      "intercept": 1.225748,
+      "storage_surplus_bcf": -0.00084,
+      "production_yoy_pct": -0.024055
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-08-10",
+      "n": 480,
+      "in_sample_r2": 0.3377
+    },
+    "fair_value": 2.61107,
+    "deviation_pct": 10.8358
+  },
+  {
+    "model_week": "2025-08-24",
+    "coefficients": {
+      "intercept": 1.225801,
+      "storage_surplus_bcf": -0.000839,
+      "production_yoy_pct": -0.02402
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-08-17",
+      "n": 481,
+      "in_sample_r2": 0.3375
+    },
+    "fair_value": 2.657511,
+    "deviation_pct": 2.7277
+  },
+  {
+    "model_week": "2025-08-31",
+    "coefficients": {
+      "intercept": 1.225819,
+      "storage_surplus_bcf": -0.000839,
+      "production_yoy_pct": -0.024012
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-08-24",
+      "n": 482,
+      "in_sample_r2": 0.3376
+    },
+    "fair_value": 2.640847,
+    "deviation_pct": 9.9647
+  },
+  {
+    "model_week": "2025-09-07",
+    "coefficients": {
+      "intercept": 1.225876,
+      "storage_surplus_bcf": -0.000838,
+      "production_yoy_pct": -0.023982
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-08-31",
+      "n": 483,
+      "in_sample_r2": 0.3375
+    },
+    "fair_value": 2.629279,
+    "deviation_pct": 15.7732
+  },
+  {
+    "model_week": "2025-09-14",
+    "coefficients": {
+      "intercept": 1.225958,
+      "storage_surplus_bcf": -0.000837,
+      "production_yoy_pct": -0.023935
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-09-07",
+      "n": 484,
+      "in_sample_r2": 0.3371
+    },
+    "fair_value": 2.604237,
+    "deviation_pct": 15.5809
+  },
+  {
+    "model_week": "2025-09-21",
+    "coefficients": {
+      "intercept": 1.226028,
+      "storage_surplus_bcf": -0.000836,
+      "production_yoy_pct": -0.023887
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-09-14",
+      "n": 485,
+      "in_sample_r2": 0.3368
+    },
+    "fair_value": 2.589392,
+    "deviation_pct": 7.9404
+  },
+  {
+    "model_week": "2025-09-28",
+    "coefficients": {
+      "intercept": 1.226051,
+      "storage_surplus_bcf": -0.000836,
+      "production_yoy_pct": -0.023858
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-09-21",
+      "n": 486,
+      "in_sample_r2": 0.3367
+    },
+    "fair_value": 2.679952,
+    "deviation_pct": 12.6886
+  },
+  {
+    "model_week": "2025-10-05",
+    "coefficients": {
+      "intercept": 1.226121,
+      "storage_surplus_bcf": -0.000835,
+      "production_yoy_pct": -0.02382
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-09-28",
+      "n": 487,
+      "in_sample_r2": 0.3365
+    },
+    "fair_value": 2.70207,
+    "deviation_pct": 18.3167
+  },
+  {
+    "model_week": "2025-10-12",
+    "coefficients": {
+      "intercept": 1.226229,
+      "storage_surplus_bcf": -0.000834,
+      "production_yoy_pct": -0.023769
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-10-05",
+      "n": 488,
+      "in_sample_r2": 0.3361
+    },
+    "fair_value": 2.711103,
+    "deviation_pct": 9.4757
+  },
+  {
+    "model_week": "2025-10-19",
+    "coefficients": {
+      "intercept": 1.226289,
+      "storage_surplus_bcf": -0.000834,
+      "production_yoy_pct": -0.023742
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-10-12",
+      "n": 489,
+      "in_sample_r2": 0.336
+    },
+    "fair_value": 2.825093,
+    "deviation_pct": 18.2262
+  },
+  {
+    "model_week": "2025-10-26",
+    "coefficients": {
+      "intercept": 1.226581,
+      "storage_surplus_bcf": -0.000833,
+      "production_yoy_pct": -0.023733
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-10-19",
+      "n": 490,
+      "in_sample_r2": 0.3356
+    },
+    "fair_value": 2.820036,
+    "deviation_pct": 19.9985
+  },
+  {
+    "model_week": "2025-11-02",
+    "coefficients": {
+      "intercept": 1.226894,
+      "storage_surplus_bcf": -0.000833,
+      "production_yoy_pct": -0.023723
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-10-26",
+      "n": 491,
+      "in_sample_r2": 0.3352
+    },
+    "fair_value": 2.795927,
+    "deviation_pct": 34.839
+  },
+  {
+    "model_week": "2025-11-09",
+    "coefficients": {
+      "intercept": 1.227386,
+      "storage_surplus_bcf": -0.000832,
+      "production_yoy_pct": -0.023702
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-11-02",
+      "n": 492,
+      "in_sample_r2": 0.3343
+    },
+    "fair_value": 2.785773,
+    "deviation_pct": 44.879
+  },
+  {
+    "model_week": "2025-11-16",
+    "coefficients": {
+      "intercept": 1.227981,
+      "storage_surplus_bcf": -0.000831,
+      "production_yoy_pct": -0.023673
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-11-09",
+      "n": 493,
+      "in_sample_r2": 0.333
+    },
+    "fair_value": 2.603738,
+    "deviation_pct": 59.7703
+  },
+  {
+    "model_week": "2025-11-23",
+    "coefficients": {
+      "intercept": 1.228051,
+      "storage_surplus_bcf": -0.000828,
+      "production_yoy_pct": -0.023485
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-11-16",
+      "n": 494,
+      "in_sample_r2": 0.3305
+    },
+    "fair_value": 2.569676,
+    "deviation_pct": 69.9825
+  },
+  {
+    "model_week": "2025-11-30",
+    "coefficients": {
+      "intercept": 1.228067,
+      "storage_surplus_bcf": -0.000824,
+      "production_yoy_pct": -0.02326
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-11-23",
+      "n": 495,
+      "in_sample_r2": 0.3274
+    },
+    "fair_value": 2.502703,
+    "deviation_pct": 86.2386
+  },
+  {
+    "model_week": "2025-12-07",
+    "coefficients": {
+      "intercept": 1.227942,
+      "storage_surplus_bcf": -0.000818,
+      "production_yoy_pct": -0.022969
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-11-30",
+      "n": 496,
+      "in_sample_r2": 0.3232
+    },
+    "fair_value": 2.686475,
+    "deviation_pct": 74.541
+  },
+  {
+    "model_week": "2025-12-14",
+    "coefficients": {
+      "intercept": 1.228139,
+      "storage_surplus_bcf": -0.000815,
+      "production_yoy_pct": -0.022771
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-12-07",
+      "n": 497,
+      "in_sample_r2": 0.3203
+    },
+    "fair_value": 2.85121,
+    "deviation_pct": 38.1869
+  },
+  {
+    "model_week": "2025-12-21",
+    "coefficients": {
+      "intercept": 1.228405,
+      "storage_surplus_bcf": -0.000814,
+      "production_yoy_pct": -0.022687
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-12-14",
+      "n": 498,
+      "in_sample_r2": 0.3194
+    },
+    "fair_value": 2.970374,
+    "deviation_pct": 26.6507
+  },
+  {
+    "model_week": "2025-12-28",
+    "coefficients": {
+      "intercept": 1.228725,
+      "storage_surplus_bcf": -0.000814,
+      "production_yoy_pct": -0.022652
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-12-21",
+      "n": 499,
+      "in_sample_r2": 0.319
+    },
+    "fair_value": 2.825271,
+    "deviation_pct": 44.8357
+  },
+  {
+    "model_week": "2026-01-04",
+    "coefficients": {
+      "intercept": 1.229072,
+      "storage_surplus_bcf": -0.000812,
+      "production_yoy_pct": -0.022567
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2025-12-28",
+      "n": 500,
+      "in_sample_r2": 0.3178
+    },
+    "fair_value": 2.822379,
+    "deviation_pct": 27.1268
+  },
+  {
+    "model_week": "2026-01-11",
+    "coefficients": {
+      "intercept": 1.229292,
+      "storage_surplus_bcf": -0.000811,
+      "production_yoy_pct": -0.022511
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-01-04",
+      "n": 501,
+      "in_sample_r2": 0.3172
+    },
+    "fair_value": 2.58839,
+    "deviation_pct": 32.2444
+  },
+  {
+    "model_week": "2026-01-18",
+    "coefficients": {
+      "intercept": 1.229347,
+      "storage_surplus_bcf": -0.000809,
+      "production_yoy_pct": -0.022407
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-01-11",
+      "n": 502,
+      "in_sample_r2": 0.3161
+    },
+    "fair_value": 2.509596,
+    "deviation_pct": 44.1268
+  },
+  {
+    "model_week": "2026-01-25",
+    "coefficients": {
+      "intercept": 1.229483,
+      "storage_surplus_bcf": -0.000806,
+      "production_yoy_pct": -0.022289
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-01-18",
+      "n": 503,
+      "in_sample_r2": 0.3142
+    },
+    "fair_value": 2.544191,
+    "deviation_pct": 115.1568
+  },
+  {
+    "model_week": "2026-02-01",
+    "coefficients": {
+      "intercept": 1.229842,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022059
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-01-25",
+      "n": 504,
+      "in_sample_r2": 0.3087
+    },
+    "fair_value": 2.963781,
+    "deviation_pct": 44.3427
+  },
+  {
+    "model_week": "2026-02-08",
+    "coefficients": {
+      "intercept": 1.230474,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022039
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-02-01",
+      "n": 505,
+      "in_sample_r2": 0.3078
+    },
+    "fair_value": 3.253887,
+    "deviation_pct": 16.4761
+  },
+  {
+    "model_week": "2026-02-15",
+    "coefficients": {
+      "intercept": 1.230853,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022055
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-02-08",
+      "n": 506,
+      "in_sample_r2": 0.308
+    },
+    "fair_value": 3.127647,
+    "deviation_pct": 10.3066
+  },
+  {
+    "model_week": "2026-02-22",
+    "coefficients": {
+      "intercept": 1.231025,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022048
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-02-15",
+      "n": 507,
+      "in_sample_r2": 0.308
+    },
+    "fair_value": 2.927187,
+    "deviation_pct": 8.2951
+  },
+  {
+    "model_week": "2026-03-01",
+    "coefficients": {
+      "intercept": 1.23112,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022035
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-02-22",
+      "n": 508,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 3.059469,
+    "deviation_pct": 4.1357
+  },
+  {
+    "model_week": "2026-03-08",
+    "coefficients": {
+      "intercept": 1.231183,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022031
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-03-01",
+      "n": 509,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 3.045558,
+    "deviation_pct": 4.3815
+  },
+  {
+    "model_week": "2026-03-15",
+    "coefficients": {
+      "intercept": 1.231247,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022026
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-03-08",
+      "n": 510,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 3.051703,
+    "deviation_pct": 2.238
+  },
+  {
+    "model_week": "2026-03-22",
+    "coefficients": {
+      "intercept": 1.231298,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022028
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-03-15",
+      "n": 511,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 3.183575,
+    "deviation_pct": -6.426
+  },
+  {
+    "model_week": "2026-03-29",
+    "coefficients": {
+      "intercept": 1.231123,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022018
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-03-22",
+      "n": 512,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 3.078405,
+    "deviation_pct": -4.1062
+  },
+  {
+    "model_week": "2026-04-05",
+    "coefficients": {
+      "intercept": 1.231024,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022014
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-03-29",
+      "n": 513,
+      "in_sample_r2": 0.3078
+    },
+    "fair_value": 3.047264,
+    "deviation_pct": -6.4079
+  },
+  {
+    "model_week": "2026-04-12",
+    "coefficients": {
+      "intercept": 1.230874,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.02201
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-04-05",
+      "n": 514,
+      "in_sample_r2": 0.3078
+    },
+    "fair_value": 3.013883,
+    "deviation_pct": -11.7418
+  },
+  {
+    "model_week": "2026-04-19",
+    "coefficients": {
+      "intercept": 1.230603,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022003
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-04-12",
+      "n": 515,
+      "in_sample_r2": 0.3078
+    },
+    "fair_value": 2.878742,
+    "deviation_pct": -6.4175
+  },
+  {
+    "model_week": "2026-04-26",
+    "coefficients": {
+      "intercept": 1.230498,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022007
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-04-19",
+      "n": 516,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 2.860889,
+    "deviation_pct": -8.5599
+  },
+  {
+    "model_week": "2026-05-03",
+    "coefficients": {
+      "intercept": 1.230361,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022014
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-04-26",
+      "n": 517,
+      "in_sample_r2": 0.308
+    },
+    "fair_value": 2.906046,
+    "deviation_pct": -4.888
+  },
+  {
+    "model_week": "2026-05-10",
+    "coefficients": {
+      "intercept": 1.230278,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022016
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-05-03",
+      "n": 518,
+      "in_sample_r2": 0.308
+    },
+    "fair_value": 2.912738,
+    "deviation_pct": -1.6733
+  },
+  {
+    "model_week": "2026-05-17",
+    "coefficients": {
+      "intercept": 1.230249,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022017
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-05-10",
+      "n": 519,
+      "in_sample_r2": 0.3081
+    },
+    "fair_value": 2.926363,
+    "deviation_pct": 2.0721
+  },
+  {
+    "model_week": "2026-05-24",
+    "coefficients": {
+      "intercept": 1.230286,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022017
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-05-17",
+      "n": 520,
+      "in_sample_r2": 0.3081
+    },
+    "fair_value": 2.933991,
+    "deviation_pct": -1.1926
+  },
+  {
+    "model_week": "2026-05-31",
+    "coefficients": {
+      "intercept": 1.230264,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022017
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-05-24",
+      "n": 521,
+      "in_sample_r2": 0.3081
+    },
+    "fair_value": 2.956085,
+    "deviation_pct": 3.8197
+  },
+  {
+    "model_week": "2026-06-07",
+    "coefficients": {
+      "intercept": 1.230335,
+      "storage_surplus_bcf": -0.000801,
+      "production_yoy_pct": -0.022017
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-05-31",
+      "n": 522,
+      "in_sample_r2": 0.3081
+    },
+    "fair_value": 2.879219,
+    "deviation_pct": 6.2441
+  },
+  {
+    "model_week": "2026-06-14",
+    "coefficients": {
+      "intercept": 1.230435,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022014
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-06-07",
+      "n": 523,
+      "in_sample_r2": 0.308
+    },
+    "fair_value": 2.891127,
+    "deviation_pct": 7.2938
+  },
+  {
+    "model_week": "2026-06-21",
+    "coefficients": {
+      "intercept": 1.230554,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022011
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-06-14",
+      "n": 524,
+      "in_sample_r2": 0.3079
+    },
+    "fair_value": 2.894783,
+    "deviation_pct": 11.0964
+  },
+  {
+    "model_week": "2026-06-28",
+    "coefficients": {
+      "intercept": 1.230732,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.022008
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-06-21",
+      "n": 525,
+      "in_sample_r2": 0.3078
+    },
+    "fair_value": 2.805992,
+    "deviation_pct": 11.547
+  },
+  {
+    "model_week": "2026-07-05",
+    "coefficients": {
+      "intercept": 1.230887,
+      "storage_surplus_bcf": -0.0008,
+      "production_yoy_pct": -0.021998
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-06-28",
+      "n": 526,
+      "in_sample_r2": 0.3076
+    },
+    "fair_value": 2.795472,
+    "deviation_pct": 15.2578
+  },
+  {
+    "model_week": "2026-07-12",
+    "coefficients": {
+      "intercept": 1.231084,
+      "storage_surplus_bcf": -0.000799,
+      "production_yoy_pct": -0.021985
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-07-05",
+      "n": 527,
+      "in_sample_r2": 0.3073
+    },
+    "fair_value": 2.784322,
+    "deviation_pct": 3.3645
+  },
+  {
+    "model_week": "2026-07-19",
+    "coefficients": {
+      "intercept": 1.231129,
+      "storage_surplus_bcf": -0.000799,
+      "production_yoy_pct": -0.021982
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-07-12",
+      "n": 528,
+      "in_sample_r2": 0.3073
+    },
+    "fair_value": 2.76325,
+    "deviation_pct": 2.1985
+  },
+  {
+    "model_week": "2026-07-26",
+    "coefficients": {
+      "intercept": 1.231157,
+      "storage_surplus_bcf": -0.000799,
+      "production_yoy_pct": -0.02198
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-07-19",
+      "n": 529,
+      "in_sample_r2": 0.3074
+    },
+    "fair_value": 2.760743,
+    "deviation_pct": 0.6975
+  },
+  {
+    "model_week": "2026-07-30",
+    "coefficients": {
+      "intercept": 1.231165,
+      "storage_surplus_bcf": -0.000799,
+      "production_yoy_pct": -0.021979
+    },
+    "training_window": {
+      "start": "2016-06-05",
+      "end": "2026-07-26",
+      "n": 530,
+      "in_sample_r2": 0.3075
+    },
+    "fair_value": 2.760788,
+    "deviation_pct": 1.3841
+  }
+]

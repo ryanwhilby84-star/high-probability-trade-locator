@@ -24,7 +24,16 @@ from hptl.config import get_settings
 from hptl.markets.instrument_registry import LEGACY_MARKET_ALIASES, cot_mapped_ids, get_instrument
 
 PARSER_NAME = "hptl.cot.legacy_cot"
-WEEKS_HISTORY = 13
+# Workstation target: up to 10 calendar years of weekly Legacy COT (~520 reports).
+HISTORY_YEARS = 10
+WEEKS_HISTORY = 520
+
+
+def default_history_years(*, span_years: int = HISTORY_YEARS) -> list[int]:
+    """CFTC annual ZIP years covering the last ``span_years`` calendar years."""
+    end = datetime.now(timezone.utc).year
+    start = end - span_years + 1
+    return list(range(start, end + 1))
 
 LEGACY_FUTURES_OPTIONS_URL_TEMPLATE = "https://www.cftc.gov/files/dea/history/dea_com_xls_{year}.zip"
 
@@ -63,6 +72,9 @@ CANONICAL_LEGACY_CODE: dict[str, str] = {
     "Sugar": "080732",
     "Platinum": "076651",
     "Palladium": "075651",
+    "Bitcoin": "133741",
+    "Cotton": "033661",
+    "US Dollar Index / DX": "098662",
 }
 
 # Rows to exclude when matching by alias (e.g. micro contracts).
@@ -72,6 +84,8 @@ EXCLUDE_NAME_HINTS: dict[str, list[str]] = {
     "Dow / YM": ["DJIA Consolidated", "MICRO"],
     "Gold": ["MICRO GOLD"],
     "Silver": ["MICRO SILVER"],
+    "Bitcoin": ["MICRO BITCOIN", "MICRO E-MINI BITCOIN"],
+    "US Dollar Index / DX": ["MICRO US DOLLAR INDEX"],
 }
 
 LEGACY_COLUMN_MAP = {
@@ -228,6 +242,36 @@ def load_legacy_futures_only_dataframe(year: int, *, download: bool = True) -> t
     return df, meta
 
 
+def load_legacy_futures_only_multiyear(
+    years: list[int], *, download: bool = True
+) -> tuple[pd.DataFrame, LegacyFrameMeta]:
+    """Concatenate multiple annual Legacy Futures-Only frames into one history.
+
+    Used to build a multi-year (e.g. 3-year / 156-week) Non-Commercial series.
+    Years that fail to load are skipped; the returned meta references the set of
+    source files actually loaded.
+    """
+    frames: list[pd.DataFrame] = []
+    sources: list[str] = []
+    for y in sorted(set(years)):
+        df, meta = load_legacy_futures_only_dataframe(y, download=download)
+        if df.empty:
+            print(f"LEGACY_COT_MULTIYEAR: year={y} produced no rows — skipping.")
+            continue
+        frames.append(df)
+        sources.append(meta.source_file)
+        print(f"LEGACY_COT_MULTIYEAR: year={y} rows={len(df)} file={meta.source_file}")
+    if not frames:
+        return pd.DataFrame(), LegacyFrameMeta("legacy_futures_only", "", "")
+    combined = pd.concat(frames, ignore_index=True)
+    meta = LegacyFrameMeta(
+        report_type="legacy_futures_only",
+        source_file="+".join(sources),
+        source_url="https://www.cftc.gov/files/dea/history/deacot{year}.zip",
+    )
+    return combined, meta
+
+
 def try_load_legacy_futures_options_sample(year: int) -> dict[str, Any] | None:
     """Futures+options combined (XLS). Returns summary only if parse fails."""
     url = LEGACY_FUTURES_OPTIONS_URL_TEMPLATE.format(year=year)
@@ -290,11 +334,14 @@ def _extract_legacy_position_row(row: pd.Series, meta: LegacyFrameMeta, row_inde
 def _candidate_rows_for_instrument(df: pd.DataFrame, instrument_id: str) -> pd.DataFrame:
     if df.empty:
         return df
+    preferred = CANONICAL_LEGACY_CODE.get(instrument_id, "")
     mask = df["_market"].apply(lambda n: _row_matches_instrument(n, instrument_id))
     sub = df.loc[mask].copy()
-    preferred = CANONICAL_LEGACY_CODE.get(instrument_id, "")
     if preferred:
-        code_hit = sub[sub["_code"] == preferred]
+        code_hit = sub[sub["_code"] == preferred] if not sub.empty else pd.DataFrame()
+        if code_hit.empty:
+            # CFTC names often differ from aliases (e.g. "USD INDEX - ICE FUTURES U.S.").
+            code_hit = df.loc[df["_code"] == preferred].copy()
         if not code_hit.empty:
             return code_hit
     return sub
@@ -463,10 +510,14 @@ def build_legacy_latest_and_audit(
     reconciliation: dict[str, Any] | None = None,
     *,
     weeks: int = WEEKS_HISTORY,
+    years: list[int] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     recon = reconciliation or build_legacy_reconciliation()
     year = int(recon.get("legacy_year") or datetime.now(timezone.utc).year)
-    df, meta = load_legacy_futures_only_dataframe(year, download=False)
+    if years:
+        df, meta = load_legacy_futures_only_multiyear(sorted(set(years)), download=True)
+    else:
+        df, meta = load_legacy_futures_only_dataframe(year, download=False)
 
     latest_payload: dict[str, Any] = {
         "version": 1,
@@ -663,6 +714,8 @@ def build_reset_deliverable_report(
         "Canadian Dollar / 6C",
         "NZ Dollar / 6N",
         "Swiss Franc / 6S",
+        "Bitcoin",
+        "US Dollar Index / DX",
     ]
     regression_results: dict[str, Any] = {}
     for iid in regression_instruments:
@@ -701,10 +754,18 @@ def build_reset_deliverable_report(
     return report
 
 
-def run_legacy_cot_reset(*, year: int | None = None, weeks: int = WEEKS_HISTORY) -> dict[str, Any]:
-    """Full Phases 1–6 pipeline."""
+def run_legacy_cot_reset(
+    *, year: int | None = None, weeks: int = WEEKS_HISTORY, years: list[int] | None = None
+) -> dict[str, Any]:
+    """Full Phases 1–6 pipeline.
+
+    Defaults to ``default_history_years()`` (10Y) and ``WEEKS_HISTORY`` (520 weeks)
+    so the COT workstation receives full weekly history, not a recent sample.
+    """
+    if years is None:
+        years = default_history_years()
     reconciliation = build_legacy_reconciliation(year=year)
-    latest, audit = build_legacy_latest_and_audit(reconciliation, weeks=weeks)
+    latest, audit = build_legacy_latest_and_audit(reconciliation, weeks=weeks, years=years)
     paths = write_legacy_exports(reconciliation, latest, audit)
     report = build_reset_deliverable_report(reconciliation, latest)
     return {"paths": paths, "reconciliation": reconciliation, "latest": latest, "audit": audit, "report": report}

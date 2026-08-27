@@ -9,7 +9,8 @@ from typing import Final
 COT_CURRENCY_SOURCES: Final[dict[str, dict[str, object]]] = {
     "EUR": {"market": "Euro FX / 6E", "invert_cot": False, "quote": "EUR/USD"},
     "GBP": {"market": "British Pound / 6B", "invert_cot": False, "quote": "GBP/USD"},
-    "JPY": {"market": "Japanese Yen / 6J", "invert_cot": True, "quote": "USD/JPY"},
+    # Quote is CME 6J (USD per JPY / yen value). invert_cot=False — price rises with yen strength.
+    "JPY": {"market": "Japanese Yen / 6J", "invert_cot": False, "quote": "6J"},
     "CHF": {"market": "Swiss Franc / 6S", "invert_cot": True, "quote": "USD/CHF"},
     "AUD": {"market": "Australian Dollar / 6A", "invert_cot": False, "quote": "AUD/USD"},
     "CAD": {"market": "Canadian Dollar / 6C", "invert_cot": True, "quote": "USD/CAD"},
@@ -27,6 +28,10 @@ LEADERBOARD_CURRENCIES: Final[tuple[str, ...]] = (
     "NZD",
     "USD",
 )
+
+DX_INSTRUMENT_ID: Final[str] = "US Dollar Index / DX"
+USD_SYNTHETIC_LABEL: Final[str] = "Synthetic USD (G10 inverse basket)"
+USD_DIRECT_LABEL: Final[str] = "Direct USD / DXY (ICE Dollar Index COT 098662)"
 
 
 @dataclass(frozen=True)

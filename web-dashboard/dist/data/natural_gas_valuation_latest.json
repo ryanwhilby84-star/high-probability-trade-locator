@@ -1,0 +1,3829 @@
+{
+  "version": 4,
+  "generated_at": "2026-08-03T12:23:47+00:00",
+  "engine": "ng_storage_production_v2",
+  "valuation_phase": "Validated Two-Driver Fair Value",
+  "market": "Natural Gas / NG",
+  "active_model": "ng_storage_production_v2",
+  "fallback_to_v1": false,
+  "summary": {
+    "wired": true,
+    "publish": true,
+    "headline": "Validated Two-Driver Fair Value",
+    "active_model": "ng_storage_production_v2",
+    "fallback_to_v1": false,
+    "fallback_reason": null,
+    "validated_features": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "validated_drivers": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "experimental_features": [
+      "lng_exports",
+      "log_dxy",
+      "hdd_anomaly",
+      "cdd_anomaly"
+    ],
+    "informational_features": [
+      "working_gas_storage_level",
+      "seasonality_factor"
+    ],
+    "rejected_features": [
+      "raw_level",
+      "seasonal_deviation",
+      "trailing_zscore_156",
+      "chg_4w",
+      "chg_12w",
+      "v1_fullsample_zscore",
+      "dry_gas_production",
+      "dry_gas_production_level"
+    ],
+    "production_transformation": "production_yoy_pct",
+    "raw_level_used_in_fair_value": false,
+    "v1_fair_value": 2.8221,
+    "v2_fair_value": 2.7609,
+    "awaiting_drivers": [],
+    "confidence": "High",
+    "confidence_reasons": [
+      "active_model=ng_storage_production_v2",
+      "validated_drivers=['storage_surplus_bcf', 'production_yoy_pct']",
+      "in_sample_R2=0.3075",
+      "oos_R2=0.256",
+      "oos_RMSE=0.34586",
+      "n=531",
+      "production_observation_date=2026-05-15",
+      "production_age_days=76",
+      "cleared High thresholds (OOS R², sample, features, extremes)"
+    ],
+    "freshness_warnings": []
+  },
+  "instrument": {
+    "market": "Natural Gas / NG",
+    "model_id": "ng_storage_production_v2",
+    "valuation_phase": "Validated Two-Driver Fair Value",
+    "valuation_pillar": "energy_natural_gas",
+    "headline": "Validated Two-Driver Fair Value",
+    "generated_at": "2026-08-03T12:23:47+00:00",
+    "as_of_week": "2026-07-30",
+    "wired": true,
+    "publish": true,
+    "fair_value": 2.7609,
+    "spot_price": 2.799,
+    "deviation_pct": 0.87,
+    "valuation_bias": "Fair Value",
+    "institutional_bias": "Neutral",
+    "confidence": "High",
+    "confidence_reasons": [
+      "active_model=ng_storage_production_v2",
+      "validated_drivers=['storage_surplus_bcf', 'production_yoy_pct']",
+      "in_sample_R2=0.3075",
+      "oos_R2=0.256",
+      "oos_RMSE=0.34586",
+      "n=531",
+      "production_observation_date=2026-05-15",
+      "production_age_days=76",
+      "cleared High thresholds (OOS R², sample, features, extremes)"
+    ],
+    "active_model": "ng_storage_production_v2",
+    "fallback_to_v1": false,
+    "fallback_reason": null,
+    "validated_drivers": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "production_transformation": "production_yoy_pct",
+    "rejected_production_transforms": [
+      "raw_level",
+      "seasonal_deviation",
+      "trailing_zscore_156",
+      "chg_4w",
+      "chg_12w",
+      "v1_fullsample_zscore",
+      "dry_gas_production",
+      "dry_gas_production_level"
+    ],
+    "raw_level_used_in_fair_value": false,
+    "production_source_cadence": "monthly",
+    "max_production_staleness_days": 100,
+    "driver_cards": [
+      {
+        "id": "market_price",
+        "label": "Natural Gas Price",
+        "unit": "USD/MMBtu",
+        "available": true,
+        "current": 2.799,
+        "as_of": "2026-07-30",
+        "source": "canonical_price_timeline",
+        "institutional_effect": "Anchor",
+        "tone": "neutral",
+        "interpretation": "Model anchor = latest completed weekly ISO close from canonical daily history. Market comparison uses the live OANDA snapshot when fresh; otherwise comparison is marked stale and deviation is not trusted.",
+        "model_anchor_price": 2.799,
+        "model_anchor_as_of": "2026-07-30",
+        "live_quote": {
+          "price": 2.785,
+          "bid": 2.782,
+          "ask": 2.788,
+          "as_of": "2026-08-03T12:22:56.335921932Z",
+          "age_hours": 0.015,
+          "status": "Current"
+        },
+        "latest_completed_daily": {
+          "date": "2026-07-30",
+          "close": 2.799,
+          "age_days": 4,
+          "status": "Current"
+        },
+        "latest_completed_weekly": {
+          "date": "2026-07-24",
+          "close": 2.799,
+          "age_days": 10,
+          "status": "Stale"
+        },
+        "forming_daily": {
+          "date": "2026-08-02",
+          "open": 2.724,
+          "high": 2.786,
+          "low": 2.72,
+          "close": 2.785,
+          "volume": 1322.0
+        },
+        "market_comparison": {
+          "price": 2.785,
+          "as_of": "2026-08-03T12:22:56.335921932Z",
+          "kind": "live_snapshot",
+          "age_hours": 0.015,
+          "status": "Current",
+          "trusted": true
+        },
+        "price_status": "Current"
+      },
+      {
+        "id": "dxy",
+        "label": "US Dollar (Broad)",
+        "unit": "index",
+        "available": true,
+        "current": 120.71,
+        "as_of": "2026-07-30",
+        "source": "DTWEXBGS",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "A firm dollar typically pressures energy commodities. Broad USD index at 120.71.",
+        "valuation_role": "EXPERIMENTAL DRIVER",
+        "valuation_badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+        "in_fair_value": false,
+        "valuation_note": "NOT INCLUDED IN FAIR VALUE"
+      },
+      {
+        "id": "storage",
+        "label": "Working Gas Storage",
+        "unit": "Bcf",
+        "available": true,
+        "current": 3084.0,
+        "weekly_change": 28.0,
+        "five_year_average": 2911.4,
+        "difference": 172.6,
+        "surplus_deficit_pct": 5.93,
+        "as_of": "2026-07-24",
+        "source": "EIA dnav hist_xls (official public download)",
+        "series_id": "NW2_EPG0_SWO_R48_BCF_W",
+        "freshness": "LIVE",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "Storage is 173 Bcf above the 5-year same-week average (2911 Bcf), 5.9% surplus.",
+        "valuation_role": "VALIDATED VALUATION DRIVER",
+        "valuation_badge": "VALIDATED VALUATION DRIVER",
+        "in_fair_value": true,
+        "valuation_note": "Included in fair value",
+        "model_contribution": {
+          "value": 172.6,
+          "transformed_input": 172.6,
+          "coefficient": -0.000799,
+          "log_contribution": -0.137912,
+          "price_impact_pct": -12.8824,
+          "direction": "lowers fair value",
+          "label": "Storage surplus/deficit"
+        },
+        "contribution_direction": "lowers fair value",
+        "contribution_magnitude_log": -0.137912
+      },
+      {
+        "id": "production",
+        "label": "US Dry Gas Production — YoY Change",
+        "unit": "% YoY",
+        "available": true,
+        "current": 3.537,
+        "production_level_bcf_d": 112.313,
+        "production_level_unit": "Bcf/d",
+        "previous": 112.313,
+        "avg_4": 112.313,
+        "yoy_pct": 3.537,
+        "as_of": "2026-05-15",
+        "observation_date": "2026-05-15",
+        "source": "EIA dnav hist_xls (official public download)",
+        "series_id": "N9070US2",
+        "source_cadence": "monthly",
+        "production_transformation": "production_yoy_pct",
+        "raw_level_used_in_fair_value": false,
+        "proxy": false,
+        "fallback": false,
+        "freshness": "LIVE",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "Faster year-over-year production growth increases available supply and lowers modeled fair value.",
+        "valuation_role": "VALIDATED VALUATION DRIVER",
+        "valuation_badge": "VALIDATED VALUATION DRIVER",
+        "in_fair_value": true,
+        "valuation_note": "Included in fair value as production_yoy_pct",
+        "model_contribution": {
+          "value": 3.5365278569033713,
+          "transformed_input": 3.536528,
+          "coefficient": -0.021977,
+          "log_contribution": -0.077723,
+          "price_impact_pct": -7.4779,
+          "direction": "lowers fair value",
+          "label": "Production YoY %"
+        },
+        "contribution_direction": "lowers fair value",
+        "contribution_magnitude_log": -0.077723
+      },
+      {
+        "id": "lng_exports",
+        "label": "LNG Exports",
+        "unit": "Bcf/d",
+        "available": true,
+        "current": 16.52,
+        "previous": 16.52,
+        "avg_4": 16.52,
+        "as_of": "2026-05-15",
+        "source": "EIA dnav hist_xls (official public download)",
+        "series_id": "N9133US2",
+        "concept": "U.S. liquefied natural gas exports (not feedgas)",
+        "freshness": "LIVE",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "Strong LNG exports are typically supportive for domestic prices (export volumes — not terminal feedgas).",
+        "valuation_role": "EXPERIMENTAL DRIVER",
+        "valuation_badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+        "in_fair_value": false,
+        "valuation_note": "NOT INCLUDED IN FAIR VALUE"
+      },
+      {
+        "id": "hdd",
+        "label": "Heating Degree Days",
+        "unit": "degree-days",
+        "available": true,
+        "current": 0.0,
+        "normal": 0.0,
+        "anomaly": 0.0,
+        "as_of": "2026-07-30",
+        "source": "NOAA/CPC population-weighted degree days (public FTP)",
+        "freshness": "LIVE",
+        "data_quality": "OK",
+        "institutional_effect": "Neutral",
+        "tone": "neutral",
+        "interpretation": "Heating Degree Days: actual=0.0, week-of-year normal=0.0, anomaly=+0.00σ vs same-week climatology. Current HDD of 0 is a genuine midsummer observation (no heating demand), not missing data.",
+        "valuation_role": "EXPERIMENTAL DRIVER",
+        "valuation_badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+        "in_fair_value": false,
+        "valuation_note": "NOT INCLUDED IN FAIR VALUE"
+      },
+      {
+        "id": "cdd",
+        "label": "Cooling Degree Days",
+        "unit": "degree-days",
+        "available": true,
+        "current": 25.0,
+        "normal": 79.6,
+        "anomaly": -5.907,
+        "as_of": "2026-07-30",
+        "source": "NOAA/CPC population-weighted degree days (public FTP)",
+        "freshness": "LIVE",
+        "data_quality": "OK",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "Cooling Degree Days: actual=25.0, week-of-year normal=79.6, anomaly=-5.91σ vs same-week climatology.",
+        "valuation_role": "EXPERIMENTAL DRIVER",
+        "valuation_badge": "EXPERIMENTAL DRIVER — NOT INCLUDED IN FAIR VALUE",
+        "in_fair_value": false,
+        "valuation_note": "NOT INCLUDED IN FAIR VALUE"
+      },
+      {
+        "id": "seasonality",
+        "label": "Seasonality",
+        "unit": "z-score",
+        "available": true,
+        "current": -0.399,
+        "seasonality_bias": "Bearish",
+        "month_avg_return_pct": -2.473,
+        "as_of": "2026-07-30",
+        "source": "Existing HPTL seasonality + week-of-year factor",
+        "valuation_role": "INFORMATIONAL ONLY",
+        "in_fair_value": false,
+        "valuation_note": "NOT INCLUDED IN FAIR VALUE",
+        "institutional_effect": "Bearish",
+        "tone": "bearish",
+        "interpretation": "Informational only — not a validated Natural Gas seasonality valuation model. Historical Jul seasonality: avg weekly return -2.47% across 8 sample weeks in price history.",
+        "valuation_badge": "INFORMATIONAL ONLY — NOT INCLUDED IN FAIR VALUE"
+      }
+    ],
+    "history": [
+      {
+        "date": "2016-06-05",
+        "spot_price": 2.346,
+        "fair_value": 1.9336,
+        "deviation_pct": 21.33
+      },
+      {
+        "date": "2016-06-12",
+        "spot_price": 2.508,
+        "fair_value": 1.9663,
+        "deviation_pct": 27.55
+      },
+      {
+        "date": "2016-06-19",
+        "spot_price": 2.698,
+        "fair_value": 2.0433,
+        "deviation_pct": 32.04
+      },
+      {
+        "date": "2016-06-26",
+        "spot_price": 2.726,
+        "fair_value": 2.1188,
+        "deviation_pct": 28.66
+      },
+      {
+        "date": "2016-07-03",
+        "spot_price": 2.883,
+        "fair_value": 2.1817,
+        "deviation_pct": 32.15
+      },
+      {
+        "date": "2016-07-10",
+        "spot_price": 2.694,
+        "fair_value": 2.2031,
+        "deviation_pct": 22.28
+      },
+      {
+        "date": "2016-07-17",
+        "spot_price": 2.722,
+        "fair_value": 2.2428,
+        "deviation_pct": 21.37
+      },
+      {
+        "date": "2016-07-24",
+        "spot_price": 2.733,
+        "fair_value": 2.3068,
+        "deviation_pct": 18.48
+      },
+      {
+        "date": "2016-07-31",
+        "spot_price": 2.804,
+        "fair_value": 2.4193,
+        "deviation_pct": 15.9
+      },
+      {
+        "date": "2016-08-07",
+        "spot_price": 2.76,
+        "fair_value": 2.4646,
+        "deviation_pct": 11.99
+      },
+      {
+        "date": "2016-08-14",
+        "spot_price": 2.608,
+        "fair_value": 2.5333,
+        "deviation_pct": 2.95
+      },
+      {
+        "date": "2016-08-21",
+        "spot_price": 2.671,
+        "fair_value": 2.6932,
+        "deviation_pct": -0.82
+      },
+      {
+        "date": "2016-08-28",
+        "spot_price": 2.876,
+        "fair_value": 2.7261,
+        "deviation_pct": 5.5
+      },
+      {
+        "date": "2016-09-04",
+        "spot_price": 2.742,
+        "fair_value": 2.79,
+        "deviation_pct": -1.72
+      },
+      {
+        "date": "2016-09-11",
+        "spot_price": 2.892,
+        "fair_value": 2.8034,
+        "deviation_pct": 3.16
+      },
+      {
+        "date": "2016-09-18",
+        "spot_price": 2.932,
+        "fair_value": 2.9312,
+        "deviation_pct": 0.03
+      },
+      {
+        "date": "2016-09-25",
+        "spot_price": 3.001,
+        "fair_value": 3.0429,
+        "deviation_pct": -1.38
+      },
+      {
+        "date": "2016-10-02",
+        "spot_price": 2.853,
+        "fair_value": 3.084,
+        "deviation_pct": -7.49
+      },
+      {
+        "date": "2016-10-09",
+        "spot_price": 3.233,
+        "fair_value": 3.1252,
+        "deviation_pct": 3.45
+      },
+      {
+        "date": "2016-10-16",
+        "spot_price": 3.228,
+        "fair_value": 3.1208,
+        "deviation_pct": 3.44
+      },
+      {
+        "date": "2016-10-23",
+        "spot_price": 2.942,
+        "fair_value": 3.1499,
+        "deviation_pct": -6.6
+      },
+      {
+        "date": "2016-10-30",
+        "spot_price": 2.702,
+        "fair_value": 3.1787,
+        "deviation_pct": -15.0
+      },
+      {
+        "date": "2016-11-06",
+        "spot_price": 2.63,
+        "fair_value": 3.1645,
+        "deviation_pct": -16.89
+      },
+      {
+        "date": "2016-11-13",
+        "spot_price": 2.618,
+        "fair_value": 3.1433,
+        "deviation_pct": -16.71
+      },
+      {
+        "date": "2016-11-20",
+        "spot_price": 2.896,
+        "fair_value": 3.029,
+        "deviation_pct": -4.39
+      },
+      {
+        "date": "2016-11-27",
+        "spot_price": 3.188,
+        "fair_value": 3.0695,
+        "deviation_pct": 3.86
+      },
+      {
+        "date": "2016-12-04",
+        "spot_price": 3.46,
+        "fair_value": 3.0117,
+        "deviation_pct": 14.89
+      },
+      {
+        "date": "2016-12-11",
+        "spot_price": 3.44,
+        "fair_value": 3.2254,
+        "deviation_pct": 6.65
+      },
+      {
+        "date": "2016-12-18",
+        "spot_price": 3.356,
+        "fair_value": 3.568,
+        "deviation_pct": -5.94
+      },
+      {
+        "date": "2016-12-22",
+        "spot_price": 3.626,
+        "fair_value": 3.568,
+        "deviation_pct": 1.63
+      },
+      {
+        "date": "2016-12-29",
+        "spot_price": 3.69,
+        "fair_value": 4.0384,
+        "deviation_pct": -8.63
+      },
+      {
+        "date": "2017-01-08",
+        "spot_price": 3.092,
+        "fair_value": 3.8753,
+        "deviation_pct": -20.21
+      },
+      {
+        "date": "2017-01-15",
+        "spot_price": 3.462,
+        "fair_value": 4.0915,
+        "deviation_pct": -15.39
+      },
+      {
+        "date": "2017-01-22",
+        "spot_price": 3.265,
+        "fair_value": 3.8994,
+        "deviation_pct": -16.27
+      },
+      {
+        "date": "2017-01-29",
+        "spot_price": 3.214,
+        "fair_value": 3.6714,
+        "deviation_pct": -12.46
+      },
+      {
+        "date": "2017-02-05",
+        "spot_price": 3.049,
+        "fair_value": 3.7419,
+        "deviation_pct": -18.52
+      },
+      {
+        "date": "2017-02-12",
+        "spot_price": 2.916,
+        "fair_value": 3.5844,
+        "deviation_pct": -18.65
+      },
+      {
+        "date": "2017-02-19",
+        "spot_price": 2.767,
+        "fair_value": 3.6621,
+        "deviation_pct": -24.44
+      },
+      {
+        "date": "2017-02-26",
+        "spot_price": 2.605,
+        "fair_value": 3.2997,
+        "deviation_pct": -21.05
+      },
+      {
+        "date": "2017-03-05",
+        "spot_price": 2.803,
+        "fair_value": 3.1327,
+        "deviation_pct": -10.53
+      },
+      {
+        "date": "2017-03-12",
+        "spot_price": 2.972,
+        "fair_value": 2.969,
+        "deviation_pct": 0.1
+      },
+      {
+        "date": "2017-03-19",
+        "spot_price": 3.048,
+        "fair_value": 2.8367,
+        "deviation_pct": 7.45
+      },
+      {
+        "date": "2017-03-26",
+        "spot_price": 3.05,
+        "fair_value": 2.881,
+        "deviation_pct": 5.87
+      },
+      {
+        "date": "2017-04-02",
+        "spot_price": 3.086,
+        "fair_value": 2.8182,
+        "deviation_pct": 9.5
+      },
+      {
+        "date": "2017-04-09",
+        "spot_price": 3.198,
+        "fair_value": 2.7993,
+        "deviation_pct": 14.24
+      },
+      {
+        "date": "2017-04-16",
+        "spot_price": 3.136,
+        "fair_value": 2.7342,
+        "deviation_pct": 14.7
+      },
+      {
+        "date": "2017-04-23",
+        "spot_price": 3.069,
+        "fair_value": 2.6964,
+        "deviation_pct": 13.82
+      },
+      {
+        "date": "2017-04-30",
+        "spot_price": 3.158,
+        "fair_value": 2.6835,
+        "deviation_pct": 17.68
+      },
+      {
+        "date": "2017-05-07",
+        "spot_price": 3.123,
+        "fair_value": 2.7263,
+        "deviation_pct": 14.55
+      },
+      {
+        "date": "2017-05-14",
+        "spot_price": 3.315,
+        "fair_value": 2.7742,
+        "deviation_pct": 19.49
+      },
+      {
+        "date": "2017-05-21",
+        "spot_price": 3.307,
+        "fair_value": 2.7315,
+        "deviation_pct": 21.07
+      },
+      {
+        "date": "2017-05-28",
+        "spot_price": 3.124,
+        "fair_value": 2.7591,
+        "deviation_pct": 13.23
+      },
+      {
+        "date": "2017-06-04",
+        "spot_price": 2.916,
+        "fair_value": 2.7406,
+        "deviation_pct": 6.4
+      },
+      {
+        "date": "2017-06-11",
+        "spot_price": 2.966,
+        "fair_value": 2.767,
+        "deviation_pct": 7.19
+      },
+      {
+        "date": "2017-06-18",
+        "spot_price": 2.87,
+        "fair_value": 2.6985,
+        "deviation_pct": 6.36
+      },
+      {
+        "date": "2017-06-25",
+        "spot_price": 3.042,
+        "fair_value": 2.76,
+        "deviation_pct": 10.22
+      },
+      {
+        "date": "2017-07-02",
+        "spot_price": 2.932,
+        "fair_value": 2.7657,
+        "deviation_pct": 6.01
+      },
+      {
+        "date": "2017-07-09",
+        "spot_price": 2.911,
+        "fair_value": 2.7968,
+        "deviation_pct": 4.08
+      },
+      {
+        "date": "2017-07-16",
+        "spot_price": 3.016,
+        "fair_value": 2.8684,
+        "deviation_pct": 5.14
+      },
+      {
+        "date": "2017-07-23",
+        "spot_price": 2.893,
+        "fair_value": 2.938,
+        "deviation_pct": -1.53
+      },
+      {
+        "date": "2017-07-30",
+        "spot_price": 2.817,
+        "fair_value": 2.9959,
+        "deviation_pct": -5.97
+      },
+      {
+        "date": "2017-08-06",
+        "spot_price": 2.81,
+        "fair_value": 3.0519,
+        "deviation_pct": -7.93
+      },
+      {
+        "date": "2017-08-13",
+        "spot_price": 2.96,
+        "fair_value": 3.0465,
+        "deviation_pct": -2.84
+      },
+      {
+        "date": "2017-08-20",
+        "spot_price": 2.968,
+        "fair_value": 3.0146,
+        "deviation_pct": -1.55
+      },
+      {
+        "date": "2017-08-27",
+        "spot_price": 2.938,
+        "fair_value": 3.1016,
+        "deviation_pct": -5.28
+      },
+      {
+        "date": "2017-09-03",
+        "spot_price": 3.002,
+        "fair_value": 3.0873,
+        "deviation_pct": -2.76
+      },
+      {
+        "date": "2017-09-10",
+        "spot_price": 2.936,
+        "fair_value": 3.0199,
+        "deviation_pct": -2.78
+      },
+      {
+        "date": "2017-09-17",
+        "spot_price": 3.146,
+        "fair_value": 2.787,
+        "deviation_pct": 12.88
+      },
+      {
+        "date": "2017-09-24",
+        "spot_price": 2.938,
+        "fair_value": 2.8445,
+        "deviation_pct": 3.29
+      },
+      {
+        "date": "2017-10-01",
+        "spot_price": 2.884,
+        "fair_value": 2.9638,
+        "deviation_pct": -2.69
+      },
+      {
+        "date": "2017-10-08",
+        "spot_price": 2.808,
+        "fair_value": 2.9681,
+        "deviation_pct": -5.39
+      },
+      {
+        "date": "2017-10-15",
+        "spot_price": 2.936,
+        "fair_value": 2.8874,
+        "deviation_pct": 1.68
+      },
+      {
+        "date": "2017-10-22",
+        "spot_price": 2.952,
+        "fair_value": 2.9237,
+        "deviation_pct": 0.97
+      },
+      {
+        "date": "2017-10-29",
+        "spot_price": 2.85,
+        "fair_value": 2.9143,
+        "deviation_pct": -2.21
+      },
+      {
+        "date": "2017-11-05",
+        "spot_price": 3.008,
+        "fair_value": 3.0013,
+        "deviation_pct": 0.22
+      },
+      {
+        "date": "2017-11-12",
+        "spot_price": 3.068,
+        "fair_value": 3.1057,
+        "deviation_pct": -1.21
+      },
+      {
+        "date": "2017-11-19",
+        "spot_price": 2.994,
+        "fair_value": 3.0117,
+        "deviation_pct": -0.59
+      },
+      {
+        "date": "2017-11-26",
+        "spot_price": 2.931,
+        "fair_value": 2.9882,
+        "deviation_pct": -1.91
+      },
+      {
+        "date": "2017-12-03",
+        "spot_price": 2.894,
+        "fair_value": 2.8207,
+        "deviation_pct": 2.6
+      },
+      {
+        "date": "2017-12-10",
+        "spot_price": 2.75,
+        "fair_value": 2.8175,
+        "deviation_pct": -2.4
+      },
+      {
+        "date": "2017-12-17",
+        "spot_price": 2.708,
+        "fair_value": 2.7912,
+        "deviation_pct": -2.98
+      },
+      {
+        "date": "2017-12-21",
+        "spot_price": 2.646,
+        "fair_value": 2.7912,
+        "deviation_pct": -5.2
+      },
+      {
+        "date": "2017-12-28",
+        "spot_price": 2.93,
+        "fair_value": 2.7881,
+        "deviation_pct": 5.09
+      },
+      {
+        "date": "2018-01-07",
+        "spot_price": 2.82,
+        "fair_value": 3.5649,
+        "deviation_pct": -20.89
+      },
+      {
+        "date": "2018-01-14",
+        "spot_price": 3.121,
+        "fair_value": 3.4649,
+        "deviation_pct": -9.93
+      },
+      {
+        "date": "2018-01-21",
+        "spot_price": 3.241,
+        "fair_value": 3.934,
+        "deviation_pct": -17.62
+      },
+      {
+        "date": "2018-01-28",
+        "spot_price": 3.438,
+        "fair_value": 3.7667,
+        "deviation_pct": -8.73
+      },
+      {
+        "date": "2018-02-04",
+        "spot_price": 2.922,
+        "fair_value": 3.6951,
+        "deviation_pct": -20.92
+      },
+      {
+        "date": "2018-02-11",
+        "spot_price": 2.664,
+        "fair_value": 3.7811,
+        "deviation_pct": -29.54
+      },
+      {
+        "date": "2018-02-18",
+        "spot_price": 2.615,
+        "fair_value": 3.6765,
+        "deviation_pct": -28.87
+      },
+      {
+        "date": "2018-02-25",
+        "spot_price": 2.698,
+        "fair_value": 3.5963,
+        "deviation_pct": -24.98
+      },
+      {
+        "date": "2018-03-04",
+        "spot_price": 2.718,
+        "fair_value": 3.3909,
+        "deviation_pct": -19.84
+      },
+      {
+        "date": "2018-03-11",
+        "spot_price": 2.796,
+        "fair_value": 3.3239,
+        "deviation_pct": -15.88
+      },
+      {
+        "date": "2018-03-18",
+        "spot_price": 2.664,
+        "fair_value": 3.4907,
+        "deviation_pct": -23.68
+      },
+      {
+        "date": "2018-03-25",
+        "spot_price": 2.652,
+        "fair_value": 3.5497,
+        "deviation_pct": -25.29
+      },
+      {
+        "date": "2018-04-01",
+        "spot_price": 2.664,
+        "fair_value": 3.5361,
+        "deviation_pct": -24.66
+      },
+      {
+        "date": "2018-04-08",
+        "spot_price": 2.689,
+        "fair_value": 3.5971,
+        "deviation_pct": -25.25
+      },
+      {
+        "date": "2018-04-15",
+        "spot_price": 2.742,
+        "fair_value": 3.8362,
+        "deviation_pct": -28.52
+      },
+      {
+        "date": "2018-04-22",
+        "spot_price": 2.749,
+        "fair_value": 4.0921,
+        "deviation_pct": -32.82
+      },
+      {
+        "date": "2018-04-29",
+        "spot_price": 2.738,
+        "fair_value": 4.113,
+        "deviation_pct": -33.43
+      },
+      {
+        "date": "2018-05-06",
+        "spot_price": 2.718,
+        "fair_value": 4.044,
+        "deviation_pct": -32.79
+      },
+      {
+        "date": "2018-05-13",
+        "spot_price": 2.821,
+        "fair_value": 3.9964,
+        "deviation_pct": -29.41
+      },
+      {
+        "date": "2018-05-20",
+        "spot_price": 2.819,
+        "fair_value": 3.8722,
+        "deviation_pct": -27.2
+      },
+      {
+        "date": "2018-05-27",
+        "spot_price": 2.95,
+        "fair_value": 3.871,
+        "deviation_pct": -23.79
+      },
+      {
+        "date": "2018-06-03",
+        "spot_price": 2.898,
+        "fair_value": 3.9158,
+        "deviation_pct": -25.99
+      },
+      {
+        "date": "2018-06-10",
+        "spot_price": 2.932,
+        "fair_value": 3.9039,
+        "deviation_pct": -24.9
+      },
+      {
+        "date": "2018-06-17",
+        "spot_price": 2.942,
+        "fair_value": 3.9113,
+        "deviation_pct": -24.78
+      },
+      {
+        "date": "2018-06-24",
+        "spot_price": 2.928,
+        "fair_value": 3.9301,
+        "deviation_pct": -25.5
+      },
+      {
+        "date": "2018-07-01",
+        "spot_price": 2.862,
+        "fair_value": 3.9025,
+        "deviation_pct": -26.66
+      },
+      {
+        "date": "2018-07-08",
+        "spot_price": 2.828,
+        "fair_value": 3.9845,
+        "deviation_pct": -29.02
+      },
+      {
+        "date": "2018-07-15",
+        "spot_price": 2.766,
+        "fair_value": 3.9535,
+        "deviation_pct": -30.04
+      },
+      {
+        "date": "2018-07-22",
+        "spot_price": 2.721,
+        "fair_value": 4.0203,
+        "deviation_pct": -32.32
+      },
+      {
+        "date": "2018-07-29",
+        "spot_price": 2.814,
+        "fair_value": 4.0487,
+        "deviation_pct": -30.5
+      },
+      {
+        "date": "2018-08-05",
+        "spot_price": 2.872,
+        "fair_value": 4.0701,
+        "deviation_pct": -29.44
+      },
+      {
+        "date": "2018-08-12",
+        "spot_price": 2.932,
+        "fair_value": 4.1496,
+        "deviation_pct": -29.34
+      },
+      {
+        "date": "2018-08-19",
+        "spot_price": 2.956,
+        "fair_value": 3.945,
+        "deviation_pct": -25.07
+      },
+      {
+        "date": "2018-08-26",
+        "spot_price": 2.878,
+        "fair_value": 3.9118,
+        "deviation_pct": -26.43
+      },
+      {
+        "date": "2018-09-02",
+        "spot_price": 2.868,
+        "fair_value": 3.923,
+        "deviation_pct": -26.89
+      },
+      {
+        "date": "2018-09-09",
+        "spot_price": 2.812,
+        "fair_value": 3.9457,
+        "deviation_pct": -28.73
+      },
+      {
+        "date": "2018-09-16",
+        "spot_price": 2.819,
+        "fair_value": 3.911,
+        "deviation_pct": -27.92
+      },
+      {
+        "date": "2018-09-23",
+        "spot_price": 3.06,
+        "fair_value": 4.0162,
+        "deviation_pct": -23.81
+      },
+      {
+        "date": "2018-09-30",
+        "spot_price": 3.133,
+        "fair_value": 3.9785,
+        "deviation_pct": -21.25
+      },
+      {
+        "date": "2018-10-07",
+        "spot_price": 3.298,
+        "fair_value": 3.9842,
+        "deviation_pct": -17.22
+      },
+      {
+        "date": "2018-10-14",
+        "spot_price": 3.27,
+        "fair_value": 3.9779,
+        "deviation_pct": -17.8
+      },
+      {
+        "date": "2018-10-21",
+        "spot_price": 3.139,
+        "fair_value": 4.1005,
+        "deviation_pct": -23.45
+      },
+      {
+        "date": "2018-10-28",
+        "spot_price": 3.141,
+        "fair_value": 4.144,
+        "deviation_pct": -24.2
+      },
+      {
+        "date": "2018-11-04",
+        "spot_price": 3.52,
+        "fair_value": 4.0965,
+        "deviation_pct": -14.07
+      },
+      {
+        "date": "2018-11-11",
+        "spot_price": 3.912,
+        "fair_value": 4.0503,
+        "deviation_pct": -3.42
+      },
+      {
+        "date": "2018-11-18",
+        "spot_price": 4.564,
+        "fair_value": 4.5904,
+        "deviation_pct": -0.58
+      },
+      {
+        "date": "2018-11-25",
+        "spot_price": 4.246,
+        "fair_value": 4.6235,
+        "deviation_pct": -8.17
+      },
+      {
+        "date": "2018-12-02",
+        "spot_price": 4.352,
+        "fair_value": 4.6517,
+        "deviation_pct": -6.44
+      },
+      {
+        "date": "2018-12-09",
+        "spot_price": 4.503,
+        "fair_value": 4.6235,
+        "deviation_pct": -2.61
+      },
+      {
+        "date": "2018-12-16",
+        "spot_price": 3.56,
+        "fair_value": 4.7203,
+        "deviation_pct": -24.58
+      },
+      {
+        "date": "2018-12-23",
+        "spot_price": 3.462,
+        "fair_value": 4.4507,
+        "deviation_pct": -22.21
+      },
+      {
+        "date": "2018-12-30",
+        "spot_price": 3.0,
+        "fair_value": 4.2187,
+        "deviation_pct": -28.89
+      },
+      {
+        "date": "2019-01-06",
+        "spot_price": 2.98,
+        "fair_value": 3.8177,
+        "deviation_pct": -21.94
+      },
+      {
+        "date": "2019-01-13",
+        "spot_price": 3.586,
+        "fair_value": 3.4017,
+        "deviation_pct": 5.42
+      },
+      {
+        "date": "2019-01-20",
+        "spot_price": 3.245,
+        "fair_value": 3.1904,
+        "deviation_pct": 1.71
+      },
+      {
+        "date": "2019-01-27",
+        "spot_price": 2.97,
+        "fair_value": 3.2903,
+        "deviation_pct": -9.74
+      },
+      {
+        "date": "2019-02-03",
+        "spot_price": 2.718,
+        "fair_value": 3.5464,
+        "deviation_pct": -23.36
+      },
+      {
+        "date": "2019-02-10",
+        "spot_price": 2.682,
+        "fair_value": 3.2888,
+        "deviation_pct": -18.45
+      },
+      {
+        "date": "2019-02-17",
+        "spot_price": 2.648,
+        "fair_value": 3.512,
+        "deviation_pct": -24.6
+      },
+      {
+        "date": "2019-02-24",
+        "spot_price": 2.806,
+        "fair_value": 3.7409,
+        "deviation_pct": -24.99
+      },
+      {
+        "date": "2019-03-03",
+        "spot_price": 2.846,
+        "fair_value": 3.8513,
+        "deviation_pct": -26.1
+      },
+      {
+        "date": "2019-03-10",
+        "spot_price": 2.771,
+        "fair_value": 4.1457,
+        "deviation_pct": -33.16
+      },
+      {
+        "date": "2019-03-17",
+        "spot_price": 2.84,
+        "fair_value": 4.1655,
+        "deviation_pct": -31.82
+      },
+      {
+        "date": "2019-03-24",
+        "spot_price": 2.759,
+        "fair_value": 4.1668,
+        "deviation_pct": -33.79
+      },
+      {
+        "date": "2019-03-31",
+        "spot_price": 2.69,
+        "fair_value": 4.0235,
+        "deviation_pct": -33.14
+      },
+      {
+        "date": "2019-04-07",
+        "spot_price": 2.7,
+        "fair_value": 3.9477,
+        "deviation_pct": -31.61
+      },
+      {
+        "date": "2019-04-14",
+        "spot_price": 2.584,
+        "fair_value": 3.7335,
+        "deviation_pct": -30.79
+      },
+      {
+        "date": "2019-04-21",
+        "spot_price": 2.528,
+        "fair_value": 3.5628,
+        "deviation_pct": -29.04
+      },
+      {
+        "date": "2019-04-28",
+        "spot_price": 2.56,
+        "fair_value": 3.4216,
+        "deviation_pct": -25.18
+      },
+      {
+        "date": "2019-05-05",
+        "spot_price": 2.5,
+        "fair_value": 3.3744,
+        "deviation_pct": -25.91
+      },
+      {
+        "date": "2019-05-12",
+        "spot_price": 2.605,
+        "fair_value": 3.339,
+        "deviation_pct": -21.98
+      },
+      {
+        "date": "2019-05-19",
+        "spot_price": 2.656,
+        "fair_value": 3.3362,
+        "deviation_pct": -20.39
+      },
+      {
+        "date": "2019-05-26",
+        "spot_price": 2.567,
+        "fair_value": 3.2906,
+        "deviation_pct": -21.99
+      },
+      {
+        "date": "2019-06-02",
+        "spot_price": 2.402,
+        "fair_value": 3.2483,
+        "deviation_pct": -26.05
+      },
+      {
+        "date": "2019-06-09",
+        "spot_price": 2.354,
+        "fair_value": 3.2235,
+        "deviation_pct": -26.97
+      },
+      {
+        "date": "2019-06-16",
+        "spot_price": 2.372,
+        "fair_value": 3.1618,
+        "deviation_pct": -24.98
+      },
+      {
+        "date": "2019-06-23",
+        "spot_price": 2.298,
+        "fair_value": 3.0829,
+        "deviation_pct": -25.46
+      },
+      {
+        "date": "2019-06-30",
+        "spot_price": 2.282,
+        "fair_value": 3.037,
+        "deviation_pct": -24.86
+      },
+      {
+        "date": "2019-07-07",
+        "spot_price": 2.412,
+        "fair_value": 3.0128,
+        "deviation_pct": -19.94
+      },
+      {
+        "date": "2019-07-14",
+        "spot_price": 2.404,
+        "fair_value": 3.0123,
+        "deviation_pct": -20.19
+      },
+      {
+        "date": "2019-07-21",
+        "spot_price": 2.319,
+        "fair_value": 3.1319,
+        "deviation_pct": -25.96
+      },
+      {
+        "date": "2019-07-28",
+        "spot_price": 2.13,
+        "fair_value": 3.0616,
+        "deviation_pct": -30.43
+      },
+      {
+        "date": "2019-08-04",
+        "spot_price": 2.1,
+        "fair_value": 3.0378,
+        "deviation_pct": -30.87
+      },
+      {
+        "date": "2019-08-11",
+        "spot_price": 2.116,
+        "fair_value": 3.0412,
+        "deviation_pct": -30.42
+      },
+      {
+        "date": "2019-08-18",
+        "spot_price": 2.206,
+        "fair_value": 2.9867,
+        "deviation_pct": -26.14
+      },
+      {
+        "date": "2019-08-25",
+        "spot_price": 2.224,
+        "fair_value": 2.9833,
+        "deviation_pct": -25.45
+      },
+      {
+        "date": "2019-09-01",
+        "spot_price": 2.304,
+        "fair_value": 2.9445,
+        "deviation_pct": -21.75
+      },
+      {
+        "date": "2019-09-08",
+        "spot_price": 2.604,
+        "fair_value": 2.9426,
+        "deviation_pct": -11.51
+      },
+      {
+        "date": "2019-09-15",
+        "spot_price": 2.686,
+        "fair_value": 3.0213,
+        "deviation_pct": -11.1
+      },
+      {
+        "date": "2019-09-22",
+        "spot_price": 2.541,
+        "fair_value": 2.9478,
+        "deviation_pct": -13.8
+      },
+      {
+        "date": "2019-09-29",
+        "spot_price": 2.31,
+        "fair_value": 2.8858,
+        "deviation_pct": -19.95
+      },
+      {
+        "date": "2019-10-06",
+        "spot_price": 2.284,
+        "fair_value": 2.8716,
+        "deviation_pct": -20.46
+      },
+      {
+        "date": "2019-10-13",
+        "spot_price": 2.278,
+        "fair_value": 2.8161,
+        "deviation_pct": -19.11
+      },
+      {
+        "date": "2019-10-20",
+        "spot_price": 2.236,
+        "fair_value": 2.8141,
+        "deviation_pct": -20.54
+      },
+      {
+        "date": "2019-10-27",
+        "spot_price": 2.42,
+        "fair_value": 2.7567,
+        "deviation_pct": -12.21
+      },
+      {
+        "date": "2019-11-03",
+        "spot_price": 2.7,
+        "fair_value": 2.806,
+        "deviation_pct": -3.78
+      },
+      {
+        "date": "2019-11-10",
+        "spot_price": 2.559,
+        "fair_value": 2.8649,
+        "deviation_pct": -10.68
+      },
+      {
+        "date": "2019-11-17",
+        "spot_price": 2.495,
+        "fair_value": 3.0064,
+        "deviation_pct": -17.01
+      },
+      {
+        "date": "2019-11-24",
+        "spot_price": 2.513,
+        "fair_value": 2.9328,
+        "deviation_pct": -14.31
+      },
+      {
+        "date": "2019-12-01",
+        "spot_price": 2.298,
+        "fair_value": 2.8942,
+        "deviation_pct": -20.6
+      },
+      {
+        "date": "2019-12-08",
+        "spot_price": 2.216,
+        "fair_value": 2.8688,
+        "deviation_pct": -22.76
+      },
+      {
+        "date": "2019-12-15",
+        "spot_price": 2.334,
+        "fair_value": 2.8007,
+        "deviation_pct": -16.66
+      },
+      {
+        "date": "2019-12-22",
+        "spot_price": 2.212,
+        "fair_value": 2.9505,
+        "deviation_pct": -25.03
+      },
+      {
+        "date": "2019-12-29",
+        "spot_price": 2.186,
+        "fair_value": 2.9181,
+        "deviation_pct": -25.09
+      },
+      {
+        "date": "2020-01-05",
+        "spot_price": 2.15,
+        "fair_value": 2.5708,
+        "deviation_pct": -16.37
+      },
+      {
+        "date": "2020-01-12",
+        "spot_price": 2.19,
+        "fair_value": 2.4213,
+        "deviation_pct": -9.55
+      },
+      {
+        "date": "2020-01-19",
+        "spot_price": 1.94,
+        "fair_value": 2.1902,
+        "deviation_pct": -11.42
+      },
+      {
+        "date": "2020-01-26",
+        "spot_price": 1.888,
+        "fair_value": 2.3347,
+        "deviation_pct": -19.13
+      },
+      {
+        "date": "2020-02-02",
+        "spot_price": 1.831,
+        "fair_value": 2.3317,
+        "deviation_pct": -21.47
+      },
+      {
+        "date": "2020-02-09",
+        "spot_price": 1.774,
+        "fair_value": 2.2823,
+        "deviation_pct": -22.27
+      },
+      {
+        "date": "2020-02-16",
+        "spot_price": 1.945,
+        "fair_value": 2.2838,
+        "deviation_pct": -14.83
+      },
+      {
+        "date": "2020-02-23",
+        "spot_price": 1.86,
+        "fair_value": 2.3617,
+        "deviation_pct": -21.24
+      },
+      {
+        "date": "2020-03-01",
+        "spot_price": 1.764,
+        "fair_value": 2.3561,
+        "deviation_pct": -25.13
+      },
+      {
+        "date": "2020-03-08",
+        "spot_price": 1.824,
+        "fair_value": 2.244,
+        "deviation_pct": -18.72
+      },
+      {
+        "date": "2020-03-15",
+        "spot_price": 1.805,
+        "fair_value": 2.3769,
+        "deviation_pct": -24.06
+      },
+      {
+        "date": "2020-03-22",
+        "spot_price": 1.59,
+        "fair_value": 2.3727,
+        "deviation_pct": -32.99
+      },
+      {
+        "date": "2020-03-29",
+        "spot_price": 1.646,
+        "fair_value": 2.4052,
+        "deviation_pct": -31.56
+      },
+      {
+        "date": "2020-04-05",
+        "spot_price": 1.708,
+        "fair_value": 2.3437,
+        "deviation_pct": -27.12
+      },
+      {
+        "date": "2020-04-12",
+        "spot_price": 1.699,
+        "fair_value": 2.2754,
+        "deviation_pct": -25.33
+      },
+      {
+        "date": "2020-04-19",
+        "spot_price": 1.918,
+        "fair_value": 2.3491,
+        "deviation_pct": -18.35
+      },
+      {
+        "date": "2020-04-26",
+        "spot_price": 1.788,
+        "fair_value": 2.3691,
+        "deviation_pct": -24.53
+      },
+      {
+        "date": "2020-05-03",
+        "spot_price": 1.882,
+        "fair_value": 2.296,
+        "deviation_pct": -18.03
+      },
+      {
+        "date": "2020-05-10",
+        "spot_price": 1.78,
+        "fair_value": 2.2777,
+        "deviation_pct": -21.85
+      },
+      {
+        "date": "2020-05-17",
+        "spot_price": 1.692,
+        "fair_value": 2.7638,
+        "deviation_pct": -38.78
+      },
+      {
+        "date": "2020-05-24",
+        "spot_price": 1.649,
+        "fair_value": 2.7374,
+        "deviation_pct": -39.76
+      },
+      {
+        "date": "2020-05-31",
+        "spot_price": 1.626,
+        "fair_value": 2.7391,
+        "deviation_pct": -40.64
+      },
+      {
+        "date": "2020-06-07",
+        "spot_price": 1.695,
+        "fair_value": 2.7352,
+        "deviation_pct": -38.03
+      },
+      {
+        "date": "2020-06-14",
+        "spot_price": 1.608,
+        "fair_value": 2.7339,
+        "deviation_pct": -41.18
+      },
+      {
+        "date": "2020-06-21",
+        "spot_price": 1.606,
+        "fair_value": 2.4744,
+        "deviation_pct": -35.1
+      },
+      {
+        "date": "2020-06-28",
+        "spot_price": 1.59,
+        "fair_value": 2.4807,
+        "deviation_pct": -35.91
+      },
+      {
+        "date": "2020-07-05",
+        "spot_price": 1.746,
+        "fair_value": 2.505,
+        "deviation_pct": -30.3
+      },
+      {
+        "date": "2020-07-12",
+        "spot_price": 1.672,
+        "fair_value": 2.5215,
+        "deviation_pct": -33.69
+      },
+      {
+        "date": "2020-07-19",
+        "spot_price": 1.612,
+        "fair_value": 2.5421,
+        "deviation_pct": -36.59
+      },
+      {
+        "date": "2020-07-26",
+        "spot_price": 1.724,
+        "fair_value": 2.5544,
+        "deviation_pct": -32.51
+      },
+      {
+        "date": "2020-08-02",
+        "spot_price": 2.044,
+        "fair_value": 2.5687,
+        "deviation_pct": -20.43
+      },
+      {
+        "date": "2020-08-09",
+        "spot_price": 2.124,
+        "fair_value": 2.5409,
+        "deviation_pct": -16.41
+      },
+      {
+        "date": "2020-08-16",
+        "spot_price": 2.314,
+        "fair_value": 2.6707,
+        "deviation_pct": -13.36
+      },
+      {
+        "date": "2020-08-23",
+        "spot_price": 2.506,
+        "fair_value": 2.693,
+        "deviation_pct": -6.94
+      },
+      {
+        "date": "2020-08-30",
+        "spot_price": 2.542,
+        "fair_value": 2.7667,
+        "deviation_pct": -8.12
+      },
+      {
+        "date": "2020-09-06",
+        "spot_price": 2.484,
+        "fair_value": 2.7765,
+        "deviation_pct": -10.53
+      },
+      {
+        "date": "2020-09-13",
+        "spot_price": 2.266,
+        "fair_value": 2.7535,
+        "deviation_pct": -17.71
+      },
+      {
+        "date": "2020-09-20",
+        "spot_price": 1.864,
+        "fair_value": 2.7314,
+        "deviation_pct": -31.76
+      },
+      {
+        "date": "2020-09-27",
+        "spot_price": 2.14,
+        "fair_value": 2.7524,
+        "deviation_pct": -22.25
+      },
+      {
+        "date": "2020-10-04",
+        "spot_price": 2.161,
+        "fair_value": 2.7861,
+        "deviation_pct": -22.44
+      },
+      {
+        "date": "2020-10-11",
+        "spot_price": 2.472,
+        "fair_value": 2.8669,
+        "deviation_pct": -13.77
+      },
+      {
+        "date": "2020-10-18",
+        "spot_price": 2.623,
+        "fair_value": 3.0873,
+        "deviation_pct": -15.04
+      },
+      {
+        "date": "2020-10-25",
+        "spot_price": 2.903,
+        "fair_value": 3.1738,
+        "deviation_pct": -8.53
+      },
+      {
+        "date": "2020-11-01",
+        "spot_price": 2.971,
+        "fair_value": 3.3855,
+        "deviation_pct": -12.24
+      },
+      {
+        "date": "2020-11-08",
+        "spot_price": 2.69,
+        "fair_value": 3.4225,
+        "deviation_pct": -21.4
+      },
+      {
+        "date": "2020-11-15",
+        "spot_price": 2.583,
+        "fair_value": 3.1081,
+        "deviation_pct": -16.89
+      },
+      {
+        "date": "2020-11-22",
+        "spot_price": 2.646,
+        "fair_value": 3.073,
+        "deviation_pct": -13.9
+      },
+      {
+        "date": "2020-11-29",
+        "spot_price": 2.794,
+        "fair_value": 2.9906,
+        "deviation_pct": -6.58
+      },
+      {
+        "date": "2020-12-06",
+        "spot_price": 2.338,
+        "fair_value": 2.9969,
+        "deviation_pct": -21.99
+      },
+      {
+        "date": "2020-12-13",
+        "spot_price": 2.6,
+        "fair_value": 2.9668,
+        "deviation_pct": -12.36
+      },
+      {
+        "date": "2020-12-20",
+        "spot_price": 2.662,
+        "fair_value": 2.9999,
+        "deviation_pct": -11.26
+      },
+      {
+        "date": "2020-12-27",
+        "spot_price": 2.347,
+        "fair_value": 3.0869,
+        "deviation_pct": -23.97
+      },
+      {
+        "date": "2021-01-03",
+        "spot_price": 2.593,
+        "fair_value": 3.0869,
+        "deviation_pct": -16.0
+      },
+      {
+        "date": "2021-01-10",
+        "spot_price": 2.786,
+        "fair_value": 3.2875,
+        "deviation_pct": -15.26
+      },
+      {
+        "date": "2021-01-17",
+        "spot_price": 2.617,
+        "fair_value": 3.4211,
+        "deviation_pct": -23.5
+      },
+      {
+        "date": "2021-01-24",
+        "spot_price": 2.598,
+        "fair_value": 3.2961,
+        "deviation_pct": -21.18
+      },
+      {
+        "date": "2021-01-31",
+        "spot_price": 2.828,
+        "fair_value": 3.4293,
+        "deviation_pct": -17.53
+      },
+      {
+        "date": "2021-02-07",
+        "spot_price": 2.884,
+        "fair_value": 3.5069,
+        "deviation_pct": -17.76
+      },
+      {
+        "date": "2021-02-14",
+        "spot_price": 3.011,
+        "fair_value": 3.8114,
+        "deviation_pct": -21.0
+      },
+      {
+        "date": "2021-02-21",
+        "spot_price": 3.025,
+        "fair_value": 5.4084,
+        "deviation_pct": -44.07
+      },
+      {
+        "date": "2021-02-28",
+        "spot_price": 2.864,
+        "fair_value": 5.4623,
+        "deviation_pct": -47.57
+      },
+      {
+        "date": "2021-03-07",
+        "spot_price": 2.718,
+        "fair_value": 5.3074,
+        "deviation_pct": -48.79
+      },
+      {
+        "date": "2021-03-14",
+        "spot_price": 2.533,
+        "fair_value": 5.0267,
+        "deviation_pct": -49.61
+      },
+      {
+        "date": "2021-03-21",
+        "spot_price": 2.593,
+        "fair_value": 3.8326,
+        "deviation_pct": -32.34
+      },
+      {
+        "date": "2021-03-28",
+        "spot_price": 2.61,
+        "fair_value": 3.6731,
+        "deviation_pct": -28.94
+      },
+      {
+        "date": "2021-04-04",
+        "spot_price": 2.494,
+        "fair_value": 3.6085,
+        "deviation_pct": -30.89
+      },
+      {
+        "date": "2021-04-11",
+        "spot_price": 2.54,
+        "fair_value": 3.465,
+        "deviation_pct": -26.7
+      },
+      {
+        "date": "2021-04-18",
+        "spot_price": 2.729,
+        "fair_value": 3.3893,
+        "deviation_pct": -19.48
+      },
+      {
+        "date": "2021-04-25",
+        "spot_price": 2.794,
+        "fair_value": 3.4932,
+        "deviation_pct": -20.02
+      },
+      {
+        "date": "2021-05-02",
+        "spot_price": 2.895,
+        "fair_value": 3.5438,
+        "deviation_pct": -18.31
+      },
+      {
+        "date": "2021-05-09",
+        "spot_price": 2.88,
+        "fair_value": 3.5603,
+        "deviation_pct": -19.11
+      },
+      {
+        "date": "2021-05-16",
+        "spot_price": 3.093,
+        "fair_value": 3.0349,
+        "deviation_pct": 1.91
+      },
+      {
+        "date": "2021-05-23",
+        "spot_price": 2.884,
+        "fair_value": 2.9597,
+        "deviation_pct": -2.56
+      },
+      {
+        "date": "2021-05-30",
+        "spot_price": 2.977,
+        "fair_value": 2.9559,
+        "deviation_pct": 0.71
+      },
+      {
+        "date": "2021-06-06",
+        "spot_price": 3.045,
+        "fair_value": 2.9531,
+        "deviation_pct": 3.11
+      },
+      {
+        "date": "2021-06-13",
+        "spot_price": 3.318,
+        "fair_value": 3.127,
+        "deviation_pct": 6.11
+      },
+      {
+        "date": "2021-06-20",
+        "spot_price": 3.18,
+        "fair_value": 3.446,
+        "deviation_pct": -7.72
+      },
+      {
+        "date": "2021-06-27",
+        "spot_price": 3.56,
+        "fair_value": 3.4389,
+        "deviation_pct": 3.52
+      },
+      {
+        "date": "2021-07-04",
+        "spot_price": 3.75,
+        "fair_value": 3.5807,
+        "deviation_pct": 4.73
+      },
+      {
+        "date": "2021-07-11",
+        "spot_price": 3.729,
+        "fair_value": 3.6008,
+        "deviation_pct": 3.56
+      },
+      {
+        "date": "2021-07-18",
+        "spot_price": 3.762,
+        "fair_value": 3.5009,
+        "deviation_pct": 7.46
+      },
+      {
+        "date": "2021-07-25",
+        "spot_price": 4.091,
+        "fair_value": 3.4736,
+        "deviation_pct": 17.78
+      },
+      {
+        "date": "2021-08-01",
+        "spot_price": 3.968,
+        "fair_value": 3.5138,
+        "deviation_pct": 12.93
+      },
+      {
+        "date": "2021-08-08",
+        "spot_price": 4.048,
+        "fair_value": 3.4858,
+        "deviation_pct": 16.13
+      },
+      {
+        "date": "2021-08-15",
+        "spot_price": 3.944,
+        "fair_value": 3.4582,
+        "deviation_pct": 14.05
+      },
+      {
+        "date": "2021-08-22",
+        "spot_price": 3.932,
+        "fair_value": 3.4915,
+        "deviation_pct": 12.62
+      },
+      {
+        "date": "2021-08-29",
+        "spot_price": 4.302,
+        "fair_value": 3.5791,
+        "deviation_pct": 20.2
+      },
+      {
+        "date": "2021-09-05",
+        "spot_price": 4.682,
+        "fair_value": 3.5922,
+        "deviation_pct": 30.34
+      },
+      {
+        "date": "2021-09-12",
+        "spot_price": 5.18,
+        "fair_value": 3.5665,
+        "deviation_pct": 45.24
+      },
+      {
+        "date": "2021-09-19",
+        "spot_price": 4.952,
+        "fair_value": 3.6086,
+        "deviation_pct": 37.23
+      },
+      {
+        "date": "2021-09-26",
+        "spot_price": 5.796,
+        "fair_value": 3.5406,
+        "deviation_pct": 63.7
+      },
+      {
+        "date": "2021-10-03",
+        "spot_price": 5.764,
+        "fair_value": 3.4391,
+        "deviation_pct": 67.6
+      },
+      {
+        "date": "2021-10-10",
+        "spot_price": 5.364,
+        "fair_value": 3.4523,
+        "deviation_pct": 55.37
+      },
+      {
+        "date": "2021-10-17",
+        "spot_price": 4.97,
+        "fair_value": 3.1419,
+        "deviation_pct": 58.19
+      },
+      {
+        "date": "2021-10-24",
+        "spot_price": 5.906,
+        "fair_value": 3.0906,
+        "deviation_pct": 91.1
+      },
+      {
+        "date": "2021-10-31",
+        "spot_price": 5.063,
+        "fair_value": 3.0758,
+        "deviation_pct": 64.61
+      },
+      {
+        "date": "2021-11-07",
+        "spot_price": 5.3,
+        "fair_value": 3.1238,
+        "deviation_pct": 69.66
+      },
+      {
+        "date": "2021-11-14",
+        "spot_price": 4.99,
+        "fair_value": 3.0901,
+        "deviation_pct": 61.49
+      },
+      {
+        "date": "2021-11-21",
+        "spot_price": 4.769,
+        "fair_value": 3.1633,
+        "deviation_pct": 50.76
+      },
+      {
+        "date": "2021-11-28",
+        "spot_price": 4.806,
+        "fair_value": 3.2179,
+        "deviation_pct": 49.35
+      },
+      {
+        "date": "2021-12-05",
+        "spot_price": 3.644,
+        "fair_value": 3.3076,
+        "deviation_pct": 10.17
+      },
+      {
+        "date": "2021-12-12",
+        "spot_price": 3.795,
+        "fair_value": 3.2986,
+        "deviation_pct": 15.05
+      },
+      {
+        "date": "2021-12-19",
+        "spot_price": 3.822,
+        "fair_value": 3.0389,
+        "deviation_pct": 25.77
+      },
+      {
+        "date": "2021-12-26",
+        "spot_price": 4.057,
+        "fair_value": 3.0244,
+        "deviation_pct": 34.14
+      },
+      {
+        "date": "2022-01-02",
+        "spot_price": 3.91,
+        "fair_value": 2.8865,
+        "deviation_pct": 35.46
+      },
+      {
+        "date": "2022-01-09",
+        "spot_price": 4.184,
+        "fair_value": 2.8801,
+        "deviation_pct": 45.27
+      },
+      {
+        "date": "2022-01-16",
+        "spot_price": 4.3,
+        "fair_value": 3.2411,
+        "deviation_pct": 32.67
+      },
+      {
+        "date": "2022-01-23",
+        "spot_price": 4.022,
+        "fair_value": 3.403,
+        "deviation_pct": 18.19
+      },
+      {
+        "date": "2022-01-30",
+        "spot_price": 5.108,
+        "fair_value": 3.7383,
+        "deviation_pct": 36.64
+      },
+      {
+        "date": "2022-02-06",
+        "spot_price": 4.407,
+        "fair_value": 3.9181,
+        "deviation_pct": 12.48
+      },
+      {
+        "date": "2022-02-13",
+        "spot_price": 4.254,
+        "fair_value": 4.0531,
+        "deviation_pct": 4.96
+      },
+      {
+        "date": "2022-02-20",
+        "spot_price": 4.779,
+        "fair_value": 3.1839,
+        "deviation_pct": 50.1
+      },
+      {
+        "date": "2022-02-27",
+        "spot_price": 4.497,
+        "fair_value": 3.2962,
+        "deviation_pct": 36.43
+      },
+      {
+        "date": "2022-03-06",
+        "spot_price": 4.882,
+        "fair_value": 3.3951,
+        "deviation_pct": 43.79
+      },
+      {
+        "date": "2022-03-13",
+        "spot_price": 4.72,
+        "fair_value": 3.3897,
+        "deviation_pct": 39.25
+      },
+      {
+        "date": "2022-03-20",
+        "spot_price": 4.975,
+        "fair_value": 3.9639,
+        "deviation_pct": 25.51
+      },
+      {
+        "date": "2022-03-27",
+        "spot_price": 5.462,
+        "fair_value": 3.7862,
+        "deviation_pct": 44.26
+      },
+      {
+        "date": "2022-04-03",
+        "spot_price": 5.764,
+        "fair_value": 3.8855,
+        "deviation_pct": 48.35
+      },
+      {
+        "date": "2022-04-10",
+        "spot_price": 6.686,
+        "fair_value": 3.9104,
+        "deviation_pct": 70.98
+      },
+      {
+        "date": "2022-04-17",
+        "spot_price": 7.757,
+        "fair_value": 3.8653,
+        "deviation_pct": 100.68
+      },
+      {
+        "date": "2022-04-24",
+        "spot_price": 6.816,
+        "fair_value": 3.869,
+        "deviation_pct": 76.17
+      },
+      {
+        "date": "2022-05-01",
+        "spot_price": 7.422,
+        "fair_value": 3.8671,
+        "deviation_pct": 91.92
+      },
+      {
+        "date": "2022-05-08",
+        "spot_price": 6.964,
+        "fair_value": 3.8789,
+        "deviation_pct": 79.54
+      },
+      {
+        "date": "2022-05-15",
+        "spot_price": 7.923,
+        "fair_value": 3.8712,
+        "deviation_pct": 104.67
+      },
+      {
+        "date": "2022-05-22",
+        "spot_price": 8.71,
+        "fair_value": 3.8879,
+        "deviation_pct": 124.03
+      },
+      {
+        "date": "2022-05-29",
+        "spot_price": 8.646,
+        "fair_value": 3.943,
+        "deviation_pct": 119.28
+      },
+      {
+        "date": "2022-06-05",
+        "spot_price": 9.268,
+        "fair_value": 3.9474,
+        "deviation_pct": 134.79
+      },
+      {
+        "date": "2022-06-12",
+        "spot_price": 8.626,
+        "fair_value": 3.9003,
+        "deviation_pct": 121.16
+      },
+      {
+        "date": "2022-06-19",
+        "spot_price": 6.678,
+        "fair_value": 3.8668,
+        "deviation_pct": 72.7
+      },
+      {
+        "date": "2022-06-26",
+        "spot_price": 6.392,
+        "fair_value": 3.8644,
+        "deviation_pct": 65.41
+      },
+      {
+        "date": "2022-07-03",
+        "spot_price": 5.821,
+        "fair_value": 3.8706,
+        "deviation_pct": 50.39
+      },
+      {
+        "date": "2022-07-10",
+        "spot_price": 6.489,
+        "fair_value": 3.8774,
+        "deviation_pct": 67.36
+      },
+      {
+        "date": "2022-07-17",
+        "spot_price": 7.422,
+        "fair_value": 3.933,
+        "deviation_pct": 88.71
+      },
+      {
+        "date": "2022-07-24",
+        "spot_price": 8.788,
+        "fair_value": 3.9804,
+        "deviation_pct": 120.78
+      },
+      {
+        "date": "2022-07-31",
+        "spot_price": 8.332,
+        "fair_value": 3.9494,
+        "deviation_pct": 110.97
+      },
+      {
+        "date": "2022-08-07",
+        "spot_price": 7.731,
+        "fair_value": 3.9462,
+        "deviation_pct": 95.91
+      },
+      {
+        "date": "2022-08-14",
+        "spot_price": 8.872,
+        "fair_value": 4.0413,
+        "deviation_pct": 119.53
+      },
+      {
+        "date": "2022-08-21",
+        "spot_price": 9.796,
+        "fair_value": 3.9596,
+        "deviation_pct": 147.4
+      },
+      {
+        "date": "2022-08-28",
+        "spot_price": 9.318,
+        "fair_value": 3.9086,
+        "deviation_pct": 138.4
+      },
+      {
+        "date": "2022-09-04",
+        "spot_price": 8.79,
+        "fair_value": 3.9268,
+        "deviation_pct": 123.85
+      },
+      {
+        "date": "2022-09-11",
+        "spot_price": 8.411,
+        "fair_value": 3.9306,
+        "deviation_pct": 113.99
+      },
+      {
+        "date": "2022-09-18",
+        "spot_price": 7.884,
+        "fair_value": 3.8016,
+        "deviation_pct": 107.39
+      },
+      {
+        "date": "2022-09-25",
+        "spot_price": 6.918,
+        "fair_value": 3.7086,
+        "deviation_pct": 86.54
+      },
+      {
+        "date": "2022-10-02",
+        "spot_price": 6.422,
+        "fair_value": 3.5925,
+        "deviation_pct": 78.76
+      },
+      {
+        "date": "2022-10-09",
+        "spot_price": 6.462,
+        "fair_value": 3.4828,
+        "deviation_pct": 85.54
+      },
+      {
+        "date": "2022-10-16",
+        "spot_price": 5.946,
+        "fair_value": 3.5236,
+        "deviation_pct": 68.75
+      },
+      {
+        "date": "2022-10-23",
+        "spot_price": 5.15,
+        "fair_value": 3.5723,
+        "deviation_pct": 44.16
+      },
+      {
+        "date": "2022-10-30",
+        "spot_price": 5.766,
+        "fair_value": 3.4374,
+        "deviation_pct": 67.75
+      },
+      {
+        "date": "2022-11-06",
+        "spot_price": 6.268,
+        "fair_value": 3.2712,
+        "deviation_pct": 91.61
+      },
+      {
+        "date": "2022-11-13",
+        "spot_price": 5.806,
+        "fair_value": 3.1371,
+        "deviation_pct": 85.08
+      },
+      {
+        "date": "2022-11-20",
+        "spot_price": 6.579,
+        "fair_value": 3.2801,
+        "deviation_pct": 100.58
+      },
+      {
+        "date": "2022-11-27",
+        "spot_price": 6.85,
+        "fair_value": 3.3909,
+        "deviation_pct": 102.01
+      },
+      {
+        "date": "2022-12-04",
+        "spot_price": 5.338,
+        "fair_value": 3.372,
+        "deviation_pct": 58.3
+      },
+      {
+        "date": "2022-12-11",
+        "spot_price": 6.294,
+        "fair_value": 3.2932,
+        "deviation_pct": 91.12
+      },
+      {
+        "date": "2022-12-18",
+        "spot_price": 5.786,
+        "fair_value": 3.3732,
+        "deviation_pct": 71.53
+      },
+      {
+        "date": "2022-12-22",
+        "spot_price": 5.102,
+        "fair_value": 3.3732,
+        "deviation_pct": 51.25
+      },
+      {
+        "date": "2022-12-29",
+        "spot_price": 4.495,
+        "fair_value": 3.6282,
+        "deviation_pct": 23.89
+      },
+      {
+        "date": "2023-01-08",
+        "spot_price": 3.896,
+        "fair_value": 3.4496,
+        "deviation_pct": 12.94
+      },
+      {
+        "date": "2023-01-15",
+        "spot_price": 3.59,
+        "fair_value": 2.8655,
+        "deviation_pct": 25.28
+      },
+      {
+        "date": "2023-01-22",
+        "spot_price": 3.442,
+        "fair_value": 2.6624,
+        "deviation_pct": 29.28
+      },
+      {
+        "date": "2023-01-29",
+        "spot_price": 2.829,
+        "fair_value": 2.5878,
+        "deviation_pct": 9.32
+      },
+      {
+        "date": "2023-02-05",
+        "spot_price": 2.589,
+        "fair_value": 2.6714,
+        "deviation_pct": -3.08
+      },
+      {
+        "date": "2023-02-12",
+        "spot_price": 2.483,
+        "fair_value": 2.5407,
+        "deviation_pct": -2.27
+      },
+      {
+        "date": "2023-02-19",
+        "spot_price": 2.302,
+        "fair_value": 2.396,
+        "deviation_pct": -3.93
+      },
+      {
+        "date": "2023-02-26",
+        "spot_price": 2.706,
+        "fair_value": 2.3136,
+        "deviation_pct": 16.96
+      },
+      {
+        "date": "2023-03-05",
+        "spot_price": 2.592,
+        "fair_value": 2.2875,
+        "deviation_pct": 13.31
+      },
+      {
+        "date": "2023-03-12",
+        "spot_price": 2.623,
+        "fair_value": 2.2366,
+        "deviation_pct": 17.28
+      },
+      {
+        "date": "2023-03-19",
+        "spot_price": 2.238,
+        "fair_value": 2.2962,
+        "deviation_pct": -2.54
+      },
+      {
+        "date": "2023-03-26",
+        "spot_price": 2.102,
+        "fair_value": 2.3508,
+        "deviation_pct": -10.58
+      },
+      {
+        "date": "2023-04-02",
+        "spot_price": 2.029,
+        "fair_value": 2.3799,
+        "deviation_pct": -14.74
+      },
+      {
+        "date": "2023-04-09",
+        "spot_price": 2.119,
+        "fair_value": 2.378,
+        "deviation_pct": -10.89
+      },
+      {
+        "date": "2023-04-16",
+        "spot_price": 2.26,
+        "fair_value": 2.4185,
+        "deviation_pct": -6.55
+      },
+      {
+        "date": "2023-04-23",
+        "spot_price": 2.266,
+        "fair_value": 2.3338,
+        "deviation_pct": -2.91
+      },
+      {
+        "date": "2023-04-30",
+        "spot_price": 2.166,
+        "fair_value": 2.3797,
+        "deviation_pct": -8.98
+      },
+      {
+        "date": "2023-05-07",
+        "spot_price": 2.136,
+        "fair_value": 2.395,
+        "deviation_pct": -10.81
+      },
+      {
+        "date": "2023-05-14",
+        "spot_price": 2.292,
+        "fair_value": 2.3874,
+        "deviation_pct": -3.99
+      },
+      {
+        "date": "2023-05-21",
+        "spot_price": 2.36,
+        "fair_value": 2.344,
+        "deviation_pct": 0.68
+      },
+      {
+        "date": "2023-05-28",
+        "spot_price": 2.204,
+        "fair_value": 2.3249,
+        "deviation_pct": -5.2
+      },
+      {
+        "date": "2023-06-04",
+        "spot_price": 2.154,
+        "fair_value": 2.3223,
+        "deviation_pct": -7.25
+      },
+      {
+        "date": "2023-06-11",
+        "spot_price": 2.197,
+        "fair_value": 2.3146,
+        "deviation_pct": -5.08
+      },
+      {
+        "date": "2023-06-18",
+        "spot_price": 2.606,
+        "fair_value": 2.3739,
+        "deviation_pct": 9.78
+      },
+      {
+        "date": "2023-06-25",
+        "spot_price": 2.756,
+        "fair_value": 2.3975,
+        "deviation_pct": 14.95
+      },
+      {
+        "date": "2023-07-02",
+        "spot_price": 2.613,
+        "fair_value": 2.3701,
+        "deviation_pct": 10.25
+      },
+      {
+        "date": "2023-07-09",
+        "spot_price": 2.606,
+        "fair_value": 2.3914,
+        "deviation_pct": 8.97
+      },
+      {
+        "date": "2023-07-16",
+        "spot_price": 2.504,
+        "fair_value": 2.404,
+        "deviation_pct": 4.16
+      },
+      {
+        "date": "2023-07-23",
+        "spot_price": 2.686,
+        "fair_value": 2.4303,
+        "deviation_pct": 10.52
+      },
+      {
+        "date": "2023-07-30",
+        "spot_price": 2.629,
+        "fair_value": 2.4726,
+        "deviation_pct": 6.33
+      },
+      {
+        "date": "2023-08-06",
+        "spot_price": 2.722,
+        "fair_value": 2.506,
+        "deviation_pct": 8.62
+      },
+      {
+        "date": "2023-08-13",
+        "spot_price": 2.806,
+        "fair_value": 2.5177,
+        "deviation_pct": 11.45
+      },
+      {
+        "date": "2023-08-20",
+        "spot_price": 2.612,
+        "fair_value": 2.5811,
+        "deviation_pct": 1.2
+      },
+      {
+        "date": "2023-08-27",
+        "spot_price": 2.588,
+        "fair_value": 2.6206,
+        "deviation_pct": -1.24
+      },
+      {
+        "date": "2023-09-03",
+        "spot_price": 2.594,
+        "fair_value": 2.6726,
+        "deviation_pct": -2.94
+      },
+      {
+        "date": "2023-09-10",
+        "spot_price": 2.566,
+        "fair_value": 2.7122,
+        "deviation_pct": -5.39
+      },
+      {
+        "date": "2023-09-17",
+        "spot_price": 2.69,
+        "fair_value": 2.848,
+        "deviation_pct": -5.55
+      },
+      {
+        "date": "2023-09-24",
+        "spot_price": 2.658,
+        "fair_value": 2.8276,
+        "deviation_pct": -6.0
+      },
+      {
+        "date": "2023-10-01",
+        "spot_price": 2.653,
+        "fair_value": 2.8745,
+        "deviation_pct": -7.71
+      },
+      {
+        "date": "2023-10-08",
+        "spot_price": 3.22,
+        "fair_value": 2.8971,
+        "deviation_pct": 11.15
+      },
+      {
+        "date": "2023-10-15",
+        "spot_price": 3.025,
+        "fair_value": 2.8556,
+        "deviation_pct": 5.93
+      },
+      {
+        "date": "2023-10-22",
+        "spot_price": 2.904,
+        "fair_value": 2.8387,
+        "deviation_pct": 2.3
+      },
+      {
+        "date": "2023-10-29",
+        "spot_price": 3.023,
+        "fair_value": 2.8121,
+        "deviation_pct": 7.5
+      },
+      {
+        "date": "2023-11-05",
+        "spot_price": 3.072,
+        "fair_value": 2.8937,
+        "deviation_pct": 6.16
+      },
+      {
+        "date": "2023-11-12",
+        "spot_price": 3.012,
+        "fair_value": 2.8207,
+        "deviation_pct": 6.78
+      },
+      {
+        "date": "2023-11-19",
+        "spot_price": 2.728,
+        "fair_value": 2.6212,
+        "deviation_pct": 4.07
+      },
+      {
+        "date": "2023-11-26",
+        "spot_price": 2.695,
+        "fair_value": 2.5005,
+        "deviation_pct": 7.78
+      },
+      {
+        "date": "2023-12-03",
+        "spot_price": 2.518,
+        "fair_value": 2.6749,
+        "deviation_pct": -5.87
+      },
+      {
+        "date": "2023-12-10",
+        "spot_price": 2.329,
+        "fair_value": 2.6309,
+        "deviation_pct": -11.47
+      },
+      {
+        "date": "2023-12-17",
+        "spot_price": 2.374,
+        "fair_value": 2.5063,
+        "deviation_pct": -5.28
+      },
+      {
+        "date": "2023-12-21",
+        "spot_price": 2.431,
+        "fair_value": 2.5063,
+        "deviation_pct": -3.01
+      },
+      {
+        "date": "2023-12-28",
+        "spot_price": 2.46,
+        "fair_value": 2.3986,
+        "deviation_pct": 2.56
+      },
+      {
+        "date": "2024-01-07",
+        "spot_price": 2.91,
+        "fair_value": 2.308,
+        "deviation_pct": 26.09
+      },
+      {
+        "date": "2024-01-14",
+        "spot_price": 2.859,
+        "fair_value": 2.347,
+        "deviation_pct": 21.81
+      },
+      {
+        "date": "2024-01-21",
+        "spot_price": 2.378,
+        "fair_value": 3.0539,
+        "deviation_pct": -22.13
+      },
+      {
+        "date": "2024-01-28",
+        "spot_price": 2.246,
+        "fair_value": 3.0539,
+        "deviation_pct": -26.45
+      },
+      {
+        "date": "2024-02-04",
+        "spot_price": 2.206,
+        "fair_value": 2.7707,
+        "deviation_pct": -20.38
+      },
+      {
+        "date": "2024-02-11",
+        "spot_price": 1.836,
+        "fair_value": 2.5784,
+        "deviation_pct": -28.79
+      },
+      {
+        "date": "2024-02-18",
+        "spot_price": 1.599,
+        "fair_value": 2.0272,
+        "deviation_pct": -21.12
+      },
+      {
+        "date": "2024-02-25",
+        "spot_price": 1.716,
+        "fair_value": 1.9802,
+        "deviation_pct": -13.34
+      },
+      {
+        "date": "2024-03-03",
+        "spot_price": 1.892,
+        "fair_value": 1.8821,
+        "deviation_pct": 0.53
+      },
+      {
+        "date": "2024-03-10",
+        "spot_price": 1.729,
+        "fair_value": 1.7794,
+        "deviation_pct": -2.83
+      },
+      {
+        "date": "2024-03-17",
+        "spot_price": 1.704,
+        "fair_value": 2.0094,
+        "deviation_pct": -15.2
+      },
+      {
+        "date": "2024-03-24",
+        "spot_price": 1.664,
+        "fair_value": 2.0443,
+        "deviation_pct": -18.6
+      },
+      {
+        "date": "2024-03-31",
+        "spot_price": 1.732,
+        "fair_value": 2.0949,
+        "deviation_pct": -17.32
+      },
+      {
+        "date": "2024-04-07",
+        "spot_price": 1.762,
+        "fair_value": 2.1097,
+        "deviation_pct": -16.48
+      },
+      {
+        "date": "2024-04-14",
+        "spot_price": 1.643,
+        "fair_value": 2.1372,
+        "deviation_pct": -23.12
+      },
+      {
+        "date": "2024-04-21",
+        "spot_price": 1.826,
+        "fair_value": 2.0778,
+        "deviation_pct": -12.12
+      },
+      {
+        "date": "2024-04-28",
+        "spot_price": 1.854,
+        "fair_value": 2.1076,
+        "deviation_pct": -12.03
+      },
+      {
+        "date": "2024-05-05",
+        "spot_price": 2.033,
+        "fair_value": 2.1055,
+        "deviation_pct": -3.45
+      },
+      {
+        "date": "2024-05-12",
+        "spot_price": 2.24,
+        "fair_value": 2.1439,
+        "deviation_pct": 4.48
+      },
+      {
+        "date": "2024-05-19",
+        "spot_price": 2.658,
+        "fair_value": 2.205,
+        "deviation_pct": 20.54
+      },
+      {
+        "date": "2024-05-26",
+        "spot_price": 2.536,
+        "fair_value": 2.2362,
+        "deviation_pct": 13.41
+      },
+      {
+        "date": "2024-06-02",
+        "spot_price": 2.558,
+        "fair_value": 2.2524,
+        "deviation_pct": 13.57
+      },
+      {
+        "date": "2024-06-09",
+        "spot_price": 2.828,
+        "fair_value": 2.2585,
+        "deviation_pct": 25.22
+      },
+      {
+        "date": "2024-06-16",
+        "spot_price": 2.709,
+        "fair_value": 2.1683,
+        "deviation_pct": 24.94
+      },
+      {
+        "date": "2024-06-23",
+        "spot_price": 2.804,
+        "fair_value": 2.2269,
+        "deviation_pct": 25.91
+      },
+      {
+        "date": "2024-06-30",
+        "spot_price": 2.386,
+        "fair_value": 2.2795,
+        "deviation_pct": 4.67
+      },
+      {
+        "date": "2024-07-07",
+        "spot_price": 2.309,
+        "fair_value": 2.2701,
+        "deviation_pct": 1.72
+      },
+      {
+        "date": "2024-07-14",
+        "spot_price": 2.133,
+        "fair_value": 2.3359,
+        "deviation_pct": -8.69
+      },
+      {
+        "date": "2024-07-21",
+        "spot_price": 2.218,
+        "fair_value": 2.3211,
+        "deviation_pct": -4.44
+      },
+      {
+        "date": "2024-07-28",
+        "spot_price": 2.03,
+        "fair_value": 2.3469,
+        "deviation_pct": -13.5
+      },
+      {
+        "date": "2024-08-04",
+        "spot_price": 1.926,
+        "fair_value": 2.3866,
+        "deviation_pct": -19.3
+      },
+      {
+        "date": "2024-08-11",
+        "spot_price": 2.153,
+        "fair_value": 2.4783,
+        "deviation_pct": -13.13
+      },
+      {
+        "date": "2024-08-18",
+        "spot_price": 2.238,
+        "fair_value": 2.5781,
+        "deviation_pct": -13.19
+      },
+      {
+        "date": "2024-08-25",
+        "spot_price": 2.002,
+        "fair_value": 2.5959,
+        "deviation_pct": -22.88
+      },
+      {
+        "date": "2024-09-01",
+        "spot_price": 2.094,
+        "fair_value": 2.6772,
+        "deviation_pct": -21.78
+      },
+      {
+        "date": "2024-09-08",
+        "spot_price": 2.079,
+        "fair_value": 2.7488,
+        "deviation_pct": -24.37
+      },
+      {
+        "date": "2024-09-15",
+        "spot_price": 2.351,
+        "fair_value": 2.8606,
+        "deviation_pct": -17.82
+      },
+      {
+        "date": "2024-09-22",
+        "spot_price": 2.557,
+        "fair_value": 2.9578,
+        "deviation_pct": -13.55
+      },
+      {
+        "date": "2024-09-29",
+        "spot_price": 2.656,
+        "fair_value": 3.0764,
+        "deviation_pct": -13.67
+      },
+      {
+        "date": "2024-10-06",
+        "spot_price": 2.55,
+        "fair_value": 3.1026,
+        "deviation_pct": -17.81
+      },
+      {
+        "date": "2024-10-13",
+        "spot_price": 2.363,
+        "fair_value": 3.1375,
+        "deviation_pct": -24.68
+      },
+      {
+        "date": "2024-10-20",
+        "spot_price": 2.34,
+        "fair_value": 3.0285,
+        "deviation_pct": -22.73
+      },
+      {
+        "date": "2024-10-27",
+        "spot_price": 2.418,
+        "fair_value": 3.015,
+        "deviation_pct": -19.8
+      },
+      {
+        "date": "2024-11-03",
+        "spot_price": 2.46,
+        "fair_value": 2.8937,
+        "deviation_pct": -14.99
+      },
+      {
+        "date": "2024-11-10",
+        "spot_price": 2.704,
+        "fair_value": 2.8734,
+        "deviation_pct": -5.9
+      },
+      {
+        "date": "2024-11-17",
+        "spot_price": 2.798,
+        "fair_value": 2.8959,
+        "deviation_pct": -3.38
+      },
+      {
+        "date": "2024-11-24",
+        "spot_price": 3.14,
+        "fair_value": 2.8201,
+        "deviation_pct": 11.34
+      },
+      {
+        "date": "2024-12-01",
+        "spot_price": 2.994,
+        "fair_value": 2.7901,
+        "deviation_pct": 7.31
+      },
+      {
+        "date": "2024-12-08",
+        "spot_price": 3.032,
+        "fair_value": 3.0674,
+        "deviation_pct": -1.15
+      },
+      {
+        "date": "2024-12-15",
+        "spot_price": 3.11,
+        "fair_value": 3.0372,
+        "deviation_pct": 2.4
+      },
+      {
+        "date": "2024-12-22",
+        "spot_price": 3.454,
+        "fair_value": 2.9024,
+        "deviation_pct": 19.0
+      },
+      {
+        "date": "2024-12-29",
+        "spot_price": 3.98,
+        "fair_value": 2.9691,
+        "deviation_pct": 34.05
+      },
+      {
+        "date": "2025-01-05",
+        "spot_price": 3.758,
+        "fair_value": 2.7781,
+        "deviation_pct": 35.27
+      },
+      {
+        "date": "2025-01-12",
+        "spot_price": 3.964,
+        "fair_value": 3.0343,
+        "deviation_pct": 30.64
+      },
+      {
+        "date": "2025-01-19",
+        "spot_price": 3.852,
+        "fair_value": 3.0185,
+        "deviation_pct": 27.61
+      },
+      {
+        "date": "2025-01-26",
+        "spot_price": 3.6,
+        "fair_value": 3.3201,
+        "deviation_pct": 8.43
+      },
+      {
+        "date": "2025-02-02",
+        "spot_price": 3.589,
+        "fair_value": 3.3457,
+        "deviation_pct": 7.27
+      },
+      {
+        "date": "2025-02-09",
+        "spot_price": 3.64,
+        "fair_value": 3.2425,
+        "deviation_pct": 12.26
+      },
+      {
+        "date": "2025-02-16",
+        "spot_price": 3.72,
+        "fair_value": 3.8088,
+        "deviation_pct": -2.33
+      },
+      {
+        "date": "2025-02-23",
+        "spot_price": 4.11,
+        "fair_value": 4.2924,
+        "deviation_pct": -4.25
+      },
+      {
+        "date": "2025-03-02",
+        "spot_price": 4.266,
+        "fair_value": 4.2862,
+        "deviation_pct": -0.47
+      },
+      {
+        "date": "2025-03-09",
+        "spot_price": 4.537,
+        "fair_value": 4.3588,
+        "deviation_pct": 4.09
+      },
+      {
+        "date": "2025-03-16",
+        "spot_price": 4.044,
+        "fair_value": 3.5356,
+        "deviation_pct": 14.38
+      },
+      {
+        "date": "2025-03-23",
+        "spot_price": 3.924,
+        "fair_value": 3.3933,
+        "deviation_pct": 15.64
+      },
+      {
+        "date": "2025-03-30",
+        "spot_price": 4.115,
+        "fair_value": 3.2672,
+        "deviation_pct": 25.95
+      },
+      {
+        "date": "2025-04-06",
+        "spot_price": 3.616,
+        "fair_value": 3.2041,
+        "deviation_pct": 12.86
+      },
+      {
+        "date": "2025-04-13",
+        "spot_price": 3.33,
+        "fair_value": 3.3129,
+        "deviation_pct": 0.52
+      },
+      {
+        "date": "2025-04-20",
+        "spot_price": 3.078,
+        "fair_value": 3.1847,
+        "deviation_pct": -3.35
+      },
+      {
+        "date": "2025-04-27",
+        "spot_price": 3.208,
+        "fair_value": 3.0771,
+        "deviation_pct": 4.25
+      },
+      {
+        "date": "2025-05-04",
+        "spot_price": 3.474,
+        "fair_value": 3.0279,
+        "deviation_pct": 14.73
+      },
+      {
+        "date": "2025-05-11",
+        "spot_price": 3.617,
+        "fair_value": 2.9718,
+        "deviation_pct": 21.71
+      },
+      {
+        "date": "2025-05-18",
+        "spot_price": 3.08,
+        "fair_value": 2.9381,
+        "deviation_pct": 4.83
+      },
+      {
+        "date": "2025-05-25",
+        "spot_price": 3.342,
+        "fair_value": 2.9282,
+        "deviation_pct": 14.13
+      },
+      {
+        "date": "2025-06-01",
+        "spot_price": 3.484,
+        "fair_value": 2.8781,
+        "deviation_pct": 21.05
+      },
+      {
+        "date": "2025-06-08",
+        "spot_price": 3.428,
+        "fair_value": 2.7938,
+        "deviation_pct": 22.7
+      },
+      {
+        "date": "2025-06-15",
+        "spot_price": 3.632,
+        "fair_value": 2.7696,
+        "deviation_pct": 31.14
+      },
+      {
+        "date": "2025-06-22",
+        "spot_price": 3.64,
+        "fair_value": 2.7392,
+        "deviation_pct": 32.89
+      },
+      {
+        "date": "2025-06-29",
+        "spot_price": 3.346,
+        "fair_value": 2.7278,
+        "deviation_pct": 22.66
+      },
+      {
+        "date": "2025-07-06",
+        "spot_price": 3.332,
+        "fair_value": 2.7357,
+        "deviation_pct": 21.8
+      },
+      {
+        "date": "2025-07-13",
+        "spot_price": 3.392,
+        "fair_value": 2.7126,
+        "deviation_pct": 25.05
+      },
+      {
+        "date": "2025-07-20",
+        "spot_price": 3.29,
+        "fair_value": 2.7667,
+        "deviation_pct": 18.92
+      },
+      {
+        "date": "2025-07-27",
+        "spot_price": 3.06,
+        "fair_value": 2.7107,
+        "deviation_pct": 12.89
+      },
+      {
+        "date": "2025-08-03",
+        "spot_price": 2.92,
+        "fair_value": 2.7724,
+        "deviation_pct": 5.32
+      },
+      {
+        "date": "2025-08-10",
+        "spot_price": 2.96,
+        "fair_value": 2.7159,
+        "deviation_pct": 8.99
+      },
+      {
+        "date": "2025-08-17",
+        "spot_price": 2.894,
+        "fair_value": 2.6725,
+        "deviation_pct": 8.29
+      },
+      {
+        "date": "2025-08-24",
+        "spot_price": 2.73,
+        "fair_value": 2.7168,
+        "deviation_pct": 0.48
+      },
+      {
+        "date": "2025-08-31",
+        "spot_price": 2.904,
+        "fair_value": 2.7004,
+        "deviation_pct": 7.54
+      },
+      {
+        "date": "2025-09-07",
+        "spot_price": 3.044,
+        "fair_value": 2.6883,
+        "deviation_pct": 13.23
+      },
+      {
+        "date": "2025-09-14",
+        "spot_price": 3.01,
+        "fair_value": 2.6627,
+        "deviation_pct": 13.04
+      },
+      {
+        "date": "2025-09-21",
+        "spot_price": 2.795,
+        "fair_value": 2.6477,
+        "deviation_pct": 5.56
+      },
+      {
+        "date": "2025-09-28",
+        "spot_price": 3.02,
+        "fair_value": 2.7355,
+        "deviation_pct": 10.4
+      },
+      {
+        "date": "2025-10-05",
+        "spot_price": 3.197,
+        "fair_value": 2.7561,
+        "deviation_pct": 16.0
+      },
+      {
+        "date": "2025-10-12",
+        "spot_price": 2.968,
+        "fair_value": 2.7636,
+        "deviation_pct": 7.4
+      },
+      {
+        "date": "2025-10-19",
+        "spot_price": 3.34,
+        "fair_value": 2.8689,
+        "deviation_pct": 16.42
+      },
+      {
+        "date": "2025-10-26",
+        "spot_price": 3.384,
+        "fair_value": 2.8629,
+        "deviation_pct": 18.2
+      },
+      {
+        "date": "2025-11-02",
+        "spot_price": 3.77,
+        "fair_value": 2.8383,
+        "deviation_pct": 32.82
+      },
+      {
+        "date": "2025-11-09",
+        "spot_price": 4.036,
+        "fair_value": 2.8266,
+        "deviation_pct": 42.79
+      },
+      {
+        "date": "2025-11-16",
+        "spot_price": 4.16,
+        "fair_value": 2.6524,
+        "deviation_pct": 56.84
+      },
+      {
+        "date": "2025-11-23",
+        "spot_price": 4.368,
+        "fair_value": 2.6145,
+        "deviation_pct": 67.07
+      },
+      {
+        "date": "2025-11-30",
+        "spot_price": 4.661,
+        "fair_value": 2.5433,
+        "deviation_pct": 83.27
+      },
+      {
+        "date": "2025-12-07",
+        "spot_price": 4.689,
+        "fair_value": 2.7181,
+        "deviation_pct": 72.51
+      },
+      {
+        "date": "2025-12-14",
+        "spot_price": 3.94,
+        "fair_value": 2.8763,
+        "deviation_pct": 36.98
+      },
+      {
+        "date": "2025-12-21",
+        "spot_price": 3.762,
+        "fair_value": 2.9912,
+        "deviation_pct": 25.77
+      },
+      {
+        "date": "2025-12-28",
+        "spot_price": 4.092,
+        "fair_value": 2.8462,
+        "deviation_pct": 43.77
+      },
+      {
+        "date": "2026-01-04",
+        "spot_price": 3.588,
+        "fair_value": 2.8407,
+        "deviation_pct": 26.31
+      },
+      {
+        "date": "2026-01-11",
+        "spot_price": 3.423,
+        "fair_value": 2.6071,
+        "deviation_pct": 31.29
+      },
+      {
+        "date": "2026-01-18",
+        "spot_price": 3.617,
+        "fair_value": 2.5257,
+        "deviation_pct": 43.21
+      },
+      {
+        "date": "2026-01-25",
+        "spot_price": 5.474,
+        "fair_value": 2.5566,
+        "deviation_pct": 114.11
+      },
+      {
+        "date": "2026-02-01",
+        "spot_price": 4.278,
+        "fair_value": 2.9691,
+        "deviation_pct": 44.09
+      },
+      {
+        "date": "2026-02-08",
+        "spot_price": 3.79,
+        "fair_value": 3.2569,
+        "deviation_pct": 16.37
+      },
+      {
+        "date": "2026-02-15",
+        "spot_price": 3.45,
+        "fair_value": 3.1298,
+        "deviation_pct": 10.23
+      },
+      {
+        "date": "2026-02-22",
+        "spot_price": 3.17,
+        "fair_value": 2.929,
+        "deviation_pct": 8.23
+      },
+      {
+        "date": "2026-03-01",
+        "spot_price": 3.186,
+        "fair_value": 3.0606,
+        "deviation_pct": 4.1
+      },
+      {
+        "date": "2026-03-08",
+        "spot_price": 3.179,
+        "fair_value": 3.0464,
+        "deviation_pct": 4.35
+      },
+      {
+        "date": "2026-03-15",
+        "spot_price": 3.12,
+        "fair_value": 3.0522,
+        "deviation_pct": 2.22
+      },
+      {
+        "date": "2026-03-22",
+        "spot_price": 2.979,
+        "fair_value": 3.1837,
+        "deviation_pct": -6.43
+      },
+      {
+        "date": "2026-03-29",
+        "spot_price": 2.952,
+        "fair_value": 3.0792,
+        "deviation_pct": -4.13
+      },
+      {
+        "date": "2026-04-05",
+        "spot_price": 2.852,
+        "fair_value": 3.0483,
+        "deviation_pct": -6.44
+      },
+      {
+        "date": "2026-04-12",
+        "spot_price": 2.66,
+        "fair_value": 3.0154,
+        "deviation_pct": -11.79
+      },
+      {
+        "date": "2026-04-19",
+        "spot_price": 2.694,
+        "fair_value": 2.8811,
+        "deviation_pct": -6.49
+      },
+      {
+        "date": "2026-04-26",
+        "spot_price": 2.616,
+        "fair_value": 2.8636,
+        "deviation_pct": -8.65
+      },
+      {
+        "date": "2026-05-03",
+        "spot_price": 2.764,
+        "fair_value": 2.9093,
+        "deviation_pct": -4.99
+      },
+      {
+        "date": "2026-05-10",
+        "spot_price": 2.864,
+        "fair_value": 2.9163,
+        "deviation_pct": -1.79
+      },
+      {
+        "date": "2026-05-17",
+        "spot_price": 2.987,
+        "fair_value": 2.93,
+        "deviation_pct": 1.95
+      },
+      {
+        "date": "2026-05-24",
+        "spot_price": 2.899,
+        "fair_value": 2.9375,
+        "deviation_pct": -1.31
+      },
+      {
+        "date": "2026-05-31",
+        "spot_price": 3.069,
+        "fair_value": 2.9596,
+        "deviation_pct": 3.7
+      },
+      {
+        "date": "2026-06-07",
+        "spot_price": 3.059,
+        "fair_value": 2.8826,
+        "deviation_pct": 6.12
+      },
+      {
+        "date": "2026-06-14",
+        "spot_price": 3.102,
+        "fair_value": 2.8941,
+        "deviation_pct": 7.18
+      },
+      {
+        "date": "2026-06-21",
+        "spot_price": 3.216,
+        "fair_value": 2.8974,
+        "deviation_pct": 11.0
+      },
+      {
+        "date": "2026-06-28",
+        "spot_price": 3.13,
+        "fair_value": 2.808,
+        "deviation_pct": 11.47
+      },
+      {
+        "date": "2026-07-05",
+        "spot_price": 3.222,
+        "fair_value": 2.7968,
+        "deviation_pct": 15.2
+      },
+      {
+        "date": "2026-07-12",
+        "spot_price": 2.878,
+        "fair_value": 2.7848,
+        "deviation_pct": 3.35
+      },
+      {
+        "date": "2026-07-19",
+        "spot_price": 2.824,
+        "fair_value": 2.7635,
+        "deviation_pct": 2.19
+      },
+      {
+        "date": "2026-07-26",
+        "spot_price": 2.78,
+        "fair_value": 2.7609,
+        "deviation_pct": 0.69
+      },
+      {
+        "date": "2026-07-30",
+        "spot_price": 2.799,
+        "fair_value": 2.7609,
+        "deviation_pct": 1.38
+      }
+    ],
+    "awaiting_drivers": [],
+    "model_anchor_price": 2.799,
+    "deviation_pct_model_anchor": 1.38,
+    "deviation_pct_trusted": true,
+    "deviation_pct_stale_untrusted": null,
+    "price_freshness": {
+      "provider": "oanda",
+      "symbol": "NATGAS_USD",
+      "timezone": "UTC",
+      "evaluated_at": "2026-08-03T12:23:49.968807+00:00",
+      "live_quote": {
+        "price": 2.785,
+        "bid": 2.782,
+        "ask": 2.788,
+        "as_of": "2026-08-03T12:22:56.335921932Z",
+        "age_hours": 0.015,
+        "status": "Current"
+      },
+      "latest_completed_daily": {
+        "date": "2026-07-30",
+        "close": 2.799,
+        "age_days": 4,
+        "status": "Current"
+      },
+      "latest_completed_weekly": {
+        "date": "2026-07-24",
+        "close": 2.799,
+        "age_days": 10,
+        "status": "Stale"
+      },
+      "forming_daily": {
+        "date": "2026-08-02",
+        "open": 2.724,
+        "high": 2.786,
+        "low": 2.72,
+        "close": 2.785,
+        "volume": 1322.0
+      },
+      "forming_weekly": {
+        "date": "2026-07-31",
+        "open": 2.724,
+        "high": 2.786,
+        "low": 2.72,
+        "close": 2.785,
+        "volume": 1322.0
+      },
+      "market_comparison": {
+        "price": 2.785,
+        "as_of": "2026-08-03T12:22:56.335921932Z",
+        "kind": "live_snapshot",
+        "age_hours": 0.015,
+        "status": "Current",
+        "trusted": true
+      },
+      "overall_status": "Current"
+    },
+    "price_comparison_gate": {
+      "fair_value": 2.7609,
+      "model_anchor_price": 2.799,
+      "market_comparison_price": 2.785,
+      "market_comparison_as_of": "2026-08-03T12:22:56.335921932Z",
+      "market_comparison_kind": "live_snapshot",
+      "market_price_status": "Current",
+      "deviation_pct_trusted": true,
+      "deviation_pct": 0.87,
+      "deviation_pct_stale_untrusted": null,
+      "warning": null
+    },
+    "valuation_state": "Fair Value",
+    "freshness_warnings": [],
+    "active_features": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "validated_features": [
+      "storage_surplus_bcf",
+      "production_yoy_pct"
+    ],
+    "experimental_features": [
+      "lng_exports",
+      "log_dxy",
+      "hdd_anomaly",
+      "cdd_anomaly"
+    ],
+    "informational_features": [
+      "working_gas_storage_level",
+      "seasonality_factor"
+    ],
+    "rejected_features": [
+      "raw_level",
+      "seasonal_deviation",
+      "trailing_zscore_156",
+      "chg_4w",
+      "chg_12w",
+      "v1_fullsample_zscore",
+      "dry_gas_production",
+      "dry_gas_production_level"
+    ],
+    "equation": "log(P) = 1.231183 + (-0.000799) * storage_surplus_bcf + (-0.021977) * production_yoy_pct; fair = exp(log(P))",
+    "regression": {
+      "n": 531,
+      "r_squared": 0.3075,
+      "adj_r_squared": 0.3049,
+      "intercept": 1.231183,
+      "features": {
+        "storage_surplus_bcf": -0.000799,
+        "production_yoy_pct": -0.021977
+      },
+      "p_values": {
+        "storage_surplus_bcf": 0.0,
+        "production_yoy_pct": 0.0
+      },
+      "t_stats": {
+        "storage_surplus_bcf": -14.9201,
+        "production_yoy_pct": -7.2314
+      },
+      "oos_r2": 0.256,
+      "oos_rmse": 0.34586,
+      "oos_mae": 0.255877
+    },
+    "driver_contributions": {
+      "storage_surplus_bcf": {
+        "value": 172.6,
+        "transformed_input": 172.6,
+        "coefficient": -0.000799,
+        "log_contribution": -0.137912,
+        "price_impact_pct": -12.8824,
+        "direction": "lowers fair value",
+        "label": "Storage surplus/deficit"
+      },
+      "production_yoy_pct": {
+        "value": 3.5365278569033713,
+        "transformed_input": 3.536528,
+        "coefficient": -0.021977,
+        "log_contribution": -0.077723,
+        "price_impact_pct": -7.4779,
+        "direction": "lowers fair value",
+        "label": "Production YoY %"
+      }
+    },
+    "contribution_breakdown": {
+      "space": "log_price",
+      "identity": "log(fair) = intercept + Σ (βᵢ · xᵢ); fair = exp(log(fair))",
+      "intercept_log_contribution": 1.231183,
+      "driver_contributions": {
+        "storage_surplus_bcf": {
+          "value": 172.6,
+          "transformed_input": 172.6,
+          "coefficient": -0.000799,
+          "log_contribution": -0.137912,
+          "price_impact_pct": -12.8824,
+          "direction": "lowers fair value",
+          "label": "Storage surplus/deficit"
+        },
+        "production_yoy_pct": {
+          "value": 3.5365278569033713,
+          "transformed_input": 3.536528,
+          "coefficient": -0.021977,
+          "log_contribution": -0.077723,
+          "price_impact_pct": -7.4779,
+          "direction": "lowers fair value",
+          "label": "Production YoY %"
+        }
+      },
+      "drivers": [
+        {
+          "feature": "storage_surplus_bcf",
+          "value": 172.6,
+          "transformed_input": 172.6,
+          "coefficient": -0.000799,
+          "log_contribution": -0.137912,
+          "price_impact_pct": -12.8824,
+          "direction": "lowers fair value",
+          "label": "Storage surplus/deficit",
+          "raw_observation": 172.6
+        },
+        {
+          "feature": "production_yoy_pct",
+          "value": 3.5365278569033713,
+          "transformed_input": 3.536528,
+          "coefficient": -0.021977,
+          "log_contribution": -0.077723,
+          "price_impact_pct": -7.4779,
+          "direction": "lowers fair value",
+          "label": "Production YoY %",
+          "raw_observation": 3.5365278569033713
+        }
+      ],
+      "sum_log_contributions": 1.015549,
+      "reconstructed_log_fair": 1.015549,
+      "reconstructed_fair_value": 2.7609,
+      "reconciliation_ok": true,
+      "market_price": 2.799,
+      "deviation_pct": 1.38,
+      "note": "price_impact_pct = 100*(exp(log_contribution)-1) is the multiplicative price-space effect of that driver term alone."
+    },
+    "v1_benchmark": {
+      "model_id": "ng_storage_v1",
+      "fair_value": 2.8221,
+      "deviation_pct": -0.82,
+      "confidence": "Medium",
+      "equation": "log(P) = 1.131379 + (-0.000544) * storage_surplus_bcf; fair = exp(log(P))",
+      "coefficients": {
+        "storage_surplus_bcf": -0.000544
+      },
+      "intercept": 1.131379,
+      "validated_drivers": [
+        "storage_surplus_bcf"
+      ],
+      "oos_r2": 0.1962,
+      "oos_rmse": 0.359504,
+      "r_squared": 0.239,
+      "n": 531
+    },
+    "v2_model": {
+      "model_id": "ng_storage_production_v2",
+      "available": true,
+      "fair_value": 2.7609,
+      "deviation_pct": 1.38,
+      "confidence": "High",
+      "equation": "log(P) = 1.231183 + (-0.000799) * storage_surplus_bcf + (-0.021977) * production_yoy_pct; fair = exp(log(P))",
+      "coefficients": {
+        "storage_surplus_bcf": -0.000799,
+        "production_yoy_pct": -0.021977
+      },
+      "intercept": 1.231183,
+      "validated_drivers": [
+        "storage_surplus_bcf",
+        "production_yoy_pct"
+      ],
+      "oos_r2": 0.256,
+      "oos_rmse": 0.34586,
+      "r_squared": 0.3075,
+      "n": 531,
+      "production_freshness": {
+        "usable": true,
+        "reason": "ok",
+        "stale": false,
+        "observation_date": "2026-05-15",
+        "age_days": 76,
+        "max_age_days": 100
+      }
+    },
+    "v1_fair_value": 2.8221,
+    "v2_fair_value": 2.7609,
+    "v1_v2_fair_value_diff": -0.0612,
+    "production_observation_date": "2026-05-15",
+    "production_yoy_value": 3.5365278569033713,
+    "storage_surplus_bcf_value": 172.6,
+    "scale": {
+      "pct": 51.5,
+      "band": "Fair Value",
+      "deviation_pct": 0.87
+    },
+    "summary_text": "Validated Two-Driver Fair Value. Active model `ng_storage_production_v2`. Fair value 2.7609. Model anchor (weekly) 2.7990. Market comparison 2.785 (Current); trusted deviation +0.87%. v1 benchmark fair 2.8221; v2 fair 2.7609; Δ(v2−v1)=-0.0612. Confidence=High.",
+    "model_note": "ng_storage_production_v2: features=['storage_surplus_bcf', 'production_yoy_pct'] R²=0.3075 OOS_R²=0.256 OOS_RMSE=0.34586 production_transformation=production_yoy_pct raw_level_used_in_fair_value=false",
+    "valuation_reason": "Active=ng_storage_production_v2; fair 2.7609; model_anchor 2.7990; market_comparison=2.785 status=Current; trusted_dev=0.87; confidence=High",
+    "pass": true,
+    "phase2_audit_ref": "data/audits/ng_driver_validation_phase2_production/phase2_production_validation.json",
+    "source_lineage": [
+      {
+        "source_name": "FRED",
+        "source_id": "DTWEXBGS",
+        "source_date": "2026-07-30"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "NW2_EPG0_SWO_R48_BCF_W",
+        "source_date": "2026-07-24"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "NW2_EPG0_SWO_R48_BCF_W",
+        "source_date": "2026-07-24"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "N9070US2",
+        "source_date": "2026-07-30"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "N9070US2",
+        "source_date": "2026-07-30"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "N9070US2",
+        "source_date": "2026-05-15",
+        "transformation": "production_yoy_pct",
+        "note": "YoY % on native monthly EIA dates; as-of to weekly price dates. Raw level not used in FV."
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "N9133US2",
+        "source_date": "2026-07-30"
+      },
+      {
+        "source_name": "EIA dnav hist_xls (official public download)",
+        "source_id": "N9133US2",
+        "source_date": "2026-07-30"
+      },
+      {
+        "source_name": "HPTL seasonality",
+        "source_id": "week_of_year_price_factor",
+        "source_date": "2026-07-30"
+      }
+    ]
+  }
+}

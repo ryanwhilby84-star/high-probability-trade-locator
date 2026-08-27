@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-07-06T18:44:23+00:00",
+  "model_id": "metals_real_yield_v1",
+  "markets": {
+    "Gold": {
+      "available": true,
+      "n_obs": 527,
+      "r_squared": 0.3666,
+      "trust_grade": "A",
+      "forward_weeks": 4,
+      "forward_return_correlation": -0.1097,
+      "mean_abs_deviation_pct": 25.39,
+      "sample_forward_pairs": 471,
+      "latest_deviation_pct": 71.46,
+      "latest_bias": "Overvalued"
+    },
+    "Silver": {
+      "available": true,
+      "n_obs": 526,
+      "r_squared": 0.2096,
+      "trust_grade": "A",
+      "forward_weeks": 4,
+      "forward_return_correlation": -0.0663,
+      "mean_abs_deviation_pct": 33.23,
+      "sample_forward_pairs": 470,
+      "latest_deviation_pct": 105.83,
+      "latest_bias": "Overvalued"
+    },
+    "Copper / HG": {
+      "available": false,
+      "reason": "Model R\u00b2 0.002 below gate 0.08."
+    },
+    "Platinum": {
+      "available": true,
+      "n_obs": 527,
+      "r_squared": 0.0928,
+      "trust_grade": "B",
+      "forward_weeks": 4,
+      "forward_return_correlation": -0.1044,
+      "mean_abs_deviation_pct": 17.25,
+      "sample_forward_pairs": 471,
+      "latest_deviation_pct": 45.35,
+      "latest_bias": "Overvalued"
+    },
+    "Palladium": {
+      "available": true,
+      "n_obs": 527,
+      "r_squared": 0.4121,
+      "trust_grade": "A",
+      "forward_weeks": 4,
+      "forward_return_correlation": -0.2684,
+      "mean_abs_deviation_pct": 20.97,
+      "sample_forward_pairs": 471,
+      "latest_deviation_pct": 27.76,
+      "latest_bias": "Overvalued"
+    }
+  }
+}

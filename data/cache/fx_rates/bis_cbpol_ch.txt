@@ -1,0 +1,2 @@
+FREQ,REF_AREA,UNIT_MEASURE,UNIT_MULT,TIME_FORMAT,COMPILATION,DECIMALS,SOURCE_REF,SUPP_INFO_BREAKS,TITLE,TIME_PERIOD,OBS_VALUE,OBS_STATUS,OBS_CONF,OBS_PRE_BREAK
+D,CH,368,0,,From 13 June 2019 onwards SNB Policy rate; From 1 Jan 2000 to 12 June 2019 mid-point of the SNB target range; from 1 Jan 1946 to 31 Dec 1999: discount rate.,4,Swiss National Bank,, Central bank policy rates - Switzerland - Daily - End of period,2026-06-23,0,A,F,

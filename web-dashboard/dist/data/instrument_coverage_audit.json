@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-06-03T05:26:26.673858+00:00",
-  "latest_calendar_week": "2026-05-26",
+  "generated_at": "2026-08-15T06:42:42.832792+00:00",
+  "latest_calendar_week": "2026-08-11",
   "summary": {
-    "total": 125,
+    "total": 140,
     "complete": 23,
     "cot_missing": 0,
     "cot_mapping_missing": 0,
-    "macro_only": 77,
+    "macro_only": 84,
     "proxy_required": 25,
     "broken_mapping": 0,
-    "no_data": 0,
-    "attention_eligible_count": 22,
+    "no_data": 8,
+    "attention_eligible_count": 29,
     "legacy_cot_markets": [
       "NASDAQ / NQ",
       "S&P 500 / ES",
@@ -29,12 +29,15 @@
       "Natural Gas / NG",
       "Coffee",
       "Cocoa",
+      "Cotton",
       "Corn",
       "Wheat",
       "Soybeans",
       "Sugar",
       "Platinum",
-      "Palladium"
+      "Palladium",
+      "Bitcoin",
+      "US Dollar Index / DX"
     ],
     "expected_direct_cot_count": 23
   },
@@ -45,11 +48,11 @@
       "asset_class": "indices",
       "subgroup": "us_index",
       "has_cot_mapping": true,
-      "cot_market_code": "NAS100USD",
+      "cot_market_code": "209742",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -59,7 +62,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "S&P 500 / ES",
@@ -67,11 +70,11 @@
       "asset_class": "indices",
       "subgroup": "us_index",
       "has_cot_mapping": true,
-      "cot_market_code": "SPX500USD",
+      "cot_market_code": "13874A",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -81,7 +84,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Dow / YM",
@@ -89,11 +92,11 @@
       "asset_class": "indices",
       "subgroup": "us_index",
       "has_cot_mapping": true,
-      "cot_market_code": "US30USD",
+      "cot_market_code": "124603",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 236,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -103,7 +106,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Euro FX / 6E",
@@ -111,11 +114,11 @@
       "asset_class": "fx",
       "subgroup": "fx_major",
       "has_cot_mapping": true,
-      "cot_market_code": "EUR_USD",
+      "cot_market_code": "099741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -125,7 +128,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "British Pound / 6B",
@@ -133,11 +136,11 @@
       "asset_class": "fx",
       "subgroup": "fx_major",
       "has_cot_mapping": true,
-      "cot_market_code": "GBP_USD",
+      "cot_market_code": "096742",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -147,7 +150,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Japanese Yen / 6J",
@@ -155,11 +158,11 @@
       "asset_class": "fx",
       "subgroup": "fx_major",
       "has_cot_mapping": true,
-      "cot_market_code": "USD_JPY",
+      "cot_market_code": "097741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -169,7 +172,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Swiss Franc / 6S",
@@ -177,11 +180,11 @@
       "asset_class": "fx",
       "subgroup": "fx_major",
       "has_cot_mapping": true,
-      "cot_market_code": "USD_CHF",
+      "cot_market_code": "092741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -191,7 +194,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Australian Dollar / 6A",
@@ -199,11 +202,11 @@
       "asset_class": "fx",
       "subgroup": "fx_commodity",
       "has_cot_mapping": true,
-      "cot_market_code": "AUD_USD",
+      "cot_market_code": "232741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -213,7 +216,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Canadian Dollar / 6C",
@@ -221,11 +224,11 @@
       "asset_class": "fx",
       "subgroup": "fx_commodity",
       "has_cot_mapping": true,
-      "cot_market_code": "USD_CAD",
+      "cot_market_code": "090741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -235,7 +238,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZ Dollar / 6N",
@@ -243,11 +246,11 @@
       "asset_class": "fx",
       "subgroup": "fx_commodity",
       "has_cot_mapping": true,
-      "cot_market_code": "NZD_USD",
+      "cot_market_code": "112741",
       "cot_report_type": "financial",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -257,7 +260,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold",
@@ -265,11 +268,11 @@
       "asset_class": "metals",
       "subgroup": "precious",
       "has_cot_mapping": true,
-      "cot_market_code": "Gold",
+      "cot_market_code": "088691",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -279,7 +282,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver",
@@ -287,21 +290,21 @@
       "asset_class": "metals",
       "subgroup": "precious",
       "has_cot_mapping": true,
-      "cot_market_code": "Silver",
+      "cot_market_code": "084691",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
       "macro_driver_profile": "silver",
       "has_price_proxy": false,
-      "attention_eligible": true,
-      "reason_if_not_attention_eligible": null,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "priority_tier_low_score_17",
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Copper / HG",
@@ -309,11 +312,11 @@
       "asset_class": "metals",
       "subgroup": "industrial",
       "has_cot_mapping": true,
-      "cot_market_code": "Copper / HG",
+      "cot_market_code": "085692",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -323,7 +326,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Crude Oil / CL",
@@ -331,11 +334,11 @@
       "asset_class": "commodities",
       "subgroup": "energy",
       "has_cot_mapping": true,
-      "cot_market_code": "Crude Oil / CL",
+      "cot_market_code": "067651",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 236,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -345,7 +348,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Natural Gas / NG",
@@ -353,11 +356,11 @@
       "asset_class": "commodities",
       "subgroup": "energy",
       "has_cot_mapping": true,
-      "cot_market_code": "Natural Gas / NG",
+      "cot_market_code": "023651",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -367,7 +370,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Coffee",
@@ -375,21 +378,21 @@
       "asset_class": "commodities",
       "subgroup": "soft",
       "has_cot_mapping": true,
-      "cot_market_code": "Coffee",
+      "cot_market_code": "083731",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
       "macro_driver_profile": "soft",
       "has_price_proxy": false,
-      "attention_eligible": false,
-      "reason_if_not_attention_eligible": "priority_tier_low_score_9",
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Cocoa",
@@ -397,11 +400,11 @@
       "asset_class": "commodities",
       "subgroup": "soft",
       "has_cot_mapping": true,
-      "cot_market_code": "Cocoa",
+      "cot_market_code": "073732",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -411,7 +414,29 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "Cotton",
+      "display_name": "Cotton",
+      "asset_class": "commodities",
+      "subgroup": "soft",
+      "has_cot_mapping": true,
+      "cot_market_code": "033661",
+      "cot_report_type": "disaggregated",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "soft",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Corn",
@@ -419,33 +444,11 @@
       "asset_class": "commodities",
       "subgroup": "ag",
       "has_cot_mapping": true,
-      "cot_market_code": "Corn",
+      "cot_market_code": "002602",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
-      "cot_resolved_latest_week": true,
-      "has_macro_transmission": true,
-      "macro_transmission_generic_only": false,
-      "macro_driver_profile": "ag",
-      "has_price_proxy": false,
-      "attention_eligible": true,
-      "reason_if_not_attention_eligible": null,
-      "data_status": "complete",
-      "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
-    },
-    {
-      "instrument_id": "Wheat",
-      "display_name": "Wheat",
-      "asset_class": "commodities",
-      "subgroup": "ag",
-      "has_cot_mapping": true,
-      "cot_market_code": "Wheat",
-      "cot_report_type": "disaggregated",
-      "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -455,19 +458,19 @@
       "reason_if_not_attention_eligible": "priority_tier_low_score_8",
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
-      "instrument_id": "Soybeans",
-      "display_name": "Soybeans",
+      "instrument_id": "Wheat",
+      "display_name": "Wheat",
       "asset_class": "commodities",
       "subgroup": "ag",
       "has_cot_mapping": true,
-      "cot_market_code": "Soybeans",
+      "cot_market_code": "001602",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -477,7 +480,29 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "Soybeans",
+      "display_name": "Soybeans",
+      "asset_class": "commodities",
+      "subgroup": "ag",
+      "has_cot_mapping": true,
+      "cot_market_code": "005602",
+      "cot_report_type": "disaggregated",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "ag",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "complete",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Sugar",
@@ -485,11 +510,11 @@
       "asset_class": "commodities",
       "subgroup": "soft",
       "has_cot_mapping": true,
-      "cot_market_code": "Sugar",
+      "cot_market_code": "080732",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -499,7 +524,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Platinum",
@@ -507,11 +532,11 @@
       "asset_class": "metals",
       "subgroup": "precious",
       "has_cot_mapping": true,
-      "cot_market_code": "Platinum",
+      "cot_market_code": "076651",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -521,7 +546,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Palladium",
@@ -529,21 +554,175 @@
       "asset_class": "metals",
       "subgroup": "precious",
       "has_cot_mapping": true,
-      "cot_market_code": "Palladium",
+      "cot_market_code": "075651",
       "cot_report_type": "disaggregated",
       "cot_proxy_of": null,
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": true,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
       "macro_driver_profile": "gold",
       "has_price_proxy": false,
-      "attention_eligible": true,
-      "reason_if_not_attention_eligible": null,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "priority_tier_low_score_14",
       "data_status": "complete",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "Bitcoin",
+      "display_name": "Bitcoin",
+      "asset_class": "crypto",
+      "subgroup": "major",
+      "has_cot_mapping": true,
+      "cot_market_code": "133741",
+      "cot_report_type": "legacy_futures_only",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 436,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "crypto",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US Dollar Index / DX",
+      "display_name": "US Dollar Index / DX",
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "has_cot_mapping": true,
+      "cot_market_code": "098662",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "usd_index",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 2-Year Treasury Yield",
+      "display_name": "US 2-Year Treasury Yield",
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "N/A",
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_2y",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 10-Year Treasury Yield",
+      "display_name": "US 10-Year Treasury Yield",
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "N/A",
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_10y",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 30-Year Treasury Yield",
+      "display_name": "US 30-Year Treasury Yield",
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "N/A",
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_30y",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "2s10s Yield Curve",
+      "display_name": "2s10s Yield Curve",
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "N/A",
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "curve_2s10s",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "10-Year Real Yield",
+      "display_name": "10-Year Real Yield",
+      "asset_class": "macro",
+      "subgroup": "us_rates",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": "N/A",
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": true,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "real_yield",
+      "has_price_proxy": false,
+      "attention_eligible": true,
+      "reason_if_not_attention_eligible": null,
+      "data_status": "no_data",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/CAD",
@@ -565,7 +744,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/CHF",
@@ -587,7 +766,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/HKD",
@@ -609,7 +788,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/JPY",
@@ -631,7 +810,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/NZD",
@@ -653,7 +832,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/SGD",
@@ -675,7 +854,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "AUD/USD",
@@ -686,8 +865,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Australian Dollar / 6A",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -697,7 +876,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Australia 200",
@@ -719,29 +898,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
-    },
-    {
-      "instrument_id": "Bitcoin",
-      "display_name": "Bitcoin",
-      "asset_class": "crypto",
-      "subgroup": "major",
-      "has_cot_mapping": false,
-      "cot_market_code": null,
-      "cot_report_type": null,
-      "cot_proxy_of": null,
-      "latest_cot_date_available": null,
-      "cot_rows_found": 0,
-      "cot_resolved_latest_week": false,
-      "has_macro_transmission": true,
-      "macro_transmission_generic_only": false,
-      "macro_driver_profile": "crypto",
-      "has_price_proxy": false,
-      "attention_eligible": false,
-      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
-      "data_status": "macro_only",
-      "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Bitcoin Cash",
@@ -763,7 +920,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Brent Crude Oil",
@@ -785,7 +942,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": "ICE Brent disaggregated exists but not mapped in pipeline",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "Broad US Dollar Index — DTWEXBGS",
+      "display_name": "Broad US Dollar Index — DTWEXBGS",
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "usd_broad",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Bund",
@@ -807,7 +986,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "CAD/HKD",
@@ -829,7 +1008,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "CAD/SGD",
@@ -851,7 +1030,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "CHF/HKD",
@@ -873,7 +1052,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "CHF/ZAR",
@@ -895,7 +1074,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "China A50",
@@ -917,7 +1096,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Copper",
@@ -928,8 +1107,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Copper / HG",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -939,7 +1118,7 @@
       "reason_if_not_attention_eligible": null,
       "data_status": "proxy_required",
       "expected_cot_note": "Copper / HG (proxy)",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/AUD",
@@ -961,7 +1140,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/CZK",
@@ -983,7 +1162,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/DKK",
@@ -1005,7 +1184,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "EUR/GBP",
+      "display_name": "EUR/GBP",
+      "asset_class": "fx",
+      "subgroup": "fx_cross",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "fx",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/HKD",
@@ -1027,7 +1228,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/HUF",
@@ -1049,7 +1250,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/NOK",
@@ -1071,7 +1272,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/NZD",
@@ -1093,7 +1294,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/SEK",
@@ -1115,7 +1316,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/SGD",
@@ -1137,7 +1338,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/TRY",
@@ -1159,7 +1360,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "EUR/ZAR",
@@ -1181,7 +1382,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Ethereum/Ether",
@@ -1203,7 +1404,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Europe 50",
@@ -1225,7 +1426,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "France 40",
@@ -1247,7 +1448,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/AUD",
@@ -1269,7 +1470,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/HKD",
@@ -1291,7 +1492,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/NZD",
@@ -1313,7 +1514,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/PLN",
@@ -1335,7 +1536,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/SGD",
@@ -1357,7 +1558,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "GBP/ZAR",
@@ -1379,7 +1580,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Germany 30",
@@ -1401,7 +1602,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/AUD",
@@ -1412,8 +1613,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1423,7 +1624,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/CAD",
@@ -1434,8 +1635,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1445,7 +1646,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/CHF",
@@ -1456,8 +1657,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1467,7 +1668,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/EUR",
@@ -1478,8 +1679,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1489,7 +1690,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/GBP",
@@ -1500,8 +1701,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1511,7 +1712,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/HKD",
@@ -1522,8 +1723,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1533,7 +1734,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/JPY",
@@ -1544,8 +1745,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1555,7 +1756,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/NZD",
@@ -1566,8 +1767,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1577,7 +1778,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/SGD",
@@ -1588,8 +1789,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Gold",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1599,7 +1800,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Gold/Silver",
@@ -1621,7 +1822,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "HKD/JPY",
@@ -1643,7 +1844,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Hong Kong 33",
@@ -1665,7 +1866,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "India 50",
@@ -1687,7 +1888,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Japan 225",
@@ -1709,7 +1910,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Litecoin",
@@ -1731,7 +1932,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/CAD",
@@ -1753,7 +1954,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/CHF",
@@ -1775,7 +1976,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/HKD",
@@ -1797,7 +1998,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/JPY",
@@ -1819,7 +2020,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/SGD",
@@ -1841,7 +2042,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "NZD/USD",
@@ -1852,8 +2053,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "NZ Dollar / 6N",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1863,7 +2064,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Netherlands 25",
@@ -1885,7 +2086,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "SGD/CHF",
@@ -1907,7 +2108,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "SGD/JPY",
@@ -1929,7 +2130,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/AUD",
@@ -1940,8 +2141,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1951,7 +2152,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/CAD",
@@ -1962,8 +2163,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1973,7 +2174,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/CHF",
@@ -1984,8 +2185,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -1995,7 +2196,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/EUR",
@@ -2006,8 +2207,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2017,7 +2218,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/GBP",
@@ -2028,8 +2229,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2039,7 +2240,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/HKD",
@@ -2050,8 +2251,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2061,7 +2262,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/JPY",
@@ -2072,8 +2273,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2083,7 +2284,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/NZD",
@@ -2094,8 +2295,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2105,7 +2306,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Silver/SGD",
@@ -2116,8 +2317,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Silver",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2127,7 +2328,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Singapore 30",
@@ -2149,7 +2350,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "TRY/JPY",
@@ -2171,7 +2372,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "Taiwan Index",
@@ -2193,7 +2394,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "UK 100",
@@ -2215,7 +2416,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "UK 10Y Gilt",
@@ -2237,7 +2438,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 10-Year T-Note / ZN",
+      "display_name": "US 10-Year T-Note / ZN",
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "has_cot_mapping": true,
+      "cot_market_code": "043602",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_10y_futures",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US 10Y T-Note",
@@ -2259,7 +2482,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 2-Year T-Note / ZT",
+      "display_name": "US 2-Year T-Note / ZT",
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "has_cot_mapping": true,
+      "cot_market_code": "042601",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_2y_futures",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US 2Y T-Note",
@@ -2281,7 +2526,51 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 30-Year T-Bond / ZB",
+      "display_name": "US 30-Year T-Bond / ZB",
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "has_cot_mapping": true,
+      "cot_market_code": "020601",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_30y_futures",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US 5-Year T-Note / ZF",
+      "display_name": "US 5-Year T-Note / ZF",
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "has_cot_mapping": true,
+      "cot_market_code": "044601",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_5y_futures",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US 5Y T-Note",
@@ -2303,7 +2592,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "US Dollar Index / DXY — ICE DX futures",
+      "display_name": "US Dollar Index / DXY — ICE DX futures",
+      "asset_class": "fx",
+      "subgroup": "usd_index",
+      "has_cot_mapping": false,
+      "cot_market_code": null,
+      "cot_report_type": null,
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "usd_index",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US Nas 100",
@@ -2314,8 +2625,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "NASDAQ / NQ",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2325,7 +2636,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": "NASDAQ / NQ (proxy)",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US Russ 2000",
@@ -2347,7 +2658,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": "no CFTC mini-Russell in current fut_fin feed",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US SPX 500",
@@ -2358,8 +2669,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "S&P 500 / ES",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 502,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2369,7 +2680,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": "S&P 500 / ES (proxy)",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US T-Bond",
@@ -2391,7 +2702,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "US Wall St 30",
@@ -2402,8 +2713,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Dow / YM",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 236,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2413,7 +2724,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": "Dow / YM (proxy)",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/CNH",
@@ -2435,7 +2746,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/CZK",
@@ -2457,7 +2768,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/DKK",
@@ -2479,7 +2790,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/HKD",
@@ -2501,7 +2812,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/HUF",
@@ -2523,7 +2834,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/INR",
@@ -2545,7 +2856,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/MXN",
@@ -2567,7 +2878,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/NOK",
@@ -2589,7 +2900,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/PLN",
@@ -2611,7 +2922,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/SAR",
@@ -2633,7 +2944,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/SEK",
@@ -2655,7 +2966,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/SGD",
@@ -2677,7 +2988,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/THB",
@@ -2699,7 +3010,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/TRY",
@@ -2721,7 +3032,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "USD/ZAR",
@@ -2743,7 +3054,29 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
+    },
+    {
+      "instrument_id": "Ultra 10-Year T-Note / TN",
+      "display_name": "Ultra 10-Year T-Note / TN",
+      "asset_class": "macro",
+      "subgroup": "us_treasury_futures",
+      "has_cot_mapping": true,
+      "cot_market_code": "043607",
+      "cot_report_type": "financial_futures_tff",
+      "cot_proxy_of": null,
+      "latest_cot_date_available": null,
+      "cot_rows_found": 0,
+      "cot_resolved_latest_week": false,
+      "has_macro_transmission": true,
+      "macro_transmission_generic_only": false,
+      "macro_driver_profile": "us_ultra_10y_futures",
+      "has_price_proxy": false,
+      "attention_eligible": false,
+      "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
+      "data_status": "macro_only",
+      "expected_cot_note": null,
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "West Texas Oil",
@@ -2754,8 +3087,8 @@
       "cot_market_code": null,
       "cot_report_type": null,
       "cot_proxy_of": "Crude Oil / CL",
-      "latest_cot_date_available": "2026-05-26",
-      "cot_rows_found": 13,
+      "latest_cot_date_available": "2026-08-11",
+      "cot_rows_found": 236,
       "cot_resolved_latest_week": false,
       "has_macro_transmission": true,
       "macro_transmission_generic_only": false,
@@ -2765,7 +3098,7 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "proxy_required",
       "expected_cot_note": "Crude Oil / CL (proxy)",
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     },
     {
       "instrument_id": "ZAR/JPY",
@@ -2787,198 +3120,30 @@
       "reason_if_not_attention_eligible": "macro_only_priority_low_score_8",
       "data_status": "macro_only",
       "expected_cot_note": null,
-      "latest_calendar_week": "2026-05-26"
+      "latest_calendar_week": "2026-08-11"
     }
   ],
   "priority_markets_debug": {
     "priority_markets": [
       {
-        "market": "Australian Dollar / 6A",
-        "canonical_id": "Australian Dollar / 6A",
+        "market": "Dow / YM",
+        "canonical_id": "Dow / YM",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 154.5,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Largest net liquidation in 12 weeks",
-        "icon": "🔥",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 154.5,
-          "cot_score_component": 22.5,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 120.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Gold",
-        "canonical_id": "Gold",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 134.5,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 134.5,
-          "cot_score_component": 22.5,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 100.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Canadian Dollar / 6C",
-        "canonical_id": "Canadian Dollar / 6C",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 121.2,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Largest net liquidation in 12 weeks",
-        "icon": "🔥",
-        "tactical_readable": "Wait for confirmation",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 121.2,
-          "cot_score_component": 21.2,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 88.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Copper / HG",
-        "canonical_id": "Copper / HG",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 114.9,
+        "priority_score": 110.7,
         "dominant_narrative": "Bull trend cooling at crowded levels — avoid momentum chasing; pullbacks only.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
+        "priority_headline": "Euphoric long crowding — poor chase RR",
+        "icon": "💀",
         "tactical_readable": "Avoid breakout longs",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 114.9,
-          "cot_score_component": 22.9,
+          "final_attention_score": 110.7,
+          "cot_score_component": 20.7,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 80.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Soybeans",
-        "canonical_id": "Soybeans",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 111.8,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 111.8,
-          "cot_score_component": 19.8,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 80.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Crude Oil / CL",
-        "canonical_id": "Crude Oil / CL",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 108.2,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 108.2,
-          "cot_score_component": 16.2,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 80.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Silver",
-        "canonical_id": "Silver",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 106.4,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Avoid chasing downside",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 106.4,
-          "cot_score_component": 14.4,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 80.0,
-          "data_confidence_score": 100.0,
-          "penalty_for_missing_data": 0.0
-        },
-        "inclusion_reason": "direct_cot_and_macro_top_score"
-      },
-      {
-        "market": "Euro FX / 6E",
-        "canonical_id": "Euro FX / 6E",
-        "priority_tier": "high_attention",
-        "priority_label": "HIGH ATTENTION",
-        "priority_score": 104.2,
-        "dominant_narrative": "Bull trend cooling — profit-taking within larger uptrend; buy pullbacks, not breakouts.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Buy pullbacks only",
-        "data_mode": "unknown",
-        "data_confidence_badge": "full_data",
-        "eligibility_label": "direct_cot_and_macro",
-        "scoring": {
-          "final_attention_score": 104.2,
-          "cot_score_component": 16.2,
-          "macro_score_component": 12.0,
-          "positioning_change_component": 0.0,
-          "anomaly_component": 76.0,
+          "anomaly_component": 78.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
@@ -2989,41 +3154,113 @@
         "canonical_id": "British Pound / 6B",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 98.5,
-        "dominant_narrative": "Accumulation tape but macro headwind — size down longs until backdrop improves.",
-        "priority_headline": "Fresh accumulation — first week in new structure",
-        "icon": "⚡",
+        "priority_score": 90.5,
+        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
+        "priority_headline": "Aggressive short covering this week",
+        "icon": "📈",
         "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 98.5,
+          "final_attention_score": 90.5,
           "cot_score_component": 4.5,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 82.0,
+          "anomaly_component": 74.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
         "inclusion_reason": "direct_cot_and_macro_top_score"
       },
       {
-        "market": "S&P 500 / ES",
-        "canonical_id": "S&P 500 / ES",
+        "market": "Canadian Dollar / 6C",
+        "canonical_id": "Canadian Dollar / 6C",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 91.8,
-        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Early accumulation behaviour emerging",
-        "icon": "👀",
+        "priority_score": 90.5,
+        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
+        "priority_headline": "Aggressive short covering this week",
+        "icon": "📈",
         "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 91.8,
-          "cot_score_component": 19.8,
+          "final_attention_score": 90.5,
+          "cot_score_component": 4.5,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 74.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Soybeans",
+        "canonical_id": "Soybeans",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 85.9,
+        "dominant_narrative": "Bull trend cooling at crowded levels — avoid momentum chasing; pullbacks only.",
+        "priority_headline": "Weak sponsorship — profit-taking into strength",
+        "icon": "⚠️",
+        "tactical_readable": "Wait for confirmation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 85.9,
+          "cot_score_component": 27.9,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 46.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Copper / HG",
+        "canonical_id": "Copper / HG",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 84.2,
+        "dominant_narrative": "Crowded long positioning — extension risk elevated; fade chasing breakouts.",
+        "priority_headline": "Euphoric long crowding — poor chase RR",
+        "icon": "💀",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 84.2,
+          "cot_score_component": 30.2,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 42.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Euro FX / 6E",
+        "canonical_id": "Euro FX / 6E",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 83.7,
+        "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
+        "priority_headline": "Crowded shorts — squeeze risk elevated",
+        "icon": "🚨",
+        "tactical_readable": "Avoid chasing downside",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 83.7,
+          "cot_score_component": 11.7,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
           "anomaly_component": 60.0,
@@ -3033,64 +3270,164 @@
         "inclusion_reason": "direct_cot_and_macro_top_score"
       },
       {
-        "market": "Platinum",
-        "canonical_id": "Platinum",
+        "market": "Sugar",
+        "canonical_id": "Sugar",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 80.6,
-        "dominant_narrative": "Bull trend cooling — profit-taking within larger uptrend; buy pullbacks, not breakouts.",
-        "priority_headline": "Weak sponsorship — profit-taking into strength",
-        "icon": "⚠️",
-        "tactical_readable": "Buy pullbacks only",
+        "priority_score": 81.8,
+        "dominant_narrative": "Accumulation tape but macro headwind — size down longs until backdrop improves.",
+        "priority_headline": "Early accumulation behaviour emerging",
+        "icon": "👀",
+        "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 80.6,
-          "cot_score_component": 12.6,
+          "final_attention_score": 81.8,
+          "cot_score_component": 33.8,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
-          "anomaly_component": 56.0,
+          "anomaly_component": 36.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
         "inclusion_reason": "direct_cot_and_macro_top_score"
       },
       {
-        "market": "Japanese Yen / 6J",
-        "canonical_id": "Japanese Yen / 6J",
+        "market": "Cocoa",
+        "canonical_id": "Cocoa",
         "priority_tier": "high_attention",
         "priority_label": "HIGH ATTENTION",
-        "priority_score": 74.1,
+        "priority_score": 78.8,
         "dominant_narrative": "Crowded shorts — squeeze risk if flow keeps improving against structure.",
-        "priority_headline": "Crowded shorts — squeeze risk elevated",
-        "icon": "🚨",
-        "tactical_readable": "Avoid chasing downside",
+        "priority_headline": "Early accumulation behaviour emerging",
+        "icon": "👀",
+        "tactical_readable": "Wait for confirmation",
         "data_mode": "unknown",
         "data_confidence_badge": "full_data",
         "eligibility_label": "direct_cot_and_macro",
         "scoring": {
-          "final_attention_score": 74.1,
-          "cot_score_component": 22.1,
+          "final_attention_score": 78.8,
+          "cot_score_component": 6.8,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 60.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "NZ Dollar / 6N",
+        "canonical_id": "NZ Dollar / 6N",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 74.5,
+        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
+        "priority_headline": "Aggressive short covering this week",
+        "icon": "📈",
+        "tactical_readable": "Wait for confirmation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 74.5,
+          "cot_score_component": 4.5,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 58.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Swiss Franc / 6S",
+        "canonical_id": "Swiss Franc / 6S",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 74.5,
+        "dominant_narrative": "Short squeeze risk building — avoid chasing breakdowns; rallies may run first.",
+        "priority_headline": "Aggressive short covering this week",
+        "icon": "📈",
+        "tactical_readable": "Wait for confirmation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 74.5,
+          "cot_score_component": 4.5,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 58.0,
+          "data_confidence_score": 100.0,
+          "penalty_for_missing_data": 0.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Cotton",
+        "canonical_id": "Cotton",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 66.7,
+        "dominant_narrative": "Crowded long positioning — extension risk elevated; fade chasing breakouts.",
+        "priority_headline": "Fresh positioning extreme — crowded longs",
+        "icon": "🚨",
+        "tactical_readable": "Avoid breakout longs",
+        "data_mode": "unknown",
+        "data_confidence_badge": "broken_incomplete",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 66.7,
+          "cot_score_component": 29.7,
           "macro_score_component": 12.0,
           "positioning_change_component": 0.0,
           "anomaly_component": 40.0,
+          "data_confidence_score": 50.0,
+          "penalty_for_missing_data": 15.0
+        },
+        "inclusion_reason": "direct_cot_and_macro_top_score"
+      },
+      {
+        "market": "Gold",
+        "canonical_id": "Gold",
+        "priority_tier": "high_attention",
+        "priority_label": "HIGH ATTENTION",
+        "priority_score": 64.9,
+        "dominant_narrative": "Bullish tape but macro headwind — size down longs until backdrop improves.",
+        "priority_headline": "Macro headwind into bullish structure",
+        "icon": "⚠️",
+        "tactical_readable": "Watch for continuation",
+        "data_mode": "unknown",
+        "data_confidence_badge": "full_data",
+        "eligibility_label": "direct_cot_and_macro",
+        "scoring": {
+          "final_attention_score": 64.9,
+          "cot_score_component": 36.9,
+          "macro_score_component": 12.0,
+          "positioning_change_component": 0.0,
+          "anomaly_component": 16.0,
           "data_confidence_score": 100.0,
           "penalty_for_missing_data": 0.0
         },
         "inclusion_reason": "direct_cot_and_macro_top_score"
       }
     ],
-    "total_actionable": 23,
-    "excluded_count": 103,
+    "total_actionable": 28,
+    "excluded_count": 111,
     "excluded_sample": [
       {
-        "market": "Coffee",
-        "reason": "priority_tier_low_score_9"
+        "market": "Silver",
+        "reason": "priority_tier_low_score_17"
       },
       {
-        "market": "Wheat",
+        "market": "Corn",
         "reason": "priority_tier_low_score_8"
+      },
+      {
+        "market": "Palladium",
+        "reason": "priority_tier_low_score_14"
       },
       {
         "market": "AUD/CAD",
@@ -3125,15 +3462,15 @@
         "reason": "macro_only_priority_low_score_8"
       },
       {
-        "market": "Bitcoin",
-        "reason": "macro_only_priority_low_score_8"
-      },
-      {
         "market": "Bitcoin Cash",
         "reason": "macro_only_priority_low_score_8"
       },
       {
         "market": "Brent Crude Oil",
+        "reason": "macro_only_priority_low_score_8"
+      },
+      {
+        "market": "Broad US Dollar Index — DTWEXBGS",
         "reason": "macro_only_priority_low_score_8"
       },
       {
@@ -3170,6 +3507,10 @@
       },
       {
         "market": "EUR/DKK",
+        "reason": "macro_only_priority_low_score_8"
+      },
+      {
+        "market": "EUR/GBP",
         "reason": "macro_only_priority_low_score_8"
       },
       {
@@ -3235,52 +3576,72 @@
       {
         "market": "GBP/SGD",
         "reason": "macro_only_priority_low_score_8"
-      },
-      {
-        "market": "GBP/ZAR",
-        "reason": "macro_only_priority_low_score_8"
-      },
-      {
-        "market": "Germany 30",
-        "reason": "macro_only_priority_low_score_8"
       }
     ],
     "eligible_not_in_top_n": [
       {
         "market": "NASDAQ / NQ",
-        "reason": "eligible_but_ranked_out: eligible_developing_score_38"
+        "reason": "eligible_but_ranked_out: eligible_developing_score_46"
       },
       {
-        "market": "Dow / YM",
-        "reason": "eligible_but_ranked_out: eligible_developing_score_35"
+        "market": "S&P 500 / ES",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_22"
       },
       {
-        "market": "Swiss Franc / 6S",
-        "reason": "eligible_but_ranked_out: eligible_watchlist_score_32"
+        "market": "Japanese Yen / 6J",
+        "reason": "eligible_but_ranked_out: eligible_developing_score_45"
       },
       {
-        "market": "NZ Dollar / 6N",
-        "reason": "eligible_but_ranked_out: eligible_high_attention_score_56"
+        "market": "Australian Dollar / 6A",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_22"
       },
       {
-        "market": "Natural Gas / NG",
-        "reason": "eligible_but_ranked_out: eligible_high_attention_score_59"
-      },
-      {
-        "market": "Cocoa",
-        "reason": "eligible_but_ranked_out: eligible_developing_score_35"
-      },
-      {
-        "market": "Corn",
+        "market": "Crude Oil / CL",
         "reason": "eligible_but_ranked_out: eligible_developing_score_44"
       },
       {
-        "market": "Sugar",
-        "reason": "eligible_but_ranked_out: eligible_high_attention_score_65"
+        "market": "Natural Gas / NG",
+        "reason": "eligible_but_ranked_out: eligible_high_attention_score_58"
       },
       {
-        "market": "Palladium",
+        "market": "Coffee",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_20"
+      },
+      {
+        "market": "Wheat",
+        "reason": "eligible_but_ranked_out: eligible_developing_score_54"
+      },
+      {
+        "market": "Platinum",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_23"
+      },
+      {
+        "market": "Bitcoin",
         "reason": "eligible_but_ranked_out: eligible_developing_score_34"
+      },
+      {
+        "market": "US Dollar Index / DX",
+        "reason": "eligible_but_ranked_out: eligible_high_attention_score_75"
+      },
+      {
+        "market": "US 2-Year Treasury Yield",
+        "reason": "eligible_but_ranked_out: eligible_high_attention_score_40"
+      },
+      {
+        "market": "US 10-Year Treasury Yield",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_12"
+      },
+      {
+        "market": "US 30-Year Treasury Yield",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_12"
+      },
+      {
+        "market": "2s10s Yield Curve",
+        "reason": "eligible_but_ranked_out: eligible_watchlist_score_0"
+      },
+      {
+        "market": "10-Year Real Yield",
+        "reason": "eligible_but_ranked_out: eligible_high_attention_score_40"
       },
       {
         "market": "Copper",

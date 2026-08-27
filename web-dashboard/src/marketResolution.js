@@ -14,6 +14,7 @@ export const TRACKED_MARKET_IDS = [
   'Australian Dollar / 6A',
   'Canadian Dollar / 6C',
   'NZ Dollar / 6N',
+  'US Dollar Index / DX',
   'Gold',
   'Silver',
   'Copper / HG',
@@ -21,9 +22,14 @@ export const TRACKED_MARKET_IDS = [
   'Natural Gas / NG',
   'Coffee',
   'Cocoa',
+  'Cotton',
   'Corn',
   'Wheat',
   'Soybeans',
+  'Sugar',
+  'Platinum',
+  'Palladium',
+  'Bitcoin',
 ]
 
 const norm = (m = '') => String(m || '').toLowerCase().trim()
@@ -52,6 +58,33 @@ export function canonicalMarketId(market = '') {
   if (m.includes('australian dollar') || m.includes('/ 6a') || m.includes('aud')) return 'Australian Dollar / 6A'
   if (m.includes('canadian dollar') || m.includes('/ 6c') || m.includes('cad')) return 'Canadian Dollar / 6C'
   if (m.includes('nz dollar') || m.includes('new zealand') || m.includes('/ 6n') || m.includes('nzd')) return 'NZ Dollar / 6N'
+  // Broad FRED series — never resolve to ICE DX / DXY futures.
+  if (
+    m.includes('broad us dollar') ||
+    m.includes('dtwexbgs') ||
+    m.includes('nominal broad')
+  ) {
+    return 'Broad US Dollar Index — DTWEXBGS'
+  }
+  // Explicit ICE DXY price identity (seasonality / retail DXY charts).
+  if (
+    m.includes('ice dx') ||
+    (m.includes('dxy') && m.includes('ice')) ||
+    m === 'us dollar index / dxy — ice dx futures'
+  ) {
+    return 'US Dollar Index / DXY — ICE DX futures'
+  }
+  // COT / TFF DX market (098662). Alias DXY/Dixie still lands here for positioning
+  // navigation; seasonality engine remaps price to ICE DXY explicitly.
+  if (
+    m.includes('us dollar index') ||
+    m.includes('dollar index') ||
+    m === 'dxy' ||
+    m.includes('dixie') ||
+    m.includes('/ dx')
+  ) {
+    return 'US Dollar Index / DX'
+  }
   if (m.includes('gold') || m.includes('/ gc')) return 'Gold'
   if (m.includes('silver') || m.includes('/ si')) return 'Silver'
   if (m.includes('copper') || m.includes('/ hg')) return 'Copper / HG'

@@ -1,12 +1,10 @@
 import React from 'react'
 import { AppShell, filterMarketsBySidebar, assetClassForMarket, assetClassLabel } from '../components/AppShell.jsx'
 import { getAssetClasses } from '../marketCatalog.js'
-import { PriorityMarketsPanel } from '../components/PriorityMarketsPanel.jsx'
-import { RelativeStrengthPanel } from '../components/RelativeStrengthPanel.jsx'
+import { CommercialAttentionPanel } from '../components/CommercialAttentionPanel.jsx'
+// Phase 6 UI cleanup: RelativeStrengthPanel / PriorityMarketsPanel retained on disk but hidden from Scanner.
 import { deriveActionLabel, positioningShiftMagnitude, loadWatchlist, toggleWatchlist } from '../marketCatalog.js'
 import {
-  buildPriorityBoardFromDebug,
-  buildPriorityBoardFromRows,
   priorityClass,
   priorityLabel,
   priorityTier,
@@ -73,9 +71,10 @@ export function ScannerPage({
   cotFeedStatus,
   loading,
   error,
-  scannerAttentionWeek,
-  priorityDebug,
-  relativeStrength,
+  scannerAttentionWeek: _scannerAttentionWeek,
+  priorityDebug: _priorityDebug,
+  commercialAttention,
+  relativeStrength: _relativeStrength,
   payloadGeneratedAt,
   economicCalendar,
   weatherContext,
@@ -116,24 +115,8 @@ export function ScannerPage({
     })
   }
 
-  const priorityBoard = React.useMemo(() => {
-    const gate = (markets) =>
-      radarEligibleOnly && Array.isArray(markets)
-        ? markets.filter((m) => isRadarEligible(m?.market))
-        : markets
-    if (priorityDebug?.calendar_week === date && priorityDebug?.priority_markets?.length) {
-      return buildPriorityBoardFromDebug(
-        { ...priorityDebug, priority_markets: gate(priorityDebug.priority_markets) },
-        { topN: 6 },
-      )
-    }
-    if (scannerAttentionWeek?.calendar_week === date && scannerAttentionWeek?.priority_markets?.length) {
-      if (!radarEligibleOnly) return scannerAttentionWeek
-      return { ...scannerAttentionWeek, priority_markets: gate(scannerAttentionWeek.priority_markets) }
-    }
-    const rows = radarEligibleOnly ? marketRows.filter((r) => isRadarEligible(r.market)) : marketRows
-    return buildPriorityBoardFromRows(rows, { topN: 6 })
-  }, [priorityDebug, scannerAttentionWeek, date, marketRows, radarEligibleOnly])
+  // Phase 6: Priority Markets board computation removed from UI (Commercial Attention is the ranking surface).
+  // Props scannerAttentionWeek / priorityDebug / relativeStrength retained for call-site compatibility.
 
   const rows = React.useMemo(() => {
     let list = marketRows.map((r) => ({
@@ -240,19 +223,7 @@ export function ScannerPage({
         </p>
       ) : null}
 
-      <p className="scanner-page-intro">
-        Radar mode: what changed, what matters, what to ignore. One dominant narrative per market — expand for layer
-        detail. Not a buy/sell signal engine.
-      </p>
-
-      <RelativeStrengthPanel
-        relativeStrength={
-          relativeStrength?.calendar_week === date ? relativeStrength : null
-        }
-        calendarWeek={date}
-      />
-
-      <PriorityMarketsPanel board={priorityBoard} calendarWeek={date} />
+      <CommercialAttentionPanel doc={commercialAttention} radarEligibleOnly={radarEligibleOnly} topN={8} />
 
       <div className="ws-toolbar">
         <input
@@ -393,7 +364,17 @@ export function ScannerPage({
                       <p className="scanner-dominant-narrative">{r.narrative || '—'}</p>
                       {r.tactical ? <p className="scanner-tactical-line">{r.tactical}</p> : null}
                     </td>
-                    <td className="scanner-net-cell">{fmtNum(r.one_week_net_change)}</td>
+                    <td
+                      className={`scanner-net-cell${
+                        Number(r.one_week_net_change) > 0
+                          ? ' hptl-tone-bull'
+                          : Number(r.one_week_net_change) < 0
+                            ? ' hptl-tone-bear'
+                            : ''
+                      }`}
+                    >
+                      {fmtNum(r.one_week_net_change)}
+                    </td>
                     <td>
                       <button
                         type="button"

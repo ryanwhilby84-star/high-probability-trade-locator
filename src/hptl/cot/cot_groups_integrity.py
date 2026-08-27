@@ -73,6 +73,7 @@ INSTRUMENT_PREFERRED_CFTC_CODE: dict[str, str] = {
     "Sugar": "080732",
     "Platinum": "076651",
     "Palladium": "075651",
+    "Cotton": "033661",
     **{v: k for k, v in FINANCIAL_INDEX_CODE_TO_TARGET.items()},
 }
 

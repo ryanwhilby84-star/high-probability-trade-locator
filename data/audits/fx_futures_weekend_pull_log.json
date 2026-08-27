@@ -1,0 +1,344 @@
+{
+  "phase": "1G-C Weekend FX Futures Pull",
+  "generated_at": "2026-08-15T07:22:35.161028+00:00",
+  "sources": [
+    {
+      "source_name": "price:yahoo_futures",
+      "requested_series": "US Dollar Index / DX",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-14",
+      "detail": "bars=14122 proxy=DTWEXBGS"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "Euro FX / 6E",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2648 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "British Pound / 6B",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2649 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "Australian Dollar / 6A",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2647 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "Canadian Dollar / 6C",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2659 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:yahoo_futures",
+      "requested_series": "Japanese Yen / 6J",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-14",
+      "detail": "bars=6466 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "Swiss Franc / 6S",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2653 proxy=OANDA FX"
+    },
+    {
+      "source_name": "price:oanda",
+      "requested_series": "NZ Dollar / 6N",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": "stored_history_preserved",
+      "latest_date": "2026-08-13",
+      "detail": "bars=2657 proxy=OANDA FX"
+    },
+    {
+      "source_name": "FRED",
+      "requested_series": "DFF",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-31",
+      "detail": "3865 observations"
+    },
+    {
+      "source_name": "FRED",
+      "requested_series": "DGS2",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "2644 observations"
+    },
+    {
+      "source_name": "FRED",
+      "requested_series": "DGS10",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-31",
+      "detail": "2645 observations"
+    },
+    {
+      "source_name": "ECB",
+      "requested_series": "eur_2y_history",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "n=2699"
+    },
+    {
+      "source_name": "ECB",
+      "requested_series": "eur_10y_history",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "n=2699"
+    },
+    {
+      "source_name": "ECB",
+      "requested_series": "eur_dfr_history",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-06-17",
+      "detail": "n=21"
+    },
+    {
+      "source_name": "GBP history",
+      "requested_series": "GBP.y2",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-05-29",
+      "detail": "n=11981"
+    },
+    {
+      "source_name": "JPY history",
+      "requested_series": "JPY.y2",
+      "status": "fail",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": null,
+      "detail": "n=0"
+    },
+    {
+      "source_name": "AUD history",
+      "requested_series": "AUD.y2",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-06-24",
+      "detail": "n=3218"
+    },
+    {
+      "source_name": "CAD history",
+      "requested_series": "CAD.y2",
+      "status": "ok",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "n=2640"
+    },
+    {
+      "source_name": "CHF history",
+      "requested_series": "CHF.y2",
+      "status": "fail",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": null,
+      "detail": "n=0"
+    },
+    {
+      "source_name": "NZD history",
+      "requested_series": "NZD.y2",
+      "status": "fail",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": null,
+      "detail": "n=0"
+    },
+    {
+      "source_name": "ingest:USD",
+      "requested_series": "USD policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-01",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:EUR",
+      "requested_series": "EUR policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-06-30",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:GBP",
+      "requested_series": "GBP policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-06-30",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:JPY",
+      "requested_series": "JPY policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:AUD",
+      "requested_series": "AUD policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-06-24",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:NZD",
+      "requested_series": "NZD policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-05-01",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:CAD",
+      "requested_series": "CAD policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2026-07-30",
+      "detail": "status=WARN"
+    },
+    {
+      "source_name": "ingest:CHF",
+      "requested_series": "CHF policy/y2/y10",
+      "status": "warn",
+      "error": null,
+      "fallback_attempted": null,
+      "latest_date": "2025-07-31",
+      "detail": "status=WARN"
+    }
+  ],
+  "prices": {
+    "DX": {
+      "instrument": "US Dollar Index / DX",
+      "provider": "yahoo_futures",
+      "status": "ok",
+      "daily_bars": 14122,
+      "last_date": "2026-08-14",
+      "price_as_of": "2026-08-14",
+      "error": null
+    },
+    "6E": {
+      "instrument": "Euro FX / 6E",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2648,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.055177583Z",
+      "error": null
+    },
+    "6B": {
+      "instrument": "British Pound / 6B",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2649,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.054923919Z",
+      "error": null
+    },
+    "6A": {
+      "instrument": "Australian Dollar / 6A",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2647,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.050425856Z",
+      "error": null
+    },
+    "6C": {
+      "instrument": "Canadian Dollar / 6C",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2659,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.060570496Z",
+      "error": null
+    },
+    "6J": {
+      "instrument": "Japanese Yen / 6J",
+      "provider": "yahoo_futures",
+      "status": "ok",
+      "daily_bars": 6466,
+      "last_date": "2026-08-14",
+      "price_as_of": "2026-08-14",
+      "error": null
+    },
+    "6S": {
+      "instrument": "Swiss Franc / 6S",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2653,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.061180188Z",
+      "error": null
+    },
+    "6N": {
+      "instrument": "NZ Dollar / 6N",
+      "provider": "oanda",
+      "status": "ok",
+      "daily_bars": 2657,
+      "last_date": "2026-08-13",
+      "price_as_of": "2026-08-14T20:59:05.044794912Z",
+      "error": null
+    }
+  },
+  "macro": {
+    "currency_rates": {
+      "USD": "WARN",
+      "EUR": "WARN",
+      "GBP": "WARN",
+      "JPY": "WARN",
+      "AUD": "WARN",
+      "NZD": "WARN",
+      "CAD": "WARN",
+      "CHF": "WARN"
+    }
+  }
+}

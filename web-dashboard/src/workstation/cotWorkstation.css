@@ -1,0 +1,1929 @@
+.cot-workstation {
+  position: relative;
+  /* Phase 1 unified-canvas tokens: one surface, hairline separators, aligned edges. */
+  --ws-canvas-bg: #0b1220;
+  --ws-separator: rgba(148, 163, 184, 0.1);
+  --ws-separator-strong: rgba(148, 163, 184, 0.16);
+  --ws-pane-pad-x: 0px;
+  --ws-pane-pad-top: 3px;
+  --ws-pane-pad-bottom: 4px;
+  --ws-pane-pad-bottom-axis: 8px;
+  --ws-header-pad: 3px 10px 2px;
+  --ws-label: #cbd5e1;
+  --ws-label-muted: #94a3b8;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 12px;
+  background: var(--ws-canvas-bg);
+}
+
+.cot-ws-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 2px 8px;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(11, 18, 32, 0.95) 100%);
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.cot-ws-crosshair-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #bae6fd;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  min-width: 96px;
+}
+
+.cot-ws-panel--price {
+  border-bottom: 1px solid var(--ws-separator);
+}
+
+.cot-ws-panel--price .cot-ws-panel-body {
+  min-height: 360px;
+}
+
+.cot-ws-panels--camera .cot-ws-panel-body {
+  cursor: grab;
+}
+
+.cot-ws-panels--camera .cot-ws-panel-body:active {
+  cursor: grabbing;
+}
+
+.cot-ws-panels--camera .cot-ws-panel--price .cot-ws-panel-body {
+  cursor: grab;
+}
+
+.cot-ws-panels--camera .cot-ws-panel--price .cot-ws-panel-body:active {
+  cursor: grabbing;
+}
+
+.cot-ws-panel--price .cot-ws-chart-plot {
+  padding: var(--ws-pane-pad-top) var(--ws-pane-pad-x) var(--ws-pane-pad-bottom);
+  box-sizing: border-box;
+}
+
+.cot-ws-panel--cot .cot-ws-panel-body {
+  /* Do not use contain:paint — it can hide research pin overlays in some browsers. */
+  isolation: isolate;
+}
+
+.cot-ws-panel--cot .cot-ws-chart-plot {
+  padding: var(--ws-pane-pad-top) var(--ws-pane-pad-x) var(--ws-pane-pad-bottom);
+  box-sizing: border-box;
+}
+
+.cot-ws-panel--retail .cot-ws-panel-body {
+  padding-bottom: var(--ws-pane-pad-bottom);
+}
+
+.cot-ws-panel--retail .cot-ws-chart-plot {
+  padding-bottom: var(--ws-pane-pad-bottom-axis);
+}
+
+.cot-ws-chart-plot {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Keep LWC canvas under research pins / event markers. */
+.cot-ws-chart-plot > .cot-ws-chart-canvas,
+.cot-ws-chart-plot > .ws-chart-pane-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.cot-ws-drawing-host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cot-ws-panel-body .cot-ws-chart-canvas {
+  filter: contrast(1.02);
+}
+
+.cot-ws-toolbar-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.cot-ws-history {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.cot-ws-weeks {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.cot-ws-toolbar-center {
+  flex: 1;
+  text-align: center;
+}
+
+.cot-ws-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cot-ws-range-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cot-ws-range-btn {
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+  background: rgba(15, 23, 42, 0.8);
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.cot-ws-range-btn:hover {
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.cot-ws-range-btn.active {
+  color: #0f172a;
+  background: #38bdf8;
+  border-color: #38bdf8;
+}
+
+.cot-ws-panels {
+  display: flex;
+  flex-direction: column;
+  min-height: min-content;
+  padding-bottom: 20px;
+}
+
+.cot-ws-canvas-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: var(--ws-canvas-bg);
+}
+
+/* One continuous surface: no separate group background, just a hairline flow line. */
+.cot-ws-cot-group {
+  flex-shrink: 0;
+  border-top: 1px solid var(--ws-separator-strong);
+  background: transparent;
+}
+
+.cot-ws-panel--cot {
+  border-bottom-color: var(--ws-separator);
+}
+
+.cot-ws-panel--cot:last-child {
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+
+.cot-ws-panels--camera {
+  cursor: grab;
+}
+
+.cot-ws-panels--camera:active {
+  cursor: grabbing;
+}
+
+.cot-ws-panels--axis-hover,
+body.cot-ws-axis-magnify,
+body.cot-ws-axis-magnify .cot-ws-panels--camera {
+  cursor: ns-resize;
+}
+
+body.cot-ws-axis-magnify .cot-ws-panels--camera:active {
+  cursor: ns-resize;
+}
+
+.cot-ws-panels--camera .cot-ws-panel-body {
+  touch-action: auto;
+}
+
+.cot-ws-panels--camera .cot-ws-chart-canvas {
+  touch-action: none;
+}
+
+.cot-ws-panel {
+  border-bottom: 1px solid var(--ws-separator);
+  flex-shrink: 0;
+  min-height: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.cot-ws-range-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  color: #64748b;
+  max-width: 320px;
+  line-height: 1.35;
+}
+
+.cot-ws-panel-body {
+  position: relative;
+  min-height: 120px;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.cot-ws-panel-body .ws-chart-pane,
+.cot-ws-panel-body .ws-chart-pane-plot,
+.cot-ws-panel-body .ws-chart-pane-canvas,
+.cot-ws-panel-body .cot-ws-chart-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.cot-ws-chart-pane .ws-chart-pane-plot {
+  position: relative;
+  height: 100%;
+}
+
+.cot-ws-chart-canvas {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.cot-ws-chart-canvas--ready {
+  opacity: 1;
+}
+
+.cot-ws-chart-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.35) 0%,
+    rgba(11, 18, 32, 0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cot-ws-chart-skeleton--panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  position: relative;
+}
+
+.cot-ws-chart-skeleton-label {
+  font-size: 11px;
+  color: #475569;
+  letter-spacing: 0.04em;
+}
+
+.cot-workstation--loading .cot-ws-range-btn {
+  opacity: 0.55;
+}
+
+.cot-ws-chart-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  background: rgba(11, 18, 32, 0.72);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cot-ws-live-price-hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  max-width: calc(100% - 88px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(11, 18, 32, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  pointer-events: none;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #cbd5e1;
+}
+
+.cot-ws-live-price-badge {
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  background: #38bdf8;
+}
+
+.cot-ws-live-price-badge--stale {
+  background: #fbbf24;
+  color: #422006;
+}
+
+.cot-ws-live-price-badge--fallback {
+  background: #94a3b8;
+  color: #0f172a;
+}
+
+.cot-ws-live-price-badge--offline {
+  background: #64748b;
+  color: #f8fafc;
+}
+
+.cot-ws-live-price-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.cot-ws-live-price-ts {
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+}
+
+.cot-ws-live-price-diag {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+  color: #64748b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9px;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+.cot-ws-panel--price-empty .cot-ws-panel-body {
+  min-height: 72px;
+}
+
+/* Hide lightweight-charts / TradingView attribution logo */
+.cot-ws-chart-canvas a[href*='tradingview'],
+.cot-ws-chart-canvas a[target='_blank'] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.cot-ws-panel-resize-handle {
+  flex-shrink: 0;
+  height: 7px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: row-resize;
+  position: relative;
+  z-index: 2;
+}
+
+.cot-ws-panel-resize-handle::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 3px;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.14);
+  transition: background 0.15s ease, height 0.15s ease;
+}
+
+.cot-ws-panel-resize-handle:hover::after,
+body.cot-ws-panel-resizing .cot-ws-panel-resize-handle::after {
+  height: 2px;
+  background: rgba(56, 189, 248, 0.55);
+}
+
+body.cot-ws-panel-resizing {
+  cursor: row-resize;
+  user-select: none;
+}
+
+.cot-ws-status {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.cot-ws-status--error {
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+.cot-ws-status-detail {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.cot-workstation--fullscreen {
+  margin-top: 0;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cot-workstation--fullscreen .cot-ws-toolbar {
+  flex-shrink: 0;
+}
+
+/* Research chrome + stage are part of the normal fullscreen workstation shell.
+   Keep chrome visible; charts fill remaining height under it. */
+.cot-workstation--fullscreen .cot-ws-research-chrome,
+.cot-workstation--fullscreen .cot-ws-weekly-inspector--drawer {
+  flex-shrink: 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-research-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Phase 2 — one continuous surface fitted to the viewport (no vertical scroll).
+   Price is the hero pane; the COT group and its three panes flex to fill the
+   remaining height as equal indicators beneath it. Density (bar spacing / scale
+   margins) is intentionally unchanged here — that is Phase 3. */
+.cot-workstation--fullscreen .cot-ws-canvas-scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cot-workstation--fullscreen .cot-ws-panels {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+/* Price is a compact market-context viewport at the top. */
+.cot-workstation--fullscreen .cot-ws-panel--price {
+  flex: var(--ws-price-flex, 29) 1 0;
+  min-height: 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
+  min-height: 0;
+}
+
+/* COT positioning is the primary product — owns the majority of the surface. */
+.cot-workstation--fullscreen .cot-ws-cot-group {
+  flex: var(--ws-cot-group-flex, 71) 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--cot {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+/* No OHLC: collapse price so the COT indicators dominate the surface. */
+.cot-workstation--fullscreen.cot-workstation--no-ohlc .cot-ws-panel--price {
+  flex: var(--ws-price-flex-no-ohlc, 10) 1 0;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-panel-body {
+  padding-bottom: 6px;
+}
+
+.cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-chart-plot {
+  padding-bottom: 2px;
+}
+
+.cot-ws-panel-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  padding: 4px 10px 7px;
+  border-top: 1px solid var(--ws-separator);
+  font-size: 10px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  background: transparent;
+}
+
+.cot-ws-panel-stats-group {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 9px;
+  margin-right: 2px;
+}
+
+.cot-ws-stat-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.cot-ws-stat-item-label {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cot-ws-stat-item-value {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.cot-ws-stat-item--up .cot-ws-stat-item-value {
+  color: #34d399;
+}
+
+.cot-ws-stat-item--down .cot-ws-stat-item-value {
+  color: #f87171;
+}
+
+.cot-ws-stat-item--flat .cot-ws-stat-item-value {
+  color: #94a3b8;
+}
+
+.cot-ws-range-btn--fit {
+  margin-right: 2px;
+}
+
+.cot-workstation--no-ohlc .cot-ws-panel--price-empty .cot-ws-panel-body {
+  min-height: 72px;
+}
+
+/* --- Toolbar freshness + reload controls --------------------------------- */
+.cot-ws-stale-view {
+  padding: 3px 9px;
+  border-radius: 5px;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #fee2e2;
+  background: #dc2626;
+  cursor: pointer;
+  animation: cot-ws-stale-pulse 1.4s ease-in-out infinite;
+}
+
+.cot-ws-stale-view:hover {
+  background: #ef4444;
+}
+
+@keyframes cot-ws-stale-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.cot-ws-reload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.8);
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.cot-ws-reload-btn:hover:not(:disabled) {
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.cot-ws-reload-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* --- Aligned vertical LATEST marker (per pane) --------------------------- */
+.cot-ws-latest-vline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(56, 189, 248, 0.55);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cot-ws-latest-vline-label {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  background: rgba(56, 189, 248, 0.9);
+}
+
+/* --- TradingView-style in-pane legend (indicator name + latest value) ---- */
+.cot-ws-pane-legend {
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 1px 2px;
+  pointer-events: none;
+  font-size: 11px;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(3, 7, 18, 0.85);
+}
+
+/* Small per-pane "Fit Y" control — fits only this pane to the visible range. */
+.cot-ws-fit-y-btn {
+  position: absolute;
+  top: 5px;
+  right: calc(var(--ws-price-scale-width, 56px) + 6px);
+  z-index: 5;
+  padding: 1px 6px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.55);
+  color: #cbd5e1;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.cot-ws-chart-plot:hover .cot-ws-fit-y-btn {
+  opacity: 0.85;
+}
+
+.cot-ws-fit-y-btn:hover {
+  opacity: 1;
+  background: rgba(30, 41, 59, 0.9);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.cot-ws-pane-legend-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.cot-ws-pane-legend-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.cot-ws-pane-legend-chg {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.cot-ws-pane-legend-chg-key {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.cot-ws-pane-legend-delta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+}
+
+.cot-ws-pane-legend-delta--up {
+  color: #4ade80;
+}
+
+.cot-ws-pane-legend-delta--down {
+  color: #f87171;
+}
+
+.cot-ws-pane-legend-delta--flat {
+  color: #94a3b8;
+}
+
+/* --- Research intelligence chrome (chart-first) ------------------------- */
+
+.cot-ws-research-chrome {
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.28);
+  background: rgba(15, 23, 42, 0.96);
+  padding: 2px 8px 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cot-ws-research-chrome--analysis-only {
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 26px;
+}
+
+.cot-ws-research-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.cot-ws-research-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cot-ws-insp-btn.is-active {
+  border-color: rgba(251, 191, 36, 0.55);
+  color: #fde68a;
+}
+
+.cot-ws-research-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(30, 41, 59, 0.65);
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.cot-ws-research-toggle.is-on {
+  border-color: rgba(20, 184, 166, 0.55);
+  background: rgba(15, 118, 110, 0.22);
+  color: #ccfbf1;
+}
+
+.cot-ws-research-toggle-count {
+  min-width: 18px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  opacity: 0.85;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.cot-ws-research-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.cot-ws-research-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cot-ws-research-legend-shape {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.cot-ws-event-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 22px;
+}
+
+.cot-ws-event-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
+.cot-ws-event-nav-toggle {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(30, 41, 59, 0.7);
+  color: #e2e8f0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.cot-ws-event-nav-counts {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
+.cot-ws-event-nav-count--extreme { color: #fbbf24; }
+.cot-ws-event-nav-count--divergence { color: #2dd4bf; }
+.cot-ws-event-nav-count--rotation { color: #38bdf8; }
+.cot-ws-event-nav-count--nr { color: #c084fc; }
+
+.cot-ws-event-nav-total {
+  color: #64748b;
+}
+
+.cot-ws-research-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cot-ws-research-tooltip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 8;
+  width: min(280px, calc(100% - 24px));
+  padding: 8px 10px;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.cot-ws-research-tooltip--slim {
+  width: min(240px, calc(100% - 24px));
+}
+
+.cot-ws-research-tooltip-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+
+.cot-ws-research-tooltip-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cot-ws-research-tooltip-grid span {
+  color: #64748b;
+}
+
+.cot-ws-research-tooltip-grid strong {
+  color: #f8fafc;
+  font-weight: 650;
+}
+
+.cot-ws-research-tooltip-hint {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.cot-ws-research-card {
+  /* Bottom-left so recent right-side EX/DIV pins stay clickable. */
+  position: absolute;
+  left: 12px;
+  right: auto;
+  top: auto;
+  bottom: 12px;
+  z-index: 9;
+  width: min(380px, calc(100% - 24px));
+  max-height: min(420px, calc(100% - 24px));
+  overflow: auto;
+  padding: 16px 18px;
+  border: 2px solid rgba(45, 212, 191, 0.8);
+  background: rgba(11, 18, 32, 0.98);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  color: #e2e8f0;
+}
+
+.cot-ws-research-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cot-ws-research-card-kicker {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #5eead4;
+}
+
+.cot-ws-research-card-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: #f8fafc;
+  margin-top: 2px;
+}
+
+.cot-ws-research-card-date {
+  font-size: 13px;
+  color: #e2e8f0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.cot-ws-research-card-close {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.cot-ws-research-card-state {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cot-ws-research-card-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #5eead4;
+  margin: 8px 0 4px;
+}
+
+.cot-ws-research-card-cases {
+  font-size: 16px;
+  color: #f8fafc;
+  margin-bottom: 10px;
+}
+
+.cot-ws-research-card-cases strong {
+  font-size: 28px;
+  font-weight: 900;
+  margin-right: 8px;
+  color: #5eead4;
+}
+
+.cot-ws-research-horizons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.cot-ws-research-horizon {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(30, 41, 59, 0.45);
+  padding: 6px 7px;
+}
+
+.cot-ws-research-horizon-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-bottom: 3px;
+}
+
+.cot-ws-research-horizon-body {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.cot-ws-research-card-quality {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.cot-ws-research-card-tendency {
+  color: #94a3b8;
+}
+
+.cot-ws-research-card-note {
+  margin: 8px 0 0;
+  font-size: 10px;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.cot-ws-event-btn {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(30, 41, 59, 0.9);
+  color: #e2e8f0;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cot-ws-event-btn:hover {
+  border-color: rgba(15, 118, 110, 0.55);
+  color: #ccfbf1;
+}
+
+.cot-ws-event-btn--ghost {
+  background: transparent;
+  margin-right: 4px;
+  margin-top: 2px;
+}
+
+.cot-ws-analogue-jumps {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.cot-ws-event-vline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid rgba(251, 113, 133, 0.75);
+  pointer-events: none;
+  z-index: 5;
+  transform: translateX(-1px);
+  box-shadow: none;
+}
+
+.cot-ws-event-vline-label {
+  display: none;
+}
+
+/* Compact research markers — diamonds / circles, no permanent text boxes */
+.cot-ws-research-pins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: visible;
+}
+
+.cot-ws-research-pin {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 51;
+}
+
+.cot-ws-research-pin-mark {
+  display: block;
+  width: 7px;
+  height: 7px;
+  box-sizing: border-box;
+  border: 1px solid rgba(15, 23, 42, 0.75);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.cot-ws-research-pin--shape-diamond .cot-ws-research-pin-mark,
+.cot-ws-research-pin--shape-split-diamond .cot-ws-research-pin-mark,
+.cot-ws-research-pin--shape-diamond-outline .cot-ws-research-pin-mark {
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+.cot-ws-research-pin--shape-circle .cot-ws-research-pin-mark {
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+}
+
+.cot-ws-research-pin--shape-split-diamond .cot-ws-research-pin-mark {
+  background: linear-gradient(135deg, #2dd4bf 50%, rgba(15, 23, 42, 0.35) 50%);
+}
+
+.cot-ws-research-pin--shape-diamond-outline .cot-ws-research-pin-mark {
+  background: transparent;
+  border-width: 1.5px;
+}
+
+.cot-ws-research-pin--extreme .cot-ws-research-pin-mark {
+  background: #fbbf24;
+  border-color: rgba(15, 23, 42, 0.7);
+}
+
+.cot-ws-research-pin--divergence .cot-ws-research-pin-mark {
+  background: #2dd4bf;
+}
+
+.cot-ws-research-pin--rotation .cot-ws-research-pin-mark {
+  background: #38bdf8;
+}
+
+.cot-ws-research-pin--nr .cot-ws-research-pin-mark {
+  background: #c084fc;
+  border-color: #f5d0fe;
+}
+
+.cot-ws-research-pin--nr.cot-ws-research-pin--shape-diamond-outline .cot-ws-research-pin-mark {
+  background: rgba(192, 132, 252, 0.2);
+  border-color: #e9d5ff;
+}
+
+.cot-ws-research-pin.is-selected .cot-ws-research-pin-mark {
+  background: #fb7185;
+  border-color: #fff;
+  box-shadow:
+    0 0 0 1px rgba(251, 113, 133, 0.9),
+    0 0 8px rgba(251, 113, 133, 0.55);
+  width: 8px;
+  height: 8px;
+  transition: box-shadow 180ms ease-out, background 180ms ease-out;
+}
+
+.cot-ws-research-pins--price .cot-ws-research-pin {
+  top: 2px;
+  opacity: 0.9;
+}
+
+/* Expanded event chips — single horizontal scroller, small height */
+.cot-ws-research-chip-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  max-height: 28px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1px 0 2px;
+}
+
+.cot-ws-research-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #0f172a;
+  line-height: 1.2;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.cot-ws-research-chip--extreme {
+  background: #fbbf24;
+}
+
+.cot-ws-research-chip--divergence {
+  background: #2dd4bf;
+}
+
+.cot-ws-research-chip--rotation {
+  background: #38bdf8;
+}
+
+.cot-ws-research-chip--nr {
+  background: #c084fc;
+}
+
+.cot-ws-research-chip.is-selected {
+  outline: 1px solid #fb7185;
+  outline-offset: 1px;
+}
+
+.cot-ws-research-chip-tag {
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.cot-ws-research-chip-group {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+}
+
+.cot-ws-research-chip-date {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+/* Click-to-open drawer — absent from layout when closed (charts reclaim height) */
+.cot-ws-weekly-inspector--drawer {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(11, 18, 32, 0.98);
+  color: #e2e8f0;
+  font-size: 10px;
+  pointer-events: auto;
+  height: auto;
+  max-height: min(46vh, 420px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  animation: cot-ws-insp-open 180ms ease-out;
+}
+
+.cot-ws-weekly-inspector--drawer.is-expanded {
+  height: auto;
+  max-height: min(56vh, 520px);
+  overflow: auto;
+}
+
+@keyframes cot-ws-insp-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Compact hover chip — no layout impact */
+.cot-ws-week-hover-chip {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 8;
+  min-width: 140px;
+  max-width: 240px;
+  padding: 6px 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+  font-size: 11px;
+  pointer-events: none;
+  animation: cot-ws-insp-open 150ms ease-out;
+}
+
+.cot-ws-week-hover-chip-date {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #bae6fd;
+  margin-bottom: 3px;
+}
+
+.cot-ws-week-hover-chip-events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.cot-ws-week-hover-chip-none {
+  color: #64748b;
+  font-size: 10px;
+}
+
+.cot-ws-insp-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 4px 10px 3px;
+  min-height: 28px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  flex-shrink: 0;
+}
+
+.cot-ws-insp-kicker {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.cot-ws-insp-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.cot-ws-insp-date {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: #bae6fd;
+}
+
+.cot-ws-insp-price {
+  color: #cbd5e1;
+}
+
+.cot-ws-insp-price strong {
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.cot-ws-insp-fresh--latest { color: #86efac; font-weight: 700; }
+.cot-ws-insp-fresh--stale { color: #fbbf24; font-weight: 700; }
+.cot-ws-insp-fresh--historical { color: #94a3b8; font-weight: 700; }
+
+.cot-ws-insp-locked {
+  color: #fda4af;
+  font-weight: 700;
+}
+
+.cot-ws-insp-preview {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.cot-ws-insp-head-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.cot-ws-insp-btn {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.8);
+  color: #e2e8f0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.cot-ws-insp-btn--ghost {
+  background: transparent;
+}
+
+.cot-ws-insp-narratives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 10px 2px;
+  flex-shrink: 0;
+}
+
+.cot-ws-insp-narrative {
+  flex: 1 1 220px;
+  min-width: 200px;
+  text-align: left;
+  padding: 5px 8px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cot-ws-insp-narrative.is-selected {
+  border-color: rgba(251, 191, 36, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.35);
+}
+
+.cot-ws-insp-narrative-kicker {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+}
+
+.cot-ws-insp-narrative-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.cot-ws-insp-narrative-body {
+  font-size: 10px;
+  line-height: 1.35;
+  color: #cbd5e1;
+  white-space: normal;
+}
+
+.cot-ws-insp-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  flex: 0 0 auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 4px 6px 2px;
+}
+
+.cot-ws-insp-col {
+  flex: 1 1 220px;
+  min-width: 200px;
+  max-width: 100%;
+  padding: 0 8px 6px;
+  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  overflow: visible;
+}
+
+.cot-ws-insp-col:last-child {
+  border-right: none;
+}
+
+.cot-ws-insp-col-title {
+  margin: 0 0 3px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+}
+
+.cot-ws-insp-measure {
+  font-size: 9px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cot-ws-insp-flow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(30, 41, 59, 0.45);
+  min-height: 20px;
+}
+
+.cot-ws-insp-flow-pct {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+  min-width: 28px;
+}
+
+.cot-ws-insp-flow-arrow {
+  font-size: 11px;
+  font-weight: 900;
+  min-width: 18px;
+  text-align: center;
+}
+
+.cot-ws-insp-flow-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #cbd5e1;
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.25;
+}
+
+.cot-ws-insp-flow--heating_rapidly,
+.cot-ws-insp-col--temp-heating_rapidly {
+  border-color: rgba(239, 68, 68, 0.55);
+  background: rgba(127, 29, 29, 0.28);
+}
+.cot-ws-insp-flow--heating_rapidly .cot-ws-insp-flow-arrow { color: #f87171; }
+
+.cot-ws-insp-flow--heating,
+.cot-ws-insp-col--temp-heating {
+  border-color: rgba(249, 115, 22, 0.5);
+  background: rgba(154, 52, 18, 0.22);
+}
+.cot-ws-insp-flow--heating .cot-ws-insp-flow-arrow { color: #fb923c; }
+
+.cot-ws-insp-flow--cooling_from_extreme,
+.cot-ws-insp-col--temp-cooling_from_extreme {
+  border-color: rgba(251, 146, 60, 0.35);
+  background: rgba(120, 53, 15, 0.14);
+}
+.cot-ws-insp-flow--cooling_from_extreme .cot-ws-insp-flow-arrow { color: #fdba74; }
+
+.cot-ws-insp-flow--deepening_extreme,
+.cot-ws-insp-col--temp-deepening_extreme {
+  border-color: rgba(139, 92, 246, 0.55);
+  background: rgba(76, 29, 149, 0.28);
+}
+.cot-ws-insp-flow--deepening_extreme .cot-ws-insp-flow-arrow { color: #c4b5fd; }
+
+.cot-ws-insp-flow--recovering,
+.cot-ws-insp-col--temp-recovering,
+.cot-ws-insp-flow--recovering_strong,
+.cot-ws-insp-col--temp-recovering_strong {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(30, 58, 138, 0.22);
+}
+.cot-ws-insp-flow--recovering .cot-ws-insp-flow-arrow,
+.cot-ws-insp-flow--recovering_strong .cot-ws-insp-flow-arrow { color: #93c5fd; }
+
+.cot-ws-insp-flow--building,
+.cot-ws-insp-col--temp-building {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(6, 78, 59, 0.18);
+}
+.cot-ws-insp-flow--building .cot-ws-insp-flow-arrow { color: #6ee7b7; }
+
+.cot-ws-insp-flow--weakening,
+.cot-ws-insp-col--temp-weakening {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(51, 65, 85, 0.25);
+}
+.cot-ws-insp-flow--weakening .cot-ws-insp-flow-arrow { color: #94a3b8; }
+
+.cot-ws-insp-flow--elevated_stable,
+.cot-ws-insp-flow--depressed_stable,
+.cot-ws-insp-flow--neutral,
+.cot-ws-insp-col--temp-elevated_stable,
+.cot-ws-insp-col--temp-depressed_stable,
+.cot-ws-insp-col--temp-neutral {
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+.cot-ws-insp-group-summary {
+  margin: 4px 0 0;
+  font-size: 9px;
+  line-height: 1.3;
+  color: #94a3b8;
+  white-space: normal;
+  overflow: visible;
+}
+
+.cot-ws-insp-col--temp-heating_rapidly,
+.cot-ws-insp-col--temp-heating,
+.cot-ws-insp-col--temp-cooling_from_extreme,
+.cot-ws-insp-col--temp-deepening_extreme,
+.cot-ws-insp-col--temp-recovering,
+.cot-ws-insp-col--temp-recovering_strong,
+.cot-ws-insp-col--temp-building,
+.cot-ws-insp-col--temp-weakening {
+  border-radius: 3px;
+}
+
+.cot-ws-insp-metrics {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2px 10px;
+}
+
+.cot-ws-insp-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.cot-ws-insp-metric--state {
+  grid-column: 1 / -1;
+}
+
+.cot-ws-insp-metric-label {
+  color: #64748b;
+  font-weight: 600;
+  flex: 0 1 auto;
+  white-space: normal;
+}
+
+.cot-ws-insp-metric-value {
+  color: #e2e8f0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.cot-ws-insp-dir--rising .cot-ws-insp-metric-value,
+.cot-ws-insp-dir--rising { color: #86efac; }
+.cot-ws-insp-dir--falling .cot-ws-insp-metric-value,
+.cot-ws-insp-dir--falling { color: #fda4af; }
+.cot-ws-insp-dir--flat .cot-ws-insp-metric-value,
+.cot-ws-insp-dir--flat { color: #94a3b8; }
+
+.cot-ws-insp-summary-row {
+  flex-shrink: 0;
+  padding: 3px 10px 5px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  min-height: 28px;
+}
+
+.cot-ws-insp-integrity-fail {
+  margin: 6px 10px 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  background: rgba(127, 29, 29, 0.35);
+  color: #fecaca;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.cot-ws-insp-integrity-fail strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #fee2e2;
+  letter-spacing: 0.04em;
+}
+
+.cot-ws-insp-integrity-fail p {
+  margin: 0.2rem 0;
+}
+
+.cot-ws-insp-integrity-fail code {
+  color: #fde68a;
+}
+
+.cot-ws-insp-integrity-missing {
+  margin: 0.25rem 0 0.5rem 1.1rem;
+  padding: 0;
+}
+
+.cot-ws-integrity-panel {
+  margin: 16px;
+  padding: 16px 18px;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  background: rgba(127, 29, 29, 0.28);
+  color: #fecaca;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  max-width: 52rem;
+}
+
+.cot-ws-integrity-panel strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.04em;
+  color: #fee2e2;
+}
+
+.cot-ws-integrity-panel code {
+  color: #fde68a;
+}
+
+.cot-ws-integrity-panel ul {
+  margin: 0.25rem 0 0.75rem 1.2rem;
+}
+
+.cot-ws-integrity-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cot-ws-insp-summary {
+  margin: 0;
+  line-height: 1.35;
+  color: #cbd5e1;
+  display: block;
+  overflow: visible;
+  white-space: normal;
+}
+
+.cot-ws-weekly-inspector--drawer.is-expanded .cot-ws-insp-summary {
+  display: block;
+  overflow: visible;
+}
+
+.cot-ws-insp-detail {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+  padding: 6px 10px 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.55);
+  flex-shrink: 0;
+}
+
+.cot-ws-insp-detail-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.cot-ws-insp-muted {
+  margin: 0;
+  color: #64748b;
+}
+
+.cot-ws-insp-events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cot-ws-insp-event {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(30, 41, 59, 0.55);
+  color: #e2e8f0;
+  text-align: left;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.cot-ws-insp-event.is-selected {
+  border-color: #fb7185;
+}
+
+.cot-ws-insp-event-badge {
+  font-weight: 900;
+  min-width: 28px;
+}
+
+.cot-ws-insp-event--extreme .cot-ws-insp-event-badge { color: #fbbf24; }
+.cot-ws-insp-event--divergence .cot-ws-insp-event-badge { color: #2dd4bf; }
+.cot-ws-insp-event--rotation .cot-ws-insp-event-badge { color: #38bdf8; }
+.cot-ws-insp-event--nr .cot-ws-insp-event-badge { color: #c084fc; }
+
+.cot-ws-insp-event-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cot-ws-insp-event-explain {
+  margin: 2px 0 4px;
+  padding-left: 4px;
+  color: #94a3b8;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.cot-ws-insp-analogue-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cot-ws-insp-cases {
+  color: #cbd5e1;
+  margin-bottom: 4px;
+}
+
+.cot-ws-insp-horizons {
+  display: flex;
+  gap: 10px;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1100px) {
+  .cot-ws-insp-columns {
+    flex-wrap: wrap;
+    overflow-y: auto;
+  }
+
+  .cot-ws-insp-col {
+    flex: 1 1 45%;
+    border-right: none;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    padding-bottom: 4px;
+    margin-bottom: 2px;
+  }
+
+  .cot-ws-insp-detail {
+    grid-template-columns: 1fr;
+  }
+}
