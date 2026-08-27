@@ -26,6 +26,36 @@ function fmtRatio(value) {
   return `${Number(value).toFixed(1)}x`
 }
 
+function evidenceRead(lookback, evidence) {
+  const hit = Number(evidence?.hitRatePct)
+  const expectancy = Number(evidence?.expectancyPct)
+  const rr = Number(evidence?.rewardRiskMedian)
+  const n = Number(evidence?.sampleCount)
+  const direction = lookback?.expectedDirection === 'down' ? 'lower' : 'higher'
+
+  if (![hit, expectancy, n].every(Number.isFinite)) {
+    return { label: 'NO READ', text: 'Not enough completed history to form a useful directional read.' }
+  }
+
+  if (n < 6) {
+    return { label: 'TOO EARLY', text: `Only ${n} independent episodes are available. Treat this as context, not evidence.` }
+  }
+
+  if (hit >= 60 && expectancy > 0 && (!Number.isFinite(rr) || rr >= 1)) {
+    return { label: 'SUPPORTIVE', text: `Historically this setup has favoured a move ${direction}; the hit rate, expectancy and payoff profile agree.` }
+  }
+
+  if (hit >= 55 && expectancy > 0) {
+    return { label: 'LEAN', text: `History leans ${direction}, but the edge is not strong enough to use on its own.` }
+  }
+
+  if (hit <= 45 || expectancy < 0) {
+    return { label: 'WEAK / CONTRARY', text: `This percentile extreme has not produced a dependable move ${direction}. The COT extreme alone is not enough here.` }
+  }
+
+  return { label: 'MIXED', text: `Historical outcomes are mixed. Use the COT condition as context and wait for stronger confluence.` }
+}
+
 function useBasicSelectedWeekLookback(week) {
   const marketId = week?.instrument || ''
   const selectedDate = week?.date || null
@@ -112,6 +142,10 @@ export function BasicLookbackPanel({ week }) {
 
   const evidence = lookback.primaryEvidence || {}
   const confidence = lookback.sampleConfidence || {}
+  const read = evidenceRead(lookback, evidence)
+  const timing = evidence.medianWeeksTo5 != null
+    ? `A 5% favourable move, when reached, took a median ${evidence.medianWeeksTo5} weeks.`
+    : 'A 5% favourable move was not reached often enough to give useful timing.'
 
   return (
     <section className="cot-lookback" aria-label="Historical lookback">
@@ -141,6 +175,13 @@ export function BasicLookbackPanel({ week }) {
       <div className={`cot-lookback-confidence is-${confidence.tone || 'low'}`}>
         <strong>{confidence.grade || '—'}</strong>
         <span>{confidence.label || 'Evidence unavailable'}</span>
+      </div>
+
+      <div className="cot-lookback-read">
+        <div className="cot-lookback-kicker">WHAT HISTORY SAYS · {lookback.primaryHorizon}W</div>
+        <strong>{read.label}</strong>
+        <p>{read.text}</p>
+        <p>{timing} Typical favourable excursion was {fmtPct(evidence.medianMfePct)} versus {fmtPct(evidence.medianMaePct)} adverse.</p>
       </div>
 
       <div className="cot-lookback-table" role="table" aria-label="Forward price outcomes">
