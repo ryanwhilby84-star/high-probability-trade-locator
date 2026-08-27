@@ -21,6 +21,11 @@ function fmtRate(value) {
   return `${Math.round(Number(value))}%`
 }
 
+function fmtRatio(value) {
+  if (value == null || !Number.isFinite(Number(value))) return '—'
+  return `${Number(value).toFixed(1)}x`
+}
+
 function useBasicSelectedWeekLookback(week) {
   const marketId = week?.instrument || ''
   const selectedDate = week?.date || null
@@ -45,9 +50,7 @@ function useBasicSelectedWeekLookback(week) {
         if (!cancelled) setInspectorBlock(null)
       })
 
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
   }, [marketId])
 
   return React.useMemo(() => {
@@ -92,8 +95,8 @@ export function BasicLookbackPanel({ week }) {
   if (!lookback) {
     return (
       <section className="cot-lookback cot-lookback--loading" aria-label="Historical lookback">
-        <div className="cot-lookback-kicker">LOOKBACK · BASIC V1</div>
-        <p>Preparing historical cohort…</p>
+        <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V2</div>
+        <p>Preparing historical episodes…</p>
       </section>
     )
   }
@@ -101,30 +104,51 @@ export function BasicLookbackPanel({ week }) {
   if (!lookback.available) {
     return (
       <section className="cot-lookback cot-lookback--empty" aria-label="Historical lookback">
-        <div className="cot-lookback-kicker">LOOKBACK · BASIC V1</div>
+        <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V2</div>
         <p>{lookback.reason || 'Lookback unavailable for this week.'}</p>
       </section>
     )
   }
 
+  const evidence = lookback.primaryEvidence || {}
+  const confidence = lookback.sampleConfidence || {}
+
   return (
     <section className="cot-lookback" aria-label="Historical lookback">
       <div className="cot-lookback-head">
         <div>
-          <div className="cot-lookback-kicker">LOOKBACK · BASIC V1</div>
+          <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V2</div>
           <div className="cot-lookback-rule">{lookback.cohortLabel}</div>
+          <div className="cot-lookback-direction">
+            Historical direction: <strong>{lookback.expectedDirection === 'down' ? 'LOWER' : 'HIGHER'}</strong>
+          </div>
         </div>
         <div className="cot-lookback-count">
-          <strong>{lookback.priorMatchCount}</strong>
-          <span>prior matching weeks</span>
+          <strong>{lookback.priorEpisodeCount}</strong>
+          <span>independent episodes</span>
         </div>
+      </div>
+
+      <div className="cot-lookback-evidence-grid">
+        <div><span>{lookback.primaryHorizon}W hit rate</span><strong>{fmtRate(evidence.hitRatePct)}</strong></div>
+        <div><span>Expectancy</span><strong className={evidence.expectancyPct > 0 ? 'is-positive' : evidence.expectancyPct < 0 ? 'is-negative' : ''}>{fmtPct(evidence.expectancyPct)}</strong></div>
+        <div><span>Median MFE</span><strong className="is-positive">{fmtPct(evidence.medianMfePct)}</strong></div>
+        <div><span>Median MAE</span><strong className="is-negative">{fmtPct(evidence.medianMaePct)}</strong></div>
+        <div><span>Winner / loser</span><strong>{fmtRatio(evidence.rewardRiskMedian)}</strong></div>
+        <div><span>+5% reached</span><strong>{fmtRate(evidence.hit5RatePct)}</strong></div>
+      </div>
+
+      <div className={`cot-lookback-confidence is-${confidence.tone || 'low'}`}>
+        <strong>{confidence.grade || '—'}</strong>
+        <span>{confidence.label || 'Evidence unavailable'}</span>
       </div>
 
       <div className="cot-lookback-table" role="table" aria-label="Forward price outcomes">
         <div className="cot-lookback-row cot-lookback-row--head" role="row">
           <span>Horizon</span>
+          <span>Hit</span>
           <span>Median</span>
-          <span>Higher</span>
+          <span>MFE / MAE</span>
           <span>N</span>
         </div>
         {lookback.horizons.map((horizon) => {
@@ -132,16 +156,11 @@ export function BasicLookbackPanel({ week }) {
           return (
             <div className="cot-lookback-row" role="row" key={horizon}>
               <strong>{horizon}W</strong>
-              <span className={
-                outcome.medianReturnPct > 0
-                  ? 'is-positive'
-                  : outcome.medianReturnPct < 0
-                    ? 'is-negative'
-                    : ''
-              }>
+              <span>{fmtRate(outcome.hitRatePct)}</span>
+              <span className={outcome.medianReturnPct > 0 ? 'is-positive' : outcome.medianReturnPct < 0 ? 'is-negative' : ''}>
                 {fmtPct(outcome.medianReturnPct)}
               </span>
-              <span>{fmtRate(outcome.positiveRatePct)}</span>
+              <span>{fmtPct(outcome.medianMfePct)} / {fmtPct(outcome.medianMaePct)}</span>
               <span>{outcome.sampleCount ?? 0}</span>
             </div>
           )
@@ -149,7 +168,7 @@ export function BasicLookbackPanel({ week }) {
       </div>
 
       <p className="cot-lookback-note">
-        Point-in-time only · no future data beyond {week?.date || 'the selected week'} is used.
+        Consecutive matching weeks count as one episode · seasonality excluded · point-in-time only through {week?.date || 'the selected week'}.
       </p>
     </section>
   )
