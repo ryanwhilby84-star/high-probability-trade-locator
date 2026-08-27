@@ -7,6 +7,7 @@ import {
 
 /**
  * Per-market drawing store with localStorage persistence.
+ * Drawing tools are one-shot by default: place a line/shape, then return to Select.
  */
 export function useWorkstationDrawings(marketId) {
   const [drawings, setDrawings] = React.useState([])
@@ -26,7 +27,20 @@ export function useWorkstationDrawings(marketId) {
       setDrawings([])
     }
     setSelectedId(null)
+    setActiveTool('select')
   }, [marketId])
+
+  React.useEffect(() => {
+    const onKey = (event) => {
+      if (event.key !== 'Escape') return
+      const tag = String(event.target?.tagName || '').toLowerCase()
+      if (tag === 'input' || tag === 'textarea' || event.target?.isContentEditable) return
+      setActiveTool('select')
+      setSelectedId(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const persist = React.useCallback(
     (next) => {
@@ -55,6 +69,7 @@ export function useWorkstationDrawings(marketId) {
       }
       persist((prev) => [...(prev || []), drawing])
       setSelectedId(drawing.id)
+      setActiveTool('select')
       return drawing
     },
     [persist],
@@ -79,6 +94,7 @@ export function useWorkstationDrawings(marketId) {
   const clearDrawings = React.useCallback(() => {
     persist([])
     setSelectedId(null)
+    setActiveTool('select')
   }, [persist])
 
   const deleteSelected = React.useCallback(() => {
