@@ -33,7 +33,6 @@ RECOMMENDED_CHUNK_DAYS = 500
 MIN_YEARS_10Y = 10.0
 MIN_BARS_10Y = 252 * 8
 
-# (display symbol, OANDA instrument, HTPL price-store key)
 TEST_PAIRS: tuple[tuple[str, str, str], ...] = (
     ("EURUSD", "EUR_USD", "Euro FX / 6E"),
     ("GBPUSD", "GBP_USD", "British Pound / 6B"),
@@ -106,7 +105,9 @@ def _probe_candles(
     }
     try:
         doc = api_get(f"/v3/instruments/{instrument}/candles", params=params)
-        bars = _parse_candles(doc)
+        # _parse_candles returns (completed_bars, forming_bar).  This audit and
+        # workstation history only consume completed bars.
+        bars, _forming = _parse_candles(doc)
         meta["candles_returned"] = len(bars)
         meta["http_status"] = 200
         return bars, meta
@@ -135,15 +136,12 @@ def _audit_pair_live(
 
     probes: list[dict[str, Any]] = []
 
-    # Probe A: live loader equivalent (count=260)
     bars_a, meta_a = _probe_candles(oanda_symbol, count=DAILY_BAR_TARGET)
     probes.append({"name": "live_loader_equivalent", **meta_a, "earliest": bars_a[0]["date"] if bars_a else None, "latest": bars_a[-1]["date"] if bars_a else None})
 
-    # Probe B: max single request (count=5000 backward from now)
     bars_b, meta_b = _probe_candles(oanda_symbol, count=OANDA_MAX_COUNT)
     probes.append({"name": "max_count_5000", **meta_b, "earliest": bars_b[0]["date"] if bars_b else None, "latest": bars_b[-1]["date"] if bars_b else None})
 
-    # Probe C: 10-year forward window from start date
     bars_c, meta_c = _probe_candles(
         oanda_symbol,
         from_time=_iso_from(ten_year_start),
@@ -151,7 +149,6 @@ def _audit_pair_live(
     )
     probes.append({"name": "from_10y_start", **meta_c, "earliest": bars_c[0]["date"] if bars_c else None, "latest": bars_c[-1]["date"] if bars_c else None})
 
-    # Probe D: can we fetch strictly before stored earliest?
     bars_d: list[dict[str, Any]] = []
     meta_d: dict[str, Any] = {"name": "before_stored_earliest", "params": {}, "error": None}
     can_fetch_older = False
@@ -168,234 +165,65 @@ def _audit_pair_live(
                 meta_d["latest"] = bars_d[-1]["date"]
         except ValueError:
             meta_d["error"] = "invalid stored earliest date"
-    else:
-        meta_d["error"] = "no stored earliest bar to compare"
-        can_fetch_older = bool(bars_b or bars_c)
-
     probes.append(meta_d)
 
-    # Best depth from successful probes
-    all_probe_bars = bars_b or bars_c or bars_a
-    earliest_fetchable = all_probe_bars[0]["date"] if all_probe_bars else None
-    latest_fetchable = all_probe_bars[-1]["date"] if all_probe_bars else None
-    bars_in_10y = len(bars_c) if bars_c else len(bars_b)
-
-    fetch_years = round(years_spanned(all_probe_bars), 2) if all_probe_bars else 0.0
-    feasible_10y = fetch_years >= MIN_YEARS_10Y and bars_in_10y >= MIN_BARS_10Y
-
-    api_limits: list[str] = []
-    for p in probes:
-        if p.get("error"):
-            api_limits.append(f"{p.get('name')}: {p['error']}")
-    if bars_b and len(bars_b) >= OANDA_MAX_COUNT - 1:
-        api_limits.append("max_count_5000 may be truncated — paginate with from/to")
-
-    recommended_chunks = 1 if bars_in_10y <= RECOMMENDED_CHUNK_DAYS * 6 else max(1, (bars_in_10y // RECOMMENDED_CHUNK_DAYS) + 1)
+    max_probe = max((len(bars_a), len(bars_b), len(bars_c)), default=0)
+    earliest_live = min((b[0]["date"] for b in (bars_a, bars_b, bars_c) if b), default=None)
+    latest_live = max((b[-1]["date"] for b in (bars_a, bars_b, bars_c) if b), default=None)
+    years_live = 0.0
+    if earliest_live and latest_live:
+        years_live = (datetime.strptime(latest_live, "%Y-%m-%d").date() - datetime.strptime(earliest_live, "%Y-%m-%d").date()).days / 365.25
 
     return {
-        "display_symbol": display,
+        "display": display,
         "oanda_symbol": oanda_symbol,
-        "store_key": store_key,
-        **stored,
-        "can_oanda_fetch_older_than_stored": can_fetch_older,
-        "earliest_oanda_fetchable_daily_bar": earliest_fetchable,
-        "latest_oanda_fetchable_daily_bar": latest_fetchable,
-        "bars_fetchable_10y_range": bars_in_10y,
-        "oanda_fetch_years_of_coverage": fetch_years,
-        "ten_year_backfill_feasible": feasible_10y,
-        "api_limits_encountered": api_limits,
-        "recommended_chunk_size_bars": RECOMMENDED_CHUNK_DAYS,
-        "recommended_chunk_count_for_10y": recommended_chunks,
+        "stored": stored,
         "probes": probes,
+        "max_probe_rows": max_probe,
+        "earliest_live": earliest_live,
+        "latest_live": latest_live,
+        "live_years": round(years_live, 2),
+        "can_fetch_older_than_store": can_fetch_older,
+        "meets_10y_target": bool(years_live >= MIN_YEARS_10Y or max_probe >= MIN_BARS_10Y),
     }
 
 
-def _audit_pair_offline(
-    display: str,
-    oanda_symbol: str,
-    store_key: str,
-    *,
-    instruments: dict[str, Any],
-) -> dict[str, Any]:
-    stored = _stored_daily_stats(store_key, instruments)
+def run_live_audit() -> dict[str, Any]:
+    store = load_price_store()
+    instruments = store.get("instruments") or {}
+    rows = []
+    for display, oanda_symbol, store_key in TEST_PAIRS:
+        rows.append(_audit_pair_live(display, oanda_symbol, store_key, instruments=instruments))
     return {
-        "display_symbol": display,
-        "oanda_symbol": oanda_symbol,
-        "store_key": store_key,
-        **stored,
-        "can_oanda_fetch_older_than_stored": None,
-        "earliest_oanda_fetchable_daily_bar": None,
-        "latest_oanda_fetchable_daily_bar": None,
-        "bars_fetchable_10y_range": None,
-        "oanda_fetch_years_of_coverage": None,
-        "ten_year_backfill_feasible": None,
-        "api_limits_encountered": ["OANDA_API_KEY not set — live probes skipped"],
-        "recommended_chunk_size_bars": RECOMMENDED_CHUNK_DAYS,
-        "recommended_chunk_count_for_10y": None,
-        "probes": [],
-    }
-
-
-def _backfill_design() -> dict[str, Any]:
-    return {
-        "proposed_command": "python -m hptl.prices.backfill_fx_daily --source oanda --years 10",
-        "dry_run_command": "python -m hptl.prices.backfill_fx_daily --source oanda --years 10 --dry-run",
-        "post_backfill_audit": "python -m hptl.seasonality.fx_seasonality_coverage_audit",
-        "rules": [
-            "Fetch in chunks (default 500 daily bars) using OANDA from/to pagination",
-            "Deduplicate by date per instrument",
-            "Merge: keep newest bar when duplicate dates; never replace newer stored close with older fetch",
-            "Log bar counts and date ranges only — never API keys",
-            "Resume via checkpoint file per instrument",
-            "Skip failed pairs and continue",
-            "Default --dry-run: probe and print merge plan without writing",
-            "Write to data/processed/prices/backfill/ staging until explicitly promoted",
-        ],
-        "oanda_api_notes": {
-            "max_count_per_request": OANDA_MAX_COUNT,
-            "recommended_chunk_bars": RECOMMENDED_CHUNK_DAYS,
-            "supports_from_to": True,
-            "live_loader_uses_count_only": True,
-            "live_loader_count": DAILY_BAR_TARGET,
-        },
-    }
-
-
-def build_audit(*, years: int = 10) -> dict[str, Any]:
-    instruments = load_price_store().get("instruments") or {}
-    loader = _loader_analysis()
-    key_configured = bool(get_oanda_api_key())
-
-    pairs: list[dict[str, Any]] = []
-    for display, oanda_sym, store_key in TEST_PAIRS:
-        if key_configured:
-            pairs.append(_audit_pair_live(display, oanda_sym, store_key, instruments=instruments, years=years))
-        else:
-            pairs.append(_audit_pair_offline(display, oanda_sym, store_key, instruments=instruments))
-
-    backfillable = [p["display_symbol"] for p in pairs if p.get("ten_year_backfill_feasible") is True]
-    older_fetchable = [p["display_symbol"] for p in pairs if p.get("can_oanda_fetch_older_than_stored") is True]
-
-    oanda_sufficient = len(backfillable) >= len(TEST_PAIRS) // 2 if key_configured else None
-    root_cause = "local_loader_limit"
-    if key_configured and backfillable:
-        root_cause = "local_loader_limit (OANDA API can supply deeper history when using from/to + count up to 5000)"
-    elif not key_configured:
-        root_cause = "local_loader_limit (OANDA live probes not run — key missing)"
-
-    needs_paid = False
-    if key_configured and not backfillable and pairs:
-        needs_paid = True
-
-    return {
-        "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "parser": "hptl.prices.fx_oanda_backfill_feasibility_audit",
-        "audit_only": True,
-        "oanda_api_key_configured": key_configured,
-        "oanda_api_host": get_oanda_api_host() if key_configured else None,
-        "loader_analysis": loader,
-        "backfill_design": _backfill_design(),
-        "summary": {
-            "pairs_tested": len(pairs),
-            "oanda_sufficient_for_10y_fx_seasonality": oanda_sufficient,
-            "root_cause": root_cause,
-            "backfillable_pairs": backfillable,
-            "can_fetch_older_than_store": older_fetchable,
-            "needs_paid_provider": needs_paid,
-            "recommended_next_command": (
-                "python -m hptl.prices.backfill_fx_daily --source oanda --years 10 --dry-run"
-                if key_configured
-                else "Set OANDA_API_KEY then re-run this audit"
-            ),
-        },
-        "pairs": pairs,
+        "oanda_host": get_oanda_api_host(),
+        "loader_analysis": _loader_analysis(),
+        "pairs": rows,
     }
 
 
-def _render_markdown(report: dict[str, Any]) -> str:
-    la = report.get("loader_analysis") or {}
-    s = report.get("summary") or {}
-    bd = report.get("backfill_design") or {}
-    lines = [
-        "# FX OANDA Historical Daily Backfill Feasibility",
-        "",
-        f"Generated: {report.get('generated_at')}",
-        "",
-        "**Audit-only** — production price store not modified.",
-        "",
-        "## Loader analysis",
-        "",
-        f"- Module: `{la.get('module')}`",
-        f"- Daily bar target: **{la.get('daily_bar_target')}** (≈1 trading year)",
-        f"- Uses from/to pagination: **{la.get('uses_from_to_pagination')}**",
-        f"- Verdict: **{la.get('verdict')}**",
-        "",
-        la.get("explanation", ""),
-        "",
-        "## Executive summary",
-        "",
-        f"1. **Is OANDA enough for 10-year FX seasonality?** "
-        f"{'Likely yes (with loader fix)' if s.get('oanda_sufficient_for_10y_fx_seasonality') else 'Unconfirmed or no — see pair table'}",
-        f"2. **Root cause:** {s.get('root_cause')}",
-        f"3. **Backfillable pairs:** {', '.join(s.get('backfillable_pairs') or []) or 'none probed'}",
-        f"4. **Next command:** `{s.get('recommended_next_command')}`",
-        f"5. **Paid provider needed?** {'Yes' if s.get('needs_paid_provider') else 'No (if OANDA probes pass)'}",
-        "",
-        "## Pair probes",
-        "",
-        "| Pair | OANDA | Stored earliest | Stored bars | Older than store? | OANDA earliest | 10Y bars | 10Y feasible |",
-        "|---|---|---:|---:|:---:|---|---:|:---:|",
-    ]
-    for row in report.get("pairs") or []:
-        lines.append(
-            "| {sym} | {oanda} | {se} | {sb} | {older} | {oe} | {b10} | {ok} |".format(
-                sym=row.get("display_symbol"),
-                oanda=row.get("oanda_symbol"),
-                se=row.get("earliest_stored_daily_bar") or "—",
-                sb=row.get("stored_daily_bar_count"),
-                older="Yes" if row.get("can_oanda_fetch_older_than_stored") else "No" if row.get("can_oanda_fetch_older_than_stored") is False else "—",
-                oe=row.get("earliest_oanda_fetchable_daily_bar") or "—",
-                b10=row.get("bars_fetchable_10y_range") if row.get("bars_fetchable_10y_range") is not None else "—",
-                ok="Yes" if row.get("ten_year_backfill_feasible") else "No" if row.get("ten_year_backfill_feasible") is False else "—",
-            )
-        )
-
-    lines.extend(["", "## Backfill design", ""])
-    for rule in bd.get("rules") or []:
-        lines.append(f"- {rule}")
-    lines.append("")
-    lines.append(f"Proposed: `{bd.get('proposed_command')}`")
-    lines.append(f"Dry-run: `{bd.get('dry_run_command')}`")
-    lines.append(f"After backfill: `{bd.get('post_backfill_audit')}`")
-    return "\n".join(lines)
-
-
-def write_exports(payload: dict[str, Any] | None = None) -> dict[str, Any]:
-    payload = payload or build_audit()
+def write_audit(payload: dict[str, Any]) -> None:
     AUDIT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    AUDIT_JSON.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-    AUDIT_MD.write_text(_render_markdown(payload), encoding="utf-8")
-    return {"json": AUDIT_JSON, "md": AUDIT_MD}
-
-
-def run() -> dict[str, Any]:
-    payload = build_audit()
-    paths = write_exports(payload)
-    s = payload["summary"]
-    print("FX OANDA BACKFILL FEASIBILITY AUDIT (audit-only)")
-    print(f"JSON: {paths['json']}")
-    print(f"MD:   {paths['md']}")
-    print(f"Root cause: {s.get('root_cause')}")
-    print(f"10Y backfillable: {s.get('backfillable_pairs')}")
-    print(f"Next: {s.get('recommended_next_command')}")
-    return payload
+    AUDIT_JSON.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    lines = ["# OANDA historical backfill feasibility", ""]
+    for row in payload.get("pairs") or []:
+        lines.append(
+            f"- {row['display']}: live {row.get('earliest_live')} → {row.get('latest_live')} "
+            f"({row.get('live_years')}y), older-than-store={row.get('can_fetch_older_than_store')}"
+        )
+    AUDIT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
-    run()
+    if not get_oanda_api_key():
+        print("OANDA_API_KEY not set")
+        return 2
+    payload = run_live_audit()
+    write_audit(payload)
+    print(f"Wrote {AUDIT_JSON}")
+    print(f"Wrote {AUDIT_MD}")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
