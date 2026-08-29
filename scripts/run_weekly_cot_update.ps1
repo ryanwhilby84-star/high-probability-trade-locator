@@ -5,6 +5,10 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 $env:PYTHONPATH = "src"
 $env:HPTL_SKIP_LIVE_FEEDS = "1"
+# The confluence builder defines its watchdog settings at import time. Set this
+# before Python starts so long but healthy weekly JSON builds are not killed by
+# the default 120s stall watchdog.
+$env:HPTL_DISABLE_WATCHDOG = "1"
 # Fast COT/dashboard export: skip per-row FX V3 valuation in Stage 4 (engine.py gate).
 # FX histories are still process-cached when valuation is explicitly enabled.
 $env:HPTL_SKIP_VALUATION = "1"
