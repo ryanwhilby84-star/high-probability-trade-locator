@@ -1,13 +1,15 @@
 /**
- * Seasonal Roadmap view helpers (UI only — no methodology changes).
+ * Seasonal Roadmap view helpers (UI only — no calculation performed here).
  */
 
 export const ROADMAP_METHOD_LABEL = 'Seasonal Roadmap'
 
 export const ROADMAP_METHOD_DESCRIPTION =
-  'Average normalised historical yearly price path, rebased to the current price.'
+  'Robust ISO week-to-week historical returns, compounded and rebased to the current price. No synthetic interpolation or default smoothing.'
 
-export const ROADMAP_HORIZON_WEEKS = [4, 8, 12, 26, 48]
+// Production reliability is currently validated for the near-term horizons
+// used by the trading workflow. Do not surface longer placeholders as signals.
+export const ROADMAP_HORIZON_WEEKS = [4, 8, 12]
 
 /**
  * Directional class from existing forecast_stats fields only.
@@ -46,7 +48,9 @@ export function classifyRoadmapHorizon(row) {
 
 /**
  * Which Roadmap series the chart binds when the smooth toggle changes.
- * Does not touch Mean-return or Freeze packs.
+ * Robust production payloads intentionally omit `smoothed`, so even an older
+ * UI preference safely falls back to the genuine unsmoothed weekly series.
+ * Mean-return and Freeze packs remain isolated.
  */
 export function resolveRoadmapSeriesSource(roadmap, useSmoothed) {
   if (!roadmap?.available) {
@@ -55,18 +59,18 @@ export function resolveRoadmapSeriesSource(roadmap, useSmoothed) {
   if (useSmoothed && roadmap.smoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.smoothed.full_year',
-      datasetName: roadmap.method?.version || 'seasonal_roadmap_v1',
+      datasetName: roadmap.method?.version || 'robust_weekly_returns_v2',
       valueKey: 'price',
     }
   }
   if (roadmap.unsmoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.unsmoothed.full_year',
-      datasetName: roadmap.method?.version || 'seasonal_roadmap_v1',
+      datasetName: roadmap.method?.version || 'robust_weekly_returns_v2',
       valueKey: 'price',
     }
   }
-  return { sourcePath: null, datasetName: roadmap.method?.version || 'seasonal_roadmap_v1' }
+  return { sourcePath: null, datasetName: roadmap.method?.version || 'robust_weekly_returns_v2' }
 }
 
 export function defaultSeasonalView(displayDefaults) {
