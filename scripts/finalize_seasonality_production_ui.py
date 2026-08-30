@@ -1,35 +1,22 @@
 #!/usr/bin/env python3
 """One-shot idempotent source finalizer for the production seasonality UI.
 
-The GitHub connector can safely add the backend production adapter directly,
-but the two React workstation files are large generated/hand-edited sources.
-This script applies the deliberately tiny presentation-only edits locally:
+Run from the repository root after pulling the production seasonality backend.
+It applies the deliberately small presentation edits that are awkward to make
+safely through whole-file GitHub writes on the large React workstation sources.
 
-* Roadmap defaults to the unsmoothed source.
-* Recharts uses straight line segments instead of monotone spline interpolation.
-* Two pre-existing typos in the seasonality foundation utility are repaired so
-  compile/test discovery cannot be broken by an unrelated syntax error.
-
-Run from the repository root. The script refuses to silently succeed if an
-expected source pattern is absent and verifies every target after writing.
+Final state:
+* robust Roadmap always defaults to its unsmoothed weekly observations
+* the obsolete SMA(5) production toggle is removed
+* Recharts uses straight segments, not monotone spline interpolation
+* reliability verdict/score is visible beside horizon statistics
+* two pre-existing foundation utility parse typos are repaired
 """
 from __future__ import annotations
 
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def _replace(path: Path, old: str, new: str, *, minimum: int = 1, maximum: int | None = None) -> int:
-    text = path.read_text(encoding="utf-8")
-    count = text.count(old)
-    max_allowed = minimum if maximum is None else maximum
-    if count < minimum or count > max_allowed:
-        raise RuntimeError(
-            f"{path.relative_to(ROOT)}: expected {minimum}..{max_allowed} occurrences of {old!r}, found {count}"
-        )
-    path.write_text(text.replace(old, new), encoding="utf-8")
-    return count
 
 
 def _replace_if_present(path: Path, old: str, new: str) -> int:
@@ -47,7 +34,6 @@ def main() -> int:
 
     changes: list[str] = []
 
-    # Idempotent: only replace the old defaults if they still exist.
     if _replace_if_present(
         workstation,
         "const [roadmapSmoothed, setRoadmapSmoothed] = React.useState(true)",
@@ -61,14 +47,78 @@ def main() -> int:
     ):
         changes.append("Payload refresh -> unsmoothed")
 
-    # Straight segments preserve the actual observation-to-observation shape.
+    old_active_smooth = """  const activeSmooth =
+    seasonalView === 'roadmap'
+      ? roadmapSmoothed
+        ? 'SMA(5)'
+        : 'Unsmoothed'
+      : seasonalView === 'freeze_index'
+        ? `SMA(${method.smooth ?? 5})`
+        : 'n/a'"""
+    new_active_smooth = """  const activeSmooth =
+    seasonalView === 'roadmap'
+      ? 'Unsmoothed weekly'
+      : seasonalView === 'freeze_index'
+        ? `SMA(${method.smooth ?? 5})`
+        : 'n/a'"""
+    if _replace_if_present(workstation, old_active_smooth, new_active_smooth):
+        changes.append("Roadmap metadata -> unsmoothed weekly")
+
+    old_toggle = """          {seasonalView === 'roadmap' ? (
+            <div className=\"sws-lookbacks\" role=\"group\" aria-label=\"Roadmap smooth\">
+              <button
+                type=\"button\"
+                className={`sws-btn${roadmapSmoothed ? ' is-active' : ''}`}
+                onClick={() => setRoadmapSmoothed(true)}
+              >
+                SMA(5)
+              </button>
+              <button
+                type=\"button\"
+                className={`sws-btn${!roadmapSmoothed ? ' is-active' : ''}`}
+                onClick={() => setRoadmapSmoothed(false)}
+              >
+                Unsmoothed
+              </button>
+            </div>
+          ) : null}
+"""
+    if _replace_if_present(workstation, old_toggle, ""):
+        changes.append("Removed obsolete production SMA(5) toggle")
+
+    reliability_anchor = """      <div className=\"sws-stat\">
+        <span>Anchor price</span>
+        <strong>
+          {roadmap?.asof_price != null || roadmap?.anchor_price != null
+            ? Number(roadmap.asof_price ?? roadmap.anchor_price).toFixed(3)
+            : '—'}
+        </strong>
+      </div>
+"""
+    reliability_block = reliability_anchor + """      <div className=\"sws-stat sws-stat-block\">
+        <span>Reliability</span>
+        <strong>{roadmap?.reliability?.verdict || '—'}</strong>
+        <strong>
+          score {roadmap?.reliability?.score ?? '—'} · {roadmap?.reliability?.label || '—'}
+        </strong>
+        {roadmap?.reliability?.reasons?.length ? (
+          <span className=\"sws-muted\">{roadmap.reliability.reasons.join(' · ')}</span>
+        ) : null}
+      </div>
+"""
+    wt_now = workstation.read_text(encoding="utf-8")
+    if "roadmap?.reliability?.verdict" not in wt_now:
+        if reliability_anchor not in wt_now:
+            raise RuntimeError("Could not locate Roadmap anchor-price block for reliability UI insertion")
+        workstation.write_text(wt_now.replace(reliability_anchor, reliability_block, 1), encoding="utf-8")
+        changes.append("Reliability verdict/score added to Roadmap panel")
+
     chart_text = charts.read_text(encoding="utf-8")
     monotone_count = chart_text.count('type="monotone"')
     if monotone_count:
         charts.write_text(chart_text.replace('type="monotone"', 'type="linear"'), encoding="utf-8")
         changes.append(f"Recharts monotone -> linear ({monotone_count} lines)")
 
-    # Repair known pre-existing parse typos in the foundation utility.
     if _replace_if_present(
         foundation,
         '"confidence_before": b.get("confidence_level else"),',
@@ -82,12 +132,14 @@ def main() -> int:
     ):
         changes.append("Foundation markdown typo repaired")
 
-    # Verify the intended final state, whether edits happened now or earlier.
     wt = workstation.read_text(encoding="utf-8")
     ct = charts.read_text(encoding="utf-8")
     ft = foundation.read_text(encoding="utf-8")
     checks = {
         "roadmap_defaults_raw": "React.useState(false)" in wt and "setRoadmapSmoothed(false)" in wt,
+        "production_sma_toggle_removed": 'aria-label="Roadmap smooth"' not in wt,
+        "roadmap_metadata_unsmoothed": "'Unsmoothed weekly'" in wt,
+        "reliability_visible": "roadmap?.reliability?.verdict" in wt,
         "no_monotone_chart_interpolation": 'type="monotone"' not in ct,
         "linear_chart_segments_present": 'type="linear"' in ct,
         "foundation_confidence_typo_absent": 'confidence_level else' not in ft,
