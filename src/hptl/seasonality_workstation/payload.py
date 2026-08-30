@@ -6,6 +6,7 @@ from typing import Any
 
 from hptl.seasonality_workstation.engine import build_seasonality_research
 from hptl.seasonality_workstation.models import DEFAULT_LOOKBACK, ENGINE_VERSION
+from hptl.seasonality_workstation.production_roadmap import apply_production_seasonality
 
 
 def build_seasonality_workstation_payload(
@@ -33,6 +34,11 @@ def build_seasonality_workstation_payload(
             "seasonal_roadmap": research.get("seasonal_roadmap"),
         }
 
+    # Production presentation contract: use the engine's robust ISO-week return
+    # statistics as the canonical roadmap. Legacy indexed / mean-return products
+    # remain available as explicit alternate views, not silent primary fallbacks.
+    research = apply_production_seasonality(research)
+
     return {
         "status": "ok",
         "instrument_id": instrument_id,
@@ -45,6 +51,7 @@ def build_seasonality_workstation_payload(
         "available_lookbacks": research.get("available_lookbacks"),
         "sample_size": research.get("sample_size"),
         "confidence": research.get("confidence"),
+        "reliability": research.get("reliability"),
         "data_quality": research.get("data_quality"),
         "integrity": research.get("integrity"),
         "anchor": research.get("anchor"),
