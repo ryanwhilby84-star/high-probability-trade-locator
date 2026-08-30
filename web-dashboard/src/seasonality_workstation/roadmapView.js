@@ -1,7 +1,7 @@
 /** Seasonal Roadmap view helpers (UI only). */
 export const ROADMAP_METHOD_LABEL = 'Seasonal Roadmap'
 export const ROADMAP_METHOD_DESCRIPTION =
-  'Robust daily close-to-close historical returns, compounded trading-day by trading-day and rebased to the current price. No synthetic interpolation or default smoothing.'
+  'Historical daily moves are normalised by each year’s typical daily volatility, aggregated by trading day, then rescaled to the market’s recent daily volatility. No synthetic noise, interpolation or smoothing.'
 
 export const ROADMAP_HORIZON_WEEKS = [4, 8, 12]
 
@@ -18,18 +18,18 @@ export function resolveRoadmapSeriesSource(roadmap, useSmoothed) {
   if (useSmoothed && roadmap.smoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.smoothed.full_year',
-      datasetName: roadmap.method?.version || 'robust_daily_returns_v3',
+      datasetName: roadmap.method?.version || 'volatility_normalised_daily_texture_v4',
       valueKey: 'price',
     }
   }
   if (roadmap.unsmoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.unsmoothed.full_year',
-      datasetName: roadmap.method?.version || 'robust_daily_returns_v3',
+      datasetName: roadmap.method?.version || 'volatility_normalised_daily_texture_v4',
       valueKey: 'price',
     }
   }
-  return { sourcePath: null, datasetName: roadmap.method?.version || 'robust_daily_returns_v3' }
+  return { sourcePath: null, datasetName: roadmap.method?.version || 'volatility_normalised_daily_texture_v4' }
 }
 
 export function defaultSeasonalView(displayDefaults) {
