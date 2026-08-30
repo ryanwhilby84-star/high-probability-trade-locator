@@ -2,15 +2,14 @@
 """Audit the production robust weekly-return seasonality roadmap.
 
 Designed for the final pre-commit check, including the Soybeans 2026-08-24
-reference case. It runs the return model on data truncated at the requested
-as-of date, computes a leave-one-year-out directional validation, applies the
-same production reliability gate, and writes a compact audit JSON.
+reference case. Data is truncated at the requested as-of date and the audit
+uses the exact same year-wrap horizon statistics, lookback agreement and
+leave-one-year-out validation as the live production payload.
 """
 from __future__ import annotations
 
 import argparse
 import json
-import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -18,10 +17,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from hptl.seasonality_workstation.engine import (  # noqa: E402
-    _lookback_agreement,
-    compute_lookback_block,
-)
+from hptl.seasonality_workstation.engine import compute_lookback_block  # noqa: E402
 from hptl.seasonality_workstation.integrity import audit_daily_series  # noqa: E402
 from hptl.seasonality_workstation.production_roadmap import (  # noqa: E402
     METHOD_VERSION,
@@ -33,113 +29,18 @@ from hptl.seasonality_workstation.returns import (  # noqa: E402
     weekly_closes_from_daily,
     weekly_return_rows,
 )
-from hptl.seasonality_workstation.stats import bucket_stats  # noqa: E402
+from hptl.seasonality_workstation.validation import (  # noqa: E402
+    LOOKBACK_YEARS,
+    robust_forward_horizon_stats,
+    robust_lookback_agreement,
+    robust_weekly_leave_one_year_out,
+)
 
-LOOKBACKS: dict[str, int | None] = {
-    "5Y": 5,
-    "10Y": 10,
-    "15Y": 15,
-    "20Y": 20,
-    "FULL": None,
-}
+LOOKBACKS = LOOKBACK_YEARS
 
 
 def _clean(block: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in block.items() if not k.startswith("_")}
-
-
-def _train_week_stats(
-    rows: list[dict[str, Any]], *, test_year: int, lookback_years: int | None
-) -> dict[int, dict[str, Any]]:
-    first_year = -10_000 if lookback_years is None else test_year - lookback_years
-    buckets: dict[int, list[float]] = {w: [] for w in range(1, 53)}
-    for row in rows:
-        year = int(row["iso_year"])
-        week = int(row["iso_week"])
-        ret = row.get("return")
-        if year >= test_year or year < first_year or ret is None:
-            continue
-        if 1 <= week <= 52 and math.isfinite(float(ret)):
-            buckets[week].append(float(ret))
-    return {w: bucket_stats(buckets[w]) for w in range(1, 53)}
-
-
-def _next_h_actual_returns(
-    rows: list[dict[str, Any]], *, test_year: int, anchor_week: int, horizon: int
-) -> list[float] | None:
-    start = None
-    for i, row in enumerate(rows):
-        if int(row["iso_year"]) == test_year and int(row["iso_week"]) == anchor_week:
-            start = i
-            break
-    if start is None or start + horizon >= len(rows):
-        return None
-    actual: list[float] = []
-    for row in rows[start + 1 : start + horizon + 1]:
-        ret = row.get("return")
-        if ret is None or not math.isfinite(float(ret)):
-            return None
-        actual.append(float(ret))
-    return actual if len(actual) == horizon else None
-
-
-def leave_one_year_out_hit_rate(
-    rows: list[dict[str, Any]],
-    *,
-    years: list[int],
-    anchor_week: int,
-    lookback_years: int | None,
-    horizon: int = 8,
-) -> dict[str, Any]:
-    outcomes: list[dict[str, Any]] = []
-    for test_year in sorted(years):
-        train_years = [
-            y
-            for y in years
-            if y < test_year and (lookback_years is None or y >= test_year - lookback_years)
-        ]
-        if len(train_years) < 5:
-            continue
-        stats = _train_week_stats(rows, test_year=test_year, lookback_years=lookback_years)
-        predicted = 1.0
-        usable_prediction = True
-        for offset in range(1, horizon + 1):
-            week = ((anchor_week - 1 + offset) % 52) + 1
-            ret = (stats.get(week) or {}).get("trimmed_mean")
-            if ret is None:
-                usable_prediction = False
-                break
-            predicted *= 1.0 + float(ret)
-        actual_returns = _next_h_actual_returns(
-            rows, test_year=test_year, anchor_week=anchor_week, horizon=horizon
-        )
-        if not usable_prediction or not actual_returns:
-            continue
-        actual = 1.0
-        for ret in actual_returns:
-            actual *= 1.0 + ret
-        pred_ret = predicted - 1.0
-        actual_ret = actual - 1.0
-        hit = (pred_ret > 0 and actual_ret > 0) or (pred_ret < 0 and actual_ret < 0)
-        outcomes.append(
-            {
-                "year": test_year,
-                "train_years": train_years,
-                "predicted_return": round(pred_ret, 6),
-                "actual_return": round(actual_ret, 6),
-                "direction_hit": hit,
-            }
-        )
-    n = len(outcomes)
-    hits = sum(1 for row in outcomes if row["direction_hit"])
-    return {
-        "hit_rate": None if n == 0 else round(hits / n, 6),
-        "n": n,
-        "hits": hits,
-        "horizon_weeks": horizon,
-        "method": "leave_one_year_out_robust_weekly_direction",
-        "outcomes": outcomes,
-    }
 
 
 def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]:
@@ -161,7 +62,6 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
     usable = list(integrity.get("usable_history_years") or [])
 
     blocks: dict[str, dict[str, Any]] = {}
-    raw_blocks: dict[str, dict[str, Any]] = {}
     for label in LOOKBACKS:
         block = compute_lookback_block(
             rows,
@@ -173,19 +73,23 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
             anchor_price=anchor_price,
             anchor_date=anchor_date,
         )
-        raw_blocks[label] = block
-        blocks[label] = _clean(block)
+        clean = _clean(block)
+        clean["forward_horizons"] = robust_forward_horizon_stats(
+            rows,
+            years=list(clean.get("sample_years") or []),
+            anchor_week=anchor_week,
+            horizons=(4, 8, 12),
+        )
+        blocks[label] = clean
 
-    agreement = _lookback_agreement(
-        {label: block["_trimmed_path_raw"] for label, block in raw_blocks.items()},
-        anchor_week,
-    )
+    agreement = robust_lookback_agreement(blocks, anchor_week=anchor_week, horizon=8)
     selected = blocks[lookback]
-    wf = leave_one_year_out_hit_rate(
+    wf = robust_weekly_leave_one_year_out(
         rows,
-        years=selected.get("sample_years") or [],
+        years=list(selected.get("sample_years") or []),
         anchor_week=anchor_week,
-        lookback_years=LOOKBACKS[lookback],
+        lookback=lookback,
+        horizon=8,
     )
     research = {
         "status": "ok",
@@ -213,7 +117,13 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
         "anchor_is_exact": today is not None and abs(float(today["price"]) - float(anchor_price)) <= 1e-9,
         "cot_not_a_dependency": (roadmap.get("method") or {}).get("cot_dependency") == "none",
         "missing_week_rule_declared": (roadmap.get("method") or {}).get("missing_week_rule") == "do_not_bridge_missing_week_returns",
+        "year_wrap_horizon_stats": all(
+            ((selected.get("forward_horizons") or {}).get(h) or {}).get("year_wrap") == "supported"
+            for h in ("4w", "8w", "12w")
+        ),
+        "walk_forward_is_robust_model": wf.get("method") == "leave_one_year_out_robust_weekly_direction",
         "walk_forward_has_observations": int(wf.get("n") or 0) > 0,
+        "lookback_agreement_is_robust_model": agreement.get("method") == "robust_weekly_return_projection_sign_agreement",
         "reliability_verdict_present": bool((roadmap.get("reliability") or {}).get("verdict")),
     }
     passed = all(checks.values())
