@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""Audit the production robust weekly-return seasonality roadmap.
-
-Designed for the final pre-commit check, including the Soybeans 2026-08-24
-reference case. Data is truncated at the requested as-of date and the audit
-uses the exact same year-wrap horizon statistics, lookback agreement and
-leave-one-year-out validation as the live production payload.
-"""
+"""Audit the production robust DAILY-return seasonality roadmap."""
 from __future__ import annotations
 
 import argparse
@@ -19,16 +13,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from hptl.seasonality_workstation.engine import compute_lookback_block  # noqa: E402
 from hptl.seasonality_workstation.integrity import audit_daily_series  # noqa: E402
-from hptl.seasonality_workstation.production_roadmap import (  # noqa: E402
-    METHOD_VERSION,
-    build_production_roadmap,
-)
-from hptl.seasonality_workstation.returns import (  # noqa: E402
-    iso_week,
-    load_daily_closes,
-    weekly_closes_from_daily,
-    weekly_return_rows,
-)
+from hptl.seasonality_workstation.production_roadmap import METHOD_VERSION, build_production_roadmap  # noqa: E402
+from hptl.seasonality_workstation.returns import iso_week, load_daily_closes, weekly_closes_from_daily, weekly_return_rows  # noqa: E402
 from hptl.seasonality_workstation.validation import (  # noqa: E402
     LOOKBACK_YEARS,
     robust_forward_horizon_stats,
@@ -93,30 +79,31 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
     )
     research = {
         "status": "ok",
+        "instrument_id": instrument,
         "selected_lookback": lookback,
         "lookbacks": blocks,
-        "anchor": {
-            "date": anchor_date,
-            "price": anchor_price,
-            "iso_year": asof_year,
-            "iso_week": anchor_week,
-        },
+        "anchor": {"date": anchor_date, "price": anchor_price, "iso_year": asof_year, "iso_week": anchor_week},
         "integrity": integrity,
         "lookback_agreement": agreement,
         "walk_forward": wf,
+        "_daily_closes": daily,
     }
     roadmap = build_production_roadmap(research)
     points = ((roadmap.get("unsmoothed") or {}).get("full_year") or [])
     today = next((p for p in points if p.get("segment") == "today"), None)
+    daily_returns = [p.get("trimmed_mean_return") for p in points if p.get("trimmed_mean_return") is not None]
 
     checks = {
         "integrity_pass": integrity.get("status") == "PASS",
-        "method_is_robust_weekly_returns_v2": (roadmap.get("method") or {}).get("version") == METHOD_VERSION,
-        "exactly_52_weekly_observations": len(points) == 52,
+        "method_is_robust_daily_returns_v3": (roadmap.get("method") or {}).get("version") == METHOD_VERSION,
+        "daily_observation_count_gt_180": len(points) > 180,
+        "daily_observation_count_gt_weekly_52": len(points) > 52,
+        "daily_path_has_up_moves": any(float(r) > 0 for r in daily_returns),
+        "daily_path_has_down_moves": any(float(r) < 0 for r in daily_returns),
         "no_payload_smoothing": roadmap.get("smoothed") is None and roadmap.get("smooth_window") is None,
         "anchor_is_exact": today is not None and abs(float(today["price"]) - float(anchor_price)) <= 1e-9,
         "cot_not_a_dependency": (roadmap.get("method") or {}).get("cot_dependency") == "none",
-        "missing_week_rule_declared": (roadmap.get("method") or {}).get("missing_week_rule") == "do_not_bridge_missing_week_returns",
+        "daily_return_aggregation_declared": (roadmap.get("method") or {}).get("aggregation") == "10pct_trimmed_mean_daily_close_to_close_return",
         "year_wrap_horizon_stats": all(
             ((selected.get("forward_horizons") or {}).get(h) or {}).get("year_wrap") == "supported"
             for h in ("4w", "8w", "12w")
@@ -136,26 +123,26 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
         "lookback": lookback,
         "anchor_week": anchor_week,
         "anchor_price": anchor_price,
-        "sample_years": selected.get("sample_years"),
-        "sample_size": selected.get("sample_size"),
+        "sample_years": roadmap.get("sample_years"),
+        "sample_size": roadmap.get("sample_size"),
+        "observation_count": len(points),
         "checks": checks,
         "lookback_agreement": agreement,
         "walk_forward": wf,
         "forecast_stats": roadmap.get("forecast_stats"),
         "reliability": roadmap.get("reliability"),
         "method": roadmap.get("method"),
-        "first_12_forward_points": [p for p in points if p.get("segment") in {"today", "forward"}][:13],
+        "first_20_forward_points": [p for p in points if p.get("segment") in {"today", "forward"}][:20],
     }
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Audit robust production seasonality roadmap")
+    parser = argparse.ArgumentParser(description="Audit robust daily production seasonality roadmap")
     parser.add_argument("--instrument", default="Soybeans")
     parser.add_argument("--asof", default=None, help="YYYY-MM-DD; defaults to latest available bar")
     parser.add_argument("--lookback", choices=tuple(LOOKBACKS), default="15Y")
     parser.add_argument("--output", default=None)
     args = parser.parse_args(argv)
-
     report = audit(args.instrument, asof=args.asof, lookback=args.lookback)
     safe = "".join(ch.lower() if ch.isalnum() else "_" for ch in args.instrument).strip("_")
     asof_label = report.get("resolved_asof") or args.asof or "latest"
@@ -163,11 +150,12 @@ def main(argv: list[str] | None = None) -> int:
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
 
-    print("PRODUCTION SEASONALITY AUDIT")
-    print("=" * 30)
+    print("PRODUCTION DAILY SEASONALITY AUDIT")
+    print("=" * 34)
     print(f"Instrument : {report.get('instrument')}")
     print(f"As-of      : {report.get('resolved_asof')}")
     print(f"Lookback   : {report.get('lookback')}")
+    print(f"Points     : {report.get('observation_count')}")
     for name, ok in (report.get("checks") or {}).items():
         print(f"{'PASS' if ok else 'FAIL':4}  {name}")
     reliability = report.get("reliability") or {}

@@ -1,76 +1,35 @@
-/**
- * Seasonal Roadmap view helpers (UI only — no calculation performed here).
- */
-
+/** Seasonal Roadmap view helpers (UI only). */
 export const ROADMAP_METHOD_LABEL = 'Seasonal Roadmap'
-
 export const ROADMAP_METHOD_DESCRIPTION =
-  'Robust ISO week-to-week historical returns, compounded and rebased to the current price. No synthetic interpolation or default smoothing.'
+  'Robust daily close-to-close historical returns, compounded trading-day by trading-day and rebased to the current price. No synthetic interpolation or default smoothing.'
 
-// Production reliability is currently validated for the near-term horizons
-// used by the trading workflow. Do not surface longer placeholders as signals.
 export const ROADMAP_HORIZON_WEEKS = [4, 8, 12]
 
-/**
- * Directional class from existing forecast_stats fields only.
- * Bullish: mean > 0, median > 0, bullish_frequency > 0.5
- * Bearish: mean < 0, median < 0, bearish_frequency > 0.5
- * Mixed otherwise.
- */
 export function classifyRoadmapHorizon(row) {
   if (!row || row.n == null || row.n <= 0) return 'Mixed'
-  const mean = row.mean
-  const median = row.median
-  const bull = row.bullish_frequency
-  const bear = row.bearish_frequency
-  if (
-    mean != null &&
-    median != null &&
-    bull != null &&
-    mean > 0 &&
-    median > 0 &&
-    bull > 0.5
-  ) {
-    return 'Bullish'
-  }
-  if (
-    mean != null &&
-    median != null &&
-    bear != null &&
-    mean < 0 &&
-    median < 0 &&
-    bear > 0.5
-  ) {
-    return 'Bearish'
-  }
+  const { mean, median, bullish_frequency: bull, bearish_frequency: bear } = row
+  if (mean != null && median != null && bull != null && mean > 0 && median > 0 && bull > 0.5) return 'Bullish'
+  if (mean != null && median != null && bear != null && mean < 0 && median < 0 && bear > 0.5) return 'Bearish'
   return 'Mixed'
 }
 
-/**
- * Which Roadmap series the chart binds when the smooth toggle changes.
- * Robust production payloads intentionally omit `smoothed`, so even an older
- * UI preference safely falls back to the genuine unsmoothed weekly series.
- * Mean-return and Freeze packs remain isolated.
- */
 export function resolveRoadmapSeriesSource(roadmap, useSmoothed) {
-  if (!roadmap?.available) {
-    return { sourcePath: null, datasetName: null }
-  }
+  if (!roadmap?.available) return { sourcePath: null, datasetName: null }
   if (useSmoothed && roadmap.smoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.smoothed.full_year',
-      datasetName: roadmap.method?.version || 'robust_weekly_returns_v2',
+      datasetName: roadmap.method?.version || 'robust_daily_returns_v3',
       valueKey: 'price',
     }
   }
   if (roadmap.unsmoothed?.full_year?.length) {
     return {
       sourcePath: 'payload.seasonal_roadmap.unsmoothed.full_year',
-      datasetName: roadmap.method?.version || 'robust_weekly_returns_v2',
+      datasetName: roadmap.method?.version || 'robust_daily_returns_v3',
       valueKey: 'price',
     }
   }
-  return { sourcePath: null, datasetName: roadmap.method?.version || 'robust_weekly_returns_v2' }
+  return { sourcePath: null, datasetName: roadmap.method?.version || 'robust_daily_returns_v3' }
 }
 
 export function defaultSeasonalView(displayDefaults) {
