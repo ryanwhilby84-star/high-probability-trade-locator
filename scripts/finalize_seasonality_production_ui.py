@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""One-shot idempotent source finalizer for the production seasonality UI.
+"""One-shot idempotent finalizer for the production seasonality rebuild.
 
 Run from the repository root after pulling the production seasonality backend.
-It applies the deliberately small presentation edits that are awkward to make
-safely through whole-file GitHub writes on the large React workstation sources.
+It applies the deliberately small source edits that are awkward to make safely
+through whole-file GitHub writes on the large workstation sources.
 
 Final state:
-* robust Roadmap always defaults to its unsmoothed weekly observations
-* the obsolete SMA(5) production toggle is removed
+* robust Roadmap defaults to unsmoothed weekly observations
+* obsolete SMA(5) production toggle is removed
 * Recharts uses straight segments, not monotone spline interpolation
 * reliability verdict/score is visible beside horizon statistics
+* the current-week plotted point keeps the real as-of date on partial weeks
 * two pre-existing foundation utility parse typos are repaired
 """
 from __future__ import annotations
@@ -30,6 +31,7 @@ def _replace_if_present(path: Path, old: str, new: str) -> int:
 def main() -> int:
     workstation = ROOT / "web-dashboard" / "src" / "seasonality_workstation" / "SeasonalityWorkstation.jsx"
     charts = ROOT / "web-dashboard" / "src" / "seasonality_workstation" / "SeasonalityCharts.jsx"
+    roadmap_py = ROOT / "src" / "hptl" / "seasonality_workstation" / "production_roadmap.py"
     foundation = ROOT / "src" / "hptl" / "seasonality" / "seasonality_foundation_rebuild.py"
 
     changes: list[str] = []
@@ -119,6 +121,11 @@ def main() -> int:
         charts.write_text(chart_text.replace('type="monotone"', 'type="linear"'), encoding="utf-8")
         changes.append(f"Recharts monotone -> linear ({monotone_count} lines)")
 
+    old_date = '                "date": _week_date(iso_year, week),'
+    new_date = '                "date": (str(anchor.get("date"))[:10] if week == anchor_week and anchor.get("date") else _week_date(iso_year, week)),'
+    if _replace_if_present(roadmap_py, old_date, new_date):
+        changes.append("Current-week point keeps exact as-of date")
+
     if _replace_if_present(
         foundation,
         '"confidence_before": b.get("confidence_level else"),',
@@ -134,6 +141,7 @@ def main() -> int:
 
     wt = workstation.read_text(encoding="utf-8")
     ct = charts.read_text(encoding="utf-8")
+    rt = roadmap_py.read_text(encoding="utf-8")
     ft = foundation.read_text(encoding="utf-8")
     checks = {
         "roadmap_defaults_raw": "React.useState(false)" in wt and "setRoadmapSmoothed(false)" in wt,
@@ -142,6 +150,7 @@ def main() -> int:
         "reliability_visible": "roadmap?.reliability?.verdict" in wt,
         "no_monotone_chart_interpolation": 'type="monotone"' not in ct,
         "linear_chart_segments_present": 'type="linear"' in ct,
+        "exact_asof_date_on_current_week": 'week == anchor_week and anchor.get("date")' in rt,
         "foundation_confidence_typo_absent": 'confidence_level else' not in ft,
         "foundation_farkdown_typo_absent": "farkdown f" not in ft,
     }
@@ -149,7 +158,7 @@ def main() -> int:
     if failed:
         raise RuntimeError("Finalization verification failed: " + ", ".join(failed))
 
-    print("Seasonality production UI finalization: PASS")
+    print("Seasonality production finalization: PASS")
     if changes:
         for change in changes:
             print(f"  changed: {change}")
