@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit the production robust DAILY-return seasonality roadmap."""
+"""Audit the production volatility-normalised DAILY seasonality roadmap."""
 from __future__ import annotations
 
 import argparse
@@ -91,19 +91,26 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
     roadmap = build_production_roadmap(research)
     points = ((roadmap.get("unsmoothed") or {}).get("full_year") or [])
     today = next((p for p in points if p.get("segment") == "today"), None)
-    daily_returns = [p.get("trimmed_mean_return") for p in points if p.get("trimmed_mean_return") is not None]
+    seasonal_returns = [p.get("seasonal_return") for p in points if p.get("seasonal_return") is not None]
+    agreements = [p.get("directional_agreement") for p in points if p.get("directional_agreement") is not None]
+    normalised = [p.get("normalised_median_return") for p in points if p.get("normalised_median_return") is not None]
 
     checks = {
         "integrity_pass": integrity.get("status") == "PASS",
-        "method_is_robust_daily_returns_v3": (roadmap.get("method") or {}).get("version") == METHOD_VERSION,
+        "method_is_volatility_normalised_daily_texture_v4": (roadmap.get("method") or {}).get("version") == METHOD_VERSION,
         "daily_observation_count_gt_180": len(points) > 180,
         "daily_observation_count_gt_weekly_52": len(points) > 52,
-        "daily_path_has_up_moves": any(float(r) > 0 for r in daily_returns),
-        "daily_path_has_down_moves": any(float(r) < 0 for r in daily_returns),
+        "daily_path_has_up_moves": any(float(r) > 0 for r in seasonal_returns),
+        "daily_path_has_down_moves": any(float(r) < 0 for r in seasonal_returns),
+        "volatility_normalisation_declared": (roadmap.get("method") or {}).get("historical_normalisation") == "each_year_daily_returns_divided_by_year_median_absolute_daily_return",
+        "current_volatility_rescale_declared": (roadmap.get("method") or {}).get("volatility_rescale") == "recent_60_observation_median_absolute_daily_return",
+        "target_daily_scale_positive": float(roadmap.get("target_daily_scale") or 0) > 0,
+        "directional_agreement_present": len(agreements) > 100,
+        "normalised_median_present": len(normalised) > 100,
+        "no_synthetic_noise": (roadmap.get("method") or {}).get("synthetic_noise") is False,
         "no_payload_smoothing": roadmap.get("smoothed") is None and roadmap.get("smooth_window") is None,
         "anchor_is_exact": today is not None and abs(float(today["price"]) - float(anchor_price)) <= 1e-9,
         "cot_not_a_dependency": (roadmap.get("method") or {}).get("cot_dependency") == "none",
-        "daily_return_aggregation_declared": (roadmap.get("method") or {}).get("aggregation") == "10pct_trimmed_mean_daily_close_to_close_return",
         "year_wrap_horizon_stats": all(
             ((selected.get("forward_horizons") or {}).get(h) or {}).get("year_wrap") == "supported"
             for h in ("4w", "8w", "12w")
@@ -126,6 +133,7 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
         "sample_years": roadmap.get("sample_years"),
         "sample_size": roadmap.get("sample_size"),
         "observation_count": len(points),
+        "target_daily_scale": roadmap.get("target_daily_scale"),
         "checks": checks,
         "lookback_agreement": agreement,
         "walk_forward": wf,
@@ -137,7 +145,7 @@ def audit(instrument: str, *, asof: str | None, lookback: str) -> dict[str, Any]
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Audit robust daily production seasonality roadmap")
+    parser = argparse.ArgumentParser(description="Audit volatility-normalised daily production seasonality roadmap")
     parser.add_argument("--instrument", default="Soybeans")
     parser.add_argument("--asof", default=None, help="YYYY-MM-DD; defaults to latest available bar")
     parser.add_argument("--lookback", choices=tuple(LOOKBACKS), default="15Y")
@@ -146,16 +154,17 @@ def main(argv: list[str] | None = None) -> int:
     report = audit(args.instrument, asof=args.asof, lookback=args.lookback)
     safe = "".join(ch.lower() if ch.isalnum() else "_" for ch in args.instrument).strip("_")
     asof_label = report.get("resolved_asof") or args.asof or "latest"
-    output = Path(args.output) if args.output else ROOT / "data" / "audits" / "seasonality" / f"{safe}_{asof_label}_{args.lookback.lower()}_production_audit.json"
+    output = Path(args.output) if args.output else ROOT / "data" / "audits" / "seasonality" / f"{safe}_{asof_label}_{args.lookback.lower()}_texture_audit.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
 
-    print("PRODUCTION DAILY SEASONALITY AUDIT")
-    print("=" * 34)
+    print("PRODUCTION SEASONAL TEXTURE AUDIT")
+    print("=" * 35)
     print(f"Instrument : {report.get('instrument')}")
     print(f"As-of      : {report.get('resolved_asof')}")
     print(f"Lookback   : {report.get('lookback')}")
     print(f"Points     : {report.get('observation_count')}")
+    print(f"Daily vol  : {report.get('target_daily_scale')}")
     for name, ok in (report.get("checks") or {}).items():
         print(f"{'PASS' if ok else 'FAIL':4}  {name}")
     reliability = report.get("reliability") or {}

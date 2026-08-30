@@ -18,8 +18,14 @@ def _synthetic_daily() -> list[tuple[str, float]]:
     i = 0
     while d <= end:
         if d.weekday() < 5:
-            # Deterministic but deliberately textured daily movement.
-            r = 0.0018 if i % 11 in (1, 2, 7) else -0.0012 if i % 11 in (4, 8) else 0.0002
+            # Repeating price-like texture with quiet and impulsive observations.
+            r = (
+                0.010 if i % 23 == 3
+                else -0.008 if i % 23 == 9
+                else 0.004 if i % 11 in (1, 2, 7)
+                else -0.003 if i % 11 in (4, 8)
+                else 0.0005
+            )
             px *= 1.0 + r
             out.append((d.isoformat(), px))
             i += 1
@@ -55,11 +61,13 @@ def _research(*, wf_hit: float = 0.70, wf_n: int = 10, agreement: float = 0.8):
     }
 
 
-def test_production_roadmap_is_unsmoothed_daily_return_path():
+def test_production_roadmap_is_unsmoothed_volatility_normalised_daily_texture():
     roadmap = build_production_roadmap(_research())
     assert roadmap["available"] is True
     assert roadmap["method"]["version"] == METHOD_VERSION
-    assert roadmap["method"]["aggregation"] == "10pct_trimmed_mean_daily_close_to_close_return"
+    assert roadmap["method"]["aggregation"] == "cross_year_median_normalised_daily_return"
+    assert roadmap["method"]["volatility_rescale"] == "recent_60_observation_median_absolute_daily_return"
+    assert roadmap["method"]["synthetic_noise"] is False
     assert roadmap["method"]["interpolation"] == "none_in_payload"
     assert roadmap["method"]["smooth"] is None
     assert roadmap["smoothed"] is None
@@ -69,10 +77,12 @@ def test_production_roadmap_is_unsmoothed_daily_return_path():
     today = next(p for p in points if p["segment"] == "today")
     assert today["date"] == "2026-08-24"
     assert abs(today["price"] - roadmap["anchor_price"]) < 1e-9
-    # Daily path must contain actual day-to-day directional changes.
-    returns = [p["trimmed_mean_return"] for p in points[1:80] if p["trimmed_mean_return"] is not None]
+    returns = [p["seasonal_return"] for p in points[1:100] if p["seasonal_return"] is not None]
     assert any(r > 0 for r in returns)
     assert any(r < 0 for r in returns)
+    assert roadmap["target_daily_scale"] > 0
+    assert any(p.get("normalised_median_return") is not None for p in points[1:])
+    assert any(p.get("directional_agreement") is not None for p in points[1:])
 
 
 def test_production_adapter_replaces_legacy_primary_without_touching_cot():
