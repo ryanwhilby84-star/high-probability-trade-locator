@@ -8,6 +8,7 @@ Soybeans 2026-08-24 15Y reference case against the exact production model.
 """
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -28,6 +29,7 @@ def run(label: str, command: list[str], *, cwd: Path = ROOT) -> None:
 
 def main() -> int:
     py = sys.executable
+    npm = "npm.cmd" if os.name == "nt" else "npm"
 
     run("Finalize production sources", [py, "scripts/finalize_seasonality_production_ui.py"])
     run(
@@ -70,7 +72,7 @@ def main() -> int:
     try:
         run(
             "Dashboard production build",
-            ["npm", "run", "build", "--", "--outDir", ".seasonality-build-check", "--emptyOutDir"],
+            [npm, "run", "build", "--", "--outDir", ".seasonality-build-check", "--emptyOutDir"],
             cwd=DASHBOARD,
         )
     finally:
