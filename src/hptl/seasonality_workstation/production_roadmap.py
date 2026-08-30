@@ -220,7 +220,7 @@ def build_production_roadmap(research: dict[str, Any]) -> dict[str, Any]:
             "trading_day": td,
             "date": dt,
             "doy": calendar_doy(date.fromisoformat(dt)),
-            "price": round(float(px), 6),
+            "price": float(anchor_price) if segment == "today" else round(float(px), 6),
             "index": round(float(index[i]), 8),
             "segment": segment,
             "sample_count": int(st.get("n") or 0),
