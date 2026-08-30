@@ -2,18 +2,20 @@
 """One-command final local validation for the seasonality rebuild.
 
 This is intentionally the last step before staging/committing local changes.
-It applies the small UI source finalizer, compiles the touched Python modules,
-runs focused Python + JS tests, builds the dashboard, and audits the Soybeans
-2026-08-24 15Y reference case against the exact production model.
+It applies the source finalizer, compiles touched Python modules, runs focused
+Python + JS tests, performs a temporary Vite production build, and audits the
+Soybeans 2026-08-24 15Y reference case against the exact production model.
 """
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD = ROOT / "web-dashboard"
+BUILD_CHECK = DASHBOARD / ".seasonality-build-check"
 
 
 def run(label: str, command: list[str], *, cwd: Path = ROOT) -> None:
@@ -27,7 +29,7 @@ def run(label: str, command: list[str], *, cwd: Path = ROOT) -> None:
 def main() -> int:
     py = sys.executable
 
-    run("Finalize production UI", [py, "scripts/finalize_seasonality_production_ui.py"])
+    run("Finalize production sources", [py, "scripts/finalize_seasonality_production_ui.py"])
     run(
         "Compile seasonality sources",
         [
@@ -61,7 +63,20 @@ def main() -> int:
         ],
         cwd=DASHBOARD,
     )
-    run("Dashboard production build", ["npm", "run", "build"], cwd=DASHBOARD)
+
+    # Build away from tracked dist/ so validation does not create noisy generated diffs.
+    if BUILD_CHECK.exists():
+        shutil.rmtree(BUILD_CHECK)
+    try:
+        run(
+            "Dashboard production build",
+            ["npm", "run", "build", "--", "--outDir", ".seasonality-build-check", "--emptyOutDir"],
+            cwd=DASHBOARD,
+        )
+    finally:
+        if BUILD_CHECK.exists():
+            shutil.rmtree(BUILD_CHECK)
+
     run(
         "Soybeans reference production audit",
         [
@@ -83,7 +98,7 @@ def main() -> int:
     print("model conclusion, not a validation failure, provided the audit itself says PASS.")
     print("=" * 72)
 
-    # Informational only: show exactly what the user is about to commit.
+    # Informational only: show exactly what is ready for the final commit.
     subprocess.run(["git", "status", "--short"], cwd=ROOT)
     return 0
 
