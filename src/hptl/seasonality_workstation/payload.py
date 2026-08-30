@@ -12,49 +12,68 @@ from hptl.seasonality_workstation.returns import (
     weekly_closes_from_daily,
     weekly_return_rows,
 )
-from hptl.seasonality_workstation.validation import robust_weekly_leave_one_year_out
+from hptl.seasonality_workstation.validation import (
+    robust_forward_horizon_stats,
+    robust_lookback_agreement,
+    robust_weekly_leave_one_year_out,
+)
 
 
-def _attach_robust_walk_forward(research: dict[str, Any], instrument_id: str) -> None:
-    """Replace legacy OOS evidence with validation of the production return model."""
+def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> None:
+    """Attach validation/statistics for the exact production weekly-return model."""
     selected = str(research.get("selected_lookback") or DEFAULT_LOOKBACK)
-    block = (research.get("lookbacks") or {}).get(selected) or {}
+    lookbacks = research.get("lookbacks") or {}
+    block = lookbacks.get(selected) or {}
     years = list(block.get("sample_years") or [])
     anchor_week = int((research.get("anchor") or {}).get("iso_week") or 0)
     asof = str((research.get("anchor") or {}).get("date") or "")[:10]
     price_id = str(research.get("price_instrument_id") or instrument_id)
 
+    empty = {
+        "method": "leave_one_year_out_robust_weekly_direction",
+        "lookback": selected,
+        "horizon_weeks": 8,
+        "hit_rate": None,
+        "hits": 0,
+        "n": 0,
+        "outcomes": [],
+    }
     if not years or not anchor_week:
-        research["robust_walk_forward"] = {
-            "method": "leave_one_year_out_robust_weekly_direction",
-            "lookback": selected,
-            "horizon_weeks": 8,
-            "hit_rate": None,
-            "hits": 0,
-            "n": 0,
-            "outcomes": [],
-            "reason": "missing_validation_inputs",
-        }
+        research["robust_walk_forward"] = {**empty, "reason": "missing_validation_inputs"}
+        research["legacy_walk_forward"] = research.get("walk_forward")
+        research["walk_forward"] = research["robust_walk_forward"]
         return
 
     daily, _source, error = load_daily_closes(price_id)
     if error or not daily:
-        research["robust_walk_forward"] = {
-            "method": "leave_one_year_out_robust_weekly_direction",
-            "lookback": selected,
-            "horizon_weeks": 8,
-            "hit_rate": None,
-            "hits": 0,
-            "n": 0,
-            "outcomes": [],
-            "reason": error or "no_daily_history",
-        }
+        research["robust_walk_forward"] = {**empty, "reason": error or "no_daily_history"}
+        research["legacy_walk_forward"] = research.get("walk_forward")
+        research["walk_forward"] = research["robust_walk_forward"]
         return
 
     if asof:
         daily = [(d, c) for d, c in daily if str(d)[:10] <= asof]
     weekly = weekly_closes_from_daily(daily)
     rows = weekly_return_rows(weekly)
+
+    # Replace the engine's old non-wrapping forward horizon summaries with the
+    # production model's exact historical observations, including week 52 -> 1.
+    for _label, lb in lookbacks.items():
+        sample_years = list((lb or {}).get("sample_years") or [])
+        if not sample_years:
+            continue
+        lb["forward_horizons"] = robust_forward_horizon_stats(
+            rows,
+            years=sample_years,
+            anchor_week=anchor_week,
+            horizons=(4, 8, 12),
+        )
+
+    research["lookback_agreement"] = robust_lookback_agreement(
+        lookbacks,
+        anchor_week=anchor_week,
+        horizon=8,
+    )
     robust = robust_weekly_leave_one_year_out(
         rows,
         years=years,
@@ -94,13 +113,12 @@ def build_seasonality_workstation_payload(
             "seasonal_roadmap": research.get("seasonal_roadmap"),
         }
 
-    # Production reliability must validate the same robust weekly-return model
-    # that is plotted, not the legacy indexed-year model.
-    _attach_robust_walk_forward(research, instrument_id)
+    # Production reliability/statistics must validate the same robust weekly
+    # return model that is plotted, not the legacy indexed-year model.
+    _attach_robust_validation(research, instrument_id)
 
-    # Production presentation contract: use the engine's robust ISO-week return
-    # statistics as the canonical roadmap. Legacy indexed / mean-return products
-    # remain available as explicit alternate views, not silent primary fallbacks.
+    # Production presentation contract: robust ISO-week returns are canonical.
+    # Legacy indexed / mean-return products remain explicit alternate views.
     research = apply_production_seasonality(research)
 
     return {
@@ -134,7 +152,6 @@ def build_seasonality_workstation_payload(
         "stats_panel": research.get("stats_panel"),
         "advanced": research.get("advanced"),
         "display_defaults": research.get("display_defaults"),
-        # Compact lookback comparison for audits / UI switcher
         "lookback_summaries": {
             k: {
                 "sample_size": v.get("sample_size"),
