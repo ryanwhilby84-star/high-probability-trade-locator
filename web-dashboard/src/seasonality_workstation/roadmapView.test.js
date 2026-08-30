@@ -20,7 +20,7 @@ describe('Seasonal Roadmap view helpers', () => {
     assert.equal(ROADMAP_METHOD_LABEL, 'Seasonal Roadmap')
     assert.equal(
       ROADMAP_METHOD_DESCRIPTION,
-      'Average normalised historical yearly price path, rebased to the current price.',
+      'Robust ISO week-to-week historical returns, compounded and rebased to the current price. No synthetic interpolation or default smoothing.',
     )
   })
 
@@ -67,7 +67,22 @@ describe('Seasonal Roadmap view helpers', () => {
     )
   })
 
-  it('Unsmoothed toggle changes only Roadmap series source', () => {
+  it('robust production payload falls back to the unsmoothed series', () => {
+    const roadmap = {
+      available: true,
+      method: { version: 'robust_weekly_returns_v2' },
+      smoothed: null,
+      unsmoothed: { full_year: [{ price: 3 }, { price: 4 }] },
+    }
+    const requestedSmooth = resolveRoadmapSeriesSource(roadmap, true)
+    const raw = resolveRoadmapSeriesSource(roadmap, false)
+    assert.equal(requestedSmooth.sourcePath, 'payload.seasonal_roadmap.unsmoothed.full_year')
+    assert.equal(raw.sourcePath, 'payload.seasonal_roadmap.unsmoothed.full_year')
+    assert.equal(requestedSmooth.datasetName, 'robust_weekly_returns_v2')
+    assert.equal(raw.datasetName, 'robust_weekly_returns_v2')
+  })
+
+  it('retains explicit legacy smooth selection only when a legacy smooth series exists', () => {
     const roadmap = {
       available: true,
       method: { version: 'seasonal_roadmap_v1' },
@@ -78,8 +93,5 @@ describe('Seasonal Roadmap view helpers', () => {
     const raw = resolveRoadmapSeriesSource(roadmap, false)
     assert.equal(smooth.sourcePath, 'payload.seasonal_roadmap.smoothed.full_year')
     assert.equal(raw.sourcePath, 'payload.seasonal_roadmap.unsmoothed.full_year')
-    assert.notEqual(smooth.sourcePath, raw.sourcePath)
-    assert.equal(smooth.datasetName, 'seasonal_roadmap_v1')
-    assert.equal(raw.datasetName, 'seasonal_roadmap_v1')
   })
 })
