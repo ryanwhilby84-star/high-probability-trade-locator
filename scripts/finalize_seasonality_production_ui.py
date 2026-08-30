@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Idempotent UI finalizer for the production DAILY seasonality roadmap."""
+"""Idempotent UI finalizer for volatility-normalised DAILY seasonality."""
 from __future__ import annotations
 from pathlib import Path
 
@@ -24,8 +24,10 @@ def main() -> int:
         changes.append("Roadmap default -> unsmoothed")
     if _replace_if_present(workstation, "setRoadmapSmoothed(true)\n  }, [payload?.report_date, payload?.instrument_id, payload?.selected_lookback])", "setRoadmapSmoothed(false)\n  }, [payload?.report_date, payload?.instrument_id, payload?.selected_lookback])"):
         changes.append("Payload refresh -> unsmoothed")
-    if _replace_if_present(workstation, "'Unsmoothed weekly'", "'Unsmoothed daily'"):
-        changes.append("Roadmap metadata -> unsmoothed daily")
+    if _replace_if_present(workstation, "'Unsmoothed weekly'", "'Vol-normalised daily'"):
+        changes.append("Roadmap metadata -> volatility-normalised daily")
+    if _replace_if_present(workstation, "'Unsmoothed daily'", "'Vol-normalised daily'"):
+        changes.append("Roadmap metadata -> volatility-normalised daily")
 
     old_active_smooth = """  const activeSmooth =
     seasonalView === 'roadmap'
@@ -37,12 +39,12 @@ def main() -> int:
         : 'n/a'"""
     new_active_smooth = """  const activeSmooth =
     seasonalView === 'roadmap'
-      ? 'Unsmoothed daily'
+      ? 'Vol-normalised daily'
       : seasonalView === 'freeze_index'
         ? `SMA(${method.smooth ?? 5})`
         : 'n/a'"""
     if _replace_if_present(workstation, old_active_smooth, new_active_smooth):
-        changes.append("Roadmap metadata -> unsmoothed daily")
+        changes.append("Roadmap metadata -> volatility-normalised daily")
 
     old_toggle = """          {seasonalView === 'roadmap' ? (
             <div className=\"sws-lookbacks\" role=\"group\" aria-label=\"Roadmap smooth\">
@@ -66,14 +68,14 @@ def main() -> int:
     ct = charts.read_text(encoding="utf-8")
     checks = {
         "roadmap_defaults_raw": "React.useState(false)" in wt and "setRoadmapSmoothed(false)" in wt,
-        "roadmap_metadata_daily": "'Unsmoothed daily'" in wt,
+        "roadmap_metadata_vol_normalised_daily": "'Vol-normalised daily'" in wt,
         "no_monotone_chart_interpolation": 'type="monotone"' not in ct,
         "linear_chart_segments_present": 'type="linear"' in ct,
     }
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
         raise RuntimeError("Finalization verification failed: " + ", ".join(failed))
-    print("Seasonality DAILY production UI finalization: PASS")
+    print("Seasonality volatility-normalised DAILY UI finalization: PASS")
     for change in changes:
         print(f"  changed: {change}")
     if not changes:
