@@ -7,7 +7,9 @@ export const ROADMAP_METHOD_LABEL = 'Seasonal Roadmap'
 export const ROADMAP_METHOD_DESCRIPTION =
   'Robust ISO week-to-week historical returns, compounded and rebased to the current price. No synthetic interpolation or default smoothing.'
 
-export const ROADMAP_HORIZON_WEEKS = [4, 8, 12, 26, 48]
+// Production reliability is currently validated for the near-term horizons
+// used by the trading workflow. Do not surface longer placeholders as signals.
+export const ROADMAP_HORIZON_WEEKS = [4, 8, 12]
 
 /**
  * Directional class from existing forecast_stats fields only.
