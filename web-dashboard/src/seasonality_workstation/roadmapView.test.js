@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
 import {
+  ROADMAP_HORIZON_WEEKS,
   ROADMAP_METHOD_DESCRIPTION,
   ROADMAP_METHOD_LABEL,
   classifyRoadmapHorizon,
@@ -16,12 +17,13 @@ describe('Seasonal Roadmap view helpers', () => {
     assert.equal(defaultSeasonalView({ seasonal_view: 'freeze_index' }), 'freeze_index')
   })
 
-  it('exposes production method label and description', () => {
+  it('exposes production method label, description, and validated horizons', () => {
     assert.equal(ROADMAP_METHOD_LABEL, 'Seasonal Roadmap')
     assert.equal(
       ROADMAP_METHOD_DESCRIPTION,
       'Robust ISO week-to-week historical returns, compounded and rebased to the current price. No synthetic interpolation or default smoothing.',
     )
+    assert.deepEqual(ROADMAP_HORIZON_WEEKS, [4, 8, 12])
   })
 
   it('classifies horizons from existing stats only', () => {
