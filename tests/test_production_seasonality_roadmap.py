@@ -122,5 +122,6 @@ def test_missing_week_is_not_bridged_into_one_week_return():
         ("2026-01-30", 110.0),
     ]
     rows = weekly_return_rows(weekly)
-    assert rows[1]["return"] == 0.02
+    assert rows[1]["return"] is not None
+    assert abs(rows[1]["return"] - 0.02) < 1e-12
     assert rows[2]["return"] is None
