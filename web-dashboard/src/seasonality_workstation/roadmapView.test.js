@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
 import {
+  ROADMAP_HORIZON_WEEKS,
   ROADMAP_METHOD_DESCRIPTION,
   ROADMAP_METHOD_LABEL,
   classifyRoadmapHorizon,
@@ -16,70 +17,33 @@ describe('Seasonal Roadmap view helpers', () => {
     assert.equal(defaultSeasonalView({ seasonal_view: 'freeze_index' }), 'freeze_index')
   })
 
-  it('exposes production method label and description', () => {
+  it('exposes volatility-normalised daily production method and validated horizons', () => {
     assert.equal(ROADMAP_METHOD_LABEL, 'Seasonal Roadmap')
     assert.equal(
       ROADMAP_METHOD_DESCRIPTION,
-      'Average normalised historical yearly price path, rebased to the current price.',
+      'Historical daily moves are normalised by each year’s typical daily volatility, aggregated by trading day, then rescaled to the market’s recent daily volatility. No synthetic noise, interpolation or smoothing.',
     )
+    assert.deepEqual(ROADMAP_HORIZON_WEEKS, [4, 8, 12])
   })
 
-  it('classifies horizons from existing stats only', () => {
-    assert.equal(
-      classifyRoadmapHorizon({
-        mean: 0.01,
-        median: 0.02,
-        bullish_frequency: 0.6,
-        bearish_frequency: 0.4,
-        n: 15,
-      }),
-      'Bullish',
-    )
-    assert.equal(
-      classifyRoadmapHorizon({
-        mean: -0.01,
-        median: -0.02,
-        bullish_frequency: 0.3,
-        bearish_frequency: 0.7,
-        n: 15,
-      }),
-      'Bearish',
-    )
-    assert.equal(
-      classifyRoadmapHorizon({
-        mean: 0.01,
-        median: -0.01,
-        bullish_frequency: 0.55,
-        bearish_frequency: 0.45,
-        n: 15,
-      }),
-      'Mixed',
-    )
-    assert.equal(
-      classifyRoadmapHorizon({
-        mean: 0.01,
-        median: 0.01,
-        bullish_frequency: 0.5,
-        bearish_frequency: 0.5,
-        n: 15,
-      }),
-      'Mixed',
-    )
+  it('classifies horizons from stats only', () => {
+    assert.equal(classifyRoadmapHorizon({ mean: 0.01, median: 0.02, bullish_frequency: 0.6, bearish_frequency: 0.4, n: 15 }), 'Bullish')
+    assert.equal(classifyRoadmapHorizon({ mean: -0.01, median: -0.02, bullish_frequency: 0.3, bearish_frequency: 0.7, n: 15 }), 'Bearish')
+    assert.equal(classifyRoadmapHorizon({ mean: 0.01, median: -0.01, bullish_frequency: 0.55, bearish_frequency: 0.45, n: 15 }), 'Mixed')
   })
 
-  it('Unsmoothed toggle changes only Roadmap series source', () => {
+  it('production payload always resolves to unsmoothed observations', () => {
     const roadmap = {
       available: true,
-      method: { version: 'seasonal_roadmap_v1' },
-      smoothed: { full_year: [{ price: 1 }, { price: 2 }] },
+      method: { version: 'volatility_normalised_daily_texture_v4' },
+      smoothed: null,
       unsmoothed: { full_year: [{ price: 3 }, { price: 4 }] },
     }
-    const smooth = resolveRoadmapSeriesSource(roadmap, true)
+    const requestedSmooth = resolveRoadmapSeriesSource(roadmap, true)
     const raw = resolveRoadmapSeriesSource(roadmap, false)
-    assert.equal(smooth.sourcePath, 'payload.seasonal_roadmap.smoothed.full_year')
+    assert.equal(requestedSmooth.sourcePath, 'payload.seasonal_roadmap.unsmoothed.full_year')
     assert.equal(raw.sourcePath, 'payload.seasonal_roadmap.unsmoothed.full_year')
-    assert.notEqual(smooth.sourcePath, raw.sourcePath)
-    assert.equal(smooth.datasetName, 'seasonal_roadmap_v1')
-    assert.equal(raw.datasetName, 'seasonal_roadmap_v1')
+    assert.equal(requestedSmooth.datasetName, 'volatility_normalised_daily_texture_v4')
+    assert.equal(raw.datasetName, 'volatility_normalised_daily_texture_v4')
   })
 })

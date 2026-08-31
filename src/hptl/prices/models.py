@@ -52,9 +52,12 @@ class InstrumentPriceRecord(TypedDict, total=False):
     price_scale: dict[str, Any] | None
 
 
-DAILY_BAR_TARGET = 260
-WEEKLY_BAR_TARGET = 52
-WEEKLY_LOOKBACK_DAYS = 52 * 7
+# Research-grade history targets. OANDA permits up to 5,000 candles per request;
+# these targets give the workstation enough history for COT analogue/lookback work
+# while remaining within one request per granularity.
+DAILY_BAR_TARGET = 5000
+WEEKLY_BAR_TARGET = 1000
+WEEKLY_LOOKBACK_DAYS = WEEKLY_BAR_TARGET * 7
 
 
 def compute_range_52w(daily: list[OhlcBar]) -> Range52w | None:

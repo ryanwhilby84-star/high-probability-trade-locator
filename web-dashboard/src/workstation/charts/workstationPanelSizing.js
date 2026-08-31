@@ -6,7 +6,8 @@ export const WS_PRICE_PLOT_MIN = 400
 export const WS_COT_PLOT_HEIGHT = 420
 export const WS_COT_RETAIL_PLOT_HEIGHT = 448
 export const WS_COT_PLOT_MIN = 280
-export const WS_COT_PLOT_MAX = 960
+// Keep manual stretching useful without allowing a pane to become absurdly tall and visually flatten the series.
+export const WS_COT_PLOT_MAX = 760
 
 /**
  * Single-surface proportions for the fullscreen fitted layout.

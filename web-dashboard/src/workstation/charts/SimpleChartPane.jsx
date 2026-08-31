@@ -71,6 +71,59 @@ function hasRenderableData(mode, candleBars, linePoints) {
   return prepareLightweightLinePoints(linePoints).length > 0
 }
 
+function percentile(sortedValues, q) {
+  if (!sortedValues.length) return 0
+  const idx = Math.max(
+    0,
+    Math.min(sortedValues.length - 1, Math.round((sortedValues.length - 1) * q)),
+  )
+  return sortedValues[idx]
+}
+
+/**
+ * Weekly net-position delta rendered as a subtle histogram on its own hidden
+ * scale. Positive = net positioning increased; negative = decreased.
+ * Colour opacity is normalised to the 90th percentile so one historic shock
+ * cannot make the rest of the stream disappear.
+ */
+function buildDeltaFlowPoints(points) {
+  if (!Array.isArray(points) || points.length < 2) return []
+
+  const deltas = []
+  const magnitudes = []
+
+  for (let i = 1; i < points.length; i += 1) {
+    const current = points[i]
+    const previous = points[i - 1]
+    if (
+      !isFiniteNumber(current?.time) ||
+      !isFiniteNumber(current?.value) ||
+      !isFiniteNumber(previous?.value)
+    ) {
+      continue
+    }
+
+    const delta = current.value - previous.value
+    if (!Number.isFinite(delta)) continue
+    deltas.push({ time: current.time, value: delta })
+    magnitudes.push(Math.abs(delta))
+  }
+
+  const sorted = magnitudes.slice().sort((a, b) => a - b)
+  const normaliser = percentile(sorted, 0.9) || sorted[sorted.length - 1] || 1
+
+  return deltas.map((row) => {
+    const strength = Math.min(1, Math.abs(row.value) / normaliser)
+    const alpha = 0.07 + strength * 0.22
+    const color =
+      row.value >= 0
+        ? `rgba(34, 139, 101, ${alpha.toFixed(3)})`
+        : `rgba(201, 84, 84, ${alpha.toFixed(3)})`
+
+    return { ...row, color }
+  })
+}
+
 function waitForContainerSize(element, onReady) {
   if (element.clientWidth > 0 && element.clientHeight > 0) {
     onReady()
@@ -146,6 +199,7 @@ export function SimpleChartPane({
   const chartRef = React.useRef(null)
   const primarySeriesRef = React.useRef(null)
   const overlaySeriesRef = React.useRef(null)
+  const deltaSeriesRef = React.useRef(null)
   const anchorSeriesRef = React.useRef(null)
   const zeroSeriesRef = React.useRef(null)
   const livePriceLineRef = React.useRef(null)
@@ -217,6 +271,7 @@ export function SimpleChartPane({
 
       let primarySeries
       let zeroSeries = null
+      let deltaSeries = null
 
       if (modeRef.current === 'candle') {
         primarySeries = chart.addCandlestickSeries({
@@ -230,6 +285,21 @@ export function SimpleChartPane({
           lastValueVisible: false,
         })
       } else {
+        // Delta is created first so the positioning line always paints above it.
+        if (zeroLine) {
+          deltaSeries = chart.addHistogramSeries({
+            priceScaleId: 'delta-flow',
+            base: 0,
+            priceLineVisible: false,
+            lastValueVisible: false,
+          })
+          chart.priceScale('delta-flow').applyOptions({
+            visible: false,
+            borderVisible: false,
+            scaleMargins: { top: 0.7, bottom: 0.03 },
+          })
+        }
+
         primarySeries = chart.addLineSeries({
           color: lineColor,
           lineWidth: 1.5,
@@ -244,7 +314,7 @@ export function SimpleChartPane({
 
         if (zeroLine) {
           zeroSeries = chart.addLineSeries({
-            color: 'rgba(148, 163, 184, 0.24)',
+            color: 'rgba(111, 124, 119, 0.22)',
             lineWidth: 1,
             lineStyle: 2,
             priceLineVisible: false,
@@ -258,6 +328,7 @@ export function SimpleChartPane({
       chartRef.current = chart
       primarySeriesRef.current = primarySeries
       overlaySeriesRef.current = null
+      deltaSeriesRef.current = deltaSeries
       anchorSeriesRef.current = anchorSeries
       zeroSeriesRef.current = zeroSeries
 
@@ -328,6 +399,7 @@ export function SimpleChartPane({
       chartRef.current = null
       primarySeriesRef.current = null
       overlaySeriesRef.current = null
+      deltaSeriesRef.current = null
       anchorSeriesRef.current = null
       zeroSeriesRef.current = null
       livePriceLineRef.current = null
@@ -360,10 +432,6 @@ export function SimpleChartPane({
       handleScale: {
         mouseWheel: horizontalNavigation,
         pinch: horizontalNavigation,
-        // Vertical scaling + reset are owned by the workstation's per-pane
-        // vertical camera (useGlobalVerticalMagnification). Disabling LWC's
-        // native price-axis drag / double-click reset prevents two systems from
-        // competing over the same gesture and keeps interaction stable.
         axisPressedMouseMove: {
           time: horizontalNavigation,
           price: false,
@@ -449,8 +517,9 @@ export function SimpleChartPane({
     try {
       primarySeries.setData(points)
       primarySeries.setMarkers([])
+      deltaSeriesRef.current?.setData(buildDeltaFlowPoints(points))
     } catch (error) {
-      console.error('[cot-workstation] line setData failed', panelId, error)
+      console.error('[cot-workstation] line/delta setData failed', panelId, error)
     }
   }, [
     candleBars,

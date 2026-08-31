@@ -6,6 +6,9 @@ from datetime import datetime
 from typing import Any
 
 
+MAX_ADJACENT_WEEK_GAP_DAYS = 10
+
+
 def iso_week(date: str) -> tuple[int, int]:
     dt = datetime.strptime(str(date)[:10], "%Y-%m-%d")
     cal = dt.isocalendar()
@@ -26,14 +29,36 @@ def weekly_closes_from_daily(daily: list[tuple[str, float]]) -> list[tuple[str, 
     return [buckets[k] for k in sorted(buckets.keys())]
 
 
+def _adjacent_weekly_observations(previous_date: str, current_date: str) -> bool:
+    """True only when two weekly closes represent adjacent calendar weeks.
+
+    Weekly close weekdays can shift around exchange holidays, so allow up to ten
+    calendar days. A missing week creates a larger gap and must never be bridged
+    into one synthetic multi-week return.
+    """
+    try:
+        previous = datetime.strptime(str(previous_date)[:10], "%Y-%m-%d").date()
+        current = datetime.strptime(str(current_date)[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return False
+    gap = (current - previous).days
+    return 1 <= gap <= MAX_ADJACENT_WEEK_GAP_DAYS
+
+
 def weekly_return_rows(weekly: list[tuple[str, float]]) -> list[dict[str, Any]]:
-    """One row per week with return from prior week."""
+    """One row per week with genuine adjacent-week return only.
+
+    Missing calendar weeks are left as missing observations rather than silently
+    converting a two-or-more-week price change into a one-week seasonal return.
+    """
     rows: list[dict[str, Any]] = []
     for i, (d, c) in enumerate(weekly):
         y, w = iso_week(d)
         ret = None
-        if i > 0 and weekly[i - 1][1] > 0:
-            ret = c / weekly[i - 1][1] - 1.0
+        if i > 0:
+            prev_d, prev_c = weekly[i - 1]
+            if prev_c > 0 and _adjacent_weekly_observations(prev_d, d):
+                ret = c / prev_c - 1.0
         rows.append(
             {
                 "date": d,

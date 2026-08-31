@@ -1,4 +1,4 @@
-"""Shared constants and lookback definitions for Seasonality Workstation V1."""
+"""Shared constants and lookback definitions for Seasonality Workstation."""
 
 from __future__ import annotations
 
@@ -19,4 +19,4 @@ MAX_GAP_DAYS = 14
 MAX_SINGLE_DAY_RETURN = 0.35  # 35% absolute daily move flags discontinuity
 TURN_HALF_WINDOW_WEEKS = 2
 TURN_FOLLOW_WEEKS = 8
-ENGINE_VERSION = "seasonality_freeze_v1_0"
+ENGINE_VERSION = "seasonality_robust_weekly_v2"
