@@ -186,7 +186,7 @@ def run_foundation_rebuild(*, execute: bool = False, years: int = 10) -> dict[st
                 "avg_wpy_after": a.get("avg_weeks_per_year"),
                 "sample_8w_before": b.get("forward_8w_sample_years"),
                 "sample_8w_after": a.get("forward_8w_sample_years"),
-                "confidence_before": b.get("confidence_level else"),
+                "confidence_before": b.get("confidence_level"),
                 "confidence_after": a.get("confidence_level"),
                 "before": b,
                 "after": a,
@@ -214,7 +214,7 @@ def write_audit_exports(payload: dict[str, Any]) -> None:
     lines = [
         "# Seasonality Foundation Rebuild Audit",
         "",
-        farkdown f"- Generated: {payload['generated_at']}",
+        f"- Generated: {payload['generated_at']}",
         f"- Execute mode: {payload['execute']}",
         "",
         "## Before vs After",
