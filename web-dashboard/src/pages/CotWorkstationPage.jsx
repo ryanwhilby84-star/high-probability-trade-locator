@@ -14,6 +14,7 @@ import {
 
 import '../workstation/cotWorkstationPage.css'
 import '../workstation/cotWorkstationSoft.css'
+import '../workstation/weeklyInspectorCompact.css'
 
 class CotWorkstationErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { error: null, retryToken: 0 } }
