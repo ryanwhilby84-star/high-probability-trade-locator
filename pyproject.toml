@@ -12,6 +12,8 @@ dependencies = [
   "openpyxl>=3.1.2",
   "requests>=2.31.0",
   "python-dotenv>=1.0.1",
+  "fastapi>=0.116.0",
+  "uvicorn[standard]>=0.35.0",
 ]
 
 [project.optional-dependencies]
