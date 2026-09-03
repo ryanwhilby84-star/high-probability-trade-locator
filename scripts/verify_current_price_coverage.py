@@ -82,7 +82,7 @@ def _classify(quote: dict[str, Any] | None, candle: dict[str, Any] | None) -> st
         return "UNAVAILABLE" if status != "FALLBACK" else "FALLBACK"
     if status == "LIVE":
         return "PASS"
-    if status in {"STALE", "FALLBACK", "UNAVAILABLE"}:
+    if status in {"IDLE", "STALE", "FALLBACK", "UNAVAILABLE"}:
         return status
     return status
 
@@ -97,6 +97,8 @@ def _reason(row: dict[str, Any]) -> str:
         return f"{row['provider']}:{row['provider_symbol']} mapped but returned no usable price"
     if c == "FALLBACK":
         return f"using {row.get('fallback_source') or 'trusted fallback close'}"
+    if c == "IDLE":
+        return f"valid provider quote idle age={row.get('age_seconds')}s"
     if c == "STALE":
         return f"provider quote stale age={row.get('age_seconds')}s"
     return c
@@ -152,7 +154,7 @@ def main() -> int:
         }
         rows.append(row)
         counts[classification] += 1
-        if classification != "PASS":
+        if classification not in {"PASS", "IDLE"}:
             failed.append({"internal_key": key, "classification": classification, "reason": _reason(row)})
 
     audit = {
@@ -166,6 +168,7 @@ def main() -> int:
             "config_entries": len(rows),
             "runtime_mapped": sum(1 for r in rows if r["runtime_mapped"]),
             "PASS": counts.get("PASS", 0),
+            "IDLE": counts.get("IDLE", 0),
             "STALE": counts.get("STALE", 0),
             "FALLBACK": counts.get("FALLBACK", 0),
             "UNAVAILABLE": counts.get("UNAVAILABLE", 0),
@@ -183,13 +186,13 @@ def main() -> int:
     print("CURRENT PRICE COVERAGE")
     print("=" * 78)
     print(f"Runtime mapped: {audit['totals']['runtime_mapped']}/{audit['totals']['config_entries']}")
-    print("  " + "  ".join(f"{k}={counts.get(k, 0)}" for k in ("PASS", "STALE", "FALLBACK", "UNAVAILABLE", "MAPPING ERROR", "FRONTEND RESOLUTION ERROR")))
+    print("  " + "  ".join(f"{k}={counts.get(k, 0)}" for k in ("PASS", "IDLE", "STALE", "FALLBACK", "UNAVAILABLE", "MAPPING ERROR", "FRONTEND RESOLUTION ERROR")))
     if failed:
         print(f"\nNon-pass ({len(failed)}):")
         for failure in failed:
             print(f"  [{failure['classification']}] {failure['internal_key']}: {failure['reason']}")
     else:
-        print("\nAll instruments PASS.")
+        print("\nAll instruments are PASS or IDLE; no coverage failures.")
     print(f"\nWrote {AUDIT_PATH}")
 
     hard = counts.get("MAPPING ERROR", 0) or counts.get("FRONTEND RESOLUTION ERROR", 0)
