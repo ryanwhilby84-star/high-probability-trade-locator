@@ -31,6 +31,7 @@ from hptl.prices.oanda_instrument_discovery import (
 
 CURRENT_PRICE_STALE_SECONDS = 60
 STATUS_LIVE = "LIVE"
+STATUS_IDLE = "IDLE"
 STATUS_STALE = "STALE"
 STATUS_FALLBACK = "FALLBACK"
 STATUS_UNAVAILABLE = "UNAVAILABLE"
@@ -75,7 +76,7 @@ class CurrentPrice:
 
     @property
     def current_price(self) -> float | None:
-        if self.mid is not None and self.status in (STATUS_LIVE, STATUS_STALE):
+        if self.mid is not None and self.status in (STATUS_LIVE, STATUS_IDLE, STATUS_STALE):
             return self.mid
         return self.fallback_close
 
@@ -314,9 +315,15 @@ def _build_current_price(mapping: InstrumentMapping, snap: PriceSnapshot | None,
     note: str | None = None
 
     if mid is not None:
-        status = STATUS_LIVE if age is not None and age <= CURRENT_PRICE_STALE_SECONDS else STATUS_STALE
-        if status == STATUS_STALE:
-            note = "provider quote older than stale threshold" if age is not None else "quote age unknown"
+        if age is not None and age <= CURRENT_PRICE_STALE_SECONDS:
+            status = STATUS_LIVE
+        else:
+            # An aged quote is still a valid provider quote. It may simply be an
+            # inactive/closed market or an instrument that has not printed a new
+            # tick. Feed health is monitored separately by the stream service, so
+            # quote age alone must not imply a broken feed.
+            status = STATUS_IDLE
+            note = "provider quote idle; last price older than live threshold" if age is not None else "provider quote idle; quote age unknown"
     else:
         status = STATUS_UNAVAILABLE
         note = "no provider quote"
