@@ -229,7 +229,7 @@ def _build_registry() -> dict[str, InstrumentSpec]:
         _legacy_cot("Coffee", asset_class="commodities", subgroup="soft", macro_profile="soft", cftc_code="083731", oanda_symbol=None, cot_type="disaggregated", usd=0.55, commodity=0.7),
         _legacy_cot("Cocoa", asset_class="commodities", subgroup="soft", macro_profile="soft", cftc_code="073732", oanda_symbol=None, cot_type="disaggregated", usd=0.55, commodity=0.7),
         _legacy_cot("Cotton", asset_class="commodities", subgroup="soft", macro_profile="soft", cftc_code="033661", oanda_symbol=None, cot_type="disaggregated", usd=0.55, commodity=0.7),
-        _legacy_cot("Corn", asset_class="commodities", subgroup="ag", macro_profile="ag", cftc_code="002602", oanda_symbol=None, cot_type="disaggregated", usd=0.5, china=0.4, commodity=0.85),
+        _legacy_cot("Corn", asset_class="commodities", subgroup="ag", macro_profile="ag", cftc_code="002602", oanda_symbol="CORN_USD", cot_type="disaggregated", usd=0.5, china=0.4, commodity=0.85),
         _legacy_cot("Wheat", asset_class="commodities", subgroup="ag", macro_profile="ag", cftc_code="001602", oanda_symbol="WHEAT_USD", cot_type="disaggregated", usd=0.5, china=0.35, commodity=0.85),
         _legacy_cot("Soybeans", asset_class="commodities", subgroup="ag", macro_profile="ag", cftc_code="005602", oanda_symbol="SOYBN_USD", cot_type="disaggregated", usd=0.5, china=0.7, commodity=0.85),
         _legacy_cot("Sugar", asset_class="commodities", subgroup="soft", macro_profile="soft", cftc_code="080732", oanda_symbol="SUGAR_USD", cot_type="disaggregated", usd=0.55, commodity=0.85),
