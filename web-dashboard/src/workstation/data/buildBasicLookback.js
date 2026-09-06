@@ -91,7 +91,7 @@ function buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand
     const date = orderedDates[index]
     const week = weeklyView[date]
     const commercialMatches = week && inBand(week?.commercial?.percentile, commercialBand)
-    const ncMatches = !ncBand || inBand(week?.non_commercial?.percentile, ncBand)
+    const ncMatches = !ncBand || inBand(week?.nonCommercial?.percentile, ncBand)
     const qualifies = commercialMatches && ncMatches && isNum(week?.price?.close) && week.price.close !== 0
 
     if (!qualifies) {
@@ -192,7 +192,7 @@ export function buildBasicLookback({ weeklyView, dates = [], selectedDate, horiz
 
   const selectedWeek = weeklyView[selectedDate]
   const selectedPercentile = selectedWeek?.commercial?.percentile
-  const selectedNcPercentile = selectedWeek?.non_commercial?.percentile
+  const selectedNcPercentile = selectedWeek?.nonCommercial?.percentile
   const commercialBand = percentileBand(selectedPercentile, 'Commercial')
   const ncBand = oppositionBand(selectedPercentile, selectedNcPercentile)
 
