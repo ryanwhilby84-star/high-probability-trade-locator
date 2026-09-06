@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-22T05:13:17.347197+00:00",
+  "generated_at": "2026-09-05T06:07:00.625245+00:00",
   "summary": {
     "total": 13,
     "available": 13,
     "live": 0,
-    "cached": 2,
-    "stale": 11,
-    "warning": 0,
+    "cached": 0,
+    "stale": 5,
+    "warning": 8,
     "missing": 0,
     "unknown": 0,
     "last_successful_refresh": "2026-08-01T04:26:16.235065+00:00",
@@ -25,7 +25,7 @@
         "DGS10"
       ],
       "latest_observation_date": "2026-06-10",
-      "latency_days": 73,
+      "latency_days": 87,
       "last_successful_refresh": "2026-06-12T11:24:59.430241+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -42,7 +42,7 @@
         "DGS10"
       ],
       "latest_observation_date": "2026-06-10",
-      "latency_days": 73,
+      "latency_days": 87,
       "last_successful_refresh": "2026-06-12T11:24:59.430241+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -59,7 +59,7 @@
         "DGS10"
       ],
       "latest_observation_date": "2026-06-10",
-      "latency_days": 73,
+      "latency_days": 87,
       "last_successful_refresh": "2026-06-12T11:24:59.430241+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -69,14 +69,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "IR14270",
         "DTWEXBGS"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:19.205147+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -86,14 +86,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "cached",
-      "freshness": "Cached",
+      "data_status": "stale",
+      "freshness": "Stale",
       "source_series_ids": [
         "WPU102301",
         "IR14270"
       ],
       "latest_observation_date": "2026-06-30",
-      "latency_days": 53,
+      "latency_days": 67,
       "last_successful_refresh": "2026-08-01T04:26:16.235065+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -103,14 +103,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PCOPPUSDM",
         "DGS10"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:32.119511+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -120,14 +120,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "DCOILWTICO",
         "DTWEXBGS"
       ],
       "latest_observation_date": "2026-05-22",
-      "latency_days": 92,
+      "latency_days": 106,
       "last_successful_refresh": "2026-05-30T21:11:26.116704+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -137,14 +137,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "cached",
-      "freshness": "Cached",
+      "data_status": "stale",
+      "freshness": "Stale",
       "source_series_ids": [
         "DHHNGSP",
         "DCOILWTICO"
       ],
       "latest_observation_date": "2026-07-27",
-      "latency_days": 26,
+      "latency_days": 40,
       "last_successful_refresh": "2026-08-01T04:26:11.709481+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -154,14 +154,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PCOFFOTMUSDM",
         "DGS10"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:32.119511+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -171,14 +171,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PCOCOUSDM",
         "DGS10"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:32.119511+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -188,14 +188,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PWHEAMTUSDM",
         "DGS10"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:32.119511+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -205,14 +205,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PMAIZMTUSDM",
         "DGS10"
       ],
       "latest_observation_date": "2026-05-31",
-      "latency_days": 83,
+      "latency_days": 97,
       "last_successful_refresh": "2026-05-30T21:11:32.119511+00:00",
       "carried_over": false,
       "failure_reason": null
@@ -222,14 +222,14 @@
       "data_source": "FRED",
       "available": true,
       "coverage_status": "available",
-      "data_status": "stale",
-      "freshness": "Stale",
+      "data_status": "warning",
+      "freshness": "Warning",
       "source_series_ids": [
         "PSOYBUSDQ",
         "DGS10"
       ],
       "latest_observation_date": "2026-06-30",
-      "latency_days": 53,
+      "latency_days": 67,
       "last_successful_refresh": "2026-05-30T21:11:35.368259+00:00",
       "carried_over": false,
       "failure_reason": null

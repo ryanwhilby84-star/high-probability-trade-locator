@@ -1,0 +1,30 @@
+{
+  "schema_version": "soybean_valuation_research_v1",
+  "status": "awaiting_inputs",
+  "as_of": null,
+  "current": {
+    "market_price": null,
+    "fair_value": null,
+    "scarcity_fair_value": null,
+    "crush_implied_value": null,
+    "deviation": null,
+    "stocks_to_use": null,
+    "ending_stocks": null,
+    "total_use": null,
+    "crush_use": null,
+    "exports": null,
+    "meal_price": null,
+    "oil_price": null,
+    "fx_adjustment": null,
+    "biofuel_adjustment": null,
+    "wasde_as_of": null
+  },
+  "history": [],
+  "methodology": {
+    "primary_anchor": "inverse stocks-to-use scarcity value",
+    "secondary_anchor": "board crush implied bean value",
+    "secondary_adjustments": ["BRL/USD competitiveness", "biofuel regime"],
+    "point_in_time_required": true,
+    "synthetic_fallback": false
+  }
+}
