@@ -26,6 +26,11 @@ function fmtRatio(value) {
   return `${Number(value).toFixed(1)}x`
 }
 
+function fmtPercentile(value) {
+  if (value == null || !Number.isFinite(Number(value))) return '—'
+  return `${Number(value).toFixed(1)}th`
+}
+
 function evidenceRead(lookback, evidence) {
   const hit = Number(evidence?.hitRatePct)
   const expectancy = Number(evidence?.expectancyPct)
@@ -87,11 +92,11 @@ export function BasicLookbackPanel({ week }) {
   const lookback = useBasicSelectedWeekLookback(week)
 
   if (!lookback) {
-    return <section className="cot-lookback cot-lookback--loading" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div><p>Preparing historical episodes…</p></section>
+    return <section className="cot-lookback cot-lookback--loading" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div><p>Preparing historical episodes…</p></section>
   }
 
   if (!lookback.available) {
-    return <section className="cot-lookback cot-lookback--empty" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div><p>{lookback.reason || 'Lookback unavailable for this week.'}</p></section>
+    return <section className="cot-lookback cot-lookback--empty" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div><p>{lookback.reason || 'Lookback unavailable for this week.'}</p></section>
   }
 
   const evidence = lookback.primaryEvidence || {}
@@ -106,8 +111,9 @@ export function BasicLookbackPanel({ week }) {
     <section className="cot-lookback" aria-label="Historical lookback">
       <div className="cot-lookback-head">
         <div>
-          <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div>
+          <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div>
           <div className="cot-lookback-rule">{lookback.cohortLabel}</div>
+          <div className="cot-lookback-direction">Selected week: <strong>C {fmtPercentile(lookback.selectedPercentile)} · NC {fmtPercentile(lookback.selectedNcPercentile)}</strong></div>
           <div className="cot-lookback-direction">Expected COT direction: <strong>{lookback.expectedDirection === 'down' ? 'LOWER' : 'HIGHER'}</strong></div>
         </div>
         <div className="cot-lookback-count"><strong>{lookback.priorEpisodeCount}</strong><span>independent episodes</span></div>
