@@ -3,8 +3,10 @@
  * Visualization-only — does not alter COT calculations or exports.
  *
  * Price candles use completed weekly OHLC dates (provider/store weeks).
- * COT values attach onto that timeline and simply stop at the latest report —
- * price is never truncated because COT is behind.
+ * COT values live ONLY on genuine COT report dates. They are never carried
+ * forward onto price-only rows. This matters because carrying Tuesday's report
+ * onto a Friday price bar made one COT observation appear as two separate weeks
+ * in the chart/inspector and produced duplicated percentile/lookback reads.
  */
 
 import {
@@ -79,21 +81,19 @@ export function buildPositioningWorkstationSeries(
     if (pb) priceByDate.set(pb.date, pb)
   }
 
-  // COT attach map (as-of match) — used for COT panel values, not for truncating price.
+  // Exact COT report map. A report is one observation and must appear once.
   const cotByDate = new Map()
-  let prevMatchedBarDate = null
   for (const cot of cotSeries) {
     const date = String(cot.date || '').slice(0, 10)
     if (!date) continue
-    const storeBar = matchOhlcBarForCotWeek(date, completedPriceBars, prevMatchedBarDate)
-    if (storeBar?.date) prevMatchedBarDate = storeBar.date
     cotByDate.set(date, cot)
   }
 
-  // Unified timeline = all completed price weeks ∪ all COT weeks (sorted).
+  // Unified timeline = all completed price weeks ∪ all genuine COT report weeks.
+  // Price and COT can therefore share a camera without inventing extra COT prints.
   const allDates = new Set([
     ...priceByDate.keys(),
-    ...[...cotByDate.keys()],
+    ...cotByDate.keys(),
   ])
   const sortedDates = [...allDates].sort()
 
@@ -104,32 +104,12 @@ export function buildPositioningWorkstationSeries(
   for (const date of sortedDates) {
     const time = barTime(date)
     if (!Number.isFinite(time)) continue
-    const priceBar = priceByDate.get(date) || null
-    // As-of COT: latest COT report on or before this price/COT date.
-    let cot = cotByDate.get(date) || null
-    if (!cot) {
-      for (const c of cotSeries) {
-        const cd = String(c.date || '').slice(0, 10)
-        if (cd <= date) cot = c
-        else break
-      }
-      // Only attach as-of COT onto price-only dates after the last report when
-      // the date is still within the same calendar week of that report — otherwise
-      // leave COT null so lines stop after the latest report.
-      if (cot && String(cot.date || '').slice(0, 10) !== date) {
-        const cotDate = String(cot.date || '').slice(0, 10)
-        if (date > cotLastDate) {
-          cot = null
-        } else if (cotDate !== date) {
-          // keep as-of for historical price dates between COT prints
-        }
-      }
-    }
 
-    // Stronger rule: after latest COT report date, COT nets are null (price continues).
-    const cotLive = cot && String(cot.date || '').slice(0, 10) <= (cotLastDate || '') ? cot : cot
-    const afterCot = Boolean(cotLastDate && date > cotLastDate)
-    const cotRow = afterCot ? null : cotLive
+    const priceBar = priceByDate.get(date) || null
+
+    // CRITICAL: exact report date only. Do not as-of carry a COT print onto a
+    // price-only date (for example Tuesday report -> Friday price bar).
+    const cotRow = cotByDate.get(date) || null
 
     const ohlc = priceBar
       ? {
@@ -140,7 +120,9 @@ export function buildPositioningWorkstationSeries(
         }
       : null
 
-    // Historical COT weeks without a same-date price bar: as-of match OHLC for the row.
+    // A genuine COT report date can fall on a different weekday from the
+    // provider's weekly candle. Match price only for that report row so the
+    // inspector has a price reference; this does not create another COT row.
     let rowOhlc = ohlc
     if (!rowOhlc && cotRow) {
       const matched = matchOhlcBarForCotWeek(date, completedPriceBars, null)
@@ -163,12 +145,13 @@ export function buildPositioningWorkstationSeries(
       low: rowOhlc?.low ?? null,
       close: rowOhlc?.close ?? null,
       price: isNum(rowOhlc?.close) ? rowOhlc.close : cotRow?.price ?? null,
-      institutional_net: afterCot ? null : cotRow?.institutional_net ?? null,
-      institutional_wow: afterCot ? null : cotRow?.institutional_wow ?? null,
-      retail_net: afterCot ? null : cotRow?.retail_net ?? null,
-      retail_wow: afterCot ? null : cotRow?.retail_wow ?? null,
-      commercial_net: afterCot ? null : cotRow?.commercial_net ?? null,
-      commercial_wow: afterCot ? null : cotRow?.commercial_wow ?? null,
+      institutional_net: cotRow?.institutional_net ?? null,
+      institutional_wow: cotRow?.institutional_wow ?? null,
+      retail_net: cotRow?.retail_net ?? null,
+      retail_wow: cotRow?.retail_wow ?? null,
+      commercial_net: cotRow?.commercial_net ?? null,
+      commercial_wow: cotRow?.commercial_wow ?? null,
+      isCotReport: Boolean(cotRow),
     }
 
     fullRows.push(row)
@@ -176,8 +159,6 @@ export function buildPositioningWorkstationSeries(
       alignedOhlcWeeks += 1
       fullWeeklyBars.push(priceBar)
     } else if (rowOhlc) {
-      // COT week without native same-date bar — still plot a candle on the COT date
-      // for historical continuity, but never invent weeks after the price tip.
       alignedOhlcWeeks += 1
       fullWeeklyBars.push({
         time,
@@ -190,17 +171,13 @@ export function buildPositioningWorkstationSeries(
     }
   }
 
-  // Prefer pure completed price bars as the candle series (provider weeks).
-  // This is what TradingView compares against.
+  // Prefer pure completed provider price bars as the candle series.
   const priceOnlyBars = completedPriceBars.map(toPriceBar).filter(Boolean)
 
   const range = computeWorkstationCommonRange(fullRows, priceOnlyBars)
 
-  // IMPORTANT: the workstation price pane must retain the provider's full
-  // completed weekly history. Previously the default path silently clipped both
-  // rows and candles to the COT overlap, which is typically ~3 years because the
-  // positioning model is a 156-report series. Common-range clipping is now an
-  // explicit diagnostics-only opt-in.
+  // The workstation price pane retains the provider's full completed weekly
+  // history. Common-range clipping is diagnostics-only and explicit.
   const useCommon = clipToCommonRange && !preserveFullCotHistory && Boolean(range.commonFirst && range.commonLast)
   const rows = useCommon
     ? sliceRowsToDateRange(fullRows, range.commonFirst, range.commonLast)
@@ -223,7 +200,7 @@ export function buildPositioningWorkstationSeries(
     weeklyBars,
     priceSource: resolved.priceSource,
     meta: {
-      cotWeeks: cotSeries.length,
+      cotWeeks: cotSeries.filter((row) => isNum(row?.commercial_net) || isNum(row?.institutional_net) || isNum(row?.retail_net)).length,
       storeWeeklyBars: resolved.weeklyBars?.length ?? 0,
       filteredWeeklyBars: completedPriceBars.length,
       alignedOhlcWeeks,
@@ -240,6 +217,7 @@ export function buildPositioningWorkstationSeries(
       priceLastDate: weeklyBars[weeklyBars.length - 1]?.date ?? null,
       priceNotTruncatedToCot: !useCommon,
       clippedToCommonRange: useCommon,
+      cotCarriedOntoPriceRows: false,
     },
   }
 }
