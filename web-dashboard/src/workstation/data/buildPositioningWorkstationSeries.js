@@ -49,7 +49,7 @@ function toPriceBar(bar) {
  * @param {object} model - buildCotWorkstation() output
  * @param {object|null} priceRec - getInstrumentPrices() record
  * @param {object|null} ohlcExportBlock - workstation_ohlc_latest.json instrument block
- * @param {{ preserveFullCotHistory?: boolean }} [options]
+ * @param {{ preserveFullCotHistory?: boolean, clipToCommonRange?: boolean }} [options]
  */
 export function buildPositioningWorkstationSeries(
   model,
@@ -58,6 +58,7 @@ export function buildPositioningWorkstationSeries(
   options = {},
 ) {
   const preserveFullCotHistory = options.preserveFullCotHistory === true
+  const clipToCommonRange = options.clipToCommonRange === true
   const cotSeries = Array.isArray(model?.series) ? model.series : []
   if (!cotSeries.length) {
     return { rows: [], weeklyBars: [], priceSource: 'none', meta: {} }
@@ -194,8 +195,13 @@ export function buildPositioningWorkstationSeries(
   const priceOnlyBars = completedPriceBars.map(toPriceBar).filter(Boolean)
 
   const range = computeWorkstationCommonRange(fullRows, priceOnlyBars)
-  // Default: do NOT slice price back to COT overlap. Only slice when explicitly requested.
-  const useCommon = !preserveFullCotHistory && Boolean(range.commonFirst && range.commonLast)
+
+  // IMPORTANT: the workstation price pane must retain the provider's full
+  // completed weekly history. Previously the default path silently clipped both
+  // rows and candles to the COT overlap, which is typically ~3 years because the
+  // positioning model is a 156-report series. Common-range clipping is now an
+  // explicit diagnostics-only opt-in.
+  const useCommon = clipToCommonRange && !preserveFullCotHistory && Boolean(range.commonFirst && range.commonLast)
   const rows = useCommon
     ? sliceRowsToDateRange(fullRows, range.commonFirst, range.commonLast)
     : fullRows
@@ -210,7 +216,7 @@ export function buildPositioningWorkstationSeries(
 
   const note =
     ohlcExportBlock?.note ??
-    (incomplete ? 'Price OHLC history incomplete — displaying common overlap only.' : null)
+    (incomplete ? 'Price OHLC history incomplete — full available price history retained.' : null)
 
   return {
     rows,
@@ -232,7 +238,8 @@ export function buildPositioningWorkstationSeries(
       rangeNote: note,
       cotLastDate,
       priceLastDate: weeklyBars[weeklyBars.length - 1]?.date ?? null,
-      priceNotTruncatedToCot: true,
+      priceNotTruncatedToCot: !useCommon,
+      clippedToCommonRange: useCommon,
     },
   }
 }
