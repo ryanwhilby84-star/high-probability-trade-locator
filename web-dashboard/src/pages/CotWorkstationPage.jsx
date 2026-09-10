@@ -16,6 +16,68 @@ import '../workstation/cotWorkstationPage.css'
 import '../workstation/cotWorkstationSoft.css'
 import '../workstation/cotWorkstationFinal.css'
 
+/*
+ * Keep the fullscreen research layout attached to the rendered route itself.
+ * This intentionally wins over the legacy fitted/flex workstation rules: the
+ * four panels are analytical charts, not strips that must all fit in one screen.
+ */
+const FORCED_RESEARCH_LAYOUT = `
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-research-stage {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-canvas-scroll {
+  display: block !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-gutter: stable !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panels {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding-bottom: 28px !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel,
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group,
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--cot {
+  display: block !important;
+  flex: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
+  display: block !important;
+  flex: none !important;
+  height: 430px !important;
+  min-height: 430px !important;
+  max-height: none !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot .cot-ws-panel-body {
+  display: block !important;
+  flex: none !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  max-height: none !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group {
+  border-top: 6px solid #dfe5e2 !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot {
+  border-bottom: 6px solid #e9eeec !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-resize-handle {
+  display: none !important;
+}
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-plot,
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-pane,
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-canvas {
+  min-height: 100% !important;
+}
+`
+
 class CotWorkstationErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { error: null, retryToken: 0 } }
   static getDerivedStateFromError(error) { return { error } }
@@ -48,6 +110,7 @@ export function CotWorkstationPage({ marketId, trackedMarkets, sidebarClass }) {
 
   return (
     <div className="cot-ws-page">
+      <style>{FORCED_RESEARCH_LAYOUT}</style>
       <header className="cot-ws-page-topbar">
         <div className="cot-ws-page-topbar-left">
           <button type="button" className="cot-ws-page-btn" onClick={navigateToScanner}>← Scanner</button>
