@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from hptl.seasonality_workstation.engine import build_seasonality_research
+from hptl.seasonality_workstation.lookback import build_reliable_seasonal_lookback
 from hptl.seasonality_workstation.models import DEFAULT_LOOKBACK, ENGINE_VERSION
 from hptl.seasonality_workstation.production_roadmap import apply_production_seasonality
 from hptl.seasonality_workstation.returns import (
@@ -66,7 +67,7 @@ def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> N
             rows,
             years=sample_years,
             anchor_week=anchor_week,
-            horizons=(4, 8, 12),
+            horizons=(1, 2, 4, 8, 12),
         )
 
     research["lookback_agreement"] = robust_lookback_agreement(
@@ -86,6 +87,83 @@ def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> N
     # actually shown on screen. Preserve the old validation separately for audit.
     research["legacy_walk_forward"] = research.get("walk_forward")
     research["walk_forward"] = robust
+
+
+def _attach_reliable_seasonal_lookback(
+    research: dict[str, Any], instrument_id: str
+) -> None:
+    """Attach the auditable same-ISO-week lookback and feed its stats to the UI.
+
+    The displayed Seasonal Roadmap remains a separate path model. Only the
+    horizon statistics on its side panel are replaced with actual historical
+    same-week outcomes so the visual path cannot manufacture apparent edge.
+    """
+    selected = str(research.get("selected_lookback") or DEFAULT_LOOKBACK)
+    lookbacks = research.get("lookbacks") or {}
+    block = lookbacks.get(selected) or {}
+    years = list(block.get("sample_years") or [])
+    anchor = research.get("anchor") or {}
+    anchor_week = int(anchor.get("iso_week") or 0)
+    asof = str(anchor.get("date") or "")[:10]
+    price_id = str(research.get("price_instrument_id") or instrument_id)
+
+    if not years or not anchor_week:
+        research["seasonal_lookback"] = {
+            "available": False,
+            "lookback": selected,
+            "anchor_week": anchor_week,
+            "reason": "missing_sample_years_or_anchor_week",
+        }
+        return
+
+    daily, source, error = load_daily_closes(price_id)
+    if error or not daily:
+        research["seasonal_lookback"] = {
+            "available": False,
+            "lookback": selected,
+            "anchor_week": anchor_week,
+            "reason": error or "no_daily_history",
+            "price_source": source,
+        }
+        return
+
+    # Critical anti-lookahead gate: nothing later than the workstation anchor is
+    # allowed into the analogue engine, even when the canonical store contains it.
+    if asof:
+        daily = [(d, c) for d, c in daily if str(d)[:10] <= asof]
+    rows = weekly_return_rows(weekly_closes_from_daily(daily))
+    lookback_result = build_reliable_seasonal_lookback(
+        rows,
+        years=years,
+        anchor_week=anchor_week,
+        lookback=selected,
+    )
+    lookback_result["price_source"] = source
+    lookback_result["asof"] = asof or None
+    research["seasonal_lookback"] = lookback_result
+
+    if not lookback_result.get("available"):
+        return
+
+    # The right-hand Seasonal Roadmap panel is the live, visible route. Make it
+    # consume the exact same audited observations rather than separate legacy
+    # horizon maths. The roadmap line itself is intentionally left untouched.
+    forecast_stats = lookback_result.get("forecast_stats") or {}
+    roadmap = research.get("seasonal_roadmap") or {}
+    if roadmap.get("available"):
+        roadmap["forecast_stats"] = forecast_stats
+        roadmap["lookback_audit"] = lookback_result
+
+    monthly = research.get("monthly_roadmap") or {}
+    if monthly.get("available"):
+        monthly["forecast_stats"] = forecast_stats
+        monthly["lookback_audit"] = lookback_result
+
+    seasonality = research.get("seasonality") or {}
+    nested = seasonality.get("seasonal_roadmap") or {}
+    if nested.get("available"):
+        nested["forecast_stats"] = forecast_stats
+        nested["lookback_audit"] = lookback_result
 
 
 def build_seasonality_workstation_payload(
@@ -121,6 +199,10 @@ def build_seasonality_workstation_payload(
     # Legacy indexed / mean-return products remain explicit alternate views.
     research = apply_production_seasonality(research)
 
+    # Build the final auditable same-week analogue study after the roadmap so
+    # its horizon statistics cannot be overwritten by presentation transforms.
+    _attach_reliable_seasonal_lookback(research, instrument_id)
+
     return {
         "status": "ok",
         "instrument_id": instrument_id,
@@ -143,6 +225,7 @@ def build_seasonality_workstation_payload(
         "seasonal_roadmap": research.get("seasonal_roadmap"),
         "monthly_roadmap": research.get("monthly_roadmap"),
         "weekly_roadmap": research.get("weekly_roadmap"),
+        "seasonal_lookback": research.get("seasonal_lookback"),
         "walk_forward": research.get("walk_forward"),
         "robust_walk_forward": research.get("robust_walk_forward"),
         "legacy_walk_forward": research.get("legacy_walk_forward"),
