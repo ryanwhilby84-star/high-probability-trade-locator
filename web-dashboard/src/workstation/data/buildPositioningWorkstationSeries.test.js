@@ -55,6 +55,63 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.meta.clippedToCommonRange).toBe(false)
   })
 
+  it('does not copy a Tuesday COT report onto a Friday price-only row', () => {
+    const cotSeries = [
+      {
+        date: '2026-09-01',
+        price: 10,
+        institutional_net: 100,
+        institutional_wow: 10,
+        retail_net: 20,
+        retail_wow: 2,
+        commercial_net: -120,
+        commercial_wow: -12,
+      },
+      {
+        date: '2026-09-08',
+        price: 11,
+        institutional_net: 130,
+        institutional_wow: 30,
+        retail_net: 25,
+        retail_wow: 5,
+        commercial_net: -155,
+        commercial_wow: -35,
+      },
+    ]
+    const model = buildCotWorkstation({
+      market: 'Soybeans',
+      series: cotSeries,
+      weeks: 2,
+      has_price: true,
+      has_commercial: true,
+      has_retail: true,
+    })
+    const ohlcExportBlock = {
+      weekly_ohlc: [
+        { date: '2026-09-04', open: 10, high: 11, low: 9, close: 10.5 },
+        { date: '2026-09-11', open: 10.5, high: 12, low: 10, close: 11.5 },
+      ],
+    }
+
+    const bound = buildPositioningWorkstationSeries(model, null, ohlcExportBlock, {
+      preserveFullCotHistory: true,
+    })
+
+    const sep1 = bound.rows.find((r) => r.date === '2026-09-01')
+    const sep4 = bound.rows.find((r) => r.date === '2026-09-04')
+    const sep8 = bound.rows.find((r) => r.date === '2026-09-08')
+
+    expect(sep1?.isCotReport).toBe(true)
+    expect(sep1?.commercial_net).toBe(-120)
+    expect(sep4?.isCotReport).toBe(false)
+    expect(sep4?.commercial_net).toBeNull()
+    expect(sep4?.institutional_net).toBeNull()
+    expect(sep4?.retail_net).toBeNull()
+    expect(sep8?.isCotReport).toBe(true)
+    expect(sep8?.commercial_net).toBe(-155)
+    expect(bound.meta.cotCarriedOntoPriceRows).toBe(false)
+  })
+
   it('continues price candles past the latest COT report', () => {
     const cotSeries = [
       {
@@ -107,6 +164,7 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.meta.cotLastDate).toBe('2026-07-21')
     const lastPriceRow = bound.rows.find((r) => r.date === '2026-07-17')
     expect(lastPriceRow?.close).toBe(2.5)
+    expect(lastPriceRow?.commercial_net).toBeNull()
   })
 
   it('rejects short mismatched store OHLC for indices', () => {
