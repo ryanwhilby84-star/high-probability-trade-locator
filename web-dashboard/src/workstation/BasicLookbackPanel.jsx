@@ -48,7 +48,11 @@ function evidenceRead(lookback, evidence) {
 
 function useBasicSelectedWeekLookback(week) {
   const marketId = week?.instrument || ''
-  const selectedDate = week?.date || null
+  // A provider price bar (often Friday) and its COT report (Tuesday) used to be
+  // treated as two selectable "weeks" even though both resolved to the same COT
+  // observation. Always anchor the evidence engine to the canonical COT report
+  // date when one is available.
+  const selectedDate = week?.inspectorAsOfDate || week?.date || null
   const { doc } = useCot3ySeries()
   const { exportBlock } = useWorkstationOhlc(marketId)
   const [inspectorBlock, setInspectorBlock] = React.useState(null)
@@ -113,7 +117,7 @@ export function BasicLookbackPanel({ week }) {
         <div>
           <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div>
           <div className="cot-lookback-rule">{lookback.cohortLabel}</div>
-          <div className="cot-lookback-direction">Selected week: <strong>C {fmtPercentile(lookback.selectedPercentile)} · NC {fmtPercentile(lookback.selectedNcPercentile)}</strong></div>
+          <div className="cot-lookback-direction">Report week {lookback.selectedDate}: <strong>C {fmtPercentile(lookback.selectedPercentile)} · NC {fmtPercentile(lookback.selectedNcPercentile)}</strong></div>
           <div className="cot-lookback-direction">Expected COT direction: <strong>{lookback.expectedDirection === 'down' ? 'LOWER' : 'HIGHER'}</strong></div>
         </div>
         <div className="cot-lookback-count"><strong>{lookback.priorEpisodeCount}</strong><span>independent episodes</span></div>
@@ -161,7 +165,7 @@ export function BasicLookbackPanel({ week }) {
         })}
       </div>
 
-      <p className="cot-lookback-note">Current setup strength and historical evidence are separate. Consecutive matching weeks count as one episode · seasonality excluded · point-in-time only through {week?.date || 'the selected week'}.</p>
+      <p className="cot-lookback-note">Current setup strength and historical evidence are separate. Consecutive matching weeks count as one episode · seasonality excluded · point-in-time only through COT report {lookback.selectedDate || 'the selected week'}.</p>
     </section>
   )
 }
