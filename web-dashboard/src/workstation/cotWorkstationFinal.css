@@ -1,6 +1,6 @@
 /* Stable fullscreen COT workstation layout.
-   Keep the existing chart components and their own sizing logic intact.
-   Only change the outer stack so full-depth panes can scroll vertically. */
+   Keep the existing chart components and their internal sizing untouched.
+   The outer stack scrolls; each PaneShell receives a sensible research height. */
 
 .cot-ws-page-body {
   padding: 0 !important;
@@ -31,7 +31,7 @@
   overflow: hidden !important;
 }
 
-/* The viewport scrolls; the chart stack itself is allowed to be taller than it. */
+/* Scroll the whole analytical stack instead of squeezing four panes into one screen. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-canvas-scroll {
   display: block !important;
   height: 100% !important;
@@ -58,9 +58,22 @@
   min-height: 0 !important;
 }
 
-/* Let PaneShell's pixel bodyHeight drive the chart. Do not force descendants. */
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-body {
+/* Size only the PaneShell body. The chart component already fills its body correctly. */
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
   flex: none !important;
+  height: 360px !important;
+  min-height: 360px !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot .cot-ws-panel-body {
+  flex: none !important;
+  height: 260px !important;
+  min-height: 260px !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-panel-body {
+  height: 280px !important;
+  min-height: 280px !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-resize-handle {
