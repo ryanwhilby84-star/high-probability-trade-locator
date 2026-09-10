@@ -1,0 +1,211 @@
+/* Institutional Edge — COT workstation quality pass.
+ * Loaded last so it can tighten the workstation without disturbing the rest of the app.
+ */
+
+/* Use the screen for analysis, not chrome. */
+.chart-ws.cot-ws-tv.chart-ws-shell {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #11161d;
+}
+
+.chart-ws .chart-ws-toolbar {
+  min-height: 48px;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  gap: 6px 12px !important;
+  align-items: center !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  background: #151a20;
+}
+
+.chart-ws .chart-ws-toolbar-left,
+.chart-ws .chart-ws-toolbar-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+}
+
+.chart-ws .chart-ws-title {
+  font-size: .72rem !important;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+
+.chart-ws .chart-ws-meta {
+  margin: 0 !important;
+  font-size: .72rem !important;
+  white-space: nowrap;
+}
+
+.chart-ws .cot-ws-history,
+.chart-ws .cot-ws-coverage {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px 9px;
+  margin: 0 !important;
+}
+
+.chart-ws .cot-ws-history-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.chart-ws .cot-ws-history-k {
+  font-size: .57rem !important;
+  opacity: .62;
+}
+
+.chart-ws .cot-ws-history-v {
+  font-size: .66rem !important;
+}
+
+.chart-ws .cot-ws-controls,
+.chart-ws .chart-ws-draw-toolbar {
+  margin: 0 !important;
+}
+
+.chart-ws .cot-ws-preset,
+.chart-ws .chart-ws-draw-btn {
+  min-height: 24px;
+  padding: 3px 8px !important;
+}
+
+.chart-ws .chart-ws-readout {
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  min-height: 31px;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Every panel should read as a proper independent historical chart. */
+.chart-ws .chart-ws-stack {
+  background: #eef1f3;
+}
+
+.chart-ws .chart-ws-panel--quality {
+  position: relative;
+  background: #fbfcfd !important;
+  border-top: 6px solid #151a20 !important;
+  box-shadow: inset 0 1px 0 rgba(15,23,42,.08);
+}
+
+.chart-ws .chart-ws-panel--quality:first-child {
+  border-top-width: 2px !important;
+}
+
+.chart-ws .chart-ws-panel-bar {
+  min-height: 32px !important;
+  padding: 5px 10px 4px !important;
+  background: linear-gradient(180deg,#ffffff 0%,#f7f9fa 100%);
+  border-bottom: 1px solid rgba(15,23,42,.10);
+}
+
+.chart-ws .chart-ws-panel-label {
+  color: #27313b !important;
+  font-size: .69rem !important;
+  letter-spacing: .055em;
+}
+
+.chart-ws .chart-ws-panel-sub {
+  color: #77818d !important;
+  font-size: .62rem !important;
+}
+
+.chart-ws .chart-ws-panel-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: .73rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-ws .chart-ws-panel-fit {
+  padding: 2px 5px;
+  border: 1px solid rgba(71,85,105,.22);
+  border-radius: 3px;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: .52rem;
+  letter-spacing: .06em;
+}
+
+/* Give each series enough physical room to tell its own story. */
+.chart-ws .chart-ws-panel--quality[data-panel="price"] .recharts-responsive-container {
+  min-height: 360px !important;
+}
+
+.chart-ws .chart-ws-panel--quality:not([data-panel="price"]) .recharts-responsive-container {
+  min-height: 320px !important;
+}
+
+/* Keep grid useful but quiet. */
+.chart-ws .chart-ws-panel--quality .recharts-cartesian-grid line {
+  stroke: rgba(71,85,105,.11) !important;
+  shape-rendering: crispEdges;
+}
+
+.chart-ws .chart-ws-panel--quality .recharts-cartesian-axis-line {
+  stroke: rgba(71,85,105,.22) !important;
+}
+
+.chart-ws .chart-ws-panel--quality .recharts-text {
+  fill: #66727e !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-ws .chart-ws-panel--quality .recharts-line-curve {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Navigator should look like a navigator rather than another chart. */
+.chart-ws .chart-ws-brush-wrap {
+  margin: 0 !important;
+  padding: 7px 8px 8px !important;
+  background: #151a20;
+  border-top: 0 !important;
+}
+
+.chart-ws .chart-ws-brush-wrap .recharts-wrapper {
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.chart-ws .recharts-brush rect:first-child {
+  fill: #232a33 !important;
+  stroke: rgba(255,255,255,.18) !important;
+}
+
+.chart-ws .recharts-brush-slide {
+  fill: rgba(148,163,184,.15) !important;
+  stroke: rgba(203,213,225,.45) !important;
+}
+
+/* At ordinary laptop widths keep controls compact rather than wrapping into a tall block. */
+@media (min-width: 1180px) {
+  .chart-ws .chart-ws-toolbar {
+    flex-wrap: nowrap !important;
+  }
+
+  .chart-ws .chart-ws-toolbar-left,
+  .chart-ws .chart-ws-toolbar-right {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .chart-ws .chart-ws-panel--quality[data-panel="price"] .recharts-responsive-container,
+  .chart-ws .chart-ws-panel--quality:not([data-panel="price"]) .recharts-responsive-container {
+    min-height: 280px !important;
+  }
+}
