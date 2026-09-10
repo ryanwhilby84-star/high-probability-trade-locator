@@ -15,7 +15,6 @@ import {
 import { HPTL_LINE_TYPE } from './hptlLine.js'
 import { CHART_WS } from './chartTheme.js'
 import {
-  DRAWING_TOOLS,
   drawingsForPanel,
   nearestLabelFromX,
   valueFromY,
@@ -23,10 +22,85 @@ import {
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
+function valuesFor(data, key) {
+  return data.map((d) => d[key]).filter(isNum)
+}
+
 function rangeMinMax(data, key) {
-  const vals = data.map((d) => d[key]).filter(isNum)
+  const vals = valuesFor(data, key)
   if (!vals.length) return { min: null, max: null }
   return { min: Math.min(...vals), max: Math.max(...vals) }
+}
+
+function quantile(sorted, q) {
+  if (!sorted.length) return null
+  if (sorted.length === 1) return sorted[0]
+  const pos = (sorted.length - 1) * q
+  const base = Math.floor(pos)
+  const rest = pos - base
+  const next = sorted[base + 1]
+  return next == null ? sorted[base] : sorted[base] + rest * (next - sorted[base])
+}
+
+/**
+ * Fit the visible history, but do not let one broken / stale COT print flatten
+ * the other 99% of a panel. We only trim points when the full range is wildly
+ * larger than the IQR-based core range. Normal market extremes remain visible.
+ */
+function qualityDomain(data, key, explicitDomain = null) {
+  if (Array.isArray(explicitDomain) && explicitDomain.length === 2) {
+    return { domain: explicitDomain, clipped: 0, min: explicitDomain[0], max: explicitDomain[1] }
+  }
+
+  const vals = valuesFor(data, key).sort((a, b) => a - b)
+  if (!vals.length) return { domain: ['auto', 'auto'], clipped: 0, min: null, max: null }
+
+  const rawMin = vals[0]
+  const rawMax = vals[vals.length - 1]
+  let fitMin = rawMin
+  let fitMax = rawMax
+  let clipped = 0
+
+  if (vals.length >= 20) {
+    const q1 = quantile(vals, 0.25)
+    const q3 = quantile(vals, 0.75)
+    const iqr = q3 - q1
+    if (isNum(iqr) && iqr > 0) {
+      const lowerFence = q1 - 4 * iqr
+      const upperFence = q3 + 4 * iqr
+      const core = vals.filter((v) => v >= lowerFence && v <= upperFence)
+      if (core.length >= Math.max(12, Math.floor(vals.length * 0.9))) {
+        const coreMin = core[0]
+        const coreMax = core[core.length - 1]
+        const rawSpan = rawMax - rawMin
+        const coreSpan = coreMax - coreMin
+        // Only intervene when an outlier is doing genuine visual damage.
+        if (coreSpan > 0 && rawSpan > coreSpan * 2.75) {
+          fitMin = coreMin
+          fitMax = coreMax
+          clipped = vals.length - core.length
+        }
+      }
+    }
+  }
+
+  // The latest observation must always remain visible even when an old bad
+  // print is excluded from auto-fit.
+  const latest = [...data].reverse().find((d) => isNum(d[key]))?.[key]
+  if (isNum(latest)) {
+    fitMin = Math.min(fitMin, latest)
+    fitMax = Math.max(fitMax, latest)
+  }
+
+  const span = fitMax - fitMin
+  const magnitude = Math.max(Math.abs(fitMin), Math.abs(fitMax), 1)
+  const pad = span > 0 ? span * 0.11 : magnitude * 0.08
+  return {
+    domain: [fitMin - pad, fitMax + pad],
+    clipped,
+    min: fitMin,
+    max: fitMax,
+  }
 }
 
 function VerticalCrosshair(props) {
@@ -56,8 +130,9 @@ function ExtremeZones({ extremes, color, domainMin, domainMax }) {
         y1={extremes.high}
         y2={domainMax}
         fill={color}
-        fillOpacity={0.06}
+        fillOpacity={0.055}
         strokeOpacity={0}
+        ifOverflow="hidden"
       />,
     )
   }
@@ -68,8 +143,9 @@ function ExtremeZones({ extremes, color, domainMin, domainMax }) {
         y1={domainMin}
         y2={extremes.low}
         fill={color}
-        fillOpacity={0.06}
+        fillOpacity={0.055}
         strokeOpacity={0}
+        ifOverflow="hidden"
       />,
     )
   }
@@ -104,26 +180,9 @@ function renderDrawingShape(d, ctx, { selectedId, selectMode = false, onSelect }
     return (
       <g key={d.id}>
         {selectMode ? (
-          <line
-            x1={x}
-            x2={x}
-            y1={offset.top}
-            y2={offset.top + ctx.innerHeight}
-            stroke="transparent"
-            strokeWidth={12}
-            {...pickProps}
-          />
+          <line x1={x} x2={x} y1={offset.top} y2={offset.top + ctx.innerHeight} stroke="transparent" strokeWidth={12} {...pickProps} />
         ) : null}
-        <line
-          x1={x}
-          x2={x}
-          y1={offset.top}
-          y2={offset.top + ctx.innerHeight}
-          stroke={stroke}
-          strokeWidth={sw}
-          strokeDasharray="6 4"
-          style={{ pointerEvents: 'none' }}
-        />
+        <line x1={x} x2={x} y1={offset.top} y2={offset.top + ctx.innerHeight} stroke={stroke} strokeWidth={sw} strokeDasharray="6 4" style={{ pointerEvents: 'none' }} />
       </g>
     )
   }
@@ -134,25 +193,9 @@ function renderDrawingShape(d, ctx, { selectedId, selectMode = false, onSelect }
     return (
       <g key={d.id}>
         {selectMode ? (
-          <line
-            x1={offset.left}
-            x2={offset.left + ctx.innerWidth}
-            y1={y}
-            y2={y}
-            stroke="transparent"
-            strokeWidth={12}
-            {...pickProps}
-          />
+          <line x1={offset.left} x2={offset.left + ctx.innerWidth} y1={y} y2={y} stroke="transparent" strokeWidth={12} {...pickProps} />
         ) : null}
-        <line
-          x1={offset.left}
-          x2={offset.left + ctx.innerWidth}
-          y1={y}
-          y2={y}
-          stroke={stroke}
-          strokeWidth={sw}
-          style={{ pointerEvents: 'none' }}
-        />
+        <line x1={offset.left} x2={offset.left + ctx.innerWidth} y1={y} y2={y} stroke={stroke} strokeWidth={sw} style={{ pointerEvents: 'none' }} />
       </g>
     )
   }
@@ -168,14 +211,14 @@ function renderDrawingShape(d, ctx, { selectedId, selectMode = false, onSelect }
     const left = Math.min(x0, x1)
     const width = Math.abs(x1 - x0)
     const top = Math.min(y0, y1)
-    const height = Math.abs(y1 - y0)
+    const boxHeight = Math.abs(y1 - y0)
     return (
       <rect
         key={d.id}
         x={left}
         y={top}
         width={Math.max(width, 2)}
-        height={Math.max(height, 2)}
+        height={Math.max(boxHeight, 2)}
         fill={stroke}
         fillOpacity={selectMode ? 0.12 : 0.08}
         stroke={stroke}
@@ -194,7 +237,7 @@ function renderDrawingShape(d, ctx, { selectedId, selectMode = false, onSelect }
         key={d.id}
         x={x + 4}
         y={y}
-        fill={CHART_WS.drawingText}
+        fill={CHART_WS.drawingText || '#e2e8f0'}
         fontSize={11}
         fontWeight={600}
         {...pickProps}
@@ -348,15 +391,14 @@ export function ChartPanel({
   yDomain = null,
 }) {
   const hasData = data.some((d) => isNum(d[dataKey]))
-  const { min, max } = rangeMinMax(data, dataKey)
-  const pad = isNum(min) && isNum(max) ? (max - min) * 0.05 || 1 : 0
-  const axisDomain =
-    Array.isArray(yDomain) && yDomain.length === 2
-      ? yDomain
-      : isNum(min) && isNum(max)
-        ? [min - pad, max + pad]
-        : ['auto', 'auto']
+  const raw = rangeMinMax(data, dataKey)
+  const fit = qualityDomain(data, dataKey, yDomain)
   const labels = data.map((d) => d.label)
+  const latestValue = [...data].reverse().find((d) => isNum(d[dataKey]))?.[dataKey]
+
+  // Give every series enough vertical room to read its own historical story.
+  // The price panel gets a little more; positioning panels never collapse below 285px.
+  const effectiveHeight = panelId === 'price' ? Math.max(height, 330) : Math.max(height, 285)
 
   const drawOptsRef = React.useRef({})
   drawOptsRef.current = {
@@ -377,11 +419,15 @@ export function ChartPanel({
   const drawingsComponent = useDrawingsCustomizedComponent(drawOptsRef)
 
   return (
-    <div className="chart-ws-panel" data-panel={panelId}>
+    <div className="chart-ws-panel chart-ws-panel--quality" data-panel={panelId}>
       <div className="chart-ws-panel-bar">
         <div className="chart-ws-panel-titles">
           <span className="chart-ws-panel-label">{title}</span>
           {subtitle ? <span className="chart-ws-panel-sub">{subtitle}</span> : null}
+        </div>
+        <div className="chart-ws-panel-value" style={{ color }}>
+          {isNum(latestValue) ? yFormatter(latestValue) : '—'}
+          {fit.clipped > 0 ? <span className="chart-ws-panel-fit">AUTO-FIT</span> : null}
         </div>
       </div>
       {!hasData ? (
@@ -393,11 +439,12 @@ export function ChartPanel({
               {panelWarning}
             </p>
           ) : null}
-          <ResponsiveContainer width="100%" height={height}>
+          <ResponsiveContainer width="100%" height={effectiveHeight}>
             <LineChart
               data={data}
               syncId={syncId}
-              margin={{ top: 6, right: 14, left: 2, bottom: showXAxis ? 18 : 4 }}
+              syncMethod="index"
+              margin={{ top: 12, right: 6, left: 10, bottom: 20 }}
               onMouseMove={(state) => {
                 const p = state?.activePayload?.[0]?.payload
                 if (p) onPoint?.(p)
@@ -410,27 +457,31 @@ export function ChartPanel({
               }}
             >
               <CartesianGrid
-                strokeDasharray="3 3"
+                strokeDasharray="2 4"
                 stroke={CHART_WS.grid}
                 vertical
                 horizontal
               />
               <XAxis
                 dataKey="label"
-                hide={!showXAxis}
+                hide={false}
                 tick={{ fontSize: CHART_WS.axisFontSize, fill: CHART_WS.axis, fontFamily: CHART_WS.fontFamily }}
                 interval="preserveStartEnd"
-                minTickGap={36}
+                minTickGap={58}
                 axisLine={{ stroke: CHART_WS.border }}
-                tickLine={{ stroke: CHART_WS.border }}
+                tickLine={false}
+                height={30}
               />
               <YAxis
+                orientation="right"
                 tick={{ fontSize: CHART_WS.axisFontSize, fill: CHART_WS.axis, fontFamily: CHART_WS.fontFamily }}
-                width={76}
+                width={82}
                 tickFormatter={yFormatter}
-                domain={axisDomain}
+                domain={fit.domain}
+                allowDataOverflow={fit.clipped > 0}
                 axisLine={{ stroke: CHART_WS.border }}
-                tickLine={{ stroke: CHART_WS.border }}
+                tickLine={false}
+                tickCount={6}
               />
               <Tooltip cursor={<VerticalCrosshair />} content={() => null} />
               {activeLabel ? (
@@ -445,19 +496,22 @@ export function ChartPanel({
                 <ExtremeZones
                   extremes={extremes}
                   color={color}
-                  domainMin={isNum(min) ? min - pad : null}
-                  domainMax={isNum(max) ? max + pad : null}
+                  domainMin={isNum(fit.min) ? fit.domain[0] : raw.min}
+                  domainMax={isNum(fit.max) ? fit.domain[1] : raw.max}
                 />
               ) : null}
               {showZeroLine ? (
-                <ReferenceLine y={0} stroke={CHART_WS.zero} strokeWidth={1} />
+                <ReferenceLine y={0} stroke={CHART_WS.zero || 'rgba(148,163,184,.28)'} strokeWidth={1} ifOverflow="hidden" />
               ) : null}
               <Line
                 type={HPTL_LINE_TYPE}
                 dataKey={dataKey}
                 stroke={color}
                 dot={false}
-                strokeWidth={2}
+                activeDot={{ r: 3.5, strokeWidth: 1.5, fill: color }}
+                strokeWidth={2.25}
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 connectNulls={connectNulls}
                 isAnimationActive={false}
               />
@@ -470,4 +524,4 @@ export function ChartPanel({
   )
 }
 
-export { VerticalCrosshair, rangeMinMax }
+export { VerticalCrosshair, rangeMinMax, qualityDomain }
