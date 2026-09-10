@@ -28,6 +28,33 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.weeklyBars).toHaveLength(0)
   })
 
+  it('retains completed price history before the COT overlap by default', () => {
+    const cotSeries = [
+      { date: '2024-01-02', price: 100, institutional_net: 1, retail_net: 2, commercial_net: 3 },
+      { date: '2024-01-09', price: 101, institutional_net: 2, retail_net: 3, commercial_net: 4 },
+    ]
+    const model = buildCotWorkstation({
+      market: 'Test',
+      series: cotSeries,
+      weeks: 2,
+      has_price: true,
+      has_commercial: true,
+      has_retail: true,
+    })
+    const ohlcExportBlock = {
+      weekly_ohlc: [
+        { date: '2020-01-03', open: 50, high: 52, low: 49, close: 51 },
+        { date: '2023-12-29', open: 98, high: 100, low: 97, close: 99 },
+        { date: '2024-01-05', open: 99, high: 102, low: 98, close: 101 },
+      ],
+    }
+
+    const bound = buildPositioningWorkstationSeries(model, null, ohlcExportBlock)
+    expect(bound.weeklyBars[0]?.date).toBe('2020-01-03')
+    expect(bound.meta.priceNotTruncatedToCot).toBe(true)
+    expect(bound.meta.clippedToCommonRange).toBe(false)
+  })
+
   it('continues price candles past the latest COT report', () => {
     const cotSeries = [
       {
@@ -77,7 +104,6 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.weeklyBars.map((b) => b.date)).toContain('2026-07-10')
     expect(bound.meta.priceLastDate).toBe('2026-07-17')
     expect(bound.meta.priceNotTruncatedToCot).toBe(true)
-    // Price continues on provider week dates even though COT last is 2026-07-21.
     expect(bound.meta.cotLastDate).toBe('2026-07-21')
     const lastPriceRow = bound.rows.find((r) => r.date === '2026-07-17')
     expect(lastPriceRow?.close).toBe(2.5)
