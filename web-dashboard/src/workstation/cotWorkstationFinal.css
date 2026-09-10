@@ -1,15 +1,10 @@
-/* COT workstation full-depth layout.
-   This file is imported by the active CotWorkstationPage route. The key rule is
-   structural: fullscreen panes themselves have fixed research heights and the
-   canvas becomes the vertical scroller. This avoids relying on flex allocation. */
-
-.cot-ws-page,
-.cot-ws-page-body {
-  min-height: 0 !important;
-}
+/* Stable fullscreen COT workstation layout.
+   Keep the existing chart components and their own sizing logic intact.
+   Only change the outer stack so full-depth panes can scroll vertically. */
 
 .cot-ws-page-body {
   padding: 0 !important;
+  min-height: 0 !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen {
@@ -36,9 +31,9 @@
   overflow: hidden !important;
 }
 
+/* The viewport scrolls; the chart stack itself is allowed to be taller than it. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-canvas-scroll {
   display: block !important;
-  width: 100% !important;
   height: 100% !important;
   min-height: 0 !important;
   overflow-y: auto !important;
@@ -46,76 +41,42 @@
   scrollbar-gutter: stable !important;
 }
 
-/* Do not let the historical panes share/compress one viewport. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panels {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  gap: 0 !important;
+  display: block !important;
   height: auto !important;
   min-height: 0 !important;
   overflow: visible !important;
-  padding: 0 0 28px !important;
+  padding-bottom: 24px !important;
 }
 
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 0 0 auto !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  border-top: 8px solid #e3e8e5 !important;
-}
-
-/* Force the section, not only its body. This is what prevents flex compression. */
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price {
-  display: block !important;
-  flex: 0 0 440px !important;
-  width: 100% !important;
-  height: 440px !important;
-  min-height: 440px !important;
-  max-height: 440px !important;
-  overflow: hidden !important;
-}
-
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel,
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group,
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--cot {
   display: block !important;
-  flex: 0 0 360px !important;
-  width: 100% !important;
-  height: 360px !important;
-  min-height: 360px !important;
-  max-height: 360px !important;
-  overflow: hidden !important;
-  border-bottom: 8px solid #eef2f0 !important;
-}
-
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--retail {
-  border-bottom: 0 !important;
-}
-
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body,
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group .cot-ws-panel--cot .cot-ws-panel-body {
-  display: block !important;
   flex: none !important;
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 100% !important;
-  max-height: 100% !important;
-  overflow: hidden !important;
+  height: auto !important;
+  min-height: 0 !important;
 }
 
-/* The splitter belongs to the old compressed viewport layout. */
+/* Let PaneShell's pixel bodyHeight drive the chart. Do not force descendants. */
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-body {
+  flex: none !important;
+}
+
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-resize-handle {
   display: none !important;
 }
 
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-plot,
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-pane,
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-canvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 100% !important;
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group {
+  border-top: 1px solid var(--ws-separator-strong) !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot {
+  border-bottom: 1px solid var(--ws-separator) !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--retail {
+  border-bottom: 0 !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-pane-legend {
