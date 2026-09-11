@@ -2,6 +2,7 @@ import React from 'react'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
+import { SeasonalEdgePanel } from '../components/SeasonalEdgePanel.jsx'
 import {
   DXY_COMPONENTS,
   DXY_MARKET_ID,
@@ -135,6 +136,10 @@ export function SeasonalityWorkstationPage({
           </button>
         </div>
       </header>
+
+      <div style={{ padding: '0.75rem 0.75rem 0' }}>
+        <SeasonalEdgePanel />
+      </div>
 
       <SeasonalityWorkstation
         marketId={marketId}
