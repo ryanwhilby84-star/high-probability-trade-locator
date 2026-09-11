@@ -1,6 +1,11 @@
 import React from 'react'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
+import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
+import {
+  DXY_COMPONENTS,
+  DXY_MARKET_ID,
+} from '../seasonality_workstation/crossMarketSeasonality.js'
 import {
   navigateToInstrument,
   navigateToScanner,
@@ -9,6 +14,7 @@ import {
 import { canonicalMarketId } from '../marketResolution.js'
 
 import '../seasonality_workstation/seasonalityWorkstation.css'
+import '../seasonality_workstation/crossMarketSeasonality.css'
 
 /**
  * Seasonality Workstation page — navigates the full canonical tracked universe
@@ -33,6 +39,11 @@ export function SeasonalityWorkstationPage({
   const prevMarket = navIndex > 0 ? navMarkets[navIndex - 1] : null
   const nextMarket =
     navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
+  const dollarComplexIds = React.useMemo(
+    () => new Set([DXY_MARKET_ID, ...DXY_COMPONENTS.map((row) => row.id)]),
+    [],
+  )
+  const showCrossMarketConfirmation = dollarComplexIds.has(marketId)
 
   const [lookback, setLookback] = React.useState('15Y')
   const [payload, setPayload] = React.useState(null)
@@ -133,6 +144,12 @@ export function SeasonalityWorkstationPage({
         loading={loading}
         error={error}
       />
+
+      {showCrossMarketConfirmation ? (
+        <div className="sws-cross-shell">
+          <CrossMarketSeasonalityPanel activeLookback={lookback} />
+        </div>
+      ) : null}
     </div>
   )
 }
