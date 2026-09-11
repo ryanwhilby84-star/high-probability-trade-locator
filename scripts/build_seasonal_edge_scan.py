@@ -8,12 +8,17 @@ import sys
 from datetime import date
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC = PROJECT_ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
 from hptl.seasonality_workstation.seasonal_edge_scanner import build_seasonal_edge_scan
 
 
 def main() -> int:
     payload = build_seasonal_edge_scan(asof=date.today())
-    out = Path("web-dashboard/public/data/seasonal_edge_scan_latest.json")
+    out = PROJECT_ROOT / "web-dashboard" / "public" / "data" / "seasonal_edge_scan_latest.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(json.dumps({
