@@ -46,8 +46,7 @@ def test_frequency_without_mean_median_agreement_is_not_promoted_to_strong():
     s10 = _stats(vals[-10:])
     s5 = _stats(vals[-5:])
     _score, grade, _reasons = _window_score(s15, s10, s5, 0.9)
-    assert grade != "EXCEPTIONAL"
-    assert grade != "STRONG"
+    assert grade not in {"EXCEPTIONAL", "STRONG"}
 
 
 def test_window_spec_handles_cross_year_shape():
