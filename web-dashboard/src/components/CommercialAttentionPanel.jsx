@@ -1,6 +1,7 @@
 import React from 'react'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
+import { SeasonalEdgePanel } from './SeasonalEdgePanel.jsx'
 import './commercialAttention.css'
 
 const fmt = (v) => {
@@ -194,46 +195,52 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
 
   if (!doc) {
     return (
-      <section className="ca-panel ca-empty" aria-label="Commercial COT attention">
-        <h2 className="ca-title">Commercial COT Attention</h2>
-        <p className="ca-meta">
-          Loading commercial attention export… Run{' '}
-          <code>python scripts/run_commercial_attention_engine.py</code> if empty.
-        </p>
-      </section>
+      <>
+        <SeasonalEdgePanel />
+        <section className="ca-panel ca-empty" aria-label="Commercial COT attention">
+          <h2 className="ca-title">Commercial COT Attention</h2>
+          <p className="ca-meta">
+            Loading commercial attention export… Run{' '}
+            <code>python scripts/run_commercial_attention_engine.py</code> if empty.
+          </p>
+        </section>
+      </>
     )
   }
 
   const summary = doc.summary || {}
 
   return (
-    <section className="ca-panel" aria-label="Commercial COT attention">
-      <header className="ca-header">
-        <div>
-          <h2 className="ca-title">Commercial COT Attention</h2>
-          <p className="ca-sub">
-            Unusual Commercial positioning with Non-Commercial and Non-Reportable context. Attention triage only — not
-            buy/sell signals.
-          </p>
-        </div>
-        <div className="ca-meta">
-          <span>Week {doc.source_week || doc.calendar_week || '—'}</span>
-          <span>
-            High {summary.high_attention ?? '—'} · Developing {summary.developing ?? '—'} · Watch{' '}
-            {summary.watchlist ?? '—'}
-          </span>
-        </div>
-      </header>
+    <>
+      <SeasonalEdgePanel />
+      <section className="ca-panel" aria-label="Commercial COT attention">
+        <header className="ca-header">
+          <div>
+            <h2 className="ca-title">Commercial COT Attention</h2>
+            <p className="ca-sub">
+              Unusual Commercial positioning with Non-Commercial and Non-Reportable context. Attention triage only — not
+              buy/sell signals.
+            </p>
+          </div>
+          <div className="ca-meta">
+            <span>Week {doc.source_week || doc.calendar_week || '—'}</span>
+            <span>
+              High {summary.high_attention ?? '—'} · Developing {summary.developing ?? '—'} · Watch{' '}
+              {summary.watchlist ?? '—'}
+            </span>
+          </div>
+        </header>
 
-      {board.length ? (
-        <div className="ca-list">
-          {board.map((row) => (
-            <AttentionCard key={row.instrument} row={row} />
-          ))}
-        </div>
-      ) : (
-        <p className="ca-meta">No commercial attention rows for this week.</p>
-      )}
-    </section>
+        {board.length ? (
+          <div className="ca-list">
+            {board.map((row) => (
+              <AttentionCard key={row.instrument} row={row} />
+            ))}
+          </div>
+        ) : (
+          <p className="ca-meta">No commercial attention rows for this week.</p>
+        )}
+      </section>
+    </>
   )
 }
