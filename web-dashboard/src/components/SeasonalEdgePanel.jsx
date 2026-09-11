@@ -38,7 +38,7 @@ function cotAlignment(edge, commercialAttention) {
   return { label: 'COT neutral', tone: 'neutral', detail: row.narratives?.commercials || row.commercial_regime || null }
 }
 
-function EdgeRow({ edge, alert = false, commercialAttention }) {
+function EdgeRow({ edge, alert = false, commercialAttention, activeInstrument = false }) {
   const s15 = edge?.lookbacks?.['15Y'] || {}
   const s10 = edge?.lookbacks?.['10Y'] || {}
   const s5 = edge?.lookbacks?.['5Y'] || {}
@@ -49,12 +49,12 @@ function EdgeRow({ edge, alert = false, commercialAttention }) {
     <button
       type="button"
       className={`sep-row ${alert ? 'sep-row-alert' : ''}`}
-      onClick={() => navigateToSeasonalityWorkstation(edge.instrument_id)}
+      onClick={() => !activeInstrument && navigateToSeasonalityWorkstation(edge.instrument_id)}
       title={cot.detail || edge.thesis || ''}
     >
       <div className="sep-market">
-        <strong>{edge.instrument_id}</strong>
-        <span>{edge.window}</span>
+        <strong>{activeInstrument ? edge.window : edge.instrument_id}</strong>
+        <span>{activeInstrument ? edge.kind?.replace(/_/g, ' ') : edge.window}</span>
       </div>
       <div>
         <span className={`sep-direction ${dirClass}`}>{edge.direction}</span>
@@ -81,7 +81,7 @@ function EdgeRow({ edge, alert = false, commercialAttention }) {
   )
 }
 
-export function SeasonalEdgePanel({ commercialAttention = null }) {
+export function SeasonalEdgePanel({ commercialAttention = null, instrumentId = null }) {
   const [doc, setDoc] = React.useState(null)
   const [error, setError] = React.useState(null)
 
@@ -122,14 +122,20 @@ export function SeasonalEdgePanel({ commercialAttention = null }) {
 
   const alerts = Array.isArray(doc.alerts) ? doc.alerts.slice(0, 8) : []
   const edges = Array.isArray(doc.top_edges) ? doc.top_edges.filter((e) => !alerts.includes(e)).slice(0, 8) : []
+  const instrumentResult = instrumentId
+    ? (doc.instrument_results || []).find((r) => r.instrument_id === instrumentId)
+    : null
+  const instrumentEdges = Array.isArray(instrumentResult?.edges) ? instrumentResult.edges : []
 
   return (
     <section className="sep-panel" aria-label="Seasonal edge alerts">
       <div className="sep-header">
         <div>
-          <h2>Seasonal Edge Alerts</h2>
+          <h2>{instrumentId ? `${instrumentId} — Historical Seasonal Edge` : 'Seasonal Edge Alerts'}</h2>
           <p>
-            Finds boring recurring behaviour before it arrives: strong calendar months and robust rolling windows across the seasonality universe.
+            {instrumentId
+              ? 'This is the actual historical lookback for the selected market: recurring months and rolling windows ranked by 15Y hit rate, median move and 5Y/10Y/15Y stability.'
+              : 'Finds boring recurring behaviour before it arrives: strong calendar months and robust rolling windows across the seasonality universe.'}
           </p>
         </div>
         <div className="sep-meta">
@@ -138,23 +144,61 @@ export function SeasonalEdgePanel({ commercialAttention = null }) {
         </div>
       </div>
 
-      {alerts.length ? (
-        <div className="sep-block">
-          <h3>Approaching now</h3>
-          <div className="sep-list">
-            {alerts.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} alert commercialAttention={commercialAttention} />)}
-          </div>
-        </div>
-      ) : <p className="sep-empty">No strong seasonal window starts within the next 14 days.</p>}
+      {instrumentId ? (
+        <>
+          {instrumentResult?.status === 'ok' && instrumentEdges.length ? (
+            <div className="sep-block">
+              <h3>Best current / approaching patterns for {instrumentId}</h3>
+              <div className="sep-list">
+                {instrumentEdges.slice(0, 8).map((edge) => (
+                  <EdgeRow
+                    key={`${edge.instrument_id}-${edge.window}`}
+                    edge={edge}
+                    alert={edge.days_until_start <= 14 && ['STRONG', 'EXCEPTIONAL'].includes(edge.grade)}
+                    commercialAttention={commercialAttention}
+                    activeInstrument
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="sep-empty">
+              {instrumentResult?.status === 'unavailable'
+                ? `No historical edge calculation available for ${instrumentId}: ${instrumentResult.error || 'data unavailable'}.`
+                : `No robust seasonal edge passed the filters for ${instrumentId} in the current/next-month and 0–28 day forward scan.`}
+            </p>
+          )}
 
-      {edges.length ? (
-        <details className="sep-more">
-          <summary>Next strongest seasonal patterns</summary>
-          <div className="sep-list">
-            {edges.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} commercialAttention={commercialAttention} />)}
-          </div>
-        </details>
-      ) : null}
+          <details className="sep-more">
+            <summary>Whole-market seasonal alerts</summary>
+            <div className="sep-list">
+              {alerts.map((edge) => (
+                <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} alert commercialAttention={commercialAttention} />
+              ))}
+            </div>
+          </details>
+        </>
+      ) : (
+        <>
+          {alerts.length ? (
+            <div className="sep-block">
+              <h3>Approaching now</h3>
+              <div className="sep-list">
+                {alerts.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} alert commercialAttention={commercialAttention} />)}
+              </div>
+            </div>
+          ) : <p className="sep-empty">No strong seasonal window starts within the next 14 days.</p>}
+
+          {edges.length ? (
+            <details className="sep-more">
+              <summary>Next strongest seasonal patterns</summary>
+              <div className="sep-list">
+                {edges.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} commercialAttention={commercialAttention} />)}
+              </div>
+            </details>
+          ) : null}
+        </>
+      )}
 
       <p className="sep-foot">
         Seasonal edge is ranked independently from COT. Each row then overlays Commercial positioning as supportive, contradictory or neutral so the seasonality can start a thesis without contaminating the historical score.
