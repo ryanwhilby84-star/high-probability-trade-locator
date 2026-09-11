@@ -196,7 +196,7 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
   if (!doc) {
     return (
       <>
-        <SeasonalEdgePanel />
+        <SeasonalEdgePanel commercialAttention={doc} />
         <section className="ca-panel ca-empty" aria-label="Commercial COT attention">
           <h2 className="ca-title">Commercial COT Attention</h2>
           <p className="ca-meta">
@@ -212,7 +212,7 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
 
   return (
     <>
-      <SeasonalEdgePanel />
+      <SeasonalEdgePanel commercialAttention={doc} />
       <section className="ca-panel" aria-label="Commercial COT attention">
         <header className="ca-header">
           <div>
