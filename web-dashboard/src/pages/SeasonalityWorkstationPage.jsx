@@ -138,7 +138,7 @@ export function SeasonalityWorkstationPage({
       </header>
 
       <div style={{ padding: '0.75rem 0.75rem 0' }}>
-        <SeasonalEdgePanel />
+        <SeasonalEdgePanel instrumentId={marketId} />
       </div>
 
       <SeasonalityWorkstation
