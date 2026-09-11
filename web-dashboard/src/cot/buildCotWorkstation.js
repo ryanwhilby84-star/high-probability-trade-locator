@@ -13,11 +13,14 @@ export const COT_WS_EXTREME_WEEKS = 156
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
-function weeklyChange(series, key, i, exportedKey) {
-  const pt = series[i]
-  if (exportedKey && isNum(pt?.[exportedKey])) return pt[exportedKey]
+/**
+ * Weekly change is always derived from the exact net series rendered by the chart.
+ * Do not trust a separately exported WoW field here: if that field is generated
+ * from a differently aligned report row, the inspector can disagree with the line.
+ */
+function weeklyChange(series, key, i) {
   if (i <= 0) return null
-  const cur = pt?.[key]
+  const cur = series[i]?.[key]
   const prev = series[i - 1]?.[key]
   if (!isNum(cur) || !isNum(prev)) return null
   return cur - prev
@@ -155,11 +158,11 @@ export function buildCotWorkstation(block) {
     price: isNum(p.price) ? p.price : null,
     price_date: p.price_date || null,
     institutional_net: isNum(p.institutional_net) ? p.institutional_net : null,
-    institutional_wow: weeklyChange(source, 'institutional_net', i, 'one_week_net_change'),
+    institutional_wow: weeklyChange(source, 'institutional_net', i),
     retail_net: isNum(p.retail_net) ? p.retail_net : null,
-    retail_wow: weeklyChange(source, 'retail_net', i, null),
+    retail_wow: weeklyChange(source, 'retail_net', i),
     commercial_net: isNum(p.commercial_net) ? p.commercial_net : null,
-    commercial_wow: weeklyChange(source, 'commercial_net', i, null),
+    commercial_wow: weeklyChange(source, 'commercial_net', i),
   }))
 
   const series = calendariseWeeklySeries(observedSeries)

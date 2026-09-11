@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
+import { SeasonalLookbackAudit } from '../seasonality_workstation/SeasonalLookbackAudit.jsx'
 import {
   navigateToInstrument,
   navigateToScanner,
@@ -9,6 +10,7 @@ import {
 import { canonicalMarketId } from '../marketResolution.js'
 
 import '../seasonality_workstation/seasonalityWorkstation.css'
+import '../seasonality_workstation/seasonalLookbackAudit.css'
 
 /**
  * Seasonality Workstation page — navigates the full canonical tracked universe
@@ -124,6 +126,10 @@ export function SeasonalityWorkstationPage({
           </button>
         </div>
       </header>
+
+      {!loading && !error && payload?.status === 'ok' ? (
+        <SeasonalLookbackAudit lookback={payload.seasonal_lookback} />
+      ) : null}
 
       <SeasonalityWorkstation
         marketId={marketId}

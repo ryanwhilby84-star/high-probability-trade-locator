@@ -1,6 +1,11 @@
 /**
  * Expand compact cot_weekly_inspector_latest.json rows into the shape
  * expected by buildWeeklyViewModel (mirrors Python expand_compact_market).
+ *
+ * Contract net/change fields in this export are intentionally not exposed to the
+ * frontend view model. The chart timeline is the canonical source for net and
+ * 1W/4W/12W contract movement, so the inspector cannot drift onto a different
+ * report row. This payload contributes percentile/flow metadata only.
  */
 
 const MEASURE = 'net_positioning_expanding_percentile'
@@ -85,10 +90,12 @@ function expandGroup(arr) {
   const direction = DIR_FROM[a[9]] || 'unknown'
   const temperature = TEMP_FROM[a[10]] || 'unknown'
   return {
-    net: a[0],
-    weekly_change: a[1],
-    four_week_change: a[2],
-    twelve_week_change: a[3],
+    // Net and contract changes come from the exact chart timeline row. Keeping
+    // these null prevents stale/misaligned compact-export values overriding it.
+    net: null,
+    weekly_change: null,
+    four_week_change: null,
+    twelve_week_change: null,
     percentile: a[4],
     percentile_change_1w: a[5],
     percentile_change_4w: a[6],

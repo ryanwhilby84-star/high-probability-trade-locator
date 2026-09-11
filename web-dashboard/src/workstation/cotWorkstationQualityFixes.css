@@ -1,0 +1,74 @@
+/* Targeted quality fixes for the fullscreen COT workstation.
+ * Loaded last so these rules win over the legacy/light-theme layers without
+ * coupling the repair to a particular monitor resolution.
+ */
+
+.cot-ws-page .cot-ws-weekly-inspector--drawer {
+  width: min(560px, calc(100vw - 24px)) !important;
+  max-width: calc(100vw - 24px) !important;
+  scrollbar-gutter: stable;
+  container-type: inline-size;
+  container-name: weekly-inspector;
+}
+
+.cot-ws-page .cot-ws-insp-top,
+.cot-ws-page .cot-ws-insp-columns,
+.cot-ws-page .cot-ws-insp-col,
+.cot-ws-page .cot-ws-insp-metrics,
+.cot-ws-page .cot-ws-insp-metric {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.cot-ws-page .cot-ws-insp-head-actions {
+  flex-wrap: wrap;
+}
+
+.cot-ws-page .cot-ws-insp-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  column-gap: 18px !important;
+}
+
+.cot-ws-page .cot-ws-insp-metric {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: start;
+  column-gap: 8px;
+}
+
+.cot-ws-page .cot-ws-insp-metric-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cot-ws-page .cot-ws-insp-metric-value {
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  word-break: normal !important;
+}
+
+.cot-ws-page .cot-ws-insp-metric--state {
+  grid-column: 1 / -1;
+}
+
+/* When the drawer itself is narrow, stack metrics instead of squeezing the
+ * second value column behind the scrollbar. This follows drawer width rather
+ * than viewport width, so browser zoom and split-screen layouts behave too. */
+@container weekly-inspector (max-width: 430px) {
+  .cot-ws-page .cot-ws-insp-metrics {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .cot-ws-page .cot-ws-insp-metric--state {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .cot-ws-page .cot-ws-weekly-inspector--drawer {
+    width: calc(100vw - 12px) !important;
+    max-width: calc(100vw - 12px) !important;
+  }
+}
