@@ -1,9 +1,8 @@
-"""Controlled workstation route payload — never leak 500 for derived-COT gaps.
+"""Controlled workstation route payload — distinguish core COT failures from derived warnings.
 
-Returns one of two shapes:
-
-- status=ok (+ workstation block)
-- status=integrity_error (+ missing_fields, HTTP 422 recommended)
+The workstation's primary historical COT series is the hard integrity boundary. Missing or
+incomplete secondary derived-inspector statistics are surfaced as warnings, but they must
+not blank an otherwise valid historical COT workstation.
 """
 
 from __future__ import annotations
@@ -68,93 +67,77 @@ def _resolve_market_block(doc: dict[str, Any], instrument_id: str) -> tuple[str 
     return None, None
 
 
+def _core_integrity_error(mid: str, missing: list[str], *, report_date: str | None = None) -> tuple[dict[str, Any], int]:
+    return (
+        {
+            "status": "integrity_error",
+            "instrument_id": mid,
+            "report_date": report_date,
+            "stage": "core_cot_history",
+            "missing_fields": missing,
+            "message": "Core COT history is unavailable or incomplete for this instrument.",
+        },
+        422,
+    )
+
+
 def build_workstation_route_payload(
     instrument_id: str,
     *,
     weekly_inspector: dict[str, Any] | None = None,
     cot_3y: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], int]:
-    """Build (body, http_status) for one instrument workstation route.
+    """Build ``(body, http_status)`` for one COT workstation route.
 
-    http_status: 200 ok | 422 integrity_error | 404 unknown instrument
-    Never raises for incomplete derived COT — returns integrity_error instead.
+    Hard 422 failures are reserved for the primary historical COT series. Secondary
+    derived-inspector gaps are returned as ``derived_integrity.status=warning`` while
+    preserving HTTP 200 so the historical workstation remains usable.
     """
     mid = str(instrument_id or "").strip()
     if not mid:
-        body = {
-            "status": "integrity_error",
-            "instrument_id": "",
-            "report_date": None,
-            "stage": "derived_cot",
-            "missing_fields": ["instrument_id"],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-        }
-        return body, 422
+        return _core_integrity_error("", ["instrument_id"])
 
     wi = weekly_inspector if weekly_inspector is not None else _load_first(WI_PATHS)
     cot3y = cot_3y if cot_3y is not None else _load_first(COT3Y_PATHS)
 
-    key, block = _resolve_market_block(wi, mid)
-    if not block or not block.get("available"):
-        body = {
-            "status": "integrity_error",
-            "instrument_id": mid,
-            "report_date": None,
-            "stage": "derived_cot",
-            "missing_fields": ["weekly_inspector.market"],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-        }
-        return body, 422
+    # The primary historical COT series is the hard gate for the workstation.
+    cot_key, cot_block = _resolve_market_block(cot3y, mid)
+    series = list((cot_block or {}).get("series") or [])
+    if not cot_block:
+        return _core_integrity_error(mid, ["cot_3y.market"])
+    if not series:
+        return _core_integrity_error(mid, ["cot_3y.series"])
 
-    try:
-        expanded = expand_compact_market(block) if "rows" in block else block
-    except Exception as exc:  # noqa: BLE001
-        body = {
-            "status": "integrity_error",
-            "instrument_id": mid,
-            "report_date": None,
-            "stage": "derived_cot",
-            "missing_fields": [f"expand_error:{type(exc).__name__}"],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-        }
-        return body, 422
+    fallback_report_date = str((series[-1] or {}).get("date") or "")[:10] or None
+    derived_missing: list[str] = []
+    key, block = _resolve_market_block(wi, mid)
+    expanded: dict[str, Any] = {}
+
+    if not block or not block.get("available"):
+        derived_missing.append("weekly_inspector.market")
+    else:
+        try:
+            expanded = expand_compact_market(block) if "rows" in block else block
+        except Exception as exc:  # noqa: BLE001
+            derived_missing.append(f"expand_error:{type(exc).__name__}")
+            expanded = {}
 
     weeks = list(expanded.get("weeks") or [])
-    if not weeks:
-        body = {
-            "status": "integrity_error",
-            "instrument_id": mid,
-            "report_date": None,
-            "stage": "derived_cot",
-            "missing_fields": ["weeks"],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-        }
-        return body, 422
+    if block and block.get("available") and not weeks:
+        derived_missing.append("weeks")
 
-    lookback = weeks[-LOOKBACK_WEEKS:]
-    missing: list[str] = []
-    report_date = str(lookback[-1].get("date") or "")[:10] or None
+    lookback = weeks[-LOOKBACK_WEEKS:] if weeks else []
+    report_date = (
+        str((lookback[-1] or {}).get("date") or "")[:10] if lookback else ""
+    ) or fallback_report_date
+
     for week in lookback:
         for fail in audit_week(week, instrument_id=mid):
-            missing.append(
-                f"{fail.get('report_date')}:{fail.get('field')}"
-            )
+            derived_missing.append(f"{fail.get('report_date')}:{fail.get('field')}")
 
-    cot_key, cot_block = _resolve_market_block(cot3y, mid)
-    series_len = len((cot_block or {}).get("series") or [])
-
-    if missing:
-        body = {
-            "status": "integrity_error",
-            "instrument_id": mid,
-            "report_date": report_date,
-            "stage": "derived_cot",
-            "missing_fields": missing[:80],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-            "matched_key": key,
-            "historical_rows": series_len,
-        }
-        return body, 422
+    # Keep diagnostics deterministic and compact; duplicate failures add no value.
+    derived_missing = list(dict.fromkeys(derived_missing))
+    derived_status = "warning" if derived_missing else "ok"
 
     workstation = {
         "matched_key": key,
@@ -162,10 +145,20 @@ def build_workstation_route_payload(
         "report_date": report_date,
         "week_count": len(weeks),
         "lookback_weeks": len(lookback),
-        "historical_rows": series_len,
-        "latest_week": lookback[-1],
+        "historical_rows": len(series),
+        "latest_week": lookback[-1] if lookback else None,
         "measure": expanded.get("measure"),
         "measure_label": expanded.get("measure_label"),
+        "derived_integrity": {
+            "status": derived_status,
+            "stage": "derived_cot",
+            "missing_fields": derived_missing[:80],
+            "message": (
+                "Derived COT statistics are incomplete; historical COT remains available."
+                if derived_missing
+                else "Derived COT statistics passed integrity checks."
+            ),
+        },
     }
 
     try:
@@ -175,18 +168,21 @@ def build_workstation_route_payload(
                 "instrument_id": mid,
                 "report_date": report_date,
                 "workstation": workstation,
+                "warnings": derived_missing[:80],
             }
         )
     except JsonUnsafeError as exc:
-        body = {
-            "status": "integrity_error",
-            "instrument_id": mid,
-            "report_date": report_date,
-            "stage": "json_serialisation",
-            "missing_fields": [str(exc)],
-            "message": "Derived COT statistics are incomplete for this instrument.",
-        }
-        return body, 422
+        return (
+            {
+                "status": "integrity_error",
+                "instrument_id": mid,
+                "report_date": report_date,
+                "stage": "json_serialisation",
+                "missing_fields": [str(exc)],
+                "message": "COT workstation payload contains unsafe JSON values.",
+            },
+            422,
+        )
 
     return safe, 200
 
@@ -201,13 +197,15 @@ def audit_all_workstation_routes(
     rows: list[dict[str, Any]] = []
     ok = 0
     integrity = 0
+    warnings = 0
     for mid in LEGACY_COT_MARKETS:
-        body, status = build_workstation_route_payload(
-            mid, weekly_inspector=wi, cot_3y=cot3y
-        )
+        body, status = build_workstation_route_payload(mid, weekly_inspector=wi, cot_3y=cot3y)
         result = "PASS" if status == 200 and body.get("status") == "ok" else "FAIL"
         if body.get("status") == "ok":
             ok += 1
+            derived = ((body.get("workstation") or {}).get("derived_integrity") or {})
+            if derived.get("status") == "warning":
+                warnings += 1
         elif body.get("status") == "integrity_error":
             integrity += 1
         rows.append(
@@ -216,7 +214,7 @@ def audit_all_workstation_routes(
                 "http_status": status,
                 "response_status": body.get("status"),
                 "report_date": body.get("report_date"),
-                "missing_fields": body.get("missing_fields") or [],
+                "missing_fields": body.get("missing_fields") or body.get("warnings") or [],
                 "payload_valid": body.get("status") in ("ok", "integrity_error"),
                 "final_result": result,
             }
@@ -225,6 +223,7 @@ def audit_all_workstation_routes(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "summary": {
             "http_200_ok": ok,
+            "http_200_with_derived_warning": warnings,
             "http_422_integrity": integrity,
             "http_500": 0,
             "blank_renders": 0,
