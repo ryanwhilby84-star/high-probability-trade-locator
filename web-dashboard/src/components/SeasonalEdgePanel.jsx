@@ -9,17 +9,48 @@ const ret = (v) => {
   return `${n > 0 ? '+' : ''}${n.toFixed(2)}%`
 }
 
-function EdgeRow({ edge, alert = false }) {
+function cotAlignment(edge, commercialAttention) {
+  const rows = Array.isArray(commercialAttention?.attention_board) ? commercialAttention.attention_board : []
+  const row = rows.find((r) => r.instrument === edge.instrument_id)
+  if (!row) return { label: 'COT unavailable', tone: 'neutral', detail: null }
+
+  const text = [
+    row.commercial_regime,
+    row.narratives?.commercial_regime,
+    row.narratives?.commercials,
+    row.narratives?.alignment,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+
+  const bull = /bull|accumulat|long|buy|strength/.test(text) && !/bear/.test(text)
+  const bear = /bear|distribut|short|sell|weak/.test(text) && !/bull/.test(text)
+  const seasonalBull = edge.direction === 'Bullish'
+  const seasonalBear = edge.direction === 'Bearish'
+
+  if ((seasonalBull && bull) || (seasonalBear && bear)) {
+    return { label: 'COT supportive', tone: 'support', detail: row.narratives?.commercials || row.commercial_regime || null }
+  }
+  if ((seasonalBull && bear) || (seasonalBear && bull)) {
+    return { label: 'COT contradicts', tone: 'contradict', detail: row.narratives?.commercials || row.commercial_regime || null }
+  }
+  return { label: 'COT neutral', tone: 'neutral', detail: row.narratives?.commercials || row.commercial_regime || null }
+}
+
+function EdgeRow({ edge, alert = false, commercialAttention }) {
   const s15 = edge?.lookbacks?.['15Y'] || {}
   const s10 = edge?.lookbacks?.['10Y'] || {}
   const s5 = edge?.lookbacks?.['5Y'] || {}
   const dominant = edge.direction === 'Bullish' ? s15.bullish : s15.bearish
   const dirClass = edge.direction === 'Bullish' ? 'sep-bull' : edge.direction === 'Bearish' ? 'sep-bear' : ''
+  const cot = cotAlignment(edge, commercialAttention)
   return (
     <button
       type="button"
       className={`sep-row ${alert ? 'sep-row-alert' : ''}`}
       onClick={() => navigateToSeasonalityWorkstation(edge.instrument_id)}
+      title={cot.detail || edge.thesis || ''}
     >
       <div className="sep-market">
         <strong>{edge.instrument_id}</strong>
@@ -44,12 +75,13 @@ function EdgeRow({ edge, alert = false }) {
       <div>
         <span className={`sep-grade sep-grade-${String(edge.grade || '').toLowerCase()}`}>{edge.grade}</span>
         <small>{edge.days_until_start === 0 ? 'active now' : `starts in ${edge.days_until_start}d`}</small>
+        <small className={`sep-cot sep-cot-${cot.tone}`}>{cot.label}</small>
       </div>
     </button>
   )
 }
 
-export function SeasonalEdgePanel() {
+export function SeasonalEdgePanel({ commercialAttention = null }) {
   const [doc, setDoc] = React.useState(null)
   const [error, setError] = React.useState(null)
 
@@ -110,7 +142,7 @@ export function SeasonalEdgePanel() {
         <div className="sep-block">
           <h3>Approaching now</h3>
           <div className="sep-list">
-            {alerts.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} alert />)}
+            {alerts.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} alert commercialAttention={commercialAttention} />)}
           </div>
         </div>
       ) : <p className="sep-empty">No strong seasonal window starts within the next 14 days.</p>}
@@ -119,13 +151,13 @@ export function SeasonalEdgePanel() {
         <details className="sep-more">
           <summary>Next strongest seasonal patterns</summary>
           <div className="sep-list">
-            {edges.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} />)}
+            {edges.map((edge) => <EdgeRow key={`${edge.instrument_id}-${edge.window}`} edge={edge} commercialAttention={commercialAttention} />)}
           </div>
         </details>
       ) : null}
 
       <p className="sep-foot">
-        Edge grade requires more than a high hit rate: 5Y/10Y/15Y direction stability, mean/median agreement and nearby-window robustness are included to reduce calendar overfitting. COT alignment is the next layer, not baked into this score yet.
+        Seasonal edge is ranked independently from COT. Each row then overlays Commercial positioning as supportive, contradictory or neutral so the seasonality can start a thesis without contaminating the historical score.
       </p>
     </section>
   )
