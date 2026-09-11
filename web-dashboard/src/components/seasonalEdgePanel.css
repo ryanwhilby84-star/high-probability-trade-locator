@@ -88,6 +88,10 @@
 .sep-grade-exceptional { color: #fde68a; background: rgba(245, 158, 11, 0.16); }
 .sep-grade-strong { color: #86efac; background: rgba(34, 197, 94, 0.14); }
 .sep-grade-developing { color: #93c5fd; background: rgba(59, 130, 246, 0.14); }
+.sep-cot { margin-top: 0.1rem; font-weight: 700; }
+.sep-cot-support { color: #86efac !important; }
+.sep-cot-contradict { color: #fda4af !important; }
+.sep-cot-neutral { color: #94a3b8 !important; }
 
 .sep-more { margin-top: 0.75rem; }
 .sep-more summary { cursor: pointer; color: #cbd5e1; font-size: 0.72rem; margin-bottom: 0.5rem; }
