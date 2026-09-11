@@ -1,4 +1,4 @@
-"""Workstation route contract — controlled ok / integrity_error, never unsafe JSON."""
+"""Workstation route contract — core COT hard-gates, derived gaps warn safely."""
 
 from __future__ import annotations
 
@@ -40,22 +40,33 @@ def test_crude_oil_route_ok():
     assert body["report_date"]
     assert "workstation" in body
     latest = body["workstation"]["latest_week"]
+    assert latest is not None
     assert 0 <= float(latest["commercial"]["percentile"]) <= 100
     assert math.isfinite(float(latest["cross"]["comm_nc_spread"]))
+    assert body["workstation"]["derived_integrity"]["status"] == "ok"
 
 
-def test_missing_market_returns_integrity_error_not_500():
+def test_missing_derived_market_warns_but_keeps_valid_history():
     body, status = build_workstation_route_payload(
         "Crude Oil / CL",
         weekly_inspector={"markets": {}},
+        cot_3y={
+            "markets": {
+                "Crude Oil / CL": {
+                    "series": [{"date": "2026-07-21", "commercial_net": 1}]
+                }
+            }
+        },
     )
-    assert status == 422
-    assert body["status"] == "integrity_error"
-    assert body["stage"] == "derived_cot"
-    assert body["missing_fields"]
+    assert status == 200
+    assert body["status"] == "ok"
+    integrity = body["workstation"]["derived_integrity"]
+    assert integrity["status"] == "warning"
+    assert "weekly_inspector.market" in integrity["missing_fields"]
+    assert body["workstation"]["historical_rows"] == 1
 
 
-def test_incomplete_week_returns_integrity_error():
+def test_incomplete_derived_week_warns_instead_of_blanking_history():
     stub = {
         "markets": {
             "Crude Oil / CL": {
@@ -77,9 +88,23 @@ def test_incomplete_week_returns_integrity_error():
         weekly_inspector=stub,
         cot_3y={"markets": {"Crude Oil / CL": {"series": [{"date": "2026-07-21"}]}}},
     )
+    assert status == 200
+    assert body["status"] == "ok"
+    integrity = body["workstation"]["derived_integrity"]
+    assert integrity["status"] == "warning"
+    assert any("percentile" in f for f in integrity["missing_fields"])
+
+
+def test_missing_core_history_remains_hard_integrity_error():
+    body, status = build_workstation_route_payload(
+        "Crude Oil / CL",
+        weekly_inspector={"markets": {}},
+        cot_3y={"markets": {"Crude Oil / CL": {"series": []}}},
+    )
     assert status == 422
     assert body["status"] == "integrity_error"
-    assert any("percentile" in f for f in body["missing_fields"])
+    assert body["stage"] == "core_cot_history"
+    assert "cot_3y.series" in body["missing_fields"]
 
 
 def test_all_26_routes_ok_or_controlled():
