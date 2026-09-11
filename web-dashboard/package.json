@@ -4,8 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "seasonal-edge": "python ../scripts/build_seasonal_edge_scan.py",
+    "dev": "npm run seasonal-edge && vite",
+    "build": "npm run seasonal-edge && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
