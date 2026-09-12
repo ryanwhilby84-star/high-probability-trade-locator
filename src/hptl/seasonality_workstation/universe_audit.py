@@ -22,11 +22,20 @@ SCANNER_LOOKBACK_YEARS = 15
 MIN_DENSE_WEEKS_PER_YEAR = 40
 MIN_DENSE_YEARS_FOR_15Y_SCAN = 12
 
-# Known source contracts that are important enough to hard-gate. Alpha Vantage
-# CORN is the CORN ETF, not CBOT corn futures; using it in the seasonal engine
-# creates a unit/source discontinuity and must never publish an edge.
+# Hard source contracts for instruments where a superficially valid substitute can
+# reverse direction, use a different benchmark, or mix units. These instruments may
+# not publish a seasonal edge unless their canonical series belongs to the expected
+# futures source family.
 REQUIRED_SOURCE_FAMILIES: dict[str, tuple[str, ...]] = {
     "Corn": ("yahoo_futures", "yahoo"),
+    "Coffee": ("yahoo_futures", "yahoo"),
+    "Cocoa": ("yahoo_futures", "yahoo"),
+    "Cotton": ("yahoo_futures", "yahoo"),
+    "Japanese Yen / 6J": ("yahoo_futures", "yahoo"),
+    "Swiss Franc / 6S": ("yahoo_futures", "yahoo"),
+    "Canadian Dollar / 6C": ("yahoo_futures", "yahoo"),
+    "Copper / HG": ("yahoo_futures", "yahoo"),
+    "US Dollar Index / DX": ("yahoo_futures", "yahoo"),
 }
 
 
@@ -192,8 +201,6 @@ def audit_seasonality_universe(
     instruments: Iterable[str] | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
-    # This is deliberately the same canonical universe used by the seasonal edge
-    # scanner. Do not silently audit a different subset from the one we publish.
     universe = list(instruments or LEGACY_COT_MARKETS)
     rows: dict[str, dict[str, Any]] = {}
     for instrument_id in universe:
@@ -204,7 +211,7 @@ def audit_seasonality_universe(
     warnings = sorted(k for k, v in rows.items() if v.get("warnings"))
     return {
         "status": "PASS" if not failed else "FAIL",
-        "engine": "seasonality_universe_audit_v3",
+        "engine": "seasonality_universe_audit_v4",
         "asof": (today or date.today()).isoformat(),
         "instrument_count": len(universe),
         "universe": universe,
