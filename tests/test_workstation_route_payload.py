@@ -95,6 +95,87 @@ def test_incomplete_derived_week_warns_instead_of_blanking_history():
     assert any("percentile" in f for f in integrity["missing_fields"])
 
 
+def test_non_finite_derived_snapshot_warns_instead_of_blanking_history():
+    weekly = {
+        "markets": {
+            "Crude Oil / CL": {
+                "available": True,
+                "weeks": [
+                    {
+                        "date": "2026-07-21",
+                        "commercial": {
+                            "net": 1,
+                            "weekly_change": 0,
+                            "four_week_change": 0,
+                            "twelve_week_change": 0,
+                            "percentile": float("nan"),
+                            "percentile_change_1w": None,
+                            "percentile_change_4w": None,
+                            "percentile_change_12w": None,
+                            "percentile_observation_count": 1,
+                            "direction": "unknown",
+                            "temperature": "unknown",
+                            "is_extreme": False,
+                        },
+                        "noncommercial": {
+                            "net": 1,
+                            "weekly_change": 0,
+                            "four_week_change": 0,
+                            "twelve_week_change": 0,
+                            "percentile": 50,
+                            "percentile_change_1w": 0,
+                            "percentile_change_4w": 0,
+                            "percentile_change_12w": 0,
+                            "percentile_observation_count": 1,
+                            "direction": "stable",
+                            "temperature": "neutral",
+                            "is_extreme": False,
+                        },
+                        "nonreportable": {
+                            "net": 1,
+                            "weekly_change": 0,
+                            "four_week_change": 0,
+                            "twelve_week_change": 0,
+                            "percentile": 50,
+                            "percentile_change_1w": 0,
+                            "percentile_change_4w": 0,
+                            "percentile_change_12w": 0,
+                            "percentile_observation_count": 1,
+                            "direction": "stable",
+                            "temperature": "neutral",
+                            "is_extreme": False,
+                        },
+                        "cross": {
+                            "commercial_percentile": float("nan"),
+                            "noncommercial_percentile": 50,
+                            "nonreportable_percentile": 50,
+                            "comm_nc_spread": 0,
+                            "comm_nc_spread_percentile": 50,
+                            "comm_nc_spread_change_1w": 0,
+                            "comm_nc_spread_change_4w": 0,
+                            "comm_nr_spread": 0,
+                            "comm_nr_spread_percentile": 50,
+                            "relationship": "mixed",
+                            "flow": "stable",
+                        },
+                    }
+                ],
+            }
+        }
+    }
+    body, status = build_workstation_route_payload(
+        "Crude Oil / CL",
+        weekly_inspector=weekly,
+        cot_3y={"markets": {"Crude Oil / CL": {"series": [{"date": "2026-07-21"}]}}},
+    )
+    assert status == 200
+    assert body["status"] == "ok"
+    assert body["workstation"]["latest_week"] is None
+    integrity = body["workstation"]["derived_integrity"]
+    assert integrity["status"] == "warning"
+    assert any("latest_week_json" in f for f in integrity["missing_fields"])
+
+
 def test_missing_core_history_remains_hard_integrity_error():
     body, status = build_workstation_route_payload(
         "Crude Oil / CL",
