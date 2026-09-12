@@ -4,6 +4,12 @@ Alpha Vantage CORN is an ETF (~$20–250/share) — wrong unit basis for USDA
 stocks-to-use valuation. CBOT ZC is quoted in cents/bushel on Yahoo; we store
 USD/bushel (close / 100) to align with Wheat/Soybeans OANDA scale.
 
+Yahoo can expose sparse/legacy observations far back in the history request. Those
+old rows are not suitable for daily seasonality and previously produced hundreds of
+false discontinuities. The production Corn foundation therefore starts in 2000,
+which still gives more than enough clean daily history for the 5Y/10Y/15Y/20Y
+workstation and scanner horizons.
+
 Usage:
     python -m hptl.prices.corn_foundation_backfill --dry-run
     python -m hptl.prices.corn_foundation_backfill --execute
@@ -21,17 +27,21 @@ from hptl.prices.coffee_foundation_backfill import fetch_yahoo_daily
 from hptl.prices.models import OhlcBar, build_history_meta, compute_range_52w
 from hptl.prices.price_store import load_all_instrument_records, write_instrument_record, write_price_store
 from hptl.seasonality.seasonality_v2 import normalize_daily_bars, years_spanned
+from hptl.seasonality_workstation.integrity import audit_daily_series_for_lookback
 
 logger = logging.getLogger(__name__)
 
 CORN_INSTRUMENT_ID = "Corn"
 YAHOO_SYMBOL = "ZC=F"
 CENTS_TO_USD = 100.0
+YAHOO_HISTORY_START = datetime(2000, 1, 1, tzinfo=timezone.utc)
+YAHOO_HISTORY_START_TS = int(YAHOO_HISTORY_START.timestamp())
 YAHOO_NOTE = (
-    "CBOT Corn continuous futures (Yahoo ZC=F) daily OHLC. "
-    "Stored as USD/bushel (cents/100). Aligned with USDA stocks-to-use valuation."
+    "CBOT Corn continuous futures (Yahoo ZC=F) daily OHLC from 2000 onward. "
+    "Stored as USD/bushel (cents/100). Legacy sparse pre-2000 Yahoo observations "
+    "are deliberately excluded from the seasonality foundation."
 )
-MIN_YEARS_TARGET = 10.0
+MIN_YEARS_TARGET = 20.0
 
 
 def _scale_bars_to_usd_per_bushel(bars: list[OhlcBar]) -> list[OhlcBar]:
@@ -48,6 +58,28 @@ def _scale_bars_to_usd_per_bushel(bars: list[OhlcBar]) -> list[OhlcBar]:
             }
         )
     return normalize_daily_bars(out)
+
+
+def _fetch_clean_corn_daily() -> list[OhlcBar]:
+    raw = fetch_yahoo_daily(YAHOO_SYMBOL, period1=YAHOO_HISTORY_START_TS)
+    daily = _scale_bars_to_usd_per_bushel(raw)
+    if not daily:
+        raise RuntimeError("Yahoo returned no Corn daily bars")
+
+    closes = [(str(b["date"])[:10], float(b["close"])) for b in daily]
+    audit = audit_daily_series_for_lookback(
+        CORN_INSTRUMENT_ID,
+        closes,
+        source="yahoo_futures",
+        lookback_years=20,
+        asof=closes[-1][0],
+    )
+    if audit.get("status") != "PASS":
+        raise RuntimeError(
+            "Refusing to promote Corn: clean Yahoo ZC=F audit failed: "
+            + ", ".join(audit.get("issues") or ["unknown_integrity_failure"])
+        )
+    return daily
 
 
 def promote_corn_daily(
@@ -70,7 +102,7 @@ def promote_corn_daily(
         "error": None,
         "price_scale": price_scale,
     }
-    write_instrument_record(rec, fetched_via="corn_foundation_backfill", historical_via=source)
+    write_instrument_record(rec, fetched_via="yahoo_futures", historical_via=source)
     records = load_all_instrument_records() or {}
     records[CORN_INSTRUMENT_ID] = rec
     write_price_store(records)
@@ -79,15 +111,16 @@ def promote_corn_daily(
 
 def probe_corn_foundation() -> dict[str, Any]:
     try:
-        raw = fetch_yahoo_daily(YAHOO_SYMBOL)
-        daily = _scale_bars_to_usd_per_bushel(raw)
+        daily = _fetch_clean_corn_daily()
     except Exception as exc:
-        return {"status": "probe_failed", "source": f"yahoo:{YAHOO_SYMBOL}", "error": str(exc)[:200]}
+        return {"status": "probe_failed", "source": f"yahoo:{YAHOO_SYMBOL}", "error": str(exc)[:300]}
     return {
         "status": "ok",
         "source": f"yahoo:{YAHOO_SYMBOL}",
+        "history_start_requested": YAHOO_HISTORY_START.date().isoformat(),
         "bar_count": len(daily),
         "years_spanned": round(years_spanned(daily), 2),
+        "earliest_date": daily[0]["date"] if daily else None,
         "latest_close_usd_per_bushel": daily[-1]["close"] if daily else None,
         "latest_date": daily[-1]["date"] if daily else None,
         "unit": "USD/bushel (Yahoo cents/100)",
@@ -95,8 +128,7 @@ def probe_corn_foundation() -> dict[str, Any]:
 
 
 def run_corn_foundation_backfill(*, execute: bool = False) -> dict[str, Any]:
-    raw = fetch_yahoo_daily(YAHOO_SYMBOL)
-    daily = _scale_bars_to_usd_per_bushel(raw)
+    daily = _fetch_clean_corn_daily()
     yrs = years_spanned(daily)
     price_scale = {
         "source": "yahoo",
@@ -104,6 +136,7 @@ def run_corn_foundation_backfill(*, execute: bool = False) -> dict[str, Any]:
         "unit": "USD/bushel",
         "raw_unit": "cents/bushel",
         "scale_factor": 1.0 / CENTS_TO_USD,
+        "history_start": YAHOO_HISTORY_START.date().isoformat(),
         "note": YAHOO_NOTE,
     }
     result: dict[str, Any] = {
@@ -111,14 +144,16 @@ def run_corn_foundation_backfill(*, execute: bool = False) -> dict[str, Any]:
         "source": f"yahoo:{YAHOO_SYMBOL}",
         "bar_count": len(daily),
         "years_spanned": round(yrs, 2),
+        "earliest_date": daily[0]["date"] if daily else None,
         "latest_close": daily[-1]["close"] if daily else None,
+        "latest_date": daily[-1]["date"] if daily else None,
         "execute": execute,
     }
     if not execute:
         result["status"] = "dry_run"
         return result
     if yrs < MIN_YEARS_TARGET:
-        logger.warning("Corn history %.1fy < target %.1fy", yrs, MIN_YEARS_TARGET)
+        raise RuntimeError(f"Corn history {yrs:.1f}y < required {MIN_YEARS_TARGET:.1f}y")
     promote_corn_daily(daily, source=f"yahoo:{YAHOO_SYMBOL}", price_scale=price_scale)
     result["status"] = "promoted"
     return result
