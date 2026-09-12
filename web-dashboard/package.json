@@ -6,8 +6,9 @@
   "scripts": {
     "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
     "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
-    "dev": "npm run seasonal-edge && vite",
-    "build": "npm run seasonal-edge && vite build",
+    "cot-inspector": "cd .. && python -m hptl.cot.weekly_inspector_export",
+    "dev": "npm run cot-inspector && npm run seasonal-edge && vite",
+    "build": "npm run cot-inspector && npm run seasonal-edge && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
