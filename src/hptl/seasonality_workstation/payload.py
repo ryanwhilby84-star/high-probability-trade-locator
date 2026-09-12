@@ -126,6 +126,55 @@ def _apply_scoped_integrity(
     return scoped, daily
 
 
+def _repair_corn_if_needed(
+    instrument_id: str,
+    lookback: str,
+    research: dict[str, Any],
+    scoped_integrity: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], list[tuple[str, float]], dict[str, Any] | None]:
+    """Replace a broken Corn store with audited Yahoo ZC=F daily history once.
+
+    This makes the workstation self-healing: opening Corn after pulling the fix is
+    enough to repair the local canonical store. The replacement routine refuses to
+    promote data unless the modern 20Y Yahoo series passes integrity first.
+    """
+    if instrument_id != "Corn" or scoped_integrity.get("status") == "PASS":
+        daily, _source, _error = load_daily_closes(
+            str(research.get("price_instrument_id") or instrument_id)
+        )
+        return research, scoped_integrity, daily, None
+
+    repair_meta: dict[str, Any] = {"attempted": True, "status": "failed"}
+    try:
+        from hptl.prices.corn_foundation_backfill import run_corn_foundation_backfill
+
+        repair = run_corn_foundation_backfill(execute=True)
+        repair_meta["result"] = repair
+        repair_meta["status"] = str(repair.get("status") or "unknown")
+    except Exception as exc:  # noqa: BLE001
+        repair_meta["error"] = f"{type(exc).__name__}: {exc}"
+        daily, _source, _error = load_daily_closes(
+            str(research.get("price_instrument_id") or instrument_id)
+        )
+        return research, scoped_integrity, daily, repair_meta
+
+    # Rebuild from disk after promotion so no pre-repair objects survive this request.
+    research = build_seasonality_research(
+        instrument_id,
+        lookback=lookback,
+        fail_on_integrity=False,
+    )
+    if research.get("status") != "ok":
+        daily, _source, _error = load_daily_closes(instrument_id)
+        repair_meta["status"] = "rebuild_failed"
+        return research, scoped_integrity, daily, repair_meta
+
+    scoped_integrity, daily = _apply_scoped_integrity(research, instrument_id, lookback)
+    repair_meta["after_status"] = scoped_integrity.get("status")
+    repair_meta["after_issues"] = scoped_integrity.get("issues") or []
+    return research, scoped_integrity, daily, repair_meta
+
+
 def build_seasonality_workstation_payload(
     instrument_id: str,
     *,
@@ -153,11 +202,17 @@ def build_seasonality_workstation_payload(
         }
 
     scoped_integrity, daily = _apply_scoped_integrity(research, instrument_id, lookback)
+    research, scoped_integrity, daily, repair_meta = _repair_corn_if_needed(
+        instrument_id,
+        lookback,
+        research,
+        scoped_integrity,
+    )
     research["integrity"] = scoped_integrity
     research["data_quality"] = scoped_integrity.get("data_quality")
 
     if scoped_integrity.get("status") != "PASS":
-        return {
+        payload = {
             "status": "integrity_error",
             "instrument_id": instrument_id,
             "engine": ENGINE_VERSION,
@@ -177,6 +232,9 @@ def build_seasonality_workstation_payload(
             ) if daily else None,
             "seasonal_roadmap": None,
         }
+        if repair_meta is not None:
+            payload["integrity_repair"] = repair_meta
+        return payload
 
     # Rebuild Weekly Roadmap with the selected-lookback audit. This prevents an
     # out-of-scope legacy defect from leaving a false red gate inside an otherwise
@@ -196,7 +254,7 @@ def build_seasonality_workstation_payload(
     _attach_robust_validation(research, instrument_id)
     research = apply_production_seasonality(research)
 
-    return {
+    payload = {
         "status": "ok",
         "instrument_id": instrument_id,
         "price_instrument_id": research.get("price_instrument_id"),
@@ -236,3 +294,6 @@ def build_seasonality_workstation_payload(
             for k, v in (research.get("lookbacks") or {}).items()
         },
     }
+    if repair_meta is not None:
+        payload["integrity_repair"] = repair_meta
+    return payload
