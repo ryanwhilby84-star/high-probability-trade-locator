@@ -3,7 +3,6 @@ import React from 'react'
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
 import { SeasonalEdgePanel } from '../components/SeasonalEdgePanel.jsx'
-import { AnnualTurningPointPanel } from '../components/AnnualTurningPointPanel.jsx'
 import {
   DXY_COMPONENTS,
   DXY_MARKET_ID,
@@ -150,8 +149,6 @@ export function SeasonalityWorkstationPage({
       <div style={{ padding: '0.75rem 0.75rem 0' }}>
         <SeasonalEdgePanel instrumentId={marketId} />
       </div>
-
-      <AnnualTurningPointPanel instrumentId={marketId} />
 
       <SeasonalityWorkstation
         marketId={marketId}
