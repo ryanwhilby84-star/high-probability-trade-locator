@@ -1,7 +1,7 @@
 """Full-universe integrity audit for seasonality inputs.
 
 This sits above the low-level daily-series audit and answers the product-level
-question: can this instrument publish a seasonal edge?  It records provenance,
+question: can this instrument publish a seasonal edge? It records provenance,
 coverage, return sanity and a deterministic series fingerprint so the scanner
 and workstation can be checked against the same canonical input.
 """
@@ -15,10 +15,14 @@ from datetime import date, datetime
 from typing import Any, Iterable
 
 from hptl.markets.instrument_registry import LEGACY_COT_MARKETS
-from hptl.seasonality_workstation.integrity import audit_daily_series
-from hptl.seasonality_workstation.returns import load_daily_closes
+from hptl.seasonality_workstation.integrity import audit_daily_series_for_lookback
+from hptl.seasonality_workstation.returns import iso_week, load_daily_closes, weekly_closes_from_daily
 
-# Known source contracts that are important enough to hard-gate.  Alpha Vantage
+SCANNER_LOOKBACK_YEARS = 15
+MIN_DENSE_WEEKS_PER_YEAR = 40
+MIN_DENSE_YEARS_FOR_15Y_SCAN = 12
+
+# Known source contracts that are important enough to hard-gate. Alpha Vantage
 # CORN is the CORN ETF, not CBOT corn futures; using it in the seasonal engine
 # creates a unit/source discontinuity and must never publish an edge.
 REQUIRED_SOURCE_FAMILIES: dict[str, tuple[str, ...]] = {
@@ -81,6 +85,31 @@ def _source_issues(instrument_id: str, source: str | None) -> list[str]:
     ]
 
 
+def _density_diagnostics(
+    daily: list[tuple[str, float]], *, today: date
+) -> dict[str, Any]:
+    weekly = weekly_closes_from_daily(daily)
+    counts: dict[int, set[int]] = {}
+    for d, _ in weekly:
+        y, w = iso_week(d)
+        counts.setdefault(int(y), set()).add(int(w))
+
+    years = list(range(today.year - SCANNER_LOOKBACK_YEARS, today.year))
+    by_year = {str(y): len(counts.get(y, set())) for y in years}
+    dense = [y for y in years if len(counts.get(y, set())) >= MIN_DENSE_WEEKS_PER_YEAR]
+    thin = [y for y in years if len(counts.get(y, set())) < MIN_DENSE_WEEKS_PER_YEAR]
+    return {
+        "lookback_years": SCANNER_LOOKBACK_YEARS,
+        "minimum_weeks_per_year": MIN_DENSE_WEEKS_PER_YEAR,
+        "minimum_dense_years": MIN_DENSE_YEARS_FOR_15Y_SCAN,
+        "weekly_observations_by_year": by_year,
+        "dense_years": dense,
+        "dense_year_count": len(dense),
+        "thin_years": thin,
+        "passed": len(dense) >= MIN_DENSE_YEARS_FOR_15Y_SCAN,
+    }
+
+
 def audit_seasonality_instrument(
     instrument_id: str,
     *,
@@ -89,7 +118,12 @@ def audit_seasonality_instrument(
     load_error: str | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
-    """Return the publishability audit for one instrument."""
+    """Return the publishability audit for one scanner instrument.
+
+    The publish gate is intentionally scoped to the 15Y scanner horizon plus a
+    one-year buffer. Older legacy defects remain visible in full-history diagnostics
+    but cannot poison a calculation that never consumes those observations.
+    """
     today = today or date.today()
     if daily is None:
         daily, source, load_error = load_daily_closes(instrument_id)
@@ -106,19 +140,32 @@ def audit_seasonality_instrument(
             "bar_count": 0,
         }
 
-    base = audit_daily_series(instrument_id, daily, source=source)
+    base = audit_daily_series_for_lookback(
+        instrument_id,
+        daily,
+        source=source,
+        lookback_years=SCANNER_LOOKBACK_YEARS,
+        asof=today.isoformat(),
+    )
     issues = list(base.get("issues") or [])
     warnings = list(base.get("warnings") or [])
     issues.extend(_source_issues(instrument_id, source))
 
+    density = _density_diagnostics(daily, today=today)
+    if not density["passed"]:
+        issues.append(
+            f"insufficient_dense_15y_history:{density['dense_year_count']}"
+            f"<{MIN_DENSE_YEARS_FOR_15Y_SCAN}"
+        )
+
     last_date = _parse_date(daily[-1][0]) if daily else None
     staleness_days = (today - last_date).days if last_date else None
-    # A stale series is useful for historical research but should be visible. It is
-    # not a structural blocker because weekends/holidays and manual refreshes exist.
     if staleness_days is not None and staleness_days > 14:
         warnings.append(f"stale_latest_bar:{staleness_days}d")
 
-    diagnostics = _return_diagnostics(daily)
+    scoped_start = str(base.get("scope_start") or "")
+    scoped_daily = [(d, c) for d, c in daily if not scoped_start or str(d)[:10] >= scoped_start]
+    diagnostics = _return_diagnostics(scoped_daily)
     status = "FAIL" if issues else "PASS"
     return {
         **base,
@@ -127,8 +174,10 @@ def audit_seasonality_instrument(
         "issues": list(dict.fromkeys(issues)),
         "warnings": list(dict.fromkeys(warnings)),
         "series_fingerprint": _series_fingerprint(daily),
+        "scanner_scope_fingerprint": _series_fingerprint(scoped_daily),
         "latest_bar_staleness_days": staleness_days,
         "return_diagnostics": diagnostics,
+        "density": density,
         "source_contract": {
             "required": instrument_id in REQUIRED_SOURCE_FAMILIES,
             "allowed": list(REQUIRED_SOURCE_FAMILIES.get(instrument_id, ())),
@@ -143,6 +192,8 @@ def audit_seasonality_universe(
     instruments: Iterable[str] | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
+    # This is deliberately the same canonical universe used by the seasonal edge
+    # scanner. Do not silently audit a different subset from the one we publish.
     universe = list(instruments or LEGACY_COT_MARKETS)
     rows: dict[str, dict[str, Any]] = {}
     for instrument_id in universe:
@@ -153,9 +204,10 @@ def audit_seasonality_universe(
     warnings = sorted(k for k, v in rows.items() if v.get("warnings"))
     return {
         "status": "PASS" if not failed else "FAIL",
-        "engine": "seasonality_universe_audit_v2",
+        "engine": "seasonality_universe_audit_v3",
         "asof": (today or date.today()).isoformat(),
         "instrument_count": len(universe),
+        "universe": universe,
         "pass_count": len(passed),
         "fail_count": len(failed),
         "warning_count": len(warnings),
@@ -165,9 +217,13 @@ def audit_seasonality_universe(
         "instruments": rows,
         "policy": {
             "publish_rule": "Only PASS instruments may publish seasonal edges or alerts.",
+            "lookback_scope": f"{SCANNER_LOOKBACK_YEARS}Y plus one-year continuity buffer",
+            "minimum_dense_years": MIN_DENSE_YEARS_FOR_15Y_SCAN,
+            "minimum_weeks_per_dense_year": MIN_DENSE_WEEKS_PER_YEAR,
             "source_contracts": {
                 k: list(v) for k, v in REQUIRED_SOURCE_FAMILIES.items()
             },
             "fingerprint_rule": "Scanner/workstation must consume the same canonical daily series fingerprint.",
+            "legacy_rule": "Out-of-scope historical defects are diagnostic warnings, not current scanner blockers.",
         },
     }
