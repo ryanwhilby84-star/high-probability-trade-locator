@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """Build/export Seasonal Edge Scanner payload with full-universe integrity gating.
 
-Before scanning, Corn gets a targeted repair attempt when its canonical source is
-invalid or its series fails structural integrity.  This prevents the known Alpha
-Vantage CORN ETF / CBOT futures scale mix from ever publishing a seasonal edge.
+The audit runs against the exact 26-market scanner universe. Known unsafe source
+bindings are repaired through explicit futures foundations before publication;
+anything still failing remains withheld rather than being silently downgraded.
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
+from typing import Callable
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC = PROJECT_ROOT / "src"
@@ -26,33 +27,76 @@ from hptl.seasonality_workstation.universe_audit import (
 )
 
 
-def _repair_corn_if_needed(*, enabled: bool = True) -> dict:
-    before = audit_seasonality_instrument("Corn")
+def _repair_one(instrument_id: str) -> dict:
+    """Attempt only deterministic, direction-correct repairs we explicitly own."""
+    before = audit_seasonality_instrument(instrument_id)
     result = {
-        "instrument_id": "Corn",
+        "instrument_id": instrument_id,
         "attempted": False,
         "before": before,
         "after": before,
-        "status": "not_needed" if before.get("status") == "PASS" else "not_attempted",
+        "status": "not_needed" if before.get("status") == "PASS" else "no_known_repair",
     }
-    if before.get("status") == "PASS" or not enabled:
+    if before.get("status") == "PASS":
+        return result
+
+    repair: Callable[[], object] | None = None
+    repair_name: str | None = None
+
+    if instrument_id == "Corn":
+        from hptl.prices.corn_foundation_backfill import run_corn_foundation_backfill
+
+        repair = lambda: run_corn_foundation_backfill(execute=True)
+        repair_name = "yahoo:ZC=F"
+    elif instrument_id in {
+        "Coffee",
+        "Cocoa",
+        "Cotton",
+        "Japanese Yen / 6J",
+        "Swiss Franc / 6S",
+        "Canadian Dollar / 6C",
+        "Copper / HG",
+    }:
+        from hptl.prices.softs_futures_backfill import promote_soft_futures
+
+        repair = lambda iid=instrument_id: promote_soft_futures(iid)
+        repair_name = "direction_correct_yahoo_futures"
+    elif instrument_id == "US Dollar Index / DX":
+        from hptl.prices.ice_dx_futures_backfill import promote_ice_dx_futures
+
+        repair = lambda: promote_ice_dx_futures([instrument_id])
+        repair_name = "yahoo:DX-Y.NYB"
+
+    if repair is None:
         return result
 
     result["attempted"] = True
+    result["repair_name"] = repair_name
     try:
-        from hptl.prices.corn_foundation_backfill import run_corn_foundation_backfill
-
-        repair = run_corn_foundation_backfill(execute=True)
-        result["repair"] = repair
+        result["repair"] = repair()
     except Exception as exc:  # noqa: BLE001
         result["status"] = "repair_failed"
         result["error"] = f"{type(exc).__name__}: {exc}"
         return result
 
-    after = audit_seasonality_instrument("Corn")
+    after = audit_seasonality_instrument(instrument_id)
     result["after"] = after
     result["status"] = "repaired" if after.get("status") == "PASS" else "still_failed"
     return result
+
+
+def _repair_failed_instruments(pre_audit: dict, *, enabled: bool) -> list[dict]:
+    if not enabled:
+        return [
+            {
+                "instrument_id": iid,
+                "attempted": False,
+                "status": "repair_disabled",
+                "before": (pre_audit.get("instruments") or {}).get(iid),
+            }
+            for iid in pre_audit.get("failed") or []
+        ]
+    return [_repair_one(iid) for iid in (pre_audit.get("failed") or [])]
 
 
 def _integrity_gate(payload: dict, audit_payload: dict) -> dict:
@@ -72,6 +116,7 @@ def _integrity_gate(payload: dict, audit_payload: dict) -> dict:
         }
         result["integrity"] = audit
         result["series_fingerprint"] = audit.get("series_fingerprint")
+        result["scanner_scope_fingerprint"] = audit.get("scanner_scope_fingerprint")
         if audit.get("status") != "PASS":
             failed.add(instrument_id)
             result["status"] = "integrity_failed"
@@ -104,6 +149,7 @@ def _integrity_gate(payload: dict, audit_payload: dict) -> dict:
     payload["integrity_gate"] = {
         "engine": audit_payload.get("engine"),
         "policy": "FAIL instruments cannot publish seasonal edges or alerts",
+        "universe": audit_payload.get("universe") or [],
         "passed": audit_payload.get("passed") or [],
         "failed": sorted(failed),
         "pass_count": audit_payload.get("pass_count", 0),
@@ -118,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--no-repair",
         action="store_true",
-        help="Do not attempt the targeted Yahoo ZC=F Corn foundation repair.",
+        help="Audit only; do not attempt known deterministic futures-source repairs.",
     )
     parser.add_argument(
         "--audit-only",
@@ -127,8 +173,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    repairs = [_repair_corn_if_needed(enabled=not args.no_repair)]
+    # First pass identifies the exact failures before any mutation. Repair only the
+    # source families for which we have explicit, direction-correct foundations.
+    pre_audit = audit_seasonality_universe(today=date.today())
+    repairs = _repair_failed_instruments(pre_audit, enabled=not args.no_repair)
+
+    # Publication is always based on a fresh post-repair audit of the whole universe.
     audit_payload = audit_seasonality_universe(today=date.today())
+    audit_payload["pre_repair_status"] = {
+        "pass_count": pre_audit.get("pass_count"),
+        "fail_count": pre_audit.get("fail_count"),
+        "failed": pre_audit.get("failed") or [],
+    }
     audit_payload["repairs"] = repairs
 
     data_dir = PROJECT_ROOT / "web-dashboard" / "public" / "data"
@@ -145,6 +201,16 @@ def main(argv: list[str] | None = None) -> int:
         payload["repairs"] = repairs
         out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
+    repaired = [r["instrument_id"] for r in repairs if r.get("status") == "repaired"]
+    repair_failures = [
+        {
+            "instrument_id": r.get("instrument_id"),
+            "status": r.get("status"),
+            "error": r.get("error"),
+        }
+        for r in repairs
+        if r.get("attempted") and r.get("status") != "repaired"
+    ]
     summary = {
         "status": payload.get("status") if payload else audit_payload.get("status"),
         "output": str(out) if payload else None,
@@ -154,7 +220,8 @@ def main(argv: list[str] | None = None) -> int:
         "integrity_fail": audit_payload.get("fail_count"),
         "integrity_warnings": audit_payload.get("warning_count"),
         "failed_instruments": audit_payload.get("failed"),
-        "corn_repair": repairs[0].get("status"),
+        "repaired_instruments": repaired,
+        "repair_failures": repair_failures,
         "available_instruments": payload.get("available_instruments") if payload else None,
         "edge_count": payload.get("edge_count") if payload else None,
         "alert_count": payload.get("alert_count") if payload else None,
@@ -162,7 +229,6 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps(summary))
 
     # Audit failure does not crash dev startup; failed instruments are withheld.
-    # The terminal summary makes failures explicit for repair.
     return 0
 
 
