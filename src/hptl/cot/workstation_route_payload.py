@@ -90,8 +90,9 @@ def build_workstation_route_payload(
     """Build ``(body, http_status)`` for one COT workstation route.
 
     Hard 422 failures are reserved for the primary historical COT series. Secondary
-    derived-inspector gaps are returned as ``derived_integrity.status=warning`` while
-    preserving HTTP 200 so the historical workstation remains usable.
+    derived-inspector gaps — including non-finite derived values — are returned as
+    ``derived_integrity.status=warning`` while preserving HTTP 200 so the historical
+    workstation remains usable.
     """
     mid = str(instrument_id or "").strip()
     if not mid:
@@ -100,7 +101,7 @@ def build_workstation_route_payload(
     wi = weekly_inspector if weekly_inspector is not None else _load_first(WI_PATHS)
     cot3y = cot_3y if cot_3y is not None else _load_first(COT3Y_PATHS)
 
-    # The primary historical COT series is the hard gate for the workstation.
+    # The primary historical COT series is the only hard data gate for the workstation.
     cot_key, cot_block = _resolve_market_block(cot3y, mid)
     series = list((cot_block or {}).get("series") or [])
     if not cot_block:
@@ -135,6 +136,19 @@ def build_workstation_route_payload(
         for fail in audit_week(week, instrument_id=mid):
             derived_missing.append(f"{fail.get('report_date')}:{fail.get('field')}")
 
+    # IMPORTANT: the derived inspector may contain NaN/Inf when a percentile/spread
+    # could not be calculated. That is a derived-data warning, not a reason to blank
+    # the historical COT workstation. Sanitize it independently and drop only the
+    # unsafe derived snapshot if necessary.
+    safe_latest_week = None
+    if lookback:
+        try:
+            safe_latest_week = sanitize_for_json(
+                lookback[-1], path="workstation.latest_week"
+            )
+        except JsonUnsafeError as exc:
+            derived_missing.append(f"latest_week_json:{exc}")
+
     # Keep diagnostics deterministic and compact; duplicate failures add no value.
     derived_missing = list(dict.fromkeys(derived_missing))
     derived_status = "warning" if derived_missing else "ok"
@@ -146,7 +160,7 @@ def build_workstation_route_payload(
         "week_count": len(weeks),
         "lookback_weeks": len(lookback),
         "historical_rows": len(series),
-        "latest_week": lookback[-1] if lookback else None,
+        "latest_week": safe_latest_week,
         "measure": expanded.get("measure"),
         "measure_label": expanded.get("measure_label"),
         "derived_integrity": {
@@ -161,6 +175,8 @@ def build_workstation_route_payload(
         },
     }
 
+    # At this point the only values capable of blocking the route should be values in
+    # the core envelope itself. Derived non-finite values were isolated above.
     try:
         safe = sanitize_for_json(
             {
@@ -179,7 +195,7 @@ def build_workstation_route_payload(
                 "report_date": report_date,
                 "stage": "json_serialisation",
                 "missing_fields": [str(exc)],
-                "message": "COT workstation payload contains unsafe JSON values.",
+                "message": "COT workstation payload contains unsafe core JSON values.",
             },
             422,
         )
