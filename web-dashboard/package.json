@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
+    "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
     "dev": "npm run seasonal-edge && vite",
     "build": "npm run seasonal-edge && vite build",
     "preview": "vite preview"
