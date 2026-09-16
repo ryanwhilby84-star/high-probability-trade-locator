@@ -90,7 +90,7 @@ export function PriceHistoryChart({ priceSeries, anchorDate }) {
             />
           ) : null}
           <Line
-            type="monotone"
+            type="linear"
             dataKey="actual"
             name="Close"
             stroke="#e2e8f0"
@@ -266,7 +266,7 @@ function PriceUnitSeasonalChart({
             />
           ) : null}
           <Line
-            type="monotone"
+            type="linear"
             dataKey="historical"
             name="Seasonal path"
             stroke="#94a3b8"
@@ -275,7 +275,7 @@ function PriceUnitSeasonalChart({
             connectNulls
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="forward"
             name="Projected path"
             stroke="#38bdf8"
@@ -407,7 +407,7 @@ export function WeeklyRoadmapChart({ weeklyRoadmap }) {
             />
           ) : null}
           <Line
-            type="monotone"
+            type="linear"
             dataKey="historical"
             name="Weekly path"
             stroke={stroke}
@@ -416,7 +416,7 @@ export function WeeklyRoadmapChart({ weeklyRoadmap }) {
             connectNulls
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="forward"
             name="Forward path"
             stroke={stroke}
@@ -574,7 +574,7 @@ export function NormalisedSeasonalityChart({ normalised, anchorDate }) {
             />
           ) : null}
           <Line
-            type="monotone"
+            type="linear"
             dataKey="historical"
             name="Seasonal path"
             stroke="#94a3b8"
@@ -583,7 +583,7 @@ export function NormalisedSeasonalityChart({ normalised, anchorDate }) {
             connectNulls
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="forward"
             name="Forward seasonal"
             stroke="#ef4444"
@@ -708,7 +708,7 @@ export function PriceForecastChart({
         ) : null}
         {showBands ? (
           <Line
-            type="monotone"
+            type="linear"
             dataKey="upper"
             name="Upper band"
             stroke="rgba(251,113,133,0.35)"
@@ -719,7 +719,7 @@ export function PriceForecastChart({
         ) : null}
         {showBands ? (
           <Line
-            type="monotone"
+            type="linear"
             dataKey="lower"
             name="Lower band"
             stroke="rgba(251,113,133,0.35)"
@@ -729,7 +729,7 @@ export function PriceForecastChart({
           />
         ) : null}
         <Line
-          type="monotone"
+          type="linear"
           dataKey="actual"
           name="Actual price"
           stroke="#e2e8f0"
@@ -738,7 +738,7 @@ export function PriceForecastChart({
           connectNulls={false}
         />
         <Line
-          type="monotone"
+          type="linear"
           dataKey="forecast"
           name="Seasonal Forecast"
           stroke="#fb7185"
@@ -816,15 +816,15 @@ export function SeasonalityCurveChart({
         />
         <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155' }} />
         {showBands ? (
-          <Line type="monotone" dataKey="upper" stroke="rgba(56,189,248,0.35)" dot={false} name="Upper" />
+          <Line type="linear" dataKey="upper" stroke="rgba(56,189,248,0.35)" dot={false} name="Upper" />
         ) : null}
         {showBands ? (
-          <Line type="monotone" dataKey="lower" stroke="rgba(56,189,248,0.35)" dot={false} name="Lower" />
+          <Line type="linear" dataKey="lower" stroke="rgba(56,189,248,0.35)" dot={false} name="Lower" />
         ) : null}
         {yearKeys.map((k) => (
           <Line
             key={k}
-            type="monotone"
+            type="linear"
             dataKey={k}
             stroke="rgba(148,163,184,0.22)"
             dot={false}
@@ -833,11 +833,11 @@ export function SeasonalityCurveChart({
           />
         ))}
         {showAverage ? (
-          <Line type="monotone" dataKey="seasonal" stroke="#38bdf8" dot={false} strokeWidth={2} name="Trimmed mean" />
+          <Line type="linear" dataKey="seasonal" stroke="#38bdf8" dot={false} strokeWidth={2} name="Trimmed mean" />
         ) : null}
         {showMedian ? (
           <Line
-            type="monotone"
+            type="linear"
             dataKey="median"
             stroke="#a78bfa"
             dot={false}
@@ -847,7 +847,7 @@ export function SeasonalityCurveChart({
           />
         ) : null}
         {showCurrentYear ? (
-          <Line type="monotone" dataKey="current" stroke="#fbbf24" dot={false} strokeWidth={1.8} name="Current year" />
+          <Line type="linear" dataKey="current" stroke="#fbbf24" dot={false} strokeWidth={1.8} name="Current year" />
         ) : null}
       </LineChart>
     </ResponsiveContainer>

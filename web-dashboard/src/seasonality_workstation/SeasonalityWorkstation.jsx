@@ -261,7 +261,7 @@ export function SeasonalityWorkstation({
   const [seasonalView, setSeasonalView] = React.useState(() =>
     defaultSeasonalView(payload?.display_defaults),
   )
-  const [roadmapSmoothed, setRoadmapSmoothed] = React.useState(true)
+  const [roadmapSmoothed, setRoadmapSmoothed] = React.useState(false)
   const [horizon, setHorizon] = React.useState(12)
   const [model, setModel] = React.useState('median')
   const [showBands, setShowBands] = React.useState(true)
@@ -273,7 +273,7 @@ export function SeasonalityWorkstation({
   React.useEffect(() => {
     // Keep Roadmap as the production default when a fresh payload arrives.
     setSeasonalView(defaultSeasonalView(payload?.display_defaults))
-    setRoadmapSmoothed(true)
+    setRoadmapSmoothed(false)
   }, [payload?.report_date, payload?.instrument_id, payload?.selected_lookback])
 
   if (error || (payload && payload.status && payload.status !== 'ok')) {
@@ -327,9 +327,7 @@ export function SeasonalityWorkstation({
         : 'payload.normalised_seasonality.full_year'
   const activeSmooth =
     seasonalView === 'roadmap'
-      ? roadmapSmoothed
-        ? 'SMA(5)'
-        : 'Unsmoothed'
+      ? 'Vol-normalised daily'
       : seasonalView === 'freeze_index'
         ? `SMA(${method.smooth ?? 5})`
         : 'n/a'
