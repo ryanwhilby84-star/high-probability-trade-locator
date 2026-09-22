@@ -7,8 +7,6 @@ reference windows for auditability.
 
 from __future__ import annotations
 
-from datetime import date
-
 from hptl.seasonality_workstation.daily_window_edge import (
     discover_daily_windows,
     evaluate_daily_window,
@@ -65,6 +63,32 @@ for instrument, start_md, end_md, expected_direction, expected_wins in BENCHMARK
         f"IE={reference['direction']} {reference['wins']}/15 | "
         f"direction={'MATCH' if direction_ok else 'MISS'} | wins_delta={wins_delta:+d}"
     )
+
+    # Crude is the largest benchmark discrepancy, so expose the exact 15 samples.
+    # This lets us identify which years differ before changing any engine semantics.
+    if instrument == "Crude Oil / CL":
+        print("\nCrude reference year-by-year diagnostic:")
+        print("  year | actual window              | return    | result")
+        print("  -----+----------------------------+-----------+-------")
+        for sample in reference["samples"]:
+            ret = float(sample["return_pct"])
+            if ret > 0:
+                result = "WIN"
+            elif ret < 0:
+                result = "LOSS"
+            else:
+                result = "FLAT"
+            print(
+                f"  {sample['year']:4d} | {sample['start']} -> {sample['end']} "
+                f"| {ret:+8.3f}% | {result}"
+            )
+        losses = [x for x in reference["samples"] if float(x["return_pct"]) < 0]
+        print(f"\n  IE bullish losses: {len(losses)}")
+        for sample in losses:
+            print(
+                f"    {sample['year']}: {sample['start']} -> {sample['end']} "
+                f"{float(sample['return_pct']):+.3f}%"
+            )
 
 print("\n" + "=" * 88)
 print("DONE — no production workstation code was changed.")
