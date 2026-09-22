@@ -1,26 +1,42 @@
 import React from 'react'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
+import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
+import { SeasonalEdgePanel } from '../components/SeasonalEdgePanel.jsx'
+import {
+  DXY_COMPONENTS,
+  DXY_MARKET_ID,
+} from '../seasonality_workstation/crossMarketSeasonality.js'
 import {
   navigateToInstrument,
   navigateToScanner,
   navigateToSeasonalityWorkstation,
 } from '../routing.js'
-import { canonicalMarketId } from '../marketResolution.js'
+import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 
 import '../seasonality_workstation/seasonalityWorkstation.css'
+import '../seasonality_workstation/crossMarketSeasonality.css'
+
+const DASHBOARD_MARKETS = new Set(TRACKED_MARKET_IDS)
+const BOND_MARKET_RE = /\b(bond|treasury|t-note|t-bond|bund|gilt)\b/i
 
 /**
- * Seasonality Workstation page — navigates the full canonical tracked universe
- * (same order as HPTL registry / LEGACY_COT list), not a sidebar-filtered subset.
+ * Seasonality Workstation navigation is intentionally kept compact: the normal
+ * dashboard/COT universe plus any bond/rates market present in the registry.
+ * The larger instrument registry contains many aliases and auxiliary markets
+ * that are useful elsewhere but only add noise to this dropdown.
  */
 export function SeasonalityWorkstationPage({
   marketId,
   trackedMarkets,
 }) {
   const navMarkets = React.useMemo(() => {
-    const ids = (trackedMarkets || []).map((m) => canonicalMarketId(m)).filter(Boolean)
-    // de-dupe, preserve order
+    const ids = (trackedMarkets || [])
+      .map((m) => canonicalMarketId(m))
+      .filter(Boolean)
+      .filter((id) => DASHBOARD_MARKETS.has(id) || BOND_MARKET_RE.test(id))
+
+    // de-dupe, preserve registry/dashboard order
     const seen = new Set()
     return ids.filter((id) => {
       if (seen.has(id)) return false
@@ -33,6 +49,11 @@ export function SeasonalityWorkstationPage({
   const prevMarket = navIndex > 0 ? navMarkets[navIndex - 1] : null
   const nextMarket =
     navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
+  const dollarComplexIds = React.useMemo(
+    () => new Set([DXY_MARKET_ID, ...DXY_COMPONENTS.map((row) => row.id)]),
+    [],
+  )
+  const showCrossMarketConfirmation = dollarComplexIds.has(marketId)
 
   const [lookback, setLookback] = React.useState('15Y')
   const [payload, setPayload] = React.useState(null)
@@ -125,6 +146,10 @@ export function SeasonalityWorkstationPage({
         </div>
       </header>
 
+      <div style={{ padding: '0.75rem 0.75rem 0' }}>
+        <SeasonalEdgePanel instrumentId={marketId} />
+      </div>
+
       <SeasonalityWorkstation
         marketId={marketId}
         payload={payload}
@@ -133,6 +158,12 @@ export function SeasonalityWorkstationPage({
         loading={loading}
         error={error}
       />
+
+      {showCrossMarketConfirmation ? (
+        <div className="sws-cross-shell">
+          <CrossMarketSeasonalityPanel activeLookback={lookback} />
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -5,7 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from hptl.seasonality_workstation.engine import build_seasonality_research
-from hptl.seasonality_workstation.models import DEFAULT_LOOKBACK, ENGINE_VERSION
+from hptl.seasonality_workstation.integrity import audit_daily_series_for_lookback
+from hptl.seasonality_workstation.models import DEFAULT_LOOKBACK, ENGINE_VERSION, LOOKBACKS
 from hptl.seasonality_workstation.production_roadmap import apply_production_seasonality
 from hptl.seasonality_workstation.returns import (
     load_daily_closes,
@@ -17,6 +18,14 @@ from hptl.seasonality_workstation.validation import (
     robust_lookback_agreement,
     robust_weekly_leave_one_year_out,
 )
+from hptl.seasonality_workstation.weekly_roadmap import build_weekly_roadmap
+
+
+def _lookback_years(label: str) -> int | None:
+    for name, years in LOOKBACKS:
+        if name == label:
+            return years
+    return 15
 
 
 def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> None:
@@ -56,8 +65,6 @@ def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> N
     weekly = weekly_closes_from_daily(daily)
     rows = weekly_return_rows(weekly)
 
-    # Replace the engine's old non-wrapping forward horizon summaries with the
-    # production model's exact historical observations, including week 52 -> 1.
     for _label, lb in lookbacks.items():
         sample_years = list((lb or {}).get("sample_years") or [])
         if not sample_years:
@@ -82,10 +89,90 @@ def _attach_robust_validation(research: dict[str, Any], instrument_id: str) -> N
         horizon=8,
     )
     research["robust_walk_forward"] = robust
-    # The production payload's generic walk_forward key now refers to the model
-    # actually shown on screen. Preserve the old validation separately for audit.
     research["legacy_walk_forward"] = research.get("walk_forward")
     research["walk_forward"] = robust
+
+
+def _apply_scoped_integrity(
+    research: dict[str, Any],
+    instrument_id: str,
+    lookback: str,
+) -> tuple[dict[str, Any], list[tuple[str, float]]]:
+    """Gate only the price history that can affect the selected lookback.
+
+    The engine still computes full-history diagnostics for auditability, but a
+    defect from the 1990s cannot blank a 15Y workstation. FULL remains a genuine
+    full-history gate.
+    """
+    price_id = str(research.get("price_instrument_id") or instrument_id)
+    daily, source, error = load_daily_closes(price_id)
+    if error or not daily:
+        return {
+            "instrument_id": price_id,
+            "status": "FAIL",
+            "issues": [error or "no_daily_history"],
+            "warnings": [],
+            "source": source,
+        }, []
+
+    anchor = str((research.get("anchor") or {}).get("date") or daily[-1][0])[:10]
+    scoped = audit_daily_series_for_lookback(
+        price_id,
+        daily,
+        source=source,
+        lookback_years=_lookback_years(lookback),
+        asof=anchor,
+    )
+    return scoped, daily
+
+
+def _repair_corn_if_needed(
+    instrument_id: str,
+    lookback: str,
+    research: dict[str, Any],
+    scoped_integrity: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], list[tuple[str, float]], dict[str, Any] | None]:
+    """Replace a broken Corn store with audited Yahoo ZC=F daily history once.
+
+    This makes the workstation self-healing: opening Corn after pulling the fix is
+    enough to repair the local canonical store. The replacement routine refuses to
+    promote data unless the modern 20Y Yahoo series passes integrity first.
+    """
+    if instrument_id != "Corn" or scoped_integrity.get("status") == "PASS":
+        daily, _source, _error = load_daily_closes(
+            str(research.get("price_instrument_id") or instrument_id)
+        )
+        return research, scoped_integrity, daily, None
+
+    repair_meta: dict[str, Any] = {"attempted": True, "status": "failed"}
+    try:
+        from hptl.prices.corn_foundation_backfill import run_corn_foundation_backfill
+
+        repair = run_corn_foundation_backfill(execute=True)
+        repair_meta["result"] = repair
+        repair_meta["status"] = str(repair.get("status") or "unknown")
+    except Exception as exc:  # noqa: BLE001
+        repair_meta["error"] = f"{type(exc).__name__}: {exc}"
+        daily, _source, _error = load_daily_closes(
+            str(research.get("price_instrument_id") or instrument_id)
+        )
+        return research, scoped_integrity, daily, repair_meta
+
+    # Rebuild from disk after promotion so no pre-repair objects survive this request.
+    research = build_seasonality_research(
+        instrument_id,
+        lookback=lookback,
+        fail_on_integrity=False,
+    )
+    if research.get("status") != "ok":
+        daily, _source, _error = load_daily_closes(instrument_id)
+        repair_meta["status"] = "rebuild_failed"
+        return research, scoped_integrity, daily, repair_meta
+
+    scoped_integrity, daily = _apply_scoped_integrity(research, instrument_id, lookback)
+    repair_meta["after_status"] = scoped_integrity.get("status")
+    repair_meta["after_issues"] = scoped_integrity.get("issues") or []
+    return research, scoped_integrity, daily, repair_meta
 
 
 def build_seasonality_workstation_payload(
@@ -93,35 +180,81 @@ def build_seasonality_workstation_payload(
     *,
     lookback: str = DEFAULT_LOOKBACK,
 ) -> dict[str, Any]:
+    # Do not let the engine's full-history audit pre-empt the selected-lookback
+    # contract. We apply the correct scoped gate immediately afterwards.
     research = build_seasonality_research(
         instrument_id,
         lookback=lookback,
-        fail_on_integrity=True,
+        fail_on_integrity=False,
     )
     if research.get("status") != "ok":
         return {
-            "status": "integrity_error" if research.get("error") == "integrity_failed" else "error",
+            "status": "error",
             "instrument_id": instrument_id,
             "engine": ENGINE_VERSION,
             "lookback": lookback,
             "error": research.get("error"),
             "message": research.get("message") or research.get("error"),
             "integrity": research.get("integrity"),
-            # Separate contract keys — Monthly remains unavailable on integrity FAIL.
             "monthly_roadmap": research.get("monthly_roadmap"),
             "weekly_roadmap": research.get("weekly_roadmap"),
             "seasonal_roadmap": research.get("seasonal_roadmap"),
         }
 
-    # Production reliability/statistics must validate the same robust weekly
-    # return model that is plotted, not the legacy indexed-year model.
-    _attach_robust_validation(research, instrument_id)
+    scoped_integrity, daily = _apply_scoped_integrity(research, instrument_id, lookback)
+    research, scoped_integrity, daily, repair_meta = _repair_corn_if_needed(
+        instrument_id,
+        lookback,
+        research,
+        scoped_integrity,
+    )
+    research["integrity"] = scoped_integrity
+    research["data_quality"] = scoped_integrity.get("data_quality")
 
-    # Production presentation contract: robust ISO-week returns are canonical.
-    # Legacy indexed / mean-return products remain explicit alternate views.
+    if scoped_integrity.get("status") != "PASS":
+        payload = {
+            "status": "integrity_error",
+            "instrument_id": instrument_id,
+            "engine": ENGINE_VERSION,
+            "lookback": lookback,
+            "error": "integrity_failed",
+            "message": (
+                "Seasonality Workstation refused to compute — selected-lookback price integrity FAIL: "
+                + ", ".join(scoped_integrity.get("issues") or [])
+            ),
+            "integrity": scoped_integrity,
+            "monthly_roadmap": None,
+            "weekly_roadmap": build_weekly_roadmap(
+                daily,
+                asof=str((research.get("anchor") or {}).get("date") or "")[:10] or None,
+                lookback_years=_lookback_years(lookback) or 15,
+                integrity=scoped_integrity,
+            ) if daily else None,
+            "seasonal_roadmap": None,
+        }
+        if repair_meta is not None:
+            payload["integrity_repair"] = repair_meta
+        return payload
+
+    # Rebuild Weekly Roadmap with the selected-lookback audit. This prevents an
+    # out-of-scope legacy defect from leaving a false red gate inside an otherwise
+    # valid workstation.
+    if daily:
+        weekly = build_weekly_roadmap(
+            daily,
+            asof=str((research.get("anchor") or {}).get("date") or "")[:10] or None,
+            lookback_years=_lookback_years(lookback) or 15,
+            integrity=scoped_integrity,
+            seasonal_roadmap=research.get("seasonal_roadmap"),
+        )
+        research["weekly_roadmap"] = weekly
+        if isinstance(research.get("seasonality"), dict):
+            research["seasonality"]["weekly_roadmap"] = weekly
+
+    _attach_robust_validation(research, instrument_id)
     research = apply_production_seasonality(research)
 
-    return {
+    payload = {
         "status": "ok",
         "instrument_id": instrument_id,
         "price_instrument_id": research.get("price_instrument_id"),
@@ -161,3 +294,6 @@ def build_seasonality_workstation_payload(
             for k, v in (research.get("lookbacks") or {}).items()
         },
     }
+    if repair_meta is not None:
+        payload["integrity_repair"] = repair_meta
+    return payload

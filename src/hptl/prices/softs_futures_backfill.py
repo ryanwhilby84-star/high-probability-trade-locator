@@ -1,8 +1,8 @@
-"""Dense daily softs (Coffee / Cocoa / Cotton) via Yahoo continuous futures.
+"""Dense daily futures foundations via Yahoo continuous futures.
 
-FRED IMF monthly series (PCOFFOTMUSDM / PCOCOUSDM / PCOTTINDUSDM) currently stop
-at 2026-05-01 and cannot align COT weeks through 2026-07. Yahoo ICE continuous
-futures provide daily OHLC suitable for COT chart price attachment.
+Originally this module covered Coffee / Cocoa / Cotton. It also owns a small set
+of futures where using an OANDA spot pair would invert the CME COT instrument
+(JPY, CHF, CAD) or where an old mixed-unit price history is unsafe (Copper).
 """
 
 from __future__ import annotations
@@ -38,8 +38,6 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
         "yahoo_symbol": "CT=F",
         "note": "ICE Cotton No. 2 continuous futures (Yahoo CT=F) daily OHLC for COT alignment.",
     },
-    # CME Japanese Yen futures — USD per JPY (rises when yen strengthens).
-    # Economically matches CFTC Japanese Yen / 6J; NOT OANDA USD_JPY (inverse quote).
     "Japanese Yen / 6J": {
         "yahoo_symbol": "6J=F",
         "note": (
@@ -47,7 +45,20 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "Aligned with TradingView 6J / yen value. Replaces inverted OANDA USD_JPY."
         ),
     },
-    # COMEX Copper — replace mixed OANDA $/lb + AV tonne month-start contamination.
+    "Swiss Franc / 6S": {
+        "yahoo_symbol": "6S=F",
+        "note": (
+            "CME Swiss Franc continuous futures (Yahoo 6S=F), quoted as USD per CHF. "
+            "Aligned with 6S/CFTC direction. Replaces inverted OANDA USD_CHF."
+        ),
+    },
+    "Canadian Dollar / 6C": {
+        "yahoo_symbol": "6C=F",
+        "note": (
+            "CME Canadian Dollar continuous futures (Yahoo 6C=F), quoted as USD per CAD. "
+            "Aligned with 6C/CFTC direction. Replaces inverted OANDA USD_CAD."
+        ),
+    },
     "Copper / HG": {
         "yahoo_symbol": "HG=F",
         "note": (
@@ -97,7 +108,7 @@ def promote_soft_futures(instrument_id: str) -> dict[str, Any]:
     yahoo_symbol = cfg["yahoo_symbol"]
     prev = load_instrument_record_internal(instrument_id) or {}
     prev_daily = prev.get("daily") or []
-    previous_source = prev.get("_fetched_via") or (prev.get("price_scale") or {}).get("source") or "fred"
+    previous_source = prev.get("_fetched_via") or (prev.get("price_scale") or {}).get("source") or "unknown"
     previous_latest = prev_daily[-1]["date"] if prev_daily else None
 
     daily = normalize_daily_bars(fetch_yahoo_daily(yahoo_symbol))
@@ -162,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     ids = args.instruments or list(SOFTS_YAHOO)
     for iid in ids:
         if iid not in SOFTS_YAHOO:
-            print(f"ERROR: unsupported soft {iid}", file=sys.stderr)
+            print(f"ERROR: unsupported futures foundation {iid}", file=sys.stderr)
             return 1
         print(json.dumps(promote_soft_futures(iid), indent=2))
     return 0

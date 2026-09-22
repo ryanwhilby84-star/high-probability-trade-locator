@@ -23,3 +23,6 @@ web-dashboard/dist/data/confluence_history_latest.json
 web-dashboard/public/data/confluence_history_latest.json
 *.bak
 *.bak
+web-dashboard/dist/data/prices_latest.json
+web-dashboard/public/data/prices_latest.json
+web-dashboard/public/data/prices_latest.json
