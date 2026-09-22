@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-08-08T07:06:10.392174+00:00",
+  "generated_at": "2026-09-19T05:33:55.245908+00:00",
   "parser": "hptl.cot.cot_source_truth_audit",
   "audit_chain": [
     "Official CFTC Legacy Futures Only (deacot annual.txt, fresh download)",
@@ -11,130 +11,143 @@
   "official_source": {
     "report_type": "legacy_futures_only",
     "source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-    "source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-    "source_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\raw\\cot_legacy_futures_only_2026_20260808T065005Z.zip",
+    "source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+    "source_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\raw\\cot_legacy_futures_only_2026_20260919T050031Z.zip",
     "inner_file": "annual.txt",
     "parser": "hptl.cot.cot_source_truth_audit",
     "legacy_htpl_parser_not_used": "hptl.cot.legacy_cot"
   },
-  "latest_report_date": "2026-08-04",
+  "latest_report_date": "2026-09-15",
   "special_focus": {
     "crude_oil_cl_all_rows_2026_05_26": [
       {
         "market_name": "USD Malaysian Crude Palm Oil C - CHICAGO MERCANTILE EXCHANGE",
         "exchange": "CHICAGO MERCANTILE EXCHANGE",
         "cftc_code": "037021",
-        "noncommercial_long": 1260.0,
-        "noncommercial_short": 3893.0,
-        "noncommercial_spread": 660.0,
-        "nonreportable_long": 40.0,
+        "noncommercial_long": 1562.0,
+        "noncommercial_short": 4141.0,
+        "noncommercial_spread": 1675.0,
+        "nonreportable_long": 20.0,
         "nonreportable_short": 0.0,
-        "open_interest": 45688.0,
-        "raw_row_index": 3332,
+        "open_interest": 42842.0,
+        "raw_row_index": 4011,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "CRUDE DIFF-WCS HOUSTON/WTI 1ST - ICE FUTURES ENERGY DIV",
         "exchange": "ICE FUTURES ENERGY DIV",
         "cftc_code": "06739C",
-        "noncommercial_long": 11639.0,
-        "noncommercial_short": 675.0,
-        "noncommercial_spread": 785.0,
-        "nonreportable_long": 10.0,
-        "nonreportable_short": 0.0,
-        "open_interest": 49009.0,
-        "raw_row_index": 7567,
+        "noncommercial_long": 12014.0,
+        "noncommercial_short": 1335.0,
+        "noncommercial_spread": 430.0,
+        "nonreportable_long": 0.0,
+        "nonreportable_short": 15.0,
+        "open_interest": 71868.0,
+        "raw_row_index": 9083,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "CRUDE OIL, LIGHT SWEET-WTI - ICE FUTURES EUROPE",
         "exchange": "ICE FUTURES EUROPE",
         "cftc_code": "067411",
-        "noncommercial_long": 80866.0,
-        "noncommercial_short": 78382.0,
-        "noncommercial_spread": 208452.0,
-        "nonreportable_long": 17167.0,
-        "nonreportable_short": 13896.0,
-        "open_interest": 782189.0,
-        "raw_row_index": 7598,
+        "noncommercial_long": 69195.0,
+        "noncommercial_short": 87040.0,
+        "noncommercial_spread": 191681.0,
+        "nonreportable_long": 17893.0,
+        "nonreportable_short": 14754.0,
+        "open_interest": 753881.0,
+        "raw_row_index": 9120,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "CRUDE DIFF-TMX WCS 1A INDEX - ICE FUTURES ENERGY DIV",
         "exchange": "ICE FUTURES ENERGY DIV",
         "cftc_code": "06742G",
-        "noncommercial_long": 330.0,
-        "noncommercial_short": 14856.0,
-        "noncommercial_spread": 30.0,
-        "nonreportable_long": 15.0,
-        "nonreportable_short": 3.0,
-        "open_interest": 61984.0,
-        "raw_row_index": 7647,
+        "noncommercial_long": 475.0,
+        "noncommercial_short": 22255.0,
+        "noncommercial_spread": 485.0,
+        "nonreportable_long": 55.0,
+        "nonreportable_short": 418.0,
+        "open_interest": 78546.0,
+        "raw_row_index": 9175,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "CRUDE DIFF-TMX SW 1A INDEX - ICE FUTURES ENERGY DIV",
         "exchange": "ICE FUTURES ENERGY DIV",
         "cftc_code": "06742T",
-        "noncommercial_long": 390.0,
-        "noncommercial_short": 1485.0,
-        "noncommercial_spread": 0.0,
+        "noncommercial_long": 110.0,
+        "noncommercial_short": 1655.0,
+        "noncommercial_spread": 145.0,
         "nonreportable_long": 0.0,
-        "nonreportable_short": 0.0,
-        "open_interest": 14072.0,
-        "raw_row_index": 7678,
+        "nonreportable_short": 105.0,
+        "open_interest": 12971.0,
+        "raw_row_index": 9212,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
         "exchange": "NEW YORK MERCANTILE EXCHANGE",
         "cftc_code": "067651",
-        "noncommercial_long": 308841.0,
-        "noncommercial_short": 196398.0,
-        "noncommercial_spread": 610139.0,
-        "nonreportable_long": 80311.0,
-        "nonreportable_short": 38979.0,
-        "open_interest": 1886816.0,
-        "raw_row_index": 7740,
+        "noncommercial_long": 371202.0,
+        "noncommercial_short": 235297.0,
+        "noncommercial_spread": 605061.0,
+        "nonreportable_long": 84298.0,
+        "nonreportable_short": 55345.0,
+        "open_interest": 1955764.0,
+        "raw_row_index": 9286,
         "htpl_canonical_for_cl": true
       },
       {
         "market_name": "WTI FINANCIAL CRUDE OIL - NEW YORK MERCANTILE EXCHANGE",
         "exchange": "NEW YORK MERCANTILE EXCHANGE",
         "cftc_code": "06765A",
-        "noncommercial_long": 45051.0,
-        "noncommercial_short": 22018.0,
-        "noncommercial_spread": 13468.0,
-        "nonreportable_long": 25202.0,
-        "nonreportable_short": 45335.0,
-        "open_interest": 189613.0,
-        "raw_row_index": 7771,
+        "noncommercial_long": 59781.0,
+        "noncommercial_short": 23041.0,
+        "noncommercial_spread": 10000.0,
+        "nonreportable_long": 28479.0,
+        "nonreportable_short": 52501.0,
+        "open_interest": 202164.0,
+        "raw_row_index": 9323,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "WTI  HOUSTON ARGUS/WTI TR MO - NEW YORK MERCANTILE EXCHANGE",
         "exchange": "NEW YORK MERCANTILE EXCHANGE",
         "cftc_code": "0676A5",
-        "noncommercial_long": 700.0,
-        "noncommercial_short": 75359.0,
-        "noncommercial_spread": 12240.0,
-        "nonreportable_long": 7551.0,
-        "nonreportable_short": 15860.0,
-        "open_interest": 444555.0,
-        "raw_row_index": 7853,
+        "noncommercial_long": 3668.0,
+        "noncommercial_short": 68777.0,
+        "noncommercial_spread": 17939.0,
+        "nonreportable_long": 3313.0,
+        "nonreportable_short": 11312.0,
+        "open_interest": 459825.0,
+        "raw_row_index": 9417,
+        "htpl_canonical_for_cl": false
+      },
+      {
+        "market_name": "WTI  HOUSTON ARGUS/WTI BALMO - NEW YORK MERCANTILE EXCHANGE",
+        "exchange": "NEW YORK MERCANTILE EXCHANGE",
+        "cftc_code": "0676A6",
+        "noncommercial_long": 2170.0,
+        "noncommercial_short": 0.0,
+        "noncommercial_spread": 545.0,
+        "nonreportable_long": 2280.0,
+        "nonreportable_short": 4590.0,
+        "open_interest": 27521.0,
+        "raw_row_index": 9454,
         "htpl_canonical_for_cl": false
       },
       {
         "market_name": "WTI MIDLAND ARGUS VS WTI TRADE - NEW YORK MERCANTILE EXCHANGE",
         "exchange": "NEW YORK MERCANTILE EXCHANGE",
         "cftc_code": "067A71",
-        "noncommercial_long": 26429.0,
+        "noncommercial_long": 22104.0,
         "noncommercial_short": 5460.0,
-        "noncommercial_spread": 170.0,
-        "nonreportable_long": 6561.0,
-        "nonreportable_short": 20076.0,
-        "open_interest": 303878.0,
-        "raw_row_index": 7896,
+        "noncommercial_spread": 1241.0,
+        "nonreportable_long": 6947.0,
+        "nonreportable_short": 16396.0,
+        "open_interest": 354223.0,
+        "raw_row_index": 9467,
         "htpl_canonical_for_cl": false
       }
     ],
@@ -143,36 +156,36 @@
         "market_name": "NASDAQ-100 Consolidated - CHICAGO MERCANTILE EXCHANGE",
         "exchange": "CHICAGO MERCANTILE EXCHANGE",
         "cftc_code": "20974+",
-        "noncommercial_long": 65457.0,
-        "noncommercial_short": 100463.0,
-        "nonreportable_long": 55140.0,
-        "nonreportable_short": 44211.0,
-        "open_interest": 334748.0,
-        "raw_row_index": 10253,
+        "noncommercial_long": 79003.0,
+        "noncommercial_short": 46434.0,
+        "nonreportable_long": 54167.0,
+        "nonreportable_short": 42638.0,
+        "open_interest": 345886.0,
+        "raw_row_index": 12317,
         "htpl_canonical_for_nq": false
       },
       {
         "market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
         "exchange": "CHICAGO MERCANTILE EXCHANGE",
         "cftc_code": "209742",
-        "noncommercial_long": 82514.0,
-        "noncommercial_short": 97153.0,
-        "nonreportable_long": 39765.0,
-        "nonreportable_short": 40568.0,
-        "open_interest": 303624.0,
-        "raw_row_index": 10284,
+        "noncommercial_long": 85062.0,
+        "noncommercial_short": 51344.0,
+        "nonreportable_long": 49391.0,
+        "nonreportable_short": 34251.0,
+        "open_interest": 325784.0,
+        "raw_row_index": 12354,
         "htpl_canonical_for_nq": true
       },
       {
         "market_name": "MICRO E-MINI NASDAQ-100 INDEX - CHICAGO MERCANTILE EXCHANGE",
         "exchange": "CHICAGO MERCANTILE EXCHANGE",
         "cftc_code": "209747",
-        "noncommercial_long": 59203.0,
-        "noncommercial_short": 262869.0,
-        "nonreportable_long": 153754.0,
-        "nonreportable_short": 36427.0,
-        "open_interest": 311244.0,
-        "raw_row_index": 10315,
+        "noncommercial_long": 76251.0,
+        "noncommercial_short": 87740.0,
+        "nonreportable_long": 47755.0,
+        "nonreportable_short": 83873.0,
+        "open_interest": 201017.0,
+        "raw_row_index": 12391,
         "htpl_canonical_for_nq": false
       }
     ],
@@ -192,84 +205,84 @@
   "instruments": {
     "NASDAQ / NQ": {
       "instrument": "NASDAQ / NQ",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "209742",
       "selected_market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 10284,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 12354,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 82514.0,
-          "short": 97153.0,
-          "net": -14639.0
+          "long": 85062.0,
+          "short": 51344.0,
+          "net": 33718.0
         },
         "nonreportables": {
-          "long": 39765.0,
-          "short": 40568.0,
-          "net": -803.0
+          "long": 49391.0,
+          "short": 34251.0,
+          "net": 15140.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 82514.0,
-          "short": 97153.0,
-          "spread": 12238.0,
-          "net": -14639.0
+          "long": 85062.0,
+          "short": 51344.0,
+          "spread": 15435.0,
+          "net": 33718.0
         },
         "nonreportables": {
-          "long": 39765.0,
-          "short": 40568.0,
-          "net": -803.0
+          "long": 49391.0,
+          "short": 34251.0,
+          "net": 15140.0
         },
-        "open_interest": 303624.0
+        "open_interest": 325784.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 82514.0,
-            "official_raw_value": 82514.0,
+            "dashboard_value": 85062.0,
+            "official_raw_value": 85062.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 97153.0,
-            "official_raw_value": 97153.0,
+            "dashboard_value": 51344.0,
+            "official_raw_value": 51344.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -14639.0,
-            "official_raw_value": -14639.0,
+            "dashboard_value": 33718.0,
+            "official_raw_value": 33718.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -14639.0
+          "official_net_computed": 33718.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 39765.0,
-            "official_raw_value": 39765.0,
+            "dashboard_value": 49391.0,
+            "official_raw_value": 49391.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 40568.0,
-            "official_raw_value": 40568.0,
+            "dashboard_value": 34251.0,
+            "official_raw_value": 34251.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -803.0,
-            "official_raw_value": -803.0,
+            "dashboard_value": 15140.0,
+            "official_raw_value": 15140.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -803.0
+          "official_net_computed": 15140.0
         }
       },
       "nc_match": true,
@@ -281,17 +294,17 @@
           "market_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 82514.0,
-          "noncommercial_short": 97153.0,
-          "noncommercial_spread": 12238.0,
-          "commercial_long": 169107.0,
-          "commercial_short": 153665.0,
-          "nonreportable_long": 39765.0,
-          "nonreportable_short": 40568.0,
-          "open_interest": 303624.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10284,
+          "noncommercial_long": 85062.0,
+          "noncommercial_short": 51344.0,
+          "noncommercial_spread": 15435.0,
+          "commercial_long": 175896.0,
+          "commercial_short": 224754.0,
+          "nonreportable_long": 49391.0,
+          "nonreportable_short": 34251.0,
+          "open_interest": 325784.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12354,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -301,84 +314,84 @@
     },
     "S&P 500 / ES": {
       "instrument": "S&P 500 / ES",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "13874A",
       "selected_market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 9083,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10887,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 282551.0,
-          "short": 309809.0,
-          "net": -27258.0
+          "long": 240290.0,
+          "short": 340751.0,
+          "net": -100461.0
         },
         "nonreportables": {
-          "long": 265488.0,
-          "short": 153854.0,
-          "net": 111634.0
+          "long": 284440.0,
+          "short": 193170.0,
+          "net": 91270.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 282551.0,
-          "short": 309809.0,
-          "spread": 41958.0,
-          "net": -27258.0
+          "long": 240290.0,
+          "short": 340751.0,
+          "spread": 96393.0,
+          "net": -100461.0
         },
         "nonreportables": {
-          "long": 265488.0,
-          "short": 153854.0,
-          "net": 111634.0
+          "long": 284440.0,
+          "short": 193170.0,
+          "net": 91270.0
         },
-        "open_interest": 2116079.0
+        "open_interest": 2446519.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 282551.0,
-            "official_raw_value": 282551.0,
+            "dashboard_value": 240290.0,
+            "official_raw_value": 240290.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 309809.0,
-            "official_raw_value": 309809.0,
+            "dashboard_value": 340751.0,
+            "official_raw_value": 340751.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -27258.0,
-            "official_raw_value": -27258.0,
+            "dashboard_value": -100461.0,
+            "official_raw_value": -100461.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -27258.0
+          "official_net_computed": -100461.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 265488.0,
-            "official_raw_value": 265488.0,
+            "dashboard_value": 284440.0,
+            "official_raw_value": 284440.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 153854.0,
-            "official_raw_value": 153854.0,
+            "dashboard_value": 193170.0,
+            "official_raw_value": 193170.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 111634.0,
-            "official_raw_value": 111634.0,
+            "dashboard_value": 91270.0,
+            "official_raw_value": 91270.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 111634.0
+          "official_net_computed": 91270.0
         }
       },
       "nc_match": true,
@@ -390,17 +403,17 @@
           "market_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 282551.0,
-          "noncommercial_short": 309809.0,
-          "noncommercial_spread": 41958.0,
-          "commercial_long": 1526082.0,
-          "commercial_short": 1610458.0,
-          "nonreportable_long": 265488.0,
-          "nonreportable_short": 153854.0,
-          "open_interest": 2116079.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 9083,
+          "noncommercial_long": 240290.0,
+          "noncommercial_short": 340751.0,
+          "noncommercial_spread": 96393.0,
+          "commercial_long": 1825396.0,
+          "commercial_short": 1816205.0,
+          "nonreportable_long": 284440.0,
+          "nonreportable_short": 193170.0,
+          "open_interest": 2446519.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10887,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -410,84 +423,84 @@
     },
     "Dow / YM": {
       "instrument": "Dow / YM",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "124603",
       "selected_market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
       "exchange": "CHICAGO BOARD OF TRADE",
       "contract_description": "DJIA x $5 - CHICAGO BOARD OF TRADE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8677,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10397,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 31437.0,
-          "short": 11386.0,
-          "net": 20051.0
+          "long": 25749.0,
+          "short": 10846.0,
+          "net": 14903.0
         },
         "nonreportables": {
-          "long": 16178.0,
-          "short": 10650.0,
-          "net": 5528.0
+          "long": 14877.0,
+          "short": 10842.0,
+          "net": 4035.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 31437.0,
-          "short": 11386.0,
-          "spread": 1222.0,
-          "net": 20051.0
+          "long": 25749.0,
+          "short": 10846.0,
+          "spread": 2238.0,
+          "net": 14903.0
         },
         "nonreportables": {
-          "long": 16178.0,
-          "short": 10650.0,
-          "net": 5528.0
+          "long": 14877.0,
+          "short": 10842.0,
+          "net": 4035.0
         },
-        "open_interest": 91653.0
+        "open_interest": 101191.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 31437.0,
-            "official_raw_value": 31437.0,
+            "dashboard_value": 25749.0,
+            "official_raw_value": 25749.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 11386.0,
-            "official_raw_value": 11386.0,
+            "dashboard_value": 10846.0,
+            "official_raw_value": 10846.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 20051.0,
-            "official_raw_value": 20051.0,
+            "dashboard_value": 14903.0,
+            "official_raw_value": 14903.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 20051.0
+          "official_net_computed": 14903.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 16178.0,
-            "official_raw_value": 16178.0,
+            "dashboard_value": 14877.0,
+            "official_raw_value": 14877.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 10650.0,
-            "official_raw_value": 10650.0,
+            "dashboard_value": 10842.0,
+            "official_raw_value": 10842.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 5528.0,
-            "official_raw_value": 5528.0,
+            "dashboard_value": 4035.0,
+            "official_raw_value": 4035.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 5528.0
+          "official_net_computed": 4035.0
         }
       },
       "nc_match": true,
@@ -499,17 +512,17 @@
           "market_name": "DJIA x $5 - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 31437.0,
-          "noncommercial_short": 11386.0,
-          "noncommercial_spread": 1222.0,
-          "commercial_long": 42816.0,
-          "commercial_short": 68395.0,
-          "nonreportable_long": 16178.0,
-          "nonreportable_short": 10650.0,
-          "open_interest": 91653.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8677,
+          "noncommercial_long": 25749.0,
+          "noncommercial_short": 10846.0,
+          "noncommercial_spread": 2238.0,
+          "commercial_long": 58327.0,
+          "commercial_short": 77265.0,
+          "nonreportable_long": 14877.0,
+          "nonreportable_short": 10842.0,
+          "open_interest": 101191.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10397,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "DJIA x $5 - CHICAGO BOARD OF TRADE"
         }
@@ -519,84 +532,84 @@
     },
     "Euro FX / 6E": {
       "instrument": "Euro FX / 6E",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "099741",
       "selected_market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8403,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10072,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 201847.0,
-          "short": 259938.0,
-          "net": -58091.0
+          "long": 209000.0,
+          "short": 235993.0,
+          "net": -26993.0
         },
         "nonreportables": {
-          "long": 80953.0,
-          "short": 54324.0,
-          "net": 26629.0
+          "long": 188399.0,
+          "short": 161616.0,
+          "net": 26783.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 201847.0,
-          "short": 259938.0,
-          "spread": 41440.0,
-          "net": -58091.0
+          "long": 209000.0,
+          "short": 235993.0,
+          "spread": 37369.0,
+          "net": -26993.0
         },
         "nonreportables": {
-          "long": 80953.0,
-          "short": 54324.0,
-          "net": 26629.0
+          "long": 188399.0,
+          "short": 161616.0,
+          "net": 26783.0
         },
-        "open_interest": 799909.0
+        "open_interest": 920035.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 201847.0,
-            "official_raw_value": 201847.0,
+            "dashboard_value": 209000.0,
+            "official_raw_value": 209000.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 259938.0,
-            "official_raw_value": 259938.0,
+            "dashboard_value": 235993.0,
+            "official_raw_value": 235993.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -58091.0,
-            "official_raw_value": -58091.0,
+            "dashboard_value": -26993.0,
+            "official_raw_value": -26993.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -58091.0
+          "official_net_computed": -26993.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 80953.0,
-            "official_raw_value": 80953.0,
+            "dashboard_value": 188399.0,
+            "official_raw_value": 188399.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 54324.0,
-            "official_raw_value": 54324.0,
+            "dashboard_value": 161616.0,
+            "official_raw_value": 161616.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 26629.0,
-            "official_raw_value": 26629.0,
+            "dashboard_value": 26783.0,
+            "official_raw_value": 26783.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 26629.0
+          "official_net_computed": 26783.0
         }
       },
       "nc_match": true,
@@ -608,17 +621,17 @@
           "market_name": "EURO SHORT TERM RATE - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 3388.0,
-          "noncommercial_short": 8862.0,
-          "noncommercial_spread": 5606.0,
-          "commercial_long": 20233.0,
-          "commercial_short": 14767.0,
-          "nonreportable_long": 30.0,
-          "nonreportable_short": 22.0,
-          "open_interest": 29257.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 3598,
+          "noncommercial_long": 2616.0,
+          "noncommercial_short": 11094.0,
+          "noncommercial_spread": 5563.0,
+          "commercial_long": 23666.0,
+          "commercial_short": 15228.0,
+          "nonreportable_long": 73.0,
+          "nonreportable_short": 33.0,
+          "open_interest": 31918.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 4329,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO SHORT TERM RATE - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -627,17 +640,17 @@
           "market_name": "CRUDE OIL, LIGHT SWEET-WTI - ICE FUTURES EUROPE",
           "exchange": "ICE FUTURES EUROPE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 80866.0,
-          "noncommercial_short": 78382.0,
-          "noncommercial_spread": 208452.0,
-          "commercial_long": 475704.0,
-          "commercial_short": 481459.0,
-          "nonreportable_long": 17167.0,
-          "nonreportable_short": 13896.0,
-          "open_interest": 782189.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7598,
+          "noncommercial_long": 69195.0,
+          "noncommercial_short": 87040.0,
+          "noncommercial_spread": 191681.0,
+          "commercial_long": 475112.0,
+          "commercial_short": 460406.0,
+          "nonreportable_long": 17893.0,
+          "nonreportable_short": 14754.0,
+          "open_interest": 753881.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9120,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "CRUDE OIL, LIGHT SWEET-WTI - ICE FUTURES EUROPE"
         },
@@ -646,17 +659,17 @@
           "market_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 201847.0,
-          "noncommercial_short": 259938.0,
-          "noncommercial_spread": 41440.0,
-          "commercial_long": 475669.0,
-          "commercial_short": 444207.0,
-          "nonreportable_long": 80953.0,
-          "nonreportable_short": 54324.0,
-          "open_interest": 799909.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8403,
+          "noncommercial_long": 209000.0,
+          "noncommercial_short": 235993.0,
+          "noncommercial_spread": 37369.0,
+          "commercial_long": 485267.0,
+          "commercial_short": 485057.0,
+          "nonreportable_long": 188399.0,
+          "nonreportable_short": 161616.0,
+          "open_interest": 920035.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10072,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO FX - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -665,17 +678,17 @@
           "market_name": "ALUMINIUM EURO PREM DUTY-PAID - COMMODITY EXCHANGE INC.",
           "exchange": "COMMODITY EXCHANGE INC.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 2451.0,
-          "noncommercial_short": 3118.0,
-          "noncommercial_spread": 103.0,
-          "commercial_long": 8914.0,
-          "commercial_short": 8418.0,
-          "nonreportable_long": 442.0,
-          "nonreportable_short": 271.0,
-          "open_interest": 11910.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10164,
+          "noncommercial_long": 2320.0,
+          "noncommercial_short": 2837.0,
+          "noncommercial_spread": 124.0,
+          "commercial_long": 10354.0,
+          "commercial_short": 9883.0,
+          "nonreportable_long": 106.0,
+          "nonreportable_short": 60.0,
+          "open_interest": 12904.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12210,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "ALUMINIUM EURO PREM DUTY-PAID - COMMODITY EXCHANGE INC."
         },
@@ -684,17 +697,17 @@
           "market_name": "NORTH EURO HOT-ROLL COIL STEEL - COMMODITY EXCHANGE INC.",
           "exchange": "COMMODITY EXCHANGE INC.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 4230.0,
-          "noncommercial_short": 710.0,
-          "noncommercial_spread": 1105.0,
-          "commercial_long": 5534.0,
-          "commercial_short": 9160.0,
-          "nonreportable_long": 196.0,
-          "nonreportable_short": 90.0,
-          "open_interest": 11065.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10226,
+          "noncommercial_long": 2072.0,
+          "noncommercial_short": 603.0,
+          "noncommercial_spread": 406.0,
+          "commercial_long": 6696.0,
+          "commercial_short": 8226.0,
+          "nonreportable_long": 145.0,
+          "nonreportable_short": 84.0,
+          "open_interest": 9319.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12284,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "NORTH EURO HOT-ROLL COIL STEEL - COMMODITY EXCHANGE INC."
         },
@@ -703,17 +716,17 @@
           "market_name": "EURO FX/BRITISH POUND XRATE - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 8248.0,
-          "noncommercial_short": 8349.0,
-          "noncommercial_spread": 10.0,
-          "commercial_long": 17587.0,
-          "commercial_short": 25819.0,
-          "nonreportable_long": 14251.0,
-          "nonreportable_short": 5918.0,
-          "open_interest": 40096.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10647,
+          "noncommercial_long": 8464.0,
+          "noncommercial_short": 9101.0,
+          "noncommercial_spread": 0.0,
+          "commercial_long": 19846.0,
+          "commercial_short": 25576.0,
+          "nonreportable_long": 16839.0,
+          "nonreportable_short": 10472.0,
+          "open_interest": 45149.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12795,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO FX/BRITISH POUND XRATE - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -722,17 +735,17 @@
           "market_name": "EURO FX/JAPANESE YEN XRATE - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 6183.0,
-          "noncommercial_short": 3883.0,
-          "noncommercial_spread": 86.0,
-          "commercial_long": 3510.0,
-          "commercial_short": 12676.0,
-          "nonreportable_long": 11116.0,
-          "nonreportable_short": 4250.0,
-          "open_interest": 20895.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10846,
+          "noncommercial_long": 5557.0,
+          "noncommercial_short": 3202.0,
+          "noncommercial_spread": 934.0,
+          "commercial_long": 4609.0,
+          "commercial_short": 11442.0,
+          "nonreportable_long": 9625.0,
+          "nonreportable_short": 5147.0,
+          "open_interest": 20725.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 13031,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO FX/JAPANESE YEN XRATE - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -742,84 +755,84 @@
     },
     "British Pound / 6B": {
       "instrument": "British Pound / 6B",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "096742",
       "selected_market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8310,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9961,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 55012.0,
-          "short": 112826.0,
-          "net": -57814.0
+          "long": 69331.0,
+          "short": 128046.0,
+          "net": -58715.0
         },
         "nonreportables": {
-          "long": 23651.0,
-          "short": 28482.0,
-          "net": -4831.0
+          "long": 111818.0,
+          "short": 110168.0,
+          "net": 1650.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 55012.0,
-          "short": 112826.0,
-          "spread": 5183.0,
-          "net": -57814.0
+          "long": 69331.0,
+          "short": 128046.0,
+          "spread": 3463.0,
+          "net": -58715.0
         },
         "nonreportables": {
-          "long": 23651.0,
-          "short": 28482.0,
-          "net": -4831.0
+          "long": 111818.0,
+          "short": 110168.0,
+          "net": 1650.0
         },
-        "open_interest": 246577.0
+        "open_interest": 314293.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 55012.0,
-            "official_raw_value": 55012.0,
+            "dashboard_value": 69331.0,
+            "official_raw_value": 69331.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 112826.0,
-            "official_raw_value": 112826.0,
+            "dashboard_value": 128046.0,
+            "official_raw_value": 128046.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -57814.0,
-            "official_raw_value": -57814.0,
+            "dashboard_value": -58715.0,
+            "official_raw_value": -58715.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -57814.0
+          "official_net_computed": -58715.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 23651.0,
-            "official_raw_value": 23651.0,
+            "dashboard_value": 111818.0,
+            "official_raw_value": 111818.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 28482.0,
-            "official_raw_value": 28482.0,
+            "dashboard_value": 110168.0,
+            "official_raw_value": 110168.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -4831.0,
-            "official_raw_value": -4831.0,
+            "dashboard_value": 1650.0,
+            "official_raw_value": 1650.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -4831.0
+          "official_net_computed": 1650.0
         }
       },
       "nc_match": true,
@@ -831,17 +844,17 @@
           "market_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 55012.0,
-          "noncommercial_short": 112826.0,
-          "noncommercial_spread": 5183.0,
-          "commercial_long": 162731.0,
-          "commercial_short": 100086.0,
-          "nonreportable_long": 23651.0,
-          "nonreportable_short": 28482.0,
-          "open_interest": 246577.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8310,
+          "noncommercial_long": 69331.0,
+          "noncommercial_short": 128046.0,
+          "noncommercial_spread": 3463.0,
+          "commercial_long": 129681.0,
+          "commercial_short": 72616.0,
+          "nonreportable_long": 111818.0,
+          "nonreportable_short": 110168.0,
+          "open_interest": 314293.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9961,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -850,17 +863,17 @@
           "market_name": "EURO FX/BRITISH POUND XRATE - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 8248.0,
-          "noncommercial_short": 8349.0,
-          "noncommercial_spread": 10.0,
-          "commercial_long": 17587.0,
-          "commercial_short": 25819.0,
-          "nonreportable_long": 14251.0,
-          "nonreportable_short": 5918.0,
-          "open_interest": 40096.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10647,
+          "noncommercial_long": 8464.0,
+          "noncommercial_short": 9101.0,
+          "noncommercial_spread": 0.0,
+          "commercial_long": 19846.0,
+          "commercial_short": 25576.0,
+          "nonreportable_long": 16839.0,
+          "nonreportable_short": 10472.0,
+          "open_interest": 45149.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12795,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO FX/BRITISH POUND XRATE - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -870,84 +883,84 @@
     },
     "Japanese Yen / 6J": {
       "instrument": "Japanese Yen / 6J",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "097741",
       "selected_market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8341,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9998,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 147228.0,
-          "short": 192701.0,
-          "net": -45473.0
+          "long": 237951.0,
+          "short": 117592.0,
+          "net": 120359.0
         },
         "nonreportables": {
-          "long": 34510.0,
-          "short": 39605.0,
-          "net": -5095.0
+          "long": 151709.0,
+          "short": 147394.0,
+          "net": 4315.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 147228.0,
-          "short": 192701.0,
-          "spread": 15265.0,
-          "net": -45473.0
+          "long": 237951.0,
+          "short": 117592.0,
+          "spread": 3385.0,
+          "net": 120359.0
         },
         "nonreportables": {
-          "long": 34510.0,
-          "short": 39605.0,
-          "net": -5095.0
+          "long": 151709.0,
+          "short": 147394.0,
+          "net": 4315.0
         },
-        "open_interest": 419393.0
+        "open_interest": 542802.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 147228.0,
-            "official_raw_value": 147228.0,
+            "dashboard_value": 237951.0,
+            "official_raw_value": 237951.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 192701.0,
-            "official_raw_value": 192701.0,
+            "dashboard_value": 117592.0,
+            "official_raw_value": 117592.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -45473.0,
-            "official_raw_value": -45473.0,
+            "dashboard_value": 120359.0,
+            "official_raw_value": 120359.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -45473.0
+          "official_net_computed": 120359.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 34510.0,
-            "official_raw_value": 34510.0,
+            "dashboard_value": 151709.0,
+            "official_raw_value": 151709.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 39605.0,
-            "official_raw_value": 39605.0,
+            "dashboard_value": 147394.0,
+            "official_raw_value": 147394.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -5095.0,
-            "official_raw_value": -5095.0,
+            "dashboard_value": 4315.0,
+            "official_raw_value": 4315.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -5095.0
+          "official_net_computed": 4315.0
         }
       },
       "nc_match": true,
@@ -959,17 +972,17 @@
           "market_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 147228.0,
-          "noncommercial_short": 192701.0,
-          "noncommercial_spread": 15265.0,
-          "commercial_long": 222390.0,
-          "commercial_short": 171822.0,
-          "nonreportable_long": 34510.0,
-          "nonreportable_short": 39605.0,
-          "open_interest": 419393.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8341,
+          "noncommercial_long": 237951.0,
+          "noncommercial_short": 117592.0,
+          "noncommercial_spread": 3385.0,
+          "commercial_long": 149757.0,
+          "commercial_short": 274431.0,
+          "nonreportable_long": 151709.0,
+          "nonreportable_short": 147394.0,
+          "open_interest": 542802.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9998,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -978,17 +991,17 @@
           "market_name": "EURO FX/JAPANESE YEN XRATE - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 6183.0,
-          "noncommercial_short": 3883.0,
-          "noncommercial_spread": 86.0,
-          "commercial_long": 3510.0,
-          "commercial_short": 12676.0,
-          "nonreportable_long": 11116.0,
-          "nonreportable_short": 4250.0,
-          "open_interest": 20895.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10846,
+          "noncommercial_long": 5557.0,
+          "noncommercial_short": 3202.0,
+          "noncommercial_spread": 934.0,
+          "commercial_long": 4609.0,
+          "commercial_short": 11442.0,
+          "nonreportable_long": 9625.0,
+          "nonreportable_short": 5147.0,
+          "open_interest": 20725.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 13031,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "EURO FX/JAPANESE YEN XRATE - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -998,84 +1011,84 @@
     },
     "Swiss Franc / 6S": {
       "instrument": "Swiss Franc / 6S",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "092741",
       "selected_market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8248,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9887,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 11270.0,
-          "short": 44092.0,
-          "net": -32822.0
+          "long": 20263.0,
+          "short": 49251.0,
+          "net": -28988.0
         },
         "nonreportables": {
-          "long": 10584.0,
-          "short": 23736.0,
-          "net": -13152.0
+          "long": 50594.0,
+          "short": 66080.0,
+          "net": -15486.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 11270.0,
-          "short": 44092.0,
-          "spread": 4995.0,
-          "net": -32822.0
+          "long": 20263.0,
+          "short": 49251.0,
+          "spread": 5737.0,
+          "net": -28988.0
         },
         "nonreportables": {
-          "long": 10584.0,
-          "short": 23736.0,
-          "net": -13152.0
+          "long": 50594.0,
+          "short": 66080.0,
+          "net": -15486.0
         },
-        "open_interest": 109573.0
+        "open_interest": 171313.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 11270.0,
-            "official_raw_value": 11270.0,
+            "dashboard_value": 20263.0,
+            "official_raw_value": 20263.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 44092.0,
-            "official_raw_value": 44092.0,
+            "dashboard_value": 49251.0,
+            "official_raw_value": 49251.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -32822.0,
-            "official_raw_value": -32822.0,
+            "dashboard_value": -28988.0,
+            "official_raw_value": -28988.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -32822.0
+          "official_net_computed": -28988.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 10584.0,
-            "official_raw_value": 10584.0,
+            "dashboard_value": 50594.0,
+            "official_raw_value": 50594.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 23736.0,
-            "official_raw_value": 23736.0,
+            "dashboard_value": 66080.0,
+            "official_raw_value": 66080.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -13152.0,
-            "official_raw_value": -13152.0,
+            "dashboard_value": -15486.0,
+            "official_raw_value": -15486.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -13152.0
+          "official_net_computed": -15486.0
         }
       },
       "nc_match": true,
@@ -1087,17 +1100,17 @@
           "market_name": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 11270.0,
-          "noncommercial_short": 44092.0,
-          "noncommercial_spread": 4995.0,
-          "commercial_long": 82724.0,
-          "commercial_short": 36750.0,
-          "nonreportable_long": 10584.0,
-          "nonreportable_short": 23736.0,
-          "open_interest": 109573.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8248,
+          "noncommercial_long": 20263.0,
+          "noncommercial_short": 49251.0,
+          "noncommercial_spread": 5737.0,
+          "commercial_long": 94719.0,
+          "commercial_short": 50245.0,
+          "nonreportable_long": 50594.0,
+          "nonreportable_short": 66080.0,
+          "open_interest": 171313.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9887,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "SWISS FRANC - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -1107,106 +1120,144 @@
     },
     "Australian Dollar / 6A": {
       "instrument": "Australian Dollar / 6A",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "232741",
       "selected_market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 10412,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 12512,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 74385.0,
-          "short": 107575.0,
-          "net": -33190.0
+          "long": 114312.0,
+          "short": 153218.0,
+          "net": -38906.0
         },
         "nonreportables": {
-          "long": 36579.0,
-          "short": 15713.0,
-          "net": 20866.0
+          "long": 207883.0,
+          "short": 188802.0,
+          "net": 19081.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 74385.0,
-          "short": 107575.0,
-          "spread": 1823.0,
-          "net": -33190.0
+          "long": 114312.0,
+          "short": 153218.0,
+          "spread": 1022.0,
+          "net": -38906.0
         },
         "nonreportables": {
-          "long": 36579.0,
-          "short": 15713.0,
-          "net": 20866.0
+          "long": 207883.0,
+          "short": 188802.0,
+          "net": 19081.0
         },
-        "open_interest": 240482.0
+        "open_interest": 493141.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 74385.0,
-            "official_raw_value": 74385.0,
+            "dashboard_value": 114312.0,
+            "official_raw_value": 114312.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 107575.0,
-            "official_raw_value": 107575.0,
+            "dashboard_value": 153218.0,
+            "official_raw_value": 153218.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -33190.0,
-            "official_raw_value": -33190.0,
+            "dashboard_value": -38906.0,
+            "official_raw_value": -38906.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -33190.0
+          "official_net_computed": -38906.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 36579.0,
-            "official_raw_value": 36579.0,
+            "dashboard_value": 207883.0,
+            "official_raw_value": 207883.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 15713.0,
-            "official_raw_value": 15713.0,
+            "dashboard_value": 188802.0,
+            "official_raw_value": 188802.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 20866.0,
-            "official_raw_value": 20866.0,
+            "dashboard_value": 19081.0,
+            "official_raw_value": 19081.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 20866.0
+          "official_net_computed": 19081.0
         }
       },
       "nc_match": true,
       "nonreportable_match": true,
-      "candidate_row_count": 1,
+      "candidate_row_count": 3,
       "candidate_rows": [
+        {
+          "cftc_market_code": "06639H",
+          "market_name": "PROPANE ARGUS SAUDI CP MINI - ICE FUTURES ENERGY DIV",
+          "exchange": "ICE FUTURES ENERGY DIV",
+          "report_type": "legacy_futures_only",
+          "noncommercial_long": 500.0,
+          "noncommercial_short": 1262.0,
+          "noncommercial_spread": 143.0,
+          "commercial_long": 1308.0,
+          "commercial_short": 583.0,
+          "nonreportable_long": 742.0,
+          "nonreportable_short": 705.0,
+          "open_interest": 2693.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 8403,
+          "parser": "hptl.cot.legacy_cot",
+          "contract_description": "PROPANE ARGUS SAUDI CP MINI - ICE FUTURES ENERGY DIV"
+        },
+        {
+          "cftc_market_code": "06641H",
+          "market_name": "PROPANE ARGUS SAUDI CP FP - ICE FUTURES ENERGY DIV",
+          "exchange": "ICE FUTURES ENERGY DIV",
+          "report_type": "legacy_futures_only",
+          "noncommercial_long": 638.0,
+          "noncommercial_short": 177.0,
+          "noncommercial_spread": 245.0,
+          "commercial_long": 1032.0,
+          "commercial_short": 2494.0,
+          "nonreportable_long": 1507.0,
+          "nonreportable_short": 506.0,
+          "open_interest": 3422.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 8788,
+          "parser": "hptl.cot.legacy_cot",
+          "contract_description": "PROPANE ARGUS SAUDI CP FP - ICE FUTURES ENERGY DIV"
+        },
         {
           "cftc_market_code": "232741",
           "market_name": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 74385.0,
-          "noncommercial_short": 107575.0,
-          "noncommercial_spread": 1823.0,
-          "commercial_long": 127695.0,
-          "commercial_short": 115371.0,
-          "nonreportable_long": 36579.0,
-          "nonreportable_short": 15713.0,
-          "open_interest": 240482.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 10412,
+          "noncommercial_long": 114312.0,
+          "noncommercial_short": 153218.0,
+          "noncommercial_spread": 1022.0,
+          "commercial_long": 169924.0,
+          "commercial_short": 150099.0,
+          "nonreportable_long": 207883.0,
+          "nonreportable_short": 188802.0,
+          "open_interest": 493141.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12512,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "AUSTRALIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -1216,84 +1267,84 @@
     },
     "Canadian Dollar / 6C": {
       "instrument": "Canadian Dollar / 6C",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "090741",
       "selected_market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8217,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9850,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 13514.0,
-          "short": 192609.0,
-          "net": -179095.0
+          "long": 73950.0,
+          "short": 111527.0,
+          "net": -37577.0
         },
         "nonreportables": {
-          "long": 29943.0,
-          "short": 37856.0,
-          "net": -7913.0
+          "long": 26374.0,
+          "short": 35720.0,
+          "net": -9346.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 13514.0,
-          "short": 192609.0,
-          "spread": 15995.0,
-          "net": -179095.0
+          "long": 73950.0,
+          "short": 111527.0,
+          "spread": 6990.0,
+          "net": -37577.0
         },
         "nonreportables": {
-          "long": 29943.0,
-          "short": 37856.0,
-          "net": -7913.0
+          "long": 26374.0,
+          "short": 35720.0,
+          "net": -9346.0
         },
-        "open_interest": 365083.0
+        "open_interest": 358186.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 13514.0,
-            "official_raw_value": 13514.0,
+            "dashboard_value": 73950.0,
+            "official_raw_value": 73950.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 192609.0,
-            "official_raw_value": 192609.0,
+            "dashboard_value": 111527.0,
+            "official_raw_value": 111527.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -179095.0,
-            "official_raw_value": -179095.0,
+            "dashboard_value": -37577.0,
+            "official_raw_value": -37577.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -179095.0
+          "official_net_computed": -37577.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 29943.0,
-            "official_raw_value": 29943.0,
+            "dashboard_value": 26374.0,
+            "official_raw_value": 26374.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 37856.0,
-            "official_raw_value": 37856.0,
+            "dashboard_value": 35720.0,
+            "official_raw_value": 35720.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -7913.0,
-            "official_raw_value": -7913.0,
+            "dashboard_value": -9346.0,
+            "official_raw_value": -9346.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -7913.0
+          "official_net_computed": -9346.0
         }
       },
       "nc_match": true,
@@ -1305,17 +1356,17 @@
           "market_name": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 13514.0,
-          "noncommercial_short": 192609.0,
-          "noncommercial_spread": 15995.0,
-          "commercial_long": 305631.0,
-          "commercial_short": 118623.0,
-          "nonreportable_long": 29943.0,
-          "nonreportable_short": 37856.0,
-          "open_interest": 365083.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8217,
+          "noncommercial_long": 73950.0,
+          "noncommercial_short": 111527.0,
+          "noncommercial_spread": 6990.0,
+          "commercial_long": 250872.0,
+          "commercial_short": 203949.0,
+          "nonreportable_long": 26374.0,
+          "nonreportable_short": 35720.0,
+          "open_interest": 358186.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9850,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "CANADIAN DOLLAR - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -1325,84 +1376,84 @@
     },
     "NZ Dollar / 6N": {
       "instrument": "NZ Dollar / 6N",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "112741",
       "selected_market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8553,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10249,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 5577.0,
-          "short": 46780.0,
-          "net": -41203.0
+          "long": 32859.0,
+          "short": 22341.0,
+          "net": 10518.0
         },
         "nonreportables": {
-          "long": 2662.0,
-          "short": 6146.0,
-          "net": -3484.0
+          "long": 48402.0,
+          "short": 48736.0,
+          "net": -334.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 5577.0,
-          "short": 46780.0,
-          "spread": 461.0,
-          "net": -41203.0
+          "long": 32859.0,
+          "short": 22341.0,
+          "spread": 2229.0,
+          "net": 10518.0
         },
         "nonreportables": {
-          "long": 2662.0,
-          "short": 6146.0,
-          "net": -3484.0
+          "long": 48402.0,
+          "short": 48736.0,
+          "net": -334.0
         },
-        "open_interest": 101908.0
+        "open_interest": 135122.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 5577.0,
-            "official_raw_value": 5577.0,
+            "dashboard_value": 32859.0,
+            "official_raw_value": 32859.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 46780.0,
-            "official_raw_value": 46780.0,
+            "dashboard_value": 22341.0,
+            "official_raw_value": 22341.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -41203.0,
-            "official_raw_value": -41203.0,
+            "dashboard_value": 10518.0,
+            "official_raw_value": 10518.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -41203.0
+          "official_net_computed": 10518.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 2662.0,
-            "official_raw_value": 2662.0,
+            "dashboard_value": 48402.0,
+            "official_raw_value": 48402.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 6146.0,
-            "official_raw_value": 6146.0,
+            "dashboard_value": 48736.0,
+            "official_raw_value": 48736.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -3484.0,
-            "official_raw_value": -3484.0,
+            "dashboard_value": -334.0,
+            "official_raw_value": -334.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -3484.0
+          "official_net_computed": -334.0
         }
       },
       "nc_match": true,
@@ -1414,17 +1465,17 @@
           "market_name": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 5577.0,
-          "noncommercial_short": 46780.0,
-          "noncommercial_spread": 461.0,
-          "commercial_long": 93208.0,
-          "commercial_short": 48521.0,
-          "nonreportable_long": 2662.0,
-          "nonreportable_short": 6146.0,
-          "open_interest": 101908.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8553,
+          "noncommercial_long": 32859.0,
+          "noncommercial_short": 22341.0,
+          "noncommercial_spread": 2229.0,
+          "commercial_long": 51632.0,
+          "commercial_short": 61816.0,
+          "nonreportable_long": 48402.0,
+          "nonreportable_short": 48736.0,
+          "open_interest": 135122.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10249,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "NZ DOLLAR - CHICAGO MERCANTILE EXCHANGE"
         }
@@ -1434,108 +1485,127 @@
     },
     "Gold": {
       "instrument": "Gold",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "088691",
       "selected_market_name": "GOLD - COMMODITY EXCHANGE INC.",
       "exchange": "COMMODITY EXCHANGE INC.",
       "contract_description": "GOLD - COMMODITY EXCHANGE INC.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8152,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9771,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 227013.0,
-          "short": 29379.0,
-          "net": 197634.0
+          "long": 258059.0,
+          "short": 27721.0,
+          "net": 230338.0
         },
         "nonreportables": {
-          "long": 44531.0,
-          "short": 15674.0,
-          "net": 28857.0
+          "long": 47460.0,
+          "short": 16077.0,
+          "net": 31383.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 227013.0,
-          "short": 29379.0,
-          "spread": 28175.0,
-          "net": 197634.0
+          "long": 258059.0,
+          "short": 27721.0,
+          "spread": 47963.0,
+          "net": 230338.0
         },
         "nonreportables": {
-          "long": 44531.0,
-          "short": 15674.0,
-          "net": 28857.0
+          "long": 47460.0,
+          "short": 16077.0,
+          "net": 31383.0
         },
-        "open_interest": 371551.0
+        "open_interest": 409899.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 227013.0,
-            "official_raw_value": 227013.0,
+            "dashboard_value": 258059.0,
+            "official_raw_value": 258059.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 29379.0,
-            "official_raw_value": 29379.0,
+            "dashboard_value": 27721.0,
+            "official_raw_value": 27721.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 197634.0,
-            "official_raw_value": 197634.0,
+            "dashboard_value": 230338.0,
+            "official_raw_value": 230338.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 197634.0
+          "official_net_computed": 230338.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 44531.0,
-            "official_raw_value": 44531.0,
+            "dashboard_value": 47460.0,
+            "official_raw_value": 47460.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 15674.0,
-            "official_raw_value": 15674.0,
+            "dashboard_value": 16077.0,
+            "official_raw_value": 16077.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 28857.0,
-            "official_raw_value": 28857.0,
+            "dashboard_value": 31383.0,
+            "official_raw_value": 31383.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 28857.0
+          "official_net_computed": 31383.0
         }
       },
       "nc_match": true,
       "nonreportable_match": true,
-      "candidate_row_count": 1,
+      "candidate_row_count": 2,
       "candidate_rows": [
         {
           "cftc_market_code": "088691",
           "market_name": "GOLD - COMMODITY EXCHANGE INC.",
           "exchange": "COMMODITY EXCHANGE INC.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 227013.0,
-          "noncommercial_short": 29379.0,
-          "noncommercial_spread": 28175.0,
-          "commercial_long": 71832.0,
-          "commercial_short": 298323.0,
-          "nonreportable_long": 44531.0,
-          "nonreportable_short": 15674.0,
-          "open_interest": 371551.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8152,
+          "noncommercial_long": 258059.0,
+          "noncommercial_short": 27721.0,
+          "noncommercial_spread": 47963.0,
+          "commercial_long": 56417.0,
+          "commercial_short": 318138.0,
+          "nonreportable_long": 47460.0,
+          "nonreportable_short": 16077.0,
+          "open_interest": 409899.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9771,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "GOLD - COMMODITY EXCHANGE INC."
+        },
+        {
+          "cftc_market_code": "180LM9",
+          "market_name": "PAX GOLD PERP STYLE - COINBASE DERIVATIVES, LLC",
+          "exchange": "COINBASE DERIVATIVES, LLC",
+          "report_type": "legacy_futures_only",
+          "noncommercial_long": 791.0,
+          "noncommercial_short": 1225.0,
+          "noncommercial_spread": 0.0,
+          "commercial_long": 0.0,
+          "commercial_short": 0.0,
+          "nonreportable_long": 579.0,
+          "nonreportable_short": 145.0,
+          "open_interest": 1370.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 12048,
+          "parser": "hptl.cot.legacy_cot",
+          "contract_description": "PAX GOLD PERP STYLE - COINBASE DERIVATIVES, LLC"
         }
       ],
       "status": "PASS",
@@ -1543,84 +1613,84 @@
     },
     "Silver": {
       "instrument": "Silver",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "084691",
       "selected_market_name": "SILVER - COMMODITY EXCHANGE INC.",
       "exchange": "COMMODITY EXCHANGE INC.",
       "contract_description": "SILVER - COMMODITY EXCHANGE INC.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8082,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9689,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 36454.0,
-          "short": 14174.0,
-          "net": 22280.0
+          "long": 35395.0,
+          "short": 10069.0,
+          "net": 25326.0
         },
         "nonreportables": {
-          "long": 26507.0,
-          "short": 8365.0,
-          "net": 18142.0
+          "long": 25086.0,
+          "short": 7712.0,
+          "net": 17374.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 36454.0,
-          "short": 14174.0,
-          "spread": 15920.0,
-          "net": 22280.0
+          "long": 35395.0,
+          "short": 10069.0,
+          "spread": 11437.0,
+          "net": 25326.0
         },
         "nonreportables": {
-          "long": 26507.0,
-          "short": 8365.0,
-          "net": 18142.0
+          "long": 25086.0,
+          "short": 7712.0,
+          "net": 17374.0
         },
-        "open_interest": 111999.0
+        "open_interest": 103745.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 36454.0,
-            "official_raw_value": 36454.0,
+            "dashboard_value": 35395.0,
+            "official_raw_value": 35395.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 14174.0,
-            "official_raw_value": 14174.0,
+            "dashboard_value": 10069.0,
+            "official_raw_value": 10069.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 22280.0,
-            "official_raw_value": 22280.0,
+            "dashboard_value": 25326.0,
+            "official_raw_value": 25326.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 22280.0
+          "official_net_computed": 25326.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 26507.0,
-            "official_raw_value": 26507.0,
+            "dashboard_value": 25086.0,
+            "official_raw_value": 25086.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 8365.0,
-            "official_raw_value": 8365.0,
+            "dashboard_value": 7712.0,
+            "official_raw_value": 7712.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 18142.0,
-            "official_raw_value": 18142.0,
+            "dashboard_value": 17374.0,
+            "official_raw_value": 17374.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 18142.0
+          "official_net_computed": 17374.0
         }
       },
       "nc_match": true,
@@ -1632,17 +1702,17 @@
           "market_name": "SILVER - COMMODITY EXCHANGE INC.",
           "exchange": "COMMODITY EXCHANGE INC.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 36454.0,
-          "noncommercial_short": 14174.0,
-          "noncommercial_spread": 15920.0,
-          "commercial_long": 33118.0,
-          "commercial_short": 73540.0,
-          "nonreportable_long": 26507.0,
-          "nonreportable_short": 8365.0,
-          "open_interest": 111999.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8082,
+          "noncommercial_long": 35395.0,
+          "noncommercial_short": 10069.0,
+          "noncommercial_spread": 11437.0,
+          "commercial_long": 31827.0,
+          "commercial_short": 74527.0,
+          "nonreportable_long": 25086.0,
+          "nonreportable_short": 7712.0,
+          "open_interest": 103745.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9689,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "SILVER - COMMODITY EXCHANGE INC."
         }
@@ -1652,84 +1722,84 @@
     },
     "Copper / HG": {
       "instrument": "Copper / HG",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "085692",
       "selected_market_name": "COPPER- #1 - COMMODITY EXCHANGE INC.",
       "exchange": "COMMODITY EXCHANGE INC.",
       "contract_description": "COPPER- #1 - COMMODITY EXCHANGE INC.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8118,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9731,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 114304.0,
-          "short": 37181.0,
-          "net": 77123.0
+          "long": 117165.0,
+          "short": 42031.0,
+          "net": 75134.0
         },
         "nonreportables": {
-          "long": 19940.0,
-          "short": 10894.0,
-          "net": 9046.0
+          "long": 18412.0,
+          "short": 9159.0,
+          "net": 9253.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 114304.0,
-          "short": 37181.0,
-          "spread": 70480.0,
-          "net": 77123.0
+          "long": 117165.0,
+          "short": 42031.0,
+          "spread": 54252.0,
+          "net": 75134.0
         },
         "nonreportables": {
-          "long": 19940.0,
-          "short": 10894.0,
-          "net": 9046.0
+          "long": 18412.0,
+          "short": 9159.0,
+          "net": 9253.0
         },
-        "open_interest": 289395.0
+        "open_interest": 289463.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 114304.0,
-            "official_raw_value": 114304.0,
+            "dashboard_value": 117165.0,
+            "official_raw_value": 117165.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 37181.0,
-            "official_raw_value": 37181.0,
+            "dashboard_value": 42031.0,
+            "official_raw_value": 42031.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 77123.0,
-            "official_raw_value": 77123.0,
+            "dashboard_value": 75134.0,
+            "official_raw_value": 75134.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 77123.0
+          "official_net_computed": 75134.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 19940.0,
-            "official_raw_value": 19940.0,
+            "dashboard_value": 18412.0,
+            "official_raw_value": 18412.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 10894.0,
-            "official_raw_value": 10894.0,
+            "dashboard_value": 9159.0,
+            "official_raw_value": 9159.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 9046.0,
-            "official_raw_value": 9046.0,
+            "dashboard_value": 9253.0,
+            "official_raw_value": 9253.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 9046.0
+          "official_net_computed": 9253.0
         }
       },
       "nc_match": true,
@@ -1741,17 +1811,17 @@
           "market_name": "COPPER- #1 - COMMODITY EXCHANGE INC.",
           "exchange": "COMMODITY EXCHANGE INC.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 114304.0,
-          "noncommercial_short": 37181.0,
-          "noncommercial_spread": 70480.0,
-          "commercial_long": 84671.0,
-          "commercial_short": 170840.0,
-          "nonreportable_long": 19940.0,
-          "nonreportable_short": 10894.0,
-          "open_interest": 289395.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8118,
+          "noncommercial_long": 117165.0,
+          "noncommercial_short": 42031.0,
+          "noncommercial_spread": 54252.0,
+          "commercial_long": 99634.0,
+          "commercial_short": 184021.0,
+          "nonreportable_long": 18412.0,
+          "nonreportable_short": 9159.0,
+          "open_interest": 289463.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9731,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "COPPER- #1 - COMMODITY EXCHANGE INC."
         }
@@ -1761,84 +1831,84 @@
     },
     "Crude Oil / CL": {
       "instrument": "Crude Oil / CL",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "067651",
       "selected_market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
       "exchange": "NEW YORK MERCANTILE EXCHANGE",
       "contract_description": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 7740,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9286,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 308841.0,
-          "short": 196398.0,
-          "net": 112443.0
+          "long": 371202.0,
+          "short": 235297.0,
+          "net": 135905.0
         },
         "nonreportables": {
-          "long": 80311.0,
-          "short": 38979.0,
-          "net": 41332.0
+          "long": 84298.0,
+          "short": 55345.0,
+          "net": 28953.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 308841.0,
-          "short": 196398.0,
-          "spread": 610139.0,
-          "net": 112443.0
+          "long": 371202.0,
+          "short": 235297.0,
+          "spread": 605061.0,
+          "net": 135905.0
         },
         "nonreportables": {
-          "long": 80311.0,
-          "short": 38979.0,
-          "net": 41332.0
+          "long": 84298.0,
+          "short": 55345.0,
+          "net": 28953.0
         },
-        "open_interest": 1886816.0
+        "open_interest": 1955764.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 308841.0,
-            "official_raw_value": 308841.0,
+            "dashboard_value": 371202.0,
+            "official_raw_value": 371202.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 196398.0,
-            "official_raw_value": 196398.0,
+            "dashboard_value": 235297.0,
+            "official_raw_value": 235297.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 112443.0,
-            "official_raw_value": 112443.0,
+            "dashboard_value": 135905.0,
+            "official_raw_value": 135905.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 112443.0
+          "official_net_computed": 135905.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 80311.0,
-            "official_raw_value": 80311.0,
+            "dashboard_value": 84298.0,
+            "official_raw_value": 84298.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 38979.0,
-            "official_raw_value": 38979.0,
+            "dashboard_value": 55345.0,
+            "official_raw_value": 55345.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 41332.0,
-            "official_raw_value": 41332.0,
+            "dashboard_value": 28953.0,
+            "official_raw_value": 28953.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 41332.0
+          "official_net_computed": 28953.0
         }
       },
       "nc_match": true,
@@ -1850,17 +1920,17 @@
           "market_name": "CRUDE OIL, LIGHT SWEET-WTI - ICE FUTURES EUROPE",
           "exchange": "ICE FUTURES EUROPE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 80866.0,
-          "noncommercial_short": 78382.0,
-          "noncommercial_spread": 208452.0,
-          "commercial_long": 475704.0,
-          "commercial_short": 481459.0,
-          "nonreportable_long": 17167.0,
-          "nonreportable_short": 13896.0,
-          "open_interest": 782189.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7598,
+          "noncommercial_long": 69195.0,
+          "noncommercial_short": 87040.0,
+          "noncommercial_spread": 191681.0,
+          "commercial_long": 475112.0,
+          "commercial_short": 460406.0,
+          "nonreportable_long": 17893.0,
+          "nonreportable_short": 14754.0,
+          "open_interest": 753881.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9120,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "CRUDE OIL, LIGHT SWEET-WTI - ICE FUTURES EUROPE"
         },
@@ -1869,17 +1939,17 @@
           "market_name": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 308841.0,
-          "noncommercial_short": 196398.0,
-          "noncommercial_spread": 610139.0,
-          "commercial_long": 887525.0,
-          "commercial_short": 1041300.0,
-          "nonreportable_long": 80311.0,
-          "nonreportable_short": 38979.0,
-          "open_interest": 1886816.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7740,
+          "noncommercial_long": 371202.0,
+          "noncommercial_short": 235297.0,
+          "noncommercial_spread": 605061.0,
+          "commercial_long": 895203.0,
+          "commercial_short": 1060061.0,
+          "nonreportable_long": 84298.0,
+          "nonreportable_short": 55345.0,
+          "open_interest": 1955764.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9286,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "WTI-PHYSICAL - NEW YORK MERCANTILE EXCHANGE"
         },
@@ -1888,17 +1958,17 @@
           "market_name": "WTI FINANCIAL CRUDE OIL - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 45051.0,
-          "noncommercial_short": 22018.0,
-          "noncommercial_spread": 13468.0,
-          "commercial_long": 105892.0,
-          "commercial_short": 108792.0,
-          "nonreportable_long": 25202.0,
-          "nonreportable_short": 45335.0,
-          "open_interest": 189613.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7771,
+          "noncommercial_long": 59781.0,
+          "noncommercial_short": 23041.0,
+          "noncommercial_spread": 10000.0,
+          "commercial_long": 103904.0,
+          "commercial_short": 116622.0,
+          "nonreportable_long": 28479.0,
+          "nonreportable_short": 52501.0,
+          "open_interest": 202164.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9323,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "WTI FINANCIAL CRUDE OIL - NEW YORK MERCANTILE EXCHANGE"
         }
@@ -1908,84 +1978,84 @@
     },
     "Natural Gas / NG": {
       "instrument": "Natural Gas / NG",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "023651",
       "selected_market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
       "exchange": "NEW YORK MERCANTILE EXCHANGE",
       "contract_description": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 3053,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 3678,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 287918.0,
-          "short": 485464.0,
-          "net": -197546.0
+          "long": 307535.0,
+          "short": 529122.0,
+          "net": -221587.0
         },
         "nonreportables": {
-          "long": 54374.0,
-          "short": 44042.0,
-          "net": 10332.0
+          "long": 56533.0,
+          "short": 41698.0,
+          "net": 14835.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 287918.0,
-          "short": 485464.0,
-          "spread": 803128.0,
-          "net": -197546.0
+          "long": 307535.0,
+          "short": 529122.0,
+          "spread": 860743.0,
+          "net": -221587.0
         },
         "nonreportables": {
-          "long": 54374.0,
-          "short": 44042.0,
-          "net": 10332.0
+          "long": 56533.0,
+          "short": 41698.0,
+          "net": 14835.0
         },
-        "open_interest": 1705908.0
+        "open_interest": 1820003.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 287918.0,
-            "official_raw_value": 287918.0,
+            "dashboard_value": 307535.0,
+            "official_raw_value": 307535.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 485464.0,
-            "official_raw_value": 485464.0,
+            "dashboard_value": 529122.0,
+            "official_raw_value": 529122.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -197546.0,
-            "official_raw_value": -197546.0,
+            "dashboard_value": -221587.0,
+            "official_raw_value": -221587.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -197546.0
+          "official_net_computed": -221587.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 54374.0,
-            "official_raw_value": 54374.0,
+            "dashboard_value": 56533.0,
+            "official_raw_value": 56533.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 44042.0,
-            "official_raw_value": 44042.0,
+            "dashboard_value": 41698.0,
+            "official_raw_value": 41698.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 10332.0,
-            "official_raw_value": 10332.0,
+            "dashboard_value": 14835.0,
+            "official_raw_value": 14835.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 10332.0
+          "official_net_computed": 14835.0
         }
       },
       "nc_match": true,
@@ -1997,17 +2067,17 @@
           "market_name": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 287918.0,
-          "noncommercial_short": 485464.0,
-          "noncommercial_spread": 803128.0,
-          "commercial_long": 560488.0,
-          "commercial_short": 373274.0,
-          "nonreportable_long": 54374.0,
-          "nonreportable_short": 44042.0,
-          "open_interest": 1705908.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 3053,
+          "noncommercial_long": 307535.0,
+          "noncommercial_short": 529122.0,
+          "noncommercial_spread": 860743.0,
+          "commercial_long": 595192.0,
+          "commercial_short": 388440.0,
+          "nonreportable_long": 56533.0,
+          "nonreportable_short": 41698.0,
+          "open_interest": 1820003.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 3678,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "NAT GAS NYME - NEW YORK MERCANTILE EXCHANGE"
         },
@@ -2016,17 +2086,17 @@
           "market_name": "HENRY HUB - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 277814.0,
-          "noncommercial_short": 23325.0,
-          "noncommercial_spread": 1965.0,
-          "commercial_long": 97830.0,
-          "commercial_short": 351497.0,
-          "nonreportable_long": 12735.0,
-          "nonreportable_short": 13557.0,
-          "open_interest": 390344.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 3270,
+          "noncommercial_long": 291134.0,
+          "noncommercial_short": 20612.0,
+          "noncommercial_spread": 2257.0,
+          "commercial_long": 98052.0,
+          "commercial_short": 369506.0,
+          "nonreportable_long": 11907.0,
+          "nonreportable_short": 10975.0,
+          "open_interest": 403350.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 3937,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "HENRY HUB - NEW YORK MERCANTILE EXCHANGE"
         }
@@ -2036,84 +2106,84 @@
     },
     "Coffee": {
       "instrument": "Coffee",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "083731",
       "selected_market_name": "COFFEE C - ICE FUTURES U.S.",
       "exchange": "ICE FUTURES U.S.",
       "contract_description": "COFFEE C - ICE FUTURES U.S.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8051,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9652,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 51652.0,
-          "short": 26797.0,
-          "net": 24855.0
+          "long": 44035.0,
+          "short": 28565.0,
+          "net": 15470.0
         },
         "nonreportables": {
-          "long": 7960.0,
-          "short": 5802.0,
-          "net": 2158.0
+          "long": 7372.0,
+          "short": 5964.0,
+          "net": 1408.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 51652.0,
-          "short": 26797.0,
-          "spread": 44270.0,
-          "net": 24855.0
+          "long": 44035.0,
+          "short": 28565.0,
+          "spread": 31722.0,
+          "net": 15470.0
         },
         "nonreportables": {
-          "long": 7960.0,
-          "short": 5802.0,
-          "net": 2158.0
+          "long": 7372.0,
+          "short": 5964.0,
+          "net": 1408.0
         },
-        "open_interest": 168814.0
+        "open_interest": 150458.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 51652.0,
-            "official_raw_value": 51652.0,
+            "dashboard_value": 44035.0,
+            "official_raw_value": 44035.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 26797.0,
-            "official_raw_value": 26797.0,
+            "dashboard_value": 28565.0,
+            "official_raw_value": 28565.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 24855.0,
-            "official_raw_value": 24855.0,
+            "dashboard_value": 15470.0,
+            "official_raw_value": 15470.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 24855.0
+          "official_net_computed": 15470.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 7960.0,
-            "official_raw_value": 7960.0,
+            "dashboard_value": 7372.0,
+            "official_raw_value": 7372.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 5802.0,
-            "official_raw_value": 5802.0,
+            "dashboard_value": 5964.0,
+            "official_raw_value": 5964.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 2158.0,
-            "official_raw_value": 2158.0,
+            "dashboard_value": 1408.0,
+            "official_raw_value": 1408.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 2158.0
+          "official_net_computed": 1408.0
         }
       },
       "nc_match": true,
@@ -2125,17 +2195,17 @@
           "market_name": "COFFEE C - ICE FUTURES U.S.",
           "exchange": "ICE FUTURES U.S.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 51652.0,
-          "noncommercial_short": 26797.0,
-          "noncommercial_spread": 44270.0,
-          "commercial_long": 64932.0,
-          "commercial_short": 91945.0,
-          "nonreportable_long": 7960.0,
-          "nonreportable_short": 5802.0,
-          "open_interest": 168814.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8051,
+          "noncommercial_long": 44035.0,
+          "noncommercial_short": 28565.0,
+          "noncommercial_spread": 31722.0,
+          "commercial_long": 67329.0,
+          "commercial_short": 84207.0,
+          "nonreportable_long": 7372.0,
+          "nonreportable_short": 5964.0,
+          "open_interest": 150458.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9652,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "COFFEE C - ICE FUTURES U.S."
         }
@@ -2145,84 +2215,84 @@
     },
     "Cocoa": {
       "instrument": "Cocoa",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "073732",
       "selected_market_name": "COCOA - ICE FUTURES U.S.",
       "exchange": "ICE FUTURES U.S.",
       "contract_description": "COCOA - ICE FUTURES U.S.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 7927,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9504,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 36448.0,
-          "short": 39356.0,
-          "net": -2908.0
+          "long": 33832.0,
+          "short": 40770.0,
+          "net": -6938.0
         },
         "nonreportables": {
-          "long": 10628.0,
-          "short": 9309.0,
-          "net": 1319.0
+          "long": 11549.0,
+          "short": 8008.0,
+          "net": 3541.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 36448.0,
-          "short": 39356.0,
-          "spread": 54534.0,
-          "net": -2908.0
+          "long": 33832.0,
+          "short": 40770.0,
+          "spread": 42260.0,
+          "net": -6938.0
         },
         "nonreportables": {
-          "long": 10628.0,
-          "short": 9309.0,
-          "net": 1319.0
+          "long": 11549.0,
+          "short": 8008.0,
+          "net": 3541.0
         },
-        "open_interest": 203398.0
+        "open_interest": 182691.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 36448.0,
-            "official_raw_value": 36448.0,
+            "dashboard_value": 33832.0,
+            "official_raw_value": 33832.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 39356.0,
-            "official_raw_value": 39356.0,
+            "dashboard_value": 40770.0,
+            "official_raw_value": 40770.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -2908.0,
-            "official_raw_value": -2908.0,
+            "dashboard_value": -6938.0,
+            "official_raw_value": -6938.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -2908.0
+          "official_net_computed": -6938.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 10628.0,
-            "official_raw_value": 10628.0,
+            "dashboard_value": 11549.0,
+            "official_raw_value": 11549.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 9309.0,
-            "official_raw_value": 9309.0,
+            "dashboard_value": 8008.0,
+            "official_raw_value": 8008.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 1319.0,
-            "official_raw_value": 1319.0,
+            "dashboard_value": 3541.0,
+            "official_raw_value": 3541.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 1319.0
+          "official_net_computed": 3541.0
         }
       },
       "nc_match": true,
@@ -2234,17 +2304,17 @@
           "market_name": "COCOA - ICE FUTURES U.S.",
           "exchange": "ICE FUTURES U.S.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 36448.0,
-          "noncommercial_short": 39356.0,
-          "noncommercial_spread": 54534.0,
-          "commercial_long": 101788.0,
-          "commercial_short": 100199.0,
-          "nonreportable_long": 10628.0,
-          "nonreportable_short": 9309.0,
-          "open_interest": 203398.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7927,
+          "noncommercial_long": 33832.0,
+          "noncommercial_short": 40770.0,
+          "noncommercial_spread": 42260.0,
+          "commercial_long": 95050.0,
+          "commercial_short": 91653.0,
+          "nonreportable_long": 11549.0,
+          "nonreportable_short": 8008.0,
+          "open_interest": 182691.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9504,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "COCOA - ICE FUTURES U.S."
         }
@@ -2254,84 +2324,84 @@
     },
     "Cotton": {
       "instrument": "Cotton",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "033661",
       "selected_market_name": "COTTON NO. 2 - ICE FUTURES U.S.",
       "exchange": "ICE FUTURES U.S.",
       "contract_description": "COTTON NO. 2 - ICE FUTURES U.S.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 3239,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 3900,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 134415.0,
-          "short": 38039.0,
-          "net": 96376.0
+          "long": 151446.0,
+          "short": 34673.0,
+          "net": 116773.0
         },
         "nonreportables": {
-          "long": 16290.0,
-          "short": 7540.0,
-          "net": 8750.0
+          "long": 17393.0,
+          "short": 8480.0,
+          "net": 8913.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 134415.0,
-          "short": 38039.0,
-          "spread": 62503.0,
-          "net": 96376.0
+          "long": 151446.0,
+          "short": 34673.0,
+          "spread": 74790.0,
+          "net": 116773.0
         },
         "nonreportables": {
-          "long": 16290.0,
-          "short": 7540.0,
-          "net": 8750.0
+          "long": 17393.0,
+          "short": 8480.0,
+          "net": 8913.0
         },
-        "open_interest": 331500.0
+        "open_interest": 380206.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 134415.0,
-            "official_raw_value": 134415.0,
+            "dashboard_value": 151446.0,
+            "official_raw_value": 151446.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 38039.0,
-            "official_raw_value": 38039.0,
+            "dashboard_value": 34673.0,
+            "official_raw_value": 34673.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 96376.0,
-            "official_raw_value": 96376.0,
+            "dashboard_value": 116773.0,
+            "official_raw_value": 116773.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 96376.0
+          "official_net_computed": 116773.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 16290.0,
-            "official_raw_value": 16290.0,
+            "dashboard_value": 17393.0,
+            "official_raw_value": 17393.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 7540.0,
-            "official_raw_value": 7540.0,
+            "dashboard_value": 8480.0,
+            "official_raw_value": 8480.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 8750.0,
-            "official_raw_value": 8750.0,
+            "dashboard_value": 8913.0,
+            "official_raw_value": 8913.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 8750.0
+          "official_net_computed": 8913.0
         }
       },
       "nc_match": true,
@@ -2343,17 +2413,17 @@
           "market_name": "COTTON NO. 2 - ICE FUTURES U.S.",
           "exchange": "ICE FUTURES U.S.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 134415.0,
-          "noncommercial_short": 38039.0,
-          "noncommercial_spread": 62503.0,
-          "commercial_long": 118292.0,
-          "commercial_short": 223418.0,
-          "nonreportable_long": 16290.0,
-          "nonreportable_short": 7540.0,
-          "open_interest": 331500.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 3239,
+          "noncommercial_long": 151446.0,
+          "noncommercial_short": 34673.0,
+          "noncommercial_spread": 74790.0,
+          "commercial_long": 136577.0,
+          "commercial_short": 262263.0,
+          "nonreportable_long": 17393.0,
+          "nonreportable_short": 8480.0,
+          "open_interest": 380206.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 3900,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "COTTON NO. 2 - ICE FUTURES U.S."
         }
@@ -2363,84 +2433,84 @@
     },
     "Corn": {
       "instrument": "Corn",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "002602",
       "selected_market_name": "CORN - CHICAGO BOARD OF TRADE",
       "exchange": "CHICAGO BOARD OF TRADE",
       "contract_description": "CORN - CHICAGO BOARD OF TRADE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 93,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 111,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 480857.0,
-          "short": 225789.0,
-          "net": 255068.0
+          "long": 673517.0,
+          "short": 131133.0,
+          "net": 542384.0
         },
         "nonreportables": {
-          "long": 136323.0,
-          "short": 183046.0,
-          "net": -46723.0
+          "long": 127411.0,
+          "short": 192950.0,
+          "net": -65539.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 480857.0,
-          "short": 225789.0,
-          "spread": 452519.0,
-          "net": 255068.0
+          "long": 673517.0,
+          "short": 131133.0,
+          "spread": 345358.0,
+          "net": 542384.0
         },
         "nonreportables": {
-          "long": 136323.0,
-          "short": 183046.0,
-          "net": -46723.0
+          "long": 127411.0,
+          "short": 192950.0,
+          "net": -65539.0
         },
-        "open_interest": 1762573.0
+        "open_interest": 1843824.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 480857.0,
-            "official_raw_value": 480857.0,
+            "dashboard_value": 673517.0,
+            "official_raw_value": 673517.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 225789.0,
-            "official_raw_value": 225789.0,
+            "dashboard_value": 131133.0,
+            "official_raw_value": 131133.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 255068.0,
-            "official_raw_value": 255068.0,
+            "dashboard_value": 542384.0,
+            "official_raw_value": 542384.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 255068.0
+          "official_net_computed": 542384.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 136323.0,
-            "official_raw_value": 136323.0,
+            "dashboard_value": 127411.0,
+            "official_raw_value": 127411.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 183046.0,
-            "official_raw_value": 183046.0,
+            "dashboard_value": 192950.0,
+            "official_raw_value": 192950.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -46723.0,
-            "official_raw_value": -46723.0,
+            "dashboard_value": -65539.0,
+            "official_raw_value": -65539.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -46723.0
+          "official_net_computed": -65539.0
         }
       },
       "nc_match": true,
@@ -2452,17 +2522,17 @@
           "market_name": "CORN - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 480857.0,
-          "noncommercial_short": 225789.0,
-          "noncommercial_spread": 452519.0,
-          "commercial_long": 692874.0,
-          "commercial_short": 901219.0,
-          "nonreportable_long": 136323.0,
-          "nonreportable_short": 183046.0,
-          "open_interest": 1762573.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 93,
+          "noncommercial_long": 673517.0,
+          "noncommercial_short": 131133.0,
+          "noncommercial_spread": 345358.0,
+          "commercial_long": 697538.0,
+          "commercial_short": 1174383.0,
+          "nonreportable_long": 127411.0,
+          "nonreportable_short": 192950.0,
+          "open_interest": 1843824.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 111,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "CORN - CHICAGO BOARD OF TRADE"
         }
@@ -2472,84 +2542,84 @@
     },
     "Wheat": {
       "instrument": "Wheat",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "001602",
       "selected_market_name": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
       "exchange": "CHICAGO BOARD OF TRADE",
       "contract_description": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
       "official_raw_row_index": 0,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 117112.0,
-          "short": 131871.0,
-          "net": -14759.0
+          "long": 126842.0,
+          "short": 125614.0,
+          "net": 1228.0
         },
         "nonreportables": {
-          "long": 34362.0,
-          "short": 35990.0,
-          "net": -1628.0
+          "long": 36645.0,
+          "short": 33074.0,
+          "net": 3571.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 117112.0,
-          "short": 131871.0,
-          "spread": 147901.0,
-          "net": -14759.0
+          "long": 126842.0,
+          "short": 125614.0,
+          "spread": 154655.0,
+          "net": 1228.0
         },
         "nonreportables": {
-          "long": 34362.0,
-          "short": 35990.0,
-          "net": -1628.0
+          "long": 36645.0,
+          "short": 33074.0,
+          "net": 3571.0
         },
-        "open_interest": 466323.0
+        "open_interest": 485138.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 117112.0,
-            "official_raw_value": 117112.0,
+            "dashboard_value": 126842.0,
+            "official_raw_value": 126842.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 131871.0,
-            "official_raw_value": 131871.0,
+            "dashboard_value": 125614.0,
+            "official_raw_value": 125614.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -14759.0,
-            "official_raw_value": -14759.0,
+            "dashboard_value": 1228.0,
+            "official_raw_value": 1228.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -14759.0
+          "official_net_computed": 1228.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 34362.0,
-            "official_raw_value": 34362.0,
+            "dashboard_value": 36645.0,
+            "official_raw_value": 36645.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 35990.0,
-            "official_raw_value": 35990.0,
+            "dashboard_value": 33074.0,
+            "official_raw_value": 33074.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -1628.0,
-            "official_raw_value": -1628.0,
+            "dashboard_value": 3571.0,
+            "official_raw_value": 3571.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -1628.0
+          "official_net_computed": 3571.0
         }
       },
       "nc_match": true,
@@ -2561,16 +2631,16 @@
           "market_name": "WHEAT-SRW - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 117112.0,
-          "noncommercial_short": 131871.0,
-          "noncommercial_spread": 147901.0,
-          "commercial_long": 166948.0,
-          "commercial_short": 150561.0,
-          "nonreportable_long": 34362.0,
-          "nonreportable_short": 35990.0,
-          "open_interest": 466323.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
+          "noncommercial_long": 126842.0,
+          "noncommercial_short": 125614.0,
+          "noncommercial_spread": 154655.0,
+          "commercial_long": 166996.0,
+          "commercial_short": 171795.0,
+          "nonreportable_long": 36645.0,
+          "nonreportable_short": 33074.0,
+          "open_interest": 485138.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
           "raw_source_row": 0,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "WHEAT-SRW - CHICAGO BOARD OF TRADE"
@@ -2580,17 +2650,17 @@
           "market_name": "WHEAT-HRW - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 73792.0,
-          "noncommercial_short": 56135.0,
-          "noncommercial_spread": 106406.0,
-          "commercial_long": 112206.0,
-          "commercial_short": 130345.0,
-          "nonreportable_long": 20602.0,
-          "nonreportable_short": 20120.0,
-          "open_interest": 313006.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 31,
+          "noncommercial_long": 87626.0,
+          "noncommercial_short": 57291.0,
+          "noncommercial_spread": 94476.0,
+          "commercial_long": 108348.0,
+          "commercial_short": 139693.0,
+          "nonreportable_long": 20386.0,
+          "nonreportable_short": 19376.0,
+          "open_interest": 310836.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 37,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "WHEAT-HRW - CHICAGO BOARD OF TRADE"
         },
@@ -2599,17 +2669,17 @@
           "market_name": "WHEAT-HRSpring - MIAX FUTURES EXCHANGE",
           "exchange": "MIAX FUTURES EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 19489.0,
-          "noncommercial_short": 10762.0,
-          "noncommercial_spread": 6881.0,
-          "commercial_long": 50072.0,
-          "commercial_short": 59949.0,
-          "nonreportable_long": 9184.0,
-          "nonreportable_short": 8034.0,
-          "open_interest": 85626.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 62,
+          "noncommercial_long": 26543.0,
+          "noncommercial_short": 3791.0,
+          "noncommercial_spread": 3630.0,
+          "commercial_long": 38947.0,
+          "commercial_short": 63284.0,
+          "nonreportable_long": 9853.0,
+          "nonreportable_short": 8268.0,
+          "open_interest": 78973.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 74,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "WHEAT-HRSpring - MIAX FUTURES EXCHANGE"
         }
@@ -2619,84 +2689,84 @@
     },
     "Soybeans": {
       "instrument": "Soybeans",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "005602",
       "selected_market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
       "exchange": "CHICAGO BOARD OF TRADE",
       "contract_description": "SOYBEANS - CHICAGO BOARD OF TRADE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 131,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 156,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 252620.0,
-          "short": 77078.0,
-          "net": 175542.0
+          "long": 356583.0,
+          "short": 95400.0,
+          "net": 261183.0
         },
         "nonreportables": {
-          "long": 49474.0,
-          "short": 68264.0,
-          "net": -18790.0
+          "long": 49973.0,
+          "short": 72581.0,
+          "net": -22608.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 252620.0,
-          "short": 77078.0,
-          "spread": 241898.0,
-          "net": 175542.0
+          "long": 356583.0,
+          "short": 95400.0,
+          "spread": 213575.0,
+          "net": 261183.0
         },
         "nonreportables": {
-          "long": 49474.0,
-          "short": 68264.0,
-          "net": -18790.0
+          "long": 49973.0,
+          "short": 72581.0,
+          "net": -22608.0
         },
-        "open_interest": 990408.0
+        "open_interest": 1104880.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 252620.0,
-            "official_raw_value": 252620.0,
+            "dashboard_value": 356583.0,
+            "official_raw_value": 356583.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 77078.0,
-            "official_raw_value": 77078.0,
+            "dashboard_value": 95400.0,
+            "official_raw_value": 95400.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 175542.0,
-            "official_raw_value": 175542.0,
+            "dashboard_value": 261183.0,
+            "official_raw_value": 261183.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 175542.0
+          "official_net_computed": 261183.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 49474.0,
-            "official_raw_value": 49474.0,
+            "dashboard_value": 49973.0,
+            "official_raw_value": 49973.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 68264.0,
-            "official_raw_value": 68264.0,
+            "dashboard_value": 72581.0,
+            "official_raw_value": 72581.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -18790.0,
-            "official_raw_value": -18790.0,
+            "dashboard_value": -22608.0,
+            "official_raw_value": -22608.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -18790.0
+          "official_net_computed": -22608.0
         }
       },
       "nc_match": true,
@@ -2708,17 +2778,17 @@
           "market_name": "SOYBEANS - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 252620.0,
-          "noncommercial_short": 77078.0,
-          "noncommercial_spread": 241898.0,
-          "commercial_long": 446416.0,
-          "commercial_short": 603168.0,
-          "nonreportable_long": 49474.0,
-          "nonreportable_short": 68264.0,
-          "open_interest": 990408.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 131,
+          "noncommercial_long": 356583.0,
+          "noncommercial_short": 95400.0,
+          "noncommercial_spread": 213575.0,
+          "commercial_long": 484749.0,
+          "commercial_short": 723324.0,
+          "nonreportable_long": 49973.0,
+          "nonreportable_short": 72581.0,
+          "open_interest": 1104880.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 156,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "SOYBEANS - CHICAGO BOARD OF TRADE"
         },
@@ -2727,17 +2797,17 @@
           "market_name": "MINI SOYBEANS - CHICAGO BOARD OF TRADE",
           "exchange": "CHICAGO BOARD OF TRADE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 21923.0,
-          "noncommercial_short": 1619.0,
-          "noncommercial_spread": 324.0,
+          "noncommercial_long": 25843.0,
+          "noncommercial_short": 1285.0,
+          "noncommercial_spread": 765.0,
           "commercial_long": 7.0,
-          "commercial_short": 11257.0,
-          "nonreportable_long": 4291.0,
-          "nonreportable_short": 13345.0,
-          "open_interest": 26545.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 162,
+          "commercial_short": 10135.0,
+          "nonreportable_long": 2526.0,
+          "nonreportable_short": 16956.0,
+          "open_interest": 29141.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 193,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "MINI SOYBEANS - CHICAGO BOARD OF TRADE"
         }
@@ -2747,84 +2817,84 @@
     },
     "Sugar": {
       "instrument": "Sugar",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "080732",
       "selected_market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
       "exchange": "ICE FUTURES U.S.",
       "contract_description": "SUGAR NO. 11 - ICE FUTURES U.S.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8020,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9615,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 278300.0,
-          "short": 346768.0,
-          "net": -68468.0
+          "long": 377419.0,
+          "short": 194904.0,
+          "net": 182515.0
         },
         "nonreportables": {
-          "long": 80800.0,
-          "short": 71851.0,
-          "net": 8949.0
+          "long": 112570.0,
+          "short": 57039.0,
+          "net": 55531.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 278300.0,
-          "short": 346768.0,
-          "spread": 203362.0,
-          "net": -68468.0
+          "long": 377419.0,
+          "short": 194904.0,
+          "spread": 218997.0,
+          "net": 182515.0
         },
         "nonreportables": {
-          "long": 80800.0,
-          "short": 71851.0,
-          "net": 8949.0
+          "long": 112570.0,
+          "short": 57039.0,
+          "net": 55531.0
         },
-        "open_interest": 1055808.0
+        "open_interest": 1219523.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 278300.0,
-            "official_raw_value": 278300.0,
+            "dashboard_value": 377419.0,
+            "official_raw_value": 377419.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 346768.0,
-            "official_raw_value": 346768.0,
+            "dashboard_value": 194904.0,
+            "official_raw_value": 194904.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -68468.0,
-            "official_raw_value": -68468.0,
+            "dashboard_value": 182515.0,
+            "official_raw_value": 182515.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -68468.0
+          "official_net_computed": 182515.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 80800.0,
-            "official_raw_value": 80800.0,
+            "dashboard_value": 112570.0,
+            "official_raw_value": 112570.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 71851.0,
-            "official_raw_value": 71851.0,
+            "dashboard_value": 57039.0,
+            "official_raw_value": 57039.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 8949.0,
-            "official_raw_value": 8949.0,
+            "dashboard_value": 55531.0,
+            "official_raw_value": 55531.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 8949.0
+          "official_net_computed": 55531.0
         }
       },
       "nc_match": true,
@@ -2836,17 +2906,17 @@
           "market_name": "SUGAR NO. 11 - ICE FUTURES U.S.",
           "exchange": "ICE FUTURES U.S.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 278300.0,
-          "noncommercial_short": 346768.0,
-          "noncommercial_spread": 203362.0,
-          "commercial_long": 493346.0,
-          "commercial_short": 433827.0,
-          "nonreportable_long": 80800.0,
-          "nonreportable_short": 71851.0,
-          "open_interest": 1055808.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8020,
+          "noncommercial_long": 377419.0,
+          "noncommercial_short": 194904.0,
+          "noncommercial_spread": 218997.0,
+          "commercial_long": 510537.0,
+          "commercial_short": 748583.0,
+          "nonreportable_long": 112570.0,
+          "nonreportable_short": 57039.0,
+          "open_interest": 1219523.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9615,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "SUGAR NO. 11 - ICE FUTURES U.S."
         }
@@ -2856,84 +2926,84 @@
     },
     "Platinum": {
       "instrument": "Platinum",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "076651",
       "selected_market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
       "exchange": "NEW YORK MERCANTILE EXCHANGE",
       "contract_description": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 7989,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9578,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 23151.0,
-          "short": 8390.0,
-          "net": 14761.0
+          "long": 26250.0,
+          "short": 11030.0,
+          "net": 15220.0
         },
         "nonreportables": {
-          "long": 7241.0,
-          "short": 3560.0,
-          "net": 3681.0
+          "long": 8004.0,
+          "short": 3415.0,
+          "net": 4589.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 23151.0,
-          "short": 8390.0,
-          "spread": 7081.0,
-          "net": 14761.0
+          "long": 26250.0,
+          "short": 11030.0,
+          "spread": 10893.0,
+          "net": 15220.0
         },
         "nonreportables": {
-          "long": 7241.0,
-          "short": 3560.0,
-          "net": 3681.0
+          "long": 8004.0,
+          "short": 3415.0,
+          "net": 4589.0
         },
-        "open_interest": 55848.0
+        "open_interest": 65478.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 23151.0,
-            "official_raw_value": 23151.0,
+            "dashboard_value": 26250.0,
+            "official_raw_value": 26250.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 8390.0,
-            "official_raw_value": 8390.0,
+            "dashboard_value": 11030.0,
+            "official_raw_value": 11030.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 14761.0,
-            "official_raw_value": 14761.0,
+            "dashboard_value": 15220.0,
+            "official_raw_value": 15220.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 14761.0
+          "official_net_computed": 15220.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 7241.0,
-            "official_raw_value": 7241.0,
+            "dashboard_value": 8004.0,
+            "official_raw_value": 8004.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 3560.0,
-            "official_raw_value": 3560.0,
+            "dashboard_value": 3415.0,
+            "official_raw_value": 3415.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 3681.0,
-            "official_raw_value": 3681.0,
+            "dashboard_value": 4589.0,
+            "official_raw_value": 4589.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 3681.0
+          "official_net_computed": 4589.0
         }
       },
       "nc_match": true,
@@ -2945,17 +3015,17 @@
           "market_name": "PLATINUM - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 23151.0,
-          "noncommercial_short": 8390.0,
-          "noncommercial_spread": 7081.0,
-          "commercial_long": 18375.0,
-          "commercial_short": 36817.0,
-          "nonreportable_long": 7241.0,
-          "nonreportable_short": 3560.0,
-          "open_interest": 55848.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7989,
+          "noncommercial_long": 26250.0,
+          "noncommercial_short": 11030.0,
+          "noncommercial_spread": 10893.0,
+          "commercial_long": 20331.0,
+          "commercial_short": 40140.0,
+          "nonreportable_long": 8004.0,
+          "nonreportable_short": 3415.0,
+          "open_interest": 65478.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9578,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "PLATINUM - NEW YORK MERCANTILE EXCHANGE"
         }
@@ -2965,84 +3035,84 @@
     },
     "Palladium": {
       "instrument": "Palladium",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "075651",
       "selected_market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
       "exchange": "NEW YORK MERCANTILE EXCHANGE",
       "contract_description": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 7958,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 9541,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 6697.0,
-          "short": 11032.0,
-          "net": -4335.0
+          "long": 6284.0,
+          "short": 10434.0,
+          "net": -4150.0
         },
         "nonreportables": {
-          "long": 2227.0,
-          "short": 1710.0,
-          "net": 517.0
+          "long": 2586.0,
+          "short": 1514.0,
+          "net": 1072.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 6697.0,
-          "short": 11032.0,
-          "spread": 1002.0,
-          "net": -4335.0
+          "long": 6284.0,
+          "short": 10434.0,
+          "spread": 764.0,
+          "net": -4150.0
         },
         "nonreportables": {
-          "long": 2227.0,
-          "short": 1710.0,
-          "net": 517.0
+          "long": 2586.0,
+          "short": 1514.0,
+          "net": 1072.0
         },
-        "open_interest": 18574.0
+        "open_interest": 16707.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 6697.0,
-            "official_raw_value": 6697.0,
+            "dashboard_value": 6284.0,
+            "official_raw_value": 6284.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 11032.0,
-            "official_raw_value": 11032.0,
+            "dashboard_value": 10434.0,
+            "official_raw_value": 10434.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -4335.0,
-            "official_raw_value": -4335.0,
+            "dashboard_value": -4150.0,
+            "official_raw_value": -4150.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -4335.0
+          "official_net_computed": -4150.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 2227.0,
-            "official_raw_value": 2227.0,
+            "dashboard_value": 2586.0,
+            "official_raw_value": 2586.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 1710.0,
-            "official_raw_value": 1710.0,
+            "dashboard_value": 1514.0,
+            "official_raw_value": 1514.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 517.0,
-            "official_raw_value": 517.0,
+            "dashboard_value": 1072.0,
+            "official_raw_value": 1072.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 517.0
+          "official_net_computed": 1072.0
         }
       },
       "nc_match": true,
@@ -3054,17 +3124,17 @@
           "market_name": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE",
           "exchange": "NEW YORK MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 6697.0,
-          "noncommercial_short": 11032.0,
-          "noncommercial_spread": 1002.0,
-          "commercial_long": 8648.0,
-          "commercial_short": 4830.0,
-          "nonreportable_long": 2227.0,
-          "nonreportable_short": 1710.0,
-          "open_interest": 18574.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 7958,
+          "noncommercial_long": 6284.0,
+          "noncommercial_short": 10434.0,
+          "noncommercial_spread": 764.0,
+          "commercial_long": 7073.0,
+          "commercial_short": 3995.0,
+          "nonreportable_long": 2586.0,
+          "nonreportable_short": 1514.0,
+          "open_interest": 16707.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 9541,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "PALLADIUM - NEW YORK MERCANTILE EXCHANGE"
         }
@@ -3074,84 +3144,84 @@
     },
     "Bitcoin": {
       "instrument": "Bitcoin",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "133741",
       "selected_market_name": "BITCOIN - CHICAGO MERCANTILE EXCHANGE",
       "exchange": "CHICAGO MERCANTILE EXCHANGE",
       "contract_description": "BITCOIN - CHICAGO MERCANTILE EXCHANGE",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8757,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10493,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 17559.0,
-          "short": 13807.0,
-          "net": 3752.0
+          "long": 16744.0,
+          "short": 14276.0,
+          "net": 2468.0
         },
         "nonreportables": {
-          "long": 652.0,
-          "short": 1072.0,
-          "net": -420.0
+          "long": 1021.0,
+          "short": 832.0,
+          "net": 189.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 17559.0,
-          "short": 13807.0,
-          "spread": 1894.0,
-          "net": 3752.0
+          "long": 16744.0,
+          "short": 14276.0,
+          "spread": 2901.0,
+          "net": 2468.0
         },
         "nonreportables": {
-          "long": 652.0,
-          "short": 1072.0,
-          "net": -420.0
+          "long": 1021.0,
+          "short": 832.0,
+          "net": 189.0
         },
-        "open_interest": 20143.0
+        "open_interest": 20773.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 17559.0,
-            "official_raw_value": 17559.0,
+            "dashboard_value": 16744.0,
+            "official_raw_value": 16744.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 13807.0,
-            "official_raw_value": 13807.0,
+            "dashboard_value": 14276.0,
+            "official_raw_value": 14276.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 3752.0,
-            "official_raw_value": 3752.0,
+            "dashboard_value": 2468.0,
+            "official_raw_value": 2468.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 3752.0
+          "official_net_computed": 2468.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 652.0,
-            "official_raw_value": 652.0,
+            "dashboard_value": 1021.0,
+            "official_raw_value": 1021.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 1072.0,
-            "official_raw_value": 1072.0,
+            "dashboard_value": 832.0,
+            "official_raw_value": 832.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": -420.0,
-            "official_raw_value": -420.0,
+            "dashboard_value": 189.0,
+            "official_raw_value": 189.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": -420.0
+          "official_net_computed": 189.0
         }
       },
       "nc_match": true,
@@ -3163,17 +3233,17 @@
           "market_name": "BITCOIN - CHICAGO MERCANTILE EXCHANGE",
           "exchange": "CHICAGO MERCANTILE EXCHANGE",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 17559.0,
-          "noncommercial_short": 13807.0,
-          "noncommercial_spread": 1894.0,
-          "commercial_long": 38.0,
-          "commercial_short": 3370.0,
-          "nonreportable_long": 652.0,
-          "nonreportable_short": 1072.0,
-          "open_interest": 20143.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8757,
+          "noncommercial_long": 16744.0,
+          "noncommercial_short": 14276.0,
+          "noncommercial_spread": 2901.0,
+          "commercial_long": 107.0,
+          "commercial_short": 2764.0,
+          "nonreportable_long": 1021.0,
+          "nonreportable_short": 832.0,
+          "open_interest": 20773.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10493,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "BITCOIN - CHICAGO MERCANTILE EXCHANGE"
         },
@@ -3182,17 +3252,17 @@
           "market_name": "Nano Bitcoin - COINBASE DERIVATIVES, LLC",
           "exchange": "COINBASE DERIVATIVES, LLC",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 114021.0,
-          "noncommercial_short": 111738.0,
-          "noncommercial_spread": 209.0,
-          "commercial_long": 110.0,
-          "commercial_short": 31.0,
-          "nonreportable_long": 975.0,
-          "nonreportable_short": 3337.0,
-          "open_interest": 115315.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8819,
+          "noncommercial_long": 182307.0,
+          "noncommercial_short": 180449.0,
+          "noncommercial_spread": 1.0,
+          "commercial_long": 0.0,
+          "commercial_short": 0.0,
+          "nonreportable_long": 1141.0,
+          "nonreportable_short": 2999.0,
+          "open_interest": 183449.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10567,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "Nano Bitcoin - COINBASE DERIVATIVES, LLC"
         },
@@ -3201,17 +3271,17 @@
           "market_name": "NANO BITCOIN PERP STYLE - COINBASE DERIVATIVES, LLC",
           "exchange": "COINBASE DERIVATIVES, LLC",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 163813.0,
-          "noncommercial_short": 165470.0,
+          "noncommercial_long": 155881.0,
+          "noncommercial_short": 139357.0,
           "noncommercial_spread": 0.0,
-          "commercial_long": 692.0,
-          "commercial_short": 6053.0,
-          "nonreportable_long": 13677.0,
-          "nonreportable_short": 6659.0,
-          "open_interest": 178182.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8850,
+          "commercial_long": 827.0,
+          "commercial_short": 22217.0,
+          "nonreportable_long": 13651.0,
+          "nonreportable_short": 8785.0,
+          "open_interest": 170359.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10604,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "NANO BITCOIN PERP STYLE - COINBASE DERIVATIVES, LLC"
         },
@@ -3220,17 +3290,17 @@
           "market_name": "BITCOIN CASH PERP STYLE - COINBASE DERIVATIVES, LLC",
           "exchange": "COINBASE DERIVATIVES, LLC",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 1714.0,
-          "noncommercial_short": 1429.0,
+          "noncommercial_long": 2047.0,
+          "noncommercial_short": 2189.0,
           "noncommercial_spread": 0.0,
           "commercial_long": 0.0,
-          "commercial_short": 447.0,
-          "nonreportable_long": 279.0,
-          "nonreportable_short": 117.0,
-          "open_interest": 1993.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8881,
+          "commercial_short": 0.0,
+          "nonreportable_long": 255.0,
+          "nonreportable_short": 113.0,
+          "open_interest": 2302.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10641,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "BITCOIN CASH PERP STYLE - COINBASE DERIVATIVES, LLC"
         }
@@ -3240,84 +3310,84 @@
     },
     "US Dollar Index / DX": {
       "instrument": "US Dollar Index / DX",
-      "report_date": "2026-08-04",
+      "report_date": "2026-09-15",
       "selected_cftc_code": "098662",
       "selected_market_name": "USD INDEX - ICE FUTURES U.S.",
       "exchange": "ICE FUTURES U.S.",
       "contract_description": "USD INDEX - ICE FUTURES U.S.",
       "mapping_status": "PASS",
       "official_raw_source_url": "https://www.cftc.gov/files/dea/history/deacot2026.zip",
-      "official_raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-      "official_raw_row_index": 8372,
+      "official_raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+      "official_raw_row_index": 10035,
       "dashboard_source_file": "web-dashboard\\public\\data\\confluence_history_latest.json",
       "dashboard_values": {
         "noncommercials": {
-          "long": 35247.0,
-          "short": 12748.0,
-          "net": 22499.0
+          "long": 25971.0,
+          "short": 15378.0,
+          "net": 10593.0
         },
         "nonreportables": {
-          "long": 3661.0,
-          "short": 1534.0,
-          "net": 2127.0
+          "long": 3007.0,
+          "short": 1366.0,
+          "net": 1641.0
         }
       },
       "official_raw_values": {
         "noncommercials": {
-          "long": 35247.0,
-          "short": 12748.0,
-          "spread": 1581.0,
-          "net": 22499.0
+          "long": 25971.0,
+          "short": 15378.0,
+          "spread": 1580.0,
+          "net": 10593.0
         },
         "nonreportables": {
-          "long": 3661.0,
-          "short": 1534.0,
-          "net": 2127.0
+          "long": 3007.0,
+          "short": 1366.0,
+          "net": 1641.0
         },
-        "open_interest": 52154.0
+        "open_interest": 43744.0
       },
       "comparisons": {
         "noncommercials": {
           "long": {
-            "dashboard_value": 35247.0,
-            "official_raw_value": 35247.0,
+            "dashboard_value": 25971.0,
+            "official_raw_value": 25971.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 12748.0,
-            "official_raw_value": 12748.0,
+            "dashboard_value": 15378.0,
+            "official_raw_value": 15378.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 22499.0,
-            "official_raw_value": 22499.0,
+            "dashboard_value": 10593.0,
+            "official_raw_value": 10593.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 22499.0
+          "official_net_computed": 10593.0
         },
         "nonreportables": {
           "long": {
-            "dashboard_value": 3661.0,
-            "official_raw_value": 3661.0,
+            "dashboard_value": 3007.0,
+            "official_raw_value": 3007.0,
             "difference": 0.0,
             "match": true
           },
           "short": {
-            "dashboard_value": 1534.0,
-            "official_raw_value": 1534.0,
+            "dashboard_value": 1366.0,
+            "official_raw_value": 1366.0,
             "difference": 0.0,
             "match": true
           },
           "net": {
-            "dashboard_value": 2127.0,
-            "official_raw_value": 2127.0,
+            "dashboard_value": 1641.0,
+            "official_raw_value": 1641.0,
             "difference": 0.0,
             "match": true
           },
-          "official_net_computed": 2127.0
+          "official_net_computed": 1641.0
         }
       },
       "nc_match": true,
@@ -3329,17 +3399,17 @@
           "market_name": "USD INDEX - ICE FUTURES U.S.",
           "exchange": "ICE FUTURES U.S.",
           "report_type": "legacy_futures_only",
-          "noncommercial_long": 35247.0,
-          "noncommercial_short": 12748.0,
-          "noncommercial_spread": 1581.0,
-          "commercial_long": 11665.0,
-          "commercial_short": 36291.0,
-          "nonreportable_long": 3661.0,
-          "nonreportable_short": 1534.0,
-          "open_interest": 52154.0,
-          "report_date": "2026-08-04",
-          "raw_source_file": "cot_legacy_futures_only_2026_20260808T065005Z.zip",
-          "raw_source_row": 8372,
+          "noncommercial_long": 25971.0,
+          "noncommercial_short": 15378.0,
+          "noncommercial_spread": 1580.0,
+          "commercial_long": 13186.0,
+          "commercial_short": 25420.0,
+          "nonreportable_long": 3007.0,
+          "nonreportable_short": 1366.0,
+          "open_interest": 43744.0,
+          "report_date": "2026-09-15",
+          "raw_source_file": "cot_legacy_futures_only_2026_20260919T050031Z.zip",
+          "raw_source_row": 10035,
           "parser": "hptl.cot.legacy_cot",
           "contract_description": "USD INDEX - ICE FUTURES U.S."
         }
