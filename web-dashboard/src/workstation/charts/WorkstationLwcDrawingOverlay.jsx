@@ -86,7 +86,7 @@ export function WorkstationLwcDrawingOverlay({
           nodes = createDrawingNodes(svg, d, selectMode, meta.onSelectDrawing)
           nodeMapRef.current.set(d.id, nodes)
         }
-        if (nodes.hit && d.type === 'hline') {
+        if (nodes.hit && (d.type === 'hline' || d.type === 'vline')) {
           nodes.hit.style.pointerEvents = selectMode ? 'stroke' : 'none'
         }
         paintDrawing(nodes, d, chart, primarySeries, meta, false)
@@ -128,6 +128,7 @@ export function WorkstationLwcDrawingOverlay({
   )
 
   const drawToolActive =
+    activeTool === WORKSTATION_DRAWING_TOOLS.VLINE ||
     activeTool === WORKSTATION_DRAWING_TOOLS.HLINE || activeTool === WORKSTATION_DRAWING_TOOLS.RECT
 
   const snapHit = (hit) => {
@@ -148,6 +149,14 @@ export function WorkstationLwcDrawingOverlay({
     const hit = snapHit(pointerToPanelData(chart, primarySeries, e.clientX, e.clientY))
     if (!hit) return
     const meta = metaRef.current
+
+    if (activeTool === WORKSTATION_DRAWING_TOOLS.VLINE) {
+      if (hit.time == null) return
+      const row = meta.timelineRows.find((item) => item.time === hit.time)
+      const date = row?.label || row?.date
+      if (date) meta.onDrawingCommit?.({ type: 'vline', date })
+      return
+    }
 
     if (activeTool === WORKSTATION_DRAWING_TOOLS.HLINE) {
       if (hit.value == null || !Number.isFinite(hit.value)) return
@@ -225,6 +234,21 @@ export function WorkstationLwcDrawingOverlay({
 
 function paintDrawing(nodes, d, chart, primarySeries, meta, isDraft) {
   const selected = !isDraft && d.id === meta.selectedId
+  if (d.type === 'vline') {
+    const x = chartTimeToX(chart, resolveTimelineTime(d, 'date', meta.dateToTime))
+    nodes.line.setAttribute('visibility', x == null ? 'hidden' : 'visible')
+    if (nodes.hit) nodes.hit.setAttribute('visibility', x == null ? 'hidden' : 'visible')
+    if (x == null) return
+    nodes.line.setAttribute('x1', String(x))
+    nodes.line.setAttribute('x2', String(x))
+    nodes.line.setAttribute('stroke', selected ? CHART_WS.drawingSelected : CHART_WS.drawing)
+    nodes.line.setAttribute('stroke-width', selected ? '2' : '1.5')
+    if (nodes.hit) {
+      nodes.hit.setAttribute('x1', String(x))
+      nodes.hit.setAttribute('x2', String(x))
+    }
+    return
+  }
   if (d.type === 'hline') {
     const y = seriesValueToY(primarySeries, d.value)
     if (y == null) {
@@ -271,10 +295,12 @@ function createDrawingNodes(svg, d, selectMode, onSelectDrawing) {
   const group = document.createElementNS(SVG_NS, 'g')
   group.setAttribute('data-drawing-id', d.id || '__draft__')
 
-  if (d.type === 'hline') {
+  if (d.type === 'hline' || d.type === 'vline') {
     const hit = document.createElementNS(SVG_NS, 'line')
     hit.setAttribute('x1', '0')
-    hit.setAttribute('x2', '100%')
+    hit.setAttribute('x2', d.type === 'hline' ? '100%' : '0')
+    hit.setAttribute('y1', '0')
+    hit.setAttribute('y2', d.type === 'vline' ? '100%' : '0')
     hit.setAttribute('stroke', 'transparent')
     hit.setAttribute('stroke-width', '12')
     hit.style.cursor = 'pointer'
@@ -288,7 +314,11 @@ function createDrawingNodes(svg, d, selectMode, onSelectDrawing) {
 
     const line = document.createElementNS(SVG_NS, 'line')
     line.setAttribute('x1', '0')
-    line.setAttribute('x2', '100%')
+    line.setAttribute('x2', d.type === 'hline' ? '100%' : '0')
+    if (d.type === 'vline') {
+      line.setAttribute('y1', '0')
+      line.setAttribute('y2', '100%')
+    }
     line.setAttribute('stroke-dasharray', '6 4')
     line.setAttribute('vector-effect', 'non-scaling-stroke')
     line.style.pointerEvents = 'none'

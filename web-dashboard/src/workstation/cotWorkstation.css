@@ -19,6 +19,64 @@
   background: var(--ws-canvas-bg);
 }
 
+.ws-drawing-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  background: #101927;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.ws-drawing-toolbar-tools {
+  display: flex;
+  gap: 4px;
+}
+
+.ws-drawing-tool-btn,
+.ws-drawing-delete-btn {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 5px 9px;
+  background: transparent;
+  color: #aebccc;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.ws-drawing-tool-btn:hover,
+.ws-drawing-delete-btn:not(:disabled):hover {
+  color: #f2f6fa;
+  background: #243244;
+}
+
+.ws-drawing-tool-btn.is-active {
+  color: #f5d88a;
+  background: #2a2c31;
+  border-color: rgba(245, 216, 138, 0.45);
+}
+
+.ws-drawing-delete-btn {
+  margin-left: auto;
+}
+
+.ws-drawing-delete-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.cot-workstation .ws-drawing-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  overflow: visible;
+  touch-action: none;
+}
+
 .cot-ws-toolbar {
   display: flex;
   flex-wrap: wrap;
