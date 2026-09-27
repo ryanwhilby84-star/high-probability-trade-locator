@@ -4,16 +4,15 @@ import { WORKSTATION_DRAWING_TOOLS } from '../canvas/workstationDrawingTypes.js'
 
 const TOOLS = [
   { id: WORKSTATION_DRAWING_TOOLS.SELECT, label: 'Select', title: 'Select drawings' },
-  { id: WORKSTATION_DRAWING_TOOLS.VLINE, label: 'V-line', title: 'Vertical line (all panels)' },
-  { id: WORKSTATION_DRAWING_TOOLS.HLINE, label: 'H-line', title: 'Horizontal line (this panel)' },
-  { id: WORKSTATION_DRAWING_TOOLS.RECT, label: 'Rect', title: 'Rectangle (this panel)' },
+  { id: WORKSTATION_DRAWING_TOOLS.VLINE, label: 'Vertical', title: 'Place a vertical line across all panels' },
+  { id: WORKSTATION_DRAWING_TOOLS.HLINE, label: 'Horizontal', title: 'Place a horizontal line on this panel' },
 ]
 
 export function WorkstationDrawingToolbar({
   activeTool,
   onToolChange,
-  onClear,
-  drawingCount = 0,
+  onDeleteSelected,
+  selectedId,
 }) {
   return (
     <div className="ws-drawing-toolbar" role="toolbar" aria-label="Chart drawings">
@@ -31,11 +30,15 @@ export function WorkstationDrawingToolbar({
           </button>
         ))}
       </div>
-      {drawingCount > 0 ? (
-        <button type="button" className="ws-drawing-clear-btn" onClick={onClear}>
-          Clear ({drawingCount})
-        </button>
-      ) : null}
+      <button
+        type="button"
+        className="ws-drawing-delete-btn"
+        onClick={onDeleteSelected}
+        disabled={!selectedId}
+        title="Delete selected line (Delete key)"
+      >
+        Delete selected
+      </button>
     </div>
   )
 }
