@@ -54,7 +54,7 @@ export function globalVlineDrawings(drawings) {
   return (drawings || []).filter((d) => d.type === 'vline')
 }
 
-/** Per-panel drawings — excludes global vlines (handled by shared timeline overlay). */
+/** Drawings visible in this pane; vertical markers share a date across all panes. */
 export function drawingsForWorkstationPanel(drawings, panelId) {
-  return (drawings || []).filter((d) => d.type !== 'vline' && d.panelId === panelId)
+  return (drawings || []).filter((d) => d.type === 'vline' || d.panelId === panelId)
 }
