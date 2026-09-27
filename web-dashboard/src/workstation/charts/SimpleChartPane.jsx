@@ -21,6 +21,7 @@ import {
   recordChartUnmount,
 } from './cotWsRenderDiagnostics.js'
 import { ResearchPinsOverlay } from './ResearchPinsOverlay.jsx'
+import { WorkstationLwcDrawingOverlay } from './WorkstationLwcDrawingOverlay.jsx'
 
 const LIVE_PRICE_LINE_COLOR = '#38bdf8'
 const LIVE_PRICE_STALE_LINE_COLOR = '#fbbf24'
@@ -193,6 +194,12 @@ export function SimpleChartPane({
   valueBadge = null,
   legendLabel = null,
   onFitY = null,
+  drawings = [],
+  selectedDrawingId = null,
+  drawingTool = 'select',
+  dateToTime,
+  onSelectDrawing,
+  onDrawingCommit,
   className = '',
 }) {
   const containerRef = React.useRef(null)
@@ -825,11 +832,20 @@ export function SimpleChartPane({
           />
         ) : null}
 
-        <div
-          className="cot-ws-drawing-host"
-          data-drawing-panel={panelId}
-          aria-hidden="true"
-        />
+        {mounted && !syncOnly ? (
+          <WorkstationLwcDrawingOverlay
+            chart={chartRef.current}
+            primarySeries={primarySeriesRef.current}
+            panelId={panelId}
+            timelineRows={timelineRows}
+            drawings={drawings}
+            selectedId={selectedDrawingId}
+            activeTool={drawingTool}
+            dateToTime={dateToTime}
+            onSelectDrawing={onSelectDrawing}
+            onDrawingCommit={onDrawingCommit}
+          />
+        ) : null}
 
         {onFitY && !syncOnly ? (
           <button
