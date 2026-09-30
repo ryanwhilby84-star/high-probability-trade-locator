@@ -1,11 +1,14 @@
-/* FINAL COT workstation layout override.
-   Imported LAST by CotWorkstationPage so these rules visibly win the cascade. */
+/* Stable fullscreen COT workstation layout.
+   Keep the existing chart components and their internal sizing untouched.
+   The outer stack scrolls; each PaneShell receives a sensible research height. */
 
 .cot-ws-page-body {
   padding: 0 !important;
+  min-height: 0 !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen {
+  min-height: 0 !important;
   border-radius: 0 !important;
   border-left: 0 !important;
   border-right: 0 !important;
@@ -22,18 +25,19 @@
   padding: 3px 8px !important;
 }
 
-/* Stop the four charts being compressed into one viewport. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-research-stage {
   flex: 1 1 auto !important;
   min-height: 0 !important;
   overflow: hidden !important;
 }
 
+/* Scroll the whole analytical stack instead of squeezing four panes into one screen. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-canvas-scroll {
   display: block !important;
+  height: 100% !important;
+  min-height: 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  height: 100% !important;
   scrollbar-gutter: stable !important;
 }
 
@@ -42,7 +46,7 @@
   height: auto !important;
   min-height: 0 !important;
   overflow: visible !important;
-  padding: 0 0 24px !important;
+  padding-bottom: 24px !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel,
@@ -54,44 +58,38 @@
   min-height: 0 !important;
 }
 
-/* Price is a full research pane. */
+/* Size only the PaneShell body. The chart component already fills its body correctly. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
-  display: block !important;
-  flex: none !important;
-  height: 440px !important;
-  min-height: 440px !important;
-  max-height: none !important;
-}
-
-/* Every COT participant gets its own proper historical chart. */
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot .cot-ws-panel-body {
-  display: block !important;
   flex: none !important;
   height: 360px !important;
   min-height: 360px !important;
-  max-height: none !important;
 }
 
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group {
-  border-top: 8px solid #e3e8e5 !important;
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot .cot-ws-panel-body {
+  flex: none !important;
+  height: 260px !important;
+  min-height: 260px !important;
 }
 
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot {
-  border-bottom: 8px solid #eef2f0 !important;
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--retail .cot-ws-panel-body {
+  height: 280px !important;
+  min-height: 280px !important;
 }
 
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--retail {
-  border-bottom: 0 !important;
-}
-
-/* The old price/COT splitter belongs to the compressed layout. */
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel-resize-handle {
   display: none !important;
 }
 
-/* Stronger readable chart field without visual noise. */
-.cot-ws-page .cot-workstation--fullscreen .cot-ws-chart-plot {
-  min-height: 100% !important;
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-cot-group {
+  border-top: 1px solid var(--ws-separator-strong) !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot {
+  border-bottom: 1px solid var(--ws-separator) !important;
+}
+
+.cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--retail {
+  border-bottom: 0 !important;
 }
 
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-pane-legend {
@@ -101,16 +99,4 @@
 
 .cot-ws-page .cot-workstation--fullscreen .cot-ws-fit-y-btn {
   opacity: 1 !important;
-}
-
-@media (max-height: 850px) {
-  .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--price .cot-ws-panel-body {
-    height: 400px !important;
-    min-height: 400px !important;
-  }
-
-  .cot-ws-page .cot-workstation--fullscreen .cot-ws-panel--cot .cot-ws-panel-body {
-    height: 330px !important;
-    min-height: 330px !important;
-  }
 }

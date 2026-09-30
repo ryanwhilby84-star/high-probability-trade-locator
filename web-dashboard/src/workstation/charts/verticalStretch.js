@@ -2,9 +2,12 @@
 
 export const VERTICAL_STRETCH_DEFAULTS = {
   factor: 1,
-  minFactor: 0.25,
-  maxFactor: 16,
-  zoomFactor: 1.12,
+  // Do not allow indicator panes to be compressed into a visually flat line.
+  // 0.7 still gives useful breathing room while preserving readable structure.
+  minFactor: 0.7,
+  // Enough magnification for close inspection without making axis drag unstable.
+  maxFactor: 6,
+  zoomFactor: 1.1,
 }
 
 export function clampVerticalStretch(factor) {
@@ -31,7 +34,9 @@ export function verticalStretchEqual(a, b, epsilon = 0.02) {
 export function magnifyByAxisDrag(current, deltaYPixels) {
   if (!deltaYPixels) return clampVerticalStretch(current ?? VERTICAL_STRETCH_DEFAULTS.factor)
   const base = clampVerticalStretch(current ?? VERTICAL_STRETCH_DEFAULTS.factor)
-  const sensitivity = 0.008
+  // Deliberately damped: a normal mouse drag should refine the scale rather than
+  // jump from readable to extreme compression/magnification in one movement.
+  const sensitivity = 0.0045
   const next = base * Math.exp(-deltaYPixels * sensitivity)
   return clampVerticalStretch(next)
 }

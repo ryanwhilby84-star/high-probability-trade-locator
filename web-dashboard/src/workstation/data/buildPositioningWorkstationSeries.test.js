@@ -28,6 +28,90 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.weeklyBars).toHaveLength(0)
   })
 
+  it('retains completed price history before the COT overlap by default', () => {
+    const cotSeries = [
+      { date: '2024-01-02', price: 100, institutional_net: 1, retail_net: 2, commercial_net: 3 },
+      { date: '2024-01-09', price: 101, institutional_net: 2, retail_net: 3, commercial_net: 4 },
+    ]
+    const model = buildCotWorkstation({
+      market: 'Test',
+      series: cotSeries,
+      weeks: 2,
+      has_price: true,
+      has_commercial: true,
+      has_retail: true,
+    })
+    const ohlcExportBlock = {
+      weekly_ohlc: [
+        { date: '2020-01-03', open: 50, high: 52, low: 49, close: 51 },
+        { date: '2023-12-29', open: 98, high: 100, low: 97, close: 99 },
+        { date: '2024-01-05', open: 99, high: 102, low: 98, close: 101 },
+      ],
+    }
+
+    const bound = buildPositioningWorkstationSeries(model, null, ohlcExportBlock)
+    expect(bound.weeklyBars[0]?.date).toBe('2020-01-03')
+    expect(bound.meta.priceNotTruncatedToCot).toBe(true)
+    expect(bound.meta.clippedToCommonRange).toBe(false)
+  })
+
+  it('does not copy a Tuesday COT report onto a Friday price-only row', () => {
+    const cotSeries = [
+      {
+        date: '2026-09-01',
+        price: 10,
+        institutional_net: 100,
+        institutional_wow: 10,
+        retail_net: 20,
+        retail_wow: 2,
+        commercial_net: -120,
+        commercial_wow: -12,
+      },
+      {
+        date: '2026-09-08',
+        price: 11,
+        institutional_net: 130,
+        institutional_wow: 30,
+        retail_net: 25,
+        retail_wow: 5,
+        commercial_net: -155,
+        commercial_wow: -35,
+      },
+    ]
+    const model = buildCotWorkstation({
+      market: 'Soybeans',
+      series: cotSeries,
+      weeks: 2,
+      has_price: true,
+      has_commercial: true,
+      has_retail: true,
+    })
+    const ohlcExportBlock = {
+      weekly_ohlc: [
+        { date: '2026-09-04', open: 10, high: 11, low: 9, close: 10.5 },
+        { date: '2026-09-11', open: 10.5, high: 12, low: 10, close: 11.5 },
+      ],
+    }
+
+    const bound = buildPositioningWorkstationSeries(model, null, ohlcExportBlock, {
+      preserveFullCotHistory: true,
+    })
+
+    const sep1 = bound.rows.find((r) => r.date === '2026-09-01')
+    const sep4 = bound.rows.find((r) => r.date === '2026-09-04')
+    const sep8 = bound.rows.find((r) => r.date === '2026-09-08')
+
+    expect(sep1?.isCotReport).toBe(true)
+    expect(sep1?.commercial_net).toBe(-120)
+    expect(sep4?.isCotReport).toBe(false)
+    expect(sep4?.commercial_net).toBeNull()
+    expect(sep4?.institutional_net).toBeNull()
+    expect(sep4?.retail_net).toBeNull()
+    expect(sep8?.isCotReport).toBe(true)
+    expect(sep8?.commercial_net).toBe(-155)
+    expect(bound.meta.cotCarriedOntoPriceRows).toBe(false)
+  })
+
   it('continues price candles past the latest COT report', () => {
     const cotSeries = [
       {
@@ -77,10 +161,10 @@ describe('buildPositioningWorkstationSeries', () => {
     expect(bound.weeklyBars.map((b) => b.date)).toContain('2026-07-10')
     expect(bound.meta.priceLastDate).toBe('2026-07-17')
     expect(bound.meta.priceNotTruncatedToCot).toBe(true)
-    // Price continues on provider week dates even though COT last is 2026-07-21.
     expect(bound.meta.cotLastDate).toBe('2026-07-21')
     const lastPriceRow = bound.rows.find((r) => r.date === '2026-07-17')
     expect(lastPriceRow?.close).toBe(2.5)
+    expect(lastPriceRow?.commercial_net).toBeNull()
   })
 
   it('rejects short mismatched store OHLC for indices', () => {

@@ -1,7 +1,7 @@
 {
-  "report_date": "2026-05-26",
-  "checked_count": 23,
-  "passed_count": 23,
+  "report_date": "2026-09-01",
+  "checked_count": 26,
+  "passed_count": 26,
   "failed_count": 0,
   "failed_instruments": [],
   "quarantine_applied": false,
@@ -9,7 +9,7 @@
   "exit_code": 0,
   "error": null,
   "cot_layer_frozen": true,
-  "generated_at": "2026-06-02T08:14:02.021719+00:00",
+  "generated_at": "2026-09-05T06:17:54.819386+00:00",
   "source_truth_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
   "lineage_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_data_lineage_latest.json"
 }

@@ -1,31 +1,14 @@
 """Canonical Current Price Service.
 
-Single shared source of the *current* market price for the whole HPTL platform
-(dashboard, valuation, scanner, alerts, future features). No other module should
-fetch live prices independently — they call :func:`get_current_price` /
-:func:`get_current_prices` here.
-
-Design notes
-------------
-* Mappings come from OANDA instrument discovery
-  (``data/config/current_price_instruments.json``). If that file is absent the
-  service degrades to a registry-derived mapping so it still works before the
-  first discovery run.
-* Prices keep FULL floating-point precision. ``mid = (bid + ask) / 2``. We never
-  round here; ``price_precision`` is carried through for the display layer only.
-* ``status`` is derived from quote *age*, never from file existence:
-      LIVE       — live quote, age <= CURRENT_PRICE_STALE_SECONDS
-      STALE      — live quote present but too old (or age unknown)
-      FALLBACK   — no usable live quote; latest trusted close substituted
-      UNAVAILABLE— no live quote and no trusted close
-* The quote source is pluggable via :func:`set_quote_source`. Phase 1 uses OANDA
-  REST batch pricing; Phase 2 will inject the persistent streaming cache without
-  changing any caller.
+OANDA is the preferred provider. Instruments unavailable on the configured
+OANDA account are resolved through explicit alternate-provider mappings instead
+of being left unmapped. All callers continue to use this module as the single
+current-price interface.
 """
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable
 
@@ -33,6 +16,11 @@ from hptl.config import PROCESSED_DIR, get_oanda_api_key
 from hptl.markets.instrument_registry import all_instrument_ids, load_registry
 from hptl.oanda.oanda_client import OandaApiError
 from hptl.oanda.oanda_prices import fetch_pricing
+from hptl.prices.alternate_provider_mappings import (
+    ALTERNATE_PROVIDER_MAPPINGS,
+    PROVIDER_FRED,
+    PROVIDER_YAHOO,
+)
 from hptl.prices.models import PriceSnapshot
 from hptl.prices.oanda_instrument_discovery import (
     PROVIDER_OANDA,
@@ -41,11 +29,9 @@ from hptl.prices.oanda_instrument_discovery import (
     load_discovery,
 )
 
-# Quote is considered stale beyond this age. Mirrors the frontend threshold
-# (LIVE_QUOTE_STALE_MS = 60_000) so backend and UI agree on LIVE vs STALE.
 CURRENT_PRICE_STALE_SECONDS = 60
-
 STATUS_LIVE = "LIVE"
+STATUS_IDLE = "IDLE"
 STATUS_STALE = "STALE"
 STATUS_FALLBACK = "FALLBACK"
 STATUS_UNAVAILABLE = "UNAVAILABLE"
@@ -90,8 +76,7 @@ class CurrentPrice:
 
     @property
     def current_price(self) -> float | None:
-        """The price callers should use: live mid, else trusted fallback close."""
-        if self.mid is not None and self.status in (STATUS_LIVE, STATUS_STALE):
+        if self.mid is not None and self.status in (STATUS_LIVE, STATUS_IDLE, STATUS_STALE):
             return self.mid
         return self.fallback_close
 
@@ -101,16 +86,11 @@ class CurrentPrice:
         return d
 
 
-# --------------------------------------------------------------------------- #
-# Pluggable quote source (Phase 2 stream injects here)
-# --------------------------------------------------------------------------- #
-
 QuoteSource = Callable[[list[str]], dict[str, PriceSnapshot]]
 _quote_source: QuoteSource | None = None
 
 
 def set_quote_source(source: QuoteSource | None) -> None:
-    """Override the live-quote source (e.g. the streaming cache in Phase 2)."""
     global _quote_source
     _quote_source = source
 
@@ -127,10 +107,6 @@ def _default_quote_source(symbols: list[str]) -> dict[str, PriceSnapshot]:
 def _active_quote_source() -> QuoteSource:
     return _quote_source or _default_quote_source
 
-
-# --------------------------------------------------------------------------- #
-# Mappings
-# --------------------------------------------------------------------------- #
 
 _MAPPING_CACHE: dict[str, InstrumentMapping] | None = None
 
@@ -150,12 +126,6 @@ def _mapping_from_discovery(row: dict[str, Any]) -> InstrumentMapping:
 
 
 def _mapping_from_registry() -> dict[str, InstrumentMapping]:
-    """Offline fallback mapping used before a discovery run has been performed.
-
-    Provider symbols are best-effort candidates (underscore-normalised) and are
-    NOT verified against the account — discovery must be run for authoritative
-    mappings. Used so the service and validation script still function offline.
-    """
     reg = load_registry()
     out: dict[str, InstrumentMapping] = {}
     for iid in all_instrument_ids(tradeable_only=True):
@@ -179,7 +149,6 @@ def _mapping_from_registry() -> dict[str, InstrumentMapping]:
 
 
 def _overlay_fred_mappings(mappings: dict[str, InstrumentMapping]) -> dict[str, InstrumentMapping]:
-    """Map FRED-backed instruments (e.g. DX / DTWEXBGS) without inventing an OANDA symbol."""
     try:
         from hptl.prices.fred_prices import FRED_INSTRUMENT_SERIES
     except Exception:
@@ -189,19 +158,42 @@ def _overlay_fred_mappings(mappings: dict[str, InstrumentMapping]) -> dict[str, 
         existing = out.get(iid)
         if existing and existing.is_mapped and existing.provider == PROVIDER_OANDA:
             continue
-        display = existing.display_name if existing else iid
-        asset_type = existing.asset_type if existing else "fx"
-        tradeable = existing.tradeable if existing else True
         out[iid] = InstrumentMapping(
             internal_key=iid,
-            display_name=display,
-            provider="fred",
+            display_name=existing.display_name if existing else iid,
+            provider=PROVIDER_FRED,
             provider_symbol=series_id,
-            asset_type=asset_type,
-            currency="USD",
+            asset_type=existing.asset_type if existing else "macro",
+            currency=existing.currency if existing and existing.currency else "USD",
             price_precision=4,
             supports_streaming=False,
-            tradeable=tradeable,
+            tradeable=existing.tradeable if existing else True,
+        )
+    return out
+
+
+def _overlay_alternate_mappings(mappings: dict[str, InstrumentMapping]) -> dict[str, InstrumentMapping]:
+    """Fill every known OANDA gap with an explicit provider mapping.
+
+    A verified OANDA mapping always wins. Yahoo mappings intentionally supersede
+    old FRED commodity fallbacks because they provide an actual market quote.
+    """
+    out = dict(mappings)
+    for iid, alt in ALTERNATE_PROVIDER_MAPPINGS.items():
+        existing = out.get(iid)
+        if existing and existing.is_mapped and existing.provider == PROVIDER_OANDA:
+            continue
+        provider = str(alt["provider"])
+        out[iid] = InstrumentMapping(
+            internal_key=iid,
+            display_name=existing.display_name if existing else iid,
+            provider=provider,
+            provider_symbol=str(alt["provider_symbol"]),
+            asset_type=existing.asset_type if existing else "macro",
+            currency=alt.get("currency") or (existing.currency if existing else None),
+            price_precision=alt.get("price_precision"),
+            supports_streaming=False,
+            tradeable=existing.tradeable if existing else True,
         )
     return out
 
@@ -210,27 +202,19 @@ def load_instrument_mappings(*, refresh: bool = False) -> dict[str, InstrumentMa
     global _MAPPING_CACHE
     if _MAPPING_CACHE is not None and not refresh:
         return _MAPPING_CACHE
-
     doc = load_discovery()
     if doc and isinstance(doc.get("instruments"), dict):
-        _MAPPING_CACHE = {
-            key: _mapping_from_discovery(row)
-            for key, row in doc["instruments"].items()
-        }
+        mappings = {key: _mapping_from_discovery(row) for key, row in doc["instruments"].items()}
     else:
-        _MAPPING_CACHE = _mapping_from_registry()
-    _MAPPING_CACHE = _overlay_fred_mappings(_MAPPING_CACHE)
+        mappings = _mapping_from_registry()
+    mappings = _overlay_fred_mappings(mappings)
+    _MAPPING_CACHE = _overlay_alternate_mappings(mappings)
     return _MAPPING_CACHE
 
 
 def mapping_source() -> str:
-    """Report whether authoritative discovery mappings or the fallback are in use."""
-    return "discovery" if load_discovery() else "registry_fallback"
+    return "discovery+alternate_providers" if load_discovery() else "registry_fallback+alternate_providers"
 
-
-# --------------------------------------------------------------------------- #
-# Trusted fallback closes
-# --------------------------------------------------------------------------- #
 
 _PRICE_STORE_CACHE: dict[str, Any] | None = None
 _WS_OHLC_CACHE: dict[str, Any] | None = None
@@ -249,9 +233,8 @@ def _price_store() -> dict[str, Any]:
     if _PRICE_STORE_CACHE is None:
         try:
             from hptl.prices.price_store import load_price_store
-
             _PRICE_STORE_CACHE = load_price_store() or {}
-        except Exception:  # noqa: BLE001 - store is optional for the service
+        except Exception:
             _PRICE_STORE_CACHE = {}
     return _PRICE_STORE_CACHE
 
@@ -260,7 +243,6 @@ def _ws_ohlc() -> dict[str, Any]:
     global _WS_OHLC_CACHE
     if _WS_OHLC_CACHE is None:
         import json
-
         path = PROCESSED_DIR / "workstation_ohlc_latest.json"
         if path.is_file():
             try:
@@ -273,7 +255,6 @@ def _ws_ohlc() -> dict[str, Any]:
 
 
 def _trusted_close(internal_key: str) -> tuple[float | None, str | None]:
-    """Latest trusted close for FALLBACK: price store snapshot/daily, then weekly OHLC."""
     rec = (_price_store().get("instruments") or {}).get(internal_key) or {}
     price = rec.get("price") or {}
     px = _num(price.get("mid")) or _num(price.get("bid")) or _num(price.get("ask"))
@@ -284,7 +265,6 @@ def _trusted_close(internal_key: str) -> tuple[float | None, str | None]:
         px = _num(daily[-1].get("close"))
         if px is not None:
             return px, "price_store.daily_close"
-
     block = (_ws_ohlc().get("instruments") or {}).get(internal_key) or {}
     weekly = block.get("weekly_ohlc") or []
     if weekly:
@@ -295,21 +275,14 @@ def _trusted_close(internal_key: str) -> tuple[float | None, str | None]:
 
 
 def latest_trusted_close(internal_key: str) -> tuple[float | None, str | None]:
-    """Public accessor for the latest trusted close (value, source) for an instrument."""
     return _trusted_close(internal_key)
 
 
 def reset_caches() -> None:
-    """Drop cached mappings / stores (call after a fresh discovery or refresh)."""
     global _MAPPING_CACHE, _PRICE_STORE_CACHE, _WS_OHLC_CACHE
     _MAPPING_CACHE = None
     _PRICE_STORE_CACHE = None
     _WS_OHLC_CACHE = None
-
-
-# --------------------------------------------------------------------------- #
-# Public API
-# --------------------------------------------------------------------------- #
 
 
 def _parse_age_seconds(as_of: str | None) -> float | None:
@@ -319,7 +292,6 @@ def _parse_age_seconds(as_of: str | None) -> float | None:
     try:
         dt = datetime.fromisoformat(text)
     except ValueError:
-        # Tolerate nanosecond precision (OANDA) by trimming fractional digits.
         try:
             head = text.split("+")[0].split(".")[0]
             dt = datetime.fromisoformat(head).replace(tzinfo=timezone.utc)
@@ -330,12 +302,7 @@ def _parse_age_seconds(as_of: str | None) -> float | None:
     return max(0.0, (datetime.now(timezone.utc) - dt).total_seconds())
 
 
-def _build_current_price(
-    mapping: InstrumentMapping,
-    snap: PriceSnapshot | None,
-    *,
-    allow_fallback: bool,
-) -> CurrentPrice:
+def _build_current_price(mapping: InstrumentMapping, snap: PriceSnapshot | None, *, allow_fallback: bool) -> CurrentPrice:
     bid = _num((snap or {}).get("bid"))
     ask = _num((snap or {}).get("ask"))
     mid = _num((snap or {}).get("mid"))
@@ -343,7 +310,6 @@ def _build_current_price(
         mid = (bid + ask) / 2.0
     as_of = (snap or {}).get("as_of")
     age = _parse_age_seconds(as_of)
-
     fallback_close: float | None = None
     fallback_source: str | None = None
     note: str | None = None
@@ -352,47 +318,21 @@ def _build_current_price(
         if age is not None and age <= CURRENT_PRICE_STALE_SECONDS:
             status = STATUS_LIVE
         else:
-            status = STATUS_STALE
-            note = "live quote older than stale threshold" if age is not None else "quote age unknown"
+            # An aged quote is still a valid provider quote. It may simply be an
+            # inactive/closed market or an instrument that has not printed a new
+            # tick. Feed health is monitored separately by the stream service, so
+            # quote age alone must not imply a broken feed.
+            status = STATUS_IDLE
+            note = "provider quote idle; last price older than live threshold" if age is not None else "provider quote idle; quote age unknown"
     else:
         status = STATUS_UNAVAILABLE
-        note = "no live quote"
-
-    # FRED-backed instruments are never streamed via OANDA — use trusted close as primary.
-    if mapping.provider == "fred" and allow_fallback:
-        fallback_close, fallback_source = _trusted_close(mapping.internal_key)
-        if fallback_close is not None:
-            status = STATUS_FALLBACK
-            note = (
-                f"FRED {mapping.provider_symbol} daily close (Broad USD — not ICE DX futures)"
-                if mapping.internal_key == "Broad US Dollar Index — DTWEXBGS"
-                else f"FRED {mapping.provider_symbol} daily close (no streaming quote)"
-            )
-            return CurrentPrice(
-                internal_key=mapping.internal_key,
-                display_name=mapping.display_name,
-                provider=mapping.provider,
-                provider_symbol=mapping.provider_symbol,
-                asset_type=mapping.asset_type,
-                currency=mapping.currency,
-                price_precision=mapping.price_precision,
-                timestamp=None,
-                bid=None,
-                ask=None,
-                mid=None,
-                status=status,
-                age_seconds=None,
-                tradeable=mapping.tradeable,
-                fallback_close=fallback_close,
-                fallback_source=fallback_source or f"fred:{mapping.provider_symbol}",
-                note=note,
-            )
+        note = "no provider quote"
 
     if status in (STATUS_UNAVAILABLE, STATUS_STALE) and allow_fallback:
         fallback_close, fallback_source = _trusted_close(mapping.internal_key)
         if status == STATUS_UNAVAILABLE and fallback_close is not None:
             status = STATUS_FALLBACK
-            note = "no live quote; using latest trusted close"
+            note = "no provider quote; using latest trusted close"
 
     return CurrentPrice(
         internal_key=mapping.internal_key,
@@ -415,62 +355,70 @@ def _build_current_price(
     )
 
 
-def get_current_prices(
-    keys: list[str] | None = None,
-    *,
-    fetch: bool = True,
-    allow_fallback: bool = True,
-) -> dict[str, CurrentPrice]:
-    """Current price for each requested instrument (full registry if None)."""
-    mappings = load_instrument_mappings()
-    # Always cover the full registry so newly added instruments appear as
-    # UNAVAILABLE/FALLBACK rather than being silently omitted.
-    registry_keys = list(all_instrument_ids())
-    if keys is None:
-        selected = list(dict.fromkeys([*registry_keys, *mappings.keys()]))
-    else:
-        selected = list(keys)
+def _fetch_fred_quotes(mappings: list[InstrumentMapping]) -> dict[str, PriceSnapshot]:
+    """Fetch latest FRED observations by internal key, fail-closed per series."""
+    out: dict[str, PriceSnapshot] = {}
+    try:
+        from hptl.macro import fred_client
+    except Exception:
+        return out
+    for mapping in mappings:
+        if not mapping.provider_symbol:
+            continue
+        try:
+            df = fred_client.get_series_df(mapping.provider_symbol, "2025-01-01")
+            if df is None or df.empty:
+                continue
+            row = df.iloc[-1]
+            value = _num(row.get("value"))
+            if value is None:
+                continue
+            dt = datetime.fromisoformat(str(row.get("date"))[:10]).replace(tzinfo=timezone.utc)
+            out[mapping.provider_symbol] = {"mid": value, "bid": None, "ask": None, "as_of": dt.isoformat()}
+        except Exception:
+            continue
+    return out
 
-    symbols = sorted(
-        {
-            mappings[k].provider_symbol
-            for k in selected
-            if k in mappings
-            and mappings[k].is_mapped
-            and mappings[k].provider == PROVIDER_OANDA
-            and mappings[k].provider_symbol
-        }
-    )
+
+def get_current_prices(keys: list[str] | None = None, *, fetch: bool = True, allow_fallback: bool = True) -> dict[str, CurrentPrice]:
+    mappings = load_instrument_mappings()
+    registry_keys = list(all_instrument_ids())
+    selected = list(dict.fromkeys([*registry_keys, *mappings.keys()])) if keys is None else list(keys)
+
+    oanda_symbols = sorted({
+        mappings[k].provider_symbol for k in selected
+        if k in mappings and mappings[k].is_mapped and mappings[k].provider == PROVIDER_OANDA and mappings[k].provider_symbol
+    })
+    yahoo_symbols = sorted({
+        mappings[k].provider_symbol for k in selected
+        if k in mappings and mappings[k].is_mapped and mappings[k].provider == PROVIDER_YAHOO and mappings[k].provider_symbol
+    })
+    fred_mappings = [
+        mappings[k] for k in selected
+        if k in mappings and mappings[k].is_mapped and mappings[k].provider == PROVIDER_FRED
+    ]
 
     quotes: dict[str, PriceSnapshot] = {}
-    if fetch and symbols:
-        quotes = _active_quote_source()(symbols) or {}
+    if fetch and oanda_symbols:
+        quotes.update(_active_quote_source()(oanda_symbols) or {})
+    if fetch and yahoo_symbols:
+        try:
+            from hptl.prices.yahoo_quotes import fetch_yahoo_quotes
+            quotes.update(fetch_yahoo_quotes(yahoo_symbols))
+        except Exception:
+            pass
+    if fetch and fred_mappings:
+        quotes.update(_fetch_fred_quotes(fred_mappings))
 
     out: dict[str, CurrentPrice] = {}
     for key in selected:
         mapping = mappings.get(key)
         if mapping is None:
-            mapping = InstrumentMapping(
-                internal_key=key,
-                display_name=key,
-                provider=None,
-                provider_symbol=None,
-                asset_type=None,
-                currency=None,
-                price_precision=None,
-                supports_streaming=False,
-            )
+            mapping = InstrumentMapping(key, key, None, None, None, None, None, False)
         snap = quotes.get(mapping.provider_symbol or "") if mapping.is_mapped else None
         out[key] = _build_current_price(mapping, snap, allow_fallback=allow_fallback)
     return out
 
 
-def get_current_price(
-    key: str,
-    *,
-    fetch: bool = True,
-    allow_fallback: bool = True,
-) -> CurrentPrice | None:
-    """Current price for one instrument (None if the key is unknown)."""
-    result = get_current_prices([key], fetch=fetch, allow_fallback=allow_fallback)
-    return result.get(key)
+def get_current_price(key: str, *, fetch: bool = True, allow_fallback: bool = True) -> CurrentPrice | None:
+    return get_current_prices([key], fetch=fetch, allow_fallback=allow_fallback).get(key)

@@ -1,39 +1,49 @@
 const DEFAULT_HORIZONS = [1, 2, 4, 8, 12, 26]
+const MIN_TARGET_EPISODES = 6
 
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
+const clampPct = (v) => Math.max(0, Math.min(100, Number(v)))
 
-function percentileBand(percentile, label = 'Commercial') {
-  if (!isNum(percentile)) return null
-  if (percentile >= 95) return { low: 95, high: 100, label: `${label} ≥ 95th percentile` }
-  if (percentile <= 5) return { low: 0, high: 5, label: `${label} ≤ 5th percentile` }
-  if (percentile >= 90) return { low: 90, high: 100, label: `${label} ≥ 90th percentile` }
-  if (percentile <= 10) return { low: 0, high: 10, label: `${label} ≤ 10th percentile` }
-
-  const low = Math.floor(percentile / 10) * 10
-  const high = Math.min(100, low + 10)
-  return { low, high, label: `${label} ${low}th–${high}th percentile` }
+function ordinal(n) {
+  if (!isNum(n)) return '—'
+  const v = Math.round(n)
+  const mod10 = v % 10
+  const mod100 = v % 100
+  let suffix = 'th'
+  if (mod10 === 1 && mod100 !== 11) suffix = 'st'
+  else if (mod10 === 2 && mod100 !== 12) suffix = 'nd'
+  else if (mod10 === 3 && mod100 !== 13) suffix = 'rd'
+  return `${v}${suffix}`
 }
 
-function oppositionBand(commercialPercentile, ncPercentile) {
-  if (!isNum(commercialPercentile) || !isNum(ncPercentile)) return null
-  if (commercialPercentile <= 10 && ncPercentile >= 90) {
-    if (commercialPercentile <= 5 && ncPercentile >= 95) {
-      return { low: 95, high: 100, label: 'Non-Commercial ≥ 95th percentile' }
-    }
-    return { low: 90, high: 100, label: 'Non-Commercial ≥ 90th percentile' }
+function centeredBand(percentile, tolerance, label) {
+  if (!isNum(percentile)) return null
+  const center = clampPct(percentile)
+  return {
+    center,
+    tolerance,
+    low: clampPct(center - tolerance),
+    high: clampPct(center + tolerance),
+    label: `${label} ${ordinal(center)} ±${tolerance} pts`,
   }
-  if (commercialPercentile >= 90 && ncPercentile <= 10) {
-    if (commercialPercentile >= 95 && ncPercentile <= 5) {
-      return { low: 0, high: 5, label: 'Non-Commercial ≤ 5th percentile' }
-    }
-    return { low: 0, high: 10, label: 'Non-Commercial ≤ 10th percentile' }
-  }
-  return null
 }
 
 function inBand(value, band) {
   if (!isNum(value) || !band) return false
   return value >= band.low && value <= band.high
+}
+
+function movementSign(group) {
+  const delta = group?.percentileChange1w
+  if (!isNum(delta) || Math.abs(delta) < 0.5) return 0
+  return delta > 0 ? 1 : -1
+}
+
+function sameMovementDirection(selectedGroup, historicalGroup) {
+  const selected = movementSign(selectedGroup)
+  if (!selected) return true
+  const historical = movementSign(historicalGroup)
+  return historical === selected
 }
 
 function median(values) {
@@ -83,7 +93,7 @@ function priceExtreme(week, side) {
   return isNum(price.low) ? price.low : (isNum(price.close) ? price.close : null)
 }
 
-function buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand, ncBand }) {
+function buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand, ncBand, selectedWeek, requireMovement }) {
   const episodes = []
   let current = null
 
@@ -91,8 +101,12 @@ function buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand
     const date = orderedDates[index]
     const week = weeklyView[date]
     const commercialMatches = week && inBand(week?.commercial?.percentile, commercialBand)
-    const ncMatches = !ncBand || inBand(week?.non_commercial?.percentile, ncBand)
-    const qualifies = commercialMatches && ncMatches && isNum(week?.price?.close) && week.price.close !== 0
+    const ncMatches = !ncBand || inBand(week?.nonCommercial?.percentile, ncBand)
+    const movementMatches = !requireMovement || (
+      sameMovementDirection(selectedWeek?.commercial, week?.commercial) &&
+      (!ncBand || sameMovementDirection(selectedWeek?.nonCommercial, week?.nonCommercial))
+    )
+    const qualifies = commercialMatches && ncMatches && movementMatches && isNum(week?.price?.close) && week.price.close !== 0
 
     if (!qualifies) {
       if (current) episodes.push(current)
@@ -111,6 +125,50 @@ function buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand
   if (current) episodes.push(current)
 
   return episodes.map((episode) => ({ ...episode, durationWeeks: episode.weeks.length }))
+}
+
+function chooseAdaptiveCohort({ orderedDates, weeklyView, selectedIndex, selectedWeek }) {
+  const cPct = selectedWeek?.commercial?.percentile
+  const ncPct = selectedWeek?.nonCommercial?.percentile
+  if (!isNum(cPct)) return null
+
+  const hasNc = isNum(ncPct)
+  const ladder = hasNc
+    ? [
+        { cTol: 2, ncTol: 3, requireMovement: true },
+        { cTol: 3, ncTol: 5, requireMovement: true },
+        { cTol: 5, ncTol: 8, requireMovement: true },
+        { cTol: 5, ncTol: 8, requireMovement: false },
+        { cTol: 8, ncTol: 12, requireMovement: false },
+        { cTol: 10, ncTol: 15, requireMovement: false },
+      ]
+    : [
+        { cTol: 2, ncTol: null, requireMovement: true },
+        { cTol: 3, ncTol: null, requireMovement: true },
+        { cTol: 5, ncTol: null, requireMovement: true },
+        { cTol: 5, ncTol: null, requireMovement: false },
+        { cTol: 8, ncTol: null, requireMovement: false },
+        { cTol: 10, ncTol: null, requireMovement: false },
+      ]
+
+  let best = null
+  for (const step of ladder) {
+    const commercialBand = centeredBand(cPct, step.cTol, 'Commercial')
+    const ncBand = hasNc ? centeredBand(ncPct, step.ncTol, 'Non-Commercial') : null
+    const episodes = buildEpisodes({
+      orderedDates,
+      weeklyView,
+      selectedIndex,
+      commercialBand,
+      ncBand,
+      selectedWeek,
+      requireMovement: step.requireMovement,
+    })
+    const candidate = { ...step, commercialBand, ncBand, episodes }
+    best = candidate
+    if (episodes.length >= MIN_TARGET_EPISODES) break
+  }
+  return best
 }
 
 function episodeOutcome({ episode, horizon, orderedDates, weeklyView, selectedIndex, direction }) {
@@ -192,18 +250,19 @@ export function buildBasicLookback({ weeklyView, dates = [], selectedDate, horiz
 
   const selectedWeek = weeklyView[selectedDate]
   const selectedPercentile = selectedWeek?.commercial?.percentile
-  const selectedNcPercentile = selectedWeek?.non_commercial?.percentile
-  const commercialBand = percentileBand(selectedPercentile, 'Commercial')
-  const ncBand = oppositionBand(selectedPercentile, selectedNcPercentile)
+  const selectedNcPercentile = selectedWeek?.nonCommercial?.percentile
+  if (!isNum(selectedPercentile)) {
+    return { available: false, version: 'evidence-v4', reason: 'Commercial percentile is unavailable for this week.', selectedDate }
+  }
 
-  if (!commercialBand) {
-    return { available: false, version: 'evidence-v3', reason: 'Commercial percentile is unavailable for this week.', selectedDate }
+  const cohort = chooseAdaptiveCohort({ orderedDates, weeklyView, selectedIndex, selectedWeek })
+  if (!cohort) {
+    return { available: false, version: 'evidence-v4', reason: 'Unable to form a point-in-time comparison cohort.', selectedDate }
   }
 
   const direction = expectedDirection(selectedPercentile)
-  const episodes = buildEpisodes({ orderedDates, weeklyView, selectedIndex, commercialBand, ncBand })
+  const episodes = cohort.episodes
   const outcomes = {}
-
   for (const horizon of horizons) {
     const samples = episodes.map((episode) => episodeOutcome({ episode, horizon, orderedDates, weeklyView, selectedIndex, direction })).filter(Boolean)
     outcomes[horizon] = { horizonWeeks: horizon, ...summarizeEpisodeOutcomes(samples), samples }
@@ -212,18 +271,25 @@ export function buildBasicLookback({ weeklyView, dates = [], selectedDate, horiz
   const primaryHorizon = outcomes[12]?.sampleCount ? 12 : [...horizons].reverse().find((h) => outcomes[h]?.sampleCount) || horizons[0]
   const primary = outcomes[primaryHorizon] || summarizeEpisodeOutcomes([])
   const setupState = currentSetupState(selectedPercentile, selectedNcPercentile)
+  const hasNc = Boolean(cohort.ncBand)
+  const movementText = cohort.requireMovement ? ' + matching 1W percentile direction' : ''
 
   return {
     available: true,
-    version: 'evidence-v3',
-    basis: ncBand ? 'commercial_plus_noncommercial_extreme_episode' : 'commercial_percentile_episode',
+    version: 'evidence-v4',
+    basis: hasNc ? 'commercial_plus_noncommercial_adaptive_episode' : 'commercial_adaptive_episode',
     selectedDate,
     selectedPercentile,
     selectedNcPercentile,
     expectedDirection: direction,
-    bandLow: commercialBand.low,
-    bandHigh: commercialBand.high,
-    cohortLabel: ncBand ? `${commercialBand.label} + ${ncBand.label}` : commercialBand.label,
+    bandLow: cohort.commercialBand.low,
+    bandHigh: cohort.commercialBand.high,
+    commercialTolerance: cohort.cTol,
+    nonCommercialTolerance: cohort.ncTol,
+    movementMatched: cohort.requireMovement,
+    cohortLabel: hasNc
+      ? `${cohort.commercialBand.label} + ${cohort.ncBand.label}${movementText}`
+      : `${cohort.commercialBand.label}${movementText}`,
     currentSetupState: setupState,
     priorMatchCount: episodes.reduce((sum, e) => sum + e.durationWeeks, 0),
     priorEpisodeCount: episodes.length,
@@ -235,9 +301,9 @@ export function buildBasicLookback({ weeklyView, dates = [], selectedDate, horiz
     sampleConfidence: primary.confidence,
     pointInTime: true,
     seasonalityIncluded: false,
-    methodology: ncBand
-      ? 'Historical episodes require both the current Commercial extreme and the opposing Non-Commercial extreme. Consecutive qualifying weeks count as one episode; only point-in-time observable forward prices are used.'
-      : 'Historical episodes match the current Commercial percentile band. Consecutive qualifying weeks count as one episode; only point-in-time observable forward prices are used.',
+    methodology: hasNc
+      ? 'Historical episodes are matched around the exact selected-week Commercial and Non-Commercial percentiles. The search starts narrow, includes 1W percentile direction when possible, and widens only enough to seek a usable independent sample. Consecutive matching weeks count as one episode; only point-in-time observable forward prices are used.'
+      : 'Historical episodes are matched adaptively around the exact selected-week Commercial percentile because Non-Commercial percentile is unavailable. Consecutive matching weeks count as one episode; only point-in-time observable forward prices are used.',
   }
 }
 

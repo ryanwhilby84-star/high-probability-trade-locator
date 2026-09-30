@@ -26,6 +26,11 @@ function fmtRatio(value) {
   return `${Number(value).toFixed(1)}x`
 }
 
+function fmtPercentile(value) {
+  if (value == null || !Number.isFinite(Number(value))) return '—'
+  return `${Number(value).toFixed(1)}th`
+}
+
 function evidenceRead(lookback, evidence) {
   const hit = Number(evidence?.hitRatePct)
   const expectancy = Number(evidence?.expectancyPct)
@@ -43,7 +48,11 @@ function evidenceRead(lookback, evidence) {
 
 function useBasicSelectedWeekLookback(week) {
   const marketId = week?.instrument || ''
-  const selectedDate = week?.date || null
+  // A provider price bar (often Friday) and its COT report (Tuesday) used to be
+  // treated as two selectable "weeks" even though both resolved to the same COT
+  // observation. Always anchor the evidence engine to the canonical COT report
+  // date when one is available.
+  const selectedDate = week?.inspectorAsOfDate || week?.date || null
   const { doc } = useCot3ySeries()
   const { exportBlock } = useWorkstationOhlc(marketId)
   const [inspectorBlock, setInspectorBlock] = React.useState(null)
@@ -87,11 +96,11 @@ export function BasicLookbackPanel({ week }) {
   const lookback = useBasicSelectedWeekLookback(week)
 
   if (!lookback) {
-    return <section className="cot-lookback cot-lookback--loading" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div><p>Preparing historical episodes…</p></section>
+    return <section className="cot-lookback cot-lookback--loading" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div><p>Preparing historical episodes…</p></section>
   }
 
   if (!lookback.available) {
-    return <section className="cot-lookback cot-lookback--empty" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div><p>{lookback.reason || 'Lookback unavailable for this week.'}</p></section>
+    return <section className="cot-lookback cot-lookback--empty" aria-label="Historical lookback"><div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div><p>{lookback.reason || 'Lookback unavailable for this week.'}</p></section>
   }
 
   const evidence = lookback.primaryEvidence || {}
@@ -106,8 +115,9 @@ export function BasicLookbackPanel({ week }) {
     <section className="cot-lookback" aria-label="Historical lookback">
       <div className="cot-lookback-head">
         <div>
-          <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V3</div>
+          <div className="cot-lookback-kicker">LOOKBACK · EVIDENCE V4</div>
           <div className="cot-lookback-rule">{lookback.cohortLabel}</div>
+          <div className="cot-lookback-direction">Report week {lookback.selectedDate}: <strong>C {fmtPercentile(lookback.selectedPercentile)} · NC {fmtPercentile(lookback.selectedNcPercentile)}</strong></div>
           <div className="cot-lookback-direction">Expected COT direction: <strong>{lookback.expectedDirection === 'down' ? 'LOWER' : 'HIGHER'}</strong></div>
         </div>
         <div className="cot-lookback-count"><strong>{lookback.priorEpisodeCount}</strong><span>independent episodes</span></div>
@@ -155,7 +165,7 @@ export function BasicLookbackPanel({ week }) {
         })}
       </div>
 
-      <p className="cot-lookback-note">Current setup strength and historical evidence are separate. Consecutive matching weeks count as one episode · seasonality excluded · point-in-time only through {week?.date || 'the selected week'}.</p>
+      <p className="cot-lookback-note">Current setup strength and historical evidence are separate. Consecutive matching weeks count as one episode · seasonality excluded · point-in-time only through COT report {lookback.selectedDate || 'the selected week'}.</p>
     </section>
   )
 }

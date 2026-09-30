@@ -2,9 +2,9 @@
  * WeeklyOHLCStore — completed weekly OHLC only.
  * Never used as live price.
  *
- * Canonical HPTL price history is the primary source. The legacy workstation
- * OHLC export is retained only as a metadata/history fallback so the chart
- * cannot quietly lag behind a successful canonical price refresh.
+ * Canonical HPTL price history is the primary source for overlapping dates.
+ * The legacy workstation OHLC export is retained as a historical backfill so a
+ * shorter canonical refresh cannot silently collapse a 5Y/10Y chart to ~1Y.
  */
 
 import { normalizeWeeklyOhlc } from '../../workstation/data/normalizeWeeklyTimeline.js'
@@ -104,6 +104,25 @@ function normalizeExportWeekly(bars) {
   return normalizeWeeklyOhlc(coerceConsistentPriceScale(mapped))
 }
 
+/**
+ * Merge historical weekly candles by date.
+ *
+ * The legacy export is inserted first so it can supply older history. Canonical
+ * bars are inserted second and therefore win on every overlapping date. This
+ * gives the workstation the deepest available completed history without ever
+ * preferring stale legacy values for a week that exists in prices_latest.json.
+ */
+export function mergeWeeklyHistory(legacyBars, canonicalBars) {
+  const legacy = normalizeExportWeekly(legacyBars)
+  const canonical = normalizeExportWeekly(canonicalBars)
+  const byDate = new Map()
+
+  for (const bar of legacy) byDate.set(bar.date, bar)
+  for (const bar of canonical) byDate.set(bar.date, bar)
+
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
+}
+
 async function fetchJson(url) {
   const r = await fetch(url, { cache: 'no-store' })
   if (!r.ok) throw new Error(`HTTP ${r.status}`)
@@ -193,14 +212,28 @@ export const WeeklyOHLCStore = {
     const legacy = legacyBlock(marketId)
 
     if (canonical?.weekly?.length) {
+      const legacyWeekly = legacy?.weekly_ohlc || []
+      const mergedWeekly = mergeWeeklyHistory(legacyWeekly, canonical.weekly)
+      const canonicalWeekly = normalizeExportWeekly(canonical.weekly)
+      const legacyContributed = mergedWeekly.length > canonicalWeekly.length
+
       return {
         ...(legacy || {}),
-        weekly_ohlc: canonical.weekly,
+        weekly_ohlc: mergedWeekly,
         forming_weekly: canonical.forming_weekly ?? null,
-        price_source: 'canonical prices_latest.json',
+        price_source: legacyContributed
+          ? 'canonical prices_latest.json + legacy historical backfill'
+          : 'canonical prices_latest.json',
         canonical_source: 'prices_latest.json',
         price_quality: canonical.error ? 'provider_error' : 'canonical_fresh',
         canonical_history: canonical.history ?? null,
+        history_merge: {
+          canonical_weeks: canonicalWeekly.length,
+          legacy_weeks: normalizeExportWeekly(legacyWeekly).length,
+          merged_weeks: mergedWeekly.length,
+          legacy_backfill_used: legacyContributed,
+          canonical_wins_overlap: true,
+        },
       }
     }
 
@@ -230,7 +263,14 @@ export const WeeklyOHLCStore = {
 
   getPriceSource(marketId) {
     const canonical = canonicalRecord(marketId)
-    if (canonical?.weekly?.length) return 'canonical prices_latest.json'
+    if (canonical?.weekly?.length) {
+      const legacy = legacyBlock(marketId)
+      const merged = mergeWeeklyHistory(legacy?.weekly_ohlc || [], canonical.weekly)
+      const canonicalWeeks = normalizeExportWeekly(canonical.weekly).length
+      return merged.length > canonicalWeeks
+        ? 'canonical prices_latest.json + legacy historical backfill'
+        : 'canonical prices_latest.json'
+    }
     const block = legacyBlock(marketId)
     return block?.price_source || block?.canonical_source || 'workstation_ohlc_latest.json'
   },
@@ -267,12 +307,19 @@ export function resolveWorkstationWeeklyOhlc(marketId, _priceRec, ohlcExportBloc
     ? normalizeExportWeekly(block.weekly_ohlc)
     : WeeklyOHLCStore.getWeeklyBars(marketId)
   const canonical = canonicalRecord(marketId)
+  const mergedSource = block?.history_merge?.legacy_backfill_used === true
   return {
     weeklyBars,
-    priceSource: canonical?.weekly?.length
-      ? 'canonical prices_latest.json'
-      : block?.price_source || WeeklyOHLCStore.getPriceSource(marketId),
-    resolvedFrom: canonical?.weekly?.length ? 'prices_latest.json' : (weeklyBars.length ? 'workstation_ohlc_latest.json' : 'none'),
+    priceSource: mergedSource
+      ? 'canonical prices_latest.json + legacy historical backfill'
+      : canonical?.weekly?.length
+        ? 'canonical prices_latest.json'
+        : block?.price_source || WeeklyOHLCStore.getPriceSource(marketId),
+    resolvedFrom: mergedSource
+      ? 'prices_latest.json+workstation_ohlc_latest.json'
+      : canonical?.weekly?.length
+        ? 'prices_latest.json'
+        : (weeklyBars.length ? 'workstation_ohlc_latest.json' : 'none'),
     exportMeta: block,
   }
 }

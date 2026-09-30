@@ -1,8 +1,9 @@
 """Weekly Inspector flow layer — direction, temperature, cross-group spreads.
 
-Built on top of positioning_research_engine group-state series (expanding
-net-positioning percentiles, no look-ahead). Pure packaging for the UI —
-does not invent new COT values or event detection.
+Built on top of positioning_research_engine group-state series. The workstation
+uses rolling 3-year net-positioning percentiles (156 COT weeks), calculated
+point-in-time with no look-ahead. Pure packaging for the UI — does not invent
+new COT values or event detection.
 """
 
 from __future__ import annotations
@@ -15,7 +16,6 @@ from hptl.cot.positioning_research_engine import (
     GROUP_NONCOMMERCIAL,
     GROUP_NONREPORTABLE,
     build_group_state_series,
-    build_spread_series,
 )
 from hptl.cot.positioning_percentiles import empirical_percentile_rank
 
@@ -24,15 +24,16 @@ from hptl.cot.positioning_percentiles import empirical_percentile_rank
 # ---------------------------------------------------------------------------
 PCT_CHG_STRONG = 7.0
 PCT_CHG_MILD = 2.0
+ROLLING_WINDOW_WEEKS = 156
 
-# Temperature bands on expanding net-positioning percentile.
+# Temperature bands on rolling 3Y net-positioning percentile.
 EXTREME_HIGH = 90.0
 HIGH = 70.0
 LOW = 30.0
 EXTREME_LOW = 10.0
 
-MEASURE = "net_positioning_expanding_percentile"
-MEASURE_LABEL = "Net positioning percentile (expanding, point-in-time)"
+MEASURE = "net_positioning_3y_rolling_percentile"
+MEASURE_LABEL = "Net positioning percentile (rolling 3Y, point-in-time)"
 
 
 def _finite(v: Any) -> float | None:
@@ -86,7 +87,6 @@ def classify_temperature(
     falling = d1 is not None and d1 <= -PCT_CHG_MILD
     strong_up = d1 is not None and d1 >= PCT_CHG_STRONG
     strong_down = d1 is not None and d1 <= -PCT_CHG_STRONG
-    # Prefer 4W when 1W is flat but multi-week trend is clear.
     if d1 is not None and abs(d1) < PCT_CHG_MILD and d4 is not None:
         if d4 >= PCT_CHG_STRONG:
             rising, strong_up = True, True
@@ -119,7 +119,6 @@ def classify_temperature(
             return "recovering", "Moving out of extreme"
         return "depressed_stable", "Depressed / stable"
 
-    # Mid-range
     if strong_up or (d4 is not None and d4 >= PCT_CHG_STRONG):
         return "building", "Rotation strengthening"
     if rising:
@@ -131,21 +130,41 @@ def classify_temperature(
     return "neutral", "Neutral"
 
 
-def _obs_count_through(nets: list[float | None], idx: int) -> int:
-    return sum(1 for v in nets[: idx + 1] if v is not None)
+def _pct_series(states: list[dict[str, Any]]) -> list[float | None]:
+    return [_finite((s.get("percentiles") or {}).get("3y")) for s in states]
 
 
-def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str, Any]:
-    """Pack one participant week into the inspector schema."""
+def _series_change(values: list[float | None], idx: int, lag: int) -> float | None:
+    if idx < lag:
+        return None
+    cur = values[idx]
+    prev = values[idx - lag]
+    if cur is None or prev is None:
+        return None
+    return round(cur - prev, 2)
+
+
+def _rolling_obs_count(nets: list[float | None], idx: int) -> int:
+    start = max(0, idx - ROLLING_WINDOW_WEEKS + 1)
+    return sum(1 for v in nets[start : idx + 1] if v is not None)
+
+
+def pack_group_week(
+    state: dict[str, Any],
+    nets: list[float | None],
+    percentiles_3y: list[float | None],
+) -> dict[str, Any]:
+    """Pack one participant week into the inspector schema using rolling 3Y rank."""
     idx = int(state.get("index") or 0)
     vel = state.get("velocity") or {}
     v1 = vel.get("1w") or {}
     v4 = vel.get("4w") or {}
     v12 = vel.get("12w") or {}
-    pct = _finite((state.get("percentiles") or {}).get("long_history"))
-    pct_1w = _finite(v1.get("percentile_change"))
-    pct_4w = _finite(v4.get("percentile_change"))
-    pct_12w = _finite(v12.get("percentile_change"))
+
+    pct = percentiles_3y[idx] if idx < len(percentiles_3y) else None
+    pct_1w = _series_change(percentiles_3y, idx, 1)
+    pct_4w = _series_change(percentiles_3y, idx, 4)
+    pct_12w = _series_change(percentiles_3y, idx, 12)
     direction = classify_direction(pct_1w)
     temperature, state_label = classify_temperature(pct, pct_1w, pct_4w)
     is_extreme = pct is not None and (pct >= EXTREME_HIGH or pct <= EXTREME_LOW)
@@ -159,7 +178,7 @@ def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str
         "percentile_change_1w": pct_1w,
         "percentile_change_4w": pct_4w,
         "percentile_change_12w": pct_12w,
-        "percentile_observation_count": _obs_count_through(nets, idx),
+        "percentile_observation_count": _rolling_obs_count(nets, idx),
         "direction": direction,
         "direction_arrow": direction_arrow(direction),
         "temperature": temperature,
@@ -169,18 +188,16 @@ def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str
     }
 
 
-def _expanding_spread_percentiles(
-    spreads: list[float | None],
-) -> list[float | None]:
+def _rolling_spread_percentiles(spreads: list[float | None]) -> list[float | None]:
     out: list[float | None] = []
-    hist: list[float] = []
-    for v in spreads:
-        if v is not None:
-            hist.append(float(v))
-            p = empirical_percentile_rank(hist, v)
-            out.append(None if not math.isfinite(p) else round(float(p), 2))
-        else:
+    for idx, value in enumerate(spreads):
+        if value is None:
             out.append(None)
+            continue
+        start = max(0, idx - ROLLING_WINDOW_WEEKS + 1)
+        hist = [float(v) for v in spreads[start : idx + 1] if v is not None]
+        p = empirical_percentile_rank(hist, value)
+        out.append(None if not math.isfinite(p) else round(float(p), 2))
     return out
 
 
@@ -205,15 +222,12 @@ def classify_relationship(c_pct: float | None, nc_pct: float | None) -> str:
 def classify_spread_flow(change_1w: float | None, change_4w: float | None) -> str:
     d1 = _finite(change_1w)
     d4 = _finite(change_4w)
-    # For Comm−NC percentile spread, rising magnitude of |spread| when opposed
-    # is handled at a higher level; here we report raw spread change direction.
     if d1 is None and d4 is None:
         return "unavailable"
     primary = d1 if d1 is not None else d4
     assert primary is not None
     if primary >= PCT_CHG_STRONG:
         return "opposition_widening_rapidly" if primary > 0 else "opposition_narrowing_rapidly"
-    # Positive Comm−NC spread change = commercials rising vs NC in percentile space
     if abs(primary) < PCT_CHG_MILD:
         return "stable"
     if primary >= PCT_CHG_MILD:
@@ -238,10 +252,7 @@ def pack_cross_week(
     relationship = classify_relationship(c_pct, nc_pct)
     flow = classify_spread_flow(comm_nc_chg_1w, comm_nc_chg_4w)
 
-    # Refine flow wording when relationship is opposed and |spread| grows.
     if relationship in ("opposed", "strong_opposition") and _finite(comm_nc_chg_1w) is not None:
-        # Spread here is C_pct - NC_pct; opposition widens when |spread| increases.
-        # Approximate: if abs(spread) large and change moves further from 0.
         s = _finite(comm_nc_spread)
         d = _finite(comm_nc_chg_1w)
         if s is not None and d is not None:
@@ -303,7 +314,7 @@ def build_weekly_inspector_series(
     nonreportable_states: list[dict[str, Any]] | None = None,
     spreads_nr: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Build compact weekly inspector payload for one market's cot3y series."""
+    """Build weekly inspector payload for one market's COT series."""
     if not series:
         return {
             "available": False,
@@ -313,14 +324,8 @@ def build_weekly_inspector_series(
         }
 
     commercial = commercial_states or build_group_state_series(series, GROUP_COMMERCIAL)
-    noncommercial = noncommercial_states or build_group_state_series(
-        series, GROUP_NONCOMMERCIAL
-    )
-    nonreportable = nonreportable_states or build_group_state_series(
-        series, GROUP_NONREPORTABLE
-    )
-    if spreads_nr is None:
-        spreads_nr = build_spread_series(commercial, nonreportable)
+    noncommercial = noncommercial_states or build_group_state_series(series, GROUP_NONCOMMERCIAL)
+    nonreportable = nonreportable_states or build_group_state_series(series, GROUP_NONREPORTABLE)
 
     from hptl.cot.positioning_research_engine import GROUP_NET_KEY
 
@@ -328,33 +333,30 @@ def build_weekly_inspector_series(
     nc_nets = _nets(series, GROUP_NET_KEY[GROUP_NONCOMMERCIAL])
     nr_nets = _nets(series, GROUP_NET_KEY[GROUP_NONREPORTABLE])
 
-    # Comm − NC in percentile space + expanding percentile of that spread.
+    c_pcts = _pct_series(commercial)
+    nc_pcts = _pct_series(noncommercial)
+    nr_pcts = _pct_series(nonreportable)
+
     raw_comm_nc: list[float | None] = []
-    for c, nc in zip(commercial, noncommercial):
-        cp = _finite((c.get("percentiles") or {}).get("long_history"))
-        ncp = _finite((nc.get("percentiles") or {}).get("long_history"))
-        if cp is None or ncp is None:
-            raw_comm_nc.append(None)
-        else:
-            raw_comm_nc.append(round(cp - ncp, 2))
-    comm_nc_pcts = _expanding_spread_percentiles(raw_comm_nc)
+    raw_comm_nr: list[float | None] = []
+    for cp, ncp, nrp in zip(c_pcts, nc_pcts, nr_pcts):
+        raw_comm_nc.append(None if cp is None or ncp is None else round(cp - ncp, 2))
+        raw_comm_nr.append(None if cp is None or nrp is None else round(cp - nrp, 2))
+
+    comm_nc_pcts = _rolling_spread_percentiles(raw_comm_nc)
+    comm_nr_pcts = _rolling_spread_percentiles(raw_comm_nr)
 
     weeks: list[dict[str, Any]] = []
     for i in range(len(series)):
-        c_pack = pack_group_week(commercial[i], c_nets)
-        nc_pack = pack_group_week(noncommercial[i], nc_nets)
-        nr_pack = pack_group_week(nonreportable[i], nr_nets)
+        c_pack = pack_group_week(commercial[i], c_nets, c_pcts)
+        nc_pack = pack_group_week(noncommercial[i], nc_nets, nc_pcts)
+        nr_pack = pack_group_week(nonreportable[i], nr_nets, nr_pcts)
 
         cn_spread = raw_comm_nc[i]
         cn_spread_pct = comm_nc_pcts[i]
-        cn_1w = None
-        cn_4w = None
-        if i >= 1 and cn_spread is not None and raw_comm_nc[i - 1] is not None:
-            cn_1w = round(cn_spread - raw_comm_nc[i - 1], 2)
-        if i >= 4 and cn_spread is not None and raw_comm_nc[i - 4] is not None:
-            cn_4w = round(cn_spread - raw_comm_nc[i - 4], 2)
+        cn_1w = _series_change(raw_comm_nc, i, 1)
+        cn_4w = _series_change(raw_comm_nc, i, 4)
 
-        nr_row = spreads_nr[i]
         cross = pack_cross_week(
             c_pack,
             nc_pack,
@@ -363,8 +365,8 @@ def build_weekly_inspector_series(
             cn_spread_pct,
             cn_1w,
             cn_4w,
-            _finite(nr_row.get("spread")),
-            _finite(nr_row.get("spread_percentile")),
+            raw_comm_nr[i],
+            comm_nr_pcts[i],
         )
 
         weeks.append(

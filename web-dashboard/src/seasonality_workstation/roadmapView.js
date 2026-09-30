@@ -1,12 +1,15 @@
 /** Seasonal Roadmap view helpers (UI only). */
 export const ROADMAP_METHOD_LABEL = 'Seasonal Roadmap'
 export const ROADMAP_METHOD_DESCRIPTION =
-  'Historical daily moves are normalised by each year’s typical daily volatility, aggregated by trading day, then rescaled to the market’s recent daily volatility. No synthetic noise, interpolation or smoothing.'
+  'Historical daily moves build the plotted roadmap. Forward lookback statistics are a separate same-ISO-week study: one observation per year, genuine completed weekly closes only, with incomplete or gapped horizons rejected.'
 
-export const ROADMAP_HORIZON_WEEKS = [4, 8, 12]
+export const ROADMAP_HORIZON_WEEKS = [1, 2, 4, 8, 12]
 
 export function classifyRoadmapHorizon(row) {
   if (!row || row.n == null || row.n <= 0) return 'Mixed'
+  if (row.direction === 'Bullish' || row.direction === 'Bearish' || row.direction === 'Mixed') {
+    return row.direction
+  }
   const { mean, median, bullish_frequency: bull, bearish_frequency: bear } = row
   if (mean != null && median != null && bull != null && mean > 0 && median > 0 && bull > 0.5) return 'Bullish'
   if (mean != null && median != null && bear != null && mean < 0 && median < 0 && bear > 0.5) return 'Bearish'

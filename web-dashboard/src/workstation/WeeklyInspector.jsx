@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fmtPctile, shortSampleQuality, fmtRet } from './researchEventUi.js'
+import { shortSampleQuality, fmtRet } from './researchEventUi.js'
 import { BasicLookbackPanel } from './BasicLookbackPanel.jsx'
 
 function fmtNum(v) {
@@ -27,6 +27,15 @@ function fmtPctPts(v) {
   const n = Number(v)
   const sign = n > 0 ? '+' : ''
   return `${sign}${n.toFixed(1)}`
+}
+
+// Preserve the backend point-in-time percentile precision. Whole-number rounding
+// made adjacent weeks such as 97.6 and 98.0 both render as "98th", which made
+// the historical inspector/lookback appear frozen even when the underlying
+// percentile had moved.
+function fmtPctilePrecise(v) {
+  if (v == null || !Number.isFinite(Number(v))) return '—'
+  return `${Number(v).toFixed(1)}th`
 }
 
 function freshnessLabel(f) {
@@ -79,10 +88,7 @@ function FlowBadge({ p }) {
   const temp = p.temperature || 'neutral'
   const arrow = p.directionArrow || '·'
   const label = p.stateLabel || '—'
-  const pct =
-    p.percentile != null && Number.isFinite(Number(p.percentile))
-      ? `${Math.round(Number(p.percentile))}th`
-      : '—'
+  const pct = fmtPctilePrecise(p.percentile)
   return (
     <div
       className={`cot-ws-insp-flow cot-ws-insp-flow--${temp}`}
@@ -107,8 +113,8 @@ function ParticipantColumn({ title, p }) {
     )
   }
   const temp = p.temperature || 'neutral'
-  const pctile =
-    fmtPctile(p.percentile) === '—' ? 'Unavailable' : fmtPctile(p.percentile)
+  const precisePctile = fmtPctilePrecise(p.percentile)
+  const pctile = precisePctile === '—' ? 'Unavailable' : precisePctile
   const pct4 =
     p.percentileChange4w == null || !Number.isFinite(Number(p.percentileChange4w))
       ? 'Unavailable'
@@ -346,25 +352,25 @@ export function WeeklyInspector({
                 <Metric
                   label="C pctile"
                   value={
-                    fmtPctile(sp.commercialPercentile) === '—'
+                    fmtPctilePrecise(sp.commercialPercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.commercialPercentile)
+                      : fmtPctilePrecise(sp.commercialPercentile)
                   }
                 />
                 <Metric
                   label="NC pctile"
                   value={
-                    fmtPctile(sp.noncommercialPercentile) === '—'
+                    fmtPctilePrecise(sp.noncommercialPercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.noncommercialPercentile)
+                      : fmtPctilePrecise(sp.noncommercialPercentile)
                   }
                 />
                 <Metric
                   label="NR pctile"
                   value={
-                    fmtPctile(sp.nonreportablePercentile) === '—'
+                    fmtPctilePrecise(sp.nonreportablePercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.nonreportablePercentile)
+                      : fmtPctilePrecise(sp.nonreportablePercentile)
                   }
                 />
                 <Metric
@@ -389,9 +395,9 @@ export function WeeklyInspector({
                 <Metric
                   label="C−NR pct"
                   value={
-                    fmtPctile(sp.commNr?.percentile) === '—'
+                    fmtPctilePrecise(sp.commNr?.percentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.commNr?.percentile)
+                      : fmtPctilePrecise(sp.commNr?.percentile)
                   }
                   title="Expanding percentile of Comm−NR spread"
                 />
