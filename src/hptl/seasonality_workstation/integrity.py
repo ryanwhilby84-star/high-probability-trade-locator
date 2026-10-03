@@ -52,12 +52,7 @@ def seasonal_window_usable_years(
     lookback_years: int,
     horizon_weeks: int,
 ) -> tuple[list[int], list[dict[str, Any]]]:
-    """Return historical years usable for the exact selected forward window.
-
-    A defect elsewhere in a calendar year does not disqualify that year. A year is
-    excluded only when the selected forward seasonal window itself lacks weekly data
-    or is crossed by a large source-data gap.
-    """
+    """Return historical years usable for the exact selected forward window."""
     from hptl.seasonality_workstation.returns import iso_week, weekly_closes_from_daily, weekly_return_rows
 
     weekly = weekly_closes_from_daily(daily)
@@ -76,8 +71,6 @@ def seasonal_window_usable_years(
             continue
         if (b - a).days <= MAX_GAP_DAYS:
             continue
-        # Mark every ISO week touched by the missing interval. This prevents the
-        # first bar after a long gap from masquerading as a valid weekly return.
         cur = a
         while cur <= b:
             gap_weeks.add(iso_week(cur.strftime("%Y-%m-%d")))
@@ -117,9 +110,9 @@ def audit_daily_series(
 ) -> dict[str, Any]:
     """Audit a (date, close) daily series. status: PASS | FAIL.
 
-    Only structural defects that make the whole series unsafe are global blockers.
-    Local coverage defects stay visible as warnings and are scoped to the selected
-    seasonal window by ``seasonal_window_usable_years``.
+    This is the full-history audit. Consumers that calculate a bounded lookback
+    should use :func:`audit_daily_series_for_lookback` so defects decades outside
+    the calculation horizon cannot incorrectly block current seasonality.
     """
     issues: list[str] = []
     warnings: list[str] = []
@@ -200,9 +193,6 @@ def audit_daily_series(
     current_year = b.year if b else None
     hist_years = sorted(y for y in by_year if current_year is None or y < current_year)
     thin_years = [y for y in hist_years if len(by_year[y]) < MIN_WEEKS_PER_YEAR]
-
-    # Do not globally remove a historical year because coverage is thin somewhere
-    # else in that year. Exact-window eligibility is decided later.
     usable_years = list(hist_years)
 
     if years < MIN_YEARS_FOR_PASS:
@@ -237,4 +227,63 @@ def audit_daily_series(
             if status == "PASS"
             else "FAIL"
         ),
+    }
+
+
+def audit_daily_series_for_lookback(
+    instrument_id: str,
+    daily: list[tuple[str, float]],
+    *,
+    source: str | None = None,
+    lookback_years: int | None = 15,
+    asof: str | None = None,
+) -> dict[str, Any]:
+    """Audit only the history capable of affecting the requested lookback.
+
+    One extra calendar year is retained as a buffer so the first in-scope weekly
+    return and cross-year seasonal windows have a real predecessor. Full-history
+    defects are still attached as diagnostics, but only in-scope structural defects
+    can block a bounded 5Y/10Y/15Y/20Y calculation.
+    """
+    full = audit_daily_series(instrument_id, daily, source=source)
+    if lookback_years is None or not daily:
+        return {
+            **full,
+            "audit_scope": "full_history",
+            "lookback_years": None,
+            "full_history_status": full.get("status"),
+            "full_history_issues": list(full.get("issues") or []),
+        }
+
+    asof_dt = _parse(asof or daily[-1][0])
+    if asof_dt is None:
+        return full
+    start_year = asof_dt.year - int(lookback_years) - 1
+    cutoff = f"{start_year:04d}-01-01"
+    end = asof_dt.strftime("%Y-%m-%d")
+    scoped = [(d, c) for d, c in daily if cutoff <= str(d)[:10] <= end]
+    current = audit_daily_series(instrument_id, scoped, source=source)
+
+    legacy_issues = [x for x in (full.get("issues") or []) if x not in (current.get("issues") or [])]
+    legacy_warnings = [x for x in (full.get("warnings") or []) if x not in (current.get("warnings") or [])]
+    warnings = list(current.get("warnings") or [])
+    if legacy_issues:
+        warnings.append("legacy_out_of_scope_issues:" + "|".join(legacy_issues))
+    if legacy_warnings:
+        warnings.append("legacy_out_of_scope_warnings:" + "|".join(legacy_warnings))
+
+    return {
+        **current,
+        "warnings": list(dict.fromkeys(warnings)),
+        "audit_scope": f"lookback_{int(lookback_years)}y_plus_1y_buffer",
+        "lookback_years": int(lookback_years),
+        "scope_start": cutoff,
+        "scope_end": end,
+        "scope_bar_count": len(scoped),
+        "full_history_status": full.get("status"),
+        "full_history_issues": list(full.get("issues") or []),
+        "full_history_warnings": list(full.get("warnings") or []),
+        "full_history_first_date": full.get("first_date"),
+        "full_history_last_date": full.get("last_date"),
+        "full_history_discontinuity_count": full.get("discontinuity_count"),
     }

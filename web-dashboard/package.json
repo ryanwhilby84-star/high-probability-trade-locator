@@ -4,8 +4,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
+    "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
+    "cot-inspector": "cd .. && python -m hptl.cot.weekly_inspector_export",
+    "dev": "npm run cot-inspector && npm run seasonal-edge && vite",
+    "build": "npm run cot-inspector && npm run seasonal-edge && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
