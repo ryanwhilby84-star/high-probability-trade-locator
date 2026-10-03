@@ -1,0 +1,18 @@
+.sugar-archive { background: #141a22; border: 1px solid #35404d; border-radius: 10px; color: #e2e8f0; padding: 20px; margin: 18px 0; min-width: 0; }
+.sugar-archive h2 { margin: 0 0 8px; font-size: 1.2rem; }
+.sugar-archive h3 { font-size: 1rem; margin-top: 24px; }
+.sugar-archive-note { color: #a8b5c6; font-size: .82rem; line-height: 1.6; }
+.sugar-archive-controls { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0; }
+.sugar-archive-controls label { display: flex; flex-direction: column; gap: 7px; font-size: .8rem; }
+.sugar-archive input, .sugar-archive select, .sugar-archive button { color: #e2e8f0; background: #202a36; border: 1px solid #526176; border-radius: 5px; padding: 8px; color-scheme: dark; }
+.sugar-archive button { cursor: pointer; }
+.sugar-archive button:focus-visible, .sugar-archive input:focus-visible, .sugar-archive select:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+.sugar-archive-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; margin: 18px 0; }
+.sugar-archive-stats div { display: flex; flex-direction: column; gap: 8px; padding: 12px; background: #1d2530; border-radius: 5px; }
+.sugar-archive-stats span { color: #a8b5c6; font-size: .75rem; }
+.sugar-archive-table-wrap { overflow-x: auto; }
+.sugar-archive table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.sugar-archive th, .sugar-archive td { padding: 10px; border-bottom: 1px solid #35404d; text-align: left; white-space: nowrap; }
+.sugar-archive th { color: #a8b5c6; }
+.sugar-archive summary { cursor: pointer; padding: 12px 0; }
+@media (max-width: 600px) { .sugar-archive { padding: 14px; } .sugar-archive-controls label { flex: 1 1 140px; } }

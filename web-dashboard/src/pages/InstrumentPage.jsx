@@ -1,4 +1,5 @@
 import React from 'react'
+import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
 import { AppShell, filterMarketsBySidebar } from '../components/AppShell.jsx'
 import { InstrumentDetail, buildMarketHistoryForMarket } from '../legacy/dashboardLegacy.jsx'
 import { resolveMacroRelationshipMap } from '../macroRelationshipMapData.js'
@@ -282,6 +283,7 @@ export function InstrumentPage({ marketId, confluence, sidebarClass, onSidebarCl
         />
 
         <ValuationInstrumentSection row={row} />
+        <SugarArchivePanel marketId={marketId} />
 
         <details className="instrument-page-detail-collapse" id="valuation-evidence">
           <summary className="instrument-page-detail-summary">
