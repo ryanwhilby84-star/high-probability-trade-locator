@@ -46,7 +46,12 @@ export function evaluateSugarWindow(archive, start, end, { strict = true, direct
     if (exitRequested > `${archive.doc.full_years.at(-1)}-12-31`) { exclusions.push({ year, reason: 'partial_final_year' }); continue }
     const entry = firstSession(archive.sessions, entryRequested); const exit = firstSession(archive.sessions, exitRequested)
     if (!entry || !exit || entry >= exit) { exclusions.push({ year, reason: 'missing_boundary' }); continue }
-    const rows = archive.rows.filter((r) => r.date > entry && r.date <= exit)
+    const after = (date) => {
+      let lo = 0; let hi = archive.rows.length
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (archive.rows[mid].date <= date) lo = mid + 1; else hi = mid }
+      return lo
+    }
+    const rows = archive.rows.slice(after(entry), after(exit))
     let previous = entry; let product = 1; let low = 0; let high = 0; let flagged = 0; let missing = false
     for (const r of rows) {
       if (r.previous !== previous) missing = true

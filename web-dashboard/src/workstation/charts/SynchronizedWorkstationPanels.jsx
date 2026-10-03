@@ -332,8 +332,8 @@ export function SynchronizedWorkstationPanels({
       <WorkstationDrawingToolbar
         activeTool={drawingTool}
         onToolChange={drawingsApi?.setActiveTool}
-        onDeleteSelected={drawingsApi?.deleteSelected}
-        selectedId={drawingsApi?.selectedId}
+        onClear={drawingsApi?.clearDrawings}
+        drawingCount={drawingsApi?.drawings?.length ?? 0}
       />
       {dataWarnings.map((w) => (
         <WorkstationDataErrorPanel key={w} message={w} />

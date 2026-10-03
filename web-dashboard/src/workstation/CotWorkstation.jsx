@@ -32,8 +32,6 @@ import {
 } from './charts/workstationPanelSizing.js'
 import { CotPanelResizeHandle } from './charts/CotPanelResizeHandle.jsx'
 import { CotDrawingCoordinator } from './charts/CotDrawingCoordinator.jsx'
-import { WorkstationDrawingToolbar } from './charts/WorkstationDrawingToolbar.jsx'
-import { useWorkstationDrawings } from './canvas/useWorkstationDrawings.js'
 import { useCotWorkstationReady } from './charts/useCotWorkstationReady.js'
 import {
   bumpRender,
@@ -175,19 +173,6 @@ function WorkstationSkeleton({ message = 'Loading chart…' }) {
 }
 
 export function CotWorkstation({ marketId, variant = 'default' }) {
-  const drawingsApi = useWorkstationDrawings(marketId)
-  React.useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key !== 'Delete' && event.key !== 'Backspace') return
-      const tag = String(event.target?.tagName || '').toLowerCase()
-      if (tag === 'input' || tag === 'textarea' || event.target?.isContentEditable) return
-      if (!drawingsApi.selectedId) return
-      event.preventDefault()
-      drawingsApi.deleteSelected()
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [drawingsApi.selectedId, drawingsApi.deleteSelected])
   const { doc, loading, errored } = useCot3ySeries()
   const { exportBlock, exportLoaded } = useWorkstationOhlc(marketId)
   const livePriceState = useLivePrice(marketId)
@@ -768,11 +753,6 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     })
   }, [goHome])
 
-  const drawingDateToTime = React.useCallback(
-    (date) => findTimeForDate(timelineRows, date),
-    [timelineRows],
-  )
-
   const paneProps = React.useMemo(
     () => ({
       timelineRows,
@@ -780,14 +760,8 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
       chartsReady,
       passiveCamera: true,
       nativeWheelZoom: false,
-      drawings: drawingsApi.drawings,
-      selectedDrawingId: drawingsApi.selectedId,
-      drawingTool: drawingsApi.activeTool,
-      dateToTime: drawingDateToTime,
-      onSelectDrawing: drawingsApi.setSelectedId,
-      onDrawingCommit: drawingsApi.addDrawing,
     }),
-    [timelineRows, registerPane, chartsReady, drawingDateToTime, drawingsApi.drawings, drawingsApi.selectedId, drawingsApi.activeTool, drawingsApi.setSelectedId, drawingsApi.addDrawing],
+    [timelineRows, registerPane, chartsReady],
   )
 
   if (loading && !doc) {
@@ -954,13 +928,6 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
           </button>
         </div>
       </header>
-
-      <WorkstationDrawingToolbar
-        activeTool={drawingsApi.activeTool}
-        onToolChange={drawingsApi.setActiveTool}
-        selectedId={drawingsApi.selectedId}
-        onDeleteSelected={drawingsApi.deleteSelected}
-      />
 
       {researchBlock ? (
         <div className="cot-ws-research-chrome">
