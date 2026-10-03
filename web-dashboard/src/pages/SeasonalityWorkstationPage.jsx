@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
 import { SeasonalEdgePanel } from '../components/SeasonalEdgePanel.jsx'
@@ -20,12 +20,6 @@ import '../seasonality_workstation/crossMarketSeasonality.css'
 const DASHBOARD_MARKETS = new Set(TRACKED_MARKET_IDS)
 const BOND_MARKET_RE = /\b(bond|treasury|t-note|t-bond|bund|gilt)\b/i
 
-/**
- * Seasonality Workstation navigation is intentionally kept compact: the normal
- * dashboard/COT universe plus any bond/rates market present in the registry.
- * The larger instrument registry contains many aliases and auxiliary markets
- * that are useful elsewhere but only add noise to this dropdown.
- */
 export function SeasonalityWorkstationPage({
   marketId,
   trackedMarkets,
@@ -36,7 +30,6 @@ export function SeasonalityWorkstationPage({
       .filter(Boolean)
       .filter((id) => DASHBOARD_MARKETS.has(id) || BOND_MARKET_RE.test(id))
 
-    // de-dupe, preserve registry/dashboard order
     const seen = new Set()
     return ids.filter((id) => {
       if (seen.has(id)) return false
@@ -48,7 +41,10 @@ export function SeasonalityWorkstationPage({
   const navIndex = navMarkets.indexOf(marketId)
   const prevMarket = navIndex > 0 ? navMarkets[navIndex - 1] : null
   const nextMarket =
-    navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
+    navIndex >= 0 && navIndex < navMarkets.length - 1
+      ? navMarkets[navIndex + 1]
+      : null
+
   const dollarComplexIds = React.useMemo(
     () => new Set([DXY_MARKET_ID, ...DXY_COMPONENTS.map((row) => row.id)]),
     [],
@@ -65,7 +61,9 @@ export function SeasonalityWorkstationPage({
     setLoading(true)
     setError(null)
     setPayload(null)
+
     const url = `/api/seasonality-workstation/${encodeURIComponent(marketId)}?lookback=${encodeURIComponent(lookback)}`
+
     fetch(url, { cache: 'no-store' })
       .then(async (r) => {
         let body = null
@@ -74,12 +72,16 @@ export function SeasonalityWorkstationPage({
         } catch {
           body = null
         }
+
         if (cancelled) return
+
         if (!body) {
           setError('Invalid response from seasonality workstation API.')
           return
         }
+
         setPayload(body)
+
         if (body.status !== 'ok') {
           setError(body.message || body.error || 'Seasonality research failed.')
         }
@@ -90,6 +92,7 @@ export function SeasonalityWorkstationPage({
       .finally(() => {
         if (!cancelled) setLoading(false)
       })
+
     return () => {
       cancelled = true
     }
@@ -102,9 +105,15 @@ export function SeasonalityWorkstationPage({
           <button type="button" className="sws-btn" onClick={navigateToScanner}>
             Scanner
           </button>
-          <button type="button" className="sws-btn" onClick={() => navigateToInstrument(marketId)}>
+
+          <button
+            type="button"
+            className="sws-btn"
+            onClick={() => navigateToInstrument(marketId)}
+          >
             ← Instrument
           </button>
+
           <div>
             <h1 className="sws-title">Seasonality Workstation</h1>
             <p className="sws-sub">
@@ -112,6 +121,7 @@ export function SeasonalityWorkstationPage({
               {navIndex >= 0 ? ` · ${navIndex + 1}/${navMarkets.length}` : ''}
             </p>
           </div>
+
           <label className="sws-instrument-select">
             <span className="sws-muted">Instrument</span>
             <select
@@ -126,20 +136,26 @@ export function SeasonalityWorkstationPage({
             </select>
           </label>
         </div>
+
         <div className="sws-topbar-right">
           <button
             type="button"
             className="sws-btn"
             disabled={!prevMarket}
-            onClick={() => prevMarket && navigateToSeasonalityWorkstation(prevMarket)}
+            onClick={() =>
+              prevMarket && navigateToSeasonalityWorkstation(prevMarket)
+            }
           >
             ← Prev
           </button>
+
           <button
             type="button"
             className="sws-btn"
             disabled={!nextMarket}
-            onClick={() => nextMarket && navigateToSeasonalityWorkstation(nextMarket)}
+            onClick={() =>
+              nextMarket && navigateToSeasonalityWorkstation(nextMarket)
+            }
           >
             Next →
           </button>
@@ -149,6 +165,8 @@ export function SeasonalityWorkstationPage({
       <div style={{ padding: '0.75rem 0.75rem 0' }}>
         <SeasonalEdgePanel instrumentId={marketId} />
       </div>
+
+      <SugarArchivePanel marketId={marketId} />
 
       <SeasonalityWorkstation
         marketId={marketId}
