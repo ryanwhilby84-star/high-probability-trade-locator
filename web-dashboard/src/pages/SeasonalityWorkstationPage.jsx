@@ -1,4 +1,5 @@
 import React from 'react'
+import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import { CrossMarketSeasonalityPanel } from '../seasonality_workstation/CrossMarketSeasonalityPanel.jsx'
@@ -150,6 +151,7 @@ export function SeasonalityWorkstationPage({
         <SeasonalEdgePanel instrumentId={marketId} />
       </div>
 
+      <SugarArchivePanel marketId={marketId} />
       <SeasonalityWorkstation
         marketId={marketId}
         payload={payload}
