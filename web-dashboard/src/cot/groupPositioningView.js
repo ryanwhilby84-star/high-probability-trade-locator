@@ -30,6 +30,7 @@ const rowDate = (r) =>
   normalizeReportDate(recordCotReportDate(r) || r?.latest_report_date || r?.date || '')
 
 function num(v) {
+  if (v == null || v === '') return null
   const n = Number(v)
   return Number.isFinite(n) ? n : null
 }
@@ -100,13 +101,8 @@ export function rolling3yContextForGroup({
   groupId,
   headlineRow,
   legacyInstrument,
+  asOfDate,
 }) {
-  if (groupId === 'noncommercials') {
-    return {
-      ctx: headlineRow?.rolling_3y_history_context || null,
-      multiyear: headlineRow?.institutional_context?.multiyear_positioning || null,
-    }
-  }
 
   const tab = POSITIONING_SHEET_TABS.find((t) => t.id === groupId)
   const weeks = legacyInstrument?.groups?.[tab?.legacyGroupId]?.weeks
@@ -114,7 +110,8 @@ export function rolling3yContextForGroup({
     return { ctx: null, multiyear: null }
   }
 
-  const sorted = [...weeks].sort((a, b) =>
+  const asOf = normalizeReportDate(asOfDate)
+  const sorted = weeks.filter((w) => !asOf || normalizeReportDate(w.report_date) <= asOf).sort((a, b) =>
     String(a.report_date || '').localeCompare(String(b.report_date || '')),
   )
   return { ctx: buildRolling3yContextFromWeeks(sorted), multiyear: null }

@@ -310,6 +310,29 @@ def audit_instrument(
     for week in window:
         failures.extend(audit_week(week, instrument_id=instrument_id))
 
+    # Finite values alone are insufficient: verify the intended horizon and
+    # changes against the dated source positions for every audited week.
+    if cot_series:
+        from hptl.cot.weekly_inspector_flow import build_weekly_inspector_series
+        expected = {w['date']: w for w in build_weekly_inspector_series(cot_series)['weeks']}
+        for week in window:
+            truth = expected.get(str(week.get('date') or '')[:10])
+            if truth is None:
+                continue  # Date alignment is reported separately.
+            for group in ('commercial', 'noncommercial', 'nonreportable'):
+                for field in ('net', 'weekly_change', 'four_week_change', 'twelve_week_change',
+                              'percentile', 'percentile_change_1w', 'percentile_change_4w',
+                              'percentile_change_12w', 'percentile_observation_count'):
+                    actual = _finite((week.get(group) or {}).get(field))
+                    wanted = _finite(truth[group].get(field))
+                    if actual is None or wanted is None or abs(float(actual) - float(wanted)) > 0.02:
+                        failures.append({
+                            'instrument': instrument_id, 'report_date': week.get('date'),
+                            'participant_group': group, 'field': field,
+                            'pipeline_stage': 'rolling_3y_source_reconciliation',
+                            'suspected_cause': f'156-report source expected {wanted}; inspector has {actual}',
+                        })
+
     # Completeness rollups
     def _group_ok(group: str) -> str:
         return (

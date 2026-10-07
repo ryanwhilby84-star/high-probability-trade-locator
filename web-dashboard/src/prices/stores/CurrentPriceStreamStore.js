@@ -1,3 +1,5 @@
+import { quoteDisplayStatus, nullableNumber } from '../quoteFreshness.js'
+
 /**
  * CurrentPriceStreamStore — single shared client for the Phase 2 Current Price Service.
  *
@@ -40,8 +42,11 @@ let _intentionalClose = false
 let _snapshotCache = null
 let _snapshotCacheKey = ''
 let _started = false
+let _freshnessTimer = null
+let _revision = 0
 
 function emit() {
+  _revision += 1
   _snapshotCache = null
   _snapshotCacheKey = ''
   for (const fn of _listeners) {
@@ -78,11 +83,11 @@ function parseAgeSeconds(asOf) {
 function normalizePrice(raw) {
   if (!raw || typeof raw !== 'object') return null
   const status = String(raw.status || 'UNAVAILABLE').toUpperCase()
-  const midNum = Number(raw.mid)
+  const midNum = nullableNumber(raw.mid)
   // Never promote current_price/fallback into mid — mid is live bid/ask only.
   const mid = Number.isFinite(midNum) ? midNum : null
-  const bid = Number(raw.bid)
-  const ask = Number(raw.ask)
+  const bid = nullableNumber(raw.bid)
+  const ask = nullableNumber(raw.ask)
   const currentFromPayload =
     raw.current_price != null && Number.isFinite(Number(raw.current_price))
       ? Number(raw.current_price)
@@ -126,10 +131,10 @@ function normalizePrice(raw) {
 
 function normalizeWeeklyCandle(raw) {
   if (!raw || typeof raw !== 'object') return null
-  const open = Number(raw.open)
-  const high = Number(raw.high)
-  const low = Number(raw.low)
-  const close = Number(raw.close)
+  const open = nullableNumber(raw.open)
+  const high = nullableNumber(raw.high)
+  const low = nullableNumber(raw.low)
+  const close = nullableNumber(raw.close)
   if (![open, high, low, close].every(Number.isFinite)) return null
   const date = String(raw.date || '').slice(0, 10)
   if (!date) return null
@@ -155,9 +160,9 @@ function applySnapshot(payload) {
     const next = Object.create(null)
     for (const [key, row] of Object.entries(payload.prices)) {
       const n = normalizePrice(row)
-      if (!n) continue
+      if (!n || n.internalKey !== key) continue
       // Reject older quotes so a reconnect cannot regress mid.
-      const existing = payload.type === 'snapshot' ? null : _prices[key]
+      const existing = _prices[key]
       if (
         existing?.timestamp &&
         n.timestamp &&
@@ -215,7 +220,8 @@ async function fetchInitialSnapshot() {
       }),
     ])
 
-    const pricesDoc = pricesResp.ok ? await pricesResp.json() : null
+    if (!pricesResp.ok) throw new Error(`Current price service HTTP ${pricesResp.status}`)
+    const pricesDoc = await pricesResp.json()
     const weeklyDoc = weeklyResp.ok ? await weeklyResp.json() : null
 
     applySnapshot({
@@ -318,9 +324,14 @@ function openSocket() {
   }
 }
 
+function awaitSnapshotRecovery() {
+  fetchInitialSnapshot().finally(() => openSocket())
+}
+
 function start() {
   if (_started) return
   _started = true
+  _freshnessTimer = window.setInterval(emit, 1000)
   fetchInitialSnapshot().finally(() => {
     if (_subscriberCount > 0 && !_intentionalClose) openSocket()
   })
@@ -328,6 +339,8 @@ function start() {
 
 function stop() {
   _intentionalClose = true
+  if (_freshnessTimer != null) window.clearInterval(_freshnessTimer)
+  _freshnessTimer = null
   clearReconnectTimer()
   if (_ws) {
     try {
@@ -346,21 +359,7 @@ function stop() {
 }
 
 function displayStatus(internalKey) {
-  if (_connectionState === 'reconnecting') return 'RECONNECTING'
-  if (_connectionState === 'disconnected') return 'BACKEND OFFLINE'
-
-  const price = _prices[internalKey]
-  if (!price) return 'UNAVAILABLE'
-
-  const backendStatus = String(price.status || 'UNAVAILABLE').toUpperCase()
-
-  // LIVE only when WS is connected AND backend reports LIVE.
-  if (backendStatus === 'LIVE') {
-    if (_connectionState !== 'connected') return 'RECONNECTING'
-    return 'LIVE'
-  }
-
-  return backendStatus
+  return quoteDisplayStatus(_prices[internalKey], _connectionState)
 }
 
 export const CurrentPriceStreamStore = {
@@ -398,6 +397,7 @@ export const CurrentPriceStreamStore = {
 
     _snapshotCacheKey = key
     _snapshotCache = {
+      revision: _revision,
       connectionState: _connectionState,
       connected: _connectionState === 'connected',
       reconnecting: _connectionState === 'reconnecting',
@@ -418,7 +418,7 @@ export const CurrentPriceStreamStore = {
   },
 
   getWeeklyCandle(internalKey) {
-    if (!internalKey) return null
+    if (!internalKey || displayStatus(internalKey) !== 'LIVE') return null
     return _weeklyCandles[internalKey] ?? null
   },
 
@@ -445,7 +445,9 @@ export const CurrentPriceStreamStore = {
       }
       _ws = null
     }
-    if (_subscriberCount > 0) openSocket()
+    if (_subscriberCount > 0) {
+      awaitSnapshotRecovery()
+    }
     emit()
   },
 

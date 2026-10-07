@@ -168,6 +168,8 @@ def compact_market_weeks(full: dict[str, Any]) -> dict[str, Any]:
     return {
         "available": bool(full.get("available")),
         "week_count": len(rows),
+        "measure": MEASURE,
+        "measure_label": MEASURE_LABEL,
         "rows": rows,
     }
 
