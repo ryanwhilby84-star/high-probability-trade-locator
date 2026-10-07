@@ -5,15 +5,23 @@ export const monthDay = (n) => iso(n).slice(5)
 
 export function prepareSugarArchive(doc) {
   if (doc?.schema_version !== 1 || !Array.isArray(doc.rows)) throw new Error('Invalid sugar archive data.')
+  if (!Number.isFinite(utc(doc.first_date)) || iso(utc(doc.first_date)) !== doc.first_date || !Array.isArray(doc.full_years) || !doc.full_years.length || doc.full_years.some((year, i) => !Number.isInteger(year) || (i > 0 && year <= doc.full_years[i - 1]))) throw new Error('Invalid sugar archive coverage.')
+  if (doc.rows.some(row => !Array.isArray(row) || row.length !== 5 || ![0, 1].includes(row[3]))) throw new Error('Invalid sugar archive row.')
   const rows = doc.rows.map(([date, previous, value, eligible, contract]) => ({ date, previous, value, eligible: eligible === 1, contract, time: utc(date) }))
   let last = ''
   for (const r of rows) {
-    if (!Number.isFinite(r.time) || !Number.isFinite(r.value) || r.value <= -1 || r.date <= last || r.previous >= r.date) throw new Error('Invalid sugar return series.')
+    if (!Number.isFinite(r.time) || iso(r.time) !== r.date || !Number.isFinite(utc(r.previous)) || iso(utc(r.previous)) !== r.previous || !Number.isFinite(r.value) || r.value <= -1 || r.date <= last || r.previous >= r.date) throw new Error('Invalid sugar return series.')
     last = r.date
   }
   // First session has no return but remains a valid entry close.
   const sessions = [...new Set([doc.first_date, ...rows.map((r) => r.date)])].sort()
   return { doc, rows, sessions, byDate: new Map(rows.map((r) => [r.date, r])) }
+}
+function lastSession(sessions, date) {
+  let lo = 0; let hi = sessions.length
+  while (lo < hi) { const mid = (lo + hi) >> 1; if (sessions[mid] <= date) lo = mid + 1; else hi = mid }
+  const actual = sessions[lo - 1]
+  return actual && utc(date) - utc(actual) <= 7 * DAY ? actual : null
 }
 
 function firstSession(sessions, date) {
@@ -44,7 +52,7 @@ export function evaluateSugarWindow(archive, start, end, { strict = true, direct
     const exitRequested = `${year + (end <= start ? 1 : 0)}-${end}`
     // Never use partial 2002 in a window advertised as full-year archive research.
     if (exitRequested > `${archive.doc.full_years.at(-1)}-12-31`) { exclusions.push({ year, reason: 'partial_final_year' }); continue }
-    const entry = firstSession(archive.sessions, entryRequested); const exit = firstSession(archive.sessions, exitRequested)
+    const entry = firstSession(archive.sessions, entryRequested); const exit = lastSession(archive.sessions, exitRequested)
     if (!entry || !exit || entry >= exit) { exclusions.push({ year, reason: 'missing_boundary' }); continue }
     const after = (date) => {
       let lo = 0; let hi = archive.rows.length
