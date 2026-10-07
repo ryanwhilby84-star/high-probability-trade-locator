@@ -79,3 +79,51 @@ def test_render_markdown_ends_with_overall_status():
     assert "OVERALL STATUS" in md
     assert md.strip().endswith("FAIL")
     assert "Natural Gas / NG" in md
+
+
+def test_oanda_start_dated_daily_and_weekly_candles_align_without_weakening_ohlc():
+    from hptl.prices.workstation_ohlc_export import derive_weekly_ohlc_from_daily
+    from hptl.prices.price_cot_alignment_audit import _oanda_week_end_bar, _compare_last_n_weeks
+    # A previous Thursday belongs to the previous native Friday-to-Friday week.
+    daily = [{'date': '2026-09-24', 'open': 80, 'high': 90, 'low': 70, 'close': 85, 'source': 'oanda'}]
+    for i, d in enumerate(['2026-09-25', '2026-09-26', '2026-09-27', '2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01']):
+        daily.append({'date': d, 'open': 100+i, 'high': 110+i, 'low': 90+i, 'close': 105+i, 'source': 'oanda'})
+    ws = derive_weekly_ohlc_from_daily(daily)
+    assert len(ws) == 2
+    assert ws[-1]['date'] == '2026-10-01'
+    provider = _oanda_week_end_bar({'date': '2026-09-25', 'open': 100, 'high': 116, 'low': 90, 'close': 111})
+    assert provider['date'] == '2026-10-02'
+    assert _compare_last_n_weeks([provider], ws) == []
+    assert _compare_last_n_weeks([{**provider, 'high': 120}], ws)
+    # Calendar-date Yahoo feeds must not acquire OANDA's session convention.
+    yahoo = derive_weekly_ohlc_from_daily([{**b, 'source': 'yahoo_futures'} for b in daily])
+    assert yahoo[-1]['open'] == 103
+
+
+def test_corn_provider_uses_futures_and_normalizes_cents(monkeypatch):
+    from hptl.prices import price_cot_alignment_audit as audit
+    from hptl.prices import coffee_foundation_backfill as feed
+    assert audit._provider_and_symbol('Corn') == ('yahoo_futures', 'ZC=F')
+    monkeypatch.setattr(feed, 'fetch_yahoo_daily', lambda symbol: [
+        {'date': '2026-09-28', 'open': 420, 'high': 430, 'low': 410, 'close': 425}
+    ])
+    bars, mode = audit._fetch_provider_weekly_series('yahoo_futures', 'ZC=F')
+    assert mode == 'yahoo_live_weekly_from_daily'
+    assert bars[-1]['open'] == 4.2
+    assert bars[-1]['close'] == 4.25
+
+
+def test_recent_cached_native_candles_cannot_override_oanda_daily(monkeypatch):
+    from types import SimpleNamespace
+    from hptl.prices import workstation_ohlc_export as export
+    from hptl.prices import price_store
+    monkeypatch.setattr(export, 'resolve_workstation_index_source', lambda market: None)
+    bar = SimpleNamespace(date='2026-10-01', open=100, high=110, low=90, close=105, source='oanda')
+    timeline = SimpleNamespace(bars=[bar], canonical_source='oanda', canonical_symbol='SUGAR_USD')
+    monkeypatch.setattr(export, 'build_canonical_timeline', lambda *a, **kw: timeline)
+    monkeypatch.setattr(price_store, 'load_price_store', lambda: {'instruments': {'Sugar': {
+        'weekly': [{'date': '2026-09-25', 'open': 80, 'high': 95, 'low': 70, 'close': 85}]
+    }}})
+    result = export.build_instrument_workstation_ohlc('Sugar')
+    assert result['weekly_ohlc'][-1]['date'] == '2026-10-01'
+    assert result['weekly_ohlc'][-1]['close'] == 105

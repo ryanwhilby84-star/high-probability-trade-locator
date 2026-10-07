@@ -14,7 +14,7 @@ No warnings. No skipped instruments. Any failure → overall FAIL.
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -141,6 +141,8 @@ def _symbols_equivalent(a: str | None, b: str | None) -> bool:
 
 
 def _provider_and_symbol(instrument_id: str) -> tuple[str, str | None]:
+    if instrument_id == "Corn":
+        return "yahoo_futures", "ZC=F"
     canon = BY_ID.get(instrument_id)
     reg = load_registry().get(instrument_id)
     if canon:
@@ -214,6 +216,15 @@ def _frontend_cache_checks() -> dict[str, Any]:
     return checks
 
 
+def _oanda_week_end_bar(bar: dict[str, Any]) -> dict[str, Any]:
+    """Native W timestamps label the START, not the completed week's end."""
+    d = _parse_date(bar.get('date'))
+    if not d:
+        return bar
+    return {**bar, 'date': (d + timedelta(days=7)).isoformat(),
+            'provider_start_date': str(bar.get('date') or '')[:10]}
+
+
 def _fetch_provider_weekly_series(
     provider: str, symbol: str | None, *, count: int = 12
 ) -> tuple[list[dict[str, Any]], str]:
@@ -229,7 +240,9 @@ def _fetch_provider_weekly_series(
                 return [], "oanda_key_missing"
             doc = api_get(
                 f"/v3/instruments/{symbol}/candles",
-                params={"granularity": "W", "count": str(count), "price": "M"},
+                params={"granularity": "W", "count": str(count), "price": "M",
+                        "weeklyAlignment": "Friday", "dailyAlignment": "17",
+                        "alignmentTimezone": "America/New_York"},
             )
             out: list[dict[str, Any]] = []
             for c in doc.get("candles") or []:
@@ -244,8 +257,8 @@ def _fetch_provider_weekly_series(
                     "close": _finite(mid.get("c")),
                 }
                 if bar["date"] and bar["close"] is not None:
-                    out.append(bar)
-            return out, "oanda_live"
+                    out.append(_oanda_week_end_bar(bar))
+            return out, "oanda_live_week_end"
         except Exception as exc:
             return [], f"oanda_error:{exc}"
     if provider == "yahoo_futures":
@@ -253,6 +266,9 @@ def _fetch_provider_weekly_series(
             from hptl.prices.coffee_foundation_backfill import fetch_yahoo_daily
 
             daily = fetch_yahoo_daily(symbol)
+            if symbol == "ZC=F":
+                from hptl.prices.corn_foundation_backfill import _scale_bars_to_usd_per_bushel
+                daily = _scale_bars_to_usd_per_bushel(daily)
             if not daily:
                 return [], "yahoo_empty"
             weekly = derive_weekly_ohlc_from_daily(
@@ -294,8 +310,9 @@ def _find_matching_week(
 ) -> dict[str, Any] | None:
     """Match provider week to workstation week by date, else close+date proximity.
 
-    OANDA W candles are Friday-dated; ISO aggregation may label the same week
-    with the last trade date (e.g. Thu/Sun). Require close match when dates differ.
+    OANDA native start labels are normalized to the ending Friday first.
+    Aggregation labels the last daily session start. Require close match when
+    those labels differ, then compare every OHLC field separately.
     """
     d = str(provider_bar.get("date") or "")[:10]
     if not d:
@@ -539,6 +556,8 @@ def audit_instrument(
         )
     if not provider_series and store_weekly:
         provider_series = [_ohlc_tuple(b) or {} for b in store_weekly if _ohlc_tuple(b)]
+        if provider == 'oanda':
+            provider_series = [_oanda_week_end_bar(b) for b in provider_series]
         provider_mode = "store_weekly_fallback"
     if not provider_series and derived_weekly:
         # Corn / AV-style instruments may only have daily — validate against derived weekly tip.

@@ -42,3 +42,26 @@ python scripts/run_current_price_service.py
 ```
 
 Restart the dashboard and verify the workstation quote's provider/symbol, timestamp, bid/ask and status against the broker. The weekly refresh must end PASS. If it ends FAIL, use its named audit report to resolve the failing instruments; do not call the runtime verified until those gates pass.
+# Weekly alignment follow-up
+
+The local October audit exposed native OANDA weekly candle start dates being
+compared with workstation end dates. OANDA daily candles also carry session
+start dates. Weekly aggregation now uses the provider's Friday-to-Friday
+boundary and the audit normalizes native weekly start labels to week ends.
+Cached OANDA/Yahoo weekly series no longer overwrite daily-derived candles.
+Corn's provider cross-check now uses ZC=F futures with cents converted to
+USD/bushel, matching the existing Corn foundation builder.
+
+From the Windows repository, after pulling `recover-before-emergency`:
+
+```powershell
+python scripts/repair_workstation_alignment.py
+```
+
+This refreshes Corn, Cocoa and Cotton via their existing foundation builders,
+rebuilds processed/public/dist workstation OHLC and runs the full price/COT
+alignment gate. It does not repeat COT downloading or valuation processing.
+After successful downloads, `--rebuild-only` avoids downloading them again.
+Any remaining gate failures must be investigated; the command exits nonzero.
+The user's newer datasets and live provider access remain locally verified on
+their machine, not verified by the source regression tests.
