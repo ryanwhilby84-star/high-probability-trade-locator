@@ -19,10 +19,33 @@ test('archive date windows compound same-contract returns and exclude entry-day 
 test('quality filter excludes whole windows, preserving all-observation comparison', () => {
   const r = evaluateSugarWindow(archive, '10-03', '10-10')
   assert.equal(r.all.n, 41)
-  assert.equal(r.n, 32)
+  assert.equal(r.n, 33)
   assert.equal(r.hits, 22)
   assert.equal(r.n + r.exclusions.length, 41)
   assert(r.outcomes.every((x) => x.flagged === 0))
+})
+
+test('weekend exit cannot import the next Monday return or quality flag', () => {
+  const small = prepareSugarArchive({ schema_version: 1, first_date: '2000-10-06', full_years: [2000], rows: [
+    ['2000-10-09', '2000-10-06', .1, 1, 'SB00V'],
+    ['2000-10-10', '2000-10-09', .05, 1, 'SB00V'],
+    ['2000-10-13', '2000-10-10', .02, 1, 'SB00V'],
+    ['2000-10-16', '2000-10-13', -.5, 0, 'SB00V'],
+  ] })
+  const result = evaluateSugarWindow(small, '10-07', '10-15')
+  assert.equal(result.n, 1)
+  assert.equal(result.outcomes[0].entry, '2000-10-09')
+  assert.equal(result.outcomes[0].exit, '2000-10-13')
+  assert.ok(Math.abs(result.mean - 7.1) < 1e-10)
+})
+
+test('invalid previous date is rejected at ingestion', () => {
+  assert.throws(() => prepareSugarArchive({ ...archive.doc, rows: [[archive.doc.rows[0][0], 'bad-date', .01, 1, 'SB61N']] }))
+})
+
+test('duplicate coverage years and invalid eligibility flags cannot inflate the sample', () => {
+  assert.throws(() => prepareSugarArchive({ ...archive.doc, full_years: [1961, 1961] }))
+  assert.throws(() => prepareSugarArchive({ ...archive.doc, rows: [[...archive.doc.rows[0].slice(0, 3), '1', 'SB61N']] }))
 })
 test('year wrap excludes partial 2002 and short returns reverse the long direction', () => {
   const long = evaluateSugarWindow(archive, '12-15', '01-15', { strict: false })
