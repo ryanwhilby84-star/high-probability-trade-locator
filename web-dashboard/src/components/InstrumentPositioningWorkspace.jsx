@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { normalizeReportDate } from '../marketResolution.js'
 import { POSITIONING_SHEET_TABS, rolling3yContextForGroup } from '../cot/groupPositioningView.js'
 import { buildRawRowsForGroup } from '../cot/rawCotPositioning.js'
 import { useLegacyCot } from '../hooks/useLegacyCot.js'
@@ -47,7 +48,7 @@ export function InstrumentPositioningWorkspace({
   asOfDate,
 }) {
   const [activeTab, setActiveTab] = React.useState('noncommercials')
-  const { instrumentData, loading: legacyLoading } = useLegacyCot(marketId)
+  const { instrumentData, loading: legacyLoading, error: legacyError, retry } = useLegacyCot(marketId)
 
   const tab = POSITIONING_SHEET_TABS.find((t) => t.id === activeTab) || POSITIONING_SHEET_TABS[0]
 
@@ -66,6 +67,13 @@ export function InstrumentPositioningWorkspace({
       }),
     [activeTab, headlineRow, instrumentData, asOfDate],
   )
+
+  const rawReportDate = rawRows.at(-1)?.report_date || null
+  const expectedReportDate = normalizeReportDate(headlineRow?.latest_report_date || asOfDate)
+  const headlineGroup = headlineRow?.cot_positioning_groups?.[tab.confluenceKey]
+  const headlineNet = headlineGroup?.net ?? (activeTab === 'noncommercials' ? headlineRow?.net_value : null)
+  const netMismatch = headlineNet != null && rawRows.at(-1)?.net != null && Number(headlineNet) !== rawRows.at(-1).net
+  const rawMismatch = Boolean((expectedReportDate && rawReportDate && rawReportDate !== expectedReportDate) || netMismatch)
 
   return (
     <section
@@ -113,6 +121,12 @@ export function InstrumentPositioningWorkspace({
         <p className="wo-cot-hint" style={{ marginTop: '12px' }}>
           Loading legacy COT data…
         </p>
+      ) : legacyError || !instrumentData || rawMismatch || !rawRows.length ? (
+        <div role="alert" className="cot-ws-warn cot-ws-warn-history">
+          COT DATA INTEGRITY FAILURE: {legacyError || (rawMismatch ? `Raw report ${rawReportDate} disagrees with the selected COT snapshot (${expectedReportDate}).` : `No raw rows for ${marketId}.`)}
+          {' '}The raw positioning data could not be verified.
+          <button type="button" className="ws-btn" onClick={retry}>Retry raw data</button>
+        </div>
       ) : (
         <>
           <PositioningWeeklySummary instrumentData={instrumentData} asOfDate={asOfDate} />

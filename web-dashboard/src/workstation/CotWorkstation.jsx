@@ -1,3 +1,4 @@
+import { rollingInspector } from './data/rollingInspector.js'
 import React from 'react'
 
 import { CHART_WS, PANEL_IDS } from '../charts/chartTheme.js'
@@ -12,6 +13,7 @@ import {
 import { useCot3ySeries, resolveCot3yBlock } from '../hooks/useCot3ySeries.js'
 import { COT_3Y_PATH } from '../data/cot3ySeriesStore.js'
 import { reloadCot3ySeries } from '../prices/stores/HistoricalCOTStore.js'
+import { resolveCanonicalDisplayPrice } from '../prices/canonicalCurrentPrice.js'
 import { useLivePrice } from '../prices/usePriceStores.js'
 import { useWorkstationOhlc } from './hooks/useWorkstationOhlc.js'
 import { buildPositioningWorkstationSeries } from './data/buildPositioningWorkstationSeries.js'
@@ -176,6 +178,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   const { doc, loading, errored } = useCot3ySeries()
   const { exportBlock, exportLoaded } = useWorkstationOhlc(marketId)
   const livePriceState = useLivePrice(marketId)
+  const currentPriceDisplay = resolveCanonicalDisplayPrice(livePriceState.quote, livePriceState.status)
 
   const [rangeId, setRangeId] = React.useState(POSITIONING_DEFAULT_RANGE_ID)
   const [viewportEndLabel, setViewportEndLabel] = React.useState(null)
@@ -428,6 +431,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Research markers — keep previous block until the new one arrives (no flash-clear).
   React.useEffect(() => {
     let cancelled = false
+    setResearchBlock(null)
     fetch('/data/cot_positioning_research_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
@@ -440,7 +444,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             ([k]) => String(k).toLowerCase() === String(marketId || '').toLowerCase(),
           )?.[1] ||
           null
-        if (block?.available) setResearchBlock(block)
+        if (block?.available) setResearchBlock({ ...block, instrument_id: marketId })
       })
       .catch(() => {
         /* keep prior researchBlock */
@@ -453,12 +457,13 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Percentile/flow series — independent fetch so it cannot wipe markers/selection.
   React.useEffect(() => {
     let cancelled = false
+    setWeeklyInspectorBlock(null)
     fetch('/data/cot_weekly_inspector_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
         if (cancelled || !doc) return
         const weeklyInspector = resolveWeeklyInspectorBlock(doc, marketId, matchedKey)
-        if (weeklyInspector) setWeeklyInspectorBlock(weeklyInspector)
+        if (weeklyInspector) setWeeklyInspectorBlock({ ...weeklyInspector, instrument_id: marketId })
       })
       .catch(() => {
         /* keep prior weeklyInspectorBlock */
@@ -471,6 +476,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Weekly Analysis — narrative layer over inspector + research (no recalc).
   React.useEffect(() => {
     let cancelled = false
+    setWeeklyAnalysisBlock(null)
     fetch('/data/cot_analyst_intelligence_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
@@ -487,22 +493,32 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   }, [marketId, matchedKey])
 
   const researchWithInspector = React.useMemo(() => {
-    if (!researchBlock) return null
-    return weeklyInspectorBlock
-      ? { ...researchBlock, weekly_inspector: weeklyInspectorBlock }
-      : researchBlock
-  }, [researchBlock, weeklyInspectorBlock])
+    const research = researchBlock?.instrument_id === marketId ? researchBlock : null
+    const weekly = weeklyInspectorBlock?.instrument_id === marketId ? weeklyInspectorBlock : null
+    const inspector = rollingInspector(weekly || research?.weekly_inspector)
+    if (!research && !inspector) return null
+    return { ...research, weekly_inspector: inspector }
+  }, [researchBlock, weeklyInspectorBlock, marketId])
+
+  const inspectorLatest = researchWithInspector?.weekly_inspector?.weeks?.at(-1)
+  const sourceLatest = block?.series?.at(-1)
+  const inspectorSourceMismatch = Boolean(inspectorLatest && sourceLatest && (
+    inspectorLatest.date !== String(sourceLatest.date).slice(0, 10) ||
+    inspectorLatest.commercial.net !== sourceLatest.commercial_net ||
+    inspectorLatest.noncommercial.net !== sourceLatest.institutional_net ||
+    inspectorLatest.nonreportable.net !== sourceLatest.retail_net
+  ))
 
   const weeklyModel = React.useMemo(
     () =>
       buildWeeklyViewModel({
         timelineRows,
-        researchBlock: researchWithInspector,
+        researchBlock: inspectorSourceMismatch ? null : researchWithInspector,
         instrument: marketId,
         loadedLatestDate,
         staleView: dataStale,
       }),
-    [timelineRows, researchWithInspector, marketId, loadedLatestDate, dataStale],
+    [timelineRows, researchWithInspector, inspectorSourceMismatch, marketId, loadedLatestDate, dataStale],
   )
 
   const weeklyView = weeklyModel.weeklyView
@@ -998,6 +1014,20 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             getViewportState={getViewportState}
           />
 
+          {inspectorSourceMismatch && (
+            <div role="alert" className="cot-ws-warn cot-ws-warn-history">
+              COT DATA INTEGRITY FAILURE: inspector and chart source reports disagree.
+              Inspector readings are blocked until the COT datasets are refreshed together.
+            </div>
+          )}
+          {livePriceState.status !== 'LIVE' && (
+            <div role="alert" className="cot-ws-warn cot-ws-warn-price">
+              Current price is not live: {livePriceState.status}.
+              {livePriceState.quote?.asOf ? ` Last quote: ${livePriceState.quote.asOf}.` : ' No verified quote timestamp.'}
+              {' '}Saved prices and weekly candles are historical reference only.
+              <button type="button" className="ws-btn" onClick={() => livePriceState.refresh()}>Reconnect prices</button>
+            </div>
+          )}
           <PaneShell
             panelId={PANEL_IDS.price}
             label="Weekly OHLC price"
@@ -1017,9 +1047,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 candleBars={visibleBars}
                 syncOnly={!hasVisibleOhlc}
                 livePrice={
-                  livePriceState.quote?.mid ??
-                  livePriceState.streamPrice?.currentPrice ??
-                  null
+                  currentPriceDisplay.price
                 }
                 livePriceAsOf={livePriceState.quote?.asOf ?? null}
                 livePriceSource={livePriceState.quote?.source ?? null}
@@ -1172,7 +1200,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
       <WeeklyAnalysisPanel
         open={weeklyAnalysisOpen}
         onClose={() => setWeeklyAnalysisOpen(false)}
-        intel={weeklyAnalysisBlock}
+        intel={!inspectorSourceMismatch && weeklyAnalysisBlock?.source_week === loadedLatestDate ? weeklyAnalysisBlock : null}
       />
     </div>
   )

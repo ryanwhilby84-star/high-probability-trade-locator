@@ -244,7 +244,7 @@ export function WeeklyInspector({
         <span className="cot-ws-insp-title">{week.instrument || 'Instrument'}</span>
         <span className="cot-ws-insp-date">{week.date}</span>
         <span className="cot-ws-insp-price">
-          Close <strong>{fmtPrice(week.price?.close)}</strong>
+          Selected-week close <strong>{fmtPrice(week.price?.close)}</strong>
         </span>
         <span className={`cot-ws-insp-fresh cot-ws-insp-fresh--${week.freshness}`}>
           {freshnessLabel(week.freshness)}
@@ -254,7 +254,7 @@ export function WeeklyInspector({
           className="cot-ws-insp-measure"
           title={week.measureLabel || 'Net positioning expanding percentile'}
         >
-          Net pctile
+          {week.measureLabel?.includes('156') ? '3Y · 156 reports' : 'Long-history percentile'}
         </span>
         <div className="cot-ws-insp-head-actions">
           {onToggleAnalysis ? (
