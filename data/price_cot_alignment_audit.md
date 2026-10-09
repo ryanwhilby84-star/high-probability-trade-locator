@@ -1,14 +1,14 @@
 # Price ↔ COT Alignment Audit
 
-Generated: `2026-08-15T07:30:26.279520+00:00`
+Generated: `2026-10-07T09:55:51.061044+00:00`
 Max alignment gap: **5 calendar days**
 
 ## Summary
 
 - Markets total: **26**
-- PASS: **0**
-- FAIL: **26**
-- Gate open: **False**
+- PASS: **26**
+- FAIL: **0**
+- Gate open: **True**
 
 ## Frontend cache
 
@@ -18,501 +18,344 @@ Max alignment gap: **5 calendar days**
 
 ## Per instrument
 
-### NASDAQ / NQ — **FAIL**
+### NASDAQ / NQ — **PASS**
 
 - Provider: `oanda`
 - Symbol: `NAS100_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=28511.2 H=28627.7 L=27093.2 C=28191.8 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=30890.4 H=31400.8 L=30735.8 C=31288.0 (2026-10-05)
 
-### S&P 500 / ES — **FAIL**
+### S&P 500 / ES — **PASS**
 
 - Provider: `oanda`
 - Symbol: `SPX500_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=7474.2 H=7518.2 L=7299.6 C=7483.6 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=7737.4 H=7852.6 L=7713.6 C=7836.2 (2026-10-05)
 
-### Dow / YM — **FAIL**
+### Dow / YM — **PASS**
 
 - Provider: `oanda`
 - Symbol: `US30_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=52278.8 H=52960.6 L=51498.5 C=52420.3 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=51269.5 H=51718.4 L=50889.0 C=51605.0 (2026-10-05)
 
-### Euro FX / 6E — **FAIL**
+### Euro FX / 6E — **PASS**
 
 - Provider: `oanda`
 - Symbol: `EUR_USD`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=1.13958 H=1.15476 L=1.13532 C=1.15306 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=1.12596 H=1.12768 L=1.11612 C=1.126 (2026-10-05)
 
-### British Pound / 6B — **FAIL**
+### British Pound / 6B — **PASS**
 
 - Provider: `oanda`
 - Symbol: `GBP_USD`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=1.33478 H=1.34954 L=1.32735 C=1.34836 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=1.32427 H=1.32857 L=1.319 C=1.32752 (2026-10-05)
 
-### Japanese Yen / 6J — **FAIL**
+### Japanese Yen / 6J — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `6J=F`
-- Raw daily date: `2026-08-14`
-- Store weekly date: `2026-08-14`
-- Weekly aggregation date: `2026-08-14`
-- Workstation weekly date: `2026-07-30`
-- COT date: `2026-08-11`
-- Gap days: `12`
-- Gap weeks: `1.71`
-- Latest OHLC: O=0.006120999809354544 H=0.006337999831885099 L=0.00610999995842576 C=0.006300999782979488 (2026-07-30)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-30 store_weekly=2026-08-14 derived=2026-08-14)
-- FAIL: price behind COT by 12d exceeds max 5d (weekly=2026-07-30 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-30 trails provider tip 2026-08-07 by 8d
-- FAIL: OHLC mismatch near 2026-07-31 (high): provider=0.006360999774187803 workstation=0.006337999831885099 (ws_date=2026-07-30)
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=0.006351000163704157 H=0.006366000045090914 L=0.006324999965727329 C=0.006347999908030033 (2026-10-07)
 
-### Swiss Franc / 6S — **FAIL**
+### Swiss Franc / 6S — **PASS**
 
-- Provider: `oanda`
-- Symbol: `USD_CHF`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=0.816 H=0.8207 L=0.80391 C=0.80705 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Provider: `yahoo_futures`
+- Symbol: `6S=F`
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=1.2164499759674072 H=1.2178499698638916 L=1.2091000080108643 C=1.2105499505996704 (2026-10-07)
 
-### Australian Dollar / 6A — **FAIL**
+### Australian Dollar / 6A — **PASS**
 
 - Provider: `oanda`
 - Symbol: `AUD_USD`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=0.70016 H=0.70447 L=0.69222 C=0.70302 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=0.69479 H=0.699 L=0.69325 C=0.69838 (2026-10-05)
 
-### Canadian Dollar / 6C — **FAIL**
+### Canadian Dollar / 6C — **PASS**
 
-- Provider: `oanda`
-- Symbol: `USD_CAD`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=1.40884 H=1.41292 L=1.3991 C=1.40136 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Provider: `yahoo_futures`
+- Symbol: `6C=F`
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=0.7006999850273132 H=0.7063000202178955 L=0.7006999850273132 C=0.7053999900817871 (2026-10-07)
 
-### NZ Dollar / 6N — **FAIL**
+### NZ Dollar / 6N — **PASS**
 
 - Provider: `oanda`
 - Symbol: `NZD_USD`
-- Raw daily date: `2026-08-13`
-- Store weekly date: `2026-08-07`
-- Weekly aggregation date: `2026-08-13`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=0.58035 H=0.58958 L=0.5762 C=0.58892 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-24 store_weekly=2026-08-07 derived=2026-08-13)
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=0.56146 H=0.56284 L=0.55803 C=0.56238 (2026-10-05)
 
-### Gold — **FAIL**
+### Gold — **PASS**
 
 - Provider: `oanda`
 - Symbol: `XAU_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=4090.16 H=4120.495 L=3996.055 C=4045.165 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=4141.605 H=4184.385 L=4103.515 C=4163.855 (2026-10-05)
 
-### Silver — **FAIL**
+### Silver — **PASS**
 
 - Provider: `oanda`
 - Symbol: `XAG_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=59.44875 H=60.0955 L=56.6405 C=57.6325 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=60.7485 H=62.0385 L=60.2775 C=61.3495 (2026-10-05)
 
-### Copper / HG — **FAIL**
+### Copper / HG — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `HG=F`
-- Raw daily date: `2026-07-31`
-- Store weekly date: `2026-07-31`
-- Weekly aggregation date: `2026-07-31`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=6.340000152587891 H=6.515500068664551 L=6.253499984741211 C=6.435999870300293 (2026-07-31)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=6.539999961853027 H=6.666999816894531 L=6.539999961853027 C=6.620999813079834 (2026-10-07)
 
-### Crude Oil / CL — **FAIL**
+### Crude Oil / CL — **PASS**
 
 - Provider: `oanda`
 - Symbol: `WTICO_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=84.55 H=87.364 L=78.355 C=86.921 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=93.644 H=93.972 L=88.657 C=91.718 (2026-10-05)
 
-### Natural Gas / NG — **FAIL**
+### Natural Gas / NG — **PASS**
 
 - Provider: `oanda`
 - Symbol: `NATGAS_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=2.87 H=2.87 L=2.676 C=2.799 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=2.914 H=3.032 L=2.899 C=3.02 (2026-10-05)
 
-### Coffee — **FAIL**
+### Coffee — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `KC=F`
-- Raw daily date: `2026-07-31`
-- Store weekly date: `2026-07-31`
-- Weekly aggregation date: `2026-07-31`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=314.0 H=346.6499938964844 L=313.8999938964844 C=332.1000061035156 (2026-07-31)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
-- FAIL: missing workstation weekly candle for provider week 2026-06-25
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=293.1499938964844 H=308.3500061035156 L=291.29998779296875 C=307.20001220703125 (2026-10-07)
 
-### Cocoa — **FAIL**
+### Cocoa — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `CC=F`
-- Raw daily date: `2026-07-31`
-- Store weekly date: `2026-07-31`
-- Weekly aggregation date: `2026-07-31`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=5332.0 H=5561.0 L=4992.0 C=5397.0 (2026-07-31)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-06`
+- Store weekly date: `2026-10-06`
+- Weekly aggregation date: `2026-10-06`
+- Workstation weekly date: `2026-10-06`
+- COT date: `2026-09-29`
+- Gap days: `7`
+- Gap weeks: `1.0`
+- Latest OHLC: O=5658.0 H=5908.0 L=5567.0 C=5700.0 (2026-10-06)
 
-### Cotton — **FAIL**
+### Cotton — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `CT=F`
-- Raw daily date: `2026-07-31`
-- Store weekly date: `2026-07-31`
-- Weekly aggregation date: `2026-07-31`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=78.62999725341797 H=80.48999786376953 L=77.86000061035156 C=80.5 (2026-07-31)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=77.12999725341797 H=78.93000030517578 L=77.12999725341797 C=80.75 (2026-10-07)
 
-### Corn — **FAIL**
+### Corn — **PASS**
 
-- Provider: `alpha_vantage`
+- Provider: `yahoo_futures`
 - Symbol: `ZC=F`
-- Raw daily date: `2026-07-31`
+- Raw daily date: `2026-10-07`
 - Store weekly date: `None`
-- Weekly aggregation date: `2026-07-31`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=4.5925 H=4.6225 L=4.38 C=4.4075 (2026-07-31)
-- Pipeline break: `alignment`
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=4.975 H=5.0975 L=4.95 C=5.055 (2026-10-07)
 
-### Wheat — **FAIL**
+### Wheat — **PASS**
 
 - Provider: `oanda`
 - Symbol: `WHEAT_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=6.673 H=6.794 L=6.284 C=6.319 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=6.698 H=6.936 L=6.688 C=6.933 (2026-10-05)
 
-### Soybeans — **FAIL**
+### Soybeans — **PASS**
 
 - Provider: `oanda`
 - Symbol: `SOYBN_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=12.225 H=12.294 L=11.622 C=11.691 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=12.696 H=12.973 L=12.664 C=12.97 (2026-10-05)
 
-### Sugar — **FAIL**
+### Sugar — **PASS**
 
 - Provider: `oanda`
 - Symbol: `SUGAR_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=0.14366 H=0.14456 L=0.1406 C=0.1433 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=0.18956 H=0.19974 L=0.18932 C=0.1989 (2026-10-05)
 
-### Platinum — **FAIL**
+### Platinum — **PASS**
 
 - Provider: `oanda`
 - Symbol: `XPT_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=1612.423 H=1657.322 L=1568.545 C=1639.938 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=1686.288 H=1729.148 L=1666.82 C=1693.943 (2026-10-05)
 
-### Palladium — **FAIL**
+### Palladium — **PASS**
 
 - Provider: `oanda`
 - Symbol: `XPD_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=1248.383 H=1306.954 L=1226.557 C=1264.91 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=1163.058 H=1178.948 L=1145.256 C=1158.9 (2026-10-05)
 
-### Bitcoin — **FAIL**
+### Bitcoin — **PASS**
 
 - Provider: `oanda`
 - Symbol: `BTC_USD`
-- Raw daily date: `2026-07-30`
-- Store weekly date: `2026-07-24`
-- Weekly aggregation date: `2026-07-30`
-- Workstation weekly date: `2026-07-24`
-- COT date: `2026-08-11`
-- Gap days: `18`
-- Gap weeks: `2.57`
-- Latest OHLC: O=64098.0 H=65683.5 L=62361.5 C=62886.5 (2026-07-24)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: price behind COT by 18d exceeds max 5d (weekly=2026-07-24 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-24 trails provider tip 2026-08-07 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-07-31
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
+- Raw daily date: `2026-10-05`
+- Store weekly date: `2026-09-25`
+- Weekly aggregation date: `2026-10-05`
+- Workstation weekly date: `2026-10-05`
+- COT date: `2026-09-29`
+- Gap days: `6`
+- Gap weeks: `0.86`
+- Latest OHLC: O=85835.6 H=86999.0 L=84961.0 C=85602.0 (2026-10-05)
 
-### US Dollar Index / DX — **FAIL**
+### US Dollar Index / DX — **PASS**
 
 - Provider: `yahoo_futures`
 - Symbol: `None`
-- Raw daily date: `2026-08-14`
-- Store weekly date: `2026-08-14`
-- Weekly aggregation date: `2026-08-14`
-- Workstation weekly date: `2026-07-31`
-- COT date: `2026-08-11`
-- Gap days: `11`
-- Gap weeks: `1.57`
-- Latest OHLC: O=101.31999969482422 H=101.63999938964844 L=99.69000244140625 C=99.80000305175781 (2026-07-31)
-- Pipeline break: `provider_series_cross_check`
-- FAIL: workstation weekly tip matches neither store native weekly nor derived weekly (ws=2026-07-31 store_weekly=2026-08-14 derived=2026-08-14)
-- FAIL: price behind COT by 11d exceeds max 5d (weekly=2026-07-31 cot=2026-08-11)
-- FAIL: workstation weekly tip 2026-07-31 trails provider tip 2026-08-14 by 14d
-- FAIL: missing workstation weekly candle for provider week 2026-08-07
-- FAIL: missing workstation weekly candle for provider week 2026-08-14
-
-## Failing instruments
-
-- NASDAQ / NQ
-- S&P 500 / ES
-- Dow / YM
-- Euro FX / 6E
-- British Pound / 6B
-- Japanese Yen / 6J
-- Swiss Franc / 6S
-- Australian Dollar / 6A
-- Canadian Dollar / 6C
-- NZ Dollar / 6N
-- Gold
-- Silver
-- Copper / HG
-- Crude Oil / CL
-- Natural Gas / NG
-- Coffee
-- Cocoa
-- Cotton
-- Corn
-- Wheat
-- Soybeans
-- Sugar
-- Platinum
-- Palladium
-- Bitcoin
-- US Dollar Index / DX
+- Raw daily date: `2026-10-07`
+- Store weekly date: `2026-10-07`
+- Weekly aggregation date: `2026-10-07`
+- Workstation weekly date: `2026-10-07`
+- COT date: `2026-09-29`
+- Gap days: `8`
+- Gap weeks: `1.14`
+- Latest OHLC: O=101.91999816894531 H=102.54000091552734 L=101.75 C=102.14600372314453 (2026-10-07)
 
 ## OVERALL STATUS
 
-FAIL
+PASS

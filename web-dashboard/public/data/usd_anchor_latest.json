@@ -1,6 +1,6 @@
 {
   "instrument_id": "US Dollar Index / DX",
-  "generated_at": "2026-09-19T05:28:57.562092+00:00",
+  "generated_at": "2026-10-03T08:37:00.165333+00:00",
   "cftc_code": "098662",
   "registry": {
     "has_cot_mapping": true,
@@ -23,7 +23,7 @@
     "freshness": {
       "status": "stale",
       "as_of": "2026-09-02",
-      "age_days": 17
+      "age_days": 31
     },
     "history": {
       "daily_all": [
@@ -65675,25 +65675,25 @@
     "confidence": "moderate"
   },
   "cot": {
-    "long": 28407.0,
-    "short": 10803.0,
-    "net": 17604.0,
-    "weekly_net_change": 579.0,
-    "four_week_net_change": -3805.0,
-    "open_interest": 57858.0,
-    "net_percentile_3y": 86.9,
-    "long_percentile_3y": 77.2,
-    "short_percentile_3y": 11.9,
-    "oi_percentile_3y": 99.0,
-    "report_date": "2026-09-08",
+    "long": 29742.0,
+    "short": 17861.0,
+    "net": 11881.0,
+    "weekly_net_change": 1551.0,
+    "four_week_net_change": -5144.0,
+    "open_interest": 48342.0,
+    "net_percentile_3y": 70.8,
+    "long_percentile_3y": 83.7,
+    "short_percentile_3y": 51.3,
+    "oi_percentile_3y": 88.8,
+    "report_date": "2026-09-29",
     "cftc_code": "098662",
     "market_name": null,
-    "weeks_available": 506,
+    "weeks_available": 509,
     "source": "cot_3y_series_latest.json",
     "freshness": {
       "status": "fresh",
-      "as_of": "2026-09-08",
-      "age_days": 11
+      "as_of": "2026-09-29",
+      "age_days": 4
     },
     "error": null,
     "mode": "direct_dxy_cot",

@@ -1,6 +1,6 @@
 {
   "phase": "1G-C Weekend FX Futures Pull",
-  "generated_at": "2026-08-15T07:22:35.161028+00:00",
+  "generated_at": "2026-10-07T07:26:10.128183+00:00",
   "sources": [
     {
       "source_name": "price:yahoo_futures",
@@ -8,8 +8,8 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-14",
-      "detail": "bars=14122 proxy=DTWEXBGS"
+      "latest_date": "2026-10-06",
+      "detail": "bars=14158 proxy=DTWEXBGS"
     },
     {
       "source_name": "price:oanda",
@@ -17,8 +17,8 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2648 proxy=OANDA FX"
+      "latest_date": "2026-10-05",
+      "detail": "bars=5029 proxy=OANDA FX"
     },
     {
       "source_name": "price:oanda",
@@ -26,8 +26,8 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2649 proxy=OANDA FX"
+      "latest_date": "2026-10-05",
+      "detail": "bars=5029 proxy=OANDA FX"
     },
     {
       "source_name": "price:oanda",
@@ -35,17 +35,17 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2647 proxy=OANDA FX"
+      "latest_date": "2026-10-05",
+      "detail": "bars=5029 proxy=OANDA FX"
     },
     {
-      "source_name": "price:oanda",
+      "source_name": "price:yahoo_futures",
       "requested_series": "Canadian Dollar / 6C",
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2659 proxy=OANDA FX"
+      "latest_date": "2026-10-07",
+      "detail": "bars=6510 proxy=OANDA FX"
     },
     {
       "source_name": "price:yahoo_futures",
@@ -53,17 +53,17 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-14",
-      "detail": "bars=6466 proxy=OANDA FX"
+      "latest_date": "2026-10-07",
+      "detail": "bars=6421 proxy=OANDA FX"
     },
     {
-      "source_name": "price:oanda",
+      "source_name": "price:yahoo_futures",
       "requested_series": "Swiss Franc / 6S",
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2653 proxy=OANDA FX"
+      "latest_date": "2026-10-07",
+      "detail": "bars=6416 proxy=OANDA FX"
     },
     {
       "source_name": "price:oanda",
@@ -71,8 +71,8 @@
       "status": "ok",
       "error": null,
       "fallback_attempted": "stored_history_preserved",
-      "latest_date": "2026-08-13",
-      "detail": "bars=2657 proxy=OANDA FX"
+      "latest_date": "2026-10-05",
+      "detail": "bars=5029 proxy=OANDA FX"
     },
     {
       "source_name": "FRED",
@@ -260,72 +260,72 @@
       "instrument": "US Dollar Index / DX",
       "provider": "yahoo_futures",
       "status": "ok",
-      "daily_bars": 14122,
-      "last_date": "2026-08-14",
-      "price_as_of": "2026-08-14",
+      "daily_bars": 14158,
+      "last_date": "2026-10-06",
+      "price_as_of": "2026-10-07",
       "error": null
     },
     "6E": {
       "instrument": "Euro FX / 6E",
       "provider": "oanda",
       "status": "ok",
-      "daily_bars": 2648,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.055177583Z",
+      "daily_bars": 5029,
+      "last_date": "2026-10-05",
+      "price_as_of": "2026-10-07T07:26:15.426686551Z",
       "error": null
     },
     "6B": {
       "instrument": "British Pound / 6B",
       "provider": "oanda",
       "status": "ok",
-      "daily_bars": 2649,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.054923919Z",
+      "daily_bars": 5029,
+      "last_date": "2026-10-05",
+      "price_as_of": "2026-10-07T07:26:17.219650337Z",
       "error": null
     },
     "6A": {
       "instrument": "Australian Dollar / 6A",
       "provider": "oanda",
       "status": "ok",
-      "daily_bars": 2647,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.050425856Z",
+      "daily_bars": 5029,
+      "last_date": "2026-10-05",
+      "price_as_of": "2026-10-07T07:26:18.675905846Z",
       "error": null
     },
     "6C": {
       "instrument": "Canadian Dollar / 6C",
-      "provider": "oanda",
+      "provider": "yahoo_futures",
       "status": "ok",
-      "daily_bars": 2659,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.060570496Z",
+      "daily_bars": 6510,
+      "last_date": "2026-10-07",
+      "price_as_of": "2026-10-07",
       "error": null
     },
     "6J": {
       "instrument": "Japanese Yen / 6J",
       "provider": "yahoo_futures",
       "status": "ok",
-      "daily_bars": 6466,
-      "last_date": "2026-08-14",
-      "price_as_of": "2026-08-14",
+      "daily_bars": 6421,
+      "last_date": "2026-10-07",
+      "price_as_of": "2026-10-07",
       "error": null
     },
     "6S": {
       "instrument": "Swiss Franc / 6S",
-      "provider": "oanda",
+      "provider": "yahoo_futures",
       "status": "ok",
-      "daily_bars": 2653,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.061180188Z",
+      "daily_bars": 6416,
+      "last_date": "2026-10-07",
+      "price_as_of": "2026-10-07",
       "error": null
     },
     "6N": {
       "instrument": "NZ Dollar / 6N",
       "provider": "oanda",
       "status": "ok",
-      "daily_bars": 2657,
-      "last_date": "2026-08-13",
-      "price_as_of": "2026-08-14T20:59:05.044794912Z",
+      "daily_bars": 5029,
+      "last_date": "2026-10-05",
+      "price_as_of": "2026-10-07T07:26:32.590963625Z",
       "error": null
     }
   },

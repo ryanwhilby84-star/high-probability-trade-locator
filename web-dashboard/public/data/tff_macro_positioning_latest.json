@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T05:28:57.863023+00:00",
+  "generated_at": "2026-10-03T08:37:00.729857+00:00",
   "source": "cftc_tff_fut_fin_txt",
   "trader_group": "leveraged_money (TFF)",
   "instruments": [
@@ -1574,7 +1574,7 @@
     }
   },
   "raw_snapshot": {
-    "generated_at": "2026-09-19T05:28:57.862889+00:00",
+    "generated_at": "2026-10-03T08:37:00.728874+00:00",
     "source": "cftc_tff_fut_fin_txt",
     "trader_group": "leveraged_money (TFF)",
     "instruments": {

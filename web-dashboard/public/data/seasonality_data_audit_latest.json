@@ -1,7 +1,7 @@
 {
   "status": "FAIL",
   "engine": "seasonality_universe_audit_v4",
-  "asof": "2026-09-21",
+  "asof": "2026-09-27",
   "instrument_count": 26,
   "universe": [
     "NASDAQ / NQ",
@@ -100,7 +100,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2007]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4360,
@@ -138,7 +138,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4360,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -151,7 +151,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "445024cb4cc73c881b3b",
       "scanner_scope_fingerprint": "376e595180d801330d00",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4359,
         "max_abs_daily_return_pct": 12.504,
@@ -214,7 +214,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2007]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4361,
@@ -252,7 +252,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4361,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -265,7 +265,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "710592b09c670008ff0e",
       "scanner_scope_fingerprint": "6d6edf820ab947d16fb2",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4360,
         "max_abs_daily_return_pct": 10.663,
@@ -328,7 +328,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2007]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4362,
@@ -366,7 +366,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4362,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -379,7 +379,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "a21e7853841e64673c42",
       "scanner_scope_fingerprint": "0ce195b7e8d4dbe67ef7",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4361,
         "max_abs_daily_return_pct": 11.832,
@@ -442,7 +442,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4611,
@@ -480,7 +480,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4611,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -493,7 +493,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "2549f926bfef0d88d774",
       "scanner_scope_fingerprint": "a0902d8da6432e38e4d6",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4610,
         "max_abs_daily_return_pct": 3.055,
@@ -556,7 +556,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4602,
@@ -594,7 +594,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4602,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -607,7 +607,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "a8780efddf94e717f53f",
       "scanner_scope_fingerprint": "da2745f03b96014b0b97",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4601,
         "max_abs_daily_return_pct": 8.078,
@@ -669,7 +669,7 @@
       "issues": [],
       "warnings": [
         "legacy_out_of_scope_warnings:large_gaps:2|thin_years:[2000]",
-        "stale_latest_bar:19d"
+        "stale_latest_bar:25d"
       ],
       "source": "yahoo_futures",
       "bar_count": 4193,
@@ -704,7 +704,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4193,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -718,7 +718,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "7570293aa33432c96399",
       "scanner_scope_fingerprint": "82c98b1e75b7c53ee703",
-      "latest_bar_staleness_days": 19,
+      "latest_bar_staleness_days": 25,
       "return_diagnostics": {
         "daily_return_count": 4192,
         "max_abs_daily_return_pct": 5.328,
@@ -817,7 +817,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4200,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -830,7 +830,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "1ff946149c8c7987318f",
       "scanner_scope_fingerprint": "c09de49693fd780b281d",
-      "latest_bar_staleness_days": 7,
+      "latest_bar_staleness_days": 13,
       "return_diagnostics": {
         "daily_return_count": 4199,
         "max_abs_daily_return_pct": 16.981,
@@ -896,7 +896,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4595,
@@ -934,7 +934,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4595,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -947,7 +947,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "595c77b1b670e4449645",
       "scanner_scope_fingerprint": "b439d31f6726f08d5d69",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4594,
         "max_abs_daily_return_pct": 4.557,
@@ -1043,7 +1043,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4199,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1056,7 +1056,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "7bc61b0db3524752ec13",
       "scanner_scope_fingerprint": "57d21bf0be0a670d53b7",
-      "latest_bar_staleness_days": 7,
+      "latest_bar_staleness_days": 13,
       "return_diagnostics": {
         "daily_return_count": 4198,
         "max_abs_daily_return_pct": 3.276,
@@ -1122,7 +1122,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4601,
@@ -1160,7 +1160,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4601,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1173,7 +1173,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "b012a81a6bacc32d4a27",
       "scanner_scope_fingerprint": "b1ac337af6a0942927d4",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4600,
         "max_abs_daily_return_pct": 3.44,
@@ -1236,7 +1236,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4536,
@@ -1274,7 +1274,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4536,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1287,7 +1287,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "5ffd9eed89b5380515f1",
       "scanner_scope_fingerprint": "afe5e5b637e35142d902",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4535,
         "max_abs_daily_return_pct": 9.128,
@@ -1350,7 +1350,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4508,
@@ -1388,7 +1388,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4508,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1401,7 +1401,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "7000ed590a079ce71026",
       "scanner_scope_fingerprint": "3ffda15793f4d2b03025",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4507,
         "max_abs_daily_return_pct": 26.292,
@@ -1463,7 +1463,7 @@
       "issues": [],
       "warnings": [
         "legacy_out_of_scope_warnings:thin_years:[2000]",
-        "stale_latest_bar:19d"
+        "stale_latest_bar:25d"
       ],
       "source": "yahoo_futures",
       "bar_count": 4162,
@@ -1498,7 +1498,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4162,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1511,7 +1511,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "e1ee0bd992e3454e0e4e",
       "scanner_scope_fingerprint": "929ad61355a3ebb56cec",
-      "latest_bar_staleness_days": 19,
+      "latest_bar_staleness_days": 25,
       "return_diagnostics": {
         "daily_return_count": 4161,
         "max_abs_daily_return_pct": 22.253,
@@ -1576,7 +1576,7 @@
       "issues": [],
       "warnings": [
         "thin_years:[2009]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4458,
@@ -1614,7 +1614,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4458,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1625,7 +1625,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "c0bd96ac940192f187ff",
       "scanner_scope_fingerprint": "5bd9bb43ea1f65356e3b",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4457,
         "max_abs_daily_return_pct": 27.525,
@@ -1687,7 +1687,7 @@
       "issues": [],
       "warnings": [
         "thin_years:[2009]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4457,
@@ -1725,7 +1725,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4457,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1736,7 +1736,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "62f28914491ad9d0ac4d",
       "scanner_scope_fingerprint": "6b6c7d1f19f4b72ebd87",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4456,
         "max_abs_daily_return_pct": 29.12,
@@ -1797,7 +1797,7 @@
       "status": "PASS",
       "issues": [],
       "warnings": [
-        "stale_latest_bar:19d"
+        "stale_latest_bar:25d"
       ],
       "source": "yahoo_futures",
       "bar_count": 3553,
@@ -1843,7 +1843,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 3553,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1854,7 +1854,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "04beacffa866280456b1",
       "scanner_scope_fingerprint": "99d8eeb9410cb25e2125",
-      "latest_bar_staleness_days": 19,
+      "latest_bar_staleness_days": 25,
       "return_diagnostics": {
         "daily_return_count": 3552,
         "max_abs_daily_return_pct": 16.327,
@@ -1918,7 +1918,7 @@
       "status": "PASS",
       "issues": [],
       "warnings": [
-        "stale_latest_bar:19d"
+        "stale_latest_bar:25d"
       ],
       "source": "yahoo_futures",
       "bar_count": 3698,
@@ -1953,7 +1953,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 3698,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -1964,7 +1964,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "23c098402801278101d0",
       "scanner_scope_fingerprint": "d82fa10dc5b131897286",
-      "latest_bar_staleness_days": 19,
+      "latest_bar_staleness_days": 25,
       "return_diagnostics": {
         "daily_return_count": 3697,
         "max_abs_daily_return_pct": 22.939,
@@ -2028,7 +2028,7 @@
       "status": "PASS",
       "issues": [],
       "warnings": [
-        "stale_latest_bar:20d"
+        "stale_latest_bar:26d"
       ],
       "source": "yahoo_futures",
       "bar_count": 3696,
@@ -2063,7 +2063,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 3696,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2074,7 +2074,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "592ae1bf8a934267f9d7",
       "scanner_scope_fingerprint": "90c0b8cb8889a8015dec",
-      "latest_bar_staleness_days": 20,
+      "latest_bar_staleness_days": 26,
       "return_diagnostics": {
         "daily_return_count": 3695,
         "max_abs_daily_return_pct": 23.885,
@@ -2138,7 +2138,8 @@
       "status": "PASS",
       "issues": [],
       "warnings": [
-        "legacy_out_of_scope_warnings:thin_years:[2000]"
+        "legacy_out_of_scope_warnings:thin_years:[2000]",
+        "stale_latest_bar:16d"
       ],
       "source": "yahoo_futures",
       "bar_count": 4195,
@@ -2173,7 +2174,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4195,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2186,7 +2187,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "f566f5799189329d4b51",
       "scanner_scope_fingerprint": "d188adc7697f7b0fdc20",
-      "latest_bar_staleness_days": 10,
+      "latest_bar_staleness_days": 16,
       "return_diagnostics": {
         "daily_return_count": 4194,
         "max_abs_daily_return_pct": 23.557,
@@ -2251,7 +2252,7 @@
       "issues": [],
       "warnings": [
         "thin_years:[2009]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4259,
@@ -2289,7 +2290,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4259,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2300,7 +2301,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "dea8752bcafe7543ae98",
       "scanner_scope_fingerprint": "375368fcfb57964aabea",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4258,
         "max_abs_daily_return_pct": 9.958,
@@ -2363,7 +2364,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2006]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4215,
@@ -2401,7 +2402,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4215,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2414,7 +2415,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "28fa3984fa5f35b8c03a",
       "scanner_scope_fingerprint": "7d7ecb5db2d31550c5f5",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4214,
         "max_abs_daily_return_pct": 8.191,
@@ -2477,7 +2478,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2006]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4208,
@@ -2515,7 +2516,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4208,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2528,7 +2529,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "f31206cb579497ace97f",
       "scanner_scope_fingerprint": "924599343cb6ea3cddfd",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4207,
         "max_abs_daily_return_pct": 11.019,
@@ -2591,7 +2592,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4464,
@@ -2635,7 +2636,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4464,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2648,7 +2649,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "186add9f563d26f570e7",
       "scanner_scope_fingerprint": "b5c2aebf47b122c21f5d",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4463,
         "max_abs_daily_return_pct": 17.204,
@@ -2711,7 +2712,7 @@
       "warnings": [
         "thin_years:[2009]",
         "legacy_out_of_scope_warnings:thin_years:[2008]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 4461,
@@ -2755,7 +2756,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4461,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2768,7 +2769,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "44c9aa05f7765ffb64df",
       "scanner_scope_fingerprint": "b576cd348858e55bf3ca",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 4460,
         "max_abs_daily_return_pct": 20.739,
@@ -2832,7 +2833,7 @@
       ],
       "warnings": [
         "thin_years:[2015]",
-        "stale_latest_bar:21d"
+        "stale_latest_bar:27d"
       ],
       "source": "oanda",
       "bar_count": 3122,
@@ -2864,7 +2865,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 3122,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2877,7 +2878,7 @@
       "scanner_eligible": false,
       "series_fingerprint": "6308016799ff9217cbf8",
       "scanner_scope_fingerprint": "6308016799ff9217cbf8",
-      "latest_bar_staleness_days": 21,
+      "latest_bar_staleness_days": 27,
       "return_diagnostics": {
         "daily_return_count": 3121,
         "max_abs_daily_return_pct": 27.398,
@@ -2939,7 +2940,7 @@
       "status": "PASS",
       "issues": [],
       "warnings": [
-        "stale_latest_bar:19d"
+        "stale_latest_bar:25d"
       ],
       "source": "yahoo_futures",
       "bar_count": 4193,
@@ -2974,7 +2975,7 @@
       "audit_scope": "lookback_15y_plus_1y_buffer",
       "lookback_years": 15,
       "scope_start": "2010-01-01",
-      "scope_end": "2026-09-21",
+      "scope_end": "2026-09-27",
       "scope_bar_count": 4193,
       "full_history_status": "PASS",
       "full_history_issues": [],
@@ -2985,7 +2986,7 @@
       "scanner_eligible": true,
       "series_fingerprint": "a0b5d8f1360acf9e400f",
       "scanner_scope_fingerprint": "d907b04819b43e2484c8",
-      "latest_bar_staleness_days": 19,
+      "latest_bar_staleness_days": 25,
       "return_diagnostics": {
         "daily_return_count": 4192,
         "max_abs_daily_return_pct": 2.37,
@@ -3110,7 +3111,7 @@
         ],
         "warnings": [
           "thin_years:[2015]",
-          "stale_latest_bar:21d"
+          "stale_latest_bar:27d"
         ],
         "source": "oanda",
         "bar_count": 3122,
@@ -3142,7 +3143,7 @@
         "audit_scope": "lookback_15y_plus_1y_buffer",
         "lookback_years": 15,
         "scope_start": "2010-01-01",
-        "scope_end": "2026-09-21",
+        "scope_end": "2026-09-27",
         "scope_bar_count": 3122,
         "full_history_status": "PASS",
         "full_history_issues": [],
@@ -3155,7 +3156,7 @@
         "scanner_eligible": false,
         "series_fingerprint": "6308016799ff9217cbf8",
         "scanner_scope_fingerprint": "6308016799ff9217cbf8",
-        "latest_bar_staleness_days": 21,
+        "latest_bar_staleness_days": 27,
         "return_diagnostics": {
           "daily_return_count": 3121,
           "max_abs_daily_return_pct": 27.398,
@@ -3220,7 +3221,7 @@
         ],
         "warnings": [
           "thin_years:[2015]",
-          "stale_latest_bar:21d"
+          "stale_latest_bar:27d"
         ],
         "source": "oanda",
         "bar_count": 3122,
@@ -3252,7 +3253,7 @@
         "audit_scope": "lookback_15y_plus_1y_buffer",
         "lookback_years": 15,
         "scope_start": "2010-01-01",
-        "scope_end": "2026-09-21",
+        "scope_end": "2026-09-27",
         "scope_bar_count": 3122,
         "full_history_status": "PASS",
         "full_history_issues": [],
@@ -3265,7 +3266,7 @@
         "scanner_eligible": false,
         "series_fingerprint": "6308016799ff9217cbf8",
         "scanner_scope_fingerprint": "6308016799ff9217cbf8",
-        "latest_bar_staleness_days": 21,
+        "latest_bar_staleness_days": 27,
         "return_diagnostics": {
           "daily_return_count": 3121,
           "max_abs_daily_return_pct": 27.398,

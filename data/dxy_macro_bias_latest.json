@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-15T07:27:50.487122+00:00",
+  "generated_at": "2026-10-07T07:40:55.127701+00:00",
   "engine": "dxy_macro_bias_v1",
   "market": "US Dollar Index / DX",
   "price_instrument": {
@@ -9,12 +9,12 @@
     "is_ice_dx_futures": false,
     "is_proxy": true,
     "note": "Charted price is the Fed broad USD index proxy, not ICE DX futures.",
-    "latest": 119.7034,
-    "as_of": "2026-07-31",
+    "latest": 118.7479,
+    "as_of": "2026-08-28",
     "freshness": {
       "status": "STALE",
-      "age_days": 15,
-      "as_of": "2026-07-31"
+      "age_days": 40,
+      "as_of": "2026-08-28"
     }
   },
   "positioning_instrument": {
@@ -23,7 +23,7 @@
     "is_ice_dx_futures": true
   },
   "macro_bias": "Moderately Bullish",
-  "macro_bias_summary": "DXY macro bias: Moderately Bullish. US 2Y nominal yield: Bullish; US 10Y nominal yield: Bullish; US 10Y TIPS real yield: Bullish; 2s10s Treasury curve: Bullish; Effective federal funds rate: Moderately Bearish; VIX risk sentiment: Moderately Bearish",
+  "macro_bias_summary": "DXY macro bias: Moderately Bullish. Fed Broad Trade-Weighted USD: Bearish; US 2Y nominal yield: Bullish; US 10Y nominal yield: Bullish; US 10Y TIPS real yield: Bullish; 2s10s Treasury curve: Bullish; Effective federal funds rate: Moderately Bearish",
   "valuation_status": "NOT_YET_VALIDATED",
   "valuation_note": "No robust walk-forward fair-value model is published for DXY yet. Workstation publishes MACRO BIAS with explicit driver classifications.",
   "driver_classifications": {
@@ -44,17 +44,17 @@
       "key": "usd_index_price",
       "label": "Broad USD index level (chart proxy)",
       "classification": "INFORMATIONAL_ONLY",
-      "value": 119.7034,
-      "change_5d": -1.0071,
-      "zscore_1y": -0.182,
-      "date": "2026-07-31",
-      "direction_for_usd": "Neutral",
+      "value": 118.7479,
+      "change_5d": 0.6851,
+      "zscore_1y": -0.929,
+      "date": "2026-08-28",
+      "direction_for_usd": "Bearish",
       "confidence": "medium",
       "source": "FRED DTWEXBGS",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
-        "as_of": "2026-07-31"
+        "age_days": 40,
+        "as_of": "2026-08-28"
       },
       "explanation": "FRED Trade-Weighted Broad USD (DTWEXBGS). This is NOT ICE DX / Dixie futures. Used for workstation price history until an ICE DX feed is wired.",
       "is_ice_dx_futures": false,
@@ -64,17 +64,17 @@
       "key": "fed_broad_usd",
       "label": "Fed Broad Trade-Weighted USD",
       "classification": "MACRO_BIAS_DRIVER",
-      "value": 119.7034,
-      "change_5d": -1.0071,
-      "zscore_1y": -0.182,
-      "date": "2026-07-31",
-      "direction_for_usd": "Neutral",
+      "value": 118.7479,
+      "change_5d": 0.6851,
+      "zscore_1y": -0.929,
+      "date": "2026-08-28",
+      "direction_for_usd": "Bearish",
       "confidence": "medium",
       "source": "FRED DTWEXBGS",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
-        "as_of": "2026-07-31"
+        "age_days": 40,
+        "as_of": "2026-08-28"
       },
       "explanation": "Same DTWEXBGS series used as the macro breadth/trend driver."
     },
@@ -91,7 +91,7 @@
       "source": "FRED DGS2",
       "freshness": {
         "status": "STALE",
-        "age_days": 16,
+        "age_days": 69,
         "as_of": "2026-07-30"
       },
       "explanation": "Higher US rates / policy rates typically support the USD via rate differentials."
@@ -109,7 +109,7 @@
       "source": "FRED DGS10",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
+        "age_days": 68,
         "as_of": "2026-07-31"
       },
       "explanation": "Higher US rates / policy rates typically support the USD via rate differentials."
@@ -127,7 +127,7 @@
       "source": "FRED DFII10",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
+        "age_days": 68,
         "as_of": "2026-07-31"
       },
       "explanation": "Higher real yields increase USD opportunity cost vs gold/FX — typically USD-supportive."
@@ -145,7 +145,7 @@
       "source": "FRED T10Y2Y",
       "freshness": {
         "status": "STALE",
-        "age_days": 29,
+        "age_days": 82,
         "as_of": "2026-07-17"
       },
       "explanation": "2s10s level vs 1Y history. Deep inversion often reflects policy/recession risk rather than pure USD strength."
@@ -163,7 +163,7 @@
       "source": "FRED DFF",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
+        "age_days": 68,
         "as_of": "2026-07-31"
       },
       "explanation": "Higher US rates / policy rates typically support the USD via rate differentials."
@@ -181,7 +181,7 @@
       "source": "FRED VIXCLS",
       "freshness": {
         "status": "STALE",
-        "age_days": 30,
+        "age_days": 83,
         "as_of": "2026-07-16"
       },
       "explanation": "Elevated VIX historically coincides with USD bid (safe-haven); low VIX removes that support."
@@ -190,22 +190,23 @@
       "key": "ice_dx_cot",
       "label": "ICE U.S. Dollar Index futures positioning (CFTC)",
       "classification": "MACRO_BIAS_DRIVER",
-      "value": 21409.0,
-      "change_5d": -1090.0,
+      "value": 11881.0,
+      "change_5d": 1551.0,
       "zscore_1y": null,
-      "date": "2026-08-11",
+      "date": "2026-09-29",
       "direction_for_usd": "Moderately Bullish",
       "confidence": "medium",
       "source": "CFTC TFF/Legacy code 098662 (ICE U.S. Dollar Index)",
       "freshness": {
-        "status": "FRESH",
-        "age_days": 4,
-        "as_of": "2026-08-11"
+        "status": "SOFT_STALE",
+        "age_days": 8,
+        "as_of": "2026-09-29"
       },
-      "explanation": "DXY TFF net 21,409 · Δ1w -1,090 · OI Δ -5.0%",
+      "explanation": "DXY TFF net 11,881 · Δ1w 1,551 · OI Δ 4.3%",
       "primary_label": "Strong Dollar",
       "score_labels": [
-        "Strong Dollar"
+        "Strong Dollar",
+        "Dollar Strengthening"
       ],
       "cftc_code": "098662",
       "is_ice_dx_futures_positioning": true
@@ -214,17 +215,17 @@
       "key": "gold_relationship",
       "label": "Gold vs USD",
       "classification": "INFORMATIONAL_ONLY",
-      "value": 4045.165,
-      "change_5d": -130.53,
+      "value": 4163.855,
+      "change_5d": -191.85,
       "zscore_1y": null,
-      "date": "2026-07-30",
+      "date": "2026-10-05",
       "direction_for_usd": "Neutral",
       "confidence": "low",
       "source": "price_store Gold + FRED DTWEXBGS",
       "freshness": {
-        "status": "STALE",
-        "age_days": 16,
-        "as_of": "2026-07-30"
+        "status": "FRESH",
+        "age_days": 2,
+        "as_of": "2026-10-05"
       },
       "explanation": "Gold and broad USD moving without a clear inverse confirmation."
     },
@@ -261,7 +262,7 @@
       "source": "FRED DGS2",
       "freshness": {
         "status": "STALE",
-        "age_days": 16,
+        "age_days": 69,
         "as_of": "2026-07-30"
       },
       "explanation": "Higher US rates / policy rates typically support the USD via rate differentials."
@@ -279,7 +280,7 @@
       "source": "FRED DGS10",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
+        "age_days": 68,
         "as_of": "2026-07-31"
       },
       "explanation": "Higher US rates / policy rates typically support the USD via rate differentials."
@@ -297,7 +298,7 @@
       "source": "FRED DFII10",
       "freshness": {
         "status": "STALE",
-        "age_days": 15,
+        "age_days": 68,
         "as_of": "2026-07-31"
       },
       "explanation": "Higher real yields increase USD opportunity cost vs gold/FX — typically USD-supportive."
@@ -315,7 +316,7 @@
       "source": "FRED T10Y2Y",
       "freshness": {
         "status": "STALE",
-        "age_days": 29,
+        "age_days": 82,
         "as_of": "2026-07-17"
       },
       "explanation": "2s10s level vs 1Y history. Deep inversion often reflects policy/recession risk rather than pure USD strength."

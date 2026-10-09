@@ -1,5 +1,5 @@
 {
-  "report_date": "2026-09-15",
+  "report_date": "2026-09-29",
   "checked_count": 26,
   "passed_count": 26,
   "failed_count": 0,
@@ -9,7 +9,7 @@
   "exit_code": 0,
   "error": null,
   "cot_layer_frozen": true,
-  "generated_at": "2026-09-19T05:42:34.969596+00:00",
+  "generated_at": "2026-10-03T08:54:04.761403+00:00",
   "source_truth_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_source_truth_audit_latest.json",
   "lineage_path": "C:\\Users\\ryanw\\Documents\\ClawWork\\high-probability-trade-locator\\data\\cot_data_lineage_latest.json"
 }
