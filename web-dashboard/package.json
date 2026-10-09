@@ -4,9 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
+    "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
+    "cot-inspector": "cd .. && python -m hptl.cot.weekly_inspector_export",
+    "dev": "npm run cot-inspector && npm run seasonal-edge && vite",
+    "build": "npm run cot-inspector && npm run seasonal-edge && vite build",
+    "preview": "vite preview",
+    "test:workstation-data": "node --test src/prices/quoteFreshness.regression.test.js"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",

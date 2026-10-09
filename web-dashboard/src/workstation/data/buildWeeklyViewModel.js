@@ -1,7 +1,8 @@
 /**
  * Frontend weekly-view model for the COT workstation inspector.
  * Assembles timeline + research payload (including weekly_inspector series).
- * Does not recalculate research percentiles — prefers backend weekly_inspector.
+ * Missing derived percentiles are recalculated from the same visible COT history
+ * so recent weeks never render Unavailable when net-positioning data exists.
  */
 
 import { eventBadge, eventTone } from '../researchEventUi.js'
@@ -142,6 +143,120 @@ function changeOver(rows, index, key, weeksBack) {
   return cur[key] - prior[key]
 }
 
+// Same tie-aware empirical percentile used by the Python COT engine:
+// (count below + 0.5 * count equal) / n * 100.
+function empiricalPercentile(values, value) {
+  if (!isNum(value)) return null
+  const finite = values.filter(isNum)
+  const n = finite.length
+  if (!n) return null
+  if (n === 1) return 50
+  let below = 0
+  let equal = 0
+  for (const x of finite) {
+    if (x < value) below += 1
+    else if (x === value) equal += 1
+  }
+  return (100 * (below + 0.5 * equal)) / n
+}
+
+function percentileAt(rows, index, key) {
+  if (index < 0 || !rows[index] || !isNum(rows[index][key])) return null
+  const history = []
+  for (let i = 0; i <= index; i += 1) {
+    if (isNum(rows[i]?.[key])) history.push(rows[i][key])
+  }
+  return empiricalPercentile(history, rows[index][key])
+}
+
+function percentileChange(rows, index, key, lag) {
+  const now = percentileAt(rows, index, key)
+  const prior = percentileAt(rows, index - lag, key)
+  return isNum(now) && isNum(prior) ? now - prior : null
+}
+
+function percentileObservationCount(rows, index, key) {
+  let n = 0
+  for (let i = 0; i <= index; i += 1) {
+    if (isNum(rows[i]?.[key])) n += 1
+  }
+  return n
+}
+
+function flowStateFromPercentile(percentile, d1, d4) {
+  if (!isNum(percentile)) {
+    return { temperature: 'unknown', stateLabel: 'Unavailable', directionArrow: '·' }
+  }
+  const movement = isNum(d1) && Math.abs(d1) >= 2 ? d1 : d4
+  const arrow = !isNum(movement) || Math.abs(movement) < 2 ? '→' : movement >= 7 ? '▲▲' : movement > 0 ? '▲' : movement <= -7 ? '▼▼' : '▼'
+  const rising = isNum(movement) && movement >= 2
+  const falling = isNum(movement) && movement <= -2
+  const strongUp = isNum(movement) && movement >= 7
+  const strongDown = isNum(movement) && movement <= -7
+
+  if (percentile >= 70) {
+    if (strongUp) return { temperature: 'heating_rapidly', stateLabel: 'Deeper into extreme', directionArrow: arrow }
+    if (rising) return { temperature: 'heating', stateLabel: 'Deeper into extreme', directionArrow: arrow }
+    if (falling || strongDown) return { temperature: 'cooling_from_extreme', stateLabel: 'Cooling from extreme', directionArrow: arrow }
+    return { temperature: 'elevated_stable', stateLabel: 'Elevated / stable', directionArrow: arrow }
+  }
+  if (percentile <= 30) {
+    if (strongDown || falling) return { temperature: 'deepening_extreme', stateLabel: 'Deeper into low extreme', directionArrow: arrow }
+    if (strongUp) return { temperature: 'recovering_strong', stateLabel: 'Strong rotation away from extreme', directionArrow: arrow }
+    if (rising) return { temperature: 'recovering', stateLabel: 'Moving out of extreme', directionArrow: arrow }
+    return { temperature: 'depressed_stable', stateLabel: 'Depressed / stable', directionArrow: arrow }
+  }
+  if (strongUp || rising) return { temperature: 'building', stateLabel: 'Rotation strengthening', directionArrow: arrow }
+  if (strongDown || falling) return { temperature: 'weakening', stateLabel: 'Rotation weakening', directionArrow: arrow }
+  return { temperature: 'neutral', stateLabel: 'Neutral', directionArrow: arrow }
+}
+
+function ensureCalculatedPercentiles(target, rows, index, key) {
+  if (!isNum(target?.net)) return
+  const pct = percentileAt(rows, index, key)
+  const d1 = percentileChange(rows, index, key, 1)
+  const d4 = percentileChange(rows, index, key, 4)
+  const d12 = percentileChange(rows, index, key, 12)
+
+  if (!isNum(target.percentile) && isNum(pct)) target.percentile = pct
+  if (!isNum(target.percentileChange1w) && isNum(d1)) target.percentileChange1w = d1
+  if (!isNum(target.percentileChange4w) && isNum(d4)) target.percentileChange4w = d4
+  if (!isNum(target.percentileChange12w) && isNum(d12)) target.percentileChange12w = d12
+  if (!isNum(target.percentileObservationCount)) {
+    target.percentileObservationCount = percentileObservationCount(rows, index, key)
+  }
+
+  const state = flowStateFromPercentile(target.percentile, target.percentileChange1w, target.percentileChange4w)
+  if (!target.temperature || target.temperature === 'unknown') target.temperature = state.temperature
+  if (!target.stateLabel || target.stateLabel === 'Unavailable') target.stateLabel = state.stateLabel
+  if (!target.directionArrow || target.directionArrow === '·') target.directionArrow = state.directionArrow
+  target.isExtreme = isNum(target.percentile) && (target.percentile >= 90 || target.percentile <= 10)
+  target.measure = 'net_positioning_expanding_percentile'
+}
+
+function relationshipFromPercentiles(c, nc) {
+  if (!isNum(c) || !isNum(nc)) return 'unavailable'
+  const cSide = c >= 55 ? 1 : c <= 45 ? -1 : 0
+  const ncSide = nc >= 55 ? 1 : nc <= 45 ? -1 : 0
+  if (!cSide || !ncSide) return 'mixed'
+  if (cSide === ncSide) return 'aligned'
+  return Math.abs(c - nc) >= 60 ? 'strong_opposition' : 'opposed'
+}
+
+function spreadFlowFromParticipants(c, nc) {
+  if (!c || !nc) return 'unavailable'
+  const d1 = isNum(c.percentileChange1w) && isNum(nc.percentileChange1w)
+    ? c.percentileChange1w - nc.percentileChange1w
+    : null
+  const d4 = isNum(c.percentileChange4w) && isNum(nc.percentileChange4w)
+    ? c.percentileChange4w - nc.percentileChange4w
+    : null
+  const d = isNum(d1) ? d1 : d4
+  if (!isNum(d)) return 'unavailable'
+  if (Math.abs(d) < 2) return 'stable'
+  return d > 0 ? 'spread_widening' : 'spread_narrowing'
+}
+
 function emptyParticipant() {
   return {
     net: null,
@@ -190,25 +305,14 @@ function enrichFromInspectorPack(target, pack) {
   if (isNum(pack.four_week_change)) target.change4w = pack.four_week_change
   if (isNum(pack.twelve_week_change)) target.change12w = pack.twelve_week_change
   if (isNum(pack.percentile)) target.percentile = pack.percentile
-  if (isNum(pack.percentile_change_1w)) {
-    target.percentileChange1w = pack.percentile_change_1w
-  }
-  if (isNum(pack.percentile_change_4w)) {
-    target.percentileChange4w = pack.percentile_change_4w
-  }
-  if (isNum(pack.percentile_change_12w)) {
-    target.percentileChange12w = pack.percentile_change_12w
-  }
-  if (isNum(pack.percentile_observation_count)) {
-    target.percentileObservationCount = pack.percentile_observation_count
-  }
+  if (isNum(pack.percentile_change_1w)) target.percentileChange1w = pack.percentile_change_1w
+  if (isNum(pack.percentile_change_4w)) target.percentileChange4w = pack.percentile_change_4w
+  if (isNum(pack.percentile_change_12w)) target.percentileChange12w = pack.percentile_change_12w
+  if (isNum(pack.percentile_observation_count)) target.percentileObservationCount = pack.percentile_observation_count
   if (pack.direction) target.flowDirection = pack.direction
   if (pack.direction_arrow) target.directionArrow = pack.direction_arrow
   if (pack.temperature) target.temperature = pack.temperature
-  target.stateLabel = stateLabelFromTemperature(
-    pack.temperature,
-    pack.state_label || null,
-  )
+  target.stateLabel = stateLabelFromTemperature(pack.temperature, pack.state_label || null)
   if (typeof pack.is_extreme === 'boolean') target.isExtreme = pack.is_extreme
   if (pack.measure) target.measure = pack.measure
   target.direction = directionFromDelta(target.change1w)
@@ -217,26 +321,17 @@ function enrichFromInspectorPack(target, pack) {
 function enrichFromResearchParticipant(target, src) {
   if (!src || typeof src !== 'object') return
   if (isNum(src.net) && !isNum(target.net)) target.net = src.net
-  // Prefer weekly_inspector percentiles; only fill if still missing.
   if (!isNum(target.percentile)) {
-    if (isNum(src.long_history_percentile)) {
-      target.percentile = src.long_history_percentile
-    } else if (isNum(src.percentile)) {
-      target.percentile = src.percentile
-    } else if (isNum(src?.percentiles?.long_history)) {
-      target.percentile = src.percentiles.long_history
-    }
+    if (isNum(src.long_history_percentile)) target.percentile = src.long_history_percentile
+    else if (isNum(src.percentile)) target.percentile = src.percentile
+    else if (isNum(src?.percentiles?.long_history)) target.percentile = src.percentiles.long_history
   }
   const v1 = src?.velocity?.['1w']
   if (isNum(v1?.net_change) && !isNum(target.change1w)) target.change1w = v1.net_change
-  if (isNum(v1?.percentile_change) && !isNum(target.percentileChange1w)) {
-    target.percentileChange1w = v1.percentile_change
-  }
+  if (isNum(v1?.percentile_change) && !isNum(target.percentileChange1w)) target.percentileChange1w = v1.percentile_change
   const v4 = src?.velocity?.['4w']
   if (isNum(v4?.net_change) && !isNum(target.change4w)) target.change4w = v4.net_change
-  if (isNum(v4?.percentile_change) && !isNum(target.percentileChange4w)) {
-    target.percentileChange4w = v4.percentile_change
-  }
+  if (isNum(v4?.percentile_change) && !isNum(target.percentileChange4w)) target.percentileChange4w = v4.percentile_change
   const v12 = src?.velocity?.['12w']
   if (isNum(v12?.net_change) && !isNum(target.change12w)) target.change12w = v12.net_change
   target.direction = directionFromDelta(target.change1w)
@@ -249,14 +344,10 @@ function enrichFromCurrentState(target, state) {
   if (isNum(pct) && !isNum(target.percentile)) target.percentile = pct
   const v1 = state?.velocity?.['1w']
   if (isNum(v1?.net_change) && !isNum(target.change1w)) target.change1w = v1.net_change
-  if (isNum(v1?.percentile_change) && !isNum(target.percentileChange1w)) {
-    target.percentileChange1w = v1.percentile_change
-  }
+  if (isNum(v1?.percentile_change) && !isNum(target.percentileChange1w)) target.percentileChange1w = v1.percentile_change
   const v4 = state?.velocity?.['4w']
   if (isNum(v4?.net_change) && !isNum(target.change4w)) target.change4w = v4.net_change
-  if (isNum(v4?.percentile_change) && !isNum(target.percentileChange4w)) {
-    target.percentileChange4w = v4.percentile_change
-  }
+  if (isNum(v4?.percentile_change) && !isNum(target.percentileChange4w)) target.percentileChange4w = v4.percentile_change
   const v12 = state?.velocity?.['12w']
   if (isNum(v12?.net_change) && !isNum(target.change12w)) target.change12w = v12.net_change
   target.direction = directionFromDelta(target.change1w)
@@ -274,12 +365,8 @@ function activeStatesFromEvents(events, group) {
   for (const e of events || []) {
     if (String(e.group || '') !== group) continue
     const type = String(e.event_type || '')
-    if (type === 'absolute_extreme' || type === 'local_extreme') {
-      extremeState = e.label || e.side || type
-    }
-    if (type === 'major_rotation' || type === 'rapid_velocity') {
-      rotationState = e.label || e.side || type
-    }
+    if (type === 'absolute_extreme' || type === 'local_extreme') extremeState = e.label || e.side || type
+    if (type === 'major_rotation' || type === 'rapid_velocity') rotationState = e.label || e.side || type
   }
   return { extremeState, rotationState }
 }
@@ -302,13 +389,7 @@ function ordinal(n) {
 }
 
 function relationshipLabel(raw) {
-  const m = {
-    aligned: 'Aligned',
-    opposed: 'Opposed',
-    strong_opposition: 'Strong opposition',
-    mixed: 'Mixed',
-    unavailable: 'Unavailable',
-  }
+  const m = { aligned: 'Aligned', opposed: 'Opposed', strong_opposition: 'Strong opposition', mixed: 'Mixed', unavailable: 'Unavailable' }
   return m[raw] || raw || 'Unavailable'
 }
 
@@ -326,13 +407,11 @@ function flowLabel(raw) {
   return m[raw] || raw || 'Unavailable'
 }
 
-/** Deterministic plain-English summary — fixed rules, no LLM. */
 export function buildWeekSummaryText(week) {
   if (!week) return 'Unavailable'
   const parts = []
   const c = week.commercial
   const nc = week.nonCommercial
-
   if (c?.summaryLine) parts.push(c.summaryLine)
   else {
     const cCh = c?.change1w
@@ -343,7 +422,6 @@ export function buildWeekSummaryText(week) {
       parts.push(`Commercial positioning ${verb}${by} to the ${cPct} net percentile.`)
     }
   }
-
   if (nc?.summaryLine) parts.push(nc.summaryLine)
   else {
     const ncCh = nc?.change1w
@@ -354,19 +432,11 @@ export function buildWeekSummaryText(week) {
       parts.push(`Non-Commercial positioning ${verb}${by} to the ${ncPct} net percentile.`)
     }
   }
-
   const rel = week.spreads?.relationship
   const flow = week.spreads?.flow
   if (rel === 'opposed' || rel === 'strong_opposition') {
-    parts.push(
-      `Commercials and Non-Commercials are in ${relationshipLabel(rel).toLowerCase()}` +
-        (flow && flow !== 'stable' && flow !== 'unavailable'
-          ? ` — ${flowLabel(flow).toLowerCase()}.`
-          : '.'),
-    )
-  } else if (rel === 'aligned') {
-    parts.push('Commercial and Non-Commercial positioning are aligned.')
-  }
+    parts.push(`Commercials and Non-Commercials are in ${relationshipLabel(rel).toLowerCase()}` + (flow && flow !== 'stable' && flow !== 'unavailable' ? ` — ${flowLabel(flow).toLowerCase()}.` : '.'))
+  } else if (rel === 'aligned') parts.push('Commercial and Non-Commercial positioning are aligned.')
 
   const active = []
   if (c?.extremeState) active.push('a Commercial extreme')
@@ -377,37 +447,17 @@ export function buildWeekSummaryText(week) {
   if (week.nonReportable?.rotationState) active.push('a Non-Reportable rotation')
   const divs = (week.events || []).filter((e) => e.event_type === 'comm_nr_divergence')
   if (divs.length) active.push('a Commercial–NR divergence')
-
   if (active.length === 1) parts.push(`${active[0][0].toUpperCase()}${active[0].slice(1)} is active.`)
   else if (active.length > 1) {
     const last = active[active.length - 1]
     parts.push(`${active.slice(0, -1).join(', ')} and ${last} are active.`)
   }
-
-  return parts.length
-    ? parts.join(' ')
-    : 'Weekly positioning data is available; no notable event narrative for this week.'
+  return parts.length ? parts.join(' ') : 'Weekly positioning data is available; no notable event narrative for this week.'
 }
 
-/**
- * @param {object} opts
- * @param {Array} opts.timelineRows
- * @param {object|null} opts.researchBlock
- * @param {string} opts.instrument
- * @param {string|null} opts.loadedLatestDate
- * @param {boolean} [opts.staleView]
- */
-export function buildWeeklyViewModel({
-  timelineRows = [],
-  researchBlock = null,
-  instrument = '',
-  loadedLatestDate = null,
-  staleView = false,
-} = {}) {
+export function buildWeeklyViewModel({ timelineRows = [], researchBlock = null, instrument = '', loadedLatestDate = null, staleView = false } = {}) {
   const rows = Array.isArray(timelineRows) ? timelineRows : []
-  const latestDate = sliceDate(
-    rows.length ? rows[rows.length - 1]?.date || rows[rows.length - 1]?.label : null,
-  )
+  const latestDate = sliceDate(rows.length ? rows[rows.length - 1]?.date || rows[rows.length - 1]?.label : null)
   const sourceLatest = sliceDate(loadedLatestDate || researchBlock?.source_week || latestDate)
 
   const eventsByDate = new Map()
@@ -415,22 +465,15 @@ export function buildWeeklyViewModel({
     const d = sliceDate(event.date)
     if (!d) continue
     if (!eventsByDate.has(d)) eventsByDate.set(d, [])
-    eventsByDate.get(d).push({
-      ...event,
-      id: researchEventId(event),
-      tone: eventTone(event),
-      badge: eventBadge(event),
-    })
+    eventsByDate.get(d).push({ ...event, id: researchEventId(event), tone: eventTone(event), badge: eventBadge(event) })
   }
 
   const spreadByDate = new Map()
   for (const row of researchBlock?.spread_series || []) {
     const d = sliceDate(row.date)
-    if (!d) continue
-    spreadByDate.set(d, row)
+    if (d) spreadByDate.set(d, row)
   }
 
-  // Backend weekly_inspector — primary percentile / flow source for every week.
   const inspectorByDate = new Map()
   const inspectorWeeks = researchBlock?.weekly_inspector?.weeks || []
   for (const w of inspectorWeeks) {
@@ -440,25 +483,16 @@ export function buildWeeklyViewModel({
 
   const current = researchBlock?.current_state || null
   const currentDate = sliceDate(current?.commercial?.date || current?.spread?.date)
-  const measureLabel =
-    researchBlock?.weekly_inspector?.measure_label ||
-    'Net positioning percentile (expanding, point-in-time)'
-
+  const measureLabel = researchBlock?.weekly_inspector?.measure_label || 'Net positioning percentile (expanding, point-in-time)'
   const weeklyView = Object.create(null)
 
   for (let i = 0; i < rows.length; i += 1) {
     const row = rows[i]
     const date = sliceDate(row.date || row.label)
     if (!date) continue
-
     const events = eventsByDate.get(date) || []
     const commercial = participantFromRow(rows, i, 'commercial_net', 'commercial_wow')
-    const nonCommercial = participantFromRow(
-      rows,
-      i,
-      'institutional_net',
-      'institutional_wow',
-    )
+    const nonCommercial = participantFromRow(rows, i, 'institutional_net', 'institutional_wow')
     const nonReportable = participantFromRow(rows, i, 'retail_net', 'retail_wow')
 
     const inspResolved = resolveInspectorWeekForDate(inspectorByDate, date)
@@ -477,12 +511,18 @@ export function buildWeeklyViewModel({
       enrichFromResearchParticipant(nonCommercial, ev.noncommercial)
       enrichFromResearchParticipant(nonReportable, ev.nonreportable)
     }
-
     if (current && currentDate === date) {
       enrichFromCurrentState(commercial, current.commercial)
       enrichFromCurrentState(nonCommercial, current.noncommercial)
       enrichFromCurrentState(nonReportable, current.nonreportable)
     }
+
+    // Final safety net: if raw net positioning exists, calculate the derived
+    // percentile fields here from the exact COT timeline being displayed.
+    // This removes any dependency on a stale/missing weekly-inspector export.
+    ensureCalculatedPercentiles(commercial, rows, i, 'commercial_net')
+    ensureCalculatedPercentiles(nonCommercial, rows, i, 'institutional_net')
+    ensureCalculatedPercentiles(nonReportable, rows, i, 'retail_net')
 
     const cStates = activeStatesFromEvents(events, 'commercial')
     const ncStates = activeStatesFromEvents(events, 'noncommercial')
@@ -496,18 +536,8 @@ export function buildWeeklyViewModel({
 
     const spreadRow = spreadByDate.get(date)
     const cross = insp?.cross || null
-
-    let commNrValue = isNum(cross?.comm_nr_spread)
-      ? cross.comm_nr_spread
-      : isNum(spreadRow?.spread)
-        ? spreadRow.spread
-        : null
-    let commNrPct = isNum(cross?.comm_nr_spread_percentile)
-      ? cross.comm_nr_spread_percentile
-      : isNum(spreadRow?.spread_percentile)
-        ? spreadRow.spread_percentile
-        : null
-
+    let commNrValue = isNum(cross?.comm_nr_spread) ? cross.comm_nr_spread : isNum(spreadRow?.spread) ? spreadRow.spread : null
+    let commNrPct = isNum(cross?.comm_nr_spread_percentile) ? cross.comm_nr_spread_percentile : isNum(spreadRow?.spread_percentile) ? spreadRow.spread_percentile : null
     if (currentDate === date && isNum(current?.spread?.spread)) {
       if (!isNum(commNrValue)) commNrValue = current.spread.spread
       if (!isNum(commNrPct)) commNrPct = current.spread.spread_percentile
@@ -517,20 +547,15 @@ export function buildWeeklyViewModel({
       if (isNum(ev?.spread?.percentile)) commNrPct = ev.spread.percentile
     }
 
-    const commNcContracts =
-      isNum(commercial.net) && isNum(nonCommercial.net)
-        ? commercial.net - nonCommercial.net
-        : null
-    const commNcPctSpread = isNum(cross?.comm_nc_spread) ? cross.comm_nc_spread : null
-    const commNcPctSpreadPct = isNum(cross?.comm_nc_spread_percentile)
-      ? cross.comm_nc_spread_percentile
-      : null
+    const commNcContracts = isNum(commercial.net) && isNum(nonCommercial.net) ? commercial.net - nonCommercial.net : null
+    const calculatedCommNcPctSpread = isNum(commercial.percentile) && isNum(nonCommercial.percentile) ? commercial.percentile - nonCommercial.percentile : null
+    const commNcPctSpread = isNum(cross?.comm_nc_spread) ? cross.comm_nc_spread : calculatedCommNcPctSpread
+    const commNcPctSpreadPct = isNum(cross?.comm_nc_spread_percentile) ? cross.comm_nc_spread_percentile : null
+    const calculatedRelationship = relationshipFromPercentiles(commercial.percentile, nonCommercial.percentile)
+    const calculatedFlow = spreadFlowFromParticipants(commercial, nonCommercial)
 
     let freshness = 'historical'
-    if (date === latestDate) {
-      freshness =
-        staleView || (sourceLatest && sourceLatest !== latestDate) ? 'stale' : 'latest'
-    }
+    if (date === latestDate) freshness = staleView || (sourceLatest && sourceLatest !== latestDate) ? 'stale' : 'latest'
 
     const week = {
       date,
@@ -540,9 +565,7 @@ export function buildWeeklyViewModel({
       measureLabel,
       inspectorAsOfDate: inspResolved?.asOfDate || null,
       inspectorExact: Boolean(inspResolved?.exact),
-      price: {
-        close: isNum(row.close) ? row.close : isNum(row.price) ? row.price : null,
-      },
+      price: { close: isNum(row.close) ? row.close : isNum(row.price) ? row.price : null },
       commercial,
       nonCommercial,
       nonReportable,
@@ -550,33 +573,21 @@ export function buildWeeklyViewModel({
         commNc: {
           value: isNum(commNcPctSpread) ? commNcPctSpread : commNcContracts,
           percentile: commNcPctSpreadPct,
-          change1w: isNum(cross?.comm_nc_spread_change_1w)
-            ? cross.comm_nc_spread_change_1w
-            : null,
-          change4w: isNum(cross?.comm_nc_spread_change_4w)
-            ? cross.comm_nc_spread_change_4w
-            : null,
+          change1w: isNum(cross?.comm_nc_spread_change_1w) ? cross.comm_nc_spread_change_1w : (isNum(commercial.percentileChange1w) && isNum(nonCommercial.percentileChange1w) ? commercial.percentileChange1w - nonCommercial.percentileChange1w : null),
+          change4w: isNum(cross?.comm_nc_spread_change_4w) ? cross.comm_nc_spread_change_4w : (isNum(commercial.percentileChange4w) && isNum(nonCommercial.percentileChange4w) ? commercial.percentileChange4w - nonCommercial.percentileChange4w : null),
           valueKind: isNum(commNcPctSpread) ? 'percentile_spread' : 'contract_spread',
         },
         commNr: { value: commNrValue, percentile: commNrPct },
         commNcAlignment: alignment(commercial.direction, nonCommercial.direction),
         commNrAlignment: alignment(commercial.direction, nonReportable.direction),
-        relationship: cross?.relationship || null,
-        flow: cross?.flow || null,
-        commercialPercentile: isNum(cross?.commercial_percentile)
-          ? cross.commercial_percentile
-          : commercial.percentile,
-        noncommercialPercentile: isNum(cross?.noncommercial_percentile)
-          ? cross.noncommercial_percentile
-          : nonCommercial.percentile,
-        nonreportablePercentile: isNum(cross?.nonreportable_percentile)
-          ? cross.nonreportable_percentile
-          : nonReportable.percentile,
+        relationship: cross?.relationship && cross.relationship !== 'unavailable' ? cross.relationship : calculatedRelationship,
+        flow: cross?.flow && cross.flow !== 'unavailable' ? cross.flow : calculatedFlow,
+        commercialPercentile: isNum(cross?.commercial_percentile) ? cross.commercial_percentile : commercial.percentile,
+        noncommercialPercentile: isNum(cross?.noncommercial_percentile) ? cross.noncommercial_percentile : nonCommercial.percentile,
+        nonreportablePercentile: isNum(cross?.nonreportable_percentile) ? cross.nonreportable_percentile : nonReportable.percentile,
       },
       events,
-      activeDivergence: events
-        .filter((e) => e.event_type === 'comm_nr_divergence')
-        .map((e) => e.label || e.side || 'Divergence'),
+      activeDivergence: events.filter((e) => e.event_type === 'comm_nr_divergence').map((e) => e.label || e.side || 'Divergence'),
       activeEventNames: events.map((e) => e.label || e.badge || e.event_type).filter(Boolean),
     }
     week.summary = buildWeekSummaryText(week)
@@ -594,12 +605,7 @@ export function buildWeeklyViewModel({
   }
 }
 
-export function resolveInspectedWeek({
-  weeklyView,
-  selectedWeek,
-  hoveredWeek,
-  latestDate,
-} = {}) {
+export function resolveInspectedWeek({ weeklyView, selectedWeek, hoveredWeek, latestDate } = {}) {
   const map = weeklyView || {}
   if (selectedWeek && map[selectedWeek]) return map[selectedWeek]
   if (hoveredWeek && map[hoveredWeek]) return map[hoveredWeek]

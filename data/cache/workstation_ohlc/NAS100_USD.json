@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T19:55:24.465468+00:00",
+  "generated_at": "2026-10-07T07:45:58.747238+00:00",
   "instrument_id": "NASDAQ / NQ",
   "oanda_symbol": "NAS100_USD",
   "source": "oanda",
@@ -22361,6 +22361,429 @@
       "close": 28191.8,
       "volume": 1313716.0,
       "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-02",
+      "open": 28486.5,
+      "high": 28859.7,
+      "low": 28202.4,
+      "close": 28820.0,
+      "volume": 995358.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-03",
+      "open": 28834.4,
+      "high": 29851.1,
+      "low": 28727.3,
+      "close": 29716.0,
+      "volume": 1125718.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-04",
+      "open": 29703.0,
+      "high": 29967.0,
+      "low": 29426.8,
+      "close": 29485.8,
+      "volume": 1074812.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-05",
+      "open": 29481.7,
+      "high": 29581.0,
+      "low": 29136.2,
+      "close": 29401.8,
+      "volume": 1237249.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-06",
+      "open": 29396.2,
+      "high": 29767.0,
+      "low": 29355.7,
+      "close": 29730.6,
+      "volume": 1113051.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-09",
+      "open": 29767.6,
+      "high": 29881.6,
+      "low": 29617.7,
+      "close": 29669.2,
+      "volume": 860066.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-10",
+      "open": 29689.0,
+      "high": 29791.6,
+      "low": 29446.6,
+      "close": 29564.2,
+      "volume": 846144.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-11",
+      "open": 29561.7,
+      "high": 29913.8,
+      "low": 29538.8,
+      "close": 29723.8,
+      "volume": 810033.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-12",
+      "open": 29738.2,
+      "high": 30189.8,
+      "low": 29696.0,
+      "close": 30133.2,
+      "volume": 770045.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-13",
+      "open": 30108.0,
+      "high": 30198.0,
+      "low": 29947.9,
+      "close": 30066.2,
+      "volume": 707968.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-16",
+      "open": 30089.6,
+      "high": 30258.0,
+      "low": 29982.1,
+      "close": 30000.9,
+      "volume": 689944.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-17",
+      "open": 30008.2,
+      "high": 30047.6,
+      "low": 29440.8,
+      "close": 29492.8,
+      "volume": 900241.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-18",
+      "open": 29499.8,
+      "high": 29688.8,
+      "low": 29307.6,
+      "close": 29493.2,
+      "volume": 1099849.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-19",
+      "open": 29503.4,
+      "high": 29619.4,
+      "low": 29136.8,
+      "close": 29240.6,
+      "volume": 1132635.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-20",
+      "open": 29260.8,
+      "high": 29469.2,
+      "low": 29150.8,
+      "close": 29309.3,
+      "volume": 890173.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-23",
+      "open": 29315.2,
+      "high": 29413.4,
+      "low": 28881.6,
+      "close": 29067.0,
+      "volume": 1036811.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-24",
+      "open": 29081.8,
+      "high": 29360.3,
+      "low": 28959.5,
+      "close": 29229.2,
+      "volume": 1122036.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-25",
+      "open": 29249.6,
+      "high": 29371.4,
+      "low": 29041.5,
+      "close": 29371.2,
+      "volume": 842530.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-26",
+      "open": 29478.9,
+      "high": 29657.8,
+      "low": 29351.2,
+      "close": 29584.0,
+      "volume": 1040509.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-27",
+      "open": 29580.5,
+      "high": 29760.5,
+      "low": 29388.8,
+      "close": 29462.8,
+      "volume": 1105136.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-30",
+      "open": 29460.8,
+      "high": 29499.1,
+      "low": 29225.2,
+      "close": 29479.8,
+      "volume": 868569.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-08-31",
+      "open": 29471.2,
+      "high": 29531.4,
+      "low": 28965.8,
+      "close": 29099.2,
+      "volume": 977088.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-01",
+      "open": 29098.3,
+      "high": 29178.4,
+      "low": 28891.0,
+      "close": 29114.3,
+      "volume": 919279.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-02",
+      "open": 29122.8,
+      "high": 29551.1,
+      "low": 29040.7,
+      "close": 29472.7,
+      "volume": 957261.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-03",
+      "open": 29458.6,
+      "high": 29662.4,
+      "low": 29433.1,
+      "close": 29489.0,
+      "volume": 807067.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-06",
+      "open": 29533.6,
+      "high": 29647.9,
+      "low": 29498.0,
+      "close": 29570.9,
+      "volume": 372473.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-07",
+      "open": 29574.6,
+      "high": 29728.6,
+      "low": 29389.1,
+      "close": 29501.0,
+      "volume": 1016074.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-08",
+      "open": 29484.2,
+      "high": 29610.0,
+      "low": 29309.4,
+      "close": 29435.4,
+      "volume": 970213.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-09",
+      "open": 29433.0,
+      "high": 29484.8,
+      "low": 29020.3,
+      "close": 29113.7,
+      "volume": 1111755.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-10",
+      "open": 29129.4,
+      "high": 29478.0,
+      "low": 29019.2,
+      "close": 29372.0,
+      "volume": 1075685.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-13",
+      "open": 29062.4,
+      "high": 29292.6,
+      "low": 28795.4,
+      "close": 29184.0,
+      "volume": 1130493.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-14",
+      "open": 29163.2,
+      "high": 29186.8,
+      "low": 28913.4,
+      "close": 29015.2,
+      "volume": 1070699.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-15",
+      "open": 28997.2,
+      "high": 29295.2,
+      "low": 28799.0,
+      "close": 29013.8,
+      "volume": 1021845.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-16",
+      "open": 29019.2,
+      "high": 29537.1,
+      "low": 28994.2,
+      "close": 29466.4,
+      "volume": 829980.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-17",
+      "open": 29462.4,
+      "high": 29739.8,
+      "low": 29392.4,
+      "close": 29701.0,
+      "volume": 776046.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-20",
+      "open": 29675.0,
+      "high": 30608.2,
+      "low": 29648.2,
+      "close": 30520.5,
+      "volume": 697773.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-21",
+      "open": 30538.0,
+      "high": 30810.7,
+      "low": 30416.7,
+      "close": 30751.5,
+      "volume": 824955.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-22",
+      "open": 30773.0,
+      "high": 30839.0,
+      "low": 30387.7,
+      "close": 30518.6,
+      "volume": 955314.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-23",
+      "open": 30545.8,
+      "high": 30580.0,
+      "low": 30117.8,
+      "close": 30489.0,
+      "volume": 1212382.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-24",
+      "open": 30485.8,
+      "high": 30750.9,
+      "low": 30434.8,
+      "close": 30672.4,
+      "volume": 1109124.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-27",
+      "open": 30595.7,
+      "high": 30651.4,
+      "low": 30110.1,
+      "close": 30331.1,
+      "volume": 1396280.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-28",
+      "open": 30323.8,
+      "high": 30492.0,
+      "low": 30138.6,
+      "close": 30425.3,
+      "volume": 1164108.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-29",
+      "open": 30435.7,
+      "high": 30673.2,
+      "low": 30279.7,
+      "close": 30489.3,
+      "volume": 1176921.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-09-30",
+      "open": 30478.6,
+      "high": 30922.4,
+      "low": 30304.0,
+      "close": 30549.6,
+      "volume": 1472068.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-10-01",
+      "open": 30559.4,
+      "high": 31058.2,
+      "low": 30546.9,
+      "close": 30827.7,
+      "volume": 1358322.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-10-04",
+      "open": 30890.4,
+      "high": 31155.7,
+      "low": 30735.8,
+      "close": 31133.0,
+      "volume": 924069.0,
+      "source": "oanda:NAS100_USD"
+    },
+    {
+      "date": "2026-10-05",
+      "open": 31149.2,
+      "high": 31400.8,
+      "low": 31094.0,
+      "close": 31288.0,
+      "volume": 838063.0,
+      "source": "oanda:NAS100_USD"
     }
   ],
   "diagnostics": {
@@ -22374,11 +22797,11 @@
       "probe": {
         "http_status": 200,
         "error": null,
-        "candles_returned": 2484
+        "candles_returned": 2531
       },
-      "fetched_rows": 2484,
+      "fetched_rows": 2531,
       "earliest_date": "2016-12-19",
-      "latest_date": "2026-07-30"
+      "latest_date": "2026-10-05"
     }
   }
 }

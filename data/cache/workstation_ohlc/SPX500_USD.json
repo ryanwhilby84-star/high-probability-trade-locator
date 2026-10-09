@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T19:55:26.019171+00:00",
+  "generated_at": "2026-10-07T07:46:02.138680+00:00",
   "instrument_id": "S&P 500 / ES",
   "oanda_symbol": "SPX500_USD",
   "source": "oanda",
@@ -22361,6 +22361,429 @@
       "close": 7483.6,
       "volume": 191110.0,
       "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-02",
+      "open": 7528.4,
+      "high": 7616.2,
+      "low": 7519.7,
+      "close": 7609.8,
+      "volume": 103973.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-03",
+      "open": 7611.4,
+      "high": 7764.6,
+      "low": 7608.2,
+      "close": 7753.4,
+      "volume": 115955.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-04",
+      "open": 7753.4,
+      "high": 7798.8,
+      "low": 7724.6,
+      "close": 7737.2,
+      "volume": 132881.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-05",
+      "open": 7738.4,
+      "high": 7749.4,
+      "low": 7703.1,
+      "close": 7712.0,
+      "volume": 142017.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-06",
+      "open": 7709.6,
+      "high": 7766.7,
+      "low": 7705.2,
+      "close": 7757.0,
+      "volume": 145922.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-09",
+      "open": 7753.2,
+      "high": 7775.9,
+      "low": 7742.6,
+      "close": 7759.4,
+      "volume": 69138.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-10",
+      "open": 7762.6,
+      "high": 7777.8,
+      "low": 7722.2,
+      "close": 7735.8,
+      "volume": 66996.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-11",
+      "open": 7736.6,
+      "high": 7776.4,
+      "low": 7731.2,
+      "close": 7750.2,
+      "volume": 66182.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-12",
+      "open": 7753.4,
+      "high": 7821.6,
+      "low": 7747.6,
+      "close": 7809.0,
+      "volume": 50322.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-13",
+      "open": 7807.4,
+      "high": 7814.4,
+      "low": 7780.3,
+      "close": 7786.4,
+      "volume": 38350.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-16",
+      "open": 7788.0,
+      "high": 7807.4,
+      "low": 7748.6,
+      "close": 7750.2,
+      "volume": 38327.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-17",
+      "open": 7751.6,
+      "high": 7755.4,
+      "low": 7696.0,
+      "close": 7699.0,
+      "volume": 76120.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-18",
+      "open": 7699.4,
+      "high": 7750.2,
+      "low": 7683.6,
+      "close": 7717.2,
+      "volume": 87847.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-19",
+      "open": 7718.2,
+      "high": 7730.8,
+      "low": 7643.8,
+      "close": 7653.4,
+      "volume": 111704.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-20",
+      "open": 7655.4,
+      "high": 7699.5,
+      "low": 7647.0,
+      "close": 7674.0,
+      "volume": 75837.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-23",
+      "open": 7677.0,
+      "high": 7689.6,
+      "low": 7641.4,
+      "close": 7662.8,
+      "volume": 119002.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-24",
+      "open": 7664.0,
+      "high": 7701.8,
+      "low": 7648.6,
+      "close": 7679.8,
+      "volume": 84472.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-25",
+      "open": 7682.0,
+      "high": 7698.8,
+      "low": 7659.8,
+      "close": 7698.6,
+      "volume": 72174.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-26",
+      "open": 7717.2,
+      "high": 7745.9,
+      "low": 7692.5,
+      "close": 7723.0,
+      "volume": 91986.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-27",
+      "open": 7723.2,
+      "high": 7772.5,
+      "low": 7702.7,
+      "close": 7715.0,
+      "volume": 95203.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-30",
+      "open": 7706.8,
+      "high": 7713.2,
+      "low": 7665.3,
+      "close": 7694.0,
+      "volume": 92458.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-08-31",
+      "open": 7693.6,
+      "high": 7700.4,
+      "low": 7614.6,
+      "close": 7639.6,
+      "volume": 77126.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-01",
+      "open": 7638.6,
+      "high": 7684.6,
+      "low": 7611.8,
+      "close": 7663.4,
+      "volume": 83195.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-02",
+      "open": 7666.4,
+      "high": 7760.3,
+      "low": 7654.6,
+      "close": 7743.2,
+      "volume": 91329.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-03",
+      "open": 7742.8,
+      "high": 7757.0,
+      "low": 7705.3,
+      "close": 7708.2,
+      "volume": 58000.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-06",
+      "open": 7714.2,
+      "high": 7721.8,
+      "low": 7697.0,
+      "close": 7702.5,
+      "volume": 24162.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-07",
+      "open": 7703.4,
+      "high": 7718.8,
+      "low": 7668.4,
+      "close": 7674.4,
+      "volume": 81164.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-08",
+      "open": 7672.8,
+      "high": 7686.8,
+      "low": 7624.6,
+      "close": 7644.0,
+      "volume": 75736.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-09",
+      "open": 7643.6,
+      "high": 7661.8,
+      "low": 7581.1,
+      "close": 7596.8,
+      "volume": 105528.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-10",
+      "open": 7598.0,
+      "high": 7679.0,
+      "low": 7590.2,
+      "close": 7657.2,
+      "volume": 102665.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-13",
+      "open": 7616.8,
+      "high": 7650.5,
+      "low": 7589.6,
+      "close": 7630.8,
+      "volume": 124311.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-14",
+      "open": 7626.6,
+      "high": 7630.4,
+      "low": 7573.9,
+      "close": 7607.4,
+      "volume": 147380.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-15",
+      "open": 7606.0,
+      "high": 7643.1,
+      "low": 7519.3,
+      "close": 7566.0,
+      "volume": 117220.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-16",
+      "open": 7566.0,
+      "high": 7666.2,
+      "low": 7561.6,
+      "close": 7646.4,
+      "volume": 68843.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-17",
+      "open": 7647.0,
+      "high": 7682.8,
+      "low": 7619.5,
+      "close": 7669.2,
+      "volume": 53301.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-20",
+      "open": 7662.6,
+      "high": 7792.4,
+      "low": 7657.6,
+      "close": 7774.8,
+      "volume": 41764.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-21",
+      "open": 7776.0,
+      "high": 7793.9,
+      "low": 7756.0,
+      "close": 7774.4,
+      "volume": 67176.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-22",
+      "open": 7779.2,
+      "high": 7788.8,
+      "low": 7705.4,
+      "close": 7718.4,
+      "volume": 66696.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-23",
+      "open": 7722.4,
+      "high": 7731.0,
+      "low": 7655.6,
+      "close": 7707.4,
+      "volume": 151637.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-24",
+      "open": 7707.6,
+      "high": 7762.8,
+      "low": 7695.8,
+      "close": 7753.8,
+      "volume": 117012.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-27",
+      "open": 7740.0,
+      "high": 7743.2,
+      "low": 7674.3,
+      "close": 7698.2,
+      "volume": 180024.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-28",
+      "open": 7695.4,
+      "high": 7718.2,
+      "low": 7664.1,
+      "close": 7690.4,
+      "volume": 124400.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-29",
+      "open": 7691.2,
+      "high": 7733.0,
+      "low": 7658.2,
+      "close": 7672.8,
+      "volume": 122510.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-09-30",
+      "open": 7674.0,
+      "high": 7719.6,
+      "low": 7625.2,
+      "close": 7679.8,
+      "volume": 200980.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-10-01",
+      "open": 7679.4,
+      "high": 7763.2,
+      "low": 7677.0,
+      "close": 7729.2,
+      "volume": 145171.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-10-04",
+      "open": 7737.4,
+      "high": 7803.1,
+      "low": 7713.6,
+      "close": 7787.4,
+      "volume": 96003.0,
+      "source": "oanda:SPX500_USD"
+    },
+    {
+      "date": "2026-10-05",
+      "open": 7790.6,
+      "high": 7852.6,
+      "low": 7784.4,
+      "close": 7836.2,
+      "volume": 53475.0,
+      "source": "oanda:SPX500_USD"
     }
   ],
   "diagnostics": {
@@ -22374,11 +22797,11 @@
       "probe": {
         "http_status": 200,
         "error": null,
-        "candles_returned": 2484
+        "candles_returned": 2531
       },
-      "fetched_rows": 2484,
+      "fetched_rows": 2531,
       "earliest_date": "2016-12-19",
-      "latest_date": "2026-07-30"
+      "latest_date": "2026-10-05"
     }
   }
 }

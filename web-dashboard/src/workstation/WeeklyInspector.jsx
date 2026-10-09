@@ -196,7 +196,8 @@ function EventNarratives({ events, selectedEventId, onSelectEvent }) {
 
 /**
  * Click-to-open weekly inspector drawer with directional flow.
- * Renders nothing when closed — charts reclaim the space.
+ * Missing secondary/derived statistics are warnings. The drawer hard-fails only
+ * when the core participant net-positioning data itself is unavailable.
  */
 export function WeeklyInspector({
   week,
@@ -227,7 +228,19 @@ export function WeeklyInspector({
   const eventNames = week.activeEventNames || []
   const sp = week.spreads || {}
   const integrityMissing = Array.isArray(week.integrityMissing) ? week.integrityMissing : []
-  const integrityFailed = week.integrityOk === false || integrityMissing.length > 0
+  const coreMissing = integrityMissing.filter(
+    (field) =>
+      field === 'week' ||
+      field === 'commercial' ||
+      field === 'non_commercial' ||
+      field === 'non_reportable' ||
+      field === 'commercial.net' ||
+      field === 'non_commercial.net' ||
+      field === 'non_reportable.net',
+  )
+  const derivedMissing = integrityMissing.filter((field) => !coreMissing.includes(field))
+  const integrityFailed = coreMissing.length > 0
+  const derivedWarning = !integrityFailed && derivedMissing.length > 0
 
   return (
     <aside
@@ -238,14 +251,14 @@ export function WeeklyInspector({
       data-open="1"
       data-selected-week={week.date || ''}
       data-selected-event={selectedEventId || ''}
-      data-integrity={integrityFailed ? 'fail' : 'pass'}
+      data-integrity={integrityFailed ? 'fail' : derivedWarning ? 'warning' : 'pass'}
     >
       <div className="cot-ws-insp-top">
         <span className="cot-ws-insp-kicker">Weekly Inspector</span>
         <span className="cot-ws-insp-title">{week.instrument || 'Instrument'}</span>
         <span className="cot-ws-insp-date">{week.date}</span>
         <span className="cot-ws-insp-price">
-          Close <strong>{fmtPrice(week.price?.close)}</strong>
+          Selected-week close <strong>{fmtPrice(week.price?.close)}</strong>
         </span>
         <span className={`cot-ws-insp-fresh cot-ws-insp-fresh--${week.freshness}`}>
           {freshnessLabel(week.freshness)}
@@ -255,7 +268,7 @@ export function WeeklyInspector({
           className="cot-ws-insp-measure"
           title={week.measureLabel || 'Net positioning expanding percentile'}
         >
-          Net pctile
+          {week.measureLabel?.includes('156') ? '3Y · 156 reports' : 'Long-history percentile'}
         </span>
         <div className="cot-ws-insp-head-actions">
           {onToggleAnalysis ? (
@@ -304,30 +317,31 @@ export function WeeklyInspector({
       {integrityFailed ? (
         <div className="cot-ws-insp-integrity-fail" role="alert">
           <strong>DATA INTEGRITY FAILURE</strong>
-          <p>Derived COT statistics are incomplete for this instrument.</p>
+          <p>Core COT positioning data is incomplete for this report week.</p>
           <p>
             Instrument: <code>{week.instrument || '—'}</code>
           </p>
           <p>
             Report week: <code>{week.date || '—'}</code>
-            {week.inspectorAsOfDate && week.inspectorAsOfDate !== week.date
-              ? ` (inspector as-of ${week.inspectorAsOfDate})`
-              : ''}
           </p>
-          <p>Stage: Derived COT</p>
+          <p>Stage: Core COT</p>
           <p>Missing fields:</p>
           <ul className="cot-ws-insp-integrity-missing">
-            {(integrityMissing.length ? integrityMissing : ['required derived fields']).map(
-              (f) => (
-                <li key={f}>{f}</li>
-              ),
-            )}
+            {coreMissing.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
           </ul>
         </div>
       ) : null}
 
       {!integrityFailed ? (
         <>
+          {derivedWarning ? (
+            <div className="cot-ws-insp-muted" role="status">
+              Derived COT statistics are incomplete for this week. Core positioning remains available; unavailable derived fields are shown as Unavailable.
+            </div>
+          ) : null}
+
           <EventNarratives
             events={week.events}
             selectedEventId={selectedEventId}

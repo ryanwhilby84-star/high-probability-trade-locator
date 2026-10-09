@@ -154,7 +154,7 @@ def data_confidence_badge(
         return "partial_data"
     if spec and spec.cot_proxy_of and not cot_resolved:
         return "proxy_only"
-    if (rec or {}).get("institutional_context", {}).get("data_mode") == "macro_only" or (
+    if ((rec or {}).get("institutional_context") or {}).get("data_mode") == "macro_only" or (
         has_macro and not cot_resolved
     ):
         return "macro_only"

@@ -1,6 +1,6 @@
 # Derived COT Integrity Audit
 
-Generated: `2026-07-26T06:08:20.240063+00:00`
+Generated: `2026-10-07T08:01:31.432104+00:00`
 Lookback: latest + prior 12 weeks (13 total)
 
 ## Summary
@@ -20,9 +20,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### NASDAQ / NQ — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -33,9 +33,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### S&P 500 / ES — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -46,9 +46,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Dow / YM — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `233`
+- Historical window length: `243`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -59,9 +59,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Euro FX / 6E — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -72,9 +72,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### British Pound / 6B — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -85,9 +85,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Japanese Yen / 6J — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -98,9 +98,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Swiss Franc / 6S — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -111,9 +111,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Australian Dollar / 6A — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -124,9 +124,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Canadian Dollar / 6C — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -137,9 +137,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### NZ Dollar / 6N — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -150,9 +150,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Gold — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -163,9 +163,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Silver — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -176,9 +176,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Copper / HG — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -189,9 +189,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Crude Oil / CL — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `233`
+- Historical window length: `243`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -202,9 +202,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Natural Gas / NG — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -215,9 +215,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Coffee — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -228,9 +228,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Cocoa — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -241,9 +241,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Cotton — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -254,9 +254,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Corn — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -267,9 +267,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Wheat — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -280,9 +280,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Soybeans — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -293,9 +293,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Sugar — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -306,9 +306,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Platinum — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -319,9 +319,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Palladium — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -332,9 +332,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### Bitcoin — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `433`
+- Historical window length: `443`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`
@@ -345,9 +345,9 @@ Lookback: latest + prior 12 weeks (13 total)
 
 ### US Dollar Index / DX — **PASS**
 
-- Latest COT week: `2026-07-21`
+- Latest COT week: `2026-09-29`
 - Raw COT row present: `True`
-- Historical window length: `499`
+- Historical window length: `509`
 - Lookback weeks audited: `13`
 - Commercial completeness: `PASS`
 - Non-commercial completeness: `PASS`

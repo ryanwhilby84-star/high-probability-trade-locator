@@ -11,12 +11,13 @@ export function useLegacyCot(instrumentId) {
   const [latestStore, setLatestStore] = React.useState(null)
   const [auditStore, setAuditStore] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
+  const [reloadToken, setReloadToken] = React.useState(0)
   const [error, setError] = React.useState(null)
 
   React.useEffect(() => {
     let cancelled = false
     setLoading(true)
-    Promise.all([loadLegacyCotLatest(), loadLegacyCotAudit()])
+    Promise.all([loadLegacyCotLatest(reloadToken > 0), loadLegacyCotAudit().catch(() => ({ instruments: {} }))])
       .then(([latest, audit]) => {
         if (!cancelled) {
           setLatestStore(latest)
@@ -37,7 +38,7 @@ export function useLegacyCot(instrumentId) {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [reloadToken])
 
   const instrumentData = React.useMemo(
     () => (latestStore && instrumentId ? getLegacyCotForInstrument(latestStore, instrumentId) : null),
@@ -54,5 +55,5 @@ export function useLegacyCot(instrumentId) {
     [latestStore, instrumentId],
   )
 
-  return { instrumentData, instrumentAudit, scoringEligible, loading, error, latestStore }
+  return { retry: () => setReloadToken((v) => v + 1), instrumentData, instrumentAudit, scoringEligible, loading, error, latestStore }
 }
