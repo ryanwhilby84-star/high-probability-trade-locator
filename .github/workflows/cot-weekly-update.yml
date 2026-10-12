@@ -58,6 +58,7 @@ jobs:
           OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
         run: python scripts/run_price_refresh.py --require-healthy
 
       - name: Rebuild price store and confluence exports
@@ -65,6 +66,11 @@ jobs:
         env:
           PYTHONPATH: src
           HPTL_SKIP_LIVE_FEEDS: "1"
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/run_dashboard_export_rebuild.py
 
       - name: Validate complete dashboard snapshot
