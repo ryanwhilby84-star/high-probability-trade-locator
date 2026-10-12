@@ -20,7 +20,7 @@ class DataReleaseTests(unittest.TestCase):
         for name, keys in REQUIRED.items():
             doc = {key: [{"sample": True}] for key in keys}
             if name == "prices_latest.json":
-                doc["sample_market"] = {"price": 100.0}
+                doc["instruments"] = {"sample_market": {"daily": [{"date": "2026-10-09", "close": 100.0}]}}\n                doc["summary"] = {"instruments_total": 1, "with_daily_bars": 1, "with_errors": 0}
             if name == "confluence_history_latest.json":
                 doc["latest_cot_report_date"] = date.today().isoformat()
             (self.data / name).write_text(json.dumps(doc), encoding="utf-8")
@@ -38,7 +38,15 @@ class DataReleaseTests(unittest.TestCase):
     def test_empty_price_snapshot_blocks_release(self):
         (self.data / "prices_latest.json").write_text("{}")
         errors, _ = validate(self.data)
-        self.assertTrue(any("empty price snapshot" in error for error in errors))
+        self.assertTrue(any("instruments missing or empty" in error for error in errors))
+
+    def test_zero_price_coverage_blocks_release(self):
+        path = self.data / "prices_latest.json"
+        doc = json.loads(path.read_text())
+        doc["summary"]["with_daily_bars"] = 0
+        path.write_text(json.dumps(doc))
+        errors, _ = validate(self.data)
+        self.assertTrue(any("no verified price coverage" in error for error in errors))
 
     def test_empty_confluence_blocks_release(self):
         (self.data / "confluence_history_latest.json").write_text(
