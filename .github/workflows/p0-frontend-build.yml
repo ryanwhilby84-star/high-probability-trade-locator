@@ -8,6 +8,9 @@ on:
       - 'scripts/validate_production_dashboard_data.py'
       - 'scripts/package_dashboard_data_release.py'
       - 'tests/test_dashboard_data_release.py'
+      - 'tests/test_cot_percentile_reconciliation.py'
+      - 'src/hptl/cot/weekly_inspector_flow.py'
+      - 'src/hptl/cot/positioning_percentiles.py'
   workflow_dispatch:
 
 jobs:
@@ -60,3 +63,15 @@ jobs:
         run: python -m unittest discover -s tests -p test_dashboard_data_release.py -v
       - name: Validate required dashboard data artifacts
         run: python scripts/validate_production_dashboard_data.py
+
+  cot-percentile-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent rolling percentile regression checks
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p test_cot_percentile_reconciliation.py -v
