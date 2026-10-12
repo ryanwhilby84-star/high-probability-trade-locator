@@ -49,6 +49,33 @@ def validate(data_dir: Path, *, max_cot_age_days: int | None = None) -> tuple[li
                     or summary["with_daily_bars"] <= 0
                 ):
                     errors.append(f"{name}: no verified price coverage or inconsistent summary")
+            if name == "prices_latest.json" and isinstance(doc.get("instruments"), dict):
+                registry_path = data_dir / "instrument_registry.json"
+                if registry_path.is_file():
+                    try:
+                        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+                        market_ids = [m["id"] for m in registry.get("markets", []) if isinstance(m, dict) and m.get("id")]
+                        if not market_ids:
+                            errors.append(f"{name}: registry has no instrument IDs")
+                        for iid in market_ids:
+                            rec = doc["instruments"].get(iid)
+                            if not isinstance(rec, dict):
+                                errors.append(f"{name}: {iid}: missing instrument")
+                                continue
+                            bars = rec.get("daily") or rec.get("weekly") or []
+                            if not isinstance(bars, list) or not bars:
+                                errors.append(f"{name}: {iid}: no historical price bars")
+                                continue
+                            dates = [str(b.get("date") or "")[:10] for b in bars if isinstance(b, dict)]
+                            try:
+                                last = max(date.fromisoformat(d) for d in dates if d)
+                                age = (date.today() - last).days
+                                if age < 0 or age > 10:
+                                    errors.append(f"{name}: {iid}: latest bar age {age} days outside 0..10")
+                            except (ValueError, TypeError, StopIteration):
+                                errors.append(f"{name}: {iid}: no valid dated bars")
+                    except (OSError, ValueError, TypeError, KeyError) as exc:
+                        errors.append(f"{name}: cannot verify registry coverage: {exc}")
             for key in required_keys:
                 if not isinstance(doc.get(key), (list, dict)) or not doc[key]:
                     errors.append(f"{name}: {key} missing or empty")
