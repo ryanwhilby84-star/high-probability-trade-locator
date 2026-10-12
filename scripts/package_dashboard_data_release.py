@@ -36,8 +36,19 @@ def validate(data_dir: Path, *, max_cot_age_days: int | None = None) -> tuple[li
             doc = json.loads(raw)
             if not isinstance(doc, dict):
                 raise ValueError("expected JSON object")
-            if name == "prices_latest.json" and not doc:
-                errors.append(f"{name}: empty price snapshot")
+            if name == "prices_latest.json":
+                instruments = doc.get("instruments")
+                summary = doc.get("summary")
+                if not isinstance(instruments, dict) or not instruments:
+                    errors.append(f"{name}: instruments missing or empty")
+                if not isinstance(summary, dict):
+                    errors.append(f"{name}: summary missing")
+                elif not isinstance(instruments, dict) or (
+                    summary.get("instruments_total") != len(instruments)
+                    or not isinstance(summary.get("with_daily_bars"), int)
+                    or summary["with_daily_bars"] <= 0
+                ):
+                    errors.append(f"{name}: no verified price coverage or inconsistent summary")
             for key in required_keys:
                 if not isinstance(doc.get(key), (list, dict)) or not doc[key]:
                     errors.append(f"{name}: {key} missing or empty")
