@@ -67,6 +67,10 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "Aligned with 6C/CFTC direction. Replaces inverted OANDA USD_CAD."
         ),
     },
+    "Ultra 10-Year T-Note / TN": {
+        "yahoo_symbol": "TN=F",
+        "note": "CBOT Ultra 10-year Treasury note futures; not the standard ZN contract or a Treasury yield.",
+    },
     "US 10-Year T-Note / ZN": {
         "yahoo_symbol": "ZN=F",
         "note": "CBOT 10-year Treasury note continuous futures; not a Treasury yield series.",
