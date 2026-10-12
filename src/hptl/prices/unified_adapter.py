@@ -50,6 +50,10 @@ class UnifiedPriceAdapter:
             return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unsupported_instrument"}
         if not source and instrument_id in FRED_COT_FAIL_SERIES:
             source="fred"
+        if source == "fred":
+            from hptl.prices.fred_prices import fetch_fred_instrument, fred_series_for
+            if fred_series_for(instrument_id):
+                return {**fetch_fred_instrument(instrument_id), "_fetched_via": "fred"}
         price: PriceSnapshot | None=None; daily:list[OhlcBar]=[]; weekly:list[OhlcBar]=[]; err:str|None=None; price_scale=None
         forming_daily=None; forming_weekly=None
         if source=="yahoo_futures":
