@@ -1,0 +1,31 @@
+name: P0 frontend build verification
+
+on:
+  pull_request:
+    paths:
+      - 'web-dashboard/**'
+      - '.github/workflows/p0-frontend-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - name: Install frontend dependencies
+        run: npm ci
+      - name: Verify frontend build without Python
+        run: npm run build
+      - name: Verify generated frontend files
+        run: |
+          test -f dist/index.html
+          test -d dist/assets
