@@ -6,11 +6,12 @@
   "scripts": {
     "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
     "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
-    "cot-inspector": "cd .. && python -m hptl.cot.weekly_inspector_export",
-    "dev": "npm run cot-inspector && npm run seasonal-edge && vite",
-    "build": "npm run cot-inspector && npm run seasonal-edge && vite build",
+    "cot-inspector": "cd .. && python scripts/run_weekly_inspector_export.py",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview",
-    "test:workstation-data": "node --test src/prices/quoteFreshness.regression.test.js"
+    "test:workstation-data": "node --test src/prices/quoteFreshness.regression.test.js",
+    "refresh:local-data": "npm run cot-inspector && npm run seasonal-edge"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",
