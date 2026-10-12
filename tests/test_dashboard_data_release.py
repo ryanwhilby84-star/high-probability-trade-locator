@@ -33,6 +33,11 @@ class DataReleaseTests(unittest.TestCase):
         errors, _ = validate(self.data)
         self.assertTrue(any("prices_latest.json: missing" in e for e in errors))
 
+    def test_empty_price_snapshot_blocks_release(self):
+        (self.data / "prices_latest.json").write_text("{}")
+        errors, _ = validate(self.data)
+        self.assertTrue(any("empty price snapshot" in error for error in errors))
+
     def test_empty_confluence_blocks_release(self):
         (self.data / "confluence_history_latest.json").write_text(
             json.dumps({"records": [], "latest_cot_report_date": date.today().isoformat()})
