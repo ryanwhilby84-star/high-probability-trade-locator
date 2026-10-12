@@ -51,6 +51,13 @@ jobs:
 
       # A successful CFTC refresh is not equivalent to a complete dashboard release.
       # Exporters can omit prices or confluence when their inputs are unavailable.
+      - name: Rebuild price store and confluence exports
+        if: steps.cot_update.outcome == 'success'
+        env:
+          PYTHONPATH: src
+          HPTL_SKIP_LIVE_FEEDS: "1"
+        run: python scripts/run_dashboard_export_rebuild.py
+
       - name: Validate complete dashboard snapshot
         if: steps.cot_update.outcome == 'success'
         id: release_gate
