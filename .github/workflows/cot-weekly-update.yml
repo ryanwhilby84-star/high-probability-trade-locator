@@ -37,9 +37,10 @@ jobs:
           OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
           OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
           missing=0
-          for name in VERCEL_TOKEN OANDA_API_KEY OANDA_ACCOUNT_ID ALPHA_VANTAGE_API_KEY; do
+          for name in VERCEL_TOKEN OANDA_API_KEY OANDA_ACCOUNT_ID ALPHA_VANTAGE_API_KEY FRED_API_KEY; do
             if [ -z "${!name}" ]; then
               echo "::error::Missing required GitHub Actions secret: $name"
               missing=1
