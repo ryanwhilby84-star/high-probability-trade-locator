@@ -1,5 +1,6 @@
 """Regression tests for fail-closed dashboard data packaging."""
 import json
+from datetime import date, timedelta
 import tempfile
 import unittest
 import zipfile
@@ -19,7 +20,7 @@ class DataReleaseTests(unittest.TestCase):
         for name, keys in REQUIRED.items():
             doc = {key: [{"sample": True}] for key in keys}
             if name == "confluence_history_latest.json":
-                doc["latest_cot_report_date"] = "2026-10-06"
+                doc["latest_cot_report_date"] = date.today().isoformat()
             (self.data / name).write_text(json.dumps(doc), encoding="utf-8")
 
     def test_complete_snapshot_validates(self):
@@ -34,10 +35,26 @@ class DataReleaseTests(unittest.TestCase):
 
     def test_empty_confluence_blocks_release(self):
         (self.data / "confluence_history_latest.json").write_text(
-            json.dumps({"records": [], "latest_cot_report_date": "2026-10-06"})
+            json.dumps({"records": [], "latest_cot_report_date": date.today().isoformat()})
         )
         errors, _ = validate(self.data)
         self.assertTrue(any("records missing or empty" in e for e in errors))
+
+    def test_stale_cot_blocks_release(self):
+        path = self.data / "confluence_history_latest.json"
+        doc = json.loads(path.read_text())
+        doc["latest_cot_report_date"] = (date.today() - timedelta(days=30)).isoformat()
+        path.write_text(json.dumps(doc))
+        errors, _ = validate(self.data, max_cot_age_days=21)
+        self.assertTrue(any("report date age" in e for e in errors))
+
+    def test_future_cot_blocks_release(self):
+        path = self.data / "confluence_history_latest.json"
+        doc = json.loads(path.read_text())
+        doc["latest_cot_report_date"] = (date.today() + timedelta(days=1)).isoformat()
+        path.write_text(json.dumps(doc))
+        errors, _ = validate(self.data, max_cot_age_days=21)
+        self.assertTrue(any("report date age" in e for e in errors))
 
     def test_invalid_json_blocks_release(self):
         (self.data / "prices_latest.json").write_text("{broken")
