@@ -82,6 +82,7 @@ jobs:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
           OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/run_price_refresh.py --require-healthy
 
       # Weekly COT update already builds the confluence/scanner history above.
