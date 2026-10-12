@@ -26,6 +26,14 @@ from hptl.prices.price_store import (
 from hptl.seasonality.seasonality_v2 import normalize_daily_bars, years_spanned
 
 SOFTS_YAHOO: dict[str, dict[str, str]] = {
+    "Corn": {
+        "yahoo_symbol": "ZC=F",
+        "note": "CBOT Corn continuous futures (Yahoo ZC=F); use futures prices aligned with CFTC corn, not stale historical snapshots.",
+    },
+    "Brent crude Oil": {
+        "yahoo_symbol": "BZ=F",
+        "note": "ICE Brent crude continuous futures (Yahoo BZ=F); do not use unsupported OANDA BCOUSD mapping.",
+    },
     "Coffee": {
         "yahoo_symbol": "KC=F",
         "note": "ICE Coffee C continuous futures (Yahoo KC=F) daily OHLC for COT alignment.",
