@@ -36,6 +36,8 @@ def validate(data_dir: Path, *, max_cot_age_days: int | None = None) -> tuple[li
             doc = json.loads(raw)
             if not isinstance(doc, dict):
                 raise ValueError("expected JSON object")
+            if name == "prices_latest.json" and not doc:
+                errors.append(f"{name}: empty price snapshot")
             for key in required_keys:
                 if not isinstance(doc.get(key), (list, dict)) or not doc[key]:
                     errors.append(f"{name}: {key} missing or empty")
