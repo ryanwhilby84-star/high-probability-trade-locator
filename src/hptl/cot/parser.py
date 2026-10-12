@@ -443,13 +443,23 @@ def financial_history_to_dashboard_rows(df: pd.DataFrame, source_report: str = "
     commercial_long = dealer_long + asset_mgr_long
     commercial_short = dealer_short + asset_mgr_short
 
-    weekly_change = _financial_series(
-        cleaned,
-        ["change_in_lev_money_long_all", "change_in_lev_money_positions_long_all", "change_in_leveraged_money_long_all"],
-    ) - _financial_series(
-        cleaned,
-        ["change_in_lev_money_short_all", "change_in_lev_money_positions_short_all", "change_in_leveraged_money_short_all"],
-    )
+    # The workbook weekly_change is the COMMERCIAL net change, matching
+    # cot_history_to_dashboard_rows. Leveraged Money is the noncommercial group.
+    dealer_long_change = _financial_series(cleaned, [
+        "change_in_dealer_long_all", "change_in_dealer_positions_long_all",
+    ])
+    dealer_short_change = _financial_series(cleaned, [
+        "change_in_dealer_short_all", "change_in_dealer_positions_short_all",
+    ])
+    asset_long_change = _financial_series(cleaned, [
+        "change_in_asset_mgr_long_all", "change_in_asset_mgr_positions_long_all",
+        "change_in_asset_manager_positions_long_all",
+    ])
+    asset_short_change = _financial_series(cleaned, [
+        "change_in_asset_mgr_short_all", "change_in_asset_mgr_positions_short_all",
+        "change_in_asset_manager_positions_short_all",
+    ])
+    weekly_change = (dealer_long_change + asset_long_change) - (dealer_short_change + asset_short_change)
 
     rows = pd.DataFrame(
         {
