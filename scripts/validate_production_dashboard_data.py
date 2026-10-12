@@ -8,7 +8,7 @@ from package_dashboard_data_release import validate
 ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> int:
-    errors, files = validate(ROOT / "web-dashboard" / "public" / "data")
+    errors, files = validate(ROOT / "web-dashboard" / "public" / "data", max_cot_age_days=21)
     if errors:
         print("PRODUCTION DATA GATE FAILED:")
         for error in errors:
