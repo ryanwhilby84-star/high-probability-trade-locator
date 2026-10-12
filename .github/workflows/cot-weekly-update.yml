@@ -85,7 +85,10 @@ jobs:
           OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
         run: python scripts/run_price_refresh.py --require-healthy
 
-      - name: Rebuild price store and confluence exports
+      # Weekly COT update already builds the confluence/scanner history above.
+      # Rebuild only price/valuation/seasonality after live price refresh;
+      # rebuilding 510 historical COT weeks here a second time takes hours.
+      - name: Refresh price valuation and seasonality exports
         if: steps.cot_update.outcome == 'success'
         env:
           PYTHONPATH: src
@@ -95,7 +98,7 @@ jobs:
           OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
           OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: python scripts/run_dashboard_export_rebuild.py
+        run: python scripts/run_dashboard_export_rebuild.py --skip-confluence
 
       - name: Validate complete dashboard snapshot
         if: steps.cot_update.outcome == 'success'
