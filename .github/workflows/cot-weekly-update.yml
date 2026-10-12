@@ -49,9 +49,29 @@ jobs:
             data/exports/weekly_cot_update_history.jsonl
           if-no-files-found: ignore
 
-      - name: Production note
+      # A successful CFTC refresh is not equivalent to a complete dashboard release.
+      # Exporters can omit prices or confluence when their inputs are unavailable.
+      - name: Validate complete dashboard snapshot
+        if: steps.cot_update.outcome == 'success'
+        id: release_gate
+        run: python scripts/validate_production_dashboard_data.py
+
+      - name: Package verified dashboard snapshot
+        if: steps.release_gate.outcome == 'success'
+        run: python scripts/package_dashboard_data_release.py --output dashboard-data-release.zip
+
+      - name: Upload verified dashboard snapshot for deployment
+        if: steps.release_gate.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-data-release
+          path: dashboard-data-release.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Explain release status
         if: always()
         run: |
-          echo "GitHub Actions validates the weekly script on each schedule."
-          echo "Production data (cot_cleaned_*, workbook, dashboard JSON) must live on your Windows host"
-          echo "with Task Scheduler: scripts/register_weekly_cot_task.ps1"
+          echo "Weekly CFTC refresh outcome: ${{ steps.cot_update.outcome }}"
+          echo "Complete production snapshot gate: ${{ steps.release_gate.outcome }}"
+          echo "Only a complete validated snapshot is packaged; no production deployment is attempted here."
