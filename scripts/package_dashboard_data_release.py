@@ -11,6 +11,7 @@ import hashlib
 import json
 import sys
 import zipfile
+from datetime import date
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -22,7 +23,7 @@ REQUIRED = {
     "prices_latest.json": (),
 }
 
-def validate(data_dir: Path) -> tuple[list[str], dict]:
+def validate(data_dir: Path, *, max_cot_age_days: int | None = None) -> tuple[list[str], dict]:
     errors = []
     files = {}
     for name, required_keys in REQUIRED.items():
@@ -38,8 +39,18 @@ def validate(data_dir: Path) -> tuple[list[str], dict]:
             for key in required_keys:
                 if not isinstance(doc.get(key), (list, dict)) or not doc[key]:
                     errors.append(f"{name}: {key} missing or empty")
-            if name == "confluence_history_latest.json" and not doc.get("latest_cot_report_date"):
-                errors.append(f"{name}: missing latest_cot_report_date")
+            if name == "confluence_history_latest.json":
+                report_date = doc.get("latest_cot_report_date")
+                if not report_date:
+                    errors.append(f"{name}: missing latest_cot_report_date")
+                elif max_cot_age_days is not None:
+                    try:
+                        age = (date.today() - date.fromisoformat(str(report_date)[:10])).days
+                        if age < 0 or age > max_cot_age_days:
+                            errors.append(f"{name}: report date age {age} days exceeds permitted 0..{max_cot_age_days}")
+                    except (ValueError, TypeError):
+                        errors.append(f"{name}: invalid latest_cot_report_date")
+
             files[name] = {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
         except (OSError, ValueError) as exc:
             errors.append(f"{name}: {exc}")
@@ -49,8 +60,9 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, default=Path("web-dashboard/public/data"))
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-cot-age-days", type=int, default=21)
     args = parser.parse_args()
-    errors, files = validate(args.data_dir)
+    errors, files = validate(args.data_dir, max_cot_age_days=args.max_cot_age_days)
     if errors:
         print("Refusing incomplete dashboard data release:", file=sys.stderr)
         for error in errors:
