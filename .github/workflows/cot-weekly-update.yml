@@ -51,6 +51,15 @@ jobs:
 
       # A successful CFTC refresh is not equivalent to a complete dashboard release.
       # Exporters can omit prices or confluence when their inputs are unavailable.
+      - name: Refresh live instrument prices
+        if: steps.cot_update.outcome == 'success'
+        env:
+          PYTHONPATH: src
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+        run: python scripts/run_price_refresh.py --require-healthy
+
       - name: Rebuild price store and confluence exports
         if: steps.cot_update.outcome == 'success'
         env:
