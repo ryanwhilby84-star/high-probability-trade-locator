@@ -67,6 +67,10 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "Aligned with 6C/CFTC direction. Replaces inverted OANDA USD_CAD."
         ),
     },
+    "Copper": {
+        "yahoo_symbol": "HG=F",
+        "note": "COMEX copper continuous futures, aligned to copper futures positioning rather than unsupported OANDA XCUUSD.",
+    },
     "Copper / HG": {
         "yahoo_symbol": "HG=F",
         "note": (
