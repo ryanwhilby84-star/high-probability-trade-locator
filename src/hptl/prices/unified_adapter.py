@@ -44,7 +44,9 @@ class UnifiedPriceAdapter:
     def fetch(self, instrument_id: str, *, spec: InstrumentSpec | None = None) -> InstrumentPriceRecord:
         spec = spec or get_instrument(instrument_id) or _legacy_price_only_spec(instrument_id)
         if spec is None:
-            return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unknown_instrument"}
+            from hptl.prices.fred_prices import fred_series_for
+            if not fred_series_for(instrument_id):
+                return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unknown_instrument"}
         source = self.source_for(instrument_id)
         if not source and instrument_id not in FRED_COT_FAIL_SERIES and instrument_id not in OANDA_STORE_SYMBOL:
             return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unsupported_instrument"}
