@@ -57,6 +57,9 @@ jobs:
         env:
           PYTHONPATH: src
           HPTL_SKIP_LIVE_FEEDS: "1"
+          # Must be set before Python imports the confluence builder: its watchdog
+          # configuration is evaluated at import time, before the pipeline sets defaults.
+          HPTL_DISABLE_WATCHDOG: "1"
         run: python -m hptl.cot.run_weekly_update
 
       - name: Upload weekly run logs
