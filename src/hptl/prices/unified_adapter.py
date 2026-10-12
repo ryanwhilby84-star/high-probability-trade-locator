@@ -72,8 +72,10 @@ class UnifiedPriceAdapter:
                 existing=load_instrument_record(instrument_id) or {}; daily=existing.get("daily") or []; weekly=existing.get("weekly") or []; price=existing.get("price"); price_scale=existing.get("price_scale")
             except Exception as exc:
                 err=f"yahoo_futures:{type(exc).__name__}: {exc}"[:200]
-                if is_ice_dx_price_id(instrument_id): source=None
-                else: source="fred"
+                # Keep the provider failure explicit. An unavailable Yahoo
+                # futures contract must not silently become an unrelated FRED
+                # macro series or be reported as a successful refresh.
+                source="yahoo_futures"
         oanda_sym=OANDA_STORE_SYMBOL.get(instrument_id)
         if not oanda_sym and source=="oanda":
             if instrument_id in OANDA_SYMBOL_OVERRIDES:
