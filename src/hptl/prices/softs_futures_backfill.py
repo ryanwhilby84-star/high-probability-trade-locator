@@ -30,7 +30,7 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
         "yahoo_symbol": "ZC=F",
         "note": "CBOT Corn continuous futures (Yahoo ZC=F); use futures prices aligned with CFTC corn, not stale historical snapshots.",
     },
-    "Brent crude Oil": {
+    "Brent Crude Oil": {
         "yahoo_symbol": "BZ=F",
         "note": "ICE Brent crude continuous futures (Yahoo BZ=F); do not use unsupported OANDA BCOUSD mapping.",
     },
