@@ -24,6 +24,9 @@ def main() -> int:
             payload = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(payload, dict):
                 raise ValueError("expected JSON object")
+            if name == "confluence_history_latest.json":
+                if not payload.get("latest_cot_report_date"):
+                    failures.append(f"{name}: latest_cot_report_date missing")
             for key in keys:
                 value = payload.get(key)
                 if not isinstance(value, (list, dict)) or not value:
