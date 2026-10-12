@@ -4,8 +4,6 @@ on:
   schedule:
     # Saturday 06:00 UTC — UK morning after US Friday CFTC release
     - cron: "0 6 * * 6"
-    # Saturday 01:00 UTC — ~Friday 8:00 PM US Eastern (winter)
-    - cron: "0 1 * * 6"
   workflow_dispatch:
 
 concurrency:
