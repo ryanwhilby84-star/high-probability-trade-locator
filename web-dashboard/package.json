@@ -6,7 +6,7 @@
   "scripts": {
     "seasonal-edge": "cd .. && python scripts/build_seasonal_edge_scan.py",
     "seasonality-audit": "cd .. && python scripts/build_seasonal_edge_scan.py --audit-only",
-    "cot-inspector": "cd .. && python scripts/run_weekly_inspector_export.py",
+    "cot-inspector": "cd .. && python -m hptl.cot.weekly_inspector_export",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
