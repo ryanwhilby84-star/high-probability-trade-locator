@@ -32,6 +32,22 @@ jobs:
         run: |
           test -f dist/index.html
           test -d dist/assets
+      - name: Smoke-test production HTTP entry point
+        run: |
+          set -eu
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/institutional-edge-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/ -o /tmp/institutional-edge-home.html; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/institutional-edge-home.html
+          grep -q 'id="root"' /tmp/institutional-edge-home.html
+          grep -q '/assets/' /tmp/institutional-edge-home.html
+          echo "Production-built homepage served successfully over HTTP."
 
   production-data-gate:
     runs-on: ubuntu-latest
