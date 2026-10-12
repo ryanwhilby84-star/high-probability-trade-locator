@@ -5,6 +5,8 @@ on:
     paths:
       - 'web-dashboard/**'
       - '.github/workflows/p0-frontend-build.yml'
+      - 'scripts/validate_production_dashboard_data.py'
+      - 'scripts/package_dashboard_data_release.py'
   workflow_dispatch:
 
 jobs:
