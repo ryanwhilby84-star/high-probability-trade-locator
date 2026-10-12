@@ -31,6 +31,27 @@ jobs:
           PYTHONPATH: src
         run: python -m unittest tests.test_weekly_cot_update tests.test_cot_parser -q
 
+      - name: Check deployment and market-data credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: |
+          missing=0
+          for name in VERCEL_TOKEN OANDA_API_KEY OANDA_ACCOUNT_ID ALPHA_VANTAGE_API_KEY; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            else
+              echo "Configured: $name"
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::Hosted data publication cannot run until required secrets are configured."
+            exit 1
+          fi
+
       - name: Weekly COT update
         id: cot_update
         env:
