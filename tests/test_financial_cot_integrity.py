@@ -21,5 +21,26 @@ class FinancialCotIntegrityTests(unittest.TestCase):
         self.assertTrue(pd.isna(row["commercial_short"]))
         self.assertTrue(pd.isna(row["commercial_net"]))
 
+    def test_weekly_change_tracks_commercial_not_leveraged_money(self):
+        raw = pd.DataFrame([{
+            "report_date": "2026-10-06",
+            "dealer_positions_long_all": 100,
+            "dealer_positions_short_all": 50,
+            "asset_mgr_positions_long_all": 200,
+            "asset_mgr_positions_short_all": 100,
+            "lev_money_positions_long_all": 300,
+            "lev_money_positions_short_all": 200,
+            "change_in_dealer_long_all": 12,
+            "change_in_dealer_short_all": 2,
+            "change_in_asset_mgr_long_all": 8,
+            "change_in_asset_mgr_short_all": 3,
+            "change_in_lev_money_long_all": -50,
+            "change_in_lev_money_short_all": 25,
+        }])
+        row = financial_history_to_dashboard_rows(raw).iloc[0]
+        self.assertEqual(row["commercial_net"], 150)
+        self.assertEqual(row["weekly_change"], 15)
+
+
 if __name__ == "__main__":
     unittest.main()
