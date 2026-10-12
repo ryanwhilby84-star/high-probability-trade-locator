@@ -83,6 +83,10 @@ def select_price_source(instrument_id: str, audit: dict[str, Any] | None = None)
     """Return canonical price source for an instrument."""
     doc = audit or load_price_coverage()
     spec = get_instrument(instrument_id)
+    # Official macro observations take precedence over stale provider audit rows.
+    from hptl.prices.fred_prices import fred_series_for
+    if fred_series_for(instrument_id):
+        return "fred"
     try:
         from hptl.prices.softs_futures_backfill import SOFTS_YAHOO
         if instrument_id in SOFTS_YAHOO:
