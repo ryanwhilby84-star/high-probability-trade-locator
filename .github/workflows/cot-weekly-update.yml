@@ -91,6 +91,23 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      # Deploy the exact validated files from this runner, not a fresh Git checkout
+      # (which omits the gitignored generated price/confluence snapshots).
+      - name: Publish verified dashboard to Vercel
+        if: steps.release_gate.outcome == 'success'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_kOGOa74U24TdEdIhtyRsTtK6
+          VERCEL_PROJECT_ID: prj_azYqGdff1iAUbl8MI0pMKaG2D3tK
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN secret is required to publish verified data. No deployment attempted."
+            exit 1
+          fi
+          npm install --global vercel@latest
+          cd web-dashboard
+          vercel deploy --prod --yes --token "$VERCEL_TOKEN" --scope ryanwhilby84-stars-projects
+
       - name: Explain release status
         if: always()
         run: |
