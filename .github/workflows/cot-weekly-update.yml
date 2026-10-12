@@ -108,9 +108,21 @@ jobs:
           cd web-dashboard
           vercel deploy --prod --yes --token "$VERCEL_TOKEN" --scope ryanwhilby84-stars-projects
 
+      - name: Verify deployed data endpoints
+        if: steps.release_gate.outcome == 'success'
+        run: |
+          set -eu
+          base="https://high-probability-trade-locator-seven.vercel.app"
+          for name in confluence_history_latest.json prices_latest.json cot_weekly_inspector_latest.json; do
+            echo "Checking production: /data/$name"
+            curl --fail --silent --show-error --location --retry 4 --retry-delay 5 "$base/data/$name" -o "/tmp/$name"
+            python -m json.tool "/tmp/$name" > /dev/null
+          done
+          echo "Production data endpoints returned valid JSON."
+
       - name: Explain release status
         if: always()
         run: |
           echo "Weekly CFTC refresh outcome: ${{ steps.cot_update.outcome }}"
           echo "Complete production snapshot gate: ${{ steps.release_gate.outcome }}"
-          echo "Only a complete validated snapshot is packaged; no production deployment is attempted here."
+          echo "Production publish requires a complete validated snapshot and configured Vercel credentials."
