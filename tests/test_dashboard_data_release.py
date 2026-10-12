@@ -19,8 +19,10 @@ class DataReleaseTests(unittest.TestCase):
         self.data.mkdir()
         for name, keys in REQUIRED.items():
             doc = {key: [{"sample": True}] for key in keys}
+            if name == "instrument_registry.json":
+                doc["markets"] = [{"id": "sample_market"}]
             if name == "prices_latest.json":
-                doc["instruments"] = {"sample_market": {"daily": [{"date": "2026-10-09", "close": 100.0}]}}
+                doc["instruments"] = {"sample_market": {"daily": [{"date": date.today().isoformat(), "close": 100.0}]}}
                 doc["summary"] = {"instruments_total": 1, "with_daily_bars": 1, "with_errors": 0}
             if name == "confluence_history_latest.json":
                 doc["latest_cot_report_date"] = date.today().isoformat()
@@ -40,6 +42,22 @@ class DataReleaseTests(unittest.TestCase):
         (self.data / "prices_latest.json").write_text("{}")
         errors, _ = validate(self.data)
         self.assertTrue(any("instruments missing or empty" in error for error in errors))
+
+    def test_missing_registered_instrument_blocks_release(self):
+        path = self.data / "instrument_registry.json"
+        doc = json.loads(path.read_text())
+        doc["markets"].append({"id": "uncovered_market"})
+        path.write_text(json.dumps(doc))
+        errors, _ = validate(self.data)
+        self.assertTrue(any("uncovered_market: missing instrument" in error for error in errors))
+
+    def test_stale_instrument_bars_block_release(self):
+        path = self.data / "prices_latest.json"
+        doc = json.loads(path.read_text())
+        doc["instruments"]["sample_market"]["daily"][0]["date"] = (date.today() - timedelta(days=30)).isoformat()
+        path.write_text(json.dumps(doc))
+        errors, _ = validate(self.data)
+        self.assertTrue(any("latest bar age" in error for error in errors))
 
     def test_zero_price_coverage_blocks_release(self):
         path = self.data / "prices_latest.json"
