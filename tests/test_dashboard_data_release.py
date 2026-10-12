@@ -19,6 +19,8 @@ class DataReleaseTests(unittest.TestCase):
         self.data.mkdir()
         for name, keys in REQUIRED.items():
             doc = {key: [{"sample": True}] for key in keys}
+            if name == "prices_latest.json":
+                doc["sample_market"] = {"price": 100.0}
             if name == "confluence_history_latest.json":
                 doc["latest_cot_report_date"] = date.today().isoformat()
             (self.data / name).write_text(json.dumps(doc), encoding="utf-8")
