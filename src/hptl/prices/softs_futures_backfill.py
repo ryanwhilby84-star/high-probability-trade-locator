@@ -67,6 +67,22 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "Aligned with 6C/CFTC direction. Replaces inverted OANDA USD_CAD."
         ),
     },
+    "US 10-Year T-Note / ZN": {
+        "yahoo_symbol": "ZN=F",
+        "note": "CBOT 10-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 2-Year T-Note / ZT": {
+        "yahoo_symbol": "ZT=F",
+        "note": "CBOT 2-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 5-Year T-Note / ZF": {
+        "yahoo_symbol": "ZF=F",
+        "note": "CBOT 5-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 30-Year T-Bond / ZB": {
+        "yahoo_symbol": "ZB=F",
+        "note": "CBOT 30-year Treasury bond continuous futures; not a Treasury yield series.",
+    },
     "Copper": {
         "yahoo_symbol": "HG=F",
         "note": "COMEX copper continuous futures, aligned to copper futures positioning rather than unsupported OANDA XCUUSD.",
