@@ -1,15 +1,26 @@
-name: Workstation regression
+name: Workstation release verification
 on:
   push:
     branches:
       - fix/p0-separate-vite-build-from-data-refresh
+  pull_request:
+    branches:
+      - fix/p0-separate-vite-build-from-data-refresh
   workflow_dispatch:
 jobs:
-  tests:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: npm run test:workstation-data --prefix web-dashboard
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - name: Install locked frontend dependencies
+        run: npm ci --prefix web-dashboard
+      - name: Run COT and price freshness regressions
+        run: npm run test:workstation-data --prefix web-dashboard
+      - name: Build production frontend
+        run: npm run build --prefix web-dashboard
