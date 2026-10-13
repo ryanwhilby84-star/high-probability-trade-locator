@@ -74,5 +74,14 @@ test('calendar-aligned rows cannot reveal future CFTC report dates', () => {
   assert.equal(recordCotReportDate(match.row), '2026-09-29')
   assert.equal(match.matchMode, 'backward_calendar_week')
   const futureOnly = resolveRowForMarketWeek(rows.slice(1), 'Gold', '2026-10-06')
-  assert.equal(futureOnly.matchMode, 'exact_unresolved')
+  assert.equal(futureOnly.matchMode, 'none')
+  assert.equal(futureOnly.row, null)
+})
+
+
+test('future calendar records cannot leak earlier-dated COT through fallback', () => {
+  const rows = [resolved('Gold', '2026-10-13', '2026-10-06')]
+  const match = resolveRowForMarketWeek(rows, 'Gold', '2026-10-06')
+  assert.equal(match.row, null)
+  assert.equal(match.matchMode, 'none')
 })
