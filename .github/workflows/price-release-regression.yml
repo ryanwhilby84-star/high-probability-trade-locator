@@ -1,0 +1,25 @@
+name: Price release regression tests
+on:
+  push:
+    branches:
+      - fix/p0-separate-vite-build-from-data-refresh
+    paths:
+      - 'scripts/package_dashboard_data_release.py'
+      - 'src/hptl/prices/price_store.py'
+      - 'tests/test_dashboard_release_price_validation.py'
+      - '.github/workflows/price-release-regression.yml'
+  workflow_dispatch:
+
+jobs:
+  price-release-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test runner
+        run: python -m pip install pytest
+      - name: Run price release regression tests
+        run: python -m pytest -q tests/test_dashboard_release_price_validation.py
