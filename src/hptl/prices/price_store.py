@@ -235,7 +235,7 @@ def build_store_payload(
         instruments[iid] = record_to_public(rec)
         if rec.get("error"):
             err += 1
-        elif rec.get("daily") or rec.get("weekly"):
+        elif rec.get("daily"):
             ok += 1
         else:
             err += 1
