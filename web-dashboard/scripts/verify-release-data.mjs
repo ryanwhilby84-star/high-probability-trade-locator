@@ -9,6 +9,10 @@ const required = {
   'instrument_registry.json': 'markets',
   'prices_latest.json': 'instruments',
 }
+if (process.env.VERCEL_ENV !== 'production' && process.env.REQUIRE_DASHBOARD_DATA !== '1') {
+  console.log('Frontend-only build: release data check applies to production.')
+  process.exit(0)
+}
 const errors = []
 for (const [filename, key] of Object.entries(required)) {
   const path = resolve(root, 'public', 'data', filename)
