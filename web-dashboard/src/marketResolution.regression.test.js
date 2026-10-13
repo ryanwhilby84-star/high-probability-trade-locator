@@ -64,3 +64,15 @@ test('default dashboard week requires all three indices to have resolved COT', (
   const dow = resolveRowForMarketWeek(rows, 'Dow / YM', '2026-10-06')
   assert.equal(recordCotReportDate(dow.row), '2026-09-29')
 })
+
+test('calendar-aligned rows cannot reveal future CFTC report dates', () => {
+  const rows = [
+    resolved('Gold', '2026-09-29'),
+    resolved('Gold', '2026-10-06', '2026-10-13'),
+  ]
+  const match = resolveRowForMarketWeek(rows, 'Gold', '2026-10-06')
+  assert.equal(recordCotReportDate(match.row), '2026-09-29')
+  assert.equal(match.matchMode, 'backward_calendar_week')
+  const futureOnly = resolveRowForMarketWeek(rows.slice(1), 'Gold', '2026-10-06')
+  assert.equal(futureOnly.matchMode, 'exact_unresolved')
+})
