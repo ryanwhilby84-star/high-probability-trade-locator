@@ -26,6 +26,14 @@ from hptl.prices.price_store import (
 from hptl.seasonality.seasonality_v2 import normalize_daily_bars, years_spanned
 
 SOFTS_YAHOO: dict[str, dict[str, str]] = {
+    "Corn": {
+        "yahoo_symbol": "ZC=F",
+        "note": "CBOT Corn continuous futures (Yahoo ZC=F); use futures prices aligned with CFTC corn, not stale historical snapshots.",
+    },
+    "Brent Crude Oil": {
+        "yahoo_symbol": "BZ=F",
+        "note": "ICE Brent crude continuous futures (Yahoo BZ=F); do not use unsupported OANDA BCOUSD mapping.",
+    },
     "Coffee": {
         "yahoo_symbol": "KC=F",
         "note": "ICE Coffee C continuous futures (Yahoo KC=F) daily OHLC for COT alignment.",
@@ -58,6 +66,30 @@ SOFTS_YAHOO: dict[str, dict[str, str]] = {
             "CME Canadian Dollar continuous futures (Yahoo 6C=F), quoted as USD per CAD. "
             "Aligned with 6C/CFTC direction. Replaces inverted OANDA USD_CAD."
         ),
+    },
+    "Ultra 10-Year T-Note / TN": {
+        "yahoo_symbol": "TN=F",
+        "note": "CBOT Ultra 10-year Treasury note futures; not the standard ZN contract or a Treasury yield.",
+    },
+    "US 10-Year T-Note / ZN": {
+        "yahoo_symbol": "ZN=F",
+        "note": "CBOT 10-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 2-Year T-Note / ZT": {
+        "yahoo_symbol": "ZT=F",
+        "note": "CBOT 2-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 5-Year T-Note / ZF": {
+        "yahoo_symbol": "ZF=F",
+        "note": "CBOT 5-year Treasury note continuous futures; not a Treasury yield series.",
+    },
+    "US 30-Year T-Bond / ZB": {
+        "yahoo_symbol": "ZB=F",
+        "note": "CBOT 30-year Treasury bond continuous futures; not a Treasury yield series.",
+    },
+    "Copper": {
+        "yahoo_symbol": "HG=F",
+        "note": "COMEX copper continuous futures, aligned to copper futures positioning rather than unsupported OANDA XCUUSD.",
     },
     "Copper / HG": {
         "yahoo_symbol": "HG=F",

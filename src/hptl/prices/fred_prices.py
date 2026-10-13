@@ -9,7 +9,16 @@ from hptl.prices.models import InstrumentPriceRecord, OhlcBar, build_history_met
 from hptl.prices.price_store import load_instrument_record_internal
 from hptl.seasonality.seasonality_v2 import normalize_daily_bars
 
-FRED_INSTRUMENT_SERIES: dict[str, str] = dict(FRED_COT_FAIL_SERIES)
+# Official FRED Treasury / real-yield observations; these are macro series,
+# not exchange-traded futures or proxies for Treasury futures contracts.
+FRED_INSTRUMENT_SERIES: dict[str, str] = {
+    **FRED_COT_FAIL_SERIES,
+    "US 2-Year Treasury Yield": "DGS2",
+    "US 10-Year Treasury Yield": "DGS10",
+    "US 30-Year Treasury Yield": "DGS30",
+    "2s10s Yield Curve": "T10Y2Y",
+    "10-Year Real Yield": "DFII10",
+}
 
 
 def fred_series_for(instrument_id: str) -> str | None:

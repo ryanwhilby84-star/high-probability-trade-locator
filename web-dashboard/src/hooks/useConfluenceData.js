@@ -374,12 +374,18 @@ export function useConfluenceData() {
         })
 
       fetch(`/data/cot_commercial_attention_latest.json${genQ}`)
-        .then((r) => (r.ok ? r.json() : null))
-        .then((doc) => {
-          if (!cancelled) setCommercialAttention(doc && typeof doc === 'object' ? doc : null)
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status} loading commercial COT attention`)
+          return r.json()
         })
-        .catch(() => {
-          if (!cancelled) setCommercialAttention(null)
+        .then((doc) => {
+          if (!doc || typeof doc !== 'object' || !Array.isArray(doc.attention_board)) {
+            throw new Error('Commercial COT attention export has no attention_board array')
+          }
+          if (!cancelled) setCommercialAttention(doc)
+        })
+        .catch((err) => {
+          if (!cancelled) setCommercialAttention({ __load_error: err?.message || 'Unknown commercial COT attention error' })
         })
 
       fetch(`/data/relative_strength_latest.json${genQ}`)

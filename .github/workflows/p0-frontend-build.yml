@@ -1,0 +1,85 @@
+name: P0 frontend build verification
+
+on:
+  pull_request:
+    paths:
+      - 'web-dashboard/**'
+      - '.github/workflows/p0-frontend-build.yml'
+      - 'scripts/validate_production_dashboard_data.py'
+      - 'scripts/package_dashboard_data_release.py'
+      - 'tests/test_dashboard_data_release.py'
+      - 'tests/test_cot_percentile_reconciliation.py'
+      - 'src/hptl/cot/weekly_inspector_flow.py'
+      - 'src/hptl/cot/positioning_percentiles.py'
+      - 'src/hptl/cot/parser.py'
+      - 'tests/test_financial_cot_integrity.py'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - name: Install frontend dependencies
+        run: npm ci
+      - name: Verify frontend build without Python
+        run: npm run build
+      - name: Verify generated frontend files
+        run: |
+          test -f dist/index.html
+          test -d dist/assets
+      - name: Smoke-test production HTTP entry point
+        run: |
+          set -eu
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/institutional-edge-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/ -o /tmp/institutional-edge-home.html; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/institutional-edge-home.html
+          grep -q 'id="root"' /tmp/institutional-edge-home.html
+          grep -q '/assets/' /tmp/institutional-edge-home.html
+          echo "Production-built homepage served successfully over HTTP."
+
+  production-data-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regression-test data packaging and failure isolation
+        run: python -m unittest discover -s tests -p test_dashboard_data_release.py -v
+      # Full snapshot validation belongs to the hosted data release job, after live\n      # feeds have been fetched. A source-only PR checkout intentionally has no\n      # gitignored prices/confluence snapshots; do not mark code tests failed.\n      - name: Explain hosted data release requirement\n        run: |\n          echo "Code and packaging regression tests passed."\n          echo "Production data must be generated and validated in the weekly release workflow."\n          echo "This PR build does not publish or certify live market data."
+
+  cot-percentile-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install COT parser test dependencies
+        run: python -m pip install pandas
+      - name: Independent rolling percentile regression checks
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p test_cot_percentile_reconciliation.py -v
+
+      - name: Verify financial trader fields never fabricate missing data
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p test_financial_cot_integrity.py -v

@@ -4,8 +4,6 @@ on:
   schedule:
     # Saturday 06:00 UTC — UK morning after US Friday CFTC release
     - cron: "0 6 * * 6"
-    # Saturday 01:00 UTC — ~Friday 8:00 PM US Eastern (winter)
-    - cron: "0 1 * * 6"
   workflow_dispatch:
 
 concurrency:
@@ -15,7 +13,7 @@ concurrency:
 jobs:
   weekly-cot:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -31,11 +29,36 @@ jobs:
           PYTHONPATH: src
         run: python -m unittest tests.test_weekly_cot_update tests.test_cot_parser -q
 
+      - name: Check deployment and market-data credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          missing=0
+          for name in VERCEL_TOKEN OANDA_API_KEY OANDA_ACCOUNT_ID ALPHA_VANTAGE_API_KEY FRED_API_KEY; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing required GitHub Actions secret: $name"
+              missing=1
+            else
+              echo "Configured: $name"
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::Hosted data publication cannot run until required secrets are configured."
+            exit 1
+          fi
+
       - name: Weekly COT update
         id: cot_update
         env:
           PYTHONPATH: src
           HPTL_SKIP_LIVE_FEEDS: "1"
+          # Must be set before Python imports the confluence builder: its watchdog
+          # configuration is evaluated at import time, before the pipeline sets defaults.
+          HPTL_DISABLE_WATCHDOG: "1"
         run: python -m hptl.cot.run_weekly_update
 
       - name: Upload weekly run logs
@@ -49,9 +72,84 @@ jobs:
             data/exports/weekly_cot_update_history.jsonl
           if-no-files-found: ignore
 
-      - name: Production note
+      # A successful CFTC refresh is not equivalent to a complete dashboard release.
+      # Exporters can omit prices or confluence when their inputs are unavailable.
+      - name: Refresh live instrument prices
+        if: steps.cot_update.outcome == 'success'
+        env:
+          PYTHONPATH: src
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/run_price_refresh.py --require-healthy
+
+      # Weekly COT update already builds the confluence/scanner history above.
+      # Rebuild only price/valuation/seasonality after live price refresh;
+      # rebuilding 510 historical COT weeks here a second time takes hours.
+      - name: Refresh price valuation and seasonality exports
+        if: steps.cot_update.outcome == 'success'
+        env:
+          PYTHONPATH: src
+          HPTL_SKIP_LIVE_FEEDS: "1"
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_ENVIRONMENT: ${{ vars.OANDA_ENVIRONMENT || 'practice' }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python scripts/run_dashboard_export_rebuild.py --skip-confluence
+
+      - name: Validate complete dashboard snapshot
+        if: steps.cot_update.outcome == 'success'
+        id: release_gate
+        run: python scripts/validate_production_dashboard_data.py
+
+      - name: Package verified dashboard snapshot
+        if: steps.release_gate.outcome == 'success'
+        run: python scripts/package_dashboard_data_release.py --output dashboard-data-release.zip
+
+      - name: Upload verified dashboard snapshot for deployment
+        if: steps.release_gate.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-data-release
+          path: dashboard-data-release.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      # Deploy the exact validated files from this runner, not a fresh Git checkout
+      # (which omits the gitignored generated price/confluence snapshots).
+      - name: Publish verified dashboard to Vercel
+        if: steps.release_gate.outcome == 'success'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_kOGOa74U24TdEdIhtyRsTtK6
+          VERCEL_PROJECT_ID: prj_azYqGdff1iAUbl8MI0pMKaG2D3tK
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN secret is required to publish verified data. No deployment attempted."
+            exit 1
+          fi
+          npm install --global vercel@latest
+          cd web-dashboard
+          vercel deploy --prod --yes --token "$VERCEL_TOKEN" --scope ryanwhilby84-stars-projects
+
+      - name: Verify deployed data endpoints
+        if: steps.release_gate.outcome == 'success'
+        run: |
+          set -eu
+          base="https://high-probability-trade-locator-seven.vercel.app"
+          for name in confluence_history_latest.json prices_latest.json cot_weekly_inspector_latest.json; do
+            echo "Checking production: /data/$name"
+            curl --fail --silent --show-error --location --retry 4 --retry-delay 5 "$base/data/$name" -o "/tmp/$name"
+            python -m json.tool "/tmp/$name" > /dev/null
+          done
+          echo "Production data endpoints returned valid JSON."
+
+      - name: Explain release status
         if: always()
         run: |
-          echo "GitHub Actions validates the weekly script on each schedule."
-          echo "Production data (cot_cleaned_*, workbook, dashboard JSON) must live on your Windows host"
-          echo "with Task Scheduler: scripts/register_weekly_cot_task.ps1"
+          echo "Weekly CFTC refresh outcome: ${{ steps.cot_update.outcome }}"
+          echo "Complete production snapshot gate: ${{ steps.release_gate.outcome }}"
+          echo "Production publish requires a complete validated snapshot and configured Vercel credentials."

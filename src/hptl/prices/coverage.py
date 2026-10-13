@@ -96,6 +96,11 @@ def select_price_source(instrument_id: str, audit: dict[str, Any] | None = None)
     except Exception:
         pass
 
+    # Preserve actual futures identity; use FRED only after futures routes.
+    from hptl.prices.fred_prices import fred_series_for
+    if fred_series_for(instrument_id):
+        return "fred"
+
     # Verified OANDA aliases can service legacy IDs even when the registry or
     # generated coverage row is stale. A None override explicitly blocks OANDA.
     if instrument_id in OANDA_SYMBOL_OVERRIDES and OANDA_SYMBOL_OVERRIDES[instrument_id]:

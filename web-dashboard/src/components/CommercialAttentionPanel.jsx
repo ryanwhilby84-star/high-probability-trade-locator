@@ -193,6 +193,15 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
     return rows.slice(0, topN)
   }, [doc, radarEligibleOnly, topN])
 
+  if (doc?.__load_error) {
+    return (
+      <section className="ca-panel ca-empty" aria-label="Commercial COT attention">
+        <h2 className="ca-title">Commercial COT Attention</h2>
+        <p className="ca-meta">Data unavailable: {doc.__load_error}. Check /data/cot_commercial_attention_latest.json.</p>
+      </section>
+    )
+  }
+
   if (!doc) {
     return (
       <>

@@ -44,12 +44,19 @@ class UnifiedPriceAdapter:
     def fetch(self, instrument_id: str, *, spec: InstrumentSpec | None = None) -> InstrumentPriceRecord:
         spec = spec or get_instrument(instrument_id) or _legacy_price_only_spec(instrument_id)
         if spec is None:
-            return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unknown_instrument"}
+            from hptl.prices.fred_prices import fred_series_for
+            if not fred_series_for(instrument_id):
+                return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unknown_instrument"}
         source = self.source_for(instrument_id)
         if not source and instrument_id not in FRED_COT_FAIL_SERIES and instrument_id not in OANDA_STORE_SYMBOL:
             return {"instrument_id": instrument_id,"price":None,"daily":[],"weekly":[],"range_52w":None,"history":None,"error":"unsupported_instrument"}
         if not source and instrument_id in FRED_COT_FAIL_SERIES:
             source="fred"
+        if source == "fred":
+            from hptl.prices.fred_prices import fetch_fred_instrument, fred_series_for
+            if fred_series_for(instrument_id):
+                return {**fetch_fred_instrument(instrument_id), "_fetched_via": "fred"}
+            return {"instrument_id": instrument_id, "price": None, "daily": [], "weekly": [], "range_52w": None, "history": None, "error": f"unmapped_fred_series:{instrument_id}", "_fetched_via": "fred"}
         price: PriceSnapshot | None=None; daily:list[OhlcBar]=[]; weekly:list[OhlcBar]=[]; err:str|None=None; price_scale=None
         forming_daily=None; forming_weekly=None
         if source=="yahoo_futures":
@@ -65,8 +72,10 @@ class UnifiedPriceAdapter:
                 existing=load_instrument_record(instrument_id) or {}; daily=existing.get("daily") or []; weekly=existing.get("weekly") or []; price=existing.get("price"); price_scale=existing.get("price_scale")
             except Exception as exc:
                 err=f"yahoo_futures:{type(exc).__name__}: {exc}"[:200]
-                if is_ice_dx_price_id(instrument_id): source=None
-                else: source="fred"
+                # Keep the provider failure explicit. An unavailable Yahoo
+                # futures contract must not silently become an unrelated FRED
+                # macro series or be reported as a successful refresh.
+                source="yahoo_futures"
         oanda_sym=OANDA_STORE_SYMBOL.get(instrument_id)
         if not oanda_sym and source=="oanda":
             if instrument_id in OANDA_SYMBOL_OVERRIDES:
