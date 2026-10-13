@@ -35,23 +35,16 @@ jobs:
           test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN secret missing"; exit 1; }
           test -n "$VERCEL_ORG_ID" || { echo "VERCEL_ORG_ID secret missing"; exit 1; }
           test -n "$VERCEL_PROJECT_ID" || { echo "VERCEL_PROJECT_ID secret missing"; exit 1; }
-      - name: Check price snapshot source before lengthy COT rebuild
-        run: |
-          if [ ! -s web-dashboard/public/data/prices_latest.json ]; then
-            echo "::error title=Price snapshot source missing::prices_latest.json is not present in the checkout. The release cannot pass price-integrity validation until a real price refresh/export is wired into this workflow."
-            exit 1
-          fi
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          path = Path("web-dashboard/public/data/prices_latest.json")
-          doc = json.loads(path.read_text())
-          assert isinstance(doc.get("instruments"), dict) and doc["instruments"], "No price instruments"
-          assert isinstance(doc.get("summary"), dict), "No price coverage summary"
-          print("Price snapshot exists; full freshness checks run at release validation.")
-          PY
       - name: Install COT pipeline dependencies
         run: python -m pip install -r requirements.txt
+      - name: Refresh real price history and publish dashboard price snapshot
+        env:
+          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+        run: |
+          python scripts/run_price_refresh.py --require-healthy
+          test -s web-dashboard/public/data/prices_latest.json || { echo "::error::Price exporter did not create prices_latest.json"; exit 1; }
       - name: Fetch and rebuild COT confluence data
         env:
           HPTL_STAGE_TIMEOUT_S: '900'
