@@ -43,6 +43,10 @@ def validate(data_dir: Path, *, max_cot_age_days: int | None = None) -> tuple[li
                     errors.append(f"{name}: instruments missing or empty")
                 if not isinstance(summary, dict):
                     errors.append(f"{name}: summary missing")
+                elif isinstance(instruments, dict):
+                    actual_daily = sum(bool(rec.get("daily")) for rec in instruments.values() if isinstance(rec, dict))
+                    if summary.get("with_daily_bars") != actual_daily:
+                        errors.append(f"{name}: summary daily coverage {summary.get('with_daily_bars')} does not match actual {actual_daily}")
                 elif not isinstance(instruments, dict) or (
                     summary.get("instruments_total") != len(instruments)
                     or not isinstance(summary.get("with_daily_bars"), int)
