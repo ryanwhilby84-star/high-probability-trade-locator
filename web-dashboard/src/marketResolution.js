@@ -173,14 +173,15 @@ export function resolveRowForMarketWeek(records, market, weekDate) {
   }
 
   const cotBackward = forMarket
-    .filter((r) => isKnownByWeek(r) && isCotRowResolved(r))
+    .filter((r) => recordCalendarDate(r) <= week && isKnownByWeek(r) && isCotRowResolved(r))
     .sort((a, b) => recordCotReportDate(b).localeCompare(recordCotReportDate(a)))
   if (cotBackward.length) {
     return packResult(cotBackward[0], 'backward_cot_report_date', cotBackward)
   }
 
-  if (exact.length) {
-    return packResult(pickBestRow(exact), 'exact_unresolved', exact)
+  const exactUnresolved = exact.filter((r) => isKnownByWeek(r) && !isCotRowResolved(r))
+  if (exactUnresolved.length) {
+    return packResult(pickBestRow(exactUnresolved), 'exact_unresolved', exactUnresolved)
   }
 
   return { row: null, matchMode: 'none', matchedCount: 0, matchedMarkets: [], matchedDates: [] }
