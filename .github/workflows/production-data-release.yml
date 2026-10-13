@@ -38,6 +38,9 @@ jobs:
       - name: Install COT pipeline dependencies
         run: python -m pip install -r requirements.txt
       - name: Fetch and rebuild COT confluence data
+        env:
+          HPTL_STAGE_TIMEOUT_S: '900'
+          PYTHONUNBUFFERED: '1'
         run: python -m hptl.cot.run_update --force
       - name: Refresh commercial attention
         run: python scripts/run_commercial_attention_engine.py
