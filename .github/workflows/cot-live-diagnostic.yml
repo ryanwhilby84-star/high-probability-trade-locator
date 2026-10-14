@@ -30,7 +30,7 @@ jobs:
           echo "=== LAST 100 LOG LINES ==="
           tail -100 cot-refresh.log || true
       - name: Validate all markets and inspector dates
-        if: always()
+        if: success()
         run: |
           python - <<'PY'
           import json
@@ -60,7 +60,7 @@ jobs:
               assert dates[-1]==expected, f"{name}: chart={dates[-1]} CFTC={expected}"
               assert len(rows)>=156, f"{name}: inspector has only {len(rows)} reports"
               print(name,dates[-1],len(dates),len(rows))
-          print("PASS: 26 chart and inspector markets, aligned latest weeks, 156+ reports")
+          print(f"PASS: 26 chart and inspector markets, aligned to CFTC week {expected}, 156+ reports")
           PY
       - name: Upload diagnostics (not deploy)
         if: always()
