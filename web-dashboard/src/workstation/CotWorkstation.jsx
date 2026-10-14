@@ -532,11 +532,14 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     }
   }, [marketId, matchedKey])
 
+  // The weekly inspector is an independent data source. Do not discard it
+  // when the optional research/events payload is unavailable.
   const researchWithInspector = React.useMemo(() => {
-    if (!researchBlock) return null
-    return weeklyInspectorBlock
-      ? { ...researchBlock, weekly_inspector: weeklyInspectorBlock }
-      : researchBlock
+    if (!researchBlock && !weeklyInspectorBlock) return null
+    return {
+      ...(researchBlock || {}),
+      ...(weeklyInspectorBlock ? { weekly_inspector: weeklyInspectorBlock } : {}),
+    }
   }, [researchBlock, weeklyInspectorBlock])
 
   const weeklyModel = React.useMemo(
