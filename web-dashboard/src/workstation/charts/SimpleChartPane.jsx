@@ -135,6 +135,9 @@ export function SimpleChartPane({
   overlayLinePoints = null,
   overlayLineColor = 'rgba(15, 118, 110, 0.9)',
   onTimeClick = null,
+  drawingMode = 'off',
+  drawingLines = [],
+  onAddDrawing = null,
   /** Pin click — receives pin descriptor; must not mutate camera. */
   onPinClick = null,
   valueBadge = null,
@@ -151,6 +154,10 @@ export function SimpleChartPane({
   const livePriceLineRef = React.useRef(null)
   const latestLineRef = React.useRef(null)
   const eventHighlightRef = React.useRef(null)
+  const drawingModeRef = React.useRef(drawingMode)
+  const onAddDrawingRef = React.useRef(onAddDrawing)
+  drawingModeRef.current = drawingMode
+  onAddDrawingRef.current = onAddDrawing
   const onTimeClickRef = React.useRef(onTimeClick)
   onTimeClickRef.current = onTimeClick
 
@@ -262,6 +269,18 @@ export function SimpleChartPane({
       zeroSeriesRef.current = zeroSeries
 
       clickHandler = (param) => {
+        if (drawingModeRef.current !== 'off' && param?.point) {
+          const kind = drawingModeRef.current
+          const price = primarySeriesRef.current?.coordinateToPrice?.(param.point.y)
+          if (kind === 'horizontal' && Number.isFinite(price)) {
+            onAddDrawingRef.current?.({ kind, price })
+            return
+          }
+          if (kind === 'vertical' && param.time != null) {
+            onAddDrawingRef.current?.({ kind, time: param.time })
+            return
+          }
+        }
         if (param?.time == null) return
         onTimeClickRef.current?.(param.time)
       }
@@ -731,6 +750,44 @@ export function SimpleChartPane({
       resizeObserver?.disconnect()
     }
   }, [eventHighlightTime, mounted, eventMarkers])
+
+  React.useEffect(() => {
+    const chart = chartRef.current
+    const series = primarySeriesRef.current
+    if (!mounted || !chart || !series) return undefined
+    const priceLines = []
+    const verticals = []
+    const host = containerRef.current?.parentElement
+    for (const line of drawingLines) {
+      if (line.kind === 'horizontal' && Number.isFinite(line.price)) {
+        try {
+          priceLines.push(series.createPriceLine({
+            price: line.price, color: '#b9c7d8', lineWidth: 1,
+            lineStyle: 2, axisLabelVisible: true, title: 'Level',
+          }))
+        } catch { /* chart remount */ }
+      } else if (line.kind === 'vertical' && Number.isFinite(line.time) && host) {
+        const marker = document.createElement('div')
+        marker.style.cssText = 'position:absolute;top:0;bottom:0;width:1px;background:#b9c7d8;opacity:.85;pointer-events:none;z-index:4;'
+        host.appendChild(marker)
+        verticals.push({ marker, time: line.time })
+      }
+    }
+    const reposition = () => {
+      for (const {marker,time} of verticals) {
+        const x = chart.timeScale().timeToCoordinate(time)
+        marker.style.display = x == null ? 'none' : 'block'
+        if (x != null) marker.style.left = x + 'px'
+      }
+    }
+    reposition()
+    chart.timeScale().subscribeVisibleLogicalRangeChange(reposition)
+    return () => {
+      try { chart.timeScale().unsubscribeVisibleLogicalRangeChange(reposition) } catch {}
+      for (const line of priceLines) { try { series.removePriceLine(line) } catch {} }
+      for (const {marker} of verticals) marker.remove()
+    }
+  }, [drawingLines, mounted])
 
   return (
     <div
