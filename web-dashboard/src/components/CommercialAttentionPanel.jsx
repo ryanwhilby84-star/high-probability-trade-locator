@@ -214,6 +214,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
       Math.max(Math.abs((b.c ?? 50) - 50), Math.abs((b.nr ?? 50) - 50)) - Math.max(Math.abs((a.c ?? 50) - 50), Math.abs((a.nr ?? 50) - 50)))
     return { rows, latestDate, eligibleCount: eligible.length }
   }, [historical, radarEligibleOnly])
+  const isLoading = !historical
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   const displayed = showAll ? rows : extremes
   const tile = { background: '#111c27', border: '1px solid #344c61', borderRadius: 10, padding: 16 }
@@ -223,11 +224,11 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
         <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#f0bd72' }}>80 / 20</span></h2>
         <p style={{ margin: 0, color: '#a8bacb', fontSize: 13 }}>Commercial and Non-Reportable extremes independently trigger alerts. Non-Commercial positioning is shown for timing context.</p>
       </div>
-      <div style={{ color: '#c8d6e3', textAlign: 'right', fontSize: 13 }}>COT report <strong>{latestDate || '—'}</strong><div>{extremes.length} alerts · {rows.length} markets with percentiles</div></div>
+      <div style={{ color: '#c8d6e3', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
     </div>
     <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-      <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({extremes.length})</button>
-      <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({rows.length})</button>
+      <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({isLoading ? '…' : extremes.length})</button>
+      <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({isLoading ? '…' : rows.length})</button>
     </div>
     {!historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
       !rows.length ? <p style={{ color: '#f0bd72' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
