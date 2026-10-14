@@ -184,7 +184,7 @@ function AttentionCard({ row }) {
 }
 
 
-function ExtremeAttentionBoard({ historical, week }) {
+function ExtremeAttentionBoard({ historical, week, radarEligibleOnly }) {
   const cards = React.useMemo(() => {
     const blocks = historical?.markets || historical?.instruments || historical?.data || {}
     const entries = Array.isArray(blocks) ? blocks.map(v => [v.market || v.instrument, v]) : Object.entries(blocks)
@@ -198,16 +198,16 @@ function ExtremeAttentionBoard({ historical, week }) {
     return entries.flatMap(([key, block]) => {
       const s = Array.isArray(block?.series) ? block.series : []
       const last = s[s.length - 1]
-      if (!last || !week || String(last.date).slice(0, 10) !== String(week).slice(0, 10)) return []
+      if (!last || (week && String(last.date).slice(0, 10) !== String(week).slice(0, 10))) return []
       const c = percentile(s, 'commercial_net'), nc = percentile(s, 'institutional_net'), nr = percentile(s, 'retail_net')
       if (!isExtreme(c) && !isExtreme(nr)) return []
       const name = block.market || key
-      if (!isRadarEligible(name)) return []
+      if (radarEligibleOnly && !isRadarEligible(name)) return []
       const previous = s[s.length - 2]
       return [{ name, c, nc, nr, commercialExtreme: isExtreme(c), week: last.date,
         change: Number.isFinite(last.commercial_net) && Number.isFinite(previous?.commercial_net) ? last.commercial_net - previous.commercial_net : null }]
     }).sort((a,b) => Number(b.commercialExtreme) - Number(a.commercialExtreme) || Math.abs(b.c - 50) - Math.abs(a.c - 50))
-  }, [historical, week])
+  }, [historical, week, radarEligibleOnly])
   return <section className="ca-panel" aria-label="Pay Attention 80/20 extremes" style={{ marginBottom: 16 }}>
     <header className="ca-header"><div><h2 className="ca-title">Pay Attention · 80/20 Extremes</h2>
       <p className="ca-sub">156-week net positioning · Commercial and Non-Reportable extremes · Not automatic entry signals</p></div>
@@ -248,6 +248,8 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
 
   if (!doc) {
     return (
+      <>
+      <ExtremeAttentionBoard historical={historical} week={null} radarEligibleOnly={radarEligibleOnly} />
       <section className="ca-panel ca-empty" aria-label="Commercial COT attention">
         <h2 className="ca-title">Commercial COT Attention</h2>
         <p className="ca-meta">
@@ -255,6 +257,7 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
           <code>python scripts/run_commercial_attention_engine.py</code> if empty.
         </p>
       </section>
+      </>
     )
   }
 
@@ -262,7 +265,7 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
 
   return (
     <>
-    <ExtremeAttentionBoard historical={historical} week={doc.source_week || doc.calendar_week} />
+    <ExtremeAttentionBoard historical={historical} week={doc.source_week || doc.calendar_week} radarEligibleOnly={radarEligibleOnly} />
     <section className="ca-panel" aria-label="Commercial COT attention">
       <header className="ca-header">
         <div>
