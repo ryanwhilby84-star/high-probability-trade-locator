@@ -5,6 +5,7 @@ const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 export const CAMERA_DEFAULTS = {
   rightOffset: 3,
   minBarSpacing: 0.35,
+  maxVisibleWeeks: 260,
   zoomFactor: 1.22,
   defaultBarSpacing: 6,
 }
@@ -39,7 +40,7 @@ export function indexToTime(rows, index) {
 export function barSpacingForWeekCount(plotWidth, weekCount) {
   const count = Math.max(weekCount, 1)
   const plot = Math.max(plotWidth, 80)
-  return Math.max(CAMERA_DEFAULTS.minBarSpacing, plot / count)
+  return Math.max(CAMERA_DEFAULTS.minBarSpacing, plot / Math.min(count, CAMERA_DEFAULTS.maxVisibleWeeks))
 }
 
 export function cameraForWeekWindow(rows, weeks, plotWidth) {
@@ -63,9 +64,10 @@ export function clampStretchCamera(camera, plotWidth = null) {
   if (!camera) return camera
   const plot = Math.max(plotWidth ?? 800, 80)
   const maxSpacing = maxBarSpacingForPlot(plot)
+  const minSpacing = Math.max(CAMERA_DEFAULTS.minBarSpacing, plot / CAMERA_DEFAULTS.maxVisibleWeeks)
   return {
     barSpacing: Math.max(
-      CAMERA_DEFAULTS.minBarSpacing,
+      minSpacing,
       Math.min(maxSpacing, camera.barSpacing),
     ),
     rightOffset: camera.rightOffset ?? CAMERA_DEFAULTS.rightOffset,
@@ -108,7 +110,7 @@ export function zoomCameraAtPixel(
   const factor = Math.pow(CAMERA_DEFAULTS.zoomFactor, steps)
   const nextSpacing = zoomIn
     ? Math.min(maxBarSpacingForPlot(plot), camera.barSpacing * factor)
-    : Math.max(CAMERA_DEFAULTS.minBarSpacing, camera.barSpacing / factor)
+    : Math.max(plot / CAMERA_DEFAULTS.maxVisibleWeeks, camera.barSpacing / factor)
 
   const deltaFromRight = (width - plotX - 1) / nextSpacing
   const nextRightOffset = deltaFromRight - lastIdx + anchorIdx - 0.5
