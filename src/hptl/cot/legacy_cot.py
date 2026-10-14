@@ -358,7 +358,10 @@ def _select_canonical_row(sub: pd.DataFrame, instrument_id: str) -> pd.Series | 
     oi_col = LEGACY_COLUMN_MAP["oi"]
     if oi_col in sub.columns:
         sub = sub.sort_values(oi_col, ascending=False, na_position="last")
-    return sub.iloc[-1] if len(sub) else None
+    # In the full-history exporter, candidates are already restricted to a
+    # single report date. Preserve the highest-open-interest contract instead
+    # of accidentally selecting the LOWEST (which sub.iloc[-1] did).
+    return sub.iloc[0] if len(sub) else None
 
 
 def _evaluate_mapping_status(
