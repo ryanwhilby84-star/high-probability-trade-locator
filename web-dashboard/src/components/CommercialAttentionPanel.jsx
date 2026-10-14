@@ -184,7 +184,7 @@ function AttentionCard({ row }) {
 }
 
 
-function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
+function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored, error }) {
   const [showAll, setShowAll] = React.useState(false)
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
     const blocks = historical?.markets || historical?.instruments || historical?.data || {}
@@ -214,7 +214,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
       Math.max(Math.abs((b.c ?? 50) - 50), Math.abs((b.nr ?? 50) - 50)) - Math.max(Math.abs((a.c ?? 50) - 50), Math.abs((a.nr ?? 50) - 50)))
     return { rows, latestDate, eligibleCount: eligible.length }
   }, [historical, radarEligibleOnly])
-  const isLoading = !historical
+  const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   const displayed = showAll ? rows : extremes
   const tile = { background: '#111c27', border: '1px solid #344c61', borderRadius: 10, padding: 16 }
@@ -230,7 +230,8 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
       <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({isLoading ? '…' : extremes.length})</button>
       <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({isLoading ? '…' : rows.length})</button>
     </div>
-    {!historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
+    {errored ? <p role="alert" style={{ color: '#f0bd72' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
+    !historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
       !rows.length ? <p style={{ color: '#f0bd72' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
       !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
@@ -255,6 +256,6 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
 
 /** Market Radar's single 80/20 attention board. Legacy cards retired. */
 export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
-  const { doc: historical } = useCot3ySeries()
-  return <ExtremeAttentionBoard historical={historical} radarEligibleOnly={radarEligibleOnly} />
+  const { doc: historical, loading, errored, error } = useCot3ySeries()
+  return <ExtremeAttentionBoard historical={historical} loading={loading} errored={errored} error={error} radarEligibleOnly={radarEligibleOnly} />
 }
