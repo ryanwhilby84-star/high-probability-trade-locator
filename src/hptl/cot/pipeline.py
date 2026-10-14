@@ -176,6 +176,34 @@ def _downstream_export_stale(local_iso: str | None, export_week: str | None) -> 
     return str(export_week)[:10] < str(local_iso)[:10]
 
 
+def _workstation_exports_stale(local_iso: str | None) -> bool:
+    """Detect stale workstation artifacts even when confluence is already current."""
+    if not local_iso:
+        return False
+    source = Path("web-dashboard/public/data/cot_3y_series_latest.json")
+    inspector = Path("web-dashboard/public/data/cot_weekly_inspector_latest.json")
+    for path in (source, inspector):
+        if not path.is_file():
+            return True
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            markets = payload.get("markets") or {}
+            if len(markets) != 26:
+                return True
+            for block in markets.values():
+                week = block.get("latest_date")
+                if not week:
+                    series = block.get("series") or []
+                    if series:
+                        last = series[-1]
+                        week = last.get("date") if isinstance(last, dict) else None
+                if not week or str(week)[:10] < str(local_iso)[:10]:
+                    return True
+        except (OSError, ValueError, TypeError, AttributeError):
+            return True
+    return False
+
+
 def _scanner_export_week() -> str | None:
     """Latest week advertised by scanner_latest.json (public or data copy)."""
     for path in (
@@ -556,7 +584,7 @@ def run_full_pipeline(
                 result.rows_fetched = 0
                 export_week = _confluence_export_latest_week()
                 local_iso = result.latest_local_report_date
-                needs_json = _downstream_export_stale(local_iso, export_week)
+                needs_json = _downstream_export_stale(local_iso, export_week) or _workstation_exports_stale(local_iso)
                 if probe_only:
                     result.update_needed = False
                     result.export_latest_cot_week = export_week or local_iso
@@ -669,7 +697,7 @@ def run_full_pipeline(
     if not force and local_max is not None and cftc_max <= local_max:
         # Upstream ingestion not needed — but dashboard may still be behind master.
         result.update_needed = False
-        needs_json_rebuild = _downstream_export_stale(local_iso, export_week)
+        needs_json_rebuild = _downstream_export_stale(local_iso, export_week) or _workstation_exports_stale(local_iso)
         result.cot_data_stale = needs_json_rebuild or bool(
             cftc_iso and export_week and str(export_week)[:10] < str(cftc_iso)[:10]
         )
