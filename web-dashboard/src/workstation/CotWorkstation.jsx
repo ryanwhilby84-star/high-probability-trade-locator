@@ -492,6 +492,21 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     }
   }, [marketId, matchedKey])
 
+  // Fail closed when the independently published inspector and chart disagree.
+  // Keep this derived from the current market's inspector to avoid stale
+  // state leaking across instrument navigation.
+  const inspectorSourceMismatch = React.useMemo(() => {
+    const inspector = weeklyInspectorBlock?.instrument_id === marketId
+      ? weeklyInspectorBlock
+      : null
+    const weeks = inspector?.weeks
+    if (!inspector?.available || !Array.isArray(weeks) || !weeks.length || !loadedLatestDate) {
+      return false
+    }
+    const latestInspectorDate = weeks[weeks.length - 1]?.date
+    return Boolean(latestInspectorDate && latestInspectorDate !== loadedLatestDate)
+  }, [weeklyInspectorBlock, marketId, loadedLatestDate])
+
   const researchWithInspector = React.useMemo(() => {
     const research = researchBlock?.instrument_id === marketId ? researchBlock : null
     const weekly = weeklyInspectorBlock?.instrument_id === marketId ? weeklyInspectorBlock : null
