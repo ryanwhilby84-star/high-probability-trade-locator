@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/verify-deployed-data.mjs",
     "preview": "vite preview",
     "test:workstation-data": "node --test src/prices/quoteFreshness.regression.test.js"
   },
