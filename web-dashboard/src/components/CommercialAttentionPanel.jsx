@@ -193,40 +193,42 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   const displayed = showAll ? rows : extremes
-  const tile = { background: '#111c27', border: '1px solid #344c61', borderRadius: 10, padding: 16 }
-  return <section aria-label="New 80/20 Pay Attention Board" style={{ background: '#0c1621', border: '2px solid #477f9b', borderRadius: 12, padding: 18, marginBottom: 22 }}>
+  const tile = { background: '#111418', border: '1px solid #343a40', borderRadius: 10, padding: 16 }
+  return <section aria-label="New 80/20 Pay Attention Board" style={{ background: '#0b0d0f', border: '2px solid #8dc63f', borderRadius: 12, padding: 18, marginBottom: 22 }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
-      <div><div style={{ color: '#71c9df', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
-        <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#f0bd72' }}>80 / 20</span></h2>
-        <p style={{ margin: 0, color: '#a8bacb', fontSize: 13 }}>Commercial and Non-Reportable extremes independently trigger alerts. Non-Commercial positioning is shown for timing context.</p>
+      <div><div style={{ color: '#9bd84d', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
+        <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#e7a06d' }}>80 / 20</span></h2>
+        <p style={{ margin: 0, color: '#9aa0a6', fontSize: 13 }}>Commercial and Non-Reportable extremes independently trigger alerts. Non-Commercial positioning is shown for timing context.</p>
       </div>
-      <div style={{ color: '#c8d6e3', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
+      <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
     </div>
     <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
       <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({isLoading ? '…' : extremes.length})</button>
       <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({isLoading ? '…' : rows.length})</button>
     </div>
-    {errored ? <p role="alert" style={{ color: '#f0bd72' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
+    {errored ? <p role="alert" style={{ color: '#e7a06d' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
     !historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
-      !rows.length ? <p style={{ color: '#f0bd72' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
+      !rows.length ? <p style={{ color: '#e7a06d' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
       !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
         {displayed.map(v => <article key={v.name} style={tile}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
             <h3 style={{ margin: 0, fontSize: 18, color: '#fff' }}>{v.name}</h3>
-            <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#f0bd72' : '#9db6c9', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
+            <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#e7a06d' : '#aeb4ba', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 7, margin: '14px 0' }}>
-            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} style={{ background: '#223445', padding: '12px 5px', textAlign: 'center', borderRadius: 7, border: n != null && (n >= 80 || n <= 20) ? '1px solid #d49b4f' : '1px solid #34495b' }}>
-              <div style={{ fontSize: 10, color: '#b6c8d6' }}>{label}</div><div style={{ fontSize: 23, color: n != null && (n >= 80 || n <= 20) ? '#f5c27c' : '#fff', fontWeight: 800 }}>{n == null ? '—' : n.toFixed(0) + '%'}</div>
+            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} style={{ background: '#171a1e', padding: '12px 5px', textAlign: 'center', borderRadius: 7, border: n != null && (n >= 80 || n <= 20) ? '1px solid #d49b4f' : '1px solid #383e44' }}>
+              <div style={{ fontSize: 10, color: '#aeb4ba' }}>{label}</div><div style={{ fontSize: 23, color: n != null && (n >= 80 || n <= 20) ? '#a8e15d' : '#fff', fontWeight: 800 }}>{n == null ? '—' : n.toFixed(0) + '%'}</div>
             </div>)}
           </div>
-          <div style={{ color: '#b8c9d6', fontSize: 12 }}>Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.change)}</strong></div>
-          <p style={{ color: '#a6b8c8', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable crowding: check Commercial alignment and Non-Commercial rotation.' : 'Commercial positioning extreme: check Non-Commercial rotation and fresh higher-timeframe supply/demand.'}</p>
+          <div style={{ color: '#cfd3d7', fontSize: 12 }}>Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.change)}</strong></div>
+          <div style={{ color: '#b8c9d6', fontSize: 12, marginTop: 5 }}>Non-Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.ncChange)}</strong></div>
+          <p style={{ color: '#9aa0a6', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable crowding: check Commercial alignment and Non-Commercial rotation.' : 'Commercial positioning extreme: check Non-Commercial rotation and fresh higher-timeframe supply/demand.'}</p>
           <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
         </article>)}
       </div>}
-    <p style={{ color: '#7f9aad', fontSize: 11, margin: '15px 0 0' }}>Percentile rank over up to 156 available COT weeks. Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
+    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>Percentile rank over up to 156 available COT weeks. Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
+    <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#9bd84d', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
   </section>
 }
 
