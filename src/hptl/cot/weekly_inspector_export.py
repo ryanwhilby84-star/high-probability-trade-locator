@@ -289,7 +289,16 @@ def run_weekly_inspector_export(
             continue
         series = list(block.get("series") or [])
         full = build_weekly_inspector_series(series)
-        out_markets[resolved] = compact_market_weeks(full)
+        compact = compact_market_weeks(full)
+        source_dates = [str(row.get("date"))[:10] for row in series if isinstance(row, dict) and row.get("date")]
+        compact_rows = compact.get("rows") or []
+        if not source_dates or not compact_rows or str(compact_rows[-1][0])[:10] != source_dates[-1]:
+            raise RuntimeError(
+                f"Weekly Inspector tip mismatch for {resolved}: "
+                f"chart={source_dates[-1] if source_dates else 'missing'}, "
+                f"inspector={compact_rows[-1][0] if compact_rows else 'missing'}"
+            )
+        out_markets[resolved] = compact
 
     payload = {
         "version": "cot_weekly_inspector_v1",
