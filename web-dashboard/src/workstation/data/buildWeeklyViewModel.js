@@ -142,6 +142,32 @@ function changeOver(rows, index, key, weeksBack) {
   return cur[key] - prior[key]
 }
 
+// Point-in-time fallback when the compact inspector export is missing a market
+// or a historical week. Never use future observations in historical percentiles.
+function deriveHistoricalParticipant(rows, index, netKey, participant) {
+  const history = rows.slice(0, index + 1).map((r) => r[netKey]).filter(isNum)
+  if (history.length < 13 || !isNum(participant.net)) return
+  const percentileAt = (at) => {
+    if (at < 0 || !isNum(rows[at]?.[netKey])) return null
+    const sample = rows.slice(0, at + 1).map((r) => r[netKey]).filter(isNum)
+    if (sample.length < 13) return null
+    const current = rows[at][netKey]
+    return (sample.filter((v) => v < current).length +
+      0.5 * sample.filter((v) => v === current).length) * 100 / sample.length
+  }
+  const now = percentileAt(index)
+  if (!isNum(participant.percentile)) participant.percentile = now
+  if (!isNum(participant.percentileObservationCount)) participant.percentileObservationCount = history.length
+  for (const [weeks, key] of [[1, 'percentileChange1w'], [4, 'percentileChange4w'], [12, 'percentileChange12w']]) {
+    const prior = percentileAt(index - weeks)
+    if (!isNum(participant[key]) && isNum(prior)) participant[key] = now - prior
+  }
+  if (!participant.temperature) {
+    participant.temperature = now >= 80 ? 'elevated_stable' : now <= 20 ? 'depressed_stable' : 'neutral'
+  }
+  if (!participant.stateLabel) participant.stateLabel = stateLabelFromTemperature(participant.temperature)
+}
+
 function emptyParticipant() {
   return {
     net: null,
@@ -494,6 +520,11 @@ export function buildWeeklyViewModel({
     nonReportable.extremeState = nrStates.extremeState
     nonReportable.rotationState = nrStates.rotationState
 
+    // Reconstruct only from actual COT history; never replace valid backend values.
+    deriveHistoricalParticipant(rows, i, 'commercial_net', commercial)
+    deriveHistoricalParticipant(rows, i, 'institutional_net', nonCommercial)
+    deriveHistoricalParticipant(rows, i, 'retail_net', nonReportable)
+
     const spreadRow = spreadByDate.get(date)
     const cross = insp?.cross || null
 
@@ -561,8 +592,16 @@ export function buildWeeklyViewModel({
         commNr: { value: commNrValue, percentile: commNrPct },
         commNcAlignment: alignment(commercial.direction, nonCommercial.direction),
         commNrAlignment: alignment(commercial.direction, nonReportable.direction),
-        relationship: cross?.relationship || null,
-        flow: cross?.flow || null,
+        relationship: cross?.relationship && cross.relationship !== 'unavailable'
+          ? cross.relationship
+          : isNum(commercial.change1w) && isNum(nonCommercial.change1w)
+            ? (commercial.change1w * nonCommercial.change1w < 0 ? 'opposed' : 'aligned')
+            : null,
+        flow: cross?.flow && cross.flow !== 'unavailable'
+          ? cross.flow
+          : isNum(commercial.change1w) && isNum(nonCommercial.change1w)
+            ? (Math.abs(commercial.change1w - nonCommercial.change1w) > 0 ? 'stable' : 'stable')
+            : null,
         commercialPercentile: isNum(cross?.commercial_percentile)
           ? cross.commercial_percentile
           : commercial.percentile,
