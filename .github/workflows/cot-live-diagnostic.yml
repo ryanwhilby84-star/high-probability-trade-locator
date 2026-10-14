@@ -18,7 +18,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e . -r requirements.txt
       - name: Refresh CFTC and regenerate workstation
-        run: python -m hptl.cot.run_update --force
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m hptl.cot.run_update --force 2>&1 | tee cot-refresh.log
+      - name: Summarize first refresh failure
+        if: failure()
+        run: |
+          echo "=== PIPELINE FAILURE SUMMARY ==="
+          grep -En 'Traceback|ERROR|Error|failed|FAILED|RuntimeError|ValueError|Exception|exit code|COT PIPELINE' cot-refresh.log | tail -80 || true
+          echo "=== LAST 100 LOG LINES ==="
+          tail -100 cot-refresh.log || true
       - name: Validate all markets and inspector dates
         if: always()
         run: |
@@ -53,6 +63,7 @@ jobs:
             web-dashboard/public/data/cot_3y_series_latest.json
             web-dashboard/public/data/cot_weekly_inspector_latest.json
             data/processed/**/*
+            cot-refresh.log
             logs/**/*
             data/logs/**/*
           retention-days: 3
