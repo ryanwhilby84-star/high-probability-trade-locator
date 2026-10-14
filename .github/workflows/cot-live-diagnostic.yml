@@ -1,0 +1,58 @@
+name: COT live end-to-end diagnostic
+on:
+  workflow_dispatch:
+  push:
+    branches: [fix/weekly-inspector-integrity-20261014]
+    paths: [.github/workflows/cot-live-diagnostic.yml]
+jobs:
+  cot-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pipeline dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . -r requirements.txt
+      - name: Refresh CFTC and regenerate workstation
+        run: python -m hptl.cot.run_update --force
+      - name: Validate all markets and inspector dates
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path("web-dashboard/public/data")
+          chart=base/"cot_3y_series_latest.json"
+          inspector=base/"cot_weekly_inspector_latest.json"
+          if not chart.exists() or not inspector.exists():
+              raise SystemExit(f"Missing exports: chart={chart.exists()} inspector={inspector.exists()}")
+          a=json.loads(chart.read_text())
+          b=json.loads(inspector.read_text())
+          assert len(a.get("markets",{}))==26, f"chart markets: {len(a.get('markets',{}))}"
+          assert len(b.get("markets",{}))==26, f"inspector markets: {len(b.get('markets',{}))}"
+          for name, block in a["markets"].items():
+              dates=[r["date"] for r in block.get("series",[]) if r.get("date")]
+              rows=b["markets"].get(name,{}).get("rows",[])
+              assert dates and rows, f"{name}: missing chart/inspector history"
+              assert dates[-1]==rows[-1][0], f"{name}: chart={dates[-1]} inspector={rows[-1][0]}"
+              assert len(rows)>=156, f"{name}: inspector has only {len(rows)} reports"
+              print(name,dates[-1],len(dates),len(rows))
+          print("PASS: 26 chart and inspector markets, aligned latest weeks, 156+ reports")
+          PY
+      - name: Upload diagnostics (not deploy)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cot-live-diagnostic
+          if-no-files-found: warn
+          path: |
+            web-dashboard/public/data/cot_3y_series_latest.json
+            web-dashboard/public/data/cot_weekly_inspector_latest.json
+            data/processed/**/*
+            logs/**/*
+            data/logs/**/*
+          retention-days: 3
