@@ -315,7 +315,10 @@ def _republish_downstream_exports(
             f"{(wi.get('summary') or {}).get('markets')}",
         )
     except Exception as exc:
-        logger.warning("weekly inspector export failed (confluence OK): %s", exc)
+        logger.exception("weekly inspector export failed; COT workstation publish is incomplete")
+        raise RuntimeError(
+            "COT workstation weekly inspector export failed; refusing to report refresh success"
+        ) from exc
 
 def _read_probe_cache() -> dict[str, Any] | None:
     if not PROBE_CACHE_PATH.exists():
