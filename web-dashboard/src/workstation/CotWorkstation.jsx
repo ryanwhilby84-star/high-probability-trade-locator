@@ -199,6 +199,34 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // splitter mutates only this value; the COT group takes the remainder and its
   // three panes redistribute evenly. Restoring WS_PANE_FLEX.price = "reset layout".
   const [priceFlex, setPriceFlex] = React.useState(WS_PANE_FLEX.price)
+  const [drawingMode, setDrawingMode] = React.useState('off')
+  const [drawingLines, setDrawingLines] = React.useState([])
+  React.useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('institutional-edge-lines:' + marketId) || '[]')
+      setDrawingLines(Array.isArray(saved) ? saved.filter((line) =>
+        (line.kind === 'horizontal' && Number.isFinite(line.price)) ||
+        (line.kind === 'vertical' && Number.isFinite(line.time))
+      ) : [])
+    } catch { setDrawingLines([]) }
+    setDrawingMode('off')
+  }, [marketId])
+  const addDrawingLine = React.useCallback((line) => {
+    setDrawingLines((previous) => {
+      const next = [...previous, line].slice(-100)
+      try { localStorage.setItem('institutional-edge-lines:' + marketId, JSON.stringify(next)) } catch {}
+      return next
+    })
+    setDrawingMode('off')
+  }, [marketId])
+  const undoDrawingLine = React.useCallback(() => {
+    setDrawingLines((previous) => {
+      const next = previous.slice(0, -1)
+      try { localStorage.setItem('institutional-edge-lines:' + marketId, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }, [marketId])
+
 
   const handleSplitterDrag = React.useCallback((deltaY, containerHeight) => {
     if (!containerHeight) return
@@ -900,6 +928,12 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             </button>
           ) : null}
 
+          <div className="cot-ws-range-toggles" role="group" aria-label="Price drawing tools">
+            <button type="button" className={`cot-ws-range-btn${drawingMode === 'horizontal' ? ' active' : ''}`} aria-pressed={drawingMode === 'horizontal'} title="Click the price chart to add a horizontal level" onClick={() => setDrawingMode((mode) => mode === 'horizontal' ? 'off' : 'horizontal')}>H Line</button>
+            <button type="button" className={`cot-ws-range-btn${drawingMode === 'vertical' ? ' active' : ''}`} aria-pressed={drawingMode === 'vertical'} title="Click the price chart to mark a week" onClick={() => setDrawingMode((mode) => mode === 'vertical' ? 'off' : 'vertical')}>V Line</button>
+            <button type="button" className="cot-ws-range-btn" disabled={!drawingLines.length} onClick={undoDrawingLine} title="Remove most recently added line">Undo</button>
+          </div>
+
           <div
             className="cot-ws-range-toggles"
             role="group"
@@ -1048,6 +1082,9 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 {...paneProps}
                 panelId={PANEL_IDS.price}
                 mode="candle"
+                drawingMode={drawingMode}
+                drawingLines={drawingLines}
+                onAddDrawing={addDrawingLine}
                 legendLabel={
                   priceSubtitle ? `Weekly OHLC · ${priceSubtitle}` : 'Weekly OHLC'
                 }
