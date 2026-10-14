@@ -17,7 +17,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -52,14 +52,48 @@ jobs:
               print(filename, (target/filename).stat().st_size)
           print("PASS: publishing 26 verified markets through 2026-10-06")
           PY
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install COT pipeline dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . -r requirements.txt
+      - name: Regenerate missing dashboard feeds from fresh CFTC data
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m hptl.cot.run_update --force 2>&1 | tee cot-publish-refresh.log
+      - name: Verify complete dashboard publication
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path("web-dashboard/public/data")
+          required=["cot_3y_series_latest.json","cot_weekly_inspector_latest.json","confluence_history_latest.json","cot_commercial_attention_latest.json"]
+          for name in required:
+              path=base/name
+              assert path.is_file() and path.stat().st_size>100, f"Missing/empty dashboard feed: {name}"
+              payload=json.loads(path.read_text())
+              assert payload, f"Empty dashboard feed: {name}"
+              print(name, path.stat().st_size)
+          a=json.loads((base/required[0]).read_text())
+          b=json.loads((base/required[1]).read_text())
+          assert len(a["markets"])==len(b["markets"])==26
+          for market,block in a["markets"].items():
+              series=block.get("series") or []
+              rows=b["markets"][market].get("rows") or []
+              assert series and len(rows)>=156 and series[-1]["date"]==rows[-1][0]=="2026-10-06", market
+          print("PASS: full dashboard feed set and 26 fresh aligned markets")
+          PY
       - name: Commit verified data to preview branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json
+          git add -f web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/confluence_history_latest.json web-dashboard/public/data/cot_commercial_attention_latest.json
           if git diff --cached --quiet; then
             echo "Verified exports already committed"
           else
-            git commit -m "Publish verified COT chart and inspector exports through 2026-10-06"
+            git commit -m "Publish complete verified COT and confluence dashboard feeds through 2026-10-06"
             git push origin HEAD:fix/weekly-inspector-integrity-20261014
           fi
