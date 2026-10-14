@@ -3,7 +3,10 @@ on:
   workflow_dispatch:
   push:
     branches: [fix/weekly-inspector-integrity-20261014]
-    paths: [.github/workflows/cot-live-diagnostic.yml]
+    paths:
+      - .github/workflows/cot-live-diagnostic.yml
+      - src/hptl/cot/**
+      - src/hptl/confluence/**
 jobs:
   cot-diagnostic:
     runs-on: ubuntu-latest
