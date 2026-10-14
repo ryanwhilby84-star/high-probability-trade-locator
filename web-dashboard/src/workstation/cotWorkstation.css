@@ -1940,13 +1940,17 @@ body.cot-ws-panel-resizing {
   .cot-ws-desktop-layout {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
-    align-items: start;
+    align-items: stretch;
+    grid-template-rows: minmax(0, 1fr);
+    height: 100%;
     gap: 0;
   }
   .cot-ws-desktop-layout > .cot-ws-research-stage {
     grid-column: 1;
     grid-row: 1;
     min-width: 0;
+    min-height: 0;
+    height: 100%;
   }
   .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer {
     grid-column: 2;
