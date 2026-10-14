@@ -1,0 +1,60 @@
+/* Institutional Edge sidebar — shared ZTACK charcoal/chrome/lime identity.
+   Scoped to the workstation shell; preserve trading semantics elsewhere. */
+.ws-root .ws-sidebar {
+  background: #0b0d0f;
+  border-right: 1px solid #282b2f;
+  color: #f3f5f7;
+}
+.ws-root .ws-brand {
+  background: #0b0d0f;
+  color: #cfd3d7;
+  border-bottom: 1px solid #282b2f;
+}
+.ws-root .ws-brand strong { color: #f3f5f7; }
+.ws-root .ws-brand:hover, .ws-root .ws-brand:focus-visible { color: #a8e15d; }
+.ws-root .ws-nav-btn {
+  background: transparent;
+  color: #aeb4ba;
+  border-color: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.ws-root .ws-nav-btn:hover:not(:disabled),
+.ws-root .ws-nav-btn:focus-visible:not(:disabled) {
+  background: #171a1e;
+  color: #f3f5f7;
+  border-color: #383e44;
+}
+.ws-root .ws-nav-btn.active {
+  background: #171a1e;
+  color: #a8e15d;
+  border-left: 3px solid #8dc63f;
+}
+.ws-root .ws-nav-count { color: #8d949b; }
+.ws-root .ws-nav-btn.active .ws-nav-count { color: #9bd84d; }
+.ws-root .ws-product-nav {
+  background: #0b0d0f;
+  border-top: 1px solid #282b2f;
+}
+.ws-root .ws-product-nav .ws-btn,
+.ws-root .ws-product-nav .ws-btn.ws-btn-primary {
+  background: #111418;
+  color: #cfd3d7;
+  border: 1px solid #343a40;
+  box-shadow: none;
+  border-radius: 6px;
+  font-weight: 650;
+}
+.ws-root .ws-product-nav .ws-btn:hover,
+.ws-root .ws-product-nav .ws-btn:focus-visible {
+  background: #171a1e;
+  color: #a8e15d;
+  border-color: #8dc63f;
+}
+.ws-root .ws-product-nav .ws-btn.ws-btn-primary {
+  background: #1b2513;
+  border-color: #75ad2d;
+  color: #a8e15d;
+}
+.ws-root .ws-product-nav .ws-btn.ws-btn-primary:hover {
+  background: #26381a;
+}
