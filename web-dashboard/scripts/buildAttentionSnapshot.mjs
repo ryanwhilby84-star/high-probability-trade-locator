@@ -22,8 +22,10 @@ export function buildAttentionSnapshot(root) {
     const c = rank(series, 'commercial_net'), nc = rank(series, 'institutional_net'), nr = rank(series, 'retail_net')
     if (c == null && nc == null && nr == null) return []
     const current = Number(last.commercial_net), previous = Number(prev?.commercial_net)
+    const ncCurrent = Number(last.institutional_net), ncPrevious = Number(prev?.institutional_net)
     return [{ name: block.market || key, date: String(last.date || '').slice(0, 10), c, nc, nr,
-      change: Number.isFinite(current) && Number.isFinite(previous) ? current - previous : null }]
+      change: prev && Number.isFinite(current) && Number.isFinite(previous) ? current - previous : null,
+      ncChange: prev && Number.isFinite(ncCurrent) && Number.isFinite(ncPrevious) ? ncCurrent - ncPrevious : null }]
   })
   if (!eligible.length) throw new Error('No valid 52-week COT series: refusing empty attention export')
   const latestDate = eligible.map(r => r.date).sort().at(-1)
