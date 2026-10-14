@@ -263,7 +263,10 @@ def _republish_downstream_exports(
         if synced:
             log_step("Synced public JSON → dist/data.")
     except Exception as exc:
-        logger.warning("cot_3y export failed (confluence OK): %s", exc)
+        logger.exception("cot_3y export failed; workstation source history is stale")
+        raise RuntimeError(
+            "COT workstation history export failed; refusing to report refresh success"
+        ) from exc
     # Scanner slice is a separate publish artifact; confluence alone does not refresh it.
     try:
         scanner_path = _publish_scanner_latest(
