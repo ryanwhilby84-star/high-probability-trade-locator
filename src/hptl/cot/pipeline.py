@@ -805,6 +805,13 @@ def run_full_pipeline(
         try:
             cot3_path = _export_cot_workstation_series()
             print(f"Wrote COT workstation: {cot3_path.resolve()}")
+            # A full COT rebuild must publish matching inspector statistics too.
+            from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
+            inspector = run_weekly_inspector_export(markets=None)
+            log_kv(
+                "weekly inspector",
+                f"available={inspector['summary']['available']}/{inspector['summary']['markets']}",
+            )
         except Exception as exc:
             logger.exception("cot_3y export failed after full COT rebuild")
             result.error = f"COT workstation history export failed: {exc}"
