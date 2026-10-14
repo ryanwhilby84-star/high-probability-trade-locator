@@ -466,6 +466,16 @@ def _refresh_legacy_positioning(*, cftc_max: pd.Timestamp | None = None) -> None
 
     log_step("Rebuilding legacy_cot_latest.json (positioning source for master + confluence)…")
     run_legacy_cot_reset(years=default_history_years())
+    # The dashboard reads legacy positioning, not the successfully probed
+    # disaggregated/TFF workbook. Never continue with an old legacy master.
+    refreshed = _legacy_latest_report_date()
+    if cftc_max is not None and not pd.isna(cftc_max) and (
+        refreshed is None or refreshed.normalize() < cftc_max.normalize()
+    ):
+        raise RuntimeError(
+            f"Legacy positioning remains at {_iso(refreshed)} after rebuild; "
+            f"CFTC source is {_iso(cftc_max)}. Cannot publish stale dashboard data."
+        )
 
 
 def _export_cot_workstation_series() -> Path:
