@@ -806,7 +806,11 @@ def run_full_pipeline(
             cot3_path = _export_cot_workstation_series()
             print(f"Wrote COT workstation: {cot3_path.resolve()}")
         except Exception as exc:
-            logger.warning("cot_3y export failed (confluence OK): %s", exc)
+            logger.exception("cot_3y export failed after full COT rebuild")
+            result.error = f"COT workstation history export failed: {exc}"
+            result.exit_code = 1
+            result.cot_data_stale = True
+            return result
 
         if with_live_feeds:
             _print_banner("HPTL COT PIPELINE — LIVE ENVIRONMENT FEEDS")
