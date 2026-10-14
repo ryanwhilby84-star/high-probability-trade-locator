@@ -27,7 +27,7 @@ export function buildAttentionSnapshot(root) {
   })
   if (!eligible.length) throw new Error('No valid 52-week COT series: refusing empty attention export')
   const latestDate = eligible.map(r => r.date).sort().at(-1)
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(latestDate)) throw new Error('Invalid latest COT report date')
+  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(latestDate)) throw new Error('Invalid latest COT report date')
   const rows = eligible.filter(r => r.date === latestDate).map(r => ({
     ...r, commercialExtreme: r.c != null && (r.c >= 80 || r.c <= 20),
     retailExtreme: r.nr != null && (r.nr >= 80 || r.nr <= 20),
