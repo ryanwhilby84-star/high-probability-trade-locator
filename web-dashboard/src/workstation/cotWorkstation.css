@@ -1929,55 +1929,77 @@ body.cot-ws-panel-resizing {
 }
 
 
-/* Desktop workstation: inspector is a side rail, never a chart-height dropdown. */
+/* Desktop: real right rail, no top inspector occupying chart height. */
 .cot-ws-desktop-layout {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  min-width: 0;
 }
 @media (min-width: 1200px) {
   .cot-ws-desktop-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
+    display: flex;
+    flex-direction: row;
     align-items: stretch;
-    grid-template-rows: minmax(0, 1fr);
-    height: 100%;
-    gap: 0;
+    height: calc(100vh - 140px);
+    min-height: 600px;
+    overflow: hidden;
   }
   .cot-ws-desktop-layout > .cot-ws-research-stage {
-    grid-column: 1;
-    grid-row: 1;
+    order: 1;
+    flex: 1 1 0;
     min-width: 0;
     min-height: 0;
     height: 100%;
+    overflow: hidden;
   }
-  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer {
-    grid-column: 2;
-    grid-row: 1;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    max-height: calc(100vh - 64px);
-    height: auto;
-    overflow: auto;
-    border-left: 1px solid rgba(148,163,184,.2);
-    border-bottom: 0;
-    background: #0b1220;
+  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer,
+  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer.is-expanded {
+    order: 2;
+    position: relative;
+    flex: 0 0 clamp(310px, 24vw, 430px);
+    width: clamp(310px, 24vw, 430px);
+    height: 100%;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 0;
+    border-left: 1px solid rgba(148,163,184,.18);
+    background: #101827;
     box-shadow: none;
     animation: none;
+    color: #edf2f7;
     font-size: 12px;
   }
-  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer.is-expanded {
-    max-height: calc(100vh - 64px);
+  .cot-ws-desktop-layout .cot-ws-insp-columns {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: visible;
+    gap: 0;
   }
+  .cot-ws-desktop-layout .cot-ws-insp-col {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148,163,184,.14);
+    background: transparent !important;
+    padding: 10px 12px;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-flow,
   .cot-ws-desktop-layout .cot-ws-insp-group-summary,
   .cot-ws-desktop-layout .cot-ws-insp-metric--state {
-    background: transparent;
-    box-shadow: none;
+    background: transparent !important;
+    box-shadow: none !important;
   }
   .cot-ws-desktop-layout .cot-ws-insp-metric-value,
   .cot-ws-desktop-layout .cot-ws-insp-group-summary {
     color: #f1f5f9;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-metric-label {
+    color: #aab9ca;
   }
 }
