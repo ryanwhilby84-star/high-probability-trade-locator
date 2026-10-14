@@ -184,54 +184,71 @@ function AttentionCard({ row }) {
 }
 
 
-function ExtremeAttentionBoard({ historical, week, radarEligibleOnly }) {
-  const cards = React.useMemo(() => {
+function ExtremeAttentionBoard({ historical, radarEligibleOnly }) {
+  const [showAll, setShowAll] = React.useState(false)
+  const { rows, latestDate, eligibleCount } = React.useMemo(() => {
     const blocks = historical?.markets || historical?.instruments || historical?.data || {}
     const entries = Array.isArray(blocks) ? blocks.map(v => [v.market || v.instrument, v]) : Object.entries(blocks)
-    const percentile = (series, field) => {
-      const vals = series.slice(-156).map(v => v[field] == null ? null : Number(v[field])).filter(Number.isFinite)
-      if (vals.length < 52 || !Number.isFinite(Number(series[series.length - 1]?.[field]))) return null
-      const n = vals[vals.length - 1]
-      return Math.round(1000 * (vals.filter(v => v < n).length + (vals.filter(v => v === n).length - 1) / 2) / (vals.length - 1)) / 10
+    const rank = (series, field) => {
+      const values = series.slice(-156).map(v => v[field] == null ? null : Number(v[field])).filter(Number.isFinite)
+      if (values.length < 52 || !Number.isFinite(Number(series.at(-1)?.[field]))) return null
+      const n = Number(series.at(-1)[field])
+      return Math.round(1000 * (values.filter(v => v < n).length + (values.filter(v => v === n).length - 1) / 2) / (values.length - 1)) / 10
     }
-    const isExtreme = v => Number.isFinite(v) && (v >= 80 || v <= 20)
-    return entries.flatMap(([key, block]) => {
-      const s = Array.isArray(block?.series) ? block.series : []
-      const last = s[s.length - 1]
-      if (!last || (week && String(last.date).slice(0, 10) !== String(week).slice(0, 10))) return []
-      const c = percentile(s, 'commercial_net'), nc = percentile(s, 'institutional_net'), nr = percentile(s, 'retail_net')
-      if (!isExtreme(c) && !isExtreme(nr)) return []
-      const name = block.market || key
+    const eligible = entries.flatMap(([key, block]) => {
+      const name = block?.market || key
       if (radarEligibleOnly && !isRadarEligible(name) && !isRadarEligible(key)) return []
-      const previous = s[s.length - 2]
-      return [{ name, c, nc, nr, commercialExtreme: isExtreme(c), week: last.date,
-        change: Number.isFinite(Number(last.commercial_net)) && Number.isFinite(Number(previous?.commercial_net)) ? Number(last.commercial_net) - Number(previous.commercial_net) : null }]
-    }).sort((a,b) => Number(b.commercialExtreme) - Number(a.commercialExtreme) || Math.abs(b.c - 50) - Math.abs(a.c - 50))
-  }, [historical, week, radarEligibleOnly])
-  return <section className="ca-panel" aria-label="Pay Attention 80/20 extremes" style={{ marginBottom: 16 }}>
-    <header className="ca-header"><div><h2 className="ca-title">Pay Attention · 80/20 Extremes</h2>
-      <p className="ca-sub">156-week net positioning · Commercial and Non-Reportable extremes · Not automatic entry signals</p></div>
-      <div className="ca-meta">Latest historical COT · {cards.length} markets</div></header>
-    {!historical ? <p className="ca-meta">Loading historical positioning…</p> : cards.length === 0 ?
-      <p className="ca-meta">No qualifying 80/20 extremes in the available historical COT series.</p> :
-      <div className="ca-list">{cards.map(v => {
-        const main = v.commercialExtreme ? v.c : v.nr
-        return <article className="ca-card" key={v.name} style={{ background: '#151e28', border: '1px solid #425466' }}>
-          <header className="ca-card-head"><div className="ca-card-title-row"><h3 className="ca-card-title">{v.name}</h3>
-            <span className="ca-tier-pill ca-tier-high">{v.commercialExtreme ? 'Commercial extreme' : 'Non-reportable extreme'}</span></div>
-            <p className="ca-card-week">Report {v.week}</p></header>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8 }}>
-            {[['Commercial',v.c],['Non-commercial',v.nc],['Non-reportable',v.nr]].map(([label,n]) =>
-              <div key={label} style={{ background: '#23303d', borderRadius: 6, padding: 10, minWidth: 0 }}>
-                <div style={{ color: '#b9c8d8', fontSize: 12 }}>{label}</div>
-                <strong style={{ color: Number.isFinite(n) && (n >= 80 || n <= 20) ? '#ffd08c' : '#eef4fa', fontSize: 20 }}>{n == null ? '—' : n.toFixed(1) + 'th'}</strong>
-              </div>)}
+      const series = Array.isArray(block?.series) ? block.series : []
+      if (!series.length) return []
+      const last = series.at(-1)
+      const c = rank(series, 'commercial_net'), nc = rank(series, 'institutional_net'), nr = rank(series, 'retail_net')
+      if (c == null && nc == null && nr == null) return []
+      return [{ name, date: String(last.date || '').slice(0, 10), c, nc, nr,
+        change: last.commercial_wow == null ? null : Number(last.commercial_wow) }]
+    })
+    const latestDate = eligible.map(v => v.date).sort().at(-1) || null
+    const rows = eligible.filter(v => v.date === latestDate).map(v => ({
+      ...v, commercialExtreme: v.c != null && (v.c >= 80 || v.c <= 20),
+      retailExtreme: v.nr != null && (v.nr >= 80 || v.nr <= 20),
+    })).sort((a,b) => Number(b.commercialExtreme || b.retailExtreme) - Number(a.commercialExtreme || a.retailExtreme) ||
+      Math.max(Math.abs((b.c ?? 50) - 50), Math.abs((b.nr ?? 50) - 50)) - Math.max(Math.abs((a.c ?? 50) - 50), Math.abs((a.nr ?? 50) - 50)))
+    return { rows, latestDate, eligibleCount: eligible.length }
+  }, [historical, radarEligibleOnly])
+  const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
+  const displayed = showAll ? rows : extremes
+  const tile = { background: '#111c27', border: '1px solid #344c61', borderRadius: 10, padding: 16 }
+  return <section aria-label="New 80/20 Pay Attention Board" style={{ background: '#0c1621', border: '2px solid #477f9b', borderRadius: 12, padding: 18, marginBottom: 22 }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
+      <div><div style={{ color: '#71c9df', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
+        <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#f0bd72' }}>80 / 20</span></h2>
+        <p style={{ margin: 0, color: '#a8bacb', fontSize: 13 }}>Commercial and Non-Reportable extremes independently trigger alerts. Non-Commercial positioning is shown for timing context.</p>
+      </div>
+      <div style={{ color: '#c8d6e3', textAlign: 'right', fontSize: 13 }}>COT report <strong>{latestDate || '—'}</strong><div>{extremes.length} alerts · {rows.length} markets with percentiles</div></div>
+    </div>
+    <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+      <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({extremes.length})</button>
+      <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({rows.length})</button>
+    </div>
+    {!historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
+      !rows.length ? <p style={{ color: '#f0bd72' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
+      !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
+        {displayed.map(v => <article key={v.name} style={tile}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+            <h3 style={{ margin: 0, fontSize: 18, color: '#fff' }}>{v.name}</h3>
+            <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#f0bd72' : '#9db6c9', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
           </div>
-          <p className="ca-summary" style={{ color: '#edf3fa', marginTop: 12 }}>{v.commercialExtreme ? (main >= 80 ? 'Commercial net high extreme' : 'Commercial net low extreme') : 'Non-reportable crowding extreme'} · Commercial weekly net Δ {fmt(v.change)}</p>
-          <p className="ca-sub">Check non-commercial rotation and fresh higher-timeframe supply/demand before considering an entry.</p>
-          <div className="ca-actions"><button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation</button></div>
-        </article>
-      })}</div>}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 7, margin: '14px 0' }}>
+            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} style={{ background: '#223445', padding: '12px 5px', textAlign: 'center', borderRadius: 7, border: n != null && (n >= 80 || n <= 20) ? '1px solid #d49b4f' : '1px solid #34495b' }}>
+              <div style={{ fontSize: 10, color: '#b6c8d6' }}>{label}</div><div style={{ fontSize: 23, color: n != null && (n >= 80 || n <= 20) ? '#f5c27c' : '#fff', fontWeight: 800 }}>{n == null ? '—' : n.toFixed(0) + '%'}</div>
+            </div>)}
+          </div>
+          <div style={{ color: '#b8c9d6', fontSize: 12 }}>Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.change)}</strong></div>
+          <p style={{ color: '#a6b8c8', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable crowding: check Commercial alignment and Non-Commercial rotation.' : 'Commercial positioning extreme: check Non-Commercial rotation and fresh higher-timeframe supply/demand.'}</p>
+          <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
+        </article>)}
+      </div>}
+    <p style={{ color: '#7f9aad', fontSize: 11, margin: '15px 0 0' }}>Percentile rank over up to 156 available COT weeks. Extremes are attention triggers, not trade entries. Separate from the legacy Commercial Attention engine below.</p>
   </section>
 }
 
