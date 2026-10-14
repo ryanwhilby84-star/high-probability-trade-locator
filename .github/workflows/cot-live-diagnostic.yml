@@ -7,6 +7,7 @@ on:
       - .github/workflows/cot-live-diagnostic.yml
       - src/hptl/cot/**
       - src/hptl/confluence/**
+      - src/hptl/context/**
 jobs:
   cot-diagnostic:
     runs-on: ubuntu-latest
