@@ -1,4 +1,5 @@
 import React from 'react'
+import { useCot3ySeries } from '../hooks/useCot3ySeries.js'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
 import './commercialAttention.css'
@@ -182,10 +183,63 @@ function AttentionCard({ row }) {
   )
 }
 
+
+function ExtremeAttentionBoard({ historical, week }) {
+  const cards = React.useMemo(() => {
+    const blocks = historical?.markets || historical?.instruments || historical?.data || {}
+    const entries = Array.isArray(blocks) ? blocks.map(v => [v.market || v.instrument, v]) : Object.entries(blocks)
+    const percentile = (series, field) => {
+      const vals = series.slice(-156).map(v => v[field]).filter(Number.isFinite)
+      if (vals.length < 52 || !Number.isFinite(series[series.length - 1]?.[field])) return null
+      const n = vals[vals.length - 1]
+      return Math.round(1000 * (vals.filter(v => v < n).length + (vals.filter(v => v === n).length - 1) / 2) / (vals.length - 1)) / 10
+    }
+    const isExtreme = v => Number.isFinite(v) && (v >= 80 || v <= 20)
+    return entries.flatMap(([key, block]) => {
+      const s = block?.series || []
+      const last = s[s.length - 1]
+      if (!last || String(last.date).slice(0, 10) !== String(week).slice(0, 10)) return []
+      const c = percentile(s, 'commercial_net'), nc = percentile(s, 'institutional_net'), nr = percentile(s, 'retail_net')
+      if (!isExtreme(c) && !isExtreme(nr)) return []
+      const name = block.market || key
+      if (!isRadarEligible(name)) return []
+      const previous = s[s.length - 2]
+      return [{ name, c, nc, nr, commercialExtreme: isExtreme(c), week: last.date,
+        change: Number.isFinite(last.commercial_net) && Number.isFinite(previous?.commercial_net) ? last.commercial_net - previous.commercial_net : null }]
+    }).sort((a,b) => Number(b.commercialExtreme) - Number(a.commercialExtreme) || Math.abs(b.c - 50) - Math.abs(a.c - 50))
+  }, [historical, week])
+  return <section className="ca-panel" aria-label="Pay Attention 80/20 extremes" style={{ marginBottom: 16 }}>
+    <header className="ca-header"><div><h2 className="ca-title">Pay Attention · 80/20 Extremes</h2>
+      <p className="ca-sub">156-week net positioning · Commercial and Non-Reportable extremes · Not automatic entry signals</p></div>
+      <div className="ca-meta">COT week {week || '—'} · {cards.length} markets</div></header>
+    {!historical ? <p className="ca-meta">Loading historical positioning…</p> : cards.length === 0 ?
+      <p className="ca-meta">No current-week qualifying extremes (or report dates do not match). Stale reports are excluded.</p> :
+      <div className="ca-list">{cards.map(v => {
+        const main = v.commercialExtreme ? v.c : v.nr
+        return <article className="ca-card" key={v.name} style={{ background: '#151e28', border: '1px solid #425466' }}>
+          <header className="ca-card-head"><div className="ca-card-title-row"><h3 className="ca-card-title">{v.name}</h3>
+            <span className="ca-tier-pill ca-tier-high">{v.commercialExtreme ? 'Commercial extreme' : 'Non-reportable extreme'}</span></div>
+            <p className="ca-card-week">Report {v.week}</p></header>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8 }}>
+            {[['Commercial',v.c],['Non-commercial',v.nc],['Non-reportable',v.nr]].map(([label,n]) =>
+              <div key={label} style={{ background: '#23303d', borderRadius: 6, padding: 10, minWidth: 0 }}>
+                <div style={{ color: '#b9c8d8', fontSize: 12 }}>{label}</div>
+                <strong style={{ color: Number.isFinite(n) && (n >= 80 || n <= 20) ? '#ffd08c' : '#eef4fa', fontSize: 20 }}>{n == null ? '—' : n.toFixed(1) + 'th'}</strong>
+              </div>)}
+          </div>
+          <p className="ca-summary" style={{ color: '#edf3fa', marginTop: 12 }}>{main >= 80 ? 'Bullish' : 'Bearish'} positioning watch · Commercial weekly net Δ {fmt(v.change)}</p>
+          <p className="ca-sub">Check non-commercial rotation and fresh higher-timeframe supply/demand before considering an entry.</p>
+          <div className="ca-actions"><button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation</button></div>
+        </article>
+      })}</div>}
+  </section>
+}
+
 /**
  * Commercial-led weekly attention board for Market Radar.
  */
 export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN = 8 }) {
+  const { doc: historical } = useCot3ySeries()
   const board = React.useMemo(() => {
     let rows = Array.isArray(doc?.attention_board) ? doc.attention_board : []
     if (radarEligibleOnly) rows = rows.filter((r) => isRadarEligible(r.instrument))
@@ -207,6 +261,8 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
   const summary = doc.summary || {}
 
   return (
+    <>
+    <ExtremeAttentionBoard historical={historical} week={doc.source_week || doc.calendar_week} />
     <section className="ca-panel" aria-label="Commercial COT attention">
       <header className="ca-header">
         <div>
@@ -235,5 +291,6 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
         <p className="ca-meta">No commercial attention rows for this week.</p>
       )}
     </section>
+    </>
   )
 }
