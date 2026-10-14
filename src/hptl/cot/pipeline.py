@@ -197,7 +197,7 @@ def _workstation_exports_stale(local_iso: str | None) -> bool:
                     if series:
                         last = series[-1]
                         week = last.get("date") if isinstance(last, dict) else (last[0] if isinstance(last, list) and last else None)
-                if not week or str(week)[:10] < str(local_iso)[:10]:
+                if not week or str(week)[:10] != str(local_iso)[:10]:
                     return True
         except (OSError, ValueError, TypeError, AttributeError):
             return True
