@@ -44,11 +44,20 @@ jobs:
           b=json.loads(inspector.read_text())
           assert len(a.get("markets",{}))==26, f"chart markets: {len(a.get('markets',{}))}"
           assert len(b.get("markets",{}))==26, f"inspector markets: {len(b.get('markets',{}))}"
+          assert set(a["markets"]) == set(b["markets"]), "chart/inspector market identities differ"
+          # CFTC probe proves the upstream week; don't accept equally stale exports.
+          # The probe is network-dependent; the refresh log records the source date.
+          import re
+          log=Path("cot-refresh.log").read_text(errors="replace") if Path("cot-refresh.log").exists() else ""
+          weeks=re.findall(r"latest detected CFTC week \\(combined\\): (\\d{4}-\\d{2}-\\d{2})",log)
+          expected=weeks[-1] if weeks else None
+          assert expected, "CFTC source week missing from refresh log"
           for name, block in a["markets"].items():
               dates=[r["date"] for r in block.get("series",[]) if r.get("date")]
               rows=b["markets"].get(name,{}).get("rows",[])
               assert dates and rows, f"{name}: missing chart/inspector history"
               assert dates[-1]==rows[-1][0], f"{name}: chart={dates[-1]} inspector={rows[-1][0]}"
+              assert dates[-1]==expected, f"{name}: chart={dates[-1]} CFTC={expected}"
               assert len(rows)>=156, f"{name}: inspector has only {len(rows)} reports"
               print(name,dates[-1],len(dates),len(rows))
           print("PASS: 26 chart and inspector markets, aligned latest weeks, 156+ reports")
