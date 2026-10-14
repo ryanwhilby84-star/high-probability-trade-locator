@@ -193,10 +193,10 @@ def _workstation_exports_stale(local_iso: str | None) -> bool:
             for block in markets.values():
                 week = block.get("latest_date")
                 if not week:
-                    series = block.get("series") or []
+                    series = block.get("series") or block.get("rows") or []
                     if series:
                         last = series[-1]
-                        week = last.get("date") if isinstance(last, dict) else None
+                        week = last.get("date") if isinstance(last, dict) else (last[0] if isinstance(last, list) and last else None)
                 if not week or str(week)[:10] < str(local_iso)[:10]:
                     return True
         except (OSError, ValueError, TypeError, AttributeError):
