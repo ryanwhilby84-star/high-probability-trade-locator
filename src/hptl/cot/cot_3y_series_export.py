@@ -494,6 +494,13 @@ def write_exports(payload: dict[str, Any]) -> Path:
     missing_dates = [name for name, date in latest_dates.items() if not date]
     if missing_dates:
         raise RuntimeError(f"COT workstation markets missing report dates: {missing_dates}")
+    # One market lagging behind the rest makes cross-market comparisons misleading.
+    latest = max(latest_dates.values())
+    lagging = {name: date for name, date in latest_dates.items() if date != latest}
+    if lagging:
+        raise RuntimeError(
+            f"COT workstation markets are not on the same report week ({latest}): {lagging}"
+        )
     text = json.dumps(payload, indent=2, ensure_ascii=False)
     CANONICAL_PATH.parent.mkdir(parents=True, exist_ok=True)
     CANONICAL_PATH.write_text(text, encoding="utf-8")
