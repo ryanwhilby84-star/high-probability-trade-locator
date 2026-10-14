@@ -86,6 +86,37 @@ jobs:
               assert series and len(rows)>=156 and series[-1]["date"]==rows[-1][0]=="2026-10-06", market
           print("PASS: full dashboard feed set and 26 fresh aligned markets")
           PY
+      - name: Bound confluence download size while preserving recent market coverage
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path("web-dashboard/public/data/confluence_history_latest.json")
+          document=json.loads(path.read_text())
+          records=document.get("records")
+          assert isinstance(records,list) and records, "Confluence history missing"
+          dates=sorted({str(r.get("date") or "") for r in records if isinstance(r,dict) and r.get("date")})
+          assert len(dates)>=156, f"Insufficient confluence history: {len(dates)} weeks"
+          original_count=len(records)
+          # Keep all instruments, not just the 26 COT contracts. Retain at
+          # least 156 weeks where the GitHub file limit permits. The dedicated
+          # 26-market COT exports retain their independently validated 156+ weeks.
+          for weeks in (156, 130, 104):
+              keep=set(dates[-weeks:])
+              subset=[r for r in records if isinstance(r,dict) and str(r.get("date") or "") in keep]
+              assert subset, "Confluence history truncation produced no records"
+              document["records"]=subset
+              path.write_text(json.dumps(document,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
+              size=path.stat().st_size
+              print(f"Confluence weeks={weeks} rows={len(subset)}/{original_count} bytes={size}")
+              if size<90_000_000:
+                  break
+          else:
+              raise SystemExit("Confluence remains too large for safe GitHub and browser publication")
+          assert document.get("latest_cot_report_date")=="2026-10-06", "Unexpected COT source week"
+          assert len({r.get("date") for r in subset})>=104, "Recent confluence coverage reduced too far"
+          print("PASS: bounded confluence data for preview publication")
+          PY
       - name: Commit verified data to preview branch
         run: |
           git config user.name "github-actions[bot]"
