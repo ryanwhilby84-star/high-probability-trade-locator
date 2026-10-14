@@ -1,5 +1,4 @@
 import React from 'react'
-import { useCot3ySeries } from '../hooks/useCot3ySeries.js'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
 import './commercialAttention.css'
@@ -187,32 +186,9 @@ function AttentionCard({ row }) {
 function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored, error }) {
   const [showAll, setShowAll] = React.useState(false)
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
-    const blocks = historical?.markets || historical?.instruments || historical?.data || {}
-    const entries = Array.isArray(blocks) ? blocks.map(v => [v.market || v.instrument, v]) : Object.entries(blocks)
-    const rank = (series, field) => {
-      const values = series.slice(-156).map(v => v[field] == null ? null : Number(v[field])).filter(Number.isFinite)
-      if (values.length < 52 || !Number.isFinite(Number(series.at(-1)?.[field]))) return null
-      const n = Number(series.at(-1)[field])
-      return Math.round(1000 * (values.filter(v => v < n).length + (values.filter(v => v === n).length - 1) / 2) / (values.length - 1)) / 10
-    }
-    const eligible = entries.flatMap(([key, block]) => {
-      const name = block?.market || key
-      if (radarEligibleOnly && !isRadarEligible(name) && !isRadarEligible(key)) return []
-      const series = Array.isArray(block?.series) ? block.series : []
-      if (!series.length) return []
-      const last = series.at(-1)
-      const c = rank(series, 'commercial_net'), nc = rank(series, 'institutional_net'), nr = rank(series, 'retail_net')
-      if (c == null && nc == null && nr == null) return []
-      return [{ name, date: String(last.date || '').slice(0, 10), c, nc, nr,
-        change: last.commercial_wow == null ? null : Number(last.commercial_wow) }]
-    })
-    const latestDate = eligible.map(v => v.date).sort().at(-1) || null
-    const rows = eligible.filter(v => v.date === latestDate).map(v => ({
-      ...v, commercialExtreme: v.c != null && (v.c >= 80 || v.c <= 20),
-      retailExtreme: v.nr != null && (v.nr >= 80 || v.nr <= 20),
-    })).sort((a,b) => Number(b.commercialExtreme || b.retailExtreme) - Number(a.commercialExtreme || a.retailExtreme) ||
-      Math.max(Math.abs((b.c ?? 50) - 50), Math.abs((b.nr ?? 50) - 50)) - Math.max(Math.abs((a.c ?? 50) - 50), Math.abs((a.nr ?? 50) - 50)))
-    return { rows, latestDate, eligibleCount: eligible.length }
+    const all = Array.isArray(historical?.rows) ? historical.rows : []
+    return { rows: radarEligibleOnly ? all.filter(v => isRadarEligible(v.name)) : all,
+      latestDate: historical?.latestDate || null, eligibleCount: historical?.eligibleCount || 0 }
   }, [historical, radarEligibleOnly])
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
@@ -254,8 +230,18 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   </section>
 }
 
-/** Market Radar's single 80/20 attention board. Legacy cards retired. */
 export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
-  const { doc: historical, loading, errored, error } = useCot3ySeries()
-  return <ExtremeAttentionBoard historical={historical} loading={loading} errored={errored} error={error} radarEligibleOnly={radarEligibleOnly} />
+  const [state, setState] = React.useState({ doc: null, loading: true, error: null })
+  React.useEffect(() => {
+    const controller = new AbortController()
+    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(doc => {
+        if (!Array.isArray(doc?.rows) || !doc.latestDate) throw new Error('Invalid attention snapshot')
+        setState({ doc, loading: false, error: null })
+      })
+      .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
+    return () => controller.abort()
+  }, [])
+  return <ExtremeAttentionBoard historical={state.doc} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
 }
