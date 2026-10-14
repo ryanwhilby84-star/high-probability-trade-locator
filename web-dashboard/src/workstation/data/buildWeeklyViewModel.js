@@ -599,8 +599,14 @@ export function buildWeeklyViewModel({
             : null,
         flow: cross?.flow && cross.flow !== 'unavailable'
           ? cross.flow
-          : isNum(commercial.change1w) && isNum(nonCommercial.change1w)
-            ? (Math.abs(commercial.change1w - nonCommercial.change1w) > 0 ? 'stable' : 'stable')
+          : i > 0 && isNum(commercial.net) && isNum(nonCommercial.net) &&
+              isNum(rows[i - 1]?.commercial_net) && isNum(rows[i - 1]?.institutional_net)
+            ? (Math.abs(commercial.net - nonCommercial.net) >
+                Math.abs(rows[i - 1].commercial_net - rows[i - 1].institutional_net)
+                ? 'spread_widening'
+                : Math.abs(commercial.net - nonCommercial.net) <
+                    Math.abs(rows[i - 1].commercial_net - rows[i - 1].institutional_net)
+                  ? 'spread_narrowing' : 'stable')
             : null,
         commercialPercentile: isNum(cross?.commercial_percentile)
           ? cross.commercial_percentile
