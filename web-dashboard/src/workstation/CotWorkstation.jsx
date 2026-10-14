@@ -997,6 +997,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         </div>
       )}
 
+      <div className="cot-ws-desktop-layout">
       <WeeklyInspector
         week={inspectedWeek}
         open={inspectorOpen}
@@ -1201,6 +1202,8 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         {hoveredWeekData && !inspectorOpen ? (
           <WeeklyHoverTooltip week={hoveredWeekData} />
         ) : null}
+      </div>
+
       </div>
 
       <WeeklyAnalysisPanel
