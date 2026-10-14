@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 import os
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -27,7 +26,6 @@ def legacy_cot_latest_path() -> Path:
     return PUBLIC_LATEST_PATH
 
 
-@lru_cache(maxsize=1)
 def load_legacy_cot_document(path: str | None = None) -> dict[str, Any]:
     p = Path(path) if path else legacy_cot_latest_path()
     if not p.exists():

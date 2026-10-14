@@ -1,3 +1,4 @@
+import { quoteAgeMs } from '../quoteFreshness.js'
 /**
  * LivePriceStore — live quotes from the Phase 2 Current Price Service.
  *
@@ -40,15 +41,15 @@ function releaseStreamSubscription() {
 
 function toLegacyQuote(price) {
   if (!price) return null
-  const mid = price.mid ?? price.currentPrice
-  if (mid == null || !Number.isFinite(Number(mid))) return null
+  const mid = price.mid
+  if (mid == null && price.currentPrice == null) return null
 
   return {
     instrumentId: price.internalKey,
     symbol: price.providerSymbol ?? null,
     bid: price.bid,
     ask: price.ask,
-    mid: Number(mid),
+    mid: mid == null ? null : Number(mid),
     source: price.provider
       ? `${price.provider}:${price.providerSymbol || ''}`.replace(/:$/, '')
       : 'oanda',
@@ -88,6 +89,7 @@ export const LivePriceStore = {
   getSnapshot() {
     const stream = CurrentPriceStreamStore.getSnapshot()
     const key = [
+      stream.revision,
       stream.connectionState,
       stream.generatedAt ?? '',
       Object.keys(stream.prices).length,
@@ -143,8 +145,7 @@ export const LivePriceStore = {
       }
     }
 
-    const ageSeconds = price.ageSeconds
-    const ageMs = ageSeconds != null ? ageSeconds * 1000 : null
+    const ageMs = quoteAgeMs(price.timestamp)
     const status = CurrentPriceStreamStore.getDisplayStatus(marketId)
     const isStale = status !== 'LIVE'
 
@@ -158,6 +159,7 @@ export const LivePriceStore = {
   },
 
   getStatus(marketId) {
+    if (toLegacyQuote(CurrentPriceStreamStore.getPrice(marketId))) return CurrentPriceStreamStore.getDisplayStatus(marketId)
     const streamStatus = CurrentPriceStreamStore.getDisplayStatus(marketId)
     if (
       (streamStatus === 'BACKEND OFFLINE' ||

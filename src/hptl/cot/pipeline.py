@@ -176,6 +176,34 @@ def _downstream_export_stale(local_iso: str | None, export_week: str | None) -> 
     return str(export_week)[:10] < str(local_iso)[:10]
 
 
+def _workstation_exports_stale(local_iso: str | None) -> bool:
+    """Detect stale workstation artifacts even when confluence is already current."""
+    if not local_iso:
+        return False
+    source = Path("web-dashboard/public/data/cot_3y_series_latest.json")
+    inspector = Path("web-dashboard/public/data/cot_weekly_inspector_latest.json")
+    for path in (source, inspector):
+        if not path.is_file():
+            return True
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            markets = payload.get("markets") or {}
+            if len(markets) != 26:
+                return True
+            for block in markets.values():
+                week = block.get("latest_date")
+                if not week:
+                    series = block.get("series") or block.get("rows") or []
+                    if series:
+                        last = series[-1]
+                        week = last.get("date") if isinstance(last, dict) else (last[0] if isinstance(last, list) and last else None)
+                if not week or str(week)[:10] != str(local_iso)[:10]:
+                    return True
+        except (OSError, ValueError, TypeError, AttributeError):
+            return True
+    return False
+
+
 def _scanner_export_week() -> str | None:
     """Latest week advertised by scanner_latest.json (public or data copy)."""
     for path in (
@@ -263,7 +291,10 @@ def _republish_downstream_exports(
         if synced:
             log_step("Synced public JSON → dist/data.")
     except Exception as exc:
-        logger.warning("cot_3y export failed (confluence OK): %s", exc)
+        logger.exception("cot_3y export failed; workstation source history is stale")
+        raise RuntimeError(
+            "COT workstation history export failed; refusing to report refresh success"
+        ) from exc
     # Scanner slice is a separate publish artifact; confluence alone does not refresh it.
     try:
         scanner_path = _publish_scanner_latest(
@@ -315,7 +346,10 @@ def _republish_downstream_exports(
             f"{(wi.get('summary') or {}).get('markets')}",
         )
     except Exception as exc:
-        logger.warning("weekly inspector export failed (confluence OK): %s", exc)
+        logger.exception("weekly inspector export failed; COT workstation publish is incomplete")
+        raise RuntimeError(
+            "COT workstation weekly inspector export failed; refusing to report refresh success"
+        ) from exc
 
 def _read_probe_cache() -> dict[str, Any] | None:
     if not PROBE_CACHE_PATH.exists():
@@ -432,6 +466,16 @@ def _refresh_legacy_positioning(*, cftc_max: pd.Timestamp | None = None) -> None
 
     log_step("Rebuilding legacy_cot_latest.json (positioning source for master + confluence)…")
     run_legacy_cot_reset(years=default_history_years())
+    # The dashboard reads legacy positioning, not the successfully probed
+    # disaggregated/TFF workbook. Never continue with an old legacy master.
+    refreshed = _legacy_latest_report_date()
+    if cftc_max is not None and not pd.isna(cftc_max) and (
+        refreshed is None or refreshed.normalize() < cftc_max.normalize()
+    ):
+        raise RuntimeError(
+            f"Legacy positioning remains at {_iso(refreshed)} after rebuild; "
+            f"CFTC source is {_iso(cftc_max)}. Cannot publish stale dashboard data."
+        )
 
 
 def _export_cot_workstation_series() -> Path:
@@ -550,7 +594,7 @@ def run_full_pipeline(
                 result.rows_fetched = 0
                 export_week = _confluence_export_latest_week()
                 local_iso = result.latest_local_report_date
-                needs_json = _downstream_export_stale(local_iso, export_week)
+                needs_json = _downstream_export_stale(local_iso, export_week) or _workstation_exports_stale(local_iso)
                 if probe_only:
                     result.update_needed = False
                     result.export_latest_cot_week = export_week or local_iso
@@ -663,7 +707,7 @@ def run_full_pipeline(
     if not force and local_max is not None and cftc_max <= local_max:
         # Upstream ingestion not needed — but dashboard may still be behind master.
         result.update_needed = False
-        needs_json_rebuild = _downstream_export_stale(local_iso, export_week)
+        needs_json_rebuild = _downstream_export_stale(local_iso, export_week) or _workstation_exports_stale(local_iso)
         result.cot_data_stale = needs_json_rebuild or bool(
             cftc_iso and export_week and str(export_week)[:10] < str(cftc_iso)[:10]
         )
@@ -799,8 +843,19 @@ def run_full_pipeline(
         try:
             cot3_path = _export_cot_workstation_series()
             print(f"Wrote COT workstation: {cot3_path.resolve()}")
+            # A full COT rebuild must publish matching inspector statistics too.
+            from hptl.cot.weekly_inspector_export import run_weekly_inspector_export
+            inspector = run_weekly_inspector_export(markets=None)
+            log_kv(
+                "weekly inspector",
+                f"available={inspector['summary']['available']}/{inspector['summary']['markets']}",
+            )
         except Exception as exc:
-            logger.warning("cot_3y export failed (confluence OK): %s", exc)
+            logger.exception("cot_3y export failed after full COT rebuild")
+            result.error = f"COT workstation history export failed: {exc}"
+            result.exit_code = 1
+            result.cot_data_stale = True
+            return result
 
         if with_live_feeds:
             _print_banner("HPTL COT PIPELINE — LIVE ENVIRONMENT FEEDS")

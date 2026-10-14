@@ -1985,3 +1985,79 @@ body.cot-ws-panel-resizing {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Desktop: real right rail, no top inspector occupying chart height. */
+.cot-ws-desktop-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+@media (min-width: 1200px) {
+  .cot-ws-desktop-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: calc(100vh - 140px);
+    min-height: 600px;
+    overflow: hidden;
+  }
+  .cot-ws-desktop-layout > .cot-ws-research-stage {
+    order: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer,
+  .cot-ws-desktop-layout > .cot-ws-weekly-inspector--drawer.is-expanded {
+    order: 2;
+    position: relative;
+    flex: 0 0 clamp(310px, 24vw, 430px);
+    width: clamp(310px, 24vw, 430px);
+    height: 100%;
+    max-height: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 0;
+    border-left: 1px solid rgba(148,163,184,.18);
+    background: #101827;
+    box-shadow: none;
+    animation: none;
+    color: #edf2f7;
+    font-size: 12px;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-columns {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: visible;
+    gap: 0;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-col {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148,163,184,.14);
+    background: transparent !important;
+    padding: 10px 12px;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-flow,
+  .cot-ws-desktop-layout .cot-ws-insp-group-summary,
+  .cot-ws-desktop-layout .cot-ws-insp-metric--state {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-metric-value,
+  .cot-ws-desktop-layout .cot-ws-insp-group-summary {
+    color: #f1f5f9;
+  }
+  .cot-ws-desktop-layout .cot-ws-insp-metric-label {
+    color: #aab9ca;
+  }
+}

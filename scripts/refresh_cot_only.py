@@ -98,6 +98,10 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001
         errors.append(f"legacy COT refresh failed: {exc}")
 
+    if errors:
+        print('COT DATA INTEGRITY FAILURE: raw legacy refresh failed; publish stopped.')
+        return 1
+
     # --- 5. INCREMENTAL confluence publish (NOT full history rebuild) --------
     print("[5/7] publishing confluence (incremental — new weeks only)…")
     confluence_after = "—"
@@ -128,6 +132,21 @@ def main(argv: list[str] | None = None) -> int:
         files_written.append(str(cot3_path))
     except Exception as exc:  # noqa: BLE001
         errors.append(f"cot_3y series export failed: {exc}")
+
+    if errors:
+        print('COT DATA INTEGRITY FAILURE: incomplete refresh; publish stopped.')
+        return 1
+
+    # The inspector must advance with the raw/chart source, never independently.
+    import subprocess
+    from hptl.cot.weekly_inspector_export import run_weekly_inspector_export as export_weekly_inspector
+    try:
+        export_weekly_inspector()
+        for gate in ('run_price_cot_alignment_audit.py', 'run_derived_cot_integrity_audit.py', 'run_universe_integrity_audit.py'):
+            subprocess.run([sys.executable, str(ROOT / 'scripts' / gate)], check=True)
+    except Exception as exc:
+        print(f'COT DATA INTEGRITY FAILURE: publish stopped: {exc}')
+        return 1
 
     # --- 7. Final public -> dist publish -------------------------------------
     print("[7/7] syncing public -> dist…")

@@ -90,6 +90,8 @@ export function canonicalMarketId(market = '') {
   if (m.includes('copper') || m.includes('/ hg')) return 'Copper / HG'
   if (m.includes('crude oil') || m.includes('/ cl')) return 'Crude Oil / CL'
   if (m.includes('natural gas') || m.includes('/ ng')) return 'Natural Gas / NG'
+  // Exact Sugar No. 11 aliases only: never merge London white sugar (No. 5).
+  if (/^(sugar|sugar_usd|sb(?:=f)?|sugar\s*\/\s*sb|sugar no\.?\s*11(?: - ice futures u\.s\.)?)$/.test(m)) return 'Sugar'
   if (m.includes('coffee') || m.includes('/ kc')) return 'Coffee'
   if (m.includes('cocoa') || m.includes('/ cc')) return 'Cocoa'
   if (m.includes('corn') || m.includes('/ zc')) return 'Corn'

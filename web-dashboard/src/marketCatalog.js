@@ -13,7 +13,7 @@ const LEGACY_ASSET_CLASSES = [
   { id: 'metals', label: 'Metals', markets: ['Gold', 'Silver', 'Copper / HG'] },
   { id: 'energy', label: 'Energy', markets: ['Crude Oil / CL', 'Natural Gas / NG'] },
   { id: 'agriculture', label: 'Agriculture', markets: ['Corn', 'Wheat', 'Soybeans'] },
-  { id: 'softs', label: 'Softs', markets: ['Coffee', 'Cocoa'] },
+  { id: 'softs', label: 'Softs', markets: ['Coffee', 'Cocoa', 'Sugar'] },
   { id: 'bonds', label: 'Bonds/Rates', markets: [] },
 ]
 

@@ -53,15 +53,22 @@ def _is_usable_daily_bar(
     return open_ == high == low == close
 
 
-def _iso_week_key(date_str: str) -> str:
+def _iso_week_key(date_str: str, source: str | None = None) -> str:
     try:
-        return pd.Timestamp(str(date_str)[:10]).strftime("%G-W%V")
+        d = pd.Timestamp(str(date_str)[:10])
+        # OANDA D dates are session START dates. W candles default to Friday
+        # 17:00 New York, covering Friday-start through Thursday-start D bars.
+        # Shift by three days only for grouping: Fri -> Mon, Thu -> Sun.
+        # Keep the actual source date on the exported bar.
+        if str(source or '').lower().startswith('oanda'):
+            d += pd.Timedelta(days=3)
+        return d.strftime("%G-W%V")
     except (TypeError, ValueError):
         return str(date_str)[:7]
 
 
 def derive_weekly_ohlc_from_daily(daily_bars: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """ISO-week OHLC from daily bars.
+    """Source-aligned weekly OHLC from daily bars (ISO for calendar-date feeds).
 
     Close-only daily index prints (FRED DTWEXBGS etc.) are aggregated into weekly
     OHLC using the week's first/last/min/max closes — not fabricated intraday wicks.
@@ -75,7 +82,7 @@ def derive_weekly_ohlc_from_daily(daily_bars: list[dict[str, Any]]) -> list[dict
         # Close-only print: use close for all fields so weekly min/max reflect the index path.
         if not _is_real_ohlc(o, h, l, c):
             o = h = l = c
-        wk = _iso_week_key(d)
+        wk = _iso_week_key(d, bar.get("source"))
         prev = buckets.get(wk)
         if prev is None:
             buckets[wk] = {"date": d, "open": o, "high": h, "low": l, "close": c, "source": bar.get("source")}
@@ -201,7 +208,7 @@ def build_instrument_workstation_ohlc(
                     _num(b.get("open")), _num(b.get("high")), _num(b.get("low")), _num(b.get("close"))
                 )
             ]
-            if native_weekly:
+            if native_weekly and index_diag.get("source") != "oanda":
                 native_sorted = sorted(native_weekly, key=lambda b: b["date"])
                 native_last = native_sorted[-1]["date"]
                 derived_last = weekly_ohlc[-1]["date"] if weekly_ohlc else ""
@@ -330,7 +337,10 @@ def build_instrument_workstation_ohlc(
     # Prefer provider-native weekly (OANDA Friday weeks) for the tip when fresh.
     # Stitch longer daily-derived history before the native series start so we keep
     # depth without replacing the provider's completed week calendar.
-    if native_real:
+    # Dense daily OANDA/Yahoo histories are authoritative here. A cached native
+    # weekly series may have start-date labels or older contract stitching and
+    # must not overwrite the daily-derived candles merely because it is recent.
+    if native_real and tl.canonical_source not in ("oanda", "yahoo", "yahoo_futures"):
         native_sorted = sorted(native_real, key=lambda b: b["date"])
         native_last = native_sorted[-1]["date"]
         derived_last = weekly_ohlc[-1]["date"] if weekly_ohlc else ""

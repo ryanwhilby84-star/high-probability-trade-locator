@@ -7,6 +7,7 @@ import { normalizeReportDate } from '../marketResolution.js'
 import { POSITIONING_SHEET_TABS } from './groupPositioningView.js'
 
 function num(v) {
+  if (v == null || v === '') return null
   const n = Number(v)
   return Number.isFinite(n) ? n : null
 }

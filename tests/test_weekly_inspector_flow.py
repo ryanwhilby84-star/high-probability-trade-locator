@@ -124,3 +124,31 @@ def test_group_state_series_first_week_has_percentile():
     assert states[0]["percentiles"]["long_history"] == 50.0
     packed = pack_group_week(states[0], [r["commercial_net"] for r in series])
     assert packed["percentile"] == 50.0
+
+
+def test_rolling_3y_drops_old_extremes_and_uses_same_horizon_for_changes():
+    from hptl.cot.positioning_percentiles import empirical_percentile_rank
+    series = _series(300)
+    for row in series[:144]:
+        row['commercial_net'] = 10_000_000
+    payload = build_weekly_inspector_series(series)
+    last = payload['weeks'][-1]['commercial']
+    expected = empirical_percentile_rank([r['commercial_net'] for r in series[-156:]], series[-1]['commercial_net'])
+    assert last['percentile'] == round(expected, 2)
+    assert last['percentile_observation_count'] == 156
+    prior = payload['weeks'][-2]['commercial']['percentile']
+    assert last['percentile_change_1w'] == round(last['percentile'] - prior, 2)
+    assert 'rolling_3y' in payload['measure']
+
+
+def test_integrity_gate_rejects_finite_percentile_from_wrong_horizon():
+    from hptl.cot.derived_cot_integrity_audit import audit_instrument
+    from hptl.cot.weekly_inspector_export import compact_market_weeks
+    series = _series(300)
+    full = build_weekly_inspector_series(series)
+    compact = compact_market_weeks(full)
+    compact['rows'][-1][2][4] = 70.0  # plausible number, wrong source percentile
+    result = audit_instrument('Sugar', wi_doc={'markets': {'Sugar': compact}},
+                              cot3y_doc={'markets': {'Sugar': {'series': series}}})
+    assert any(f['pipeline_stage'] == 'rolling_3y_source_reconciliation'
+               and f['field'] == 'percentile' for f in result['failures'])

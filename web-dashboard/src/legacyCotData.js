@@ -7,6 +7,7 @@ const AUDIT_URL = '/data/legacy_cot_audit.json'
 const RECON_URL = '/data/legacy_cot_reconciliation.json'
 
 let _latestCache = null
+let _latestLoadedAt = 0
 let _auditCache = null
 let _latestPromise = null
 let _auditPromise = null
@@ -19,22 +20,21 @@ export const LEGACY_COT_TABS = [
   { id: 'audit', label: 'Audit' },
 ]
 
-export async function loadLegacyCotLatest() {
-  if (_latestCache) return _latestCache
+export async function loadLegacyCotLatest(force = false) {
+  if (!force && _latestCache && Date.now() - _latestLoadedAt < 60_000) return _latestCache
   if (!_latestPromise) {
-    _latestPromise = fetch(LATEST_URL)
+    _latestPromise = fetch(`${LATEST_URL}?v=${Date.now()}`, { cache: 'no-store' })
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
       })
       .then((doc) => {
-        _latestCache = doc && typeof doc === 'object' ? doc : { instruments: {} }
+        if (!doc?.instruments || typeof doc.instruments !== 'object') throw new Error('Invalid legacy COT archive')
+        _latestCache = doc
+        _latestLoadedAt = Date.now()
         return _latestCache
       })
-      .catch(() => {
-        _latestCache = { instruments: {}, scoring_eligible_instruments: [] }
-        return _latestCache
-      })
+      .finally(() => { _latestPromise = null })
   }
   return _latestPromise
 }

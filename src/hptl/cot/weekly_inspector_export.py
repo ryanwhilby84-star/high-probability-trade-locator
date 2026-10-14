@@ -104,10 +104,24 @@ STATE_FROM_TEMP = {
 
 
 def _load_cot3y() -> dict[str, Any]:
+    """Fail closed when the canonical COT source is absent or unusable.
+
+    Never overwrite a previously valid inspector export with an empty payload.
+    """
     for p in COT3Y_PATHS:
-        if p.is_file():
-            return json.loads(p.read_text(encoding="utf-8"))
-    return {"markets": {}}
+        if not p.is_file():
+            continue
+        try:
+            doc = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            raise RuntimeError(f"Invalid COT history source: {p}") from exc
+        if not isinstance(doc, dict) or not isinstance(doc.get("markets"), dict) or not doc["markets"]:
+            raise RuntimeError(f"COT history source contains no markets: {p}")
+        return doc
+    raise FileNotFoundError(
+        "COT 3-year history source not found; refusing to overwrite inspector exports. "
+        f"Checked: {', '.join(str(p) for p in COT3Y_PATHS)}"
+    )
 
 
 def _write(path: Path, payload: dict[str, Any]) -> None:
@@ -168,6 +182,8 @@ def compact_market_weeks(full: dict[str, Any]) -> dict[str, Any]:
     return {
         "available": bool(full.get("available")),
         "week_count": len(rows),
+        "measure": MEASURE,
+        "measure_label": MEASURE_LABEL,
         "rows": rows,
     }
 
@@ -255,6 +271,9 @@ def run_weekly_inspector_export(
     all_markets = doc.get("markets") or {}
     selected = sorted(str(k) for k in all_markets.keys()) if markets is None else list(markets)
 
+    if not selected:
+        raise RuntimeError("No COT markets selected; refusing to overwrite inspector exports.")
+
     out_markets: dict[str, Any] = {}
     for mid in selected:
         block = all_markets.get(mid)
@@ -270,7 +289,16 @@ def run_weekly_inspector_export(
             continue
         series = list(block.get("series") or [])
         full = build_weekly_inspector_series(series)
-        out_markets[resolved] = compact_market_weeks(full)
+        compact = compact_market_weeks(full)
+        source_dates = [str(row.get("date"))[:10] for row in series if isinstance(row, dict) and row.get("date")]
+        compact_rows = compact.get("rows") or []
+        if not source_dates or not compact_rows or str(compact_rows[-1][0])[:10] != source_dates[-1]:
+            raise RuntimeError(
+                f"Weekly Inspector tip mismatch for {resolved}: "
+                f"chart={source_dates[-1] if source_dates else 'missing'}, "
+                f"inspector={compact_rows[-1][0] if compact_rows else 'missing'}"
+            )
+        out_markets[resolved] = compact
 
     payload = {
         "version": "cot_weekly_inspector_v1",
@@ -288,6 +316,14 @@ def run_weekly_inspector_export(
             "available": sum(1 for m in out_markets.values() if m.get("available")),
         },
     }
+
+    if payload["summary"]["available"] != payload["summary"]["markets"]:
+        missing = [mid for mid, market in out_markets.items() if not market.get("available")]
+        raise RuntimeError(
+            f"Weekly Inspector incomplete: {payload['summary']['available']}/"
+            f"{payload['summary']['markets']} markets available; missing: {missing}. "
+            "Refusing to overwrite previous exports."
+        )
 
     for path in (CANONICAL_PATH, PUBLIC_PATH, DATA_PATH):
         _write(path, payload)

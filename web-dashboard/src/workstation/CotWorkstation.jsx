@@ -1,3 +1,4 @@
+import { rollingInspector } from './data/rollingInspector.js'
 import React from 'react'
 
 import { CHART_WS, PANEL_IDS } from '../charts/chartTheme.js'
@@ -12,6 +13,7 @@ import {
 import { useCot3ySeries, resolveCot3yBlock } from '../hooks/useCot3ySeries.js'
 import { COT_3Y_PATH } from '../data/cot3ySeriesStore.js'
 import { reloadCot3ySeries } from '../prices/stores/HistoricalCOTStore.js'
+import { resolveCanonicalDisplayPrice } from '../prices/canonicalCurrentPrice.js'
 import { useLivePrice } from '../prices/usePriceStores.js'
 import { useWorkstationOhlc } from './hooks/useWorkstationOhlc.js'
 import { buildPositioningWorkstationSeries } from './data/buildPositioningWorkstationSeries.js'
@@ -174,6 +176,38 @@ function WorkstationSkeleton({ message = 'Loading chart…' }) {
   )
 }
 
+
+function CotRawLedger({ series }) {
+  const [open, setOpen] = React.useState(false)
+  const rows = React.useMemo(() => (series || []).slice(-17).reverse(), [series])
+  const fmt = v => Number.isFinite(v) ? Math.round(v).toLocaleString('en-GB') : '—'
+  const cell = { padding: '9px 12px', borderBottom: '1px solid #33404d', whiteSpace: 'nowrap', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }
+  const delta = v => Number.isFinite(v) ? (v > 0 ? '#54dfad' : v < 0 ? '#ff858e' : '#e9f0f7') : '#aab8c7'
+  const columns = [
+    ['Report date', 'date', false],
+    ['Commercial net', 'commercial_net', false],
+    ['Commercial Δ', 'commercial_wow', true],
+    ['Non-commercial net', 'institutional_net', false],
+    ['Non-commercial Δ', 'institutional_wow', true],
+    ['Non-reportable net', 'retail_net', false],
+    ['Non-reportable Δ', 'retail_wow', true],
+  ]
+  return <section aria-label="Raw COT positioning ledger" style={{ background: '#131b24', color: '#eef3f8', border: '1px solid #354354', borderRadius: 8, margin: '12px 0', overflow: 'hidden' }}>
+    <button type="button" aria-expanded={open} onClick={() => setOpen(v => !v)} style={{ width: '100%', border: 0, background: '#1c2733', color: '#eef3f8', padding: '13px 16px', textAlign: 'left', cursor: 'pointer', fontWeight: 700 }}>
+      RAW COT LEDGER · {rows.length} WEEKS <span style={{ float: 'right' }}>{open ? 'Hide ▲' : 'View spreadsheet ▼'}</span>
+    </button>
+    {open && <div style={{ padding: 12 }}>
+      <p style={{ color: '#b9c9d9', fontSize: 12, margin: '0 0 10px' }}>Published historical net contracts and weekly changes. Long, short and spread counts will require the separate raw source fields; no figures are estimated.</p>
+      <div style={{ overflow: 'auto', maxHeight: 560 }}>
+        <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
+          <thead><tr>{columns.map(([label], i) => <th key={label} style={{ ...cell, background: '#202b37', color: '#c5d3e1', position: 'sticky', top: 0, textAlign: i ? 'right' : 'left' }}>{label}</th>)}</tr></thead>
+          <tbody>{rows.map((row, i) => <tr key={row.date || i} style={{ background: i % 2 ? '#192430' : '#131b24' }}>{columns.map(([label, key, isDelta], j) => <td key={key} style={{ ...cell, textAlign: j ? 'right' : 'left', color: isDelta ? delta(row[key]) : '#eef3f8' }}>{key === 'date' ? row.date : fmt(row[key])}</td>)}</tr>)}</tbody>
+        </table>
+      </div>
+    </div>}
+  </section>
+}
+
 export function CotWorkstation({ marketId, variant = 'default' }) {
   const drawingsApi = useWorkstationDrawings(marketId)
   React.useEffect(() => {
@@ -191,6 +225,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   const { doc, loading, errored } = useCot3ySeries()
   const { exportBlock, exportLoaded } = useWorkstationOhlc(marketId)
   const livePriceState = useLivePrice(marketId)
+  const currentPriceDisplay = resolveCanonicalDisplayPrice(livePriceState.quote, livePriceState.status)
 
   const [rangeId, setRangeId] = React.useState(POSITIONING_DEFAULT_RANGE_ID)
   const [viewportEndLabel, setViewportEndLabel] = React.useState(null)
@@ -211,6 +246,34 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // splitter mutates only this value; the COT group takes the remainder and its
   // three panes redistribute evenly. Restoring WS_PANE_FLEX.price = "reset layout".
   const [priceFlex, setPriceFlex] = React.useState(WS_PANE_FLEX.price)
+  const [drawingMode, setDrawingMode] = React.useState('off')
+  const [drawingLines, setDrawingLines] = React.useState([])
+  React.useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('institutional-edge-lines:' + marketId) || '[]')
+      setDrawingLines(Array.isArray(saved) ? saved.filter((line) =>
+        (line.kind === 'horizontal' && Number.isFinite(line.price)) ||
+        (line.kind === 'vertical' && Number.isFinite(line.time))
+      ) : [])
+    } catch { setDrawingLines([]) }
+    setDrawingMode('off')
+  }, [marketId])
+  const addDrawingLine = React.useCallback((line) => {
+    setDrawingLines((previous) => {
+      const next = [...previous, line].slice(-100)
+      try { localStorage.setItem('institutional-edge-lines:' + marketId, JSON.stringify(next)) } catch {}
+      return next
+    })
+    setDrawingMode('off')
+  }, [marketId])
+  const undoDrawingLine = React.useCallback(() => {
+    setDrawingLines((previous) => {
+      const next = previous.slice(0, -1)
+      try { localStorage.setItem('institutional-edge-lines:' + marketId, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }, [marketId])
+
 
   const handleSplitterDrag = React.useCallback((deltaY, containerHeight) => {
     if (!containerHeight) return
@@ -443,6 +506,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Research markers — keep previous block until the new one arrives (no flash-clear).
   React.useEffect(() => {
     let cancelled = false
+    setResearchBlock(null)
     fetch('/data/cot_positioning_research_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
@@ -455,7 +519,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             ([k]) => String(k).toLowerCase() === String(marketId || '').toLowerCase(),
           )?.[1] ||
           null
-        if (block?.available) setResearchBlock(block)
+        if (block?.available) setResearchBlock({ ...block, instrument_id: marketId })
       })
       .catch(() => {
         /* keep prior researchBlock */
@@ -468,12 +532,13 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Percentile/flow series — independent fetch so it cannot wipe markers/selection.
   React.useEffect(() => {
     let cancelled = false
+    setWeeklyInspectorBlock(null)
     fetch('/data/cot_weekly_inspector_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
         if (cancelled || !doc) return
         const weeklyInspector = resolveWeeklyInspectorBlock(doc, marketId, matchedKey)
-        if (weeklyInspector) setWeeklyInspectorBlock(weeklyInspector)
+        if (weeklyInspector) setWeeklyInspectorBlock({ ...weeklyInspector, instrument_id: marketId })
       })
       .catch(() => {
         /* keep prior weeklyInspectorBlock */
@@ -486,6 +551,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Weekly Analysis — narrative layer over inspector + research (no recalc).
   React.useEffect(() => {
     let cancelled = false
+    setWeeklyAnalysisBlock(null)
     fetch('/data/cot_analyst_intelligence_latest.json', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : null))
       .then((doc) => {
@@ -501,12 +567,28 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     }
   }, [marketId, matchedKey])
 
+  // Fail closed when the independently published inspector and chart disagree.
+  // Keep this derived from the current market's inspector to avoid stale
+  // state leaking across instrument navigation.
+  const inspectorSourceMismatch = React.useMemo(() => {
+    const inspector = weeklyInspectorBlock?.instrument_id === marketId
+      ? weeklyInspectorBlock
+      : null
+    const weeks = inspector?.weeks
+    if (!inspector?.available || !Array.isArray(weeks) || !weeks.length || !loadedLatestDate) {
+      return false
+    }
+    const latestInspectorDate = weeks[weeks.length - 1]?.date
+    return Boolean(latestInspectorDate && latestInspectorDate !== loadedLatestDate)
+  }, [weeklyInspectorBlock, marketId, loadedLatestDate])
+
   const researchWithInspector = React.useMemo(() => {
-    if (!researchBlock) return null
-    return weeklyInspectorBlock
-      ? { ...researchBlock, weekly_inspector: weeklyInspectorBlock }
-      : researchBlock
-  }, [researchBlock, weeklyInspectorBlock])
+    const research = researchBlock?.instrument_id === marketId ? researchBlock : null
+    const weekly = weeklyInspectorBlock?.instrument_id === marketId ? weeklyInspectorBlock : null
+    const inspector = rollingInspector(weekly || research?.weekly_inspector)
+    if (!research && !inspector) return null
+    return { ...research, weekly_inspector: inspector }
+  }, [researchBlock, weeklyInspectorBlock, marketId])
 
   const weeklyModel = React.useMemo(
     () =>
@@ -877,6 +959,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         '--ws-price-flex-no-ohlc': WS_PANE_FLEX.priceNoOhlc,
       }}
     >
+      {!isFullscreen && <CotRawLedger series={model.series} />}
       <header className="cot-ws-toolbar">
         <div className="cot-ws-toolbar-left">
           <span className="cot-ws-history">{model.historyLabel}</span>
@@ -903,6 +986,12 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
               STALE
             </button>
           ) : null}
+
+          <div className="cot-ws-range-toggles" role="group" aria-label="Price drawing tools">
+            <button type="button" className={`cot-ws-range-btn${drawingMode === 'horizontal' ? ' active' : ''}`} aria-pressed={drawingMode === 'horizontal'} title="Click the price chart to add a horizontal level" onClick={() => setDrawingMode((mode) => mode === 'horizontal' ? 'off' : 'horizontal')}>H Line</button>
+            <button type="button" className={`cot-ws-range-btn${drawingMode === 'vertical' ? ' active' : ''}`} aria-pressed={drawingMode === 'vertical'} title="Click the price chart to mark a week" onClick={() => setDrawingMode((mode) => mode === 'vertical' ? 'off' : 'vertical')}>V Line</button>
+            <button type="button" className="cot-ws-range-btn" disabled={!drawingLines.length} onClick={undoDrawingLine} title="Remove most recently added line">Undo</button>
+          </div>
 
           <div
             className="cot-ws-range-toggles"
@@ -1008,6 +1097,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         </div>
       )}
 
+      <div className="cot-ws-desktop-layout">
       <WeeklyInspector
         week={inspectedWeek}
         open={inspectorOpen}
@@ -1031,6 +1121,20 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             getViewportState={getViewportState}
           />
 
+          {inspectorSourceMismatch && (
+            <div role="alert" className="cot-ws-warn cot-ws-warn-history">
+              COT DATA INTEGRITY FAILURE: inspector and chart source reports disagree.
+              Inspector readings are blocked until the COT datasets are refreshed together.
+            </div>
+          )}
+          {livePriceState.status !== 'LIVE' && (
+            <div role="alert" className="cot-ws-warn cot-ws-warn-price">
+              Current price is not live: {livePriceState.status}.
+              {livePriceState.quote?.asOf ? ` Last quote: ${livePriceState.quote.asOf}.` : ' No verified quote timestamp.'}
+              {' '}Saved prices and weekly candles are historical reference only.
+              <button type="button" className="ws-btn" onClick={() => livePriceState.refresh()}>Reconnect prices</button>
+            </div>
+          )}
           <PaneShell
             panelId={PANEL_IDS.price}
             label="Weekly OHLC price"
@@ -1044,15 +1148,16 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
                 {...paneProps}
                 panelId={PANEL_IDS.price}
                 mode="candle"
+                drawingMode={drawingMode}
+                drawingLines={drawingLines}
+                onAddDrawing={addDrawingLine}
                 legendLabel={
                   priceSubtitle ? `Weekly OHLC · ${priceSubtitle}` : 'Weekly OHLC'
                 }
                 candleBars={visibleBars}
                 syncOnly={!hasVisibleOhlc}
                 livePrice={
-                  livePriceState.quote?.mid ??
-                  livePriceState.streamPrice?.currentPrice ??
-                  null
+                  currentPriceDisplay.price
                 }
                 livePriceAsOf={livePriceState.quote?.asOf ?? null}
                 livePriceSource={livePriceState.quote?.source ?? null}
@@ -1202,10 +1307,12 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         ) : null}
       </div>
 
+      </div>
+
       <WeeklyAnalysisPanel
         open={weeklyAnalysisOpen}
         onClose={() => setWeeklyAnalysisOpen(false)}
-        intel={weeklyAnalysisBlock}
+        intel={!inspectorSourceMismatch && weeklyAnalysisBlock?.source_week === loadedLatestDate ? weeklyAnalysisBlock : null}
       />
     </div>
   )

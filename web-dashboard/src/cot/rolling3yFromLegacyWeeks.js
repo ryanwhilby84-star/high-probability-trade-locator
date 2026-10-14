@@ -11,6 +11,7 @@ const BANDS = [
 ]
 
 function finite(v) {
+  if (v == null || v === '') return null
   const n = Number(v)
   return Number.isFinite(n) ? n : null
 }
@@ -26,7 +27,7 @@ function classifyPercentile(pct) {
 function empiricalPercentileRank(window, value) {
   const v = finite(value)
   if (v == null) return null
-  const finiteVals = window.map((x) => Number(x)).filter(Number.isFinite)
+  const finiteVals = window.map(finite).filter((x) => x != null)
   const n = finiteVals.length
   if (!n) return null
   if (n === 1) return 50
@@ -36,7 +37,7 @@ function empiricalPercentileRank(window, value) {
 }
 
 function extrema(arr) {
-  const fin = arr.map((x) => Number(x)).filter(Number.isFinite)
+  const fin = arr.map(finite).filter((x) => x != null)
   if (!fin.length) return { min: null, max: null, avg: null }
   const sum = fin.reduce((a, b) => a + b, 0)
   return { min: Math.min(...fin), max: Math.max(...fin), avg: sum / fin.length }
@@ -89,6 +90,7 @@ export function buildRolling3yContextFromWeeks(weeks) {
   const pn = empiricalPercentileRank(wN, nets[i])
   const po = empiricalPercentileRank(wO, ois[i])
 
+  const round2 = (v) => (v == null ? null : Math.round(v * 100) / 100)
   const round1 = (v) => (v == null ? null : Math.round(v * 10) / 10)
   const rowsUsed = wN.filter((x) => x != null).length || wL.filter((x) => x != null).length
 
@@ -119,10 +121,10 @@ export function buildRolling3yContextFromWeeks(weeks) {
     oi_min: oiStats.min,
     oi_max: oiStats.max,
     oi_avg: oiStats.avg,
-    long_percentile: round1(pl),
-    short_percentile: round1(ps),
-    net_percentile: round1(pn),
-    oi_percentile: round1(po),
+    long_percentile: round2(pl),
+    short_percentile: round2(ps),
+    net_percentile: round2(pn),
+    oi_percentile: round2(po),
     long_class: classifyPercentile(pl),
     short_class: classifyPercentile(ps),
     net_class: classifyPercentile(pn),
