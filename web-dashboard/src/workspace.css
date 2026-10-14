@@ -1,36 +1,35 @@
-/* HPTL institutional workstation — Phase 6 dark institutional palette */
 :root {
-  --hptl-bg: #121826;
-  --hptl-bg-elevated: #1a2233;
-  --hptl-bg-muted: #1c2536;
-  --hptl-bg-panel: #162032;
+  --hptl-bg: #0b0d0f;
+  --hptl-bg-elevated: #111418;
+  --hptl-bg-muted: #171a1e;
+  --hptl-bg-panel: #13171b;
   /* Surface / chrome (never use as body text on dark panels) */
-  --hptl-navy: #0e1420;
-  --hptl-navy-mid: #1a2233;
-  --hptl-navy-soft: #2b3648;
+  --hptl-navy: #0b0d0f;
+  --hptl-navy-mid: #111418;
+  --hptl-navy-soft: #343a40;
   /* Readable content text — always high contrast vs --hptl-bg* */
   --hptl-text: #e8e8e6;
   --hptl-heading: #f3f4f6;
-  --hptl-text-secondary: #a7b1c2;
-  --hptl-text-muted: #8a95a8;
-  --hptl-border: #2b3648;
-  --hptl-border-strong: #3a465a;
-  --hptl-gold: #b08d57;
-  --hptl-gold-soft: #2a3240;
-  --hptl-gold-border: #85715b;
-  --hptl-badge-bg: #2a3240;
-  --hptl-badge-border: #85715b;
-  --hptl-badge-text: #eedfcb;
-  --hptl-attention-bg: #2a3240;
-  --hptl-attention-border: #85715b;
-  --hptl-attention-text: #eedfcb;
+  --hptl-text-secondary: #aeb4ba;
+  --hptl-text-muted: #8d949b;
+  --hptl-border: #343a40;
+  --hptl-border-strong: #454c53;
+  --hptl-gold: #8dc63f;
+  --hptl-gold-soft: #1b2513;
+  --hptl-gold-border: #75ad2d;
+  --hptl-badge-bg: #1b2513;
+  --hptl-badge-border: #75ad2d;
+  --hptl-badge-text: #a8e15d;
+  --hptl-attention-bg: #1b2513;
+  --hptl-attention-border: #75ad2d;
+  --hptl-attention-text: #a8e15d;
   /* Muted desk-terminal semantics (not neon) */
   --hptl-positive: #6a9a7e;
   --hptl-positive-bg: rgba(106, 154, 126, 0.14);
   --hptl-negative: #b07272;
   --hptl-negative-bg: rgba(176, 114, 114, 0.14);
-  --hptl-warn-bg: rgba(176, 141, 87, 0.14);
-  --hptl-warn-text: #d4b483;
+  --hptl-warn-bg: rgba(231, 160, 109, 0.12);
+  --hptl-warn-text: #e7a06d;
   --hptl-info-bg: rgba(122, 154, 186, 0.12);
   --hptl-info-text: #9bb0c7;
   --hptl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
@@ -192,7 +191,7 @@ body.theme-light {
   gap: 12px 20px;
   padding: 16px 28px;
   border-bottom: 1px solid var(--hptl-border);
-  background: rgba(18, 24, 38, 0.94);
+  background: rgba(11, 13, 15, 0.96);
   backdrop-filter: blur(10px);
   box-shadow: none;
 }
