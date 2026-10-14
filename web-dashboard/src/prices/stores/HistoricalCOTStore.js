@@ -31,17 +31,18 @@ function emit() {
   for (const fn of _listeners) fn()
 }
 
-function prefetch() {
+function prefetch(forceFresh = false) {
   if (_doc) return Promise.resolve(_doc)
   if (_promise) return _promise
 
   _loading = true
   _error = null
-  const url = `${COT_3Y_PATH}?v=${encodeURIComponent(String(Date.now()))}`
+  // Normal visits can reuse the browser/CDN cache; explicit reloads bypass it.
+  const url = forceFresh ? `${COT_3Y_PATH}?v=${encodeURIComponent(String(Date.now()))}` : COT_3Y_PATH
   _fetchUrl = url
   emit()
 
-  _promise = fetch(url, { cache: 'no-store' })
+  _promise = fetch(url, { cache: forceFresh ? 'no-store' : 'default' })
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
     .then((d) => {
       _doc = d && typeof d === 'object' ? d : null
@@ -174,7 +175,7 @@ export const HistoricalCOTStore = {
   async refresh() {
     _doc = null
     _promise = null
-    await prefetch()
+    await prefetch(true)
   },
 }
 
@@ -208,7 +209,7 @@ export function invalidateCot3ySeriesCache() {
 export async function reloadCot3ySeries() {
   invalidateCot3ySeriesCache()
   _polledTag = null
-  await prefetch()
+  await prefetch(true)
   return HistoricalCOTStore.getSnapshot()
 }
 
