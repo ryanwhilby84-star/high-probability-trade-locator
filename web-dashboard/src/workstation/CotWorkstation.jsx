@@ -174,6 +174,38 @@ function WorkstationSkeleton({ message = 'Loading chart…' }) {
   )
 }
 
+
+function CotRawLedger({ series }) {
+  const [open, setOpen] = React.useState(false)
+  const rows = React.useMemo(() => (series || []).slice(-17).reverse(), [series])
+  const fmt = v => Number.isFinite(v) ? Math.round(v).toLocaleString('en-GB') : '—'
+  const cell = { padding: '9px 12px', borderBottom: '1px solid #33404d', whiteSpace: 'nowrap', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }
+  const delta = v => Number.isFinite(v) ? (v > 0 ? '#54dfad' : v < 0 ? '#ff858e' : '#e9f0f7') : '#aab8c7'
+  const columns = [
+    ['Report date', 'date', false],
+    ['Commercial net', 'commercial_net', false],
+    ['Commercial Δ', 'commercial_wow', true],
+    ['Non-commercial net', 'institutional_net', false],
+    ['Non-commercial Δ', 'institutional_wow', true],
+    ['Non-reportable net', 'retail_net', false],
+    ['Non-reportable Δ', 'retail_wow', true],
+  ]
+  return <section aria-label="Raw COT positioning ledger" style={{ background: '#131b24', color: '#eef3f8', border: '1px solid #354354', borderRadius: 8, margin: '12px 0', overflow: 'hidden' }}>
+    <button type="button" aria-expanded={open} onClick={() => setOpen(v => !v)} style={{ width: '100%', border: 0, background: '#1c2733', color: '#eef3f8', padding: '13px 16px', textAlign: 'left', cursor: 'pointer', fontWeight: 700 }}>
+      RAW COT LEDGER · {rows.length} WEEKS <span style={{ float: 'right' }}>{open ? 'Hide ▲' : 'View spreadsheet ▼'}</span>
+    </button>
+    {open && <div style={{ padding: 12 }}>
+      <p style={{ color: '#b9c9d9', fontSize: 12, margin: '0 0 10px' }}>Published historical net contracts and weekly changes. Long, short and spread counts will require the separate raw source fields; no figures are estimated.</p>
+      <div style={{ overflow: 'auto', maxHeight: 560 }}>
+        <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12 }}>
+          <thead><tr>{columns.map(([label], i) => <th key={label} style={{ ...cell, background: '#202b37', color: '#c5d3e1', position: 'sticky', top: 0, textAlign: i ? 'right' : 'left' }}>{label}</th>)}</tr></thead>
+          <tbody>{rows.map((row, i) => <tr key={row.date || i} style={{ background: i % 2 ? '#192430' : '#131b24' }}>{columns.map(([label, key, isDelta], j) => <td key={key} style={{ ...cell, textAlign: j ? 'right' : 'left', color: isDelta ? delta(row[key]) : '#eef3f8' }}>{key === 'date' ? row.date : fmt(row[key])}</td>)}</tr>)}</tbody>
+        </table>
+      </div>
+    </div>}
+  </section>
+}
+
 export function CotWorkstation({ marketId, variant = 'default' }) {
   const { doc, loading, errored } = useCot3ySeries()
   const { exportBlock, exportLoaded } = useWorkstationOhlc(marketId)
@@ -901,6 +933,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         '--ws-price-flex-no-ohlc': WS_PANE_FLEX.priceNoOhlc,
       }}
     >
+      {!isFullscreen && <CotRawLedger series={model.series} />}
       <header className="cot-ws-toolbar">
         <div className="cot-ws-toolbar-left">
           <span className="cot-ws-history">{model.historyLabel}</span>
