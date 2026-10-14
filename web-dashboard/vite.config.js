@@ -3,6 +3,7 @@ import path from 'path'
 import { spawn } from 'child_process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { buildAttentionSnapshot } from './scripts/buildAttentionSnapshot.mjs'
 
 const root = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(root, '..')
@@ -947,6 +948,7 @@ export default defineConfig({
   root,
   plugins: [
     react(),
+    { name: 'hptl-attention-snapshot', buildStart() { buildAttentionSnapshot(root) } },
     workstationRoutePlugin(),
     seasonalityWorkstationRoutePlugin(),
     correlationMatrixRoutePlugin(),
