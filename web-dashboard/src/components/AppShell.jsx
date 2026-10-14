@@ -1,4 +1,5 @@
 import React from 'react'
+import './institutionalSidebar.css'
 import { getAssetClasses, assetClassForMarket, assetClassLabel, marketsInAssetClass } from '../marketCatalog.js'
 import { allInstrumentIds } from '../instrumentRegistry.js'
 import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
@@ -48,7 +49,7 @@ export function AppShell({
           }}
           title="Back to market scanner"
         >
-          HPTL
+          <span style={{ fontSize: 10, letterSpacing: '0.13em', color: '#9bd84d', fontWeight: 800 }}>INSTITUTIONAL EDGE</span>
           <strong>Markets</strong>
         </button>
         <nav className="ws-nav">
