@@ -3,20 +3,13 @@ import { getAssetClasses, assetClassForMarket, assetClassLabel, marketsInAssetCl
 import { allInstrumentIds } from '../instrumentRegistry.js'
 import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 import {
-  navigateToJournal,
   navigateToScanner,
-  navigateToNaturalGasValuation,
   navigateToDxyMacroBias,
-  navigateToGoldValuation,
-  navigateToInstrument,
-  navigateToMacroHub,
   navigateToSeasonalityWorkstation,
   navigateToCorrelationMatrix,
   navigateToTradeBasket,
-  navigateToMacroIntelligence,
 } from '../routing.js'
 
-const DXY_MARKET = 'US Dollar Index / DX'
 
 export function AppShell({
   children,
@@ -88,28 +81,10 @@ export function AppShell({
           <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>
             Scanner
           </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>
-            Macro Hub
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToJournal}>
-            Trade Journal
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToNaturalGasValuation}
-          >
-            NG Valuation
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToGoldValuation}
-          >
-            Gold Valuation
-          </button>
+          
+          
+          
+          
           <button
             type="button"
             className="ws-btn"
@@ -141,22 +116,8 @@ export function AppShell({
           >
             Trade Basket
           </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToMacroIntelligence}
-          >
-            Macro Intelligence
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={() => navigateToInstrument(DXY_MARKET)}
-          >
-            US Dollar Index / DX
-          </button>
+          
+          
           <button
             type="button"
             className="ws-btn"
