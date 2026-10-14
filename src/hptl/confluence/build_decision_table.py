@@ -197,6 +197,11 @@ def _watchdog_loop() -> None:
             idle = time.monotonic() - _PROGRESS["ts"]
             stage = _PROGRESS["stage"]
             detail = _PROGRESS["detail"]
+        # Stage 5 can have completed while the caller is publishing separate
+        # downstream workstation exports. Do not kill the whole pipeline on
+        # a stale heartbeat left behind by a completed stage.
+        if detail.startswith("end ") or detail.startswith("completed "):
+            continue
         if idle > _WATCHDOG_TIMEOUT_S:
             print(
                 f"\n[WATCHDOG] ABORT: stage '{stage}' made no progress for {idle:.0f}s "
