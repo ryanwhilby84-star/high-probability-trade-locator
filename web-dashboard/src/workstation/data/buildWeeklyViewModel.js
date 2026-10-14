@@ -462,7 +462,17 @@ export function buildWeeklyViewModel({
     const nonReportable = participantFromRow(rows, i, 'retail_net', 'retail_wow')
 
     const inspResolved = resolveInspectorWeekForDate(inspectorByDate, date)
-    const insp = inspResolved?.week || null
+    // Verify every matched report against the independent chart positioning
+    // before using its derived values. A stale latest export must not erase
+    // valid historical inspector weeks, nor contaminate mismatched weeks.
+    const candidate = inspResolved?.week || null
+    const matchingNet = (chartNet, archiveNet) =>
+      isNum(chartNet) && isNum(archiveNet) && chartNet === archiveNet
+    const insp = candidate &&
+      matchingNet(commercial.net, candidate.commercial?.net) &&
+      matchingNet(nonCommercial.net, candidate.noncommercial?.net) &&
+      matchingNet(nonReportable.net, candidate.nonreportable?.net)
+      ? candidate : null
     if (insp) {
       enrichFromInspectorPack(commercial, insp.commercial)
       enrichFromInspectorPack(nonCommercial, insp.noncommercial)

@@ -500,25 +500,16 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     return { ...research, weekly_inspector: inspector }
   }, [researchBlock, weeklyInspectorBlock, marketId])
 
-  const inspectorLatest = researchWithInspector?.weekly_inspector?.weeks?.at(-1)
-  const sourceLatest = block?.series?.at(-1)
-  const inspectorSourceMismatch = Boolean(inspectorLatest && sourceLatest && (
-    inspectorLatest.date !== String(sourceLatest.date).slice(0, 10) ||
-    inspectorLatest.commercial.net !== sourceLatest.commercial_net ||
-    inspectorLatest.noncommercial.net !== sourceLatest.institutional_net ||
-    inspectorLatest.nonreportable.net !== sourceLatest.retail_net
-  ))
-
   const weeklyModel = React.useMemo(
     () =>
       buildWeeklyViewModel({
         timelineRows,
-        researchBlock: inspectorSourceMismatch ? null : researchWithInspector,
+        researchBlock: researchWithInspector,
         instrument: marketId,
         loadedLatestDate,
         staleView: dataStale,
       }),
-    [timelineRows, researchWithInspector, inspectorSourceMismatch, marketId, loadedLatestDate, dataStale],
+    [timelineRows, researchWithInspector, marketId, loadedLatestDate, dataStale],
   )
 
   const weeklyView = weeklyModel.weeklyView
