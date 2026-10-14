@@ -1,0 +1,48 @@
+name: Restore missing confluence history export
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/restore-confluence-history.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: restore-confluence-history
+  cancel-in-progress: false
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Restore existing real export from repair branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin fix/weekly-inspector-integrity-20261014
+          mkdir -p web-dashboard/public/data
+          git show FETCH_HEAD:web-dashboard/public/data/confluence_history_latest.json > web-dashboard/public/data/confluence_history_latest.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("web-dashboard/public/data/confluence_history_latest.json")
+          data = json.loads(p.read_text())
+          rows = data.get("records")
+          if not isinstance(rows, list) or len(rows) < 100:
+              raise SystemExit("Refusing invalid/empty confluence history export")
+          print(f"Validated existing export: {len(rows)} records; {p.stat().st_size} bytes")
+          PY
+      - name: Commit restored data without touching source code
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -f web-dashboard/public/data/confluence_history_latest.json
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Restore real confluence history export for Market Radar"
+          git push origin HEAD:main
