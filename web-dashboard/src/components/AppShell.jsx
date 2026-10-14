@@ -83,88 +83,17 @@ export function AppShell({
             )
           })}
         </nav>
-        {/* Phase 6: product nav only. Audit/debug routes remain routable but hidden. */}
+        {/* Public beta: keep the focused product navigation; other routes remain available internally. */}
         <div className="ws-product-nav">
-          <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>
-            Scanner
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>
-            Macro Hub
-          </button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToJournal}>
-            Trade Journal
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToNaturalGasValuation}
-          >
-            NG Valuation
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToGoldValuation}
-          >
-            Gold Valuation
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={() => {
-              const universe = allInstrumentIds()
-              const first =
-                (universe && universe[0]) ||
-                (TRACKED_MARKET_IDS && TRACKED_MARKET_IDS[0]) ||
-                'NASDAQ / NQ'
-              navigateToSeasonalityWorkstation(first)
-            }}
-          >
-            Seasonality Workstation
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToCorrelationMatrix}
-          >
-            Correlation Matrix
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToTradeBasket}
-          >
-            Trade Basket
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToMacroIntelligence}
-          >
-            Macro Intelligence
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={() => navigateToInstrument(DXY_MARKET)}
-          >
-            US Dollar Index / DX
-          </button>
-          <button
-            type="button"
-            className="ws-btn"
-            style={{ width: '100%', marginTop: 8 }}
-            onClick={navigateToDxyMacroBias}
-          >
-            DXY Macro Bias
-          </button>
+          <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>Scanner</button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToTradeBasket}>Trade Basket</button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCorrelationMatrix}>Correlation Matrix</button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={() => {
+            const universe = allInstrumentIds()
+            navigateToSeasonalityWorkstation(universe[0] || TRACKED_MARKET_IDS[0] || 'NASDAQ / NQ')
+          }}>Seasonality</button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>Macro Hub</button>
+          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToDxyMacroBias}>DXY Macro Bias</button>
         </div>
       </aside>
 
