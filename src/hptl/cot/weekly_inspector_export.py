@@ -271,6 +271,9 @@ def run_weekly_inspector_export(
     all_markets = doc.get("markets") or {}
     selected = sorted(str(k) for k in all_markets.keys()) if markets is None else list(markets)
 
+    if not selected:
+        raise RuntimeError("No COT markets selected; refusing to overwrite inspector exports.")
+
     out_markets: dict[str, Any] = {}
     for mid in selected:
         block = all_markets.get(mid)
@@ -304,6 +307,14 @@ def run_weekly_inspector_export(
             "available": sum(1 for m in out_markets.values() if m.get("available")),
         },
     }
+
+    if payload["summary"]["available"] != payload["summary"]["markets"]:
+        missing = [mid for mid, market in out_markets.items() if not market.get("available")]
+        raise RuntimeError(
+            f"Weekly Inspector incomplete: {payload['summary']['available']}/"
+            f"{payload['summary']['markets']} markets available; missing: {missing}. "
+            "Refusing to overwrite previous exports."
+        )
 
     for path in (CANONICAL_PATH, PUBLIC_PATH, DATA_PATH):
         _write(path, payload)
