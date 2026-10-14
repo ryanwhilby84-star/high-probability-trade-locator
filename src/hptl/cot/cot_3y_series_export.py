@@ -484,6 +484,16 @@ def build_payload() -> dict[str, Any]:
 
 
 def write_exports(payload: dict[str, Any]) -> Path:
+    # A partial or empty COT master must not overwrite a previously usable chart.
+    markets = payload.get("markets") or {}
+    if len(markets) != 26:
+        raise RuntimeError(
+            f"COT workstation export has {len(markets)}/26 markets; refusing to publish"
+        )
+    latest_dates = {name: block.get("latest_date") for name, block in markets.items()}
+    missing_dates = [name for name, date in latest_dates.items() if not date]
+    if missing_dates:
+        raise RuntimeError(f"COT workstation markets missing report dates: {missing_dates}")
     text = json.dumps(payload, indent=2, ensure_ascii=False)
     CANONICAL_PATH.parent.mkdir(parents=True, exist_ok=True)
     CANONICAL_PATH.write_text(text, encoding="utf-8")
