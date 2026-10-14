@@ -189,8 +189,8 @@ function ExtremeAttentionBoard({ historical, week, radarEligibleOnly }) {
     const blocks = historical?.markets || historical?.instruments || historical?.data || {}
     const entries = Array.isArray(blocks) ? blocks.map(v => [v.market || v.instrument, v]) : Object.entries(blocks)
     const percentile = (series, field) => {
-      const vals = series.slice(-156).map(v => v[field]).filter(Number.isFinite)
-      if (vals.length < 52 || !Number.isFinite(series[series.length - 1]?.[field])) return null
+      const vals = series.slice(-156).map(v => v[field] == null ? null : Number(v[field])).filter(Number.isFinite)
+      if (vals.length < 52 || !Number.isFinite(Number(series[series.length - 1]?.[field]))) return null
       const n = vals[vals.length - 1]
       return Math.round(1000 * (vals.filter(v => v < n).length + (vals.filter(v => v === n).length - 1) / 2) / (vals.length - 1)) / 10
     }
@@ -202,18 +202,18 @@ function ExtremeAttentionBoard({ historical, week, radarEligibleOnly }) {
       const c = percentile(s, 'commercial_net'), nc = percentile(s, 'institutional_net'), nr = percentile(s, 'retail_net')
       if (!isExtreme(c) && !isExtreme(nr)) return []
       const name = block.market || key
-      if (radarEligibleOnly && !isRadarEligible(name)) return []
+      if (radarEligibleOnly && !isRadarEligible(name) && !isRadarEligible(key)) return []
       const previous = s[s.length - 2]
       return [{ name, c, nc, nr, commercialExtreme: isExtreme(c), week: last.date,
-        change: Number.isFinite(last.commercial_net) && Number.isFinite(previous?.commercial_net) ? last.commercial_net - previous.commercial_net : null }]
+        change: Number.isFinite(Number(last.commercial_net)) && Number.isFinite(Number(previous?.commercial_net)) ? Number(last.commercial_net) - Number(previous.commercial_net) : null }]
     }).sort((a,b) => Number(b.commercialExtreme) - Number(a.commercialExtreme) || Math.abs(b.c - 50) - Math.abs(a.c - 50))
   }, [historical, week, radarEligibleOnly])
   return <section className="ca-panel" aria-label="Pay Attention 80/20 extremes" style={{ marginBottom: 16 }}>
     <header className="ca-header"><div><h2 className="ca-title">Pay Attention · 80/20 Extremes</h2>
       <p className="ca-sub">156-week net positioning · Commercial and Non-Reportable extremes · Not automatic entry signals</p></div>
-      <div className="ca-meta">COT week {week || '—'} · {cards.length} markets</div></header>
+      <div className="ca-meta">Latest historical COT · {cards.length} markets</div></header>
     {!historical ? <p className="ca-meta">Loading historical positioning…</p> : cards.length === 0 ?
-      <p className="ca-meta">No current-week qualifying extremes (or report dates do not match). Stale reports are excluded.</p> :
+      <p className="ca-meta">No qualifying 80/20 extremes in the available historical COT series.</p> :
       <div className="ca-list">{cards.map(v => {
         const main = v.commercialExtreme ? v.c : v.nr
         return <article className="ca-card" key={v.name} style={{ background: '#151e28', border: '1px solid #425466' }}>
@@ -227,7 +227,7 @@ function ExtremeAttentionBoard({ historical, week, radarEligibleOnly }) {
                 <strong style={{ color: Number.isFinite(n) && (n >= 80 || n <= 20) ? '#ffd08c' : '#eef4fa', fontSize: 20 }}>{n == null ? '—' : n.toFixed(1) + 'th'}</strong>
               </div>)}
           </div>
-          <p className="ca-summary" style={{ color: '#edf3fa', marginTop: 12 }}>{main >= 80 ? 'Bullish' : 'Bearish'} positioning watch · Commercial weekly net Δ {fmt(v.change)}</p>
+          <p className="ca-summary" style={{ color: '#edf3fa', marginTop: 12 }}>{v.commercialExtreme ? (main >= 80 ? 'Commercial net high extreme' : 'Commercial net low extreme') : 'Non-reportable crowding extreme'} · Commercial weekly net Δ {fmt(v.change)}</p>
           <p className="ca-sub">Check non-commercial rotation and fresh higher-timeframe supply/demand before considering an entry.</p>
           <div className="ca-actions"><button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation</button></div>
         </article>
@@ -265,7 +265,7 @@ export function CommercialAttentionPanel({ doc, radarEligibleOnly = true, topN =
 
   return (
     <>
-    <ExtremeAttentionBoard historical={historical} week={doc.source_week || doc.calendar_week} radarEligibleOnly={radarEligibleOnly} />
+    <ExtremeAttentionBoard historical={historical} week={null} radarEligibleOnly={radarEligibleOnly} />
     <section className="ca-panel" aria-label="Commercial COT attention">
       <header className="ca-header">
         <div>
