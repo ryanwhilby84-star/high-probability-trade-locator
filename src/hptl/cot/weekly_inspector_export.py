@@ -104,10 +104,24 @@ STATE_FROM_TEMP = {
 
 
 def _load_cot3y() -> dict[str, Any]:
+    """Fail closed when the canonical COT source is absent or unusable.
+
+    Never overwrite a previously valid inspector export with an empty payload.
+    """
     for p in COT3Y_PATHS:
-        if p.is_file():
-            return json.loads(p.read_text(encoding="utf-8"))
-    return {"markets": {}}
+        if not p.is_file():
+            continue
+        try:
+            doc = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            raise RuntimeError(f"Invalid COT history source: {p}") from exc
+        if not isinstance(doc, dict) or not isinstance(doc.get("markets"), dict) or not doc["markets"]:
+            raise RuntimeError(f"COT history source contains no markets: {p}")
+        return doc
+    raise FileNotFoundError(
+        "COT 3-year history source not found; refusing to overwrite inspector exports. "
+        f"Checked: {', '.join(str(p) for p in COT3Y_PATHS)}"
+    )
 
 
 def _write(path: Path, payload: dict[str, Any]) -> None:
