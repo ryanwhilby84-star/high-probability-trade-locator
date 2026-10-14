@@ -1,0 +1,65 @@
+name: Publish verified COT data to preview
+on:
+  workflow_dispatch:
+  push:
+    branches: [fix/weekly-inspector-integrity-20261014]
+    paths:
+      - .github/workflows/publish-verified-cot-preview.yml
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: publish-verified-cot-preview
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/weekly-inspector-integrity-20261014
+          persist-credentials: true
+      - name: Download green-run COT artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cot-live-diagnostic
+          run-id: 38546014987
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: verified-artifact
+      - name: Verify artifact and copy public exports
+        run: |
+          python - <<'PY'
+          import json, shutil
+          from pathlib import Path
+          base = Path("verified-artifact/web-dashboard/public/data")
+          target = Path("web-dashboard/public/data")
+          a = json.loads((base/"cot_3y_series_latest.json").read_text())
+          b = json.loads((base/"cot_weekly_inspector_latest.json").read_text())
+          assert len(a["markets"]) == len(b["markets"]) == 26
+          assert set(a["markets"]) == set(b["markets"])
+          for name, block in a["markets"].items():
+              series = block.get("series") or []
+              rows = b["markets"][name].get("rows") or []
+              assert len(rows) >= 156 and series, name
+              assert series[-1]["date"] == rows[-1][0] == "2026-10-06", name
+          target.mkdir(parents=True, exist_ok=True)
+          for filename in ("cot_3y_series_latest.json", "cot_weekly_inspector_latest.json"):
+              shutil.copy2(base/filename, target/filename)
+              print(filename, (target/filename).stat().st_size)
+          print("PASS: publishing 26 verified markets through 2026-10-06")
+          PY
+      - name: Commit verified data to preview branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json
+          if git diff --cached --quiet; then
+            echo "Verified exports already committed"
+          else
+            git commit -m "Publish verified COT chart and inspector exports through 2026-10-06"
+            git push origin HEAD:fix/weekly-inspector-integrity-20261014
+          fi
