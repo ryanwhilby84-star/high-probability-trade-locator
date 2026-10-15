@@ -71,7 +71,25 @@ jobs:
       - name: Refresh commercial attention
         run: python scripts/run_commercial_attention_engine.py
       - name: Validate release snapshot and freshness
-        run: python scripts/package_dashboard_data_release.py --data-dir web-dashboard/public/data --output /tmp/institutional-edge-data-release.zip --max-cot-age-days 14
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import date, datetime
+          from pathlib import Path
+          root = Path("web-dashboard/public/data")
+          inspector = json.loads((root / "cot_weekly_inspector_latest.json").read_text())
+          if inspector.get("measure") != "net_positioning_rolling_156_week_percentile":
+              raise SystemExit("FAIL: Weekly Inspector uses incompatible percentile measure")
+          markets = inspector.get("markets") or {}
+          dates = [m["rows"][-1][0] for m in markets.values() if m.get("available") and m.get("rows")]
+          if not dates:
+              raise SystemExit("FAIL: Weekly Inspector contains no available dated markets")
+          latest = date.fromisoformat(max(dates))
+          age = (datetime.now().date() - latest).days
+          print(f"Weekly Inspector latest COT week: {latest}; age: {age} days; markets: {len(dates)}")
+          if age < 0 or age > 14:
+              raise SystemExit(f"FAIL: COT data freshness gate: {age} days")
+          PY
       - name: Install frontend dependencies
         run: npm ci --prefix web-dashboard
       - name: Verify frontend and required data
