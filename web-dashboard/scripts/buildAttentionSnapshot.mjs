@@ -14,6 +14,9 @@ export function buildAttentionSnapshot(root) {
   if (doc.engine !== 'weekly_inspector_flow' || !doc.markets || typeof doc.markets !== 'object') {
     throw new Error('Missing authoritative Weekly Inspector export; refusing independent percentile calculation')
   }
+  if (doc.measure !== 'net_positioning_rolling_156_week_percentile') {
+    throw new Error('Stale or incompatible Weekly Inspector percentile measure: ' + String(doc.measure))
+  }
   const eligible = []
   const valid = v => typeof v === 'number' && Number.isFinite(v)
   for (const [name, market] of Object.entries(doc.markets)) {
