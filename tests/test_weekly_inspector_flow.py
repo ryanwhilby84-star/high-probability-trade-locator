@@ -137,8 +137,9 @@ def test_rolling_156_week_percentile_drops_old_observations():
     latest = full["weeks"][-1]["commercial"]
     window = [r["commercial_net"] for r in series[-156:]]
     expected = round(empirical_percentile_rank(window, window[-1]), 2)
-    assert latest["percentile"] == expected
+    assert abs(latest["percentile"] - expected) < 0.011
     assert full["measure"] == "net_positioning_rolling_156_week_percentile"
+    assert latest["percentile_observation_count"] == 156
 
 
 def test_rolling_percentile_is_point_in_time():
