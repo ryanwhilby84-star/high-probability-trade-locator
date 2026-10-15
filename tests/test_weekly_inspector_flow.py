@@ -157,3 +157,17 @@ def test_rolling_percentile_changes_use_rolling_baseline():
         a = weeks[-1]["commercial"]["percentile"]
         b = weeks[-1-lag]["commercial"]["percentile"]
         assert abs(weeks[-1]["commercial"][key] - (a-b)) < 0.000001
+
+
+def test_cross_group_spread_uses_same_rolling_percentiles_as_cards():
+    weeks = build_weekly_inspector_series(_series(200))["weeks"]
+    for week in weeks[-20:]:
+        c = week["commercial"]["percentile"]
+        nc = week["noncommercial"]["percentile"]
+        nr = week["nonreportable"]["percentile"]
+        cross = week["cross"]
+        assert cross["comm_nc_spread"] == round(c - nc, 2)
+        assert cross["comm_nr_spread"] == round(c - nr, 2)
+        assert cross["commercial_percentile"] == c
+        assert cross["noncommercial_percentile"] == nc
+        assert cross["nonreportable_percentile"] == nr
