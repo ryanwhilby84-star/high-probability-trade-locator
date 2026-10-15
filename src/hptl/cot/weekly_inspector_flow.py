@@ -31,8 +31,8 @@ HIGH = 70.0
 LOW = 30.0
 EXTREME_LOW = 10.0
 
-MEASURE = "net_positioning_expanding_percentile"
-MEASURE_LABEL = "Net positioning percentile (expanding, point-in-time)"
+MEASURE = "net_positioning_rolling_156_week_percentile"
+MEASURE_LABEL = "Net positioning percentile (rolling 156 weeks, point-in-time)"
 
 
 def _finite(v: Any) -> float | None:
@@ -142,10 +142,11 @@ def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str
     v1 = vel.get("1w") or {}
     v4 = vel.get("4w") or {}
     v12 = vel.get("12w") or {}
-    pct = _finite((state.get("percentiles") or {}).get("long_history"))
-    pct_1w = _finite(v1.get("percentile_change"))
-    pct_4w = _finite(v4.get("percentile_change"))
-    pct_12w = _finite(v12.get("percentile_change"))
+    pct = _finite((state.get("percentiles") or {}).get("3y"))
+    # Movement must use the same rolling 3Y metric at both endpoints.
+    pct_1w = _finite(state.get("_rolling_3y_change_1w"))
+    pct_4w = _finite(state.get("_rolling_3y_change_4w"))
+    pct_12w = _finite(state.get("_rolling_3y_change_12w"))
     direction = classify_direction(pct_1w)
     temperature, state_label = classify_temperature(pct, pct_1w, pct_4w)
     is_extreme = pct is not None and (pct >= EXTREME_HIGH or pct <= EXTREME_LOW)
@@ -321,6 +322,14 @@ def build_weekly_inspector_series(
     )
     if spreads_nr is None:
         spreads_nr = build_spread_series(commercial, nonreportable)
+    # Derive week-over-week percentile movements from the identical rolling
+    # 156-week measure used for the displayed percentile, never expanding history.
+    for states in (commercial, noncommercial, nonreportable):
+        rolling = [_finite((st.get("percentiles") or {}).get("3y")) for st in states]
+        for i, st in enumerate(states):
+            st["_rolling_3y_change_1w"] = rolling[i] - rolling[i - 1] if i >= 1 and rolling[i] is not None and rolling[i - 1] is not None else None
+            st["_rolling_3y_change_4w"] = rolling[i] - rolling[i - 4] if i >= 4 and rolling[i] is not None and rolling[i - 4] is not None else None
+            st["_rolling_3y_change_12w"] = rolling[i] - rolling[i - 12] if i >= 12 and rolling[i] is not None and rolling[i - 12] is not None else None
 
     from hptl.cot.positioning_research_engine import GROUP_NET_KEY
 
@@ -331,8 +340,8 @@ def build_weekly_inspector_series(
     # Comm − NC in percentile space + expanding percentile of that spread.
     raw_comm_nc: list[float | None] = []
     for c, nc in zip(commercial, noncommercial):
-        cp = _finite((c.get("percentiles") or {}).get("long_history"))
-        ncp = _finite((nc.get("percentiles") or {}).get("long_history"))
+        cp = _finite((c.get("percentiles") or {}).get("3y"))
+        ncp = _finite((nc.get("percentiles") or {}).get("3y"))
         if cp is None or ncp is None:
             raw_comm_nc.append(None)
         else:
