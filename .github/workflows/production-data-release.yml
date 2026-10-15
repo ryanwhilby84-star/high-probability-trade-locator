@@ -114,9 +114,18 @@ jobs:
       - name: Deploy validated build to Vercel production
         working-directory: web-dashboard
         run: |
-          npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
-          npx --yes vercel@latest build --prod --token="$VERCEL_TOKEN"
-          npx --yes vercel@latest deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
+          # The Vercel remote build requires a shell unavailable in the prior CLI build path.
+          # Deploy the already validated Vite dist as a static prebuilt output instead.
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path(".vercel/output")
+          root.mkdir(parents=True, exist_ok=True)
+          (root / "config.json").write_text(json.dumps({"version": 3, "routes": [{"handle": "filesystem"}]}))
+          PY
+          mkdir -p .vercel/output/static
+          cp -a dist/. .vercel/output/static/
+          npx --yes vercel@latest deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID"
       - name: Upload generated data and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
