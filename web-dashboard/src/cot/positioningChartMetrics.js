@@ -1,16 +1,14 @@
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
 export const POSITIONING_RANGE_PRESETS = [
-  { id: '3m', label: '3M', weeks: 13 },
-  { id: '6m', label: '6M', weeks: 26 },
-  { id: '1y', label: '1Y', weeks: 52 },
   { id: '3y', label: '3Y', weeks: 156 },
   { id: '5y', label: '5Y', weeks: 260 },
   { id: '10y', label: '10Y', weeks: 520 },
+  { id: '15y', label: '15Y', weeks: 780 },
   { id: 'all', label: 'All', weeks: null },
 ]
 
-export const POSITIONING_DEFAULT_RANGE_ID = '3y'
+export const POSITIONING_DEFAULT_RANGE_ID = 'all'
 
 export function rangePresetById(id) {
   return POSITIONING_RANGE_PRESETS.find((p) => p.id === id) || POSITIONING_RANGE_PRESETS.find((p) => p.id === POSITIONING_DEFAULT_RANGE_ID)
