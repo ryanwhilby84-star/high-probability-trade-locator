@@ -27,6 +27,7 @@ ROLLING_WINDOWS = {
     "2y": 104,
     "3y": 156,
     "5y": 260,
+    "15y": 780,
 }
 JOURNEY_LAGS = (1, 4, 12, 26, 52)
 VELOCITY_LAGS = (1, 4, 12)
