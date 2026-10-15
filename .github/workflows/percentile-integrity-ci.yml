@@ -39,3 +39,16 @@ jobs:
           node-version: "22"
       - name: Verify all Attention Board percentiles
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
+      - name: Reject stale COT test fixtures
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import date, datetime
+          from pathlib import Path
+          doc=json.loads(Path("web-dashboard/public/data/cot_attention_80_20_latest.json").read_text())
+          report=date.fromisoformat(doc["latestDate"])
+          age=(datetime.now().date()-report).days
+          print(f"COT snapshot date: {report}; age: {age} days")
+          if age > 14 or age < 0:
+              raise SystemExit("FAIL: test data too old or future-dated for live-readiness")
+          PY
