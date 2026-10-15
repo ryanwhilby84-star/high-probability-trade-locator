@@ -363,7 +363,10 @@ def build_weekly_inspector_series(
         if i >= 4 and cn_spread is not None and raw_comm_nc[i - 4] is not None:
             cn_4w = round(cn_spread - raw_comm_nc[i - 4], 2)
 
-        nr_row = spreads_nr[i]
+        # Derive the C/NR spread from the same rolling ranks shown above.
+        c_rank = c_pack["percentile"]
+        nr_rank = nr_pack["percentile"]
+        rolling_cn_nr = round(c_rank - nr_rank, 2) if c_rank is not None and nr_rank is not None else None
         cross = pack_cross_week(
             c_pack,
             nc_pack,
@@ -372,8 +375,8 @@ def build_weekly_inspector_series(
             cn_spread_pct,
             cn_1w,
             cn_4w,
-            _finite(nr_row.get("spread")),
-            _finite(nr_row.get("spread_percentile")),
+            rolling_cn_nr,
+            None,  # Historical percentile of this spread needs its own rolling-series audit.
         )
 
         weeks.append(
