@@ -944,24 +944,6 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
             role="group"
             aria-label="Chart range"
           >
-            <button
-              type="button"
-              className="cot-ws-range-btn cot-ws-range-btn--fit"
-              disabled={shellLoading}
-              onClick={handleAll}
-            >
-              All
-            </button>
-
-            <button
-              type="button"
-              className="cot-ws-range-btn"
-              disabled={shellLoading}
-              onClick={handleHome}
-            >
-              Home
-            </button>
-
             {POSITIONING_RANGE_PRESETS.map((rangePreset) => (
               <button
                 key={rangePreset.id}
