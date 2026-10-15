@@ -150,7 +150,7 @@ def _rolling_percentiles(nets: list[float | None], window: int) -> list[float | 
             continue
         start = max(0, i - window + 1)
         hist = [x for x in nets[start : i + 1] if x is not None]
-        out.append(_pct(hist, v) if len(hist) >= 2 else None)
+        out.append(_pct(hist, v) if hist else None)
     return out
 
 
