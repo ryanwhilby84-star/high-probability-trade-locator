@@ -61,7 +61,7 @@ jobs:
         env:
           HPTL_STAGE_TIMEOUT_S: '900'
           PYTHONUNBUFFERED: '1'
-        run: python -m hptl.cot.run_update --force
+        run: python -m hptl.cot.run_update --force --ensure-from-year 2011
       - name: Validate rolling percentile regression tests
         run: |
           python -m pip install pytest
