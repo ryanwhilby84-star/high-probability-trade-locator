@@ -133,7 +133,7 @@ def _write(path: Path, payload: dict[str, Any]) -> None:
 
 
 def _pack_group(g: dict[str, Any]) -> list[Any]:
-    """Compact: [net,w1,w4,w12,pct,p1,p4,p12,obs,dir,temp,extreme]."""
+    """Compact: [net,w1,w4,w12,pct,p1,p4,p12,obs,dir,temp,extreme,5y,15y]."""
     return [
         g.get("net"),
         g.get("weekly_change"),
@@ -147,6 +147,8 @@ def _pack_group(g: dict[str, Any]) -> list[Any]:
         DIR_CODES.get(g.get("direction") or "unknown", 5),
         TEMP_CODES.get(g.get("temperature") or "unknown", 10),
         1 if g.get("is_extreme") else 0,
+        (g.get("percentiles_by_window") or {}).get("5y"),
+        (g.get("percentiles_by_window") or {}).get("15y"),
     ]
 
 
@@ -198,6 +200,7 @@ def expand_group(arr: list[Any] | None) -> dict[str, Any]:
         "four_week_change": a[2],
         "twelve_week_change": a[3],
         "percentile": a[4],
+        "percentiles_by_window": {"3y": a[4], "5y": a[12] if len(a) > 12 else None, "15y": a[13] if len(a) > 13 else None},
         "percentile_change_1w": a[5],
         "percentile_change_4w": a[6],
         "percentile_change_12w": a[7],
