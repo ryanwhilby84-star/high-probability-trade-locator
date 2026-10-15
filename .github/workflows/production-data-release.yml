@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: fix/p0-separate-vite-build-from-data-refresh
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -58,6 +58,8 @@ jobs:
           HPTL_STAGE_TIMEOUT_S: '900'
           PYTHONUNBUFFERED: '1'
         run: python -m hptl.cot.run_update --force
+      - name: Validate rolling percentile regression tests
+        run: python -m pytest tests/test_weekly_inspector_flow.py -q
       - name: Refresh commercial attention
         run: python scripts/run_commercial_attention_engine.py
       - name: Validate release snapshot and freshness
@@ -68,6 +70,8 @@ jobs:
         env:
           REQUIRE_DASHBOARD_DATA: '1'
         run: npm run build --prefix web-dashboard
+      - name: Verify Attention Board parity with Weekly Inspector
+        run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
       - name: Deploy validated build to Vercel production
         working-directory: web-dashboard
         run: |
