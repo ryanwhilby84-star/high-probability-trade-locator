@@ -1,7 +1,7 @@
 """Weekly Inspector flow layer — direction, temperature, cross-group spreads.
 
-Built on top of positioning_research_engine group-state series (expanding
-net-positioning percentiles, no look-ahead). Pure packaging for the UI —
+Built on top of positioning_research_engine group-state series (rolling
+156-week net-positioning percentiles, no look-ahead). Pure packaging for the UI —
 does not invent new COT values or event detection.
 """
 
@@ -25,7 +25,7 @@ from hptl.cot.positioning_percentiles import empirical_percentile_rank
 PCT_CHG_STRONG = 7.0
 PCT_CHG_MILD = 2.0
 
-# Temperature bands on expanding net-positioning percentile.
+# Temperature bands on rolling 156-week net-positioning percentile.
 EXTREME_HIGH = 90.0
 HIGH = 70.0
 LOW = 30.0
@@ -132,7 +132,7 @@ def classify_temperature(
 
 
 def _obs_count_through(nets: list[float | None], idx: int) -> int:
-    return sum(1 for v in nets[: idx + 1] if v is not None)
+    return sum(1 for v in nets[max(0, idx - 155) : idx + 1] if v is not None)
 
 
 def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str, Any]:
