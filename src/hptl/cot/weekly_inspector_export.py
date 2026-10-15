@@ -104,10 +104,24 @@ STATE_FROM_TEMP = {
 
 
 def _load_cot3y() -> dict[str, Any]:
+    """Choose the freshest actual COT history, not the first (possibly stale) file."""
+    candidates = []
     for p in COT3Y_PATHS:
-        if p.is_file():
-            return json.loads(p.read_text(encoding="utf-8"))
-    return {"markets": {}}
+        if not p.is_file():
+            continue
+        doc = json.loads(p.read_text(encoding="utf-8"))
+        dates = [
+            str(row.get("date", ""))
+            for block in (doc.get("markets") or {}).values()
+            for row in (block.get("series") or [])[-1:]
+        ]
+        if dates:
+            candidates.append((max(dates), p, doc))
+    if not candidates:
+        raise FileNotFoundError("No dated COT positioning history available for Inspector")
+    latest, source, doc = max(candidates, key=lambda item: item[0])
+    print(f"Inspector COT source: {source}; latest week: {latest}")
+    return doc
 
 
 def _write(path: Path, payload: dict[str, Any]) -> None:
