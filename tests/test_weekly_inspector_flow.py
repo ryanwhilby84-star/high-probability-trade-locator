@@ -124,3 +124,35 @@ def test_group_state_series_first_week_has_percentile():
     assert states[0]["percentiles"]["long_history"] == 50.0
     packed = pack_group_week(states[0], [r["commercial_net"] for r in series])
     assert packed["percentile"] == 50.0
+
+
+def test_rolling_156_week_percentile_drops_old_observations():
+    """An old outlier must not influence the current 3Y rank."""
+    from hptl.cot.positioning_percentiles import empirical_percentile_rank
+
+    series = _series(200)
+    # A large negative outlier outside the last 156 weeks.
+    series[0]["commercial_net"] = -1_000_000
+    full = build_weekly_inspector_series(series)
+    latest = full["weeks"][-1]["commercial"]
+    window = [r["commercial_net"] for r in series[-156:]]
+    expected = round(empirical_percentile_rank(window, window[-1]), 2)
+    assert latest["percentile"] == expected
+    assert full["measure"] == "net_positioning_rolling_156_week_percentile"
+
+
+def test_rolling_percentile_is_point_in_time():
+    series = _series(200)
+    mid = 175
+    full = build_weekly_inspector_series(series)
+    earlier = build_weekly_inspector_series(series[:mid + 1])
+    assert full["weeks"][mid]["commercial"]["percentile"] == earlier["weeks"][mid]["commercial"]["percentile"]
+
+
+def test_rolling_percentile_changes_use_rolling_baseline():
+    series = _series(200)
+    weeks = build_weekly_inspector_series(series)["weeks"]
+    for lag, key in ((1, "percentile_change_1w"), (4, "percentile_change_4w"), (12, "percentile_change_12w")):
+        a = weeks[-1]["commercial"]["percentile"]
+        b = weeks[-1-lag]["commercial"]["percentile"]
+        assert abs(weeks[-1]["commercial"][key] - (a-b)) < 0.000001
