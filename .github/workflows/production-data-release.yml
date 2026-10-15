@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
-      contents: read
+      contents: write
     env:
       PYTHONPATH: src
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -76,6 +76,17 @@ jobs:
         run: npm run build --prefix web-dashboard
       - name: Verify Attention Board parity with Weekly Inspector
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
+      - name: Publish validated COT exports to main for Vercel Git builds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/cot_attention_80_20_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish fresh validated COT percentile snapshots [skip ci]"
+            git push origin HEAD:main
+          else
+            echo "Validated COT exports unchanged."
+          fi
       - name: Deploy validated build to Vercel production
         working-directory: web-dashboard
         run: |
