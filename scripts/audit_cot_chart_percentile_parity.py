@@ -26,9 +26,15 @@ def main():
                 expected = round(float(empirical_percentile_rank(window, float(value))), 2) if value is not None and window else None
                 actual = packed[group_idx][4]
                 assert (expected is None and actual is None) or (expected is not None and actual is not None and abs(expected - float(actual)) <= 0.02), (name, raw["date"], key, "percentile", expected, actual)
+                for width, offset in ((260, 12), (780, 13)):
+                    history = [float(r[key]) for r in series[max(0, i - width + 1):i + 1] if r.get(key) is not None]
+                    expected_extra = round(float(empirical_percentile_rank(history, float(value))), 2) if value is not None and history else None
+                    actual_extra = packed[group_idx][offset]
+                    assert (expected_extra is None and actual_extra is None) or (expected_extra is not None and actual_extra is not None and abs(expected_extra - float(actual_extra)) <= 0.02), (name, raw["date"], key, width, expected_extra, actual_extra)
+                    checks += 1
                 checks += 1
     assert checks > 0, "No COT rows audited"
-    print(f"PASS: {checks} source-net and 156-week percentile comparisons across {len(source['markets'])} markets")
+    print(f"PASS: {checks} source-net and 3y/5y/15y percentile comparisons across {len(source['markets'])} markets")
 
 if __name__ == "__main__":
     main()
