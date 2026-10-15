@@ -24,9 +24,9 @@ from hptl.config import get_settings
 from hptl.markets.instrument_registry import LEGACY_MARKET_ALIASES, cot_mapped_ids, get_instrument
 
 PARSER_NAME = "hptl.cot.legacy_cot"
-# Workstation target: up to 10 calendar years of weekly Legacy COT (~520 reports).
-HISTORY_YEARS = 10
-WEEKS_HISTORY = 520
+# Workstation target: 15 calendar years of weekly Legacy Futures Only COT.
+HISTORY_YEARS = 16  # calendar-year buffer to supply a full trailing 780 weekly reports
+WEEKS_HISTORY = 780
 
 
 def default_history_years(*, span_years: int = HISTORY_YEARS) -> list[int]:
