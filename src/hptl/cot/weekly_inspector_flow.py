@@ -347,6 +347,13 @@ def build_weekly_inspector_series(
         else:
             raw_comm_nc.append(round(cp - ncp, 2))
     comm_nc_pcts = _expanding_spread_percentiles(raw_comm_nc)
+    # C/NR spread is calculated from the same rolling ranks as the cards.
+    raw_comm_nr = []
+    for c, nr in zip(commercial, nonreportable):
+        cp = _finite((c.get("percentiles") or {}).get("3y"))
+        np = _finite((nr.get("percentiles") or {}).get("3y"))
+        raw_comm_nr.append(round(cp - np, 2) if cp is not None and np is not None else None)
+    comm_nr_pcts = _expanding_spread_percentiles(raw_comm_nr)
 
     weeks: list[dict[str, Any]] = []
     for i in range(len(series)):
@@ -376,7 +383,7 @@ def build_weekly_inspector_series(
             cn_1w,
             cn_4w,
             rolling_cn_nr,
-            None,  # Historical percentile of this spread needs its own rolling-series audit.
+            comm_nr_pcts[i],
         )
 
         weeks.append(
