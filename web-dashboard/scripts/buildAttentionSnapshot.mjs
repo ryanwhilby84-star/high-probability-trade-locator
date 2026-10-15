@@ -19,7 +19,7 @@ export function buildAttentionSnapshot(root) {
   for (const [name, market] of Object.entries(doc.markets)) {
     if (!market?.available || !Array.isArray(market.rows) || !market.rows.length) continue
     const last = market.rows.at(-1)
-    if (!Array.isArray(last) || !/^\\d{4}-\\d{2}-\\d{2}$/.test(String(last[0]))) {
+    if (!Array.isArray(last) || !/^\d{4}-\d{2}-\d{2}$/.test(String(last[0]))) {
       throw new Error('Invalid inspector date for ' + name)
     }
     const [date, cGroup, ncGroup, nrGroup] = last
