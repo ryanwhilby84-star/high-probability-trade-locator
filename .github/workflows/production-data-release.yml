@@ -1,6 +1,10 @@
 name: Refresh and publish Institutional Edge data
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/production-data-release.yml'
 
 concurrency:
   group: institutional-edge-data-release
