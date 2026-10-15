@@ -1,0 +1,41 @@
+name: COT percentile integrity checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/hptl/cot/**"
+      - "tests/test_weekly_inspector_flow.py"
+      - "web-dashboard/scripts/buildAttentionSnapshot.mjs"
+      - "web-dashboard/scripts/verifyAttentionSnapshot.mjs"
+      - ".github/workflows/percentile-integrity-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  percentile-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install project and pytest
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install pytest
+      - name: Run percentile regression tests
+        env:
+          PYTHONPATH: src
+        run: python -m pytest tests/test_weekly_inspector_flow.py -q
+      - name: Rebuild Inspector from checked-in COT history
+        env:
+          PYTHONPATH: src
+        run: python -m hptl.cot.weekly_inspector_export
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify all Attention Board percentiles
+        run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
