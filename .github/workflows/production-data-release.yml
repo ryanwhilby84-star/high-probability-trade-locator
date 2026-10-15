@@ -90,6 +90,8 @@ jobs:
           if age < 0 or age > 14:
               raise SystemExit(f"FAIL: COT data freshness gate: {age} days")
           PY
+      - name: Audit all COT graph nets and 156-week percentiles against one history source
+        run: python scripts/audit_cot_chart_percentile_parity.py
       - name: Install frontend dependencies
         run: npm ci --prefix web-dashboard
       - name: Verify frontend and required data
