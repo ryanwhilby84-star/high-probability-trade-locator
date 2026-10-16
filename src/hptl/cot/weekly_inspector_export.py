@@ -149,6 +149,7 @@ def _pack_group(g: dict[str, Any]) -> list[Any]:
         1 if g.get("is_extreme") else 0,
         (g.get("percentiles_by_window") or {}).get("5y"),
         (g.get("percentiles_by_window") or {}).get("15y"),
+        (g.get("percentiles_by_window") or {}).get("10y"),
     ]
 
 
@@ -200,7 +201,7 @@ def expand_group(arr: list[Any] | None) -> dict[str, Any]:
         "four_week_change": a[2],
         "twelve_week_change": a[3],
         "percentile": a[4],
-        "percentiles_by_window": {"3y": a[4], "5y": a[12] if len(a) > 12 else None, "15y": a[13] if len(a) > 13 else None},
+        "percentiles_by_window": {"3y": a[4], "5y": a[12] if len(a) > 12 else None, "15y": a[13] if len(a) > 13 else None, "10y": a[14] if len(a) > 14 else None},
         "percentile_change_1w": a[5],
         "percentile_change_4w": a[6],
         "percentile_change_12w": a[7],
