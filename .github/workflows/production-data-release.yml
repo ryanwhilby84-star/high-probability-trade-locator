@@ -107,6 +107,10 @@ jobs:
           git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/cot_attention_80_20_latest.json
           if ! git diff --cached --quiet; then
             git commit -m "Publish fresh validated COT percentile snapshots [skip ci]"
+            # Generated price and diagnostic files may remain modified after the build.
+            # Keep only the audited data commit during the rebase; never publish unrelated files.
+            git reset --hard HEAD
+            git clean -fd -- web-dashboard/.vercel/output
             # The validation job is long-running; UI commits may arrive meanwhile.
             # Rebase the generated data-only commit onto current main before pushing.
             for attempt in 1 2 3; do
