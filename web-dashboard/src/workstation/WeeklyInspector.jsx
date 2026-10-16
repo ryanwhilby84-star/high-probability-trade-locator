@@ -107,10 +107,13 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
     )
   }
   const temp = p.temperature || 'neutral'
-  const required = { '3y': 156, '5y': 260, '10y': 520, '15y': 780 }[rangeId]
-  const available = p.historyObservationCount ?? 0
+  // The chart series can be shorter than the independent historical COT export.
+  // Trust only an explicitly exported rank for the selected window; the exporter
+  // is responsible for coverage validation and leaves unsupported ranks null.
   const rawRank = rangeId === 'all' ? null : p.percentilesByWindow?.[rangeId]
-  const rank = required && available >= required && Number.isFinite(Number(rawRank)) && rawRank != null ? rawRank : null
+  const rank = rawRank != null && Number.isFinite(Number(rawRank)) && Number(rawRank) >= 0 && Number(rawRank) <= 100
+    ? Number(rawRank)
+    : null
   const pctile =
     rank == null ? 'Insufficient history' : fmtPctile(rank)
   const pct4 =
@@ -150,7 +153,7 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
           label="Obs count"
           value={
             p.percentileObservationCount != null
-              ? String(p.percentileObservationCount)
+              ? String(p.percentileObservationCount) + ' (3Y baseline)'
               : 'Unavailable'
           }
         />
