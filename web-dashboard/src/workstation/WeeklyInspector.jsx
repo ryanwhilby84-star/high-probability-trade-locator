@@ -74,14 +74,14 @@ function Metric({ label, value, className = '', title = '' }) {
   )
 }
 
-function FlowBadge({ p }) {
+function FlowBadge({ p, percentile }) {
   if (!p) return null
   const temp = p.temperature || 'neutral'
   const arrow = p.directionArrow || '·'
   const label = p.stateLabel || '—'
   const pct =
-    p.percentile != null && Number.isFinite(Number(p.percentile))
-      ? `${Math.round(Number(p.percentile))}th`
+    percentile != null && Number.isFinite(Number(percentile))
+      ? `${Math.round(Number(percentile))}th`
       : '—'
   return (
     <div
@@ -97,7 +97,7 @@ function FlowBadge({ p }) {
   )
 }
 
-function ParticipantColumn({ title, p }) {
+function ParticipantColumn({ title, p, rangeId = "3y" }) {
   if (!p) {
     return (
       <div className="cot-ws-insp-col">
@@ -107,8 +107,12 @@ function ParticipantColumn({ title, p }) {
     )
   }
   const temp = p.temperature || 'neutral'
+  const required = { '3y': 156, '5y': 260, '10y': 520, '15y': 780 }[rangeId]
+  const available = p.historyObservationCount ?? 0
+  const rawRank = rangeId === 'all' ? null : p.percentilesByWindow?.[rangeId]
+  const rank = required && available >= required && Number.isFinite(Number(rawRank)) && rawRank != null ? rawRank : null
   const pctile =
-    fmtPctile(p.percentile) === '—' ? 'Unavailable' : fmtPctile(p.percentile)
+    rank == null ? 'Insufficient history' : fmtPctile(rank)
   const pct4 =
     p.percentileChange4w == null || !Number.isFinite(Number(p.percentileChange4w))
       ? 'Unavailable'
@@ -116,16 +120,16 @@ function ParticipantColumn({ title, p }) {
   return (
     <div className={`cot-ws-insp-col cot-ws-insp-col--temp-${temp}`}>
       <h4 className="cot-ws-insp-col-title">{title}</h4>
-      <FlowBadge p={p} />
+      <FlowBadge p={p} percentile={rank} />
       <div className="cot-ws-insp-metrics">
         <Metric label="Net" value={fmtNum(p.net)} />
         <Metric label="1W" value={fmtSigned(p.change1w)} />
         <Metric label="4W" value={fmtSigned(p.change4w)} />
         <Metric label="12W" value={fmtSigned(p.change12w)} />
         <Metric
-          label="Net percentile"
-          value={pctile}
-          title="Expanding net-positioning percentile through this week (no look-ahead)"
+          label={`${rangeId.toUpperCase()} net percentile`}
+          value={rangeId === "all" ? "Select 3Y–15Y" : pctile}
+          title={`CFTC net positioning rank over ${rangeId.toUpperCase()} with full-window coverage required`}
         />
         <Metric
           label="1W pct movement"
@@ -207,6 +211,7 @@ export function WeeklyInspector({
   onSelectEvent,
   analysisOpen = false,
   onToggleAnalysis,
+  rangeId = "3y",
 }) {
   const [expanded, setExpanded] = React.useState(false)
 
@@ -337,9 +342,9 @@ export function WeeklyInspector({
           <BasicLookbackPanel week={week} />
 
           <div className="cot-ws-insp-columns" role="group" aria-label="Weekly breakdown">
-            <ParticipantColumn title="Commercial" p={week.commercial} />
-            <ParticipantColumn title="Non-Commercial" p={week.nonCommercial} />
-            <ParticipantColumn title="Non-Reportable" p={week.nonReportable} />
+            <ParticipantColumn title="Commercial" p={week.commercial} rangeId={rangeId} />
+            <ParticipantColumn title="Non-Commercial" p={week.nonCommercial} rangeId={rangeId} />
+            <ParticipantColumn title="Non-Reportable" p={week.nonReportable} rangeId={rangeId} />
             <div className="cot-ws-insp-col cot-ws-insp-col--cross">
               <h4 className="cot-ws-insp-col-title">Cross-Group</h4>
               <div className="cot-ws-insp-metrics">
