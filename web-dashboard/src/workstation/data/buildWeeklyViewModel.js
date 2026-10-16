@@ -216,6 +216,7 @@ function enrichFromInspectorPack(target, pack) {
   if (isNum(pack.four_week_change)) target.change4w = pack.four_week_change
   if (isNum(pack.twelve_week_change)) target.change12w = pack.twelve_week_change
   if (isNum(pack.percentile)) target.percentile = pack.percentile
+  if (pack.percentiles_by_window) target.percentilesByWindow = pack.percentiles_by_window
   if (isNum(pack.percentile_change_1w)) {
     target.percentileChange1w = pack.percentile_change_1w
   }
