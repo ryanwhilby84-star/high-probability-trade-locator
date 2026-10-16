@@ -1026,6 +1026,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
       )}
 
       <WeeklyInspector
+        rangeId={rangeId}
         week={inspectedWeek}
         open={inspectorOpen}
         selectedEventId={selectedEventId}
