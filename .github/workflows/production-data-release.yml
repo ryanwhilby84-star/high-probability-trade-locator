@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/production-data-release.yml'
+      - 'web-dashboard/src/workstation/WeeklyInspector.jsx'
+      - 'web-dashboard/src/workstation/CotWorkstation.jsx'
+      - 'src/hptl/cot/positioning_research_engine.py'
 
 concurrency:
   group: institutional-edge-data-release
