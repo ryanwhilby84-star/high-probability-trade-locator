@@ -488,6 +488,18 @@ export function buildWeeklyViewModel({
     )
     const nonReportable = participantFromRow(rows, i, 'retail_net', 'retail_wow')
 
+    // Point-in-time available COT observations for the selected market.
+    // Never label a partial history as a full 5Y/10Y/15Y percentile.
+    for (const [participant, key] of [
+      [commercial, 'commercial_net'],
+      [nonCommercial, 'institutional_net'],
+      [nonReportable, 'retail_net'],
+    ]) {
+      participant.historyObservationCount = rows.slice(0, i + 1).filter(
+        (r) => Number.isFinite(Number(r[key])) && r[key] != null,
+      ).length
+    }
+
     const inspResolved = resolveInspectorWeekForDate(inspectorByDate, date)
     const insp = inspResolved?.week || null
     if (insp) {
