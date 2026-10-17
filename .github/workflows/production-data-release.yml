@@ -45,9 +45,22 @@ jobs:
           test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN secret missing"; exit 1; }
           test -n "$VERCEL_ORG_ID" || { echo "VERCEL_ORG_ID secret missing"; exit 1; }
           test -n "$VERCEL_PROJECT_ID" || { echo "VERCEL_PROJECT_ID secret missing"; exit 1; }
-      - name: Verify Vercel authentication before expensive data processing
+      - name: Verify Vercel project access before expensive data processing
         run: |
-          npx --yes vercel@latest whoami --token="$VERCEL_TOKEN"
+          python - <<'PY'
+          import json, os, urllib.error, urllib.parse, urllib.request
+          project = urllib.parse.quote(os.environ["VERCEL_PROJECT_ID"], safe="")
+          team = urllib.parse.quote(os.environ["VERCEL_ORG_ID"], safe="")
+          url = f"https://api.vercel.com/v9/projects/{project}?teamId={team}"
+          req = urllib.request.Request(url, headers={"Authorization": "Bearer " + os.environ["VERCEL_TOKEN"]})
+          try:
+              with urllib.request.urlopen(req, timeout=25) as resp:
+                  payload = json.load(resp)
+              print("Vercel project access verified:", payload.get("name", "project"), payload.get("id", ""))
+          except urllib.error.HTTPError as exc:
+              print(f"::error::Vercel project API returned HTTP {exc.code}; check token scope and project/team IDs")
+              raise SystemExit(1)
+          PY
       - name: Verify price-provider credentials before data processing
         env:
           OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
