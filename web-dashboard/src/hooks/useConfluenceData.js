@@ -171,7 +171,7 @@ async function fetchConfluenceHistory() {
   const buffers = []
   let total = 0
   for (const part of manifest.parts) {
-    if (!/^confluence_history_part_\\d{3}\\.bin$/.test(part.file)) throw new Error('Invalid confluence part name')
+    if (!/^confluence_history_part_\d{3}\.bin$/.test(part.file)) throw new Error('Invalid confluence part name')
     const response = await fetch(`/data/${part.file}`)
     if (!response.ok) throw new Error(`Confluence chunk ${part.file} HTTP ${response.status}`)
     const bytes = new Uint8Array(await response.arrayBuffer())
