@@ -235,7 +235,9 @@ jobs:
               "target": "production",
               "files": files,
               "version": 2,
-              "projectSettings": {"framework": None, "rootDirectory": None, "buildCommand": None, "outputDirectory": None}
+              "projectSettings": {"framework": None, "rootDirectory": None, "buildCommand": None, "outputDirectory": None, "installCommand": None},
+              "build": {"env": {}},
+              "meta": {"hptl_prebuilt_output": "1"}
           }).encode()
           url = f"https://api.vercel.com/v13/deployments?teamId={team}"
           req = urllib.request.Request(url, data=payload, headers={
