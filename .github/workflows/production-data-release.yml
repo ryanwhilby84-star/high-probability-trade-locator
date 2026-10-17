@@ -262,6 +262,20 @@ jobs:
                   print("Vercel production deployment READY")
                   break
               if ready in ("ERROR", "CANCELED"):
+                  print("::error::Vercel deployment state:", ready)
+                  print("Deployment error code:", state.get("errorCode"))
+                  print("Deployment error message:", state.get("errorMessage"))
+                  events_url = f"https://api.vercel.com/v3/deployments/{deployment_id}/events?teamId={team}&limit=100"
+                  try:
+                      with urllib.request.urlopen(urllib.request.Request(events_url, headers=headers), timeout=25) as events_response:
+                          event_data = json.load(events_response)
+                      events = event_data if isinstance(event_data, list) else event_data.get("events", [])
+                      for event in events[-30:]:
+                          message = event.get("text") or event.get("message") or event.get("payload", {}).get("text") or ""
+                          if message:
+                              print("Vercel build event:", str(message)[:800])
+                  except Exception as log_error:
+                      print("Could not fetch Vercel build events:", str(log_error))
                   raise SystemExit("Vercel deployment failed: " + str(ready))
           else:
               raise SystemExit("Vercel deployment did not become READY within 10 minutes")
