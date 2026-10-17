@@ -175,6 +175,14 @@ jobs:
           for path in sorted(root.rglob("*")):
               if not path.is_file():
                   continue
+              file_size = path.stat().st_size
+              print(f"Deployment asset: {path.relative_to(root)} ({file_size / 1048576:.1f} MiB)", flush=True)
+              if file_size > 95 * 1024 * 1024:
+                  raise SystemExit(
+                      f"Deployment asset exceeds Vercel's 100 MB file limit: "
+                      f"{path.relative_to(root)} ({file_size / 1048576:.1f} MiB). "
+                      "Move this dataset to external storage or split it without losing history."
+                  )
               data = path.read_bytes()
               sha = hashlib.sha1(data).hexdigest()
               upload_url = f"https://api.vercel.com/v2/files?teamId={team}"
