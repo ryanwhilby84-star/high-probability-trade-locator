@@ -163,6 +163,33 @@ jobs:
           PY
           mkdir -p .vercel/output/static
           cp -a dist/. .vercel/output/static/
+          # Split the large historical confluence JSON into static chunks below Vercel's 100 MB/file cap.
+          # Preserve every byte and verify the reconstruction digest before deployment.
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          folder = Path(".vercel/output/static/data")
+          original = folder / "confluence_history_latest.json"
+          if not original.is_file():
+              raise SystemExit("Missing confluence history in compiled dashboard")
+          chunk_bytes = 32 * 1024 * 1024
+          digest = hashlib.sha256()
+          parts = []
+          total = 0
+          with original.open("rb") as source:
+              for index, chunk in enumerate(iter(lambda: source.read(chunk_bytes), b"")):
+                  name = f"confluence_history_part_{index:03d}.bin"
+                  (folder / name).write_bytes(chunk)
+                  digest.update(chunk)
+                  parts.append({"file": name, "size": len(chunk)})
+                  total += len(chunk)
+          if not parts:
+              raise SystemExit("Confluence history is empty")
+          manifest = {"version": 1, "total_bytes": total, "sha256": digest.hexdigest(), "parts": parts}
+          (folder / "confluence_history_manifest.json").write_text(json.dumps(manifest))
+          original.unlink()
+          print(f"Split confluence history: {total / 1048576:.1f} MiB into {len(parts)} parts; sha256={digest.hexdigest()}")
+          PY
           # The CLI resolves a user profile even for valid team-scoped API tokens.
           # Deploy the validated static output directly through the Vercel REST API.
           python - <<'PY'
