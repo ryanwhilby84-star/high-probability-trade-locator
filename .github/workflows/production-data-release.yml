@@ -227,7 +227,7 @@ jobs:
                   if exc.code != 409:
                       print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
                       raise SystemExit(1)
-              files.append({"file": str(path.relative_to(root)).replace("\\\\", "/"), "sha": sha, "size": len(data)})
+              files.append({"file": "web-dashboard/.vercel/output/" + path.relative_to(root).as_posix(), "sha": sha, "size": len(data)})
           print(f"Uploaded {len(files)} validated prebuilt files")
           payload = json.dumps({
               "name": "high-probability-trade-locator",
