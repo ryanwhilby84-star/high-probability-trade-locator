@@ -36,6 +36,8 @@ jobs:
         env:
           PYTHONPATH: src
           HPTL_SKIP_LIVE_FEEDS: "1"
+          HPTL_STAGE_TIMEOUT_S: "900"
+          PYTHONUNBUFFERED: "1"
         run: python -m hptl.cot.run_weekly_update
 
       - name: Upload weekly run logs
