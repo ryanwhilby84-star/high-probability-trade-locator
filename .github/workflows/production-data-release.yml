@@ -229,13 +229,32 @@ jobs:
                       raise SystemExit(1)
               files.append({"file": "web-dashboard/.vercel/output/" + path.relative_to(root).as_posix(), "sha": sha, "size": len(data)})
           print(f"Uploaded {len(files)} validated prebuilt files")
+          # The REST deployments endpoint performs a remote build unless the project
+          # is configured as a static site. Serve the already compiled output directly.
+          settings_url = f"https://api.vercel.com/v9/projects/{urllib.parse.quote(os.environ['VERCEL_PROJECT_ID'])}?teamId={team}"
+          settings = json.dumps({
+              "framework": None,
+              "rootDirectory": "web-dashboard",
+              "installCommand": "echo 'Prebuilt static deployment: no dependencies'",
+              "buildCommand": "echo 'Prebuilt static deployment: no build'",
+              "outputDirectory": ".vercel/output/static"
+          }).encode()
+          settings_req = urllib.request.Request(settings_url, data=settings, headers={
+              **headers, "Content-Type": "application/json"
+          }, method="PATCH")
+          try:
+              with urllib.request.urlopen(settings_req, timeout=40) as response:
+                  print("Vercel static deployment settings updated:", response.status)
+          except urllib.error.HTTPError as exc:
+              print("::error::Cannot configure Vercel static deployment:", exc.code, exc.read(1000).decode("utf-8", "replace"))
+              raise SystemExit(1)
           payload = json.dumps({
               "name": "high-probability-trade-locator",
               "project": os.environ["VERCEL_PROJECT_ID"],
               "target": "production",
               "files": files,
               "version": 2,
-              "projectSettings": {"framework": None, "rootDirectory": None, "buildCommand": None, "outputDirectory": None, "installCommand": None},
+              "projectSettings": {"framework": None, "rootDirectory": "web-dashboard", "buildCommand": "echo prebuilt", "installCommand": "echo prebuilt", "outputDirectory": ".vercel/output/static"},
               "build": {"env": {}},
               "meta": {"hptl_prebuilt_output": "1"}
           }).encode()
