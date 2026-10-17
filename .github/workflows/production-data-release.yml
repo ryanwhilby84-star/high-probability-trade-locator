@@ -166,15 +166,34 @@ jobs:
           # The CLI resolves a user profile even for valid team-scoped API tokens.
           # Deploy the validated static output directly through the Vercel REST API.
           python - <<'PY'
-          import base64, json, os, pathlib, urllib.error, urllib.parse, urllib.request
+          import hashlib, json, os, pathlib, urllib.error, urllib.parse, urllib.request
           root = pathlib.Path(".vercel/output")
+          token = os.environ["VERCEL_TOKEN"]
+          team = urllib.parse.quote(os.environ["VERCEL_ORG_ID"])
+          headers = {"Authorization": "Bearer " + token}
           files = []
           for path in sorted(root.rglob("*")):
-              if path.is_file():
-                  files.append({"file": str(path.relative_to(root)).replace("\\", "/"),
-                                "data": base64.b64encode(path.read_bytes()).decode("ascii"),
-                                "encoding": "base64"})
-          print(f"Uploading validated prebuilt output: {len(files)} files")
+              if not path.is_file():
+                  continue
+              data = path.read_bytes()
+              sha = hashlib.sha1(data).hexdigest()
+              upload_url = f"https://api.vercel.com/v2/files?teamId={team}"
+              req = urllib.request.Request(upload_url, data=data, headers={
+                  **headers,
+                  "Content-Type": "application/octet-stream",
+                  "Content-Length": str(len(data)),
+                  "x-vercel-digest": sha,
+              }, method="POST")
+              try:
+                  with urllib.request.urlopen(req, timeout=180):
+                      pass
+              except urllib.error.HTTPError as exc:
+                  # An existing upload with the same digest may be reusable.
+                  if exc.code != 409:
+                      print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
+                      raise SystemExit(1)
+              files.append({"file": str(path.relative_to(root)).replace("\\\\", "/"), "sha": sha, "size": len(data)})
+          print(f"Uploaded {len(files)} validated prebuilt files")
           payload = json.dumps({
               "name": "high-probability-trade-locator",
               "project": os.environ["VERCEL_PROJECT_ID"],
@@ -183,10 +202,9 @@ jobs:
               "version": 2,
               "projectSettings": {"framework": None}
           }).encode()
-          url = "https://api.vercel.com/v13/deployments?teamId=" + urllib.parse.quote(os.environ["VERCEL_ORG_ID"])
+          url = f"https://api.vercel.com/v13/deployments?teamId={team}"
           req = urllib.request.Request(url, data=payload, headers={
-              "Authorization": "Bearer " + os.environ["VERCEL_TOKEN"],
-              "Content-Type": "application/json"
+              **headers, "Content-Type": "application/json"
           }, method="POST")
           try:
               with urllib.request.urlopen(req, timeout=180) as resp:
