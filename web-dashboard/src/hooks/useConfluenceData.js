@@ -160,6 +160,35 @@ async function fetchJsonText(url) {
 
 
 
+async function fetchConfluenceHistory() {
+  const manifestResponse = await fetch('/data/confluence_history_manifest.json')
+  if (manifestResponse.status === 404) {
+    return fetchJsonText('/data/confluence_history_latest.json')
+  }
+  if (!manifestResponse.ok) throw new Error(`Confluence manifest HTTP ${manifestResponse.status}`)
+  const manifest = await manifestResponse.json()
+  if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error('Invalid confluence chunk manifest')
+  const buffers = []
+  let total = 0
+  for (const part of manifest.parts) {
+    if (!/^confluence_history_part_\\d{3}\\.bin$/.test(part.file)) throw new Error('Invalid confluence part name')
+    const response = await fetch(`/data/${part.file}`)
+    if (!response.ok) throw new Error(`Confluence chunk ${part.file} HTTP ${response.status}`)
+    const bytes = new Uint8Array(await response.arrayBuffer())
+    if (bytes.byteLength !== part.size) throw new Error(`Confluence chunk size mismatch: ${part.file}`)
+    buffers.push(bytes)
+    total += bytes.byteLength
+  }
+  if (total !== manifest.total_bytes) throw new Error('Confluence dataset size mismatch')
+  const merged = new Uint8Array(total)
+  let offset = 0
+  for (const bytes of buffers) {
+    merged.set(bytes, offset)
+    offset += bytes.byteLength
+  }
+  return new TextDecoder('utf-8', { fatal: true }).decode(merged)
+}
+
 function macroMapsFromPayload(payload) {
 
   const embedded = payload?.macro_relationship_maps
@@ -442,7 +471,7 @@ export function useConfluenceData() {
 
         const [confluenceText, mapsText] = await Promise.all([
 
-          fetchJsonText('/data/confluence_history_latest.json'),
+          fetchConfluenceHistory(),
 
           fetchJsonText('/data/macro_relationship_maps_latest.json').catch(() => null),
 
