@@ -157,7 +157,7 @@ def pack_group_week(state: dict[str, Any], nets: list[float | None]) -> dict[str
         "four_week_change": _finite(v4.get("net_change")),
         "twelve_week_change": _finite(v12.get("net_change")),
         "percentile": pct,
-        "percentiles_by_window": {window: _finite((state.get("percentiles") or {}).get(window)) for window in ("3y", "5y", "10y", "15y")},
+        "percentiles_by_window": {window: _finite((state.get("percentiles") or {}).get("long_history" if window == "all" else window)) for window in ("3y", "5y", "10y", "15y", "all")},
         "percentile_change_1w": pct_1w,
         "percentile_change_4w": pct_4w,
         "percentile_change_12w": pct_12w,
