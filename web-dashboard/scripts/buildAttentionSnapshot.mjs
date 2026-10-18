@@ -32,8 +32,14 @@ export function buildAttentionSnapshot(root) {
     for (const [group, p] of [['commercial', c], ['noncommercial', nc], ['nonreportable', nr]]) {
       if (p != null && (!valid(p) || p < 0 || p > 100)) throw new Error('Invalid ' + group + ' percentile for ' + name)
     }
+    const windowIndices = { "3y": 4, "5y": 12, "10y": 14, "15y": 13, "all": 15 }
+    const percentilesByWindow = Object.fromEntries(Object.entries(windowIndices).map(([window, index]) => [window, {
+      c: valid(cGroup[index]) ? cGroup[index] : null,
+      nc: valid(ncGroup[index]) ? ncGroup[index] : null,
+      nr: valid(nrGroup[index]) ? nrGroup[index] : null,
+    }]))
     eligible.push({
-      name, date, c, nc, nr,
+      name, date, c, nc, nr, percentilesByWindow,
       change: valid(cGroup[1]) ? cGroup[1] : null,
       ncChange: valid(ncGroup[1]) ? ncGroup[1] : null,
     })
@@ -51,6 +57,7 @@ export function buildAttentionSnapshot(root) {
   )
   writeFileSync(target, JSON.stringify({
     schema: 2,
+    availableLookbacks: ["3y", "5y", "10y", "15y", "all"],
     percentile_source: 'cot_weekly_inspector_latest.json',
     percentile_measure: doc.measure,
     source_generated_at: doc.generated_at || null,
