@@ -19,6 +19,29 @@ jobs:
           node-version: '20'
           cache: npm
           cache-dependency-path: web-dashboard/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install seasonality engine dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Regenerate complete seasonal research without deploying
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/run_seasonality_workstation_export.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc = json.loads(Path("web-dashboard/public/data/seasonality_workstation_latest.json").read_text())
+          markets = doc.get("markets", {})
+          good = [m for m in markets.values() if m.get("status") == "ok"
+                  and m.get("seasonal_roadmap", {}).get("available")
+                  and m.get("weekly_roadmap")]
+          print(f"Complete roadmap packs: {len(good)}/{len(markets)}")
+          if not good:
+              raise SystemExit("No complete seasonal roadmaps generated")
+          PY
       - name: Verify seasonal windows and roadmap contracts
         working-directory: web-dashboard
         run: |
