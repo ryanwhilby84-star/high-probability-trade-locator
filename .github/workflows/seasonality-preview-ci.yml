@@ -1,5 +1,7 @@
 name: Seasonality Preview Validation
 on:
+  push:
+    branches: ['fix/isolated-seasonality-contract-20261018']
   pull_request:
     paths:
       - 'web-dashboard/src/pages/SeasonalityWorkstationPage.jsx'
