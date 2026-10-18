@@ -173,7 +173,7 @@ jobs:
           original = folder / "confluence_history_latest.json"
           if not original.is_file():
               raise SystemExit("Missing confluence history in compiled dashboard")
-          chunk_bytes = 32 * 1024 * 1024
+          chunk_bytes = 8 * 1024 * 1024
           digest = hashlib.sha256()
           parts = []
           total = 0
@@ -220,14 +220,24 @@ jobs:
                   "Content-Length": str(len(data)),
                   "x-vercel-digest": sha,
               }, method="POST")
-              try:
-                  with urllib.request.urlopen(req, timeout=180):
-                      pass
-              except urllib.error.HTTPError as exc:
-                  # An existing upload with the same digest may be reusable.
-                  if exc.code != 409:
-                      print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
-                      raise SystemExit(1)
+              import time
+              for attempt in range(4):
+                  try:
+                      with urllib.request.urlopen(req, timeout=120):
+                          pass
+                      break
+                  except urllib.error.HTTPError as exc:
+                      if exc.code == 409:
+                          break
+                      if exc.code not in (408, 429, 500, 502, 503, 504) or attempt == 3:
+                          print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
+                          raise
+                      print(f"Transient Vercel HTTP {exc.code}; retrying asset upload {attempt + 1}/4", flush=True)
+                  except (TimeoutError, urllib.error.URLError, ConnectionError) as exc:
+                      if attempt == 3:
+                          raise
+                      print(f"Transient asset upload connection error; retrying {attempt + 1}/4: {exc}", flush=True)
+                  time.sleep(min(20, 2 ** (attempt + 1)))
               files.append({"file": path.relative_to(root).as_posix(), "sha": sha, "size": len(data)})
           print(f"Uploaded {len(files)} validated prebuilt files")
           # The REST deployments endpoint performs a remote build unless the project
