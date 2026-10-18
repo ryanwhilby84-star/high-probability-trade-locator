@@ -1,4 +1,5 @@
 import React from 'react'
+import { SeasonalWindowsBoard } from './SeasonalWindowsBoard.jsx'
 import {
   NormalisedSeasonalityChart,
   PriceForecastChart,
@@ -257,6 +258,7 @@ export function SeasonalityWorkstation({
   loading,
   error,
 }) {
+  const [windowsOpen, setWindowsOpen] = React.useState(true)
   const [advancedOpen, setAdvancedOpen] = React.useState(false)
   const [seasonalView, setSeasonalView] = React.useState(() =>
     defaultSeasonalView(payload?.display_defaults),
@@ -345,6 +347,11 @@ export function SeasonalityWorkstation({
       data-active-methodology={activeMethodologyLabel}
     >
       <div className="sws-main">
+        <div className="sws-controls">
+          <button type="button" className={`sws-btn${windowsOpen ? ' is-active' : ''}`} onClick={() => setWindowsOpen(v => !v)}>{windowsOpen ? 'Hide Seasonal Windows' : 'Show Seasonal Windows'}</button>
+        </div>
+        {windowsOpen ? <SeasonalWindowsBoard marketId={marketId} windows={payload.turning_windows || []} /> : null}
+
         <div className="sws-header-meta">
           <Meta label="Instrument" value={payload.instrument_id || marketId} />
           <Meta label="Price series" value={priceId} />
