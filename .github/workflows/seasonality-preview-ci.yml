@@ -51,6 +51,12 @@ jobs:
         run: |
           npm ci
           npm run build
+      - name: Publish isolated preview build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: seasonality-preview-build
+          path: web-dashboard/dist/
+          retention-days: 7
       - name: Check seasonal archive packaged
         run: |
           test -s web-dashboard/dist/data/seasonality_workstation_latest.json
