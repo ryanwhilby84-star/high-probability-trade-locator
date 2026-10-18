@@ -1,7 +1,12 @@
 """Audit exported participant net positions and rolling percentiles against the COT chart dataset."""
 import json
 from pathlib import Path
-from hptl.cot.positioning_percentiles import empirical_percentile_rank
+from hptl.cot.positioning_percentiles import net_range_pct
+
+def range_percentile(values, current):
+    if current is None or len(values) < 2 or max(values) == min(values):
+        return None
+    return round(net_range_pct(current, min(values), max(values)), 2)
 from hptl.cot.weekly_inspector_export import _load_cot3y
 
 def main():
@@ -23,12 +28,12 @@ def main():
                 actual_net = packed[group_idx][0]
                 assert (value is None and actual_net is None) or (value is not None and actual_net is not None and abs(float(value) - float(actual_net)) < 0.001), (name, raw["date"], key, "net", value, actual_net)
                 window = [float(r[key]) for r in series[max(0, i - 155):i + 1] if r.get(key) is not None]
-                expected = round(float(empirical_percentile_rank(window, float(value))), 2) if value is not None and window else None
+                expected = range_percentile(window, float(value)) if value is not None else None
                 actual = packed[group_idx][4]
                 assert (expected is None and actual is None) or (expected is not None and actual is not None and abs(expected - float(actual)) <= 0.02), (name, raw["date"], key, "percentile", expected, actual)
                 for width, offset in ((260, 12), (520, 14), (780, 13)):
                     history = [float(r[key]) for r in series[max(0, i - width + 1):i + 1] if r.get(key) is not None]
-                    expected_extra = round(float(empirical_percentile_rank(history, float(value))), 2) if value is not None and history else None
+                    expected_extra = range_percentile(history, float(value)) if value is not None else None
                     actual_extra = packed[group_idx][offset]
                     assert (expected_extra is None and actual_extra is None) or (expected_extra is not None and actual_extra is not None and abs(expected_extra - float(actual_extra)) <= 0.02), (name, raw["date"], key, width, expected_extra, actual_extra)
                     checks += 1
