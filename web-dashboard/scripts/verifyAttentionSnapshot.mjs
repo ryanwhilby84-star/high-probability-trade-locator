@@ -16,6 +16,14 @@ for (const row of attention.rows) {
     if (actual !== group?.[4]) failures.push(row.name + ' ' + label + ': ' + actual + ' vs ' + group?.[4])
     checked++
   }
+  for (const [window, index] of Object.entries({ "3y": 4, "5y": 12, "10y": 14, "15y": 13, "all": 15 })) {
+    for (const [label, group, key] of [["commercial", week[1], "c"], ["noncommercial", week[2], "nc"], ["nonreportable", week[3], "nr"]]) {
+      const expected = group?.[index] ?? null
+      const actual = row.percentilesByWindow?.[window]?.[key] ?? null
+      if (expected !== actual) failures.push(row.name + " " + window + " " + label + ": " + actual + " vs " + expected)
+      checked++
+    }
+  }
   if (row.change !== (typeof week[1]?.[1] === 'number' ? week[1][1] : null)) failures.push(row.name + ': commercial change mismatch')
   if (row.ncChange !== (typeof week[2]?.[1] === 'number' ? week[2][1] : null)) failures.push(row.name + ': noncommercial change mismatch')
   if (row.commercialExtreme !== (row.c != null && (row.c >= 80 || row.c <= 20))) failures.push(row.name + ': commercial alert mismatch')
