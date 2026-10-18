@@ -118,6 +118,24 @@ jobs:
           PY
       - name: Audit all COT graph nets and 156-week percentiles against one history source
         run: python scripts/audit_cot_chart_percentile_parity.py
+      - name: Refresh and validate Seasonality Workstation archive
+        run: |
+          python scripts/run_seasonality_workstation_export.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("web-dashboard/public/data/seasonality_workstation_latest.json")
+          doc = json.loads(p.read_text())
+          summary = doc.get("summary") or {}
+          ok = int(summary.get("markets_ok") or 0)
+          total = int(summary.get("markets_total") or 0)
+          print(f"Seasonality archive: {ok}/{total} markets valid; generated {doc.get('generated_at')}")
+          if not total or not ok:
+              raise SystemExit("FAIL: Seasonality archive has no valid markets")
+          for name, market in (doc.get("markets") or {}).items():
+              if market.get("status") == "ok" and not (market.get("lookbacks") or {}).get("15Y"):
+                  raise SystemExit(f"FAIL: {name} has no default 15Y seasonality lookback")
+          PY
       - name: Install frontend dependencies
         run: npm ci --prefix web-dashboard
       - name: Verify frontend and required data
@@ -130,7 +148,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/cot_attention_80_20_latest.json
+          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/cot_attention_80_20_latest.json web-dashboard/public/data/seasonality_workstation_latest.json
           if ! git diff --cached --quiet; then
             git commit -m "Publish fresh validated COT percentile snapshots [skip ci]"
             # Generated price and diagnostic files may remain modified after the build.
