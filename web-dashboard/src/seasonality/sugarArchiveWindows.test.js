@@ -46,3 +46,18 @@ test('window search honours minimum sample and rejects zero-length windows', () 
   assert(windows.every((x) => x.n >= 15))
   assert(windows.every((x, i) => i === 0 || x.hitRate <= windows[i - 1].hitRate))
 })
+
+test('ranked Sugar candidates do not double-count heavily overlapping calendar windows', () => {
+  const windows = findSugarWindows(archive, '10-03')
+  const day = (md) => Date.parse(`2001-${md}T00:00:00Z`)
+  for (let i = 0; i < windows.length; i++) {
+    for (let j = i + 1; j < windows.length; j++) {
+      const a = windows[i], b = windows[j]
+      const a0 = day(a.start), b0 = day(b.start)
+      const a1 = a0 + a.calendarDays * 86400000
+      const b1 = b0 + b.calendarDays * 86400000
+      const overlap = Math.max(0, Math.min(a1, b1) - Math.max(a0, b0))
+      assert(overlap / Math.min(a1 - a0, b1 - b0) < 0.75, `duplicate windows: ${a.start}-${a.end} and ${b.start}-${b.end}`)
+    }
+  }
+})
