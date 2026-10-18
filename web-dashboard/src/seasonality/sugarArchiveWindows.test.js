@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import { prepareSugarArchive, evaluateSugarWindow, findSugarWindows } from './sugarArchiveWindows.js'
+import { prepareSugarArchive, evaluateSugarWindow, findSugarWindows, scanSugarCalendar } from './sugarArchiveWindows.js'
 
 const archive = prepareSugarArchive(JSON.parse(fs.readFileSync(new URL('../../public/data/sugar_archive_daily.json', import.meta.url), 'utf8')))
 
@@ -60,4 +60,18 @@ test('ranked Sugar candidates do not double-count heavily overlapping calendar w
       assert(overlap / Math.min(a1 - a0, b1 - b0) < 0.75, `duplicate windows: ${a.start}-${a.end} and ${b.start}-${b.end}`)
     }
   }
+})
+
+test('full calendar scanner returns ranked, qualified directional windows', () => {
+  const windows = scanSugarCalendar(archive, { stepDays: 14, minYears: 15, minHitRate: 60, limit: 12 })
+  assert(windows.length > 0)
+  assert(windows.length <= 12)
+  for (const w of windows) {
+    assert(['long', 'short'].includes(w.direction))
+    assert(w.n >= 15)
+    assert(w.hitRate >= 60)
+    assert(w.median > 0)
+    assert(w.hits <= w.n)
+  }
+  for (let i = 1; i < windows.length; i++) assert(windows[i - 1].hitRate >= windows[i].hitRate)
 })
