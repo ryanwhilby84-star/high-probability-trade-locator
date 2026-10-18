@@ -1,0 +1,44 @@
+name: Diagnose Institutional Edge live feed
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/diagnose-live-feed.yml']
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check live hosts and Vercel project aliases
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, urllib.error, urllib.parse
+          hosts = [
+            "https://institutional.ztack.co.uk",
+            "https://high-probability-trade-locator-seven.vercel.app",
+            "https://high-probability-trade-locator-o91bllee9.vercel.app"
+          ]
+          for host in hosts:
+              for path in ("/", "/data/confluence_history_manifest.json", "/data/cot_weekly_inspector_latest.json", "/data/confluence_history_part_000.bin"):
+                  try:
+                      req = urllib.request.Request(host + path, headers={"User-Agent":"InstitutionalEdgeFeedProbe/1.0"})
+                      with urllib.request.urlopen(req, timeout=12) as r:
+                          print(host, path, r.status, r.headers.get("Content-Type"), r.headers.get("Content-Length"), "final", r.url)
+                  except Exception as e:
+                      print(host, path, "ERROR", str(e))
+          token = os.getenv("VERCEL_TOKEN")
+          team = urllib.parse.quote(os.getenv("VERCEL_ORG_ID",""))
+          project = urllib.parse.quote(os.getenv("VERCEL_PROJECT_ID",""))
+          if token and team and project:
+              url = f"https://api.vercel.com/v9/projects/{project}/domains?teamId={team}"
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url,headers={"Authorization":"Bearer "+token}),timeout=15) as r:
+                      domains=json.load(r)
+                  print("PROJECT DOMAINS:",json.dumps(domains)[:7000])
+              except Exception as e:
+                  print("PROJECT DOMAIN LOOKUP ERROR",str(e))
+          PY
