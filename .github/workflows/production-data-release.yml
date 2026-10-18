@@ -321,14 +321,20 @@ jobs:
         run: |
           python - <<'PY'
           import json, os, time, urllib.request
-          url = os.environ["PRODUCTION_URL"].rstrip("/") + "/data/confluence_history_latest.json"
+          url = os.environ["PRODUCTION_URL"].rstrip("/") + "/data/confluence_history_manifest.json"
           for attempt in range(12):
               try:
                   with urllib.request.urlopen(url + "?verify=" + str(int(time.time())), timeout=20) as response:
                       doc = json.load(response)
                   if not doc.get("parts") or not doc.get("total_bytes"):
-                      raise ValueError("Missing confluence records or report date")
-                  print("Production confluence verified:", len(doc["parts"]), "parts,", doc["total_bytes"], "bytes")
+                      raise ValueError("Missing confluence chunk manifest")
+                  for part in doc["parts"]:
+                      part_url = os.environ["PRODUCTION_URL"].rstrip("/") + "/data/" + part["file"]
+                      request = urllib.request.Request(part_url, method="HEAD")
+                      with urllib.request.urlopen(request, timeout=30) as chunk_response:
+                          if chunk_response.status != 200:
+                              raise ValueError("Confluence chunk unavailable: " + part["file"])
+                  print("Production confluence manifest and chunks verified:", len(doc["parts"]), "parts,", doc["total_bytes"], "bytes")
                   break
               except Exception as exc:
                   if attempt == 11:
