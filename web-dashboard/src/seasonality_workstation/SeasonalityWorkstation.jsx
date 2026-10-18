@@ -204,7 +204,7 @@ function IntegrityBlock({ marketId, payload, error }) {
   const weeklyReasons = payload?.weekly_roadmap?.quality_reasons || []
   return (
     <div className="sws-error">
-      <h2>Seasonality unavailable — data quality gate</h2>
+      <h2>{error ? 'Seasonality unavailable — data feed or lookback' : 'Seasonality unavailable — data quality gate'}</h2>
       <p>
         {payload?.message ||
           error ||
@@ -369,6 +369,8 @@ export function SeasonalityWorkstation({
                 type="button"
                 className={`sws-btn${lookback === lb ? ' is-active' : ''}`}
                 onClick={() => onLookback?.(lb)}
+                disabled={lb !== (payload?.selected_lookback || lookback)}
+                title={lb !== (payload?.selected_lookback || lookback) ? 'Complete roadmap for this lookback is not yet exported' : undefined}
               >
                 {lb === 'FULL' ? 'All' : lb}
               </button>
