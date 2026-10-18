@@ -35,7 +35,7 @@ export function SeasonalityWorkstationPage({
   const nextMarket =
     navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
 
-  const [lookback, setLookback] = React.useState('10Y')
+  const [lookback, setLookback] = React.useState('15Y')
   const [payload, setPayload] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState(null)
