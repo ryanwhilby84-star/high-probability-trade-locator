@@ -1,5 +1,11 @@
 name: COT percentile integrity checks
 on:
+  pull_request:
+    paths:
+      - "src/hptl/cot/**"
+      - "tests/**"
+      - "scripts/audit_cot_chart_percentile_parity.py"
+      - ".github/workflows/percentile-integrity-ci.yml"
   push:
     branches: [main]
     paths:
@@ -29,7 +35,7 @@ jobs:
       - name: Run percentile regression tests
         env:
           PYTHONPATH: src
-        run: python -m pytest tests/test_weekly_inspector_flow.py -q
+        run: python -m pytest tests/test_cot_range_percentiles.py tests/test_weekly_inspector_flow.py -q
       - name: Rebuild Inspector from checked-in COT history
         env:
           PYTHONPATH: src
@@ -37,6 +43,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Audit every market and COT lookback against chart source
+        env:
+          PYTHONPATH: src
+        run: python scripts/audit_cot_chart_percentile_parity.py
       - name: Verify all Attention Board percentiles
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
       - name: Reject stale COT test fixtures

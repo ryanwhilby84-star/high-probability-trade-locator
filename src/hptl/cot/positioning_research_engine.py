@@ -19,7 +19,7 @@ import math
 import statistics
 from typing import Any, Sequence
 
-from hptl.cot.positioning_percentiles import empirical_percentile_rank
+from hptl.cot.positioning_percentiles import empirical_percentile_rank, net_range_pct
 
 MIN_HISTORY = 52
 ROLLING_WINDOWS = {
@@ -86,12 +86,14 @@ def _finite(v: Any) -> float | None:
 
 
 def _pct(window: Sequence[float], value: float | None) -> float | None:
-    # n>=1: first observation ranks at 50 via empirical_percentile_rank; never
-    # withhold a percentile when the underlying net value exists.
-    if value is None or len(window) < 1:
+    # Range-normalized net positioning: the graph's minimum is 0 and maximum
+    # is 100 for the SAME point-in-time lookback. Never invent a reading for
+    # flat/insufficient history.
+    finite = [float(v) for v in window if _finite(v) is not None]
+    if value is None or len(finite) < 2:
         return None
-    p = empirical_percentile_rank(window, value)
-    return None if not math.isfinite(p) else round(float(p), 2)
+    p = net_range_pct(value, min(finite), max(finite))
+    return None if not math.isfinite(p) else round(max(0.0, min(100.0, p)), 2)
 
 
 def _median(vals: list[float]) -> float | None:

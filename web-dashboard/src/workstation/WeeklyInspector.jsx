@@ -110,9 +110,8 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
   // The chart series can be shorter than the independent historical COT export.
   // Trust only an explicitly exported rank for the selected window; the exporter
   // is responsible for coverage validation and leaves unsupported ranks null.
-  // ALL controls chart visibility, not a percentile lookback. Keep a clearly
-  // labelled 3Y baseline visible until the user selects a 3Y–15Y window.
-  const percentileRangeId = rangeId === 'all' ? '3y' : rangeId
+  // ALL uses the full available historical COT range, not the 3Y baseline.
+  const percentileRangeId = rangeId
   const rawRank = p.percentilesByWindow?.[percentileRangeId]
   const rank = rawRank != null && Number.isFinite(Number(rawRank)) && Number(rawRank) >= 0 && Number(rawRank) <= 100
     ? Number(rawRank)
@@ -133,9 +132,9 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
         <Metric label="4W" value={fmtSigned(p.change4w)} />
         <Metric label="12W" value={fmtSigned(p.change12w)} />
         <Metric
-          label={`${percentileRangeId.toUpperCase()} net percentile${rangeId === 'all' ? ' (ALL chart)' : ''}`}
+          label={`${percentileRangeId.toUpperCase()} net range percentile`}
           value={pctile}
-          title={`CFTC net positioning rank over ${percentileRangeId.toUpperCase()} with full-window coverage required; ALL changes chart visibility only`}
+          title={`CFTC net positioning min-max range over ${percentileRangeId.toUpperCase()} available history`}
         />
         <Metric
           label="1W pct movement"
