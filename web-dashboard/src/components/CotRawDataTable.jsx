@@ -35,6 +35,8 @@ export function CotRawDataTable({ rows, groupLabel }) {
   )
 
   const heat = React.useMemo(() => buildRawCotHeatRanges(sorted), [sorted])
+  const cellStyle = { color: "#f1f5f9", background: "transparent", fontWeight: 500 }
+  const deltaStyle = (v) => ({ ...cellStyle, color: Number(v) > 0 ? "#57e3ad" : Number(v) < 0 ? "#ff929a" : "#f1f5f9" })
 
   if (!sorted.length) {
     return (
@@ -47,42 +49,42 @@ export function CotRawDataTable({ rows, groupLabel }) {
   return (
     <div className="cot-raw-data-spreadsheet">
       <div className="wo-cot-table-wrap cot-raw-data-table-scroll">
-        <table className="wo-cot-table wo-cot-table-participation cot-raw-table">
-          <thead>
+        <table className="wo-cot-table wo-cot-table-participation cot-raw-table" style={{ background: "#111c27", color: "#f1f5f9" }}>
+          <th style={{ color: "#f8fafc", background: "#263747" }}ead>
             <tr>
-              <th>Date</th>
-              <th>Long</th>
-              <th>Short</th>
-              <th title="Change in longs vs prior COT week">Long Wk</th>
-              <th title="Change in shorts vs prior COT week">Short Wk</th>
-              <th>Total OI</th>
-              <th>% Long</th>
-              <th>% Short</th>
-              <th>Net</th>
-              <th title="Net change vs prior COT week">Net Wk</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>Date</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>Long</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>Short</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }} title="Change in longs vs prior COT week">Long Wk</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }} title="Change in shorts vs prior COT week">Short Wk</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>Total OI</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>% Long</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>% Short</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }}>Net</th>
+              <th style={{ color: "#f8fafc", background: "#263747" }} title="Net change vs prior COT week">Net Wk</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map((r) => (
-              <tr key={r.report_date} className="wo-cot-data-row">
-                <td className="wo-cot-date">{r.report_date}</td>
-                <td className={longLevelHeat(r.long, heat.long.min, heat.long.max).className}>{fmtNum(r.long)}</td>
-                <td className={shortLevelHeat(r.short, heat.short.min, heat.short.max).className}>{fmtNum(r.short)}</td>
-                <td className={signedDeltaHeat(r.weekly_change_long, heat.longDeltas).className}>
+              <tr key={r.report_date} className="wo-cot-data-row" style={{ background: sorted.indexOf(r) % 2 ? "#1b2937" : "#111c27" }}>
+                <td className="wo-cot-date" style={cellStyle}>{r.report_date}</td>
+                <td style={cellStyle}>{fmtNum(r.long)}</td>
+                <td style={cellStyle}>{fmtNum(r.short)}</td>
+                <td style={deltaStyle(r.weekly_change_long)}>
                   {fmtDelta(r.weekly_change_long)}
                 </td>
-                <td className={signedDeltaHeat(r.weekly_change_short, heat.shortDeltas, true).className}>
+                <td style={deltaStyle(r.weekly_change_short)}>
                   {fmtDelta(r.weekly_change_short)}
                 </td>
-                <td className={totalOiLevelHeat(r.open_interest, heat.oi.min, heat.oi.max).className}>
+                <td style={cellStyle}>
                   {fmtNum(r.open_interest)}
                 </td>
-                <td>{fmtPct(r.percent_long)}</td>
-                <td>{fmtPct(r.percent_short)}</td>
-                <td className={`wo-cot-net-col ${netLevelHeat(r.net, heat.net.min, heat.net.max).className}`}>
+                <td style={cellStyle}>{fmtPct(r.percent_long)}</td>
+                <td style={cellStyle}>{fmtPct(r.percent_short)}</td>
+                <td className="wo-cot-net-col" style={cellStyle}>
                   {fmtNum(r.net)}
                 </td>
-                <td className={signedDeltaHeat(r.weekly_change_net, heat.netDeltas).className}>
+                <td style={deltaStyle(r.weekly_change_net)}>
                   {fmtDelta(r.weekly_change_net)}
                 </td>
               </tr>
