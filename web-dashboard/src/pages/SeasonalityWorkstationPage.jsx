@@ -47,30 +47,23 @@ export function SeasonalityWorkstationPage({
     setPayload(null)
     const load = async () => {
       try {
-        const url = `/api/seasonality-workstation/${encodeURIComponent(marketId)}?lookback=${encodeURIComponent(lookback)}`
-        const response = await fetch(url, { cache: 'no-store' })
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const body = await response.json()
-        if (!body || body.status !== 'ok') throw new Error(body?.message || 'Invalid API response')
-        if (!cancelled) setPayload(body)
-      } catch (apiError) {
-        try {
-          const response = await fetch('/data/seasonality_workstation_latest.json', { cache: 'no-store' })
-          if (!response.ok) throw new Error(`HTTP ${response.status}`)
-          const archive = await response.json()
-          const market = archive?.markets?.[marketId]
-          const selection = market?.lookbacks?.[lookback]
-          if (market?.status !== 'ok' || market?.integrity?.status === 'FAIL' || !selection) throw new Error('No verified archived lookback')
-          if (!cancelled) setPayload({
-            ...market,
-            selected_lookback: lookback,
-            sample_size: selection.sample_size ?? selection.sample_years ?? market.sample_size,
-            seasonality: { ...market.seasonality, week_stats: selection.week_stats, index_paths: selection.index_paths, price_aligned: selection.price_aligned, historical_year_paths: selection.historical_year_paths, projection: selection.projection },
-            archived_generated_at: archive.generated_at,
-          })
-        } catch (archiveError) {
-          if (!cancelled) setError(`Live API failed: ${apiError.message}; archive failed: ${archiveError.message}`)
-        }
+        // Static Vercel hosting has no live Python seasonality API. Load the
+        // validated, regularly regenerated export directly instead.
+        const response = await fetch('/data/seasonality_workstation_latest.json', { cache: 'no-store' })
+        if (!response.ok) throw new Error(`Seasonality export HTTP ${response.status}`)
+        const archive = await response.json()
+        const market = archive?.markets?.[marketId]
+        const selection = market?.lookbacks?.[lookback]
+        if (market?.status !== 'ok' || market?.integrity?.status === 'FAIL' || !selection) throw new Error('No verified seasonality for selected market and lookback')
+        if (!cancelled) setPayload({
+          ...market,
+          selected_lookback: lookback,
+          sample_size: selection.sample_size ?? selection.sample_years ?? market.sample_size,
+          seasonality: { ...market.seasonality, week_stats: selection.week_stats, index_paths: selection.index_paths, price_aligned: selection.price_aligned, historical_year_paths: selection.historical_year_paths, projection: selection.projection },
+          archived_generated_at: archive.generated_at,
+        })
+      } catch (archiveError) {
+        if (!cancelled) setError(`Seasonality data unavailable: ${archiveError.message}`)
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -133,7 +126,7 @@ export function SeasonalityWorkstationPage({
       </header>
 
       <SugarArchivePanel marketId={marketId} />
-      {payload?.archived_generated_at ? <p role="status" style={{ margin: 16, padding: 12, color: "#ffe2a0", background: "#2b251a", border: "1px solid #b68b3d" }}>HISTORICAL DATA ONLY — exported {payload.archived_generated_at.slice(0, 10)}. Live API unavailable; not a current trading signal.</p> : null}
+      {payload?.archived_generated_at ? <p role="status" style={{ margin: 16, padding: 12, color: "#cbd5e1" }}>Seasonality data updated {payload.archived_generated_at.slice(0, 10)} · historical seasonal tendencies, not trading signals.</p> : null}
       <SeasonalityWorkstation
         marketId={marketId}
         payload={payload}
