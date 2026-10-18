@@ -43,6 +43,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Audit every market and COT lookback against chart source
+        env:
+          PYTHONPATH: src
+        run: python scripts/audit_cot_chart_percentile_parity.py
       - name: Verify all Attention Board percentiles
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
       - name: Reject stale COT test fixtures
