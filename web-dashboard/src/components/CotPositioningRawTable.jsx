@@ -25,22 +25,32 @@ export function CotPositioningRawTable({ series, groupTitle }) {
             <th>Week</th>
             <th>Long</th>
             <th>Short</th>
+            <th>Long Δ</th>
+            <th>Short Δ</th>
             <th>Net</th>
+            <th>Net Δ</th>
             <th>% long</th>
             <th>% short</th>
           </tr>
         </thead>
         <tbody>
-          {[...series].reverse().map((row) => (
+          {[...series].reverse().map((row, index, newestFirst) => { 
+            const previous = newestFirst[index + 1]
+            const change = (key) => Number.isFinite(Number(row[key])) && row[key] != null && previous?.[key] != null && Number.isFinite(Number(previous[key])) ? Number(row[key]) - Number(previous[key]) : null
+            return (
             <tr key={row.cotDate || row.label}>
               <td>{row.label}</td>
               <td>{fmt(row.long)}</td>
               <td>{fmt(row.short)}</td>
+              <td>{fmt(change('long'))}</td>
+              <td>{fmt(change('short'))}</td>
               <td>{fmt(row.net)}</td>
+              <td>{fmt(change('net'))}</td>
               <td>{fmtPct(row.pctLong)}</td>
               <td>{fmtPct(row.pctShort)}</td>
             </tr>
-          ))}
+            )
+          })}
         </tbody>
       </table>
     </div>
