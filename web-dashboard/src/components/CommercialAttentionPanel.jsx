@@ -185,11 +185,20 @@ function AttentionCard({ row }) {
 
 function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored, error }) {
   const [showAll, setShowAll] = React.useState(false)
+  const [lookback, setLookback] = React.useState("all")
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
     const all = Array.isArray(historical?.rows) ? historical.rows : []
-    return { rows: radarEligibleOnly ? all.filter(v => isRadarEligible(v.name)) : all,
+    const selected = all.map(v => {
+      const p = v.percentilesByWindow?.[lookback]
+      if (!p) return null // Never display a misleading fallback percentile.
+      const c = p.c, nc = p.nc, nr = p.nr
+      return { ...v, c, nc, nr,
+        commercialExtreme: c != null && (c >= 80 || c <= 20),
+        retailExtreme: nr != null && (nr >= 80 || nr <= 20) }
+    }).filter(Boolean)
+    return { rows: radarEligibleOnly ? selected.filter(v => isRadarEligible(v.name)) : selected,
       latestDate: historical?.latestDate || null, eligibleCount: historical?.eligibleCount || 0 }
-  }, [historical, radarEligibleOnly])
+  }, [historical, radarEligibleOnly, lookback])
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   const displayed = showAll ? rows : extremes
@@ -202,7 +211,11 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
       </div>
       <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
     </div>
-    <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+      <label style={{ color: '#cfd3d7', fontSize: 12 }} htmlFor="attention-lookback">Inspector lookback</label>
+      <select id="attention-lookback" value={lookback} onChange={e => setLookback(e.target.value)} style={{ background: '#171a1e', color: '#fff', padding: '8px', borderRadius: 6 }}>
+        {[["3y","3Y"],["5y","5Y"],["10y","10Y"],["15y","15Y"],["all","ALL"]].map(([id,label]) => <option key={id} value={id}>{label}</option>)}
+      </select>
       <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} style={{ padding: '8px 14px', background: !showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>80/20 alerts ({isLoading ? '…' : extremes.length})</button>
       <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} style={{ padding: '8px 14px', background: showAll ? '#276a80' : '#1d2b39', border: '1px solid #456176', borderRadius: 7, color: '#fff', cursor: 'pointer' }}>All positioning ({isLoading ? '…' : rows.length})</button>
     </div>
@@ -227,7 +240,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
           <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
         </article>)}
       </div>}
-    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>Percentile rank over up to 156 available COT weeks. Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
+    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>Net-position min-max range percentile for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
     <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#9bd84d', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
   </section>
 }
