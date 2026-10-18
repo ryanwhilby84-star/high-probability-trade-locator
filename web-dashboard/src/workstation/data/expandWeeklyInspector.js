@@ -90,7 +90,7 @@ function expandGroup(arr) {
     four_week_change: a[2],
     twelve_week_change: a[3],
     percentile: a[4],
-    percentiles_by_window: { "3y": a[4], "5y": a[12] ?? null, "10y": a[14] ?? null, "15y": a[13] ?? null },
+    percentiles_by_window: { "3y": a[4], "5y": a[12] ?? null, "10y": a[14] ?? null, "15y": a[13] ?? null, "all": a[15] ?? null },
     percentile_change_1w: a[5],
     percentile_change_4w: a[6],
     percentile_change_12w: a[7],
