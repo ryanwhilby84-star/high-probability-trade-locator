@@ -35,7 +35,7 @@ export function SeasonalityWorkstationPage({
   const nextMarket =
     navIndex >= 0 && navIndex < navMarkets.length - 1 ? navMarkets[navIndex + 1] : null
 
-  const [lookback, setLookback] = React.useState('15Y')
+  const [lookback, setLookback] = React.useState('10Y')
   const [payload, setPayload] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState(null)
@@ -62,6 +62,9 @@ export function SeasonalityWorkstationPage({
         const exportedLookback = market.selected_lookback ?? archive.default_lookback ?? '15Y'
         if (lookback !== exportedLookback) {
           throw new Error(`The ${lookback} seasonal roadmap is not exported yet (available complete roadmap: ${exportedLookback}).`)
+        }
+        if (!market.seasonal_roadmap?.available || !market.weekly_roadmap) {
+          throw new Error('Seasonal roadmap is missing from the archived export; regenerate the complete seasonality research pack before previewing.')
         }
         if (!cancelled) setPayload({
           ...market,
