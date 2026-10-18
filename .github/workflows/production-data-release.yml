@@ -307,7 +307,7 @@ jobs:
         with:
           name: institutional-edge-release-diagnostics
           path: |
-            web-dashboard/public/data/confluence_history_latest.json
+            web-dashboard/public/data/confluence_history_manifest.json
             web-dashboard/public/data/cot_commercial_attention_latest.json
             web-dashboard/public/data/cot_weekly_inspector_latest.json
             web-dashboard/public/data/prices_latest.json
@@ -325,9 +325,9 @@ jobs:
               try:
                   with urllib.request.urlopen(url + "?verify=" + str(int(time.time())), timeout=20) as response:
                       doc = json.load(response)
-                  if not doc.get("records") or not doc.get("latest_cot_report_date"):
+                  if not doc.get("parts") or not doc.get("total_bytes"):
                       raise ValueError("Missing confluence records or report date")
-                  print("Production confluence verified:", doc["latest_cot_report_date"], "rows:", len(doc["records"]))
+                  print("Production confluence verified:", len(doc["parts"]), "parts,", doc["total_bytes"], "bytes")
                   break
               except Exception as exc:
                   if attempt == 11:
