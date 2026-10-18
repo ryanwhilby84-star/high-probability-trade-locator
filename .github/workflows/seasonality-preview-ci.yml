@@ -1,0 +1,32 @@
+name: Seasonality Preview Validation
+on:
+  pull_request:
+    paths:
+      - 'web-dashboard/src/pages/SeasonalityWorkstationPage.jsx'
+      - 'web-dashboard/src/seasonality/**'
+      - 'web-dashboard/src/seasonality_workstation/**'
+      - '.github/workflows/seasonality-preview-ci.yml'
+  workflow_dispatch:
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - name: Verify seasonal windows and roadmap contracts
+        working-directory: web-dashboard
+        run: |
+          node --test src/seasonality/sugarArchiveWindows.test.js src/seasonality_workstation/roadmapView.test.js src/seasonality_workstation/weeklyRoadmapContract.test.js
+      - name: Build isolated seasonality preview
+        working-directory: web-dashboard
+        run: |
+          npm ci
+          npm run build
+      - name: Check seasonal archive packaged
+        run: |
+          test -s web-dashboard/dist/data/seasonality_workstation_latest.json
+          test -s web-dashboard/dist/data/sugar_archive_daily.json
