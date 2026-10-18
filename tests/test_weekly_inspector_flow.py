@@ -42,7 +42,7 @@ def test_percentile_present_when_net_exists():
     assert len(weeks) == 80
     for w in weeks:
         c = w["commercial"]
-        if c["net"] is not None:
+        if c["net"] is not None and c["percentile_observation_count"] >= 2:
             assert c["percentile"] is not None, w["date"]
             assert c["percentile_observation_count"] >= 1
 
@@ -52,7 +52,7 @@ def test_first_week_percentile_not_unavailable():
     payload = build_weekly_inspector_series(series)
     first = payload["weeks"][0]["commercial"]
     assert first["net"] is not None
-    assert first["percentile"] == 50.0  # single-observation convention
+    assert first["percentile"] is None  # no historical range exists
     assert first["percentile_observation_count"] == 1
 
 
@@ -121,14 +121,14 @@ def test_compact_export_roundtrip_preserves_percentiles():
 def test_group_state_series_first_week_has_percentile():
     series = _series(5)
     states = build_group_state_series(series, GROUP_COMMERCIAL)
-    assert states[0]["percentiles"]["long_history"] == 50.0
+    assert states[0]["percentiles"]["long_history"] is None
     packed = pack_group_week(states[0], [r["commercial_net"] for r in series])
-    assert packed["percentile"] == 50.0
+    assert packed["percentile"] is None
 
 
 def test_rolling_156_week_percentile_drops_old_observations():
     """An old outlier must not influence the current 3Y rank."""
-    from hptl.cot.positioning_percentiles import empirical_percentile_rank
+    from hptl.cot.positioning_percentiles import net_range_pct
 
     series = _series(200)
     # A large negative outlier outside the last 156 weeks.
@@ -136,7 +136,7 @@ def test_rolling_156_week_percentile_drops_old_observations():
     full = build_weekly_inspector_series(series)
     latest = full["weeks"][-1]["commercial"]
     window = [r["commercial_net"] for r in series[-156:]]
-    expected = round(empirical_percentile_rank(window, window[-1]), 2)
+    expected = round(net_range_pct(window[-1], min(window), max(window)), 2)
     assert abs(latest["percentile"] - expected) < 0.011
     assert full["measure"] == "net_positioning_rolling_156_week_percentile"
     assert latest["percentile_observation_count"] == 156
