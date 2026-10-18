@@ -37,9 +37,13 @@ def main():
                     actual_extra = packed[group_idx][offset]
                     assert (expected_extra is None and actual_extra is None) or (expected_extra is not None and actual_extra is not None and abs(expected_extra - float(actual_extra)) <= 0.02), (name, raw["date"], key, width, expected_extra, actual_extra)
                     checks += 1
-                checks += 1
+                all_history = [float(r[key]) for r in series[:i + 1] if r.get(key) is not None]
+                expected_all = range_percentile(all_history, float(value)) if value is not None else None
+                actual_all = packed[group_idx][15] if len(packed[group_idx]) > 15 else None
+                assert (expected_all is None and actual_all is None) or (expected_all is not None and actual_all is not None and abs(expected_all - float(actual_all)) <= 0.02), (name, raw["date"], key, "all", expected_all, actual_all)
+                checks += 2
     assert checks > 0, "No COT rows audited"
-    print(f"PASS: {checks} source-net and 3y/5y/10y/15y percentile comparisons across {len(source['markets'])} markets")
+    print(f"PASS: {checks} source-net and 3y/5y/10y/15y/ALL percentile comparisons across {len(source['markets'])} markets")
 
 if __name__ == "__main__":
     main()
