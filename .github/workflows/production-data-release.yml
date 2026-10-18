@@ -228,14 +228,14 @@ jobs:
                   if exc.code != 409:
                       print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
                       raise SystemExit(1)
-              files.append({"file": "web-dashboard/" + ("static/" + path.relative_to(root / "static").as_posix() if path.is_relative_to(root / "static") else path.relative_to(root).as_posix()), "sha": sha, "size": len(data)})
+              files.append({"file": path.relative_to(root).as_posix(), "sha": sha, "size": len(data)})
           print(f"Uploaded {len(files)} validated prebuilt files")
           # The REST deployments endpoint performs a remote build unless the project
           # is configured as a static site. Serve the already compiled output directly.
           settings_url = f"https://api.vercel.com/v9/projects/{urllib.parse.quote(os.environ['VERCEL_PROJECT_ID'])}?teamId={team}"
           settings = json.dumps({
               "framework": None,
-              "rootDirectory": "web-dashboard",
+              "rootDirectory": None,
               "installCommand": "echo 'Prebuilt static deployment: no dependencies'",
               "buildCommand": "echo 'Prebuilt static deployment: no build'",
               "outputDirectory": "static"
@@ -255,7 +255,7 @@ jobs:
               "target": "production",
               "files": files,
               "version": 2,
-              "projectSettings": {"framework": None, "rootDirectory": "web-dashboard", "buildCommand": "echo prebuilt", "installCommand": "echo prebuilt", "outputDirectory": "static"},
+              "projectSettings": {"framework": None, "rootDirectory": None, "buildCommand": "echo prebuilt", "installCommand": "echo prebuilt", "outputDirectory": "static"},
               "build": {"env": {}},
               "meta": {"hptl_prebuilt_output": "1"}
           }).encode()
