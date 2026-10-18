@@ -50,7 +50,7 @@ export function CotRawDataTable({ rows, groupLabel }) {
     <div className="cot-raw-data-spreadsheet">
       <div className="wo-cot-table-wrap cot-raw-data-table-scroll">
         <table className="wo-cot-table wo-cot-table-participation cot-raw-table" style={{ background: "#111c27", color: "#f1f5f9" }}>
-          <th style={{ color: "#f8fafc", background: "#263747" }}ead>
+          <thead>
             <tr>
               <th style={{ color: "#f8fafc", background: "#263747" }}>Date</th>
               <th style={{ color: "#f8fafc", background: "#263747" }}>Long</th>
