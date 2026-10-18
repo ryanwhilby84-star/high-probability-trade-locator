@@ -144,33 +144,9 @@ jobs:
         run: npm run build --prefix web-dashboard
       - name: Verify Attention Board parity with Weekly Inspector
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
-      - name: Publish validated COT exports to main for Vercel Git builds
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add web-dashboard/public/data/cot_3y_series_latest.json web-dashboard/public/data/cot_weekly_inspector_latest.json web-dashboard/public/data/cot_attention_80_20_latest.json web-dashboard/public/data/seasonality_workstation_latest.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Publish fresh validated COT percentile snapshots [skip ci]"
-            # Generated price and diagnostic files may remain modified after the build.
-            # Keep only the audited data commit during the rebase; never publish unrelated files.
-            git reset --hard HEAD
-            git clean -fd -- web-dashboard/.vercel/output
-            # The validation job is long-running; UI commits may arrive meanwhile.
-            # Rebase the generated data-only commit onto current main before pushing.
-            for attempt in 1 2 3; do
-              git fetch origin main
-              git rebase origin/main
-              if git push origin HEAD:main; then
-                break
-              fi
-              if [ "$attempt" -eq 3 ]; then
-                echo "::error::Unable to publish validated COT exports after 3 retries"
-                exit 1
-              fi
-            done
-          else
-            echo "Validated COT exports unchanged."
-          fi
+      # Do not push generated snapshots to main before deployment.
+      # Git-triggered Vercel builds can replace the validated static release
+      # with a build lacking the split confluence-history manifest.
       - name: Deploy validated build to Vercel production
         working-directory: web-dashboard
         run: |
@@ -348,7 +324,7 @@ jobs:
           retention-days: 7
       - name: Verify production data endpoint
         env:
-          PRODUCTION_URL: https://high-probability-trade-locator-seven.vercel.app
+          PRODUCTION_URL: https://institutional.ztack.co.uk
         run: |
           python - <<'PY'
           import json, os, time, urllib.request
