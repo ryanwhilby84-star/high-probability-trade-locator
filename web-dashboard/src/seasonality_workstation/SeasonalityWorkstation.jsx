@@ -426,6 +426,38 @@ export function SeasonalityWorkstation({
           </button>
         </div>
 
+        <section className="sws-pane" aria-label="Historical seasonal windows">
+          <h3>Historical Seasonal Windows</h3>
+          <p className="sws-muted">
+            Recurring calendar turning periods calculated from historical returns.
+            These are research tendencies, not guaranteed trade entries.
+          </p>
+          {Array.isArray(payload.turning_windows) && payload.turning_windows.length ? (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead><tr>
+                  <th>Direction</th><th>Seasonal dates</th><th>Historical hit rate</th>
+                  <th>Average follow-through</th><th>Years tested</th><th>Confidence</th>
+                </tr></thead>
+                <tbody>
+                  {payload.turning_windows.map((w, i) => (
+                    <tr key={`${w.kind || 'window'}-${w.window?.label || i}-${i}`}>
+                      <td>{w.kind || '—'}</td>
+                      <td>{w.window?.label || '—'}</td>
+                      <td>{w.hit_rate == null ? '—' : `${Number(w.hit_rate) <= 1 ? (Number(w.hit_rate) * 100).toFixed(1) : Number(w.hit_rate).toFixed(1)}%`}</td>
+                      <td>{w.average_follow_return_pct == null ? '—' : fmtRetPct(w.average_follow_return_pct)}</td>
+                      <td>{w.sample_years ?? '—'}</td>
+                      <td>{typeof w.confidence === 'object' ? (w.confidence?.label || '—') : (w.confidence || '—')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="sws-muted">No verified seasonal turning windows available for this market and lookback.</p>
+          )}
+        </section>
+
         <div className="sws-chart-stack" data-sws-equal-panels="3">
           <section className="sws-pane sws-pane-chart" data-sws-panel="actual_price">
             <h3>Price</h3>
