@@ -10,6 +10,7 @@ on:
       - '.github/workflows/production-data-release.yml'
       - 'web-dashboard/src/workstation/WeeklyInspector.jsx'
       - 'web-dashboard/src/workstation/CotWorkstation.jsx'
+      - 'web-dashboard/src/hooks/useConfluenceData.js'
       - 'src/hptl/cot/positioning_research_engine.py'
 
 concurrency:
