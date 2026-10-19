@@ -2,6 +2,7 @@ import React from 'react'
 import { AppShell, filterMarketsBySidebar, assetClassForMarket, assetClassLabel } from '../components/AppShell.jsx'
 import { getAssetClasses } from '../marketCatalog.js'
 import { CommercialAttentionPanel } from '../components/CommercialAttentionPanel.jsx'
+import { SeasonalAttentionBoard } from '../components/SeasonalAttentionBoard.jsx'
 // Phase 6 UI cleanup: RelativeStrengthPanel / PriorityMarketsPanel retained on disk but hidden from Scanner.
 import { deriveActionLabel, positioningShiftMagnitude, loadWatchlist, toggleWatchlist } from '../marketCatalog.js'
 import {
@@ -224,6 +225,7 @@ export function ScannerPage({
       ) : null}
 
       <CommercialAttentionPanel doc={commercialAttention} radarEligibleOnly={radarEligibleOnly} topN={8} />
+      <SeasonalAttentionBoard markets={marketRows} />
 
       <div className="ws-toolbar">
         <input
