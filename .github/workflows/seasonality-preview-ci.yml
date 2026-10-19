@@ -9,6 +9,8 @@ on:
       - 'web-dashboard/src/seasonality_workstation/**'
       - '.github/workflows/seasonality-preview-ci.yml'
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   preview:
     runs-on: ubuntu-latest
@@ -42,6 +44,29 @@ jobs:
           if not good:
               raise SystemExit("No complete seasonal roadmaps generated")
           PY
+      - name: Sync validated archive to isolated preview branch for Vercel Git builds
+        if: github.event_name == 'push'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('web-dashboard/public/data/seasonality_workstation_latest.json')
+          data = json.loads(path.read_text())
+          markets = data.get('markets') or {}
+          assert len(markets) == 26, f"Expected 26 markets, got {len(markets)}"
+          assert all(m.get('status') == 'ok' and (m.get('seasonal_roadmap') or {}).get('available') for m in markets.values()), 'Incomplete roadmap export'
+          assert all(isinstance(m.get('daily_seasonal_windows'), list) for m in markets.values()), 'Missing daily seasonal window scan'
+          print('Validated 26 complete 15Y research packs before publishing archive')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f web-dashboard/public/data/seasonality_workstation_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(seasonality): publish verified 15Y archive [skip ci]"
+            git push origin HEAD:fix/isolated-seasonality-contract-20261018
+          else
+            echo "Validated archive unchanged"
+          fi
       - name: Verify seasonal windows and roadmap contracts
         working-directory: web-dashboard
         run: |
