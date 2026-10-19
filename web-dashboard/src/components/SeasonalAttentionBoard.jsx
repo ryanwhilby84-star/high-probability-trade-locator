@@ -3,11 +3,18 @@ import { navigateToSeasonalityWorkstation } from '../routing.js'
 import './seasonalAttentionBoard.css'
 
 const percent = n => Number.isFinite(Number(n)) ? `${Number(n).toFixed(1)}%` : '—'
-const formatDate = s => typeof s === 'string' ? s.slice(5) : '—'
+const formatDate = s => typeof s === 'string' ? s : '—'
 const valid = w => w && ['BULLISH','BEARISH'].includes(w.direction) &&
-  Number.isFinite(Number(w.sampleYears)) && Number(w.sampleYears) >= 10 &&
-  Number.isFinite(Number(w.medianReturnPct)) &&
-  Number.isFinite(Number(w.bullishFrequency)) && Number.isFinite(Number(w.bearishFrequency))
+  Number(w.sampleYears) >= 10 && Number.isFinite(w.medianReturnPct) &&
+  Number.isFinite(w.frequency) && w.frequency >= 0.7
+const fromArchive = archive => Object.entries(archive?.markets || {}).flatMap(([market, entry]) =>
+  (entry?.status === 'ok' && entry?.integrity?.status !== 'FAIL' ? entry.daily_seasonal_windows || [] : [])
+    .filter(w => w && ['BUY', 'SELL'].includes(w.direction) && Number(w.sample_years) >= 10)
+    .map(w => ({
+      market, direction: w.direction === 'BUY' ? 'BULLISH' : 'BEARISH',
+      start: w.start, end: w.end, sampleYears: Number(w.sample_years),
+      medianReturnPct: Number(w.median_return_pct), frequency: Number(w.hit_rate) > 1 ? Number(w.hit_rate) / 100 : Number(w.hit_rate)
+    })).filter(valid))
 
 export function SeasonalAttentionBoard({ markets = [] }) {
   const [results, setResults] = React.useState([])
@@ -17,15 +24,14 @@ export function SeasonalAttentionBoard({ markets = [] }) {
     const ids = [...new Set(markets.map(m => typeof m === 'string' ? m : m?.market).filter(Boolean))].slice(0, 30)
     if (!ids.length) { setStatus('empty'); return () => controller.abort() }
     setStatus('loading')
-    fetch('/data/seasonal_windows_latest.json', { signal: controller.signal, cache: 'no-store' })
+    fetch('/data/seasonality_workstation_latest.json', { signal: controller.signal, cache: 'no-store' })
       .then(response => response.ok ? response.json() : null)
       .then(payload => {
         if (controller.signal.aborted) return
         const allowed = new Set(ids)
-        const ranked = (payload?.status === 'ok' && Array.isArray(payload.windows) ? payload.windows : [])
-          .filter(w => allowed.has(w.market) && valid(w))
-          .filter(w => Math.max(w.bullishFrequency, w.bearishFrequency) >= .7)
-          .sort((a,b) => Math.max(b.bullishFrequency,b.bearishFrequency) - Math.max(a.bullishFrequency,a.bearishFrequency))
+        const ranked = fromArchive(payload)
+          .filter(w => allowed.has(w.market))
+          .sort((a,b) => b.frequency - a.frequency || b.medianReturnPct - a.medianReturnPct)
         setResults(ranked.slice(0,8))
         setStatus(ranked.length ? 'ready' : 'empty')
       })
@@ -38,10 +44,10 @@ export function SeasonalAttentionBoard({ markets = [] }) {
       <span className="sab-count">{status === 'ready' ? `${results.length} windows` : 'Research board'}</span>
     </header>
     {status === 'loading' ? <p className="sab-empty">Checking verified seasonal windows…</p> :
-      !results.length ? <p className="sab-empty">No verified seasonal windows available from the current API. Results will appear when audited daily-window data is published.</p> :
+      !results.length ? <p className="sab-empty">No qualifying verified daily windows in the current published seasonality archive.</p> :
       <div className="sab-grid">{results.map((w,i) => {
         const bull = w.direction === 'BULLISH'
-        const rate = 100 * (bull ? w.bullishFrequency : w.bearishFrequency)
+        const rate = 100 * w.frequency
         return <button type="button" key={w.market+'-'+w.start+'-'+i} className={`sab-card ${bull?'sab-bull':'sab-bear'}`} onClick={() => navigateToSeasonalityWorkstation(w.market)}>
           <span className="sab-top"><strong>{w.market}</strong><span>{bull?'↗ BUY':'↘ SELL'}</span></span>
           <span className="sab-dates">{formatDate(w.start)} → {formatDate(w.end)}</span>
