@@ -14,8 +14,23 @@ const currentWeek = () => {
   const yearStart = new Date(Date.UTC(day.getUTCFullYear(), 0, 1))
   return Math.ceil((((day - yearStart) / 86400000) + 1) / 7)
 }
-export function SeasonalWindowsBoard({ marketId, windows = [] }) {
+export function SeasonalWindowsBoard({ marketId, windows = [], dailyWindows = [] }) {
   const [selected, setSelected] = React.useState(null)
+  const [showAll, setShowAll] = React.useState(false)
+  const dailyRows = [...dailyWindows].sort((a,b) => b.hit_rate - a.hit_rate || b.median_return_pct - a.median_return_pct)
+  const currentMd = new Date().toISOString().slice(5,10)
+  const currentDay = (md) => {
+    const [m,d] = md.split('-').map(Number)
+    return Math.round((Date.UTC(2000,m-1,d) - Date.UTC(2000,0,1))/86400000)
+  }
+  const nowDay = currentDay(currentMd === '02-29' ? '02-28' : currentMd)
+  const isActive = (w) => {
+    const a=currentDay(w.start), b=a+w.calendar_days
+    return nowDay>=a && nowDay<=b || nowDay+366>=a && nowDay+366<=b
+  }
+  const isUpcoming = (w) => !isActive(w) && ((currentDay(w.start)-nowDay+366)%366)<=35
+  const visibleDaily = showAll ? dailyRows : dailyRows.filter(w => isActive(w) || isUpcoming(w))
+
   const now = currentWeek()
   const rows = [...windows].filter(w => w?.window?.start_week && w?.window?.end_week).sort((a,b) => (b.hit_rate || 0) - (a.hit_rate || 0))
   const active = rows.filter(w => w.window.start_week <= now && w.window.end_week >= now)
@@ -23,6 +38,12 @@ export function SeasonalWindowsBoard({ marketId, windows = [] }) {
   const highlighted = [...active, ...upcoming].slice(0, 8)
   return <section className="sws-pane" aria-label="Seasonal Windows board">
     <h2>Seasonal Windows · {marketId}</h2>
+    <h3>Daily seasonal window opportunities · 15-year research</h3>
+    <p className="sws-muted">Every calendar entry day tested against 1–12 week exits. Historical daily closes, minimum 10 usable years and 70% profitable years. In-sample research, not a validated trading signal.</p>
+    <div className="sws-controls"><strong>{dailyRows.filter(isActive).length} active</strong><strong>{dailyRows.filter(isUpcoming).length} opening within 35 days</strong><button type="button" onClick={() => setShowAll(v=>!v)}>{showAll ? 'Current / upcoming only' : 'Show all ranked windows'}</button></div>
+    <div style={{overflowX:'auto'}}><table style={{width:'100%',textAlign:'left'}}><thead><tr><th>Direction</th><th>Entry → exit</th><th>Historical record</th><th>Median</th><th>Average</th><th>Recent 5Y</th><th>Worst year</th><th>Details</th></tr></thead><tbody>{visibleDaily.map((w,i)=><tr key={`${w.start}-${w.end}-${w.direction}-${i}`}><td>{w.direction}</td><td>{w.start} → {w.end}</td><td>{w.wins}/{w.sample_years} · {pct(w.hit_rate)}</td><td>{w.median_return_pct}%</td><td>{w.average_return_pct}%</td><td>{w.recent_5y_wins}/{w.recent_5y_n}</td><td>{w.worst_return_pct}%</td><td><button type="button" onClick={()=>setSelected(selected===w?null:w)}>Inspect</button></td></tr>)}</tbody></table></div>
+    {!visibleDaily.length && <p className="sws-muted">No qualifying active/upcoming daily windows in the current archive. Select “Show all ranked windows” to inspect historical candidates.</p>}
+    {selected?.outcomes && <div className="sws-pane"><h3>{selected.direction} {selected.start} → {selected.end}</h3><p>Year-by-year directional returns · historical sample only</p><div style={{display:'flex',flexWrap:'wrap',gap:12}}>{selected.outcomes.map(o=><span key={o.year}>{o.year}: {o.return_pct}%</span>)}</div></div>}
     <p className="sws-muted">Historical ISO-week turning windows. Current archive evidence only; these are not yet the day-by-day entry/exit scans.</p>
     <div className="sws-controls"><strong>{active.length} active</strong><strong>{upcoming.length} upcoming</strong><strong>{rows.length} verified turning windows</strong></div>
     <div style={{ position: 'relative', padding: '18px 0', margin: '12px 0' }}>
