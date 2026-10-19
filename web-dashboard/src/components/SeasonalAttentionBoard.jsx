@@ -19,14 +19,11 @@ export function SeasonalAttentionBoard({ markets = [] }) {
     setStatus('loading')
     Promise.all(ids.map(async id => {
       try {
-        const response = await fetch(`/api/seasonality-workstation/${encodeURIComponent(id)}?lookback=15Y`, { signal: controller.signal })
+        const response = await fetch('/data/seasonal_windows_latest.json', { signal: controller.signal, cache: 'no-store' })
         if (!response.ok) return []
         const payload = await response.json()
-        if (payload?.status !== 'ok') return []
-        // Only use audited window outputs from the backend; never derive returns from forecast curves.
-        const windows = payload?.seasonal_windows?.windows
-        if (!Array.isArray(windows)) return []
-        return windows.filter(valid).map(w => ({ ...w, market: id }))
+        if (payload?.status !== 'ok' || !Array.isArray(payload.windows)) return []
+        return payload.windows.filter(w => w.market === id && valid(w))
       } catch { return [] }
     })).then(groups => {
       if (controller.signal.aborted) return
