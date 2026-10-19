@@ -17,21 +17,19 @@ export function SeasonalAttentionBoard({ markets = [] }) {
     const ids = [...new Set(markets.map(m => typeof m === 'string' ? m : m?.market).filter(Boolean))].slice(0, 30)
     if (!ids.length) { setStatus('empty'); return () => controller.abort() }
     setStatus('loading')
-    Promise.all(ids.map(async id => {
-      try {
-        const response = await fetch('/data/seasonal_windows_latest.json', { signal: controller.signal, cache: 'no-store' })
-        if (!response.ok) return []
-        const payload = await response.json()
-        if (payload?.status !== 'ok' || !Array.isArray(payload.windows)) return []
-        return payload.windows.filter(w => w.market === id && valid(w))
-      } catch { return [] }
-    })).then(groups => {
-      if (controller.signal.aborted) return
-      const ranked = groups.flat().filter(w => Math.max(w.bullishFrequency, w.bearishFrequency) >= .7)
-        .sort((a,b) => Math.max(b.bullishFrequency,b.bearishFrequency) - Math.max(a.bullishFrequency,a.bearishFrequency))
-      setResults(ranked.slice(0, 8))
-      setStatus(ranked.length ? 'ready' : 'empty')
-    })
+    fetch('/data/seasonal_windows_latest.json', { signal: controller.signal, cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(payload => {
+        if (controller.signal.aborted) return
+        const allowed = new Set(ids)
+        const ranked = (payload?.status === 'ok' && Array.isArray(payload.windows) ? payload.windows : [])
+          .filter(w => allowed.has(w.market) && valid(w))
+          .filter(w => Math.max(w.bullishFrequency, w.bearishFrequency) >= .7)
+          .sort((a,b) => Math.max(b.bullishFrequency,b.bearishFrequency) - Math.max(a.bullishFrequency,a.bearishFrequency))
+        setResults(ranked.slice(0,8))
+        setStatus(ranked.length ? 'ready' : 'empty')
+      })
+      .catch(() => { if (!controller.signal.aborted) setStatus('empty') })
     return () => controller.abort()
   }, [markets])
   return <section className="sab" aria-label="Strong seasonal windows">
