@@ -44,31 +44,39 @@ export function SeasonalityWorkstationPage({
     setLoading(true)
     setError(null)
     setPayload(null)
-    const url = `/api/seasonality-workstation/${encodeURIComponent(marketId)}?lookback=${encodeURIComponent(lookback)}`
-    fetch(url, { cache: 'no-store' })
-      .then(async (r) => {
-        let body = null
-        try {
-          body = await r.json()
-        } catch {
-          body = null
+    const load = async () => {
+      try {
+        // Static Vercel hosting has no live Python seasonality API. Load the
+        // validated, regularly regenerated export directly instead.
+        const response = await fetch('/data/seasonality_workstation_latest.json', { cache: 'no-store' })
+        if (!response.ok) throw new Error(`Seasonality export HTTP ${response.status}`)
+        const archive = await response.json()
+        const market = archive?.markets?.[marketId]
+        const selection = market?.lookbacks?.[lookback]
+        if (market?.status !== 'ok' || market?.integrity?.status === 'FAIL' || !selection) throw new Error('No verified seasonality for selected market and lookback')
+        // Each market export already contains a complete, internally consistent
+        // roadmap for its default lookback. The other lookback blocks contain
+        // partial research statistics, not replacement roadmap curves.
+        // Never overwrite the full roadmap with undefined partial fields.
+        const exportedLookback = market.selected_lookback ?? archive.default_lookback ?? '15Y'
+        if (lookback !== exportedLookback) {
+          throw new Error(`The ${lookback} seasonal roadmap is not exported yet (available complete roadmap: ${exportedLookback}).`)
         }
-        if (cancelled) return
-        if (!body) {
-          setError('Invalid response from seasonality workstation API.')
-          return
+        if (!market.seasonal_roadmap?.available || !market.weekly_roadmap) {
+          throw new Error('Seasonal roadmap is missing from the archived export; regenerate the complete seasonality research pack before previewing.')
         }
-        setPayload(body)
-        if (body.status !== 'ok') {
-          setError(body.message || body.error || 'Seasonality research failed.')
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err?.message || 'Fetch failed')
-      })
-      .finally(() => {
+        if (!cancelled) setPayload({
+          ...market,
+          selected_lookback: exportedLookback,
+          archived_generated_at: archive.generated_at,
+        })
+      } catch (archiveError) {
+        if (!cancelled) setError(`Seasonality data unavailable: ${archiveError.message}`)
+      } finally {
         if (!cancelled) setLoading(false)
-      })
+      }
+    }
+    load()
     return () => {
       cancelled = true
     }
@@ -125,6 +133,7 @@ export function SeasonalityWorkstationPage({
         </div>
       </header>
 
+      {payload?.archived_generated_at ? <p role="status" style={{ margin: 16, padding: 12, color: "#cbd5e1" }}>Seasonality data updated {payload.archived_generated_at.slice(0, 10)} · historical seasonal tendencies, not trading signals.</p> : null}
       <SeasonalityWorkstation
         marketId={marketId}
         payload={payload}
