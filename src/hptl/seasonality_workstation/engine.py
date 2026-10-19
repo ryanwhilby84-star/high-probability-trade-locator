@@ -35,6 +35,7 @@ from hptl.seasonality_workstation.returns import (
 )
 from hptl.seasonality_workstation.stats import bucket_stats
 from hptl.seasonality_workstation.turns import detect_turning_windows
+from hptl.seasonality_workstation.daily_windows import scan_daily_windows
 
 
 def _lookback_years(label: str) -> int | None:
@@ -848,6 +849,7 @@ def build_seasonality_research(
         "lookbacks": {k: _clean(v) for k, v in all_blocks.items()},
         "lookback_agreement": agreement,
         "turning_windows": block["turning_windows"],
+        "daily_seasonal_windows": scan_daily_windows(daily, asof_year=asof_year, lookback_years=lookback_years),
         "stats_panel": panel,
         "advanced": {
             "price_unit_forecast": block.get("forecast"),
