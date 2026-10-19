@@ -14,6 +14,8 @@ def scan_daily_windows(daily, *, asof_year, lookback_years=15,
                        min_years=10, min_hit_rate=0.7, limit=24):
     """Discover long/short seasonal windows; return auditable year outcomes."""
     years = range(asof_year - lookback_years, asof_year)
+    # Include the final exit year for windows spanning December to January.
+    source_years = range(asof_year - lookback_years, asof_year + 1)
     by_year = {}
     for d, close in daily:
         try:
@@ -21,7 +23,7 @@ def scan_daily_windows(daily, *, asof_year, lookback_years=15,
             px = float(close)
         except (ValueError, TypeError):
             continue
-        if dt.year in years and px > 0:
+        if dt.year in source_years and px > 0:
             by_year.setdefault(dt.year, []).append((dt, px))
     indexed = {}
     for y, rows in by_year.items():
@@ -37,22 +39,26 @@ def scan_daily_windows(daily, *, asof_year, lookback_years=15,
         for duration in (7, 14, 21, 28, 35, 42, 56, 70, 84):
             end = start + timedelta(days=duration)
             observations = []
-            for y, (dates, prices) in indexed.items():
+            for y in years:
+                dates, prices = indexed.get(y, ([], []))
+                if not dates:
+                    continue
                 try:
                     entry = date(y, start.month, start.day)
                     exit_ = date(y + (end.year - base.year), end.month, end.day)
                 except ValueError:
                     continue
+                exit_dates, exit_prices = indexed.get(exit_.year, ([], []))
                 i = bisect_left(dates, entry)
-                j = bisect_left(dates, exit_)
-                if i >= len(dates) or j >= len(dates):
+                j = bisect_left(exit_dates, exit_)
+                if i >= len(dates) or j >= len(exit_dates):
                     continue
                 # No stale price substitution across missing market sessions.
-                if (dates[i] - entry).days > 4 or (dates[j] - exit_).days > 4:
+                if (dates[i] - entry).days > 4 or (exit_dates[j] - exit_).days > 4:
                     continue
-                if dates[j] <= dates[i] or prices[i] <= 0:
+                if exit_dates[j] <= dates[i] or prices[i] <= 0:
                     continue
-                r = prices[j] / prices[i] - 1
+                r = exit_prices[j] / prices[i] - 1
                 if abs(r) > 0.75:  # avoid obvious contract discontinuities
                     continue
                 observations.append((y, r))
