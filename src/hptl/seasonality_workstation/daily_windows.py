@@ -66,7 +66,18 @@ def scan_daily_windows(daily, *, asof_year, lookback_years=15,
                 med = median(r for _, r in outcomes)
                 if hit < min_hit_rate or med <= 0:
                     continue
+                older = [(y, r) for y, r in outcomes if y < asof_year - 5]
+                recent = [(y, r) for y, r in outcomes if y >= asof_year - 5]
+                # Holdout is descriptive, not a true walk-forward test: the
+                # candidate was discovered using the entire history.
+                older_hit = sum(r > 0 for _, r in older) / len(older) if older else None
+                recent_hit = sum(r > 0 for _, r in recent) / len(recent) if recent else None
                 candidates.append({
+                    'earlier_years_n': len(older),
+                    'earlier_years_hit_rate': round(older_hit, 4) if older_hit is not None else None,
+                    'recent_5y_hit_rate': round(recent_hit, 4) if recent_hit is not None else None,
+                    'recent_5y_median_return_pct': round(median(r for _, r in recent) * 100, 3) if recent else None,
+                    'recent_performance_warning': bool(recent and (recent_hit < 0.6 or median(r for _, r in recent) <= 0)),
                     'direction': direction,
                     'start': start.strftime('%m-%d'),
                     'end': end.strftime('%m-%d'),
