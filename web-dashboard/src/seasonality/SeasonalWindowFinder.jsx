@@ -17,7 +17,7 @@ export function SeasonalWindowFinder({ marketId, availableMarkets = [], dailyPri
   const [direction, setDirection] = React.useState('long')
   const [showScanner, setShowScanner] = React.useState(false)
   const [sampleYears, setSampleYears] = React.useState(0)
-  const minYears = 15
+  const minYears = isSugar ? 15 : Math.min(15, Math.max(3, sampleYears))
   React.useEffect(() => {
     if (!marketId) return undefined
     const controller = new AbortController()
@@ -37,7 +37,7 @@ export function SeasonalWindowFinder({ marketId, availableMarkets = [], dailyPri
     <section className="sugar-archive" aria-label="Seasonal window finder">
       <h2>{marketId} seasonal window finder</h2>
       <p className="sugar-archive-note">{isSugar ? 'Historical Sugar archive · 1961–2001 full calendar years · source ends September 2002 · contract-switch gaps excluded.' : 'Available daily price history · incomplete samples labelled · continuous contract roll integrity must be verified.'}</p>
-      <p className="sugar-archive-note">{isSugar ? 'This is an older research sample. Keep it alongside your recent 15-year study.' : 'This study uses only the supplied valid daily bars. Results are exploratory until source integrity and sample coverage are audited.'}</p>\n      {!isSugar && archive ? <p className="sugar-archive-note" role="status">Verified complete calendar years in source: {sampleYears}. {sampleYears < 15 ? 'Below the 15-year eligibility threshold; no qualifying seasonal windows will be presented.' : 'Window results require at least 15 usable year-observations after quality exclusions.'}</p> : null}
+      <p className="sugar-archive-note">{isSugar ? 'This is an older research sample. Keep it alongside your recent 15-year study.' : 'This study uses only the supplied valid daily bars. Results are exploratory until source integrity and sample coverage are audited.'}</p>\n      {!isSugar && archive ? <p className="sugar-archive-note" role="status">Verified complete calendar years in source: {sampleYears}. {sampleYears < 15 ? 'Below 15 years: any windows shown are exploratory, not 15-year validated.' : 'Windows are ranked on available history; qualifying observations are shown for each window.'}</p> : null}
       {error ? <p role="alert">{error}</p> : !archive ? <p role="status">Loading daily seasonal history…</p> : <>
         <div className="sugar-archive-controls">
           <label>Entry date<input type="date" min="2001-01-01" max="2001-12-31" value={`2001-${start}`} onChange={(e) => { if (e.target.value) setStart(e.target.value.slice(5)) }} /></label>
@@ -55,7 +55,7 @@ export function SeasonalWindowFinder({ marketId, availableMarkets = [], dailyPri
             <div><span>Worst year</span><strong>{pct(result.worst)}</strong></div>
             <div><span>Excluded years</span><strong>{result.exclusions.length}</strong></div>
           </div>
-          <p className="sugar-archive-note">All observations: {result.all.hits}/{result.all.n} profitable, median {pct(result.all.median)}. Quality-filtered: {result.filtered.hits}/{result.filtered.n}, median {pct(result.filtered.median)}. Filter rejects entire year-windows with zero volume at either endpoint of a daily interval or daily moves above 10%; it can exclude genuine moves.</p>
+          <p className="sugar-archive-note">All observations: {result.all.hits}/{result.all.n} profitable, median {pct(result.all.median)}. Quality-filtered: {result.filtered.hits}/{result.filtered.n}, median {pct(result.filtered.median)}. Filter rejects windows containing flagged intervals; generic daily-price flags include gaps above five days or moves above 10%, while Sugar uses its original archive-specific flags.</p>
           <details><summary>Year-by-year outcomes and exclusions</summary><div className="sugar-archive-table-wrap"><table><thead><tr><th>Year</th><th>Entry</th><th>Exit</th><th>Directional return</th><th>Flagged intervals</th></tr></thead><tbody>{result.outcomes.map((r) => <tr key={r.year}><td>{r.year}</td><td>{r.entry}</td><td>{r.exit}</td><td>{pct(r.returnPct * (direction === 'short' ? -1 : 1))}</td><td>{r.flagged}</td></tr>)}</tbody></table></div><p>{result.exclusions.map((r) => `${r.year}: ${r.reason.replaceAll('_', ' ')}`).join('; ') || 'No excluded years.'}</p></details>
         </> : null}
         <h3>Full-calendar seasonal window scanner</h3>
