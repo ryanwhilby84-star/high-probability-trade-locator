@@ -1,0 +1,117 @@
+name: Seasonality Preview Validation
+on:
+  push:
+    branches: ['fix/isolated-seasonality-contract-20261018']
+  pull_request:
+    paths:
+      - 'web-dashboard/src/pages/SeasonalityWorkstationPage.jsx'
+      - 'web-dashboard/src/seasonality/**'
+      - 'web-dashboard/src/seasonality_workstation/**'
+      - '.github/workflows/seasonality-preview-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install seasonality engine dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Regenerate complete seasonal research without deploying
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/run_seasonality_workstation_export.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc = json.loads(Path("web-dashboard/public/data/seasonality_workstation_latest.json").read_text())
+          markets = doc.get("markets", {})
+          good = [m for m in markets.values() if m.get("status") == "ok"
+                  and m.get("seasonal_roadmap", {}).get("available")
+                  and m.get("weekly_roadmap")]
+          print(f"Complete roadmap packs: {len(good)}/{len(markets)}")
+          if not good:
+              raise SystemExit("No complete seasonal roadmaps generated")
+          PY
+      - name: Sync validated archive to isolated preview branch for Vercel Git builds
+        if: github.event_name == 'push'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('web-dashboard/public/data/seasonality_workstation_latest.json')
+          data = json.loads(path.read_text())
+          markets = data.get('markets') or {}
+          assert len(markets) == 26, f"Expected 26 markets, got {len(markets)}"
+          assert all(m.get('status') == 'ok' and (m.get('seasonal_roadmap') or {}).get('available') for m in markets.values()), 'Incomplete roadmap export'
+          assert all(isinstance(m.get('daily_seasonal_windows'), list) for m in markets.values()), 'Missing daily seasonal window scan'
+          print('Validated 26 complete 15Y research packs before publishing archive')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f web-dashboard/public/data/seasonality_workstation_latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(seasonality): publish verified 15Y archive [skip ci]"
+            git push origin HEAD:fix/isolated-seasonality-contract-20261018
+          else
+            echo "Validated archive unchanged"
+          fi
+      - name: Verify seasonal windows and roadmap contracts
+        working-directory: web-dashboard
+        run: |
+          node --test src/seasonality/sugarArchiveWindows.test.js src/seasonality_workstation/roadmapView.test.js src/seasonality_workstation/weeklyRoadmapContract.test.js
+      - name: Build isolated seasonality preview
+        working-directory: web-dashboard
+        run: |
+          npm ci
+          npm run build
+      - name: Publish isolated preview build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: seasonality-preview-build
+          path: web-dashboard/dist/
+          retention-days: 7
+      - name: Publish isolated Vercel preview (never production)
+        if: github.event_name == 'push'
+        working-directory: web-dashboard
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          test -n "$VERCEL_TOKEN" && test -n "$VERCEL_ORG_ID" && test -n "$VERCEL_PROJECT_ID"
+          mkdir -p .vercel/output/static
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          Path(".vercel/output/config.json").write_text(json.dumps({"version": 3, "routes": [{"handle": "filesystem"}]}))
+          PY
+          cp -a dist/. .vercel/output/static/
+          npx --yes vercel@latest deploy --prebuilt --yes --token "$VERCEL_TOKEN" --scope "$VERCEL_ORG_ID" > /tmp/seasonality-preview-url.txt
+          url=$(tail -n 1 /tmp/seasonality-preview-url.txt)
+          echo "Seasonality preview: $url"
+          echo "## Seasonality Preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "$url" >> "$GITHUB_STEP_SUMMARY"
+          curl --fail --location --retry 3 "$url/data/seasonality_workstation_latest.json" -o /tmp/seasonality-preview.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('/tmp/seasonality-preview.json').read_text())
+          assert sum(bool(m.get('seasonal_roadmap', {}).get('available')) for m in d['markets'].values()) == 26
+          print("Verified deployed preview contains 26 complete roadmaps")
+          PY
+      - name: Check seasonal archive packaged
+        run: |
+          test -s web-dashboard/dist/data/seasonality_workstation_latest.json
+          test -s web-dashboard/dist/data/sugar_archive_daily.json

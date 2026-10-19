@@ -1,4 +1,5 @@
 import React from 'react'
+import { SeasonalWindowsBoard } from './SeasonalWindowsBoard.jsx'
 import {
   NormalisedSeasonalityChart,
   PriceForecastChart,
@@ -204,7 +205,7 @@ function IntegrityBlock({ marketId, payload, error }) {
   const weeklyReasons = payload?.weekly_roadmap?.quality_reasons || []
   return (
     <div className="sws-error">
-      <h2>Seasonality unavailable — data quality gate</h2>
+      <h2>{error ? 'Seasonality unavailable — data feed or lookback' : 'Seasonality unavailable — data quality gate'}</h2>
       <p>
         {payload?.message ||
           error ||
@@ -257,6 +258,7 @@ export function SeasonalityWorkstation({
   loading,
   error,
 }) {
+  const [windowsOpen, setWindowsOpen] = React.useState(true)
   const [advancedOpen, setAdvancedOpen] = React.useState(false)
   const [seasonalView, setSeasonalView] = React.useState(() =>
     defaultSeasonalView(payload?.display_defaults),
@@ -345,6 +347,11 @@ export function SeasonalityWorkstation({
       data-active-methodology={activeMethodologyLabel}
     >
       <div className="sws-main">
+        <div className="sws-controls">
+          <button type="button" className={`sws-btn${windowsOpen ? ' is-active' : ''}`} onClick={() => setWindowsOpen(v => !v)}>{windowsOpen ? 'Hide Seasonal Windows' : 'Show Seasonal Windows'}</button>
+        </div>
+        {windowsOpen ? <SeasonalWindowsBoard marketId={marketId} windows={payload.turning_windows || []} dailyWindows={payload.daily_seasonal_windows || []} /> : null}
+
         <div className="sws-header-meta">
           <Meta label="Instrument" value={payload.instrument_id || marketId} />
           <Meta label="Price series" value={priceId} />
@@ -369,6 +376,8 @@ export function SeasonalityWorkstation({
                 type="button"
                 className={`sws-btn${lookback === lb ? ' is-active' : ''}`}
                 onClick={() => onLookback?.(lb)}
+                disabled={lb !== (payload?.selected_lookback || lookback)}
+                title={lb !== (payload?.selected_lookback || lookback) ? 'Complete roadmap for this lookback is not yet exported' : undefined}
               >
                 {lb === 'FULL' ? 'All' : lb}
               </button>
@@ -423,6 +432,38 @@ export function SeasonalityWorkstation({
             Advanced
           </button>
         </div>
+
+        <section className="sws-pane" aria-label="Historical seasonal windows">
+          <h3>Historical Seasonal Windows</h3>
+          <p className="sws-muted">
+            Recurring calendar turning periods calculated from historical returns.
+            These are research tendencies, not guaranteed trade entries.
+          </p>
+          {Array.isArray(payload.turning_windows) && payload.turning_windows.length ? (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead><tr>
+                  <th>Direction</th><th>Seasonal dates</th><th>Historical hit rate</th>
+                  <th>Average follow-through</th><th>Years tested</th><th>Confidence</th>
+                </tr></thead>
+                <tbody>
+                  {payload.turning_windows.map((w, i) => (
+                    <tr key={`${w.kind || 'window'}-${w.window?.label || i}-${i}`}>
+                      <td>{w.kind || '—'}</td>
+                      <td>{w.window?.label || '—'}</td>
+                      <td>{w.hit_rate == null ? '—' : `${Number(w.hit_rate) <= 1 ? (Number(w.hit_rate) * 100).toFixed(1) : Number(w.hit_rate).toFixed(1)}%`}</td>
+                      <td>{w.average_follow_return_pct == null ? '—' : fmtRetPct(w.average_follow_return_pct)}</td>
+                      <td>{w.sample_years ?? '—'}</td>
+                      <td>{typeof w.confidence === 'object' ? (w.confidence?.label || '—') : (w.confidence || '—')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="sws-muted">No verified seasonal turning windows available for this market and lookback.</p>
+          )}
+        </section>
 
         <div className="sws-chart-stack" data-sws-equal-panels="3">
           <section className="sws-pane sws-pane-chart" data-sws-panel="actual_price">

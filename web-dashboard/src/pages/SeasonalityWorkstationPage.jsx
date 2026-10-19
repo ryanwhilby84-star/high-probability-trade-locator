@@ -1,5 +1,4 @@
 import React from 'react'
-import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import {
@@ -55,11 +54,20 @@ export function SeasonalityWorkstationPage({
         const market = archive?.markets?.[marketId]
         const selection = market?.lookbacks?.[lookback]
         if (market?.status !== 'ok' || market?.integrity?.status === 'FAIL' || !selection) throw new Error('No verified seasonality for selected market and lookback')
+        // Each market export already contains a complete, internally consistent
+        // roadmap for its default lookback. The other lookback blocks contain
+        // partial research statistics, not replacement roadmap curves.
+        // Never overwrite the full roadmap with undefined partial fields.
+        const exportedLookback = market.selected_lookback ?? archive.default_lookback ?? '15Y'
+        if (lookback !== exportedLookback) {
+          throw new Error(`The ${lookback} seasonal roadmap is not exported yet (available complete roadmap: ${exportedLookback}).`)
+        }
+        if (!market.seasonal_roadmap?.available || !market.weekly_roadmap) {
+          throw new Error('Seasonal roadmap is missing from the archived export; regenerate the complete seasonality research pack before previewing.')
+        }
         if (!cancelled) setPayload({
           ...market,
-          selected_lookback: lookback,
-          sample_size: selection.sample_size ?? selection.sample_years ?? market.sample_size,
-          seasonality: { ...market.seasonality, week_stats: selection.week_stats, index_paths: selection.index_paths, price_aligned: selection.price_aligned, historical_year_paths: selection.historical_year_paths, projection: selection.projection },
+          selected_lookback: exportedLookback,
           archived_generated_at: archive.generated_at,
         })
       } catch (archiveError) {
@@ -125,7 +133,6 @@ export function SeasonalityWorkstationPage({
         </div>
       </header>
 
-      <SugarArchivePanel marketId={marketId} />
       {payload?.archived_generated_at ? <p role="status" style={{ margin: 16, padding: 12, color: "#cbd5e1" }}>Seasonality data updated {payload.archived_generated_at.slice(0, 10)} · historical seasonal tendencies, not trading signals.</p> : null}
       <SeasonalityWorkstation
         marketId={marketId}

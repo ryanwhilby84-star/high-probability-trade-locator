@@ -74,5 +74,77 @@ export function findSugarWindows(archive, start, options = {}) {
       if (!row.error && row.n >= 15) results.push(row)
     }
   }
-  return results.sort((a, b) => b.hitRate - a.hitRate || b.median - a.median || b.n - a.n)
+  // Candidates are ranked on the same history: highly overlapping dates are
+  // variations of one seasonal tendency, not independent trade opportunities.
+  const ranked = results.sort((a, b) => b.hitRate - a.hitRate || b.median - a.median || b.n - a.n)
+  const distinct = []
+  const interval = (r) => {
+    const startDay = utc(`2001-${r.start}`)
+    return [startDay, startDay + r.calendarDays * DAY]
+  }
+  for (const candidate of ranked) {
+    const [start, end] = interval(candidate)
+    const duplicates = distinct.some((other) => {
+      const [os, oe] = interval(other)
+      const intersection = Math.max(0, Math.min(end, oe) - Math.max(start, os))
+      const shortest = Math.min(end - start, oe - os)
+      return shortest > 0 && intersection / shortest >= 0.75
+    })
+    if (!duplicates) distinct.push(candidate)
+  }
+  return distinct
+}
+
+
+/**
+ * Full-calendar seasonal window discovery. Uses the existing audited return
+ * evaluator; no new data feed or forecast model is required.
+ * Start dates are sampled at a configurable calendar-day step.
+ */
+export function scanSugarCalendar(archive, {
+  stepDays = 7,
+  durations = [7, 14, 21, 28, 42, 56, 84],
+  minYears = 15,
+  minHitRate = 60,
+  strict = true,
+  limit = 24,
+} = {}) {
+  const candidates = []
+  const startBase = utc('2001-01-01')
+  for (let offset = 0; offset < 365; offset += stepDays) {
+    const start = monthDay(startBase + offset * DAY)
+    for (const duration of durations) {
+      const end = monthDay(startBase + (offset + duration) * DAY)
+      const long = evaluateSugarWindow(archive, start, end, { strict, direction: 'long' })
+      if (long.error || long.n < minYears) continue
+      for (const direction of ['long', 'short']) {
+        const row = direction === 'long'
+          ? long
+          : { ...long, ...summarizeSugar(long.outcomes, 'short') }
+        if (row.hitRate < minHitRate || row.median <= 0) continue
+        candidates.push({ ...row, direction })
+      }
+    }
+  }
+  candidates.sort((a, b) =>
+    b.hitRate - a.hitRate || b.median - a.median || b.n - a.n
+  )
+  const accepted = []
+  const span = (r) => {
+    const a = utc(`2001-${r.start}`)
+    return [a, a + r.calendarDays * DAY]
+  }
+  for (const candidate of candidates) {
+    const [a, b] = span(candidate)
+    const redundant = accepted.some((other) => {
+      const [c, d] = span(other)
+      // Conflicting long/short windows in the same calendar period also
+      // represent the same historical opportunity, not independent edges.
+      const overlap = Math.max(0, Math.min(b, d) - Math.max(a, c))
+      return overlap / Math.min(b - a, d - c) >= 0.75
+    })
+    if (!redundant) accepted.push(candidate)
+    if (accepted.length >= limit) break
+  }
+  return accepted
 }

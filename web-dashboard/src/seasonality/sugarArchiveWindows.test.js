@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import { prepareSugarArchive, evaluateSugarWindow, findSugarWindows } from './sugarArchiveWindows.js'
+import { prepareSugarArchive, evaluateSugarWindow, findSugarWindows, scanSugarCalendar } from './sugarArchiveWindows.js'
 
 const archive = prepareSugarArchive(JSON.parse(fs.readFileSync(new URL('../../public/data/sugar_archive_daily.json', import.meta.url), 'utf8')))
 
@@ -45,4 +45,33 @@ test('window search honours minimum sample and rejects zero-length windows', () 
   assert(windows.length > 0)
   assert(windows.every((x) => x.n >= 15))
   assert(windows.every((x, i) => i === 0 || x.hitRate <= windows[i - 1].hitRate))
+})
+
+test('ranked Sugar candidates do not double-count heavily overlapping calendar windows', () => {
+  const windows = findSugarWindows(archive, '10-03')
+  const day = (md) => Date.parse(`2001-${md}T00:00:00Z`)
+  for (let i = 0; i < windows.length; i++) {
+    for (let j = i + 1; j < windows.length; j++) {
+      const a = windows[i], b = windows[j]
+      const a0 = day(a.start), b0 = day(b.start)
+      const a1 = a0 + a.calendarDays * 86400000
+      const b1 = b0 + b.calendarDays * 86400000
+      const overlap = Math.max(0, Math.min(a1, b1) - Math.max(a0, b0))
+      assert(overlap / Math.min(a1 - a0, b1 - b0) < 0.75, `duplicate windows: ${a.start}-${a.end} and ${b.start}-${b.end}`)
+    }
+  }
+})
+
+test('full calendar scanner returns ranked, qualified directional windows', () => {
+  const windows = scanSugarCalendar(archive, { stepDays: 14, minYears: 15, minHitRate: 60, limit: 12 })
+  assert(windows.length > 0)
+  assert(windows.length <= 12)
+  for (const w of windows) {
+    assert(['long', 'short'].includes(w.direction))
+    assert(w.n >= 15)
+    assert(w.hitRate >= 60)
+    assert(w.median > 0)
+    assert(w.hits <= w.n)
+  }
+  for (let i = 1; i < windows.length; i++) assert(windows[i - 1].hitRate >= windows[i].hitRate)
 })
