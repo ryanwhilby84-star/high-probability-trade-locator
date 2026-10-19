@@ -1,5 +1,5 @@
 import React from 'react'
-import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
+import { SeasonalWindowFinder } from '../seasonality/SeasonalWindowFinder.jsx'
 
 import { SeasonalityWorkstation } from '../seasonality_workstation/SeasonalityWorkstation.jsx'
 import {
@@ -125,7 +125,7 @@ export function SeasonalityWorkstationPage({
         </div>
       </header>
 
-      <SugarArchivePanel marketId={marketId} />
+      <SeasonalWindowFinder marketId={marketId} />
       {payload?.archived_generated_at ? <p role="status" style={{ margin: 16, padding: 12, color: "#cbd5e1" }}>Seasonality data updated {payload.archived_generated_at.slice(0, 10)} · historical seasonal tendencies, not trading signals.</p> : null}
       <SeasonalityWorkstation
         marketId={marketId}
