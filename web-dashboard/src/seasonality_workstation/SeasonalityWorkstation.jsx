@@ -350,7 +350,7 @@ export function SeasonalityWorkstation({
         <div className="sws-controls">
           <button type="button" className={`sws-btn${windowsOpen ? ' is-active' : ''}`} onClick={() => setWindowsOpen(v => !v)}>{windowsOpen ? 'Hide Seasonal Windows' : 'Show Seasonal Windows'}</button>
         </div>
-        {windowsOpen ? <SeasonalWindowsBoard marketId={marketId} windows={payload.turning_windows || []} /> : null}
+        {windowsOpen ? <SeasonalWindowsBoard marketId={marketId} windows={payload.turning_windows || []} dailyWindows={payload.daily_seasonal_windows || []} /> : null}
 
         <div className="sws-header-meta">
           <Meta label="Instrument" value={payload.instrument_id || marketId} />
