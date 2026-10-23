@@ -240,7 +240,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
           <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
         </article>)}
       </div>}
-    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>Net-position min-max range percentile for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
+    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>COT range index (0–100), not a statistical percentile rank, for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
     <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#9bd84d', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
   </section>
 }

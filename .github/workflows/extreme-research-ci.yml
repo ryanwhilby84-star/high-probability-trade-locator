@@ -3,6 +3,10 @@ on:
   pull_request:
     paths:
       - 'web-dashboard/src/research/**'
+      - 'web-dashboard/src/workstation/WeeklyInspector.jsx'
+      - 'web-dashboard/src/workstation/positioningBasis*'
+      - 'web-dashboard/scripts/verify-inspector-basis.mjs'
+      - 'scripts/audit_cot_range_indices.py'
       - 'web-dashboard/src/workstation/CotWorkstation.jsx'
       - 'web-dashboard/scripts/verify-extreme-research.mjs'
       - '.github/workflows/extreme-research-ci.yml'
@@ -22,7 +26,9 @@ jobs:
           cache-dependency-path: web-dashboard/package-lock.json
       - run: npm ci --ignore-scripts
         working-directory: web-dashboard
-      - run: node --test web-dashboard/src/research/extremeOutcomes.test.js
+      - run: node --test web-dashboard/src/research/extremeOutcomes.test.js web-dashboard/src/workstation/positioningBasis.test.js
+      - run: python scripts/audit_cot_range_indices.py
+      - run: node web-dashboard/scripts/verify-inspector-basis.mjs
       - run: npm run build --prefix web-dashboard
       - run: npm install --no-save --package-lock=false playwright@1.61.0
         working-directory: web-dashboard

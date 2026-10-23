@@ -1,6 +1,7 @@
 import React from 'react'
+import { positioningBasis, formatRangeIndex, describeIndexSummary } from './positioningBasis.js'
 
-import { fmtPctile, shortSampleQuality, fmtRet } from './researchEventUi.js'
+import { shortSampleQuality, fmtRet } from './researchEventUi.js'
 import { BasicLookbackPanel } from './BasicLookbackPanel.jsx'
 
 function fmtNum(v) {
@@ -68,25 +69,25 @@ function groupTitle(group) {
 function Metric({ label, value, className = '', title = '' }) {
   return (
     <div className={`cot-ws-insp-metric ${className}`.trim()} title={title || undefined}>
-      <span className="cot-ws-insp-metric-label">{label}</span>
+      <span className="cot-ws-insp-metric-label">{label} (3Y)</span>
       <span className="cot-ws-insp-metric-value">{value}</span>
     </div>
   )
 }
 
-function FlowBadge({ p, percentile }) {
+function FlowBadge({ p, percentile, rangeId }) {
   if (!p) return null
   const temp = p.temperature || 'neutral'
   const arrow = p.directionArrow || '·'
   const label = p.stateLabel || '—'
   const pct =
     percentile != null && Number.isFinite(Number(percentile))
-      ? `${Math.round(Number(percentile))}th`
+      ? `${formatRangeIndex(percentile)} / 100 · ${rangeId.toUpperCase()}`
       : '—'
   return (
     <div
       className={`cot-ws-insp-flow cot-ws-insp-flow--${temp}`}
-      title="Net positioning expanding percentile + recent percentile-point change"
+      title="Selected-window COT range index; rotation state and arrow use the separate 3Y baseline"
     >
       <span className="cot-ws-insp-flow-pct">{pct}</span>
       <span className="cot-ws-insp-flow-arrow" aria-hidden="true">
@@ -97,7 +98,7 @@ function FlowBadge({ p, percentile }) {
   )
 }
 
-function ParticipantColumn({ title, p, rangeId = "3y" }) {
+function ParticipantColumn({ title, p, rangeId = "3y", history, date, netKey }) {
   if (!p) {
     return (
       <div className="cot-ws-insp-col">
@@ -117,7 +118,9 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
     ? Number(rawRank)
     : null
   const pctile =
-    rank == null ? 'Insufficient history' : fmtPctile(rank)
+    rank == null ? 'Insufficient history' : `${formatRangeIndex(rank)} / 100`
+  const basis = positioningBasis(history, date, netKey, rangeId)
+  const mismatch = basis && rank != null && (basis.current !== p.net || basis.index == null || Math.abs(basis.index - rank) > 0.02)
   const pct4 =
     p.percentileChange4w == null || !Number.isFinite(Number(p.percentileChange4w))
       ? 'Unavailable'
@@ -125,49 +128,51 @@ function ParticipantColumn({ title, p, rangeId = "3y" }) {
   return (
     <div className={`cot-ws-insp-col cot-ws-insp-col--temp-${temp}`}>
       <h4 className="cot-ws-insp-col-title">{title}</h4>
-      <FlowBadge p={p} percentile={rank} />
+      <FlowBadge p={p} percentile={mismatch ? null : rank} rangeId={rangeId} />
+      {mismatch ? <p role="alert">DATA MISMATCH: exported index does not match this chart history. Do not interpret this value.</p> : null}
       <div className="cot-ws-insp-metrics">
         <Metric label="Net" value={fmtNum(p.net)} />
         <Metric label="1W" value={fmtSigned(p.change1w)} />
         <Metric label="4W" value={fmtSigned(p.change4w)} />
         <Metric label="12W" value={fmtSigned(p.change12w)} />
         <Metric
-          label={`${percentileRangeId.toUpperCase()} net range percentile`}
-          value={pctile}
+          label={`${percentileRangeId.toUpperCase()} COT range index`}
+          value={mismatch ? 'Data mismatch' : pctile}
           title={`CFTC net positioning min-max range over ${percentileRangeId.toUpperCase()} available history`}
         />
         <Metric
-          label="1W pct movement"
+          label="3Y index Δ · 1W"
           value={`${fmtPctPts(p.percentileChange1w)} ${p.directionArrow || ''}`.trim()}
-          title="Change in net percentile over 1 week (percentile points)"
+          title="Change in 3Y COT range index over 1 week (index points)"
         />
         <Metric
-          label="4W pct movement"
+          label="3Y index Δ · 4W"
           value={pct4}
-          title="Change in net percentile over 4 weeks (percentile points)"
+          title="Change in 3Y COT range index over 4 weeks (index points)"
         />
         <Metric
-          label="12W pct movement"
+          label="3Y index Δ · 12W"
           value={fmtPctPts(p.percentileChange12w)}
-          title="Change in net percentile over 12 weeks (percentile points)"
+          title="Change in 3Y COT range index over 12 weeks (index points)"
         />
         <Metric
-          label="Obs count"
+          label="3Y analysis observations"
           value={
             p.percentileObservationCount != null
               ? String(p.percentileObservationCount) + ' (3Y baseline)'
               : 'Unavailable'
           }
         />
-        <Metric label="Extreme" value={p.extremeState || (p.isExtreme ? 'Yes' : 'None')} />
-        <Metric label="Rotation" value={p.rotationState || 'None'} />
+        <Metric label="3Y extreme" value={p.extremeState || (p.isExtreme ? 'Yes' : 'None')} />
+        <Metric label="3Y rotation" value={p.rotationState || 'None'} />
         <Metric
-          label="State"
+          label="3Y state"
           value={p.stateLabel || 'Unavailable'}
           className="cot-ws-insp-metric--state"
         />
       </div>
-      {p.summaryLine ? <p className="cot-ws-insp-group-summary">{p.summaryLine}</p> : null}
+      {basis ? <details className="cot-ws-insp-index-basis"><summary>{rangeId.toUpperCase()} calculation evidence</summary><p>{basis.start} to {basis.end} · {basis.count} valid weekly observations</p><p>Net {fmtNum(basis.current)} · minimum {fmtNum(basis.minimum)} · maximum {fmtNum(basis.maximum)}</p><p>(Net − minimum) ÷ (maximum − minimum) × 100 = {basis.index == null ? 'Unavailable (flat range)' : formatRangeIndex(basis.index)}</p><p>This measures distance within the positioning range, not the percentage of historical weeks below today.</p></details> : null}
+      {p.summaryLine ? <p className="cot-ws-insp-group-summary"><strong>3Y analysis: </strong>{describeIndexSummary(p.summaryLine)}</p> : null}
     </div>
   )
 }
@@ -217,6 +222,7 @@ export function WeeklyInspector({
   analysisOpen = false,
   onToggleAnalysis,
   rangeId = "3y",
+  history = [],
 }) {
   const [expanded, setExpanded] = React.useState(false)
 
@@ -263,9 +269,9 @@ export function WeeklyInspector({
         <span className="cot-ws-insp-locked">Locked</span>
         <span
           className="cot-ws-insp-measure"
-          title={week.measureLabel || 'Net positioning expanding percentile'}
+          title={week.measureLabel || 'COT range index, not statistical percentile rank'}
         >
-          Net pctile
+          COT range index
         </span>
         <div className="cot-ws-insp-head-actions">
           {onToggleAnalysis ? (
@@ -344,41 +350,42 @@ export function WeeklyInspector({
             onSelectEvent={onSelectEvent}
           />
 
+          <p className="cot-ws-insp-group-summary"><strong>{rangeId.toUpperCase()} COT range index (0–100).</strong> Not a statistical percentile rank. Participant movement, rotation and written participant analysis below use a separate 3Y baseline.</p>
           <BasicLookbackPanel week={week} />
 
           <div className="cot-ws-insp-columns" role="group" aria-label="Weekly breakdown">
-            <ParticipantColumn title="Commercial" p={week.commercial} rangeId={rangeId} />
-            <ParticipantColumn title="Non-Commercial" p={week.nonCommercial} rangeId={rangeId} />
-            <ParticipantColumn title="Non-Reportable" p={week.nonReportable} rangeId={rangeId} />
+            <ParticipantColumn title="Commercial" p={week.commercial} rangeId={rangeId} history={history} date={week.date} netKey="commercial_net" />
+            <ParticipantColumn title="Non-Commercial" p={week.nonCommercial} rangeId={rangeId} history={history} date={week.date} netKey="institutional_net" />
+            <ParticipantColumn title="Non-Reportable" p={week.nonReportable} rangeId={rangeId} history={history} date={week.date} netKey="retail_net" />
             <div className="cot-ws-insp-col cot-ws-insp-col--cross">
-              <h4 className="cot-ws-insp-col-title">Cross-Group</h4>
+              <h4 className="cot-ws-insp-col-title">Cross-Group · baselines labelled</h4>
               <div className="cot-ws-insp-metrics">
                 <Metric
-                  label="C pctile"
+                  label="C · 3Y index"
                   value={
-                    fmtPctile(sp.commercialPercentile) === '—'
+                    formatRangeIndex(sp.commercialPercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.commercialPercentile)
+                      : formatRangeIndex(sp.commercialPercentile)
                   }
                 />
                 <Metric
-                  label="NC pctile"
+                  label="NC · 3Y index"
                   value={
-                    fmtPctile(sp.noncommercialPercentile) === '—'
+                    formatRangeIndex(sp.noncommercialPercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.noncommercialPercentile)
+                      : formatRangeIndex(sp.noncommercialPercentile)
                   }
                 />
                 <Metric
-                  label="NR pctile"
+                  label="NR · 3Y index"
                   value={
-                    fmtPctile(sp.nonreportablePercentile) === '—'
+                    formatRangeIndex(sp.nonreportablePercentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.nonreportablePercentile)
+                      : formatRangeIndex(sp.nonreportablePercentile)
                   }
                 />
                 <Metric
-                  label="C−NC pct"
+                  label="C−NC · 3Y index spread"
                   value={
                     sp.commNc?.valueKind === 'percentile_spread'
                       ? fmtPctPts(sp.commNc?.value)
@@ -387,21 +394,21 @@ export function WeeklyInspector({
                   title="Commercial net percentile minus Non-Commercial net percentile"
                 />
                 <Metric
-                  label="C−NC 1W"
+                  label="3Y spread Δ · 1W"
                   value={fmtPctPts(sp.commNc?.change1w)}
                   title="1W change in Comm−NC percentile spread"
                 />
                 <Metric
-                  label="C−NC 4W"
+                  label="3Y spread Δ · 4W"
                   value={fmtPctPts(sp.commNc?.change4w)}
                   title="4W change in Comm−NC percentile spread"
                 />
                 <Metric
-                  label="C−NR pct"
+                  label="C−NR · expanding index"
                   value={
-                    fmtPctile(sp.commNr?.percentile) === '—'
+                    formatRangeIndex(sp.commNr?.percentile) === '—'
                       ? 'Unavailable'
-                      : fmtPctile(sp.commNr?.percentile)
+                      : formatRangeIndex(sp.commNr?.percentile)
                   }
                   title="Expanding percentile of Comm−NR spread"
                 />
@@ -416,7 +423,7 @@ export function WeeklyInspector({
           </div>
 
           <div className="cot-ws-insp-summary-row">
-            <p className="cot-ws-insp-summary">{week.summary}</p>
+            <p className="cot-ws-insp-summary"><strong>3Y analysis: </strong>{describeIndexSummary(week.summary)}</p>
           </div>
 
           {expanded ? (
