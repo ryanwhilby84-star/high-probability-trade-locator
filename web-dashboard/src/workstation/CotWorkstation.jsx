@@ -1,3 +1,5 @@
+import ExtremeResearchPanel from '../research/ExtremeResearchPanel.jsx'
+import {attachResearchPrices} from '../research/extremeOutcomes.js'
 import React from 'react'
 import { useLegacyCot } from '../hooks/useLegacyCot.js'
 import { POSITIONING_SHEET_TABS } from '../cot/groupPositioningView.js'
@@ -284,6 +286,10 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   }, [model, exportBlock])
 
   const timelineRows = binding?.rows ?? []
+  const researchSeries = React.useMemo(
+    () => attachResearchPrices(model?.series || [], binding?.weeklyBars || []),
+    [binding, model],
+  )
   const visibleBars = binding?.weeklyBars ?? []
   const totalCotWeeks = binding?.meta?.cotWeeks ?? timelineRows.length
 
@@ -1019,6 +1025,8 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
           </div>
         </div>
       )}
+
+      <ExtremeResearchPanel series={researchSeries} onInspect={(date) => { lockWeek(date, null); jumpToWeek(date); }} />
 
       <WeeklyInspector
         rangeId={rangeId}
