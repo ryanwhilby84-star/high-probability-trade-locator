@@ -1029,6 +1029,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
       <ExtremeResearchPanel series={researchSeries} onInspect={(date) => { lockWeek(date, null); jumpToWeek(date); }} />
 
       <WeeklyInspector
+        history={model?.series || []}
         rangeId={rangeId}
         week={inspectedWeek}
         open={inspectorOpen}
