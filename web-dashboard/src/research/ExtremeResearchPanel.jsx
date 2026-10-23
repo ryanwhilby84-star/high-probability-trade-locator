@@ -10,12 +10,12 @@ export default function ExtremeResearchPanel({series,onInspect}){
  return <section className="ie-extreme-research"><button type="button" className="ie-research-toggle" aria-expanded={open} onClick={()=>setOpen(!open)}>Historical extreme research {open?'−':'+'}</button>{open&&<>
   <h2>What followed comparable positioning extremes?</h2><p>Choose how to define an extreme, then search all available loaded history. These controls are separate from the chart’s visible date range.</p>
   <div className="ie-research-controls">
-   <label>Extreme baseline<select value={baseline} onChange={e=>setBaseline(e.target.value)}>{['3y','5y','10y','all'].map(v=><option key={v} value={v}>{v==='all'?'All prior history (expanding)':v.toUpperCase()}</option>)}</select></label>
-   <label>Participant<select value={group} onChange={e=>setGroup(e.target.value)}><option value="commercial_net">Commercial</option><option value="institutional_net">Non-commercial</option><option value="retail_net">Non-reportable</option></select></label>
-   <label>Extreme side<select value={tail} onChange={e=>setTail(e.target.value)}><option value="low">Low positioning</option><option value="high">High positioning</option></select></label>
-   <label>Extreme band<select value={band} onChange={e=>setBand(Number(e.target.value))}>{[80,90,95].map(v=><option key={v} value={v}>{v} / {100-v}</option>)}</select></label>
-   <label>Test direction<select value={direction} onChange={e=>setDirection(e.target.value)}><option value="long">Long</option><option value="short">Short</option></select></label>
-   <label>Favourable target<select value={target} onChange={e=>setTarget(Number(e.target.value))}>{[1,2,3,5,10].map(v=><option key={v} value={v}>{v}%</option>)}</select></label>
+   <label>Extreme baseline<select aria-label="Extreme baseline" value={baseline} onChange={e=>setBaseline(e.target.value)}>{['3y','5y','10y','all'].map(v=><option key={v} value={v}>{v==='all'?'All prior history (expanding)':v.toUpperCase()}</option>)}</select></label>
+   <label>Participant<select aria-label="Participant" value={group} onChange={e=>setGroup(e.target.value)}><option value="commercial_net">Commercial</option><option value="institutional_net">Non-commercial</option><option value="retail_net">Non-reportable</option></select></label>
+   <label>Extreme side<select aria-label="Extreme side" value={tail} onChange={e=>setTail(e.target.value)}><option value="low">Low positioning</option><option value="high">High positioning</option></select></label>
+   <label>Extreme band<select aria-label="Extreme band" value={band} onChange={e=>setBand(Number(e.target.value))}>{[80,90,95].map(v=><option key={v} value={v}>{v} / {100-v}</option>)}</select></label>
+   <label>Test direction<select aria-label="Test direction" value={direction} onChange={e=>setDirection(e.target.value)}><option value="long">Long</option><option value="short">Short</option></select></label>
+   <label>Favourable target<select aria-label="Favourable target" value={target} onChange={e=>setTarget(Number(e.target.value))}>{[1,2,3,5,10].map(v=><option key={v} value={v}>{v}%</option>)}</select></label>
   </div>
   <p><strong>{result.episodeCount} distinct extreme episodes</strong> · {result.eligibleWeeks} eligible signal weeks · COT: {result.cotStart||'unavailable'} to {result.cotEnd||'unavailable'} · Prices: {result.priceStart||'unavailable'} to {result.priceEnd||'unavailable'}</p>
   {!result.eligibleWeeks&&<p role="status">Insufficient complete history for this baseline. No values are invented or backfilled.</p>}
