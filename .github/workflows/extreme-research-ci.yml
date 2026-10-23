@@ -1,0 +1,34 @@
+name: Historical extreme research checks
+on:
+  pull_request:
+    paths:
+      - 'web-dashboard/src/research/**'
+      - 'web-dashboard/src/workstation/CotWorkstation.jsx'
+      - 'web-dashboard/scripts/verify-extreme-research.mjs'
+      - '.github/workflows/extreme-research-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - run: npm ci --ignore-scripts
+        working-directory: web-dashboard
+      - run: node --test web-dashboard/src/research/extremeOutcomes.test.js
+      - run: npm run build --prefix web-dashboard
+      - run: npm install --no-save --package-lock=false playwright@1.61.0
+        working-directory: web-dashboard
+      - run: npx playwright install --with-deps chromium
+        working-directory: web-dashboard
+      - name: Verify workstation research controls in browser
+        run: |
+          npm run preview --prefix web-dashboard -- --host 127.0.0.1 --port 4173 > /tmp/extreme-research-preview.log 2>&1 &
+          node web-dashboard/scripts/verify-extreme-research.mjs
