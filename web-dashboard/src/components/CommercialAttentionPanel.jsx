@@ -1,3 +1,4 @@
+import { attentionForWeek } from '../data/attentionWeek.js'
 import React from 'react'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
@@ -245,18 +246,25 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   </section>
 }
 
-export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
+export function CommercialAttentionPanel({ date, radarEligibleOnly = true }) {
   const [state, setState] = React.useState({ doc: null, loading: true, error: null })
   React.useEffect(() => {
     const controller = new AbortController()
-    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal })
+    setState({ doc: null, loading: true, error: null })
+    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal, cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
-      .then(doc => {
+      .then(async doc => {
+        if (date && date !== doc.latestDate) {
+          const response = await fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
+          if (!response.ok) throw new Error('Weekly Inspector HTTP ' + response.status)
+          doc = attentionForWeek(await response.json(), date)
+        }
+        if (controller.signal.aborted) return
         if (!Array.isArray(doc?.rows) || !doc.latestDate) throw new Error('Invalid attention snapshot')
         setState({ doc, loading: false, error: null })
       })
       .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
     return () => controller.abort()
-  }, [])
+  }, [date])
   return <ExtremeAttentionBoard historical={state.doc} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
 }

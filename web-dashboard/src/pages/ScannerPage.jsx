@@ -223,7 +223,7 @@ export function ScannerPage({
         </p>
       ) : null}
 
-      <CommercialAttentionPanel doc={commercialAttention} radarEligibleOnly={radarEligibleOnly} topN={8} />
+      <CommercialAttentionPanel date={date} doc={commercialAttention} radarEligibleOnly={radarEligibleOnly} topN={8} />
 
       <div className="ws-toolbar">
         <input
