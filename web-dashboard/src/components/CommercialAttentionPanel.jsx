@@ -1,3 +1,4 @@
+import { AssetIcon } from './AssetIcon.jsx'
 import { attentionForWeek } from '../data/attentionWeek.js'
 import React from 'react'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
@@ -227,7 +228,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
         {displayed.map(v => <article key={v.name} style={tile}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: 18, color: '#fff' }}>{v.name}</h3>
+            <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
             <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#e7a06d' : '#aeb4ba', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 7, margin: '14px 0' }}>

@@ -1,3 +1,4 @@
+import { AssetIcon } from '../components/AssetIcon.jsx'
 import React from 'react'
 import { AppShell, filterMarketsBySidebar, assetClassForMarket, assetClassLabel } from '../components/AppShell.jsx'
 import { getAssetClasses } from '../marketCatalog.js'
@@ -343,7 +344,7 @@ export function ScannerPage({
                       <span className={`priority-tier-pill ${r.tierClass}`}>{r.tierLabel}</span>
                     </td>
                     <td>
-                      <div className="scanner-market">{r.market}</div>
+                      <div className="scanner-market" style={{ display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={r.market} size={26} /><span>{r.market}</span></div>
                       <PositioningStatusBadges row={r} compact />
                       <div className="scanner-market-meta">
                         {assetClassLabel(r.assetClass)} · {r.resolved ? `COT ${display(r.cotDate)}` : 'Macro only'}
