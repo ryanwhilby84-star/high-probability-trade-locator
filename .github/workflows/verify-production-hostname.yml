@@ -1,0 +1,54 @@
+name: Verify Institutional Edge production hostname
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/connect_production_domain.py
+      - .github/workflows/verify-production-hostname.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify release credential can attach and inspect the live hostname
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'scripts')
+          from connect_production_domain import api, connect, DOMAIN
+          alias = api('/v4/aliases/' + DOMAIN)
+          import os
+          if alias.get('projectId') != os.environ['VERCEL_PROJECT_ID']:
+              raise SystemExit('Live hostname belongs to an unexpected project')
+          connect(alias['deploymentId'])
+          PY
+      - name: Verify live startup snapshot and Attention Board agree
+        run: |
+          python - <<'PY'
+          import json, time, urllib.request
+          base = 'https://institutional.ztack.co.uk/data/'
+          def read(name):
+              with urllib.request.urlopen(base + name + '?verify=' + str(time.time_ns()), timeout=60) as response:
+                  return json.load(response)
+          startup = read('confluence_bootstrap_latest.json')
+          attention = read('cot_attention_80_20_latest.json')
+          inspector = read('cot_weekly_inspector_latest.json')
+          latest = max(m['rows'][-1][0] for m in inspector['markets'].values() if m.get('available') and m.get('rows'))
+          if latest != startup['bootstrap']['latest_date'] or latest != attention['latestDate']:
+              raise SystemExit('Live COT dates disagree')
+          if len(startup['records']) >= startup['bootstrap']['full_record_count']:
+              raise SystemExit('Startup still contains the complete archive')
+          print('PASS: live hostname, Weekly Inspector, Attention Board and startup snapshot agree:', latest)
+          print('Startup rows:', len(startup['records']), 'of', startup['bootstrap']['full_record_count'])
+          PY
