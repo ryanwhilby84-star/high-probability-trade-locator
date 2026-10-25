@@ -54,7 +54,13 @@ export function SeasonalityWorkstationPage({
         const archive = await response.json()
         const market = archive?.markets?.[marketId]
         const selection = market?.lookbacks?.[lookback]
-        if (market?.status !== 'ok' || market?.integrity?.status === 'FAIL' || !selection) throw new Error('No verified seasonality for selected market and lookback')
+        if (!market) throw new Error(`No seasonality export exists for ${marketId}`)
+        if (market.status !== 'ok' || market.integrity?.status === 'FAIL') {
+          if (!cancelled) setPayload(market)
+          const issues = (market.integrity?.issues || []).join(', ')
+          throw new Error(market.message || `${marketId}: ${market.error || issues || 'history failed verification'}`)
+        }
+        if (!selection) throw new Error(`No verified ${lookback} seasonality for ${marketId}`)
         if (!cancelled) setPayload({
           ...market,
           selected_lookback: lookback,

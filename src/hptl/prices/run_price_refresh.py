@@ -75,6 +75,31 @@ def refresh_instrument_record(
     return merged
 
 
+
+def seed_price_history_from_bundle() -> int:
+    """Restore versioned history before a fresh runner attempts provider updates.
+
+    A clean CI checkout may have the published bundle but no ignored per-market
+    store files. Failed API requests must not turn that history into empty data.
+    """
+    from hptl.prices.price_store import load_price_store
+
+    restored = 0
+    for iid, record in (load_price_store().get("instruments") or {}).items():
+        if not record.get("daily"):
+            continue
+        existing = load_instrument_record_internal(iid)
+        if existing and existing.get("daily"):
+            continue
+        source = (record.get("price_scale") or {}).get("source")
+        write_instrument_record(
+            {**record, "instrument_id": iid},
+            fetched_via=source or "published_history",
+        )
+        restored += 1
+    return restored
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Refresh HTPL canonical price store")
     parser.add_argument("--limit", type=int, default=0, help="Max instruments (0 = all supported)")
@@ -131,6 +156,8 @@ def main(argv: list[str] | None = None) -> int:
     if requested:
         print(f"Targeted price refresh: {len(ids)} instrument(s)")
 
+    restored = seed_price_history_from_bundle()
+    print(f"Restored {restored} published price histories before refresh")
     adapter = UnifiedPriceAdapter(coverage)
     records: dict = {}
 
@@ -200,3 +227,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
