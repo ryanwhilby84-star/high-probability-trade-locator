@@ -383,7 +383,7 @@ export function useConfluenceData() {
 
       setData(rows)
       setArchiveDates(payloadClean?.bootstrap?.dates || [])
-      setBootstrapFrom(payloadClean?.bootstrap?.from_date || null)
+      setBootstrapFrom(payloadClean?.bootstrap?.latest_date || null)
 
       setLatestCotReportDate(metaLatest)
 

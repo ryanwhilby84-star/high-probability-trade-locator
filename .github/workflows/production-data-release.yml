@@ -18,7 +18,7 @@ on:
 
 concurrency:
   group: institutional-edge-data-release
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   release:
