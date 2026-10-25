@@ -34,7 +34,9 @@ export default function App() {
   const confluence = useConfluenceData()
   const [sidebarClass, setSidebarClass] = React.useState('all')
 
-  React.useEffect(() => { prefetchCot3ySeries() }, [])
+  React.useEffect(() => {
+    if (route.view === 'cot-workstation' || route.view === 'instrument') prefetchCot3ySeries()
+  }, [route.view])
   React.useEffect(() => LivePriceStore.subscribe(() => {}), [])
 
   const allowedMarkets = React.useMemo(() => {

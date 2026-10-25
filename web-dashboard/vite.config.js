@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url'
 import path from 'path'
-import { spawn } from 'child_process'
+import { spawn, spawnSync } from 'child_process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { buildAttentionSnapshot } from './scripts/buildAttentionSnapshot.mjs'
@@ -948,7 +948,12 @@ export default defineConfig({
   root,
   plugins: [
     react(),
-    { name: 'hptl-attention-snapshot', buildStart() { buildAttentionSnapshot(root) } },
+    { name: 'hptl-attention-snapshot', buildStart() {
+      buildAttentionSnapshot(root)
+      const result = spawnSync(process.env.HPTL_PYTHON || 'python', [path.join(projectRoot, 'scripts/build_confluence_bootstrap.py')], { cwd: projectRoot, encoding: 'utf8' })
+      if (result.status !== 0) throw new Error('Confluence startup export failed: ' + (result.stderr || result.error || 'unknown error'))
+      console.log(result.stdout.trim())
+    } },
     workstationRoutePlugin(),
     seasonalityWorkstationRoutePlugin(),
     correlationMatrixRoutePlugin(),

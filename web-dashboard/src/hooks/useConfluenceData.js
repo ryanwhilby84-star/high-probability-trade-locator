@@ -161,7 +161,7 @@ async function fetchJsonText(url) {
 
 
 async function fetchConfluenceHistory() {
-  const manifestResponse = await fetch('/data/confluence_history_manifest.json')
+  const manifestResponse = await fetch('/data/confluence_history_manifest.json', { cache: 'no-store' })
   if (manifestResponse.status === 404) {
     return fetchJsonText('/data/confluence_history_latest.json')
   }
@@ -170,14 +170,19 @@ async function fetchConfluenceHistory() {
   if (!Array.isArray(manifest.parts) || !manifest.parts.length) throw new Error('Invalid confluence chunk manifest')
   const buffers = []
   let total = 0
-  for (const part of manifest.parts) {
-    if (!/^confluence_history_part_\d{3}\.bin$/.test(part.file)) throw new Error('Invalid confluence part name')
-    const response = await fetch(`/data/${part.file}`)
-    if (!response.ok) throw new Error(`Confluence chunk ${part.file} HTTP ${response.status}`)
-    const bytes = new Uint8Array(await response.arrayBuffer())
-    if (bytes.byteLength !== part.size) throw new Error(`Confluence chunk size mismatch: ${part.file}`)
-    buffers.push(bytes)
-    total += bytes.byteLength
+  for (let index = 0; index < manifest.parts.length; index += 4) {
+    const batch = await Promise.all(manifest.parts.slice(index, index + 4).map(async (part) => {
+      if (!/^confluence_history_part_\d{3}\.bin$/.test(part.file)) throw new Error('Invalid confluence part name')
+      const response = await fetch(`/data/${part.file}?v=${encodeURIComponent(manifest.sha256)}`)
+      if (!response.ok) throw new Error(`Confluence chunk ${part.file} HTTP ${response.status}`)
+      const bytes = new Uint8Array(await response.arrayBuffer())
+      if (bytes.byteLength !== part.size) throw new Error(`Confluence chunk size mismatch: ${part.file}`)
+      return bytes
+    }))
+    for (const bytes of batch) {
+      buffers.push(bytes)
+      total += bytes.byteLength
+    }
   }
   if (total !== manifest.total_bytes) throw new Error('Confluence dataset size mismatch')
   const merged = new Uint8Array(total)
@@ -218,6 +223,8 @@ function normalizeRecords(payload) {
 export function useConfluenceData() {
 
   const [data, setData] = React.useState([])
+  const [archiveDates, setArchiveDates] = React.useState([])
+  const [bootstrapFrom, setBootstrapFrom] = React.useState(null)
 
   const [date, setDate] = React.useState('')
 
@@ -375,6 +382,8 @@ export function useConfluenceData() {
       if (cancelled) return
 
       setData(rows)
+      setArchiveDates(payloadClean?.bootstrap?.dates || [])
+      setBootstrapFrom(payloadClean?.bootstrap?.from_date || null)
 
       setLatestCotReportDate(metaLatest)
 
@@ -471,7 +480,12 @@ export function useConfluenceData() {
 
         const [confluenceText, mapsText] = await Promise.all([
 
-          fetchConfluenceHistory(),
+          (async () => {
+            const response = await fetch('/data/confluence_bootstrap_latest.json', { cache: 'no-store' })
+            if (response.status === 404) return fetchConfluenceHistory()
+            if (!response.ok) throw new Error(`Confluence startup HTTP ${response.status}`)
+            return response.text()
+          })(),
 
           fetchJsonText('/data/macro_relationship_maps_latest.json').catch(() => null),
 
@@ -551,7 +565,23 @@ export function useConfluenceData() {
 
 
 
-  const dates = React.useMemo(() => [...new Set(data.map((r) => normalizeDate(rowDate(r))).filter(Boolean))].sort(), [data])
+  // Historical dates remain selectable, but the archive is never on the startup path.
+  React.useEffect(() => {
+    if (!bootstrapFrom || !date || normalizeDate(date) >= bootstrapFrom) return
+    let cancelled = false
+    setLoading(true)
+    fetchConfluenceHistory().then(safeJsonParse).then(({ parsed }) => {
+      if (cancelled) return
+      setData(normalizeRecords(parsed))
+      setBootstrapFrom(null)
+      setError(null)
+    }).catch((e) => {
+      if (!cancelled) setError(`Could not load selected historical week: ${e.message}`)
+    }).finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [date, bootstrapFrom])
+
+  const dates = React.useMemo(() => [...new Set([...archiveDates, ...data.map((r) => normalizeDate(rowDate(r))).filter(Boolean)])].sort(), [data, archiveDates])
 
 
 
