@@ -1,0 +1,45 @@
+name: Publish dashboard interface
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'web-dashboard/src/**'
+      - 'web-dashboard/index.html'
+      - 'web-dashboard/package*.json'
+      - 'web-dashboard/tailwind.config.*'
+      - 'web-dashboard/postcss.config.*'
+      - 'web-dashboard/vite.ui.config.js'
+      - 'scripts/deploy_dashboard_interface.py'
+      - '.github/workflows/dashboard-interface.yml'
+
+concurrency:
+  group: institutional-edge-data-release
+  cancel-in-progress: false
+
+jobs:
+  interface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --prefix web-dashboard
+      - name: Build interface without rebuilding market data
+        working-directory: web-dashboard
+        run: npx vite build --config vite.ui.config.js
+      - name: Publish interface while preserving production data
+        run: python scripts/deploy_dashboard_interface.py
