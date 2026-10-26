@@ -46,7 +46,7 @@ function FreshnessBadge({ freshness }) {
   )
 }
 
-export function DxyMacroBiasPage() {
+export function DxyMacroBiasPage({ sidebarClass, onSidebarClass }) {
   const [doc, setDoc] = React.useState(null)
   const [error, setError] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
@@ -76,7 +76,7 @@ export function DxyMacroBiasPage() {
   const biasTone = toneFor(doc?.macro_bias)
 
   return (
-    <AppShell
+    <AppShell sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}
       title="DXY Macro Bias"
       subtitle="USD Index workstation bias — FRED broad USD proxy + ICE DX futures COT"
       topActions={

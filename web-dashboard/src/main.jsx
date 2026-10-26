@@ -9,4 +9,6 @@ import './workstation/styles/instrumentWorkstation.css'
 import './workstation/workstationModern.css'
 import './charts/chartQuality.css'
 
-createRoot(document.getElementById('root')).render(<App />)
+import './financeTheme.css'
+
+createRoot(document.getElementById('root')).render(<div className="ie-finance"><App /></div>)

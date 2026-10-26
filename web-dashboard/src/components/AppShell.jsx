@@ -28,8 +28,8 @@ export function AppShell({
   onDateChange,
   latestCotReportDate,
   cotFeedStatus,
-  sidebarClass,
-  onSidebarClass,
+  sidebarClass = 'all',
+  onSidebarClass = () => {},
   marketSwitcher,
   topActions,
   contentClassName = '',
@@ -49,7 +49,7 @@ export function AppShell({
           }}
           title="Back to market scanner"
         >
-          <span style={{ fontSize: 10, letterSpacing: '0.13em', color: '#9bd84d', fontWeight: 800 }}>INSTITUTIONAL EDGE</span>
+          <span style={{ fontSize: 10, letterSpacing: '0.13em', color: 'var(--hptl-accent, #a6bedc)', fontWeight: 800 }}>INSTITUTIONAL EDGE</span>
           <strong>Markets</strong>
         </button>
         <nav className="ws-nav">

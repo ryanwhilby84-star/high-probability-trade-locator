@@ -1,3 +1,4 @@
+import { AppShell } from '../components/AppShell.jsx'
 import React from 'react'
 import { SugarArchivePanel } from '../seasonality/SugarArchivePanel.jsx'
 
@@ -18,6 +19,8 @@ import '../seasonality_workstation/seasonalityWorkstation.css'
 export function SeasonalityWorkstationPage({
   marketId,
   trackedMarkets,
+  sidebarClass,
+  onSidebarClass,
 }) {
   const navMarkets = React.useMemo(() => {
     const ids = (trackedMarkets || []).map((m) => canonicalMarketId(m)).filter(Boolean)
@@ -81,6 +84,7 @@ export function SeasonalityWorkstationPage({
   }, [marketId, lookback])
 
   return (
+    <AppShell title="Seasonality" subtitle="Historical seasonal patterns and market research" sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}>
     <div className="sws-page">
       <header className="sws-topbar">
         <div className="sws-topbar-left">
@@ -142,5 +146,6 @@ export function SeasonalityWorkstationPage({
         error={error}
       />
     </div>
+    </AppShell>
   )
 }

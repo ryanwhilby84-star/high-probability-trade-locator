@@ -33,6 +33,7 @@ export default function App() {
   const route = useHashRoute()
   const confluence = useConfluenceData()
   const [sidebarClass, setSidebarClass] = React.useState('all')
+  const shellProps = { sidebarClass, onSidebarClass: setSidebarClass }
 
   React.useEffect(() => {
     if (route.view === 'cot-workstation' || route.view === 'instrument') prefetchCot3ySeries()
@@ -55,7 +56,7 @@ export default function App() {
   if (route.view === 'natural-gas-valuation-workstation') return <NaturalGasValuationWorkstationPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'natural-gas-valuation') return <NaturalGasValuationPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'soybean-valuation-research') return <SoybeanValuationResearchPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
-  if (route.view === 'dxy-macro-bias') return <DxyMacroBiasPage />
+  if (route.view === 'dxy-macro-bias') return <DxyMacroBiasPage {...shellProps} />
   if (route.view === 'gold-valuation') return <GoldValuationPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'data-lineage') return <DataLineagePage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
 
@@ -79,9 +80,9 @@ export default function App() {
     return <SeasonalityWorkstationPage marketId={marketId} trackedMarkets={allowedMarkets} sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   }
 
-  if (route.view === 'correlation-matrix') return <CorrelationMatrixPage />
-  if (route.view === 'trade-basket') return <TradeBasketWorkstationPage />
-  if (route.view === 'macro-intelligence') return <MacroIntelligencePage />
+  if (route.view === 'correlation-matrix') return <CorrelationMatrixPage {...shellProps} />
+  if (route.view === 'trade-basket') return <TradeBasketWorkstationPage {...shellProps} />
+  if (route.view === 'macro-intelligence') return <MacroIntelligencePage {...shellProps} />
 
   if (route.view === 'instrument' && route.market) {
     const marketId = canonicalMarketId(route.market)

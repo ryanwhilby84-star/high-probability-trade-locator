@@ -1,3 +1,4 @@
+import { AppShell } from '../components/AppShell.jsx'
 import React from 'react'
 
 import { CorrelationMatrixWorkstation } from '../correlation_matrix/CorrelationMatrixWorkstation.jsx'
@@ -8,7 +9,7 @@ import '../correlation_matrix/correlationMatrix.css'
  * Phase 1 Correlation Matrix Workstation.
  * Controls: return frequency + lookback. Display: colour matrix only.
  */
-export function CorrelationMatrixPage() {
+export function CorrelationMatrixPage({ sidebarClass, onSidebarClass }) {
   const [frequency, setFrequency] = React.useState('daily')
   const [lookback, setLookback] = React.useState(60)
   const [payload, setPayload] = React.useState(null)
@@ -56,22 +57,8 @@ export function CorrelationMatrixPage() {
   }, [frequency, lookback])
 
   return (
-    <div className="cmx-page">
-      <header className="cmx-topbar">
-        <div>
-          <button type="button" className="cmx-btn" onClick={navigateToScanner}>
-            Scanner
-          </button>
-        </div>
-        <div>
-          <h1 className="cmx-title">Correlation Matrix</h1>
-          <p className="cmx-sub">
-            Phase 1 — Pearson correlation on percentage returns · statistical
-            engine only
-          </p>
-        </div>
-        <div />
-      </header>
+    <AppShell title="Correlation Matrix" subtitle="Cross-market correlation and portfolio diversification" sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}>
+      <div className="cmx-page">
       <CorrelationMatrixWorkstation
         payload={payload}
         frequency={frequency}
@@ -81,6 +68,7 @@ export function CorrelationMatrixPage() {
         loading={loading}
         error={error}
       />
-    </div>
+      </div>
+    </AppShell>
   )
 }
