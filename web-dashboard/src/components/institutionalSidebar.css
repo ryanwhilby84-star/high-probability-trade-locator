@@ -1,60 +1,60 @@
-/* Institutional Edge sidebar — shared ZTACK charcoal/chrome/lime identity.
+/* Institutional Edge sidebar — polished navy and steel identity.
    Scoped to the workstation shell; preserve trading semantics elsewhere. */
 .ws-root .ws-sidebar {
-  background: #0b0d0f;
-  border-right: 1px solid #282b2f;
+  background: linear-gradient(180deg, #152131, #0c1420);
+  border-right: 1px solid #2c3c51;
   color: #f3f5f7;
 }
 .ws-root .ws-brand {
-  background: #0b0d0f;
+  background: #0c1420;
   color: #cfd3d7;
-  border-bottom: 1px solid #282b2f;
+  border-bottom: 1px solid #2c3c51;
 }
 .ws-root .ws-brand strong { color: #f3f5f7; }
-.ws-root .ws-brand:hover, .ws-root .ws-brand:focus-visible { color: #a8e15d; }
+.ws-root .ws-brand:hover, .ws-root .ws-brand:focus-visible { color: #c0d7f4; }
 .ws-root .ws-nav-btn {
   background: transparent;
-  color: #aeb4ba;
+  color: #b1bfd0;
   border-color: transparent;
   transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
 .ws-root .ws-nav-btn:hover:not(:disabled),
 .ws-root .ws-nav-btn:focus-visible:not(:disabled) {
-  background: #171a1e;
+  background: #1b293a;
   color: #f3f5f7;
-  border-color: #383e44;
+  border-color: #4a607b;
 }
 .ws-root .ws-nav-btn.active {
-  background: #171a1e;
-  color: #a8e15d;
-  border-left: 3px solid #8dc63f;
+  background: #1b293a;
+  color: #c0d7f4;
+  border-left: 3px solid #92b6e2;
 }
-.ws-root .ws-nav-count { color: #8d949b; }
+.ws-root .ws-nav-count { color: #94a5ba; }
 .ws-root .ws-nav-btn.active .ws-nav-count { color: #9bd84d; }
 .ws-root .ws-product-nav {
-  background: #0b0d0f;
-  border-top: 1px solid #282b2f;
+  background: #0c1420;
+  border-top: 1px solid #2c3c51;
 }
 .ws-root .ws-product-nav .ws-btn,
 .ws-root .ws-product-nav .ws-btn.ws-btn-primary {
-  background: #111418;
+  background: #142030;
   color: #cfd3d7;
-  border: 1px solid #343a40;
+  border: 1px solid #35485f;
   box-shadow: none;
   border-radius: 6px;
   font-weight: 650;
 }
 .ws-root .ws-product-nav .ws-btn:hover,
 .ws-root .ws-product-nav .ws-btn:focus-visible {
-  background: #171a1e;
-  color: #a8e15d;
-  border-color: #8dc63f;
+  background: #1b293a;
+  color: #c0d7f4;
+  border-color: #92b6e2;
 }
 .ws-root .ws-product-nav .ws-btn.ws-btn-primary {
-  background: #1b2513;
-  border-color: #75ad2d;
-  color: #a8e15d;
+  background: #20334a;
+  border-color: #607fa5;
+  color: #c0d7f4;
 }
 .ws-root .ws-product-nav .ws-btn.ws-btn-primary:hover {
-  background: #26381a;
+  background: #2b4462;
 }

@@ -1,28 +1,28 @@
 :root {
-  --hptl-bg: #0b0d0f;
-  --hptl-bg-elevated: #111418;
-  --hptl-bg-muted: #171a1e;
-  --hptl-bg-panel: #13171b;
+  --hptl-bg: #0c1420;
+  --hptl-bg-elevated: #142030;
+  --hptl-bg-muted: #1b293a;
+  --hptl-bg-panel: #172334;
   /* Surface / chrome (never use as body text on dark panels) */
-  --hptl-navy: #0b0d0f;
-  --hptl-navy-mid: #111418;
-  --hptl-navy-soft: #343a40;
+  --hptl-navy: #0c1420;
+  --hptl-navy-mid: #142030;
+  --hptl-navy-soft: #35485f;
   /* Readable content text — always high contrast vs --hptl-bg* */
   --hptl-text: #e8e8e6;
   --hptl-heading: #f3f4f6;
-  --hptl-text-secondary: #aeb4ba;
-  --hptl-text-muted: #8d949b;
-  --hptl-border: #343a40;
-  --hptl-border-strong: #454c53;
-  --hptl-gold: #8dc63f;
-  --hptl-gold-soft: #1b2513;
-  --hptl-gold-border: #75ad2d;
-  --hptl-badge-bg: #1b2513;
-  --hptl-badge-border: #75ad2d;
-  --hptl-badge-text: #a8e15d;
-  --hptl-attention-bg: #1b2513;
-  --hptl-attention-border: #75ad2d;
-  --hptl-attention-text: #a8e15d;
+  --hptl-text-secondary: #b1bfd0;
+  --hptl-text-muted: #94a5ba;
+  --hptl-border: #35485f;
+  --hptl-border-strong: #50647e;
+  --hptl-gold: #92b6e2;
+  --hptl-gold-soft: #20334a;
+  --hptl-gold-border: #607fa5;
+  --hptl-badge-bg: #20334a;
+  --hptl-badge-border: #607fa5;
+  --hptl-badge-text: #c0d7f4;
+  --hptl-attention-bg: #20334a;
+  --hptl-attention-border: #607fa5;
+  --hptl-attention-text: #c0d7f4;
   /* Muted desk-terminal semantics (not neon) */
   --hptl-positive: #6a9a7e;
   --hptl-positive-bg: rgba(106, 154, 126, 0.14);

@@ -408,3 +408,73 @@
 .ca-empty .ca-meta {
   align-items: flex-start;
 }
+
+
+/* Polished financial workstation: graphite, steel blue and champagne. */
+.ie-radar {
+  position: relative;
+  background: radial-gradient(ellipse at 12% 0%, rgba(79, 112, 160, .15), transparent 48%),
+    linear-gradient(155deg, #152030 0%, #0e1724 42%, #101824 100%);
+  border: 1px solid #3c506b;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: inset 0 1px 0 rgba(223, 235, 255, .14), 0 16px 38px rgba(0, 0, 0, .22);
+}
+.ie-radar-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255,255,255,.055), transparent 45%),
+    linear-gradient(180deg, #202d3e 0%, #172332 32%, #14202e 100%);
+  border: 1px solid #3a4b61;
+  border-radius: 12px;
+  padding: 17px;
+  box-shadow: inset 0 1px 0 rgba(230,239,255,.12), 0 7px 16px rgba(0,0,0,.16);
+}
+.ie-radar-metric {
+  background: linear-gradient(180deg, #1d2b3e, #152131);
+  padding: 12px 5px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #40516a;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+}
+.ie-radar-metric.is-extreme {
+  background: linear-gradient(180deg, #2c3a4c, #1b293a);
+  border-color: #8c826e;
+}
+.ie-radar-value {
+  color: #edf3fc;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -.5px;
+  font-variant-numeric: tabular-nums;
+}
+.ie-radar-metric.is-extreme .ie-radar-value { color: #bcd8fb; }
+.ie-radar-select, .ie-radar-toggle {
+  color: #e7effa;
+  background: linear-gradient(180deg, #293a50, #1c2b3e);
+  border: 1px solid #50647f;
+  border-radius: 7px;
+  padding: 9px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ie-radar-select option { background: #172536; color: #edf3fc; }
+.ie-radar-toggle { cursor: pointer; }
+.ie-radar-toggle[aria-pressed="true"] {
+  background: linear-gradient(180deg, #446286, #2b4565);
+  border-color: #789cc5;
+  color: #fff;
+}
+.ie-radar-toggle:hover { border-color: #9db8da; }
+.ie-radar :is(button, select, a):focus-visible { outline: 2px solid #b9d7ff; outline-offset: 3px; }
+.ie-radar .ca-btn-primary {
+  background: linear-gradient(180deg, #354d6a, #243a54);
+  border-color: #56708e;
+  color: #e8f1ff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+}
+.ie-radar .ca-btn-primary:hover { background: linear-gradient(180deg, #426080, #2d4766); }
+@media (max-width: 600px) {
+  .ie-radar { padding: 14px; border-radius: 12px; }
+  .ie-radar-card { padding: 14px; }
+}
