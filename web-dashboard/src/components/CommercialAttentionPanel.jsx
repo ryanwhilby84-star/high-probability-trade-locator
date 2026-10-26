@@ -1,3 +1,4 @@
+import { percentileTone } from '../data/percentileTone.js'
 import { AssetIcon } from './AssetIcon.jsx'
 import { attentionForWeek } from '../data/attentionWeek.js'
 import React from 'react'
@@ -231,7 +232,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
             <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#d5bd91' : '#aeb4ba', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 7, margin: '14px 0' }}>
-            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} className={`ie-radar-metric ${n != null && (n >= 80 || n <= 20) ? 'is-extreme' : ''}`}>
+            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} style={percentileTone(n)} title={`${label}: ${n == null ? 'unavailable' : n.toFixed(2) + '%'}`} className={`ie-radar-metric ${n != null && (n >= 80 || n <= 20) ? 'is-extreme' : ''}`}>
               <div style={{ fontSize: 10, color: '#aeb4ba' }}>{label}</div><div className="ie-radar-value">{n == null ? '—' : n.toFixed(0) + '%'}</div>
             </div>)}
           </div>

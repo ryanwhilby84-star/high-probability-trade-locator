@@ -439,8 +439,8 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
 }
 .ie-radar-metric.is-extreme {
-  background: linear-gradient(180deg, #2c3a4c, #1b293a);
-  border-color: #8c826e;
+  background: linear-gradient(180deg, var(--radar-tone-top), var(--radar-tone-bottom));
+  border-color: var(--radar-tone-border);
 }
 .ie-radar-value {
   color: #edf3fc;
@@ -449,7 +449,7 @@
   letter-spacing: -.5px;
   font-variant-numeric: tabular-nums;
 }
-.ie-radar-metric.is-extreme .ie-radar-value { color: #bcd8fb; }
+.ie-radar-metric.is-extreme .ie-radar-value { color: var(--radar-tone); }
 .ie-radar-select, .ie-radar-toggle {
   color: #e7effa;
   background: linear-gradient(180deg, #293a50, #1c2b3e);
