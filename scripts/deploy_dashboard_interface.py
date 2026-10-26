@@ -132,16 +132,24 @@ def main():
     from connect_production_domain import connect
     connect(deployment)
     # Confirm the public domain serves this exact interface, not a cached earlier release.
-    url = "https://" + HOST + "/?verify=" + str(time.time_ns())
-    with urllib.request.urlopen(url, timeout=30) as response:
-        live = response.read()
-    if live != (root / "index.html").read_bytes():
-        raise SystemExit("Live app entry does not match this build")
+    def verify_public(path, expected):
+        for attempt in range(12):
+            url = "https://" + HOST + "/" + path + "?verify=" + str(time.time_ns())
+            try:
+                request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    actual = response.read()
+                if hashlib.sha256(actual).digest() == hashlib.sha256(expected).digest():
+                    return
+            except (OSError, TimeoutError):
+                pass
+            if attempt < 11:
+                print("Waiting for hostname propagation:", path, flush=True)
+                time.sleep(5)
+        raise SystemExit("Live asset does not match build after propagation wait: " + path)
+    verify_public("", (root / "index.html").read_bytes())
     for path in root.glob("assets/*"):
-        with urllib.request.urlopen("https://" + HOST + "/assets/" + path.name, timeout=30) as response:
-            actual = response.read()
-        if hashlib.sha256(actual).digest() != hashlib.sha256(path.read_bytes()).digest():
-            raise SystemExit("Live asset differs: " + path.name)
+        verify_public("assets/" + path.name, path.read_bytes())
     print("Verified live interface and unchanged production data:", "https://" + HOST, flush=True)
 
 
