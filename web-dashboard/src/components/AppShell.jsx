@@ -4,6 +4,7 @@ import { getAssetClasses, assetClassForMarket, assetClassLabel, marketsInAssetCl
 import { allInstrumentIds } from '../instrumentRegistry.js'
 import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 import {
+  useHashRoute,
   navigateToJournal,
   navigateToScanner,
   navigateToNaturalGasValuation,
@@ -34,6 +35,11 @@ export function AppShell({
   topActions,
   contentClassName = '',
 }) {
+  const { view } = useHashRoute()
+  const pageNav = (page) => ({
+    className: `ws-btn${view === page ? ' ws-btn-primary' : ''}`,
+    'aria-current': view === page ? 'page' : undefined,
+  })
   const weekDates = Array.isArray(dates) ? dates : []
   const showWeekPicker = weekDates.length > 0 && typeof onDateChange === 'function'
 
@@ -86,15 +92,15 @@ export function AppShell({
         </nav>
         {/* Public beta: keep the focused product navigation; other routes remain available internally. */}
         <div className="ws-product-nav">
-          <button type="button" className="ws-btn ws-btn-primary" style={{ width: '100%' }} onClick={navigateToScanner}>Scanner</button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToTradeBasket}>Trade Basket</button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToCorrelationMatrix}>Correlation Matrix</button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={() => {
+          <button type="button" {...pageNav('scanner')} style={{ width: '100%' }} onClick={navigateToScanner}>Scanner</button>
+          <button type="button" {...pageNav('trade-basket')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToTradeBasket}>Trade Basket</button>
+          <button type="button" {...pageNav('correlation-matrix')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToCorrelationMatrix}>Correlation Matrix</button>
+          <button type="button" {...pageNav('seasonality-workstation')} style={{ width: '100%', marginTop: 8 }} onClick={() => {
             const universe = allInstrumentIds()
             navigateToSeasonalityWorkstation(universe[0] || TRACKED_MARKET_IDS[0] || 'NASDAQ / NQ')
           }}>Seasonality</button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>Macro Hub</button>
-          <button type="button" className="ws-btn" style={{ width: '100%', marginTop: 8 }} onClick={navigateToDxyMacroBias}>DXY Macro Bias</button>
+          <button type="button" {...pageNav('macro-hub')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToMacroHub}>Macro Hub</button>
+          <button type="button" {...pageNav('dxy-macro-bias')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToDxyMacroBias}>DXY Macro Bias</button>
         </div>
       </aside>
 
