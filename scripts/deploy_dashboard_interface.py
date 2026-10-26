@@ -42,7 +42,7 @@ def main():
     files = list(flatten(api("/v6/deployments/" + original + "/files")))
     by_path = {entry["file"]: entry for entry in files}
     required = ("confluence_bootstrap_latest.json", "confluence_history_manifest.json",
-                "cot_weekly_inspector_latest.json", "cot_attention_80_20_latest.json")
+                "cot_weekly_inspector_latest.json")
     for name in required:
         if "static/data/" + name not in by_path:
             raise SystemExit("Production source missing required data: " + name)
@@ -51,6 +51,29 @@ def main():
                 and not entry["file"].startswith("static/assets/")]
     data_before = {entry["file"]: entry["sha"] for entry in files if entry["file"].startswith("static/data/")}
     root = Path("web-dashboard/dist-ui")
+    # Older releases predate the small attention snapshot. Derive it from their
+    # immutable Inspector export, without recalculating or replacing any history.
+    snapshot_path = "static/data/cot_attention_80_20_latest.json"
+    if snapshot_path not in by_path:
+        import subprocess
+        import tempfile
+        with tempfile.TemporaryDirectory() as temp:
+            temp_root = Path(temp)
+            folder = temp_root / "public/data"
+            folder.mkdir(parents=True)
+            source_url = "https://" + alias["deployment"]["url"] + "/data/cot_weekly_inspector_latest.json"
+            with urllib.request.urlopen(source_url, timeout=60) as response:
+                inspector = response.read()
+            expected_sha = by_path["static/data/cot_weekly_inspector_latest.json"]["sha"]
+            if hashlib.sha1(inspector).hexdigest() != expected_sha:
+                raise SystemExit("Inspector differs from baseline deployment")
+            (folder / "cot_weekly_inspector_latest.json").write_bytes(inspector)
+            subprocess.run(["node", "--input-type=module", "-e",
+                "import { buildAttentionSnapshot } from './web-dashboard/scripts/buildAttentionSnapshot.mjs'; buildAttentionSnapshot(process.argv[1])",
+                str(temp_root)], check=True)
+            target = root / "data/cot_attention_80_20_latest.json"
+            target.parent.mkdir(exist_ok=True)
+            target.write_bytes((folder / "cot_attention_80_20_latest.json").read_bytes())
     html = (root / "index.html").read_text()
     if "/assets/" not in html:
         raise SystemExit("Compiled app entry is missing")
@@ -100,7 +123,11 @@ def main():
         raise SystemExit("Deployment did not become ready")
     published = list(flatten(api("/v6/deployments/" + deployment + "/files")))
     data_after = {entry["file"]: entry["sha"] for entry in published if entry["file"].startswith("static/data/")}
-    if data_before != data_after:
+    expected_data = dict(data_before)
+    for entry in new_files:
+        if entry["file"].startswith("static/data/"):
+            expected_data[entry["file"]] = entry["sha"]
+    if expected_data != data_after:
         raise SystemExit("Published data digests differ")
     from connect_production_domain import connect
     connect(deployment)
