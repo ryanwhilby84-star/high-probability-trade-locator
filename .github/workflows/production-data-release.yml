@@ -109,8 +109,16 @@ jobs:
           latest = date.fromisoformat(max(dates))
           age = (datetime.now().date() - latest).days
           print(f"Weekly Inspector latest COT week: {latest}; age: {age} days; markets: {len(dates)}")
-          if age < 0 or age > 14:
-              raise SystemExit(f"FAIL: COT data freshness gate: {age} days")
+          # Saturday publication must contain the preceding Tuesday report.
+          # The normal CFTC reporting lag is Tuesday as-of, Friday release.
+          from datetime import timedelta
+          today = datetime.now().date()
+          days_since_tuesday = (today.weekday() - 1) % 7
+          expected = today - timedelta(days=days_since_tuesday)
+          if today.weekday() in (1, 2, 3, 4):
+              expected -= timedelta(days=7)
+          if latest != expected:
+              raise SystemExit(f"FAIL: expected COT reporting week {expected}, got {latest}")
           PY
       - name: Audit all COT graph nets and 156-week percentiles against one history source
         run: python scripts/audit_cot_chart_percentile_parity.py
