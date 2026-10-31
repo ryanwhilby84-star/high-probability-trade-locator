@@ -187,13 +187,15 @@ jobs:
           # The CLI resolves a user profile even for valid team-scoped API tokens.
           # Deploy the validated static output directly through the Vercel REST API.
           python - <<'PY'
-          import hashlib, json, os, pathlib, urllib.error, urllib.parse, urllib.request
+          import hashlib, http.client, json, os, pathlib, socket, urllib.error, urllib.parse, urllib.request
           root = pathlib.Path(".vercel/output")
           token = os.environ["VERCEL_TOKEN"]
           team = urllib.parse.quote(os.environ["VERCEL_ORG_ID"])
           headers = {"Authorization": "Bearer " + token}
           files = []
-          for path in sorted(root.rglob("*")):
+          upload_paths = sorted(path for path in root.rglob("*") if path.is_file())
+          print(f"Uploading {len(upload_paths)} deployment assets", flush=True)
+          for path in upload_paths:
               if not path.is_file():
                   continue
               file_size = path.stat().st_size
@@ -226,7 +228,7 @@ jobs:
                           print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
                           raise
                       print(f"Transient Vercel HTTP {exc.code}; retrying asset upload {attempt + 1}/4", flush=True)
-                  except (TimeoutError, urllib.error.URLError, ConnectionError) as exc:
+                  except (TimeoutError, urllib.error.URLError, ConnectionError, ConnectionResetError, http.client.RemoteDisconnected, socket.timeout) as exc:
                       if attempt == 3:
                           raise
                       print(f"Transient asset upload connection error; retrying {attempt + 1}/4: {exc}", flush=True)
