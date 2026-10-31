@@ -279,8 +279,12 @@ jobs:
           for attempt in range(60):
               time.sleep(10)
               status_url = "https://api.vercel.com/v13/deployments/" + deployment_id + "?teamId=" + urllib.parse.quote(os.environ["VERCEL_ORG_ID"])
-              with urllib.request.urlopen(urllib.request.Request(status_url, headers={"Authorization": "Bearer " + os.environ["VERCEL_TOKEN"]}), timeout=30) as resp:
-                  state = json.load(resp)
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(status_url, headers={"Authorization": "Bearer " + os.environ["VERCEL_TOKEN"], "Connection": "close"}), timeout=30) as resp:
+                      state = json.load(resp)
+              except (TimeoutError, urllib.error.URLError, ConnectionError, ConnectionResetError, http.client.RemoteDisconnected, socket.timeout) as exc:
+                  print(f"Transient Vercel status-check failure ({attempt + 1}/60): {exc}; retrying", flush=True)
+                  continue
               ready = state.get("readyState")
               if ready == "READY":
                   print("Vercel production deployment READY")
