@@ -10,6 +10,8 @@ on:
       - 'src/hptl/cot/positioning_research_engine.py'
       - 'web-dashboard/scripts/buildAttentionSnapshot.mjs'
       - 'web-dashboard/scripts/verifyAttentionSnapshot.mjs'
+      - 'scripts/publish_weekly_cot.ps1'
+      - '.github/workflows/production-data-release.yml'
 
 concurrency:
   group: institutional-edge-data-release
