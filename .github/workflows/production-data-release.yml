@@ -195,45 +195,42 @@ jobs:
           files = []
           upload_paths = sorted(path for path in root.rglob("*") if path.is_file())
           print(f"Uploading {len(upload_paths)} deployment assets", flush=True)
+          import time
           for path in upload_paths:
-              if not path.is_file():
-                  continue
               file_size = path.stat().st_size
-              print(f"Deployment asset: {path.relative_to(root)} ({file_size / 1048576:.1f} MiB)", flush=True)
               if file_size > 95 * 1024 * 1024:
-                  raise SystemExit(
-                      f"Deployment asset exceeds Vercel's 100 MB file limit: "
-                      f"{path.relative_to(root)} ({file_size / 1048576:.1f} MiB). "
-                      "Move this dataset to external storage or split it without losing history."
-                  )
+                  raise SystemExit(f"Deployment asset too large: {path.relative_to(root)} ({file_size} bytes)")
               data = path.read_bytes()
               sha = hashlib.sha1(data).hexdigest()
               upload_url = f"https://api.vercel.com/v2/files?teamId={team}"
-              req = urllib.request.Request(upload_url, data=data, headers={
-                  **headers,
-                  "Content-Type": "application/octet-stream",
-                  "Content-Length": str(len(data)),
-                  "x-vercel-digest": sha,
-              }, method="POST")
-              import time
-              for attempt in range(4):
+              relative = path.relative_to(root).as_posix()
+              print(f"Deployment asset: {relative} ({file_size / 1048576:.1f} MiB)", flush=True)
+              for attempt in range(8):
+                  req = urllib.request.Request(upload_url, data=data, headers={
+                      **headers,
+                      "Content-Type": "application/octet-stream",
+                      "Content-Length": str(len(data)),
+                      "x-vercel-digest": sha,
+                      "Connection": "close",
+                  }, method="POST")
                   try:
-                      with urllib.request.urlopen(req, timeout=120):
-                          pass
+                      with urllib.request.urlopen(req, timeout=180) as response:
+                          response.read()
                       break
                   except urllib.error.HTTPError as exc:
                       if exc.code == 409:
                           break
-                      if exc.code not in (408, 429, 500, 502, 503, 504) or attempt == 3:
-                          print("::error::Vercel file upload HTTP", exc.code, exc.read(1200).decode("utf-8", "replace"))
+                      if exc.code not in (408, 429, 500, 502, 503, 504) or attempt == 7:
+                          print(f"::error::Vercel upload failed for {relative}: HTTP {exc.code}", exc.read(1200).decode("utf-8", "replace"))
                           raise
-                      print(f"Transient Vercel HTTP {exc.code}; retrying asset upload {attempt + 1}/4", flush=True)
+                      print(f"Transient HTTP {exc.code} uploading {relative}, attempt {attempt + 1}/8", flush=True)
                   except (TimeoutError, urllib.error.URLError, ConnectionError, ConnectionResetError, http.client.RemoteDisconnected, socket.timeout) as exc:
-                      if attempt == 3:
+                      if attempt == 7:
+                          print(f"::error::Vercel upload exhausted retries for {relative}: {exc}", flush=True)
                           raise
-                      print(f"Transient asset upload connection error; retrying {attempt + 1}/4: {exc}", flush=True)
-                  time.sleep(min(20, 2 ** (attempt + 1)))
-              files.append({"file": path.relative_to(root).as_posix(), "sha": sha, "size": len(data)})
+                      print(f"Transient connection error uploading {relative}, attempt {attempt + 1}/8: {exc}", flush=True)
+                  time.sleep(min(45, 3 * (attempt + 1)))
+              files.append({"file": relative, "sha": sha, "size": len(data)})
           print(f"Uploaded {len(files)} validated prebuilt files")
           # The REST deployments endpoint performs a remote build unless the project
           # is configured as a static site. Serve the already compiled output directly.
