@@ -115,7 +115,7 @@ jobs:
           today = datetime.now().date()
           days_since_tuesday = (today.weekday() - 1) % 7
           expected = today - timedelta(days=days_since_tuesday)
-          if today.weekday() in (1, 2, 3, 4):
+          if today.weekday() in (1, 2, 3):
               expected -= timedelta(days=7)
           if latest != expected:
               raise SystemExit(f"FAIL: expected COT reporting week {expected}, got {latest}")
