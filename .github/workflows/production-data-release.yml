@@ -166,7 +166,7 @@ jobs:
           original = folder / "confluence_history_latest.json"
           if not original.is_file():
               raise SystemExit("Missing confluence history in compiled dashboard")
-          chunk_bytes = 8 * 1024 * 1024
+          chunk_bytes = 2 * 1024 * 1024
           digest = hashlib.sha256()
           parts = []
           total = 0
