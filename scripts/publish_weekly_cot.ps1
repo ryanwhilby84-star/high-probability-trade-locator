@@ -9,14 +9,15 @@ try {
   if (-not (Get-Command gh -ErrorAction SilentlyContinue)) { throw 'GitHub CLI (gh) is required; install and run gh auth login.' }
   if (-not (Test-Path $StatusFile)) { throw "Missing local status: $StatusFile" }
   $status = Get-Content $StatusFile -Raw | ConvertFrom-Json
-  if ($status.cot_data_stale -ne $false -or @($status.markets_missing).Count -gt 0) { throw 'Local COT integrity status is not healthy; refusing publication.' }
+  if ($status.error -or $status.cot_data_stale -ne $false -or @($status.markets_missing).Count -gt 0) { throw 'Local COT integrity status is not healthy; refusing publication.' }
+  if ([int]$status.integrity_gate_failed -gt 0) { throw 'Local COT integrity gate has failures.' }
   if ([int]$status.integrity_gate_checked -lt 26) { throw 'Local integrity gate did not check all 26 markets.' }
   $today = (Get-Date).Date
   $offset = ([int]$today.DayOfWeek + 5) % 7
   $expected = $today.AddDays(-$offset)
   if ($today.DayOfWeek -in @('Tuesday','Wednesday','Thursday')) { $expected = $expected.AddDays(-7) }
   $expectedText = $expected.ToString('yyyy-MM-dd')
-  $localWeek = [string]$status.latest_cot_week
+  $localWeek = [string]$status.export_latest_cot_week
   if (-not $localWeek) { throw 'Local status does not contain latest_cot_week.' }
   if ($localWeek -ne $expectedText) { throw "Local COT week $localWeek does not match expected $expectedText" }
   $start = (Get-Date).ToUniversalTime()
