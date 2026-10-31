@@ -60,24 +60,14 @@ jobs:
               print(f"::error::Vercel project API returned HTTP {exc.code}; check token scope and project/team IDs")
               raise SystemExit(1)
           PY
-      - name: Verify price-provider credentials before data processing
-        env:
-          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
-          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-        run: |
-          test -n "$OANDA_API_KEY" || { echo "::error title=Missing OANDA credential::Configure OANDA_API_KEY as a repository Actions secret"; exit 1; }
-          test -n "$ALPHA_VANTAGE_API_KEY" || { echo "::error title=Missing Alpha Vantage credential::Configure ALPHA_VANTAGE_API_KEY as a repository Actions secret"; exit 1; }
-          echo "Required provider credentials are configured (values not printed)."
       - name: Install COT pipeline dependencies
         run: python -m pip install -r requirements.txt
-      - name: Refresh real price history and publish dashboard price snapshot
-        env:
-          OANDA_API_KEY: ${{ secrets.OANDA_API_KEY }}
-          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
-          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+      # Price ingestion is temporarily decoupled from the COT publication.
+      # Do not refresh or certify price data until the VPS-backed feed is ready.
+      - name: Mark price feed as deferred
         run: |
-          python scripts/run_price_refresh.py --require-healthy
-          test -s web-dashboard/public/data/prices_latest.json || { echo "::error::Price exporter did not create prices_latest.json"; exit 1; }
+          echo "::warning title=Price feed deferred::OANDA price ingestion is disabled for this COT release. Existing price snapshots must not be represented as live."
+          echo "COT publishing continues independently of the price-provider service."
       - name: Fetch and rebuild COT confluence data
         env:
           HPTL_STAGE_TIMEOUT_S: '900'
