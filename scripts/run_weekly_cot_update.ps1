@@ -24,6 +24,20 @@ Write-Host "Repo: $RepoRoot"
 & $Python -m hptl.cot.run_update @args
 $exitCode = $LASTEXITCODE
 
+if ($exitCode -eq 0) {
+    # Do not report local generation as end-to-end publication success.
+    $Publisher = Join-Path $RepoRoot "scripts\publish_weekly_cot.ps1"
+    if (-not (Test-Path $Publisher)) {
+        Write-Error "Publication stage missing: $Publisher. Local exports are not verified live."
+        exit 20
+    }
+    & $Publisher
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) {
+        Write-Error "Weekly COT publication/verification failed with exit code $exitCode"
+        exit $exitCode
+    }
+}
 Write-Host "Finished with exit code $exitCode"
 Write-Host "Log: $RepoRoot\data\exports\weekly_cot_update.log"
 Write-Host "Status JSON: $RepoRoot\data\exports\weekly_cot_update_latest.json"
