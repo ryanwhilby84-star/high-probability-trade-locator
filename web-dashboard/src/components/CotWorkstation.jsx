@@ -1,4 +1,5 @@
 import React from 'react'
+import { mergeHistoricalPrices } from '../cot/mergeHistoricalPrices.js'
 import { Brush, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 
 import { useCurrencyFuturesIVE } from '../hooks/useCurrencyFuturesIVE.js'
@@ -97,7 +98,55 @@ export function CotWorkstation({
   confluenceHistory = null,
 }) {
   const futuresIveDoc = useCurrencyFuturesIVE()
-  const baseModel = React.useMemo(() => (block ? buildCotWorkstation(block) : null), [block])
+  const [history, setHistory] = React.useState(null)
+  const historyKey = marketId || block?.market || null
+
+  React.useEffect(() => {
+    if (!historyKey) {
+      setHistory(null)
+      return
+    }
+    const controller = new AbortController()
+    setHistory(null)
+    const base = (import.meta.env.VITE_CURRENT_PRICE_URL || '').trim().replace(/\\/$/, '')
+    if (!base) return
+    fetch(`${base}/api/history/${encodeURIComponent(historyKey)}`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Historical prices HTTP ${response.status}`)
+        return response.json()
+      })
+      .then((data) => {
+        if (!controller.signal.aborted) setHistory(data)
+      })
+      .catch((error) => {
+        if (error.name !== 'AbortError') console.warn('Historical price overlay unavailable:', historyKey, error)
+      })
+    return () => controller.abort()
+  }, [historyKey])
+
+  const baseModel = React.useMemo(() => {
+    if (!block) return null
+    const model = buildCotWorkstation(block)
+    if (!model?.available || !history || history.instrument_id !== historyKey) return model
+    const series = mergeHistoricalPrices(model.series, history.daily)
+    const matched = series.filter((row) => typeof row.price === 'number' && Number.isFinite(row.price)).length
+    const cotWeeks = model.cotWeeks
+    const matchPct = cotWeeks ? Math.round((matched / cotWeeks) * 1000) / 10 : null
+    return {
+      ...model,
+      series,
+      priceWeeksMatched: matched,
+      priceCoverage: {
+        ...model.priceCoverage,
+        priceMatched: matched,
+        matchPct,
+        priceSource: 'VPS historical daily candles + COT bundle',
+        status: matchPct >= 95 ? 'OK' : matchPct >= 50 ? 'PARTIAL' : 'FAIL',
+        reason: matchPct >= 95 ? null : `Price matched for ${matchPct}% of calendar weeks.`,
+        priceIncomplete: matchPct < 95,
+      },
+    }
+  }, [block, history, historyKey])
 
   const enrichOpts = React.useMemo(
     () => ({
