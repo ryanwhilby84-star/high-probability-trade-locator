@@ -108,7 +108,7 @@ export function CotWorkstation({
     }
     const controller = new AbortController()
     setHistory(null)
-    const base = (import.meta.env.VITE_CURRENT_PRICE_URL || '').trim().replace(/\/$/, '')
+    const base = (import.meta.env.VITE_CURRENT_PRICE_URL || 'https://prices.ztack.co.uk').trim().replace(/\/$/, '')
     if (!base) return
     fetch(`${base}/api/history/${encodeURIComponent(historyKey)}`, { signal: controller.signal })
       .then((response) => {
