@@ -219,6 +219,23 @@ def create_app() -> FastAPI:
             return JSONResponse({"error": f"unknown instrument: {key}"}, status_code=404)
         return JSONResponse(cp.to_dict())
 
+    @app.get("/api/history/{key:path}")
+    def historical_prices(key: str) -> JSONResponse:
+        """Serve canonical persisted OHLC history, independently of the live stream."""
+        from hptl.prices.price_store import load_instrument_record
+
+        record = load_instrument_record(key)
+        if record is None:
+            return JSONResponse({"error": f"no historical record for: {key}"}, status_code=404)
+        return JSONResponse({
+            "instrument_id": record["instrument_id"],
+            "daily": record.get("daily") or [],
+            "weekly": record.get("weekly") or [],
+            "history": record.get("history"),
+            "price_scale": record.get("price_scale"),
+            "error": record.get("error"),
+        })
+
     @app.get("/api/weekly-candles")
     def weekly_candles() -> dict[str, Any]:
         tracker: LiveWeeklyCandleTracker = app.state.weekly
