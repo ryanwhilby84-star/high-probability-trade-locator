@@ -108,7 +108,7 @@ export function CotWorkstation({
     }
     const controller = new AbortController()
     setHistory(null)
-    const base = (import.meta.env.VITE_CURRENT_PRICE_URL || '').trim().replace(/\\/$/, '')
+    const base = (import.meta.env.VITE_CURRENT_PRICE_URL || '').trim().replace(/\/$/, '')
     if (!base) return
     fetch(`${base}/api/history/${encodeURIComponent(historyKey)}`, { signal: controller.signal })
       .then((response) => {
@@ -127,10 +127,10 @@ export function CotWorkstation({
   const baseModel = React.useMemo(() => {
     if (!block) return null
     const model = buildCotWorkstation(block)
-    if (!model?.available || !history || history.instrument_id !== historyKey) return model
+    if (!model?.available || !history || history.instrument_id !== historyKey || !Array.isArray(history.daily)) return model
     const series = mergeHistoricalPrices(model.series, history.daily)
     const matched = series.filter((row) => typeof row.price === 'number' && Number.isFinite(row.price)).length
-    const cotWeeks = model.cotWeeks
+    const cotWeeks = series.length
     const matchPct = cotWeeks ? Math.round((matched / cotWeeks) * 1000) / 10 : null
     return {
       ...model,
