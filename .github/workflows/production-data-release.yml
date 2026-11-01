@@ -137,6 +137,8 @@ jobs:
       - name: Verify frontend and required data
         env:
           REQUIRE_DASHBOARD_DATA: '1'
+          VITE_CURRENT_PRICE_URL: https://prices.ztack.co.uk
+          VITE_CURRENT_PRICE_WS: wss://prices.ztack.co.uk/ws/prices
         run: npm run build --prefix web-dashboard
       - name: Verify Attention Board parity with Weekly Inspector
         run: node web-dashboard/scripts/verifyAttentionSnapshot.mjs
