@@ -228,7 +228,15 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
     for (const row of rows) {
       if (!(row.commercialExtreme || row.retailExtreme) || !latestDate) continue
       const key = keys.find(k => k.toLowerCase() === row.name.toLowerCase())
-      if (key) out[row.name] = ncEvent(markets[key], latestDate)
+      if (key) {
+        const event = ncEvent(markets[key], latestDate)
+        // Commercial extremes set the directional thesis; if only retail is
+        // extreme, use its contrarian direction. Opposing moves are noise.
+        const desired = row.commercialExtreme
+          ? (row.c >= 80 ? 1 : -1)
+          : (row.nr >= 80 ? -1 : 1)
+        if (event && Math.sign(event.delta) === desired) out[row.name] = event
+      }
     }
     return out
   }, [inspector, rows, latestDate])
