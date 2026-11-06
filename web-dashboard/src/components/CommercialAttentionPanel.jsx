@@ -186,7 +186,26 @@ function AttentionCard({ row }) {
 }
 
 
-function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored, error }) {
+// Detect factual NC net-zero flips and unusually large week-on-week moves.
+// The comparison baseline is the preceding 3 years of available weekly moves.
+function ncEvent(block, snapshotDate) {
+  const weeks = (block?.rows || []).filter(r => Array.isArray(r) && typeof r[0] === 'string' && r[0] <= snapshotDate && Number.isFinite(r[2]?.[0])).sort((a,b) => a[0].localeCompare(b[0]))
+  if (weeks.length < 2) return null
+  const current = weeks[weeks.length - 1], previous = weeks[weeks.length - 2]
+  // Never show a historic event as if it occurred on the displayed report date.
+  if (current[0] !== snapshotDate) return null
+  const net = current[2][0], prior = previous[2][0], delta = net - prior
+  const flip = (net > 0 && prior < 0) || (net < 0 && prior > 0)
+  const history = weeks.slice(-158, -1)
+  const magnitudes = history.slice(1).map((r,i) => Math.abs(r[2][0] - history[i][2][0])).filter(Number.isFinite).sort((a,b)=>a-b)
+  // At least a year of observations; top decile of the trailing moves.
+  const threshold = magnitudes.length >= 52 ? magnitudes[Math.ceil(magnitudes.length * .9) - 1] : null
+  const significant = threshold != null && threshold > 0 && Math.abs(delta) >= threshold
+  if (!flip && !significant) return null
+  return { flip, significant, net, prior, delta, date: current[0] }
+}
+
+function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loading, errored, error }) {
   const [showAll, setShowAll] = React.useState(true)
   const [lookback, setLookback] = React.useState("3y")
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
@@ -202,6 +221,17 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
     return { rows: radarEligibleOnly ? selected.filter(v => isRadarEligible(v.name)) : selected,
       latestDate: historical?.latestDate || null, eligibleCount: historical?.eligibleCount || 0 }
   }, [historical, radarEligibleOnly, lookback])
+  const eventsByName = React.useMemo(() => {
+    const out = {}
+    const markets = inspector?.markets || {}
+    const keys = Object.keys(markets)
+    for (const row of rows) {
+      if (!(row.commercialExtreme || row.retailExtreme) || !latestDate) continue
+      const key = keys.find(k => k.toLowerCase() === row.name.toLowerCase())
+      if (key) out[row.name] = ncEvent(markets[key], latestDate)
+    }
+    return out
+  }, [inspector, rows, latestDate])
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   // Both groups independently trigger attention. Opposing extremes get a stronger
@@ -214,7 +244,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
     return 1
   }
   const displayed = [...(showAll ? rows : extremes)].sort((a, b) =>
-    attentionLevel(b) - attentionLevel(a) || a.name.localeCompare(b.name))
+    attentionLevel(b) - attentionLevel(a) || Number(Boolean(eventsByName[b.name])) - Number(Boolean(eventsByName[a.name])) || a.name.localeCompare(b.name))
   return <section aria-label="New 80/20 Pay Attention Board" className="ie-radar">
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
       <div><div style={{ color: '#a6bedc', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
@@ -236,14 +266,14 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
       !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
       !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
-        {displayed.map(v => <article key={v.name} className="ie-radar-card" style={attentionLevel(v) ? {
+        {displayed.map(v => <article key={v.name} className="ie-radar-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 345, ...(attentionLevel(v) ? {
           position: 'relative',
           border: attentionLevel(v) === 2 ? '1px solid rgba(243,191,92,.78)' : '1px solid rgba(213,181,119,.46)',
           boxShadow: attentionLevel(v) === 2
             ? '0 0 0 1px rgba(243,191,92,.18), 0 0 26px rgba(220,153,47,.18), inset 0 1px 0 rgba(255,233,172,.16)'
             : '0 0 16px rgba(210,163,72,.08), inset 0 1px 0 rgba(255,233,172,.08)',
           backgroundImage: 'linear-gradient(150deg,rgba(255,223,155,.09),transparent 36%)'
-        } : undefined}>
+        } : {}) }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
             <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
             {attentionLevel(v) ? <span aria-label={attentionLevel(v) === 2 ? 'High attention: opposing commercial and non-reportable extremes' : 'Attention: commercial or non-reportable extreme'} style={{
@@ -256,7 +286,12 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
             }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
               : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
           </div>
-          <div style={{ margin: '14px 0' }}>
+          {eventsByName[v.name] ? <div role="status" style={{ marginTop: 12, padding: '9px 10px', borderRadius: 8, border: '1px solid rgba(107,186,225,.45)', background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))', color: '#d8f1ff', fontSize: 12 }}>
+            <strong>↔ {eventsByName[v.name].flip ? (eventsByName[v.name].net < 0 ? 'NC FLIPPED NET SHORT' : 'NC FLIPPED NET LONG') : 'NC SIGNIFICANT SHIFT'}</strong>
+            <div style={{ marginTop: 4 }}> {fmt(eventsByName[v.name].prior)} → {fmt(eventsByName[v.name].net)} · 1W {fmt(eventsByName[v.name].delta)} · {eventsByName[v.name].date}</div>
+            {eventsByName[v.name].flip && eventsByName[v.name].significant ? <div>Also a top-decile weekly move (trailing 3Y)</div> : null}
+          </div> : null}
+          <div style={{ margin: '14px 0', flex: 1 }}>
             {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
               const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
               const distance = n == null ? null : Math.min(n, 100 - n)
@@ -294,10 +329,15 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
 // values and its published COT report date. Never substitute the scanner's
 // older selected week for the latest snapshot.
 export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
+  const [inspector, setInspector] = React.useState(null)
   const [state, setState] = React.useState({ doc: null, loading: true, error: null })
   React.useEffect(() => {
     const controller = new AbortController()
     setState({ doc: null, loading: true, error: null })
+    fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(doc => { if (!controller.signal.aborted) setInspector(doc) })
+      .catch(() => { if (!controller.signal.aborted) setInspector(null) })
     fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal, cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('Attention snapshot HTTP ' + r.status)))
       .then(doc => {
@@ -309,5 +349,5 @@ export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
       .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
     return () => controller.abort()
   }, [])
-  return <ExtremeAttentionBoard historical={state.doc} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
+  return <ExtremeAttentionBoard historical={state.doc} inspector={inspector} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
 }
