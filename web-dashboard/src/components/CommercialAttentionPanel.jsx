@@ -265,26 +265,20 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   </section>
 }
 
-// Always derive radar readings from the same latest published report used by
-// Weekly Inspector. Do not mix an older attention snapshot with newer charts.
+// The attention snapshot already contains the Inspector-derived 3Y/5Y/10Y/15Y/ALL
+// values and its published COT report date. Never substitute the scanner's
+// older selected week for the latest snapshot.
 export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
   const [state, setState] = React.useState({ doc: null, loading: true, error: null })
   React.useEffect(() => {
     const controller = new AbortController()
     setState({ doc: null, loading: true, error: null })
-    fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
-      .then(r => r.ok ? r.json() : Promise.reject(new Error('Weekly Inspector HTTP ' + r.status)))
-      .then(inspector => {
-        const latestDate = Object.values(inspector?.markets || {}).reduce((latest, market) => {
-          if (!market?.available || !Array.isArray(market.rows)) return latest
-          for (const row of market.rows) {
-            if (typeof row?.[0] === 'string' && /^\\d{4}-\\d{2}-\\d{2}$/.test(row[0]) && row[0] > latest) latest = row[0]
-          }
-          return latest
-        }, '')
-        if (!latestDate) throw new Error('Weekly Inspector contains no dated market rows')
-        const doc = attentionForWeek(inspector, latestDate)
-        if (!doc.rows.length) throw new Error('No COT market readings for ' + latestDate)
+    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal, cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('Attention snapshot HTTP ' + r.status)))
+      .then(doc => {
+        if (!Array.isArray(doc?.rows) || !doc.latestDate || !doc.rows.length) {
+          throw new Error('Latest attention snapshot has no market readings')
+        }
         if (!controller.signal.aborted) setState({ doc, loading: false, error: null })
       })
       .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
