@@ -211,7 +211,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
         <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#d5bd91' }}>80 / 20</span></h2>
         <p style={{ margin: 0, color: '#a4b3c5', fontSize: 13 }}>All markets shown by default. Commercial and Non-Reportable extremes lead attention; Non-Commercial positioning helps time flips.</p>
       </div>
-      <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
+      <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>Latest published COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
     </div>
     <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
       <label style={{ color: '#cfd3d7', fontSize: 12 }} htmlFor="attention-lookback">Inspector lookback</label>
@@ -265,25 +265,30 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   </section>
 }
 
-export function CommercialAttentionPanel({ date, radarEligibleOnly = true }) {
+// Always derive radar readings from the same latest published report used by
+// Weekly Inspector. Do not mix an older attention snapshot with newer charts.
+export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
   const [state, setState] = React.useState({ doc: null, loading: true, error: null })
   React.useEffect(() => {
     const controller = new AbortController()
     setState({ doc: null, loading: true, error: null })
-    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal, cache: 'no-store' })
-      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
-      .then(async doc => {
-        if (date && date !== doc.latestDate) {
-          const response = await fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
-          if (!response.ok) throw new Error('Weekly Inspector HTTP ' + response.status)
-          doc = attentionForWeek(await response.json(), date)
-        }
-        if (controller.signal.aborted) return
-        if (!Array.isArray(doc?.rows) || !doc.latestDate) throw new Error('Invalid attention snapshot')
-        setState({ doc, loading: false, error: null })
+    fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('Weekly Inspector HTTP ' + r.status)))
+      .then(inspector => {
+        const latestDate = Object.values(inspector?.markets || {}).reduce((latest, market) => {
+          if (!market?.available || !Array.isArray(market.rows)) return latest
+          for (const row of market.rows) {
+            if (typeof row?.[0] === 'string' && /^\\d{4}-\\d{2}-\\d{2}$/.test(row[0]) && row[0] > latest) latest = row[0]
+          }
+          return latest
+        }, '')
+        if (!latestDate) throw new Error('Weekly Inspector contains no dated market rows')
+        const doc = attentionForWeek(inspector, latestDate)
+        if (!doc.rows.length) throw new Error('No COT market readings for ' + latestDate)
+        if (!controller.signal.aborted) setState({ doc, loading: false, error: null })
       })
       .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
     return () => controller.abort()
-  }, [date])
+  }, [])
   return <ExtremeAttentionBoard historical={state.doc} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
 }
