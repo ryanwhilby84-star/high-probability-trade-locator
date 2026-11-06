@@ -236,7 +236,13 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
               const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
               const distance = n == null ? null : Math.min(n, 100 - n)
               const status = distance == null ? 'Unavailable' : distance <= 10 ? 'Deep extreme' : distance <= 20 ? 'Extreme' : distance <= 30 ? 'Approaching' : 'Neutral'
-              const color = distance == null ? '#718096' : distance <= 10 ? '#e16b59' : distance <= 20 ? '#e5aa51' : distance <= 30 ? '#d6c17c' : '#83a4bd'
+              // Position direction controls colour: low = red, middle = blue, high = green.
+              // Interpolate through blue so every value has a consistent, readable meaning.
+              const interpolate = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t))
+              const rgb = n == null ? [113, 128, 150] : n <= 50
+                ? interpolate([221, 76, 83], [102, 157, 211], n / 50)
+                : interpolate([102, 157, 211], [43, 190, 119], (n - 50) / 50)
+              const color = 'rgb(' + rgb.join(',') + ')'
               return <div key={label} style={{ marginBottom: 11 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 5 }}>
                   <span style={{ color: '#cbd6df', fontSize: 11, fontWeight: 700 }}>{label}</span>
