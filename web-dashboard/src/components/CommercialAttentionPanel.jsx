@@ -286,11 +286,30 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
             }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
               : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
           </div>
-          {eventsByName[v.name] ? <div role="status" style={{ marginTop: 12, padding: '9px 10px', borderRadius: 8, border: '1px solid rgba(107,186,225,.45)', background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))', color: '#d8f1ff', fontSize: 12 }}>
-            <strong>↔ {eventsByName[v.name].flip ? (eventsByName[v.name].net < 0 ? 'NC FLIPPED NET SHORT' : 'NC FLIPPED NET LONG') : 'NC SIGNIFICANT SHIFT'}</strong>
-            <div style={{ marginTop: 4 }}> {fmt(eventsByName[v.name].prior)} → {fmt(eventsByName[v.name].net)} · 1W {fmt(eventsByName[v.name].delta)} · {eventsByName[v.name].date}</div>
-            {eventsByName[v.name].flip && eventsByName[v.name].significant ? <div>Also a top-decile weekly move (trailing 3Y)</div> : null}
-          </div> : null}
+          {eventsByName[v.name] ? (() => {
+            const ev = eventsByName[v.name]
+            const down = ev.delta < 0
+            const compact = n => {
+              const abs = Math.abs(n)
+              const val = abs >= 1000000 ? (abs / 1000000).toFixed(2) + 'M' : abs >= 1000 ? (abs / 1000).toFixed(1) + 'K' : String(Math.round(abs))
+              return (n < 0 ? '−' : n > 0 ? '+' : '') + val
+            }
+            const headline = ev.flip ? (ev.net < 0 ? 'NC FLIPPED NET SHORT' : 'NC FLIPPED NET LONG')
+              : down ? 'NC NET POSITIONING FELL' : 'NC NET POSITIONING ROSE'
+            const date = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+            return <div role="status" aria-label={headline + ', weekly change ' + fmt(ev.delta)} style={{
+              marginTop: 12, padding: '10px 11px', borderRadius: 8,
+              border: '1px solid rgba(107,186,225,.4)',
+              background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))'
+            }}>
+              <div style={{ color: down ? '#f0a0a6' : '#83dbb4', fontSize: 12, fontWeight: 850, letterSpacing: '.025em' }}>{down ? '▼' : '▲'} {headline}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6, marginTop: 5 }}>
+                <strong style={{ color: '#f2f7fc', fontSize: 19, lineHeight: 1.15 }}>{compact(ev.delta)} <span style={{ fontSize: 11, color: '#b6c6d4', fontWeight: 600 }}>this week</span></strong>
+                <span style={{ fontSize: 11, color: '#aebdcb' }}>{date}</span>
+              </div>
+              <div style={{ marginTop: 5, fontSize: 11, color: '#aebdcb' }}>Net: {compact(ev.prior)} → {compact(ev.net)}{ev.flip && ev.significant ? ' · Large move' : ''}</div>
+            </div>
+          })() : null}
           <div style={{ margin: '14px 0', flex: 1 }}>
             {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
               const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
