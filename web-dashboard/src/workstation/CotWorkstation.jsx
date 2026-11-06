@@ -862,6 +862,16 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
     )
   }
 
+  // Data may be fetching or switching instruments even when the document exists.
+  // Never dereference a missing model during the transient render.
+  if (!model?.available) {
+    return <div className="cot-workstation cot-workstation--loading">
+      <div className="cot-ws-status" role="status">
+        {cotSettled ? 'Positioning data unavailable for this market.' : 'Preparing COT workstation…'}
+      </div>
+    </div>
+  }
+
   const institutionalTitle = model.institutionalGroup || 'Non-Commercial'
   const retailTitle = model.retailGroup || 'Non-Reportable'
 
