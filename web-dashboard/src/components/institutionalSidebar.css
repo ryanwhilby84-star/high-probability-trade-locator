@@ -58,3 +58,17 @@
 .ws-root .ws-product-nav .ws-btn.ws-btn-primary:hover {
   background: #2b4462;
 }
+
+/* Scanner radar: use the available viewport width rather than a fixed content cap.
+   Keep other workstation pages' layouts unchanged. */
+.ws-root:has(.ie-radar-card) .ws-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+.ws-root:has(.ie-radar-card) .ws-content {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
