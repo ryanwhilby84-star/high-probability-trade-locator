@@ -8,7 +8,6 @@ import {
 } from '../workstation/WorkstationIntegrityPanel.jsx'
 import {
   navigateToCotWorkstation,
-  navigateToInstrument,
   navigateToScanner,
 } from '../routing.js'
 
@@ -114,7 +113,6 @@ export function CotWorkstationPage({ marketId, trackedMarkets, sidebarClass }) {
       <header className="cot-ws-page-topbar">
         <div className="cot-ws-page-topbar-left">
           <button type="button" className="cot-ws-page-btn" onClick={navigateToScanner}>← Scanner</button>
-          <button type="button" className="cot-ws-page-btn" onClick={() => navigateToInstrument(marketId)}>Instrument</button>
         </div>
         <div className="cot-ws-page-topbar-center">
           <span className="cot-ws-page-title">{marketId}</span>
