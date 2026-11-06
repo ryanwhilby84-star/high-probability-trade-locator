@@ -18,7 +18,7 @@ export function parseRoute() {
     }
     if (parts.length >= 2) {
       const market = decodeURIComponent(parts.slice(1).join('/')).trim()
-      return { view: 'instrument', market }
+      return { view: 'cot-workstation', market }
     }
   }
 
