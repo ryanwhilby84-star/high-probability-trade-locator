@@ -187,8 +187,8 @@ function AttentionCard({ row }) {
 
 
 function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored, error }) {
-  const [showAll, setShowAll] = React.useState(false)
-  const [lookback, setLookback] = React.useState("all")
+  const [showAll, setShowAll] = React.useState(true)
+  const [lookback, setLookback] = React.useState("3y")
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
     const all = Array.isArray(historical?.rows) ? historical.rows : []
     const selected = all.map(v => {
@@ -209,7 +209,7 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
       <div><div style={{ color: '#a6bedc', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
         <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#d5bd91' }}>80 / 20</span></h2>
-        <p style={{ margin: 0, color: '#a4b3c5', fontSize: 13 }}>Commercial and Non-Reportable extremes independently trigger alerts. Non-Commercial positioning is shown for timing context.</p>
+        <p style={{ margin: 0, color: '#a4b3c5', fontSize: 13 }}>All markets shown by default. Commercial and Non-Reportable extremes lead attention; Non-Commercial positioning helps time flips.</p>
       </div>
       <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
     </div>
@@ -231,14 +231,26 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
             <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
             <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#d5bd91' : '#aeb4ba', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 7, margin: '14px 0' }}>
-            {[['COMMERCIAL',v.c],['NON-COMM',v.nc],['NON-REPORT',v.nr]].map(([label,n]) => <div key={label} style={percentileTone(n)} title={`${label}: ${n == null ? 'unavailable' : n.toFixed(2) + '%'}`} className={`ie-radar-metric ${n != null && (n >= 80 || n <= 20) ? 'is-extreme' : ''}`}>
-              <div style={{ fontSize: 10, color: '#aeb4ba' }}>{label}</div><div className="ie-radar-value">{n == null ? '—' : n.toFixed(0) + '%'}</div>
-            </div>)}
+          <div style={{ margin: '14px 0' }}>
+            {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
+              const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
+              const distance = n == null ? null : Math.min(n, 100 - n)
+              const status = distance == null ? 'Unavailable' : distance <= 10 ? 'Deep extreme' : distance <= 20 ? 'Extreme' : distance <= 30 ? 'Approaching' : 'Neutral'
+              const color = distance == null ? '#718096' : distance <= 10 ? '#e16b59' : distance <= 20 ? '#e5aa51' : distance <= 30 ? '#d6c17c' : '#83a4bd'
+              return <div key={label} style={{ marginBottom: 11 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 5 }}>
+                  <span style={{ color: '#cbd6df', fontSize: 11, fontWeight: 700 }}>{label}</span>
+                  <span style={{ color, fontSize: 12, fontWeight: 700 }}>{n == null ? '—' : n.toFixed(0) + '/100'} · {status}</span>
+                </div>
+                <div role="meter" aria-label={label + ' positioning range index'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={n == null ? undefined : n} aria-valuetext={status} style={{ height: 9, borderRadius: 8, overflow: 'hidden', background: '#283744' }}>
+                  {n != null ? <div style={{ width: n + '%', height: '100%', borderRadius: 8, background: color }} /> : null}
+                </div>
+              </div>
+            })}
           </div>
           <div style={{ color: '#cfd3d7', fontSize: 12 }}>Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.change)}</strong></div>
           <div style={{ color: '#b8c9d6', fontSize: 12, marginTop: 5 }}>Non-Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.ncChange)}</strong></div>
-          <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable crowding: check Commercial alignment and Non-Commercial rotation.' : 'Commercial positioning extreme: check Non-Commercial rotation and fresh higher-timeframe supply/demand.'}</p>
+          <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
           <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
         </article>)}
       </div>}
