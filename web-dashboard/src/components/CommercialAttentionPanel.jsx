@@ -204,7 +204,17 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
   }, [historical, radarEligibleOnly, lookback])
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
-  const displayed = showAll ? rows : extremes
+  // Both groups independently trigger attention. Opposing extremes get a stronger
+  // visual treatment, but are not trade entries or an inferred direction.
+  const attentionLevel = v => {
+    const c = v.c, nr = v.nr
+    const extreme = n => n != null && Number.isFinite(Number(n)) && (n <= 20 || n >= 80)
+    if (!extreme(c) && !extreme(nr)) return 0
+    if (extreme(c) && extreme(nr) && ((c <= 20 && nr >= 80) || (c >= 80 && nr <= 20))) return 2
+    return 1
+  }
+  const displayed = [...(showAll ? rows : extremes)].sort((a, b) =>
+    attentionLevel(b) - attentionLevel(a) || a.name.localeCompare(b.name))
   return <section aria-label="New 80/20 Pay Attention Board" className="ie-radar">
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
       <div><div style={{ color: '#a6bedc', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
@@ -226,10 +236,25 @@ function ExtremeAttentionBoard({ historical, radarEligibleOnly, loading, errored
       !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
       !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
-        {displayed.map(v => <article key={v.name} className="ie-radar-card">
+        {displayed.map(v => <article key={v.name} className="ie-radar-card" style={attentionLevel(v) ? {
+          position: 'relative',
+          border: attentionLevel(v) === 2 ? '1px solid rgba(243,191,92,.78)' : '1px solid rgba(213,181,119,.46)',
+          boxShadow: attentionLevel(v) === 2
+            ? '0 0 0 1px rgba(243,191,92,.18), 0 0 26px rgba(220,153,47,.18), inset 0 1px 0 rgba(255,233,172,.16)'
+            : '0 0 16px rgba(210,163,72,.08), inset 0 1px 0 rgba(255,233,172,.08)',
+          backgroundImage: 'linear-gradient(150deg,rgba(255,223,155,.09),transparent 36%)'
+        } : undefined}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
             <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
-            <span style={{ color: v.commercialExtreme || v.retailExtreme ? '#d5bd91' : '#aeb4ba', fontWeight: 700, fontSize: 11 }}>{v.commercialExtreme && v.retailExtreme ? 'DUAL EXTREME' : v.commercialExtreme ? 'COMMERCIAL ALERT' : v.retailExtreme ? 'RETAIL ALERT' : 'MONITOR'}</span>
+            {attentionLevel(v) ? <span aria-label={attentionLevel(v) === 2 ? 'High attention: opposing commercial and non-reportable extremes' : 'Attention: commercial or non-reportable extreme'} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0,
+              borderRadius: 7, padding: '5px 8px', fontSize: 10, fontWeight: 900,
+              letterSpacing: '.07em', color: '#fff1c6',
+              border: '1px solid rgba(255,218,135,.6)',
+              background: 'linear-gradient(180deg,#9d7134 0%,#59401e 48%,#392a18 100%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,240,190,.45),0 2px 10px rgba(214,154,55,.22)'
+            }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
+              : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
           </div>
           <div style={{ margin: '14px 0' }}>
             {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
