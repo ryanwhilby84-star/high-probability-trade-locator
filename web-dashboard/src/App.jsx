@@ -4,7 +4,6 @@ import { useHashRoute } from './routing.js'
 import { useConfluenceData } from './hooks/useConfluenceData.js'
 import { prefetchCot3ySeries } from './data/cot3ySeriesStore.js'
 import { ScannerPage } from './pages/ScannerPage.jsx'
-import { InstrumentPage } from './pages/InstrumentPage.jsx'
 import { CotWorkstationPage } from './pages/CotWorkstationPage.jsx'
 import { SeasonalityWorkstationPage } from './pages/SeasonalityWorkstationPage.jsx'
 import { CorrelationMatrixPage } from './pages/CorrelationMatrixPage.jsx'
@@ -83,15 +82,6 @@ export default function App() {
   if (route.view === 'correlation-matrix') return <CorrelationMatrixPage {...shellProps} />
   if (route.view === 'trade-basket') return <TradeBasketWorkstationPage {...shellProps} />
   if (route.view === 'macro-intelligence') return <MacroIntelligencePage {...shellProps} />
-
-  if (route.view === 'instrument' && route.market) {
-    const marketId = canonicalMarketId(route.market)
-    if (!allowedMarkets.includes(marketId)) {
-      navigateToScanner()
-      return null
-    }
-    return <InstrumentPage marketId={marketId} confluence={confluence} sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
-  }
 
   return <ScannerPage {...confluence} sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
 }
