@@ -1,0 +1,15 @@
+/* Quiet, reduced-motion-aware spatial transition from Radar capture to plan. */
+@keyframes ie-plan-arrive {
+  0% { opacity: 0; transform: translate3d(0,20px,0) scale(.975); filter: blur(5px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes ie-plan-saved {
+  from { opacity: 0; transform: translateY(-8px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.ie-plan-arrive { animation: ie-plan-arrive 440ms cubic-bezier(.2,.75,.2,1) both; }
+.ie-plan-saved { animation: ie-plan-saved 280ms cubic-bezier(.2,.75,.2,1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .ie-plan-arrive, .ie-plan-saved { animation: none !important; }
+}

@@ -5,6 +5,8 @@ import React from 'react'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
 import './commercialAttention.css'
+import { savePositioningPlan } from '../data/positioningPlans.js'
+import { navigateToTradePlanner } from '../routing.js'
 
 const fmt = (v) => {
   if (v == null || v === '') return '—'
@@ -186,112 +188,19 @@ function AttentionCard({ row }) {
 }
 
 
-// Historical, point-in-time NC movement: identify aggressive turns at extremes,
-// remember their onset, and distinguish sustained movement from a one-week reversal.
-function ncRotation(block, snapshotDate, lookback, desired) {
-  const index = { '3y': 4, '5y': 12, '10y': 14, '15y': 13, all: 15 }[lookback]
-  const weeks = (block?.rows || []).filter(r =>
-    Array.isArray(r) && typeof r[0] === 'string' && r[0] <= snapshotDate &&
-    Number.isFinite(r[2]?.[0])
-  ).sort((a,b) => a[0].localeCompare(b[0]))
-  if (weeks.length < 54 || weeks[weeks.length - 1][0] !== snapshotDate) return null
-  const recent = weeks.slice(-9)
-  const events = []
-  for (let i = Math.max(53, weeks.length - 9); i < weeks.length; i++) {
-    const now = weeks[i], prev = weeks[i - 1]
-    const net = now[2][0], prior = prev[2][0], delta = net - prior
-    const baseline = weeks.slice(Math.max(0, i - 157), i).map(r => r[2][0])
-    const moves = baseline.slice(1).map((v,j) => Math.abs(v - baseline[j])).sort((x,y)=>x-y)
-    if (moves.length < 52) continue
-    const aggression = Math.round(100 * moves.filter(v => v <= Math.abs(delta)).length / moves.length)
-    const ncIndex = prev[2]?.[index]
-    const cIndex = prev[1]?.[index], nrIndex = prev[3]?.[index]
-    const ncExtreme = Number.isFinite(ncIndex) && (desired < 0 ? ncIndex >= 80 : ncIndex <= 20)
-    const commercialExtreme = Number.isFinite(cIndex) && (desired < 0 ? cIndex <= 20 : cIndex >= 80)
-    const retailExtreme = Number.isFinite(nrIndex) && (desired < 0 ? nrIndex >= 80 : nrIndex <= 20)
-    if (Math.sign(delta) !== desired || !(ncExtreme && (commercialExtreme || retailExtreme))) continue
-    const flip = (prior > 0 && net < 0) || (prior < 0 && net > 0)
-    if (aggression >= 90 || flip) events.push({ date: now[0], delta, aggression, flip, index: i })
-  }
-  if (!events.length) return null
-  const event = events[0]
-  const last = weeks.length - 1
-  const since = weeks.slice(event.index)
-  const netNow = weeks[last][2][0]
-  const netBefore = weeks[event.index - 1][2][0]
-  const netMovement = netNow - netBefore
-  const alignedWeeks = since.filter((r,j) => Math.sign(r[2][0] - weeks[event.index + j - 1][2][0]) === desired).length
-  const recentMove = weeks[last][2][0] - weeks[last - 1][2][0]
-  const stillAligned = Math.sign(netMovement) === desired
-  return { ...event, weeksAgo: last - event.index, netMovement, alignedWeeks,
-    observedWeeks: since.length, recentMove,
-    state: !stillAligned ? 'reversed' : recentMove * desired <= 0 ? 'paused' : since.length >= 2 && alignedWeeks >= 2 ? 'developing' : 'initial',
-    direction: desired }
-}
 
-function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loading, errored, error }) {
-  const [showAll, setShowAll] = React.useState(true)
-  const [lookback, setLookback] = React.useState("3y")
-  const { rows, latestDate, eligibleCount } = React.useMemo(() => {
-    const all = Array.isArray(historical?.rows) ? historical.rows : []
-    const selected = all.map(v => {
-      const p = v.percentilesByWindow?.[lookback]
-      if (!p) return null // Never display a misleading fallback percentile.
-      const c = p.c, nc = p.nc, nr = p.nr
-      return { ...v, c, nc, nr,
-        commercialExtreme: c != null && (c >= 80 || c <= 20),
-        retailExtreme: nr != null && (nr >= 80 || nr <= 20) }
-    }).filter(Boolean)
-    return { rows: radarEligibleOnly ? selected.filter(v => isRadarEligible(v.name)) : selected,
-      latestDate: historical?.latestDate || null, eligibleCount: historical?.eligibleCount || 0 }
-  }, [historical, radarEligibleOnly, lookback])
-  const eventsByName = React.useMemo(() => {
-    const out = {}
-    const markets = inspector?.markets || {}
-    const keys = Object.keys(markets)
-    for (const row of rows) {
-      if (!(row.commercialExtreme || row.retailExtreme) || !latestDate) continue
-      const desired = row.commercialExtreme ? (row.c >= 80 ? 1 : -1) : (row.nr >= 80 ? -1 : 1)
-      const key = keys.find(k => k.toLowerCase() === row.name.toLowerCase())
-      if (key) out[row.name] = ncRotation(markets[key], latestDate, lookback, desired)
-    }
-    return out
-  }, [inspector, rows, latestDate, lookback])
-  const isLoading = !historical && !errored
-  const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
-  // Both groups independently trigger attention. Opposing extremes get a stronger
-  // visual treatment, but are not trade entries or an inferred direction.
-  const attentionLevel = v => {
+function attentionLevel(v) {
     const c = v.c, nr = v.nr
     const extreme = n => n != null && Number.isFinite(Number(n)) && (n <= 20 || n >= 80)
     if (!extreme(c) && !extreme(nr)) return 0
     if (extreme(c) && extreme(nr) && ((c <= 20 && nr >= 80) || (c >= 80 && nr <= 20))) return 2
     return 1
-  }
-  const displayed = [...(showAll ? rows : extremes)].sort((a, b) =>
-    attentionLevel(b) - attentionLevel(a) || Number(Boolean(eventsByName[b.name])) - Number(Boolean(eventsByName[a.name])) || a.name.localeCompare(b.name))
-  return <section aria-label="New 80/20 Pay Attention Board" className="ie-radar">
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
-      <div><div style={{ color: '#a6bedc', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
-        <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#d5bd91' }}>80 / 20</span></h2>
-        <p style={{ margin: 0, color: '#a4b3c5', fontSize: 13 }}>All markets shown by default. Commercial and Non-Reportable extremes lead attention; Non-Commercial positioning helps time flips.</p>
-      </div>
-      <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>Latest published COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
-    </div>
-    <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-      <label style={{ color: '#cfd3d7', fontSize: 12 }} htmlFor="attention-lookback">Inspector lookback</label>
-      <select id="attention-lookback" value={lookback} onChange={e => setLookback(e.target.value)} className="ie-radar-select">
-        {[["3y","3Y"],["5y","5Y"],["10y","10Y"],["15y","15Y"],["all","ALL"]].map(([id,label]) => <option key={id} value={id}>{label}</option>)}
-      </select>
-      <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} className="ie-radar-toggle">80/20 alerts ({isLoading ? '…' : extremes.length})</button>
-      <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} className="ie-radar-toggle">All positioning ({isLoading ? '…' : rows.length})</button>
-    </div>
-    {errored ? <p role="alert" style={{ color: '#d5bd91' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
-    !historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
-      !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
-      !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
-        {displayed.map(v => <article key={v.name} className="ie-radar-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 345, ...(attentionLevel(v) ? {
+}
+// Single presentation shared by the Radar and an immortalized Planner snapshot.
+// No recalculation or mutable data is introduced when the card is copied.
+export function PositioningTile({ tile: v, rotation = null, lookback = '3y', reportDate = null, onAdd = null }) {
+  const latestDate = reportDate
+  return (<article key={v.name} className="ie-radar-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 345, ...(attentionLevel(v) ? {
           position: 'relative',
           border: attentionLevel(v) === 2 ? '1px solid rgba(243,191,92,.78)' : '1px solid rgba(213,181,119,.46)',
           boxShadow: attentionLevel(v) === 2
@@ -311,8 +220,8 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
             }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
               : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
           </div>
-          {eventsByName[v.name] ? (() => {
-            const ev = eventsByName[v.name]
+          {rotation ? (() => {
+            const ev = rotation
             const bullish = ev.direction > 0
             const shortDate = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
             const label = ev.state === 'developing' ? 'NC ROTATION DEVELOPING'
@@ -360,8 +269,118 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
             </div>
           })}
           <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
-          <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
-        </article>)}
+          {onAdd ? <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><button className="ca-btn ca-btn-primary" type="button" onClick={() => onAdd?.(v, lookback, latestDate, rotation)}>＋ Add to Plan</button><button className="ca-btn" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button></div> : null}
+        </article>)
+}
+
+// Historical, point-in-time NC movement: identify aggressive turns at extremes,
+// remember their onset, and distinguish sustained movement from a one-week reversal.
+function ncRotation(block, snapshotDate, lookback, desired) {
+  const index = { '3y': 4, '5y': 12, '10y': 14, '15y': 13, all: 15 }[lookback]
+  const weeks = (block?.rows || []).filter(r =>
+    Array.isArray(r) && typeof r[0] === 'string' && r[0] <= snapshotDate &&
+    Number.isFinite(r[2]?.[0])
+  ).sort((a,b) => a[0].localeCompare(b[0]))
+  if (weeks.length < 54 || weeks[weeks.length - 1][0] !== snapshotDate) return null
+  const recent = weeks.slice(-9)
+  const events = []
+  for (let i = Math.max(53, weeks.length - 9); i < weeks.length; i++) {
+    const now = weeks[i], prev = weeks[i - 1]
+    const net = now[2][0], prior = prev[2][0], delta = net - prior
+    const baseline = weeks.slice(Math.max(0, i - 157), i).map(r => r[2][0])
+    const moves = baseline.slice(1).map((v,j) => Math.abs(v - baseline[j])).sort((x,y)=>x-y)
+    if (moves.length < 52) continue
+    const aggression = Math.round(100 * moves.filter(v => v <= Math.abs(delta)).length / moves.length)
+    const ncIndex = prev[2]?.[index]
+    const cIndex = prev[1]?.[index], nrIndex = prev[3]?.[index]
+    const ncExtreme = Number.isFinite(ncIndex) && (desired < 0 ? ncIndex >= 80 : ncIndex <= 20)
+    const commercialExtreme = Number.isFinite(cIndex) && (desired < 0 ? cIndex <= 20 : cIndex >= 80)
+    const retailExtreme = Number.isFinite(nrIndex) && (desired < 0 ? nrIndex >= 80 : nrIndex <= 20)
+    if (Math.sign(delta) !== desired || !(ncExtreme && (commercialExtreme || retailExtreme))) continue
+    const flip = (prior > 0 && net < 0) || (prior < 0 && net > 0)
+    if (aggression >= 90 || flip) events.push({ date: now[0], delta, aggression, flip, index: i })
+  }
+  if (!events.length) return null
+  const event = events[0]
+  const last = weeks.length - 1
+  const since = weeks.slice(event.index)
+  const netNow = weeks[last][2][0]
+  const netBefore = weeks[event.index - 1][2][0]
+  const netMovement = netNow - netBefore
+  const alignedWeeks = since.filter((r,j) => Math.sign(r[2][0] - weeks[event.index + j - 1][2][0]) === desired).length
+  const recentMove = weeks[last][2][0] - weeks[last - 1][2][0]
+  const stillAligned = Math.sign(netMovement) === desired
+  return { ...event, weeksAgo: last - event.index, netMovement, alignedWeeks,
+    observedWeeks: since.length, recentMove,
+    state: !stillAligned ? 'reversed' : recentMove * desired <= 0 ? 'paused' : since.length >= 2 && alignedWeeks >= 2 ? 'developing' : 'initial',
+    direction: desired }
+}
+
+function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loading, errored, error }) {
+  const [savedNotice, setSavedNotice] = React.useState('')
+  const addPlan = (v, lookback, latestDate, rotation) => {
+    try {
+      const item = savePositioningPlan({ market: v.name, reportDate: latestDate, lookback, tile: { ...v }, rotation: rotation || null })
+      setSavedNotice(item.market + ' saved to Positioning Tracker')
+    } catch (error) { setSavedNotice('Could not save: ' + error.message) }
+  }
+  const [showAll, setShowAll] = React.useState(true)
+  const [lookback, setLookback] = React.useState("3y")
+  const { rows, latestDate, eligibleCount } = React.useMemo(() => {
+    const all = Array.isArray(historical?.rows) ? historical.rows : []
+    const selected = all.map(v => {
+      const p = v.percentilesByWindow?.[lookback]
+      if (!p) return null // Never display a misleading fallback percentile.
+      const c = p.c, nc = p.nc, nr = p.nr
+      return { ...v, c, nc, nr,
+        commercialExtreme: c != null && (c >= 80 || c <= 20),
+        retailExtreme: nr != null && (nr >= 80 || nr <= 20) }
+    }).filter(Boolean)
+    return { rows: radarEligibleOnly ? selected.filter(v => isRadarEligible(v.name)) : selected,
+      latestDate: historical?.latestDate || null, eligibleCount: historical?.eligibleCount || 0 }
+  }, [historical, radarEligibleOnly, lookback])
+  const eventsByName = React.useMemo(() => {
+    const out = {}
+    const markets = inspector?.markets || {}
+    const keys = Object.keys(markets)
+    for (const row of rows) {
+      if (!(row.commercialExtreme || row.retailExtreme) || !latestDate) continue
+      const desired = row.commercialExtreme ? (row.c >= 80 ? 1 : -1) : (row.nr >= 80 ? -1 : 1)
+      const key = keys.find(k => k.toLowerCase() === row.name.toLowerCase())
+      if (key) out[row.name] = ncRotation(markets[key], latestDate, lookback, desired)
+    }
+    return out
+  }, [inspector, rows, latestDate, lookback])
+  const isLoading = !historical && !errored
+  const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
+  // Both groups independently trigger attention. Opposing extremes get a stronger
+  // visual treatment, but are not trade entries or an inferred direction.
+
+  const displayed = [...(showAll ? rows : extremes)].sort((a, b) =>
+    attentionLevel(b) - attentionLevel(a) || Number(Boolean(eventsByName[b.name])) - Number(Boolean(eventsByName[a.name])) || a.name.localeCompare(b.name))
+  return <section aria-label="New 80/20 Pay Attention Board" className="ie-radar">
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
+      <div><div style={{ color: '#a6bedc', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>NEW · WEEKLY POSITIONING RADAR</div>
+        <h2 style={{ margin: '6px 0', color: '#f4f7fa', fontSize: 25 }}>PAY ATTENTION <span style={{ color: '#d5bd91' }}>80 / 20</span></h2>
+        <p style={{ margin: 0, color: '#a4b3c5', fontSize: 13 }}>All markets shown by default. Commercial and Non-Reportable extremes lead attention; Non-Commercial positioning helps time flips.</p>
+      </div>
+      <div style={{ color: '#cfd3d7', textAlign: 'right', fontSize: 13 }}>Latest published COT report <strong>{isLoading ? 'Loading…' : (latestDate || '—')}</strong><div>{isLoading ? 'Loading alerts and market percentiles…' : `${extremes.length} alerts · ${rows.length} markets with percentiles`}</div></div>
+    </div>
+    <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+      <label style={{ color: '#cfd3d7', fontSize: 12 }} htmlFor="attention-lookback">Inspector lookback</label>
+      <select id="attention-lookback" value={lookback} onChange={e => setLookback(e.target.value)} className="ie-radar-select">
+        {[["3y","3Y"],["5y","5Y"],["10y","10Y"],["15y","15Y"],["all","ALL"]].map(([id,label]) => <option key={id} value={id}>{label}</option>)}
+      </select>
+      <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} className="ie-radar-toggle">80/20 alerts ({isLoading ? '…' : extremes.length})</button>
+      <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} className="ie-radar-toggle">All positioning ({isLoading ? '…' : rows.length})</button>
+    </div>
+    {savedNotice ? <div role="status" style={{ padding: 12, marginBottom: 12, borderRadius: 10, background: '#193c36', color: '#b5f2d6', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}><span>✓ {savedNotice}</span><button type="button" className="ca-btn" onClick={navigateToTradePlanner}>Open Planner →</button></div> : null}
+    {errored ? <p role="alert" style={{ color: '#d5bd91' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
+    !historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
+      !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
+      !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
+        {displayed.map(v => <PositioningTile key={v.name} tile={v} rotation={eventsByName[v.name]} lookback={lookback} reportDate={latestDate} onAdd={addPlan} />)}
       </div>}
     <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>COT range index (0–100), not a statistical percentile rank, for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
     <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#a6bedc', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
