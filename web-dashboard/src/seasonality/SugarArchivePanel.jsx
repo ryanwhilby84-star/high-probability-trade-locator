@@ -7,7 +7,7 @@ const localMonthDay = () => { const d = new Date(); return `${String(d.getMonth(
 const plusDays = (md, days) => new Date(Date.parse(`2001-${md}T00:00:00Z`) + days * 86400000).toISOString().slice(5, 10)
 
 export function SugarArchivePanel({ marketId }) {
-  const isSugar = marketId === 'Sugar'
+  const isSugar = marketId === 'Sugar' || marketId === 'S&P 500 / ES'
   const [archive, setArchive] = React.useState(null)
   const [error, setError] = React.useState('')
   const [start, setStart] = React.useState(localMonthDay)
@@ -18,26 +18,26 @@ export function SugarArchivePanel({ marketId }) {
     if (!isSugar) return undefined
     const controller = new AbortController()
     setError(''); setArchive(null)
-    fetch('/data/sugar_archive_daily.json', { signal: controller.signal })
+    fetch(marketId === 'S&P 500 / ES' ? '/data/sp_archive_daily.json' : '/data/sugar_archive_daily.json', { signal: controller.signal })
       .then((r) => { if (!r.ok) throw new Error(`Archive request failed (${r.status}).`); return r.json() })
       .then((doc) => { if (!controller.signal.aborted) setArchive(prepareSugarArchive(doc)) })
       .catch((err) => { if (err.name !== 'AbortError') setError(err.message) })
     return () => controller.abort()
-  }, [isSugar])
+  }, [isSugar, marketId])
   const options = React.useMemo(() => ({ strict, direction }), [strict, direction])
   const result = React.useMemo(() => archive ? evaluateSugarWindow(archive, start, end, options) : null, [archive, start, end, options])
   const candidates = React.useMemo(() => archive ? findSugarWindows(archive, start, options).slice(0, 12) : [], [archive, start, options])
   if (!isSugar) return null
   return (
     <section className="sugar-archive" aria-label="Sugar archive seasonal window finder">
-      <h2>Sugar seasonal window finder</h2>
-      <p className="sugar-archive-note">Historical archive · 1961–2001 full calendar years · source ends September 2002 · contract-switch gaps excluded.</p>
+      <h2>{marketId === 'S&P 500 / ES' ? 'S&P 500 historical seasonal research' : 'Sugar seasonal window finder'}</h2>
+      <p className="sugar-archive-note">{marketId === 'S&P 500 / ES' ? 'TurtleTrader SP full-size futures · 1983–2001 full calendar years · source ends October 2002 · separate from modern ES price history.' : 'Historical archive · 1961–2001 full calendar years · source ends September 2002 · contract-switch gaps excluded.'}</p>
       <p className="sugar-archive-note">This is an older research sample. Keep it alongside your recent 15-year study. Larger samples do not automatically mean a stronger current edge.</p>
       {error ? <p role="alert">{error}</p> : !archive ? <p role="status">Loading sugar archive…</p> : <>
         <div className="sugar-archive-controls">
           <label>Entry date<input type="date" min="2001-01-01" max="2001-12-31" value={`2001-${start}`} onChange={(e) => { if (e.target.value) setStart(e.target.value.slice(5)) }} /></label>
           <label>Exit date<input type="date" min="2001-01-01" max="2001-12-31" value={`2001-${end}`} onChange={(e) => { if (e.target.value) setEnd(e.target.value.slice(5)) }} /></label>
-          <label>Direction<select value={direction} onChange={(e) => setDirection(e.target.value)}><option value="long">Long sugar</option><option value="short">Short sugar</option></select></label>
+          <label>Direction<select value={direction} onChange={(e) => setDirection(e.target.value)}><option value="long">Long</option><option value="short">Short</option></select></label>
           <label>Observations<select value={strict ? 'strict' : 'all'} onChange={(e) => setStrict(e.target.value === 'strict')}><option value="strict">Quality-filtered windows</option><option value="all">All source observations</option></select></label>
         </div>
         <p className="sugar-archive-note">Dates repeat each year; the displayed year 2001 is only a date-picker reference. Exit dates before entry wrap into the next year. Boundaries use the first session on or after each date.</p>
