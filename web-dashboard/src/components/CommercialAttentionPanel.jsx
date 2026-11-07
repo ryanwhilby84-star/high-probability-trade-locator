@@ -380,7 +380,9 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
       !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
       !displayed.length ? <p style={{ color: '#c6d5e1' }}>No 80/20 extremes for {latestDate}. Select “All positioning” to inspect every available percentile.</p> :
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: 12 }}>
-        {displayed.map(v => <PositioningTile key={v.name} tile={v} rotation={eventsByName[v.name]} lookback={lookback} reportDate={latestDate} onAdd={addPlan} />)}primary attention triggers.</p>
+        {displayed.map(v => <PositioningTile key={v.name} tile={v} rotation={eventsByName[v.name]} lookback={lookback} reportDate={latestDate} onAdd={addPlan} />)}
+      </div>}
+    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>COT range index (0–100), not a statistical percentile rank, for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
     <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#a6bedc', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
   </section>
 }
