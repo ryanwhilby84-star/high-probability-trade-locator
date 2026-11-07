@@ -9,6 +9,7 @@ import { SeasonalityWorkstationPage } from './pages/SeasonalityWorkstationPage.j
 import { CorrelationMatrixPage } from './pages/CorrelationMatrixPage.jsx'
 import { TradeBasketWorkstationPage } from './pages/TradeBasketWorkstationPage.jsx'
 import { MacroIntelligencePage } from './pages/MacroIntelligencePage.jsx'
+import { TradePlannerPage } from './pages/TradePlannerPage.jsx'
 import { TradeJournalPage } from './pages/TradeJournalPage.jsx'
 import { ThesisTrackerPage } from './pages/ThesisTrackerPage.jsx'
 import { OandaCoveragePage } from './pages/OandaCoveragePage.jsx'
@@ -44,6 +45,7 @@ export default function App() {
     return ids.length ? ids : confluence.trackedMarkets
   }, [confluence.trackedMarkets])
 
+  if (route.view === 'trade-planner') return <TradePlannerPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'journal') return <TradeJournalPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'thesis') return <ThesisTrackerPage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
   if (route.view === 'oanda') return <OandaCoveragePage sidebarClass={sidebarClass} onSidebarClass={setSidebarClass} />
