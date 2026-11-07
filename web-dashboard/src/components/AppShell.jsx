@@ -6,6 +6,7 @@ import { canonicalMarketId, TRACKED_MARKET_IDS } from '../marketResolution.js'
 import {
   useHashRoute,
   navigateToJournal,
+  navigateToTradePlanner,
   navigateToScanner,
   navigateToNaturalGasValuation,
   navigateToDxyMacroBias,
@@ -93,6 +94,8 @@ export function AppShell({
         {/* Public beta: keep the focused product navigation; other routes remain available internally. */}
         <div className="ws-product-nav">
           <button type="button" {...pageNav('scanner')} style={{ width: '100%' }} onClick={navigateToScanner}>Scanner</button>
+          <button type="button" {...pageNav('trade-planner')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToTradePlanner}>Trade Planner</button>
+          <button type="button" {...pageNav('journal')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToJournal}>Journal</button>
           <button type="button" {...pageNav('trade-basket')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToTradeBasket}>Trade Basket</button>
           <button type="button" {...pageNav('correlation-matrix')} style={{ width: '100%', marginTop: 8 }} onClick={navigateToCorrelationMatrix}>Correlation Matrix</button>
           <button type="button" {...pageNav('seasonality-workstation')} style={{ width: '100%', marginTop: 8 }} onClick={() => {
