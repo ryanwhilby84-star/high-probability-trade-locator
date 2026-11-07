@@ -1,0 +1,26 @@
+name: Planner preview build checks
+on:
+  pull_request:
+    paths:
+      - 'web-dashboard/src/**'
+      - 'web-dashboard/package*.json'
+      - '.github/workflows/planner-preview-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web-dashboard/package-lock.json
+      - name: Install dashboard dependencies
+        working-directory: web-dashboard
+        run: npm ci
+      - name: Build dashboard without deploying production
+        working-directory: web-dashboard
+        run: npm run build
