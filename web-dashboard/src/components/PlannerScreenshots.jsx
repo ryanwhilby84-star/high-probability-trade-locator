@@ -54,7 +54,10 @@ export function PlannerScreenshots({ planId }) {
   const upload = async e => {
     try {
       setError('')
-      for (const file of Array.from(e.target.files || [])) await addScreenshot(planId, file)
+      const selected = Array.from(e.target.files || [])
+      const existing = await listScreenshots(planId)
+      if (existing.length + selected.length > 3) throw new Error('Maximum three screenshots per plan (weekly, daily and 4H recommended)')
+      for (const file of selected) await addScreenshot(planId, file)
       await refresh()
       e.target.value = ''
     } catch (err) { setError(err.message) }
@@ -62,7 +65,7 @@ export function PlannerScreenshots({ planId }) {
   return <section style={{ display: 'grid', gap: 12 }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', gap: 10 }}>
       <strong style={{ color: '#e6f0f8' }}>Chart research · {images.length} screenshots</strong>
-      <label className="ws-btn" style={{ cursor: 'pointer' }}>＋ Upload screenshots<input type="file" accept="image/*" multiple onChange={upload} style={{ display: 'none' }} /></label>
+      <label className="ws-btn" style={{ cursor: 'pointer' }}>＋ Upload screenshots (max 3)<input type="file" accept="image/*" multiple onChange={upload} style={{ display: 'none' }} /></label>
     </div>
     {error ? <p role="alert" style={{ color: '#ffc49b' }}>{error}</p> : null}
     {!images.length ? <p style={{ color: '#9cb5c8', fontSize: 12 }}>Attach weekly, daily or 4H charts. Add arrows and zones directly to each image.</p> : null}
