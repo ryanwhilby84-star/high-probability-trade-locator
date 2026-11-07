@@ -1,4 +1,5 @@
 name: Refresh and publish Institutional Edge data
+# Re-trigger canonical validated production COT release after workflow repairs (2026-11-07).
 on:
   workflow_dispatch:
   workflow_call:
