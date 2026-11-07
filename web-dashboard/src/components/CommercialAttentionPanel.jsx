@@ -188,6 +188,91 @@ function AttentionCard({ row }) {
 }
 
 
+
+function attentionLevel(v) {
+    const c = v.c, nr = v.nr
+    const extreme = n => n != null && Number.isFinite(Number(n)) && (n <= 20 || n >= 80)
+    if (!extreme(c) && !extreme(nr)) return 0
+    if (extreme(c) && extreme(nr) && ((c <= 20 && nr >= 80) || (c >= 80 && nr <= 20))) return 2
+    return 1
+}
+// Single presentation shared by the Radar and an immortalized Planner snapshot.
+// No recalculation or mutable data is introduced when the card is copied.
+export function PositioningTile({ tile: v, rotation = null, lookback = '3y', reportDate = null, onAdd = null }) {
+  const latestDate = reportDate
+  return (<article key={v.name} className="ie-radar-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 345, ...(attentionLevel(v) ? {
+          position: 'relative',
+          border: attentionLevel(v) === 2 ? '1px solid rgba(243,191,92,.78)' : '1px solid rgba(213,181,119,.46)',
+          boxShadow: attentionLevel(v) === 2
+            ? '0 0 0 1px rgba(243,191,92,.18), 0 0 26px rgba(220,153,47,.18), inset 0 1px 0 rgba(255,233,172,.16)'
+            : '0 0 16px rgba(210,163,72,.08), inset 0 1px 0 rgba(255,233,172,.08)',
+          backgroundImage: 'linear-gradient(150deg,rgba(255,223,155,.09),transparent 36%)'
+        } : {}) }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+            <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
+            {attentionLevel(v) ? <span aria-label={attentionLevel(v) === 2 ? 'High attention: opposing commercial and non-reportable extremes' : 'Attention: commercial or non-reportable extreme'} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0,
+              borderRadius: 7, padding: '5px 8px', fontSize: 10, fontWeight: 900,
+              letterSpacing: '.07em', color: '#fff1c6',
+              border: '1px solid rgba(255,218,135,.6)',
+              background: 'linear-gradient(180deg,#9d7134 0%,#59401e 48%,#392a18 100%)',
+              boxShadow: 'inset 0 1px 0 rgba(255,240,190,.45),0 2px 10px rgba(214,154,55,.22)'
+            }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
+              : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
+          </div>
+          {rotation ? (() => {
+            const ev = rotation
+            const bullish = ev.direction > 0
+            const shortDate = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+            const label = ev.state === 'developing' ? 'NC ROTATION DEVELOPING'
+              : ev.state === 'paused' ? 'NC ROTATION PAUSED'
+              : ev.state === 'reversed' ? 'NC MOVE REVERSED' : 'NC AGGRESSIVE TURN'
+            return <div style={{ marginTop: 12, padding: '10px 11px', borderRadius: 8, border: '1px solid rgba(107,186,225,.45)', background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))' }}>
+              <div style={{ fontSize: 12, fontWeight: 850, color: bullish ? '#83dbb4' : '#f0a0a6' }}>{bullish ? '▲' : '▼'} {label}</div>
+              <div style={{ fontSize: 12, color: '#d8f1ff', marginTop: 5 }}>{bullish ? 'Bullish' : 'Bearish'} NC movement · started {shortDate} ({ev.weeksAgo} reports ago)</div>
+              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 4 }}>Initial move: {fmt(ev.delta)} contracts · aggression {ev.aggression}th percentile</div>
+              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 3 }}>Since start: {fmt(ev.netMovement)} net · {ev.alignedWeeks}/{ev.observedWeeks} weeks aligned{ev.flip ? ' · net-zero flip' : ''}</div>
+            </div>
+          })() : null}
+          <div style={{ margin: '14px 0', flex: 1 }}>
+            {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
+              const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
+              const distance = n == null ? null : Math.min(n, 100 - n)
+              const status = distance == null ? 'Unavailable' : distance <= 10 ? 'Deep extreme' : distance <= 20 ? 'Extreme' : distance <= 30 ? 'Approaching' : 'Neutral'
+              // Position direction controls colour: low = red, middle = blue, high = green.
+              // Interpolate through blue so every value has a consistent, readable meaning.
+              const interpolate = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t))
+              const rgb = n == null ? [113, 128, 150] : n <= 50
+                ? interpolate([221, 76, 83], [102, 157, 211], n / 50)
+                : interpolate([102, 157, 211], [43, 190, 119], (n - 50) / 50)
+              const color = 'rgb(' + rgb.join(',') + ')'
+              return <div key={label} style={{ marginBottom: 11 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 5 }}>
+                  <span style={{ color: '#cbd6df', fontSize: 11, fontWeight: 700 }}>{label}</span>
+                  <span style={{ color, fontSize: 12, fontWeight: 700 }}>{n == null ? '—' : n.toFixed(0) + '/100'} · {status}</span>
+                </div>
+                <div role="meter" aria-label={label + ' positioning range index'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={n == null ? undefined : n} aria-valuetext={status} style={{ height: 9, borderRadius: 8, overflow: 'hidden', background: '#283744' }}>
+                  {n != null ? <div style={{ width: n + '%', height: '100%', borderRadius: 8, background: color }} /> : null}
+                </div>
+              </div>
+            })}
+          </div>
+          {[
+            ['Commercial', v.change],
+            ['Non-Commercial', v.ncChange],
+          ].map(([group, value]) => {
+            const n = value == null || value === '' ? null : Number(value)
+            const tone = n == null || !Number.isFinite(n) || n === 0 ? '#aebdcb' : n > 0 ? '#72dfac' : '#f18c97'
+            const direction = n == null || !Number.isFinite(n) || n === 0 ? 'unchanged or unavailable' : n > 0 ? 'net buying' : 'net selling'
+            return <div key={group} style={{ color: '#b8c9d6', fontSize: 12, marginTop: group === 'Commercial' ? 0 : 5 }}>
+              {group} WoW net change: <strong title={group + ' ' + direction} style={{ color: tone, fontVariantNumeric: 'tabular-nums' }}>{fmt(value)}</strong>
+            </div>
+          })}
+          <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
+          {onAdd ? <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><button className="ca-btn ca-btn-primary" type="button" onClick={() => onAdd?.(v, lookback, latestDate, rotation)}>＋ Add to Plan</button><button className="ca-btn" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button></div> : null}
+        </article>)
+}
+
 // Historical, point-in-time NC movement: identify aggressive turns at extremes,
 // remember their onset, and distinguish sustained movement from a one-week reversal.
 function ncRotation(block, snapshotDate, lookback, desired) {
@@ -270,13 +355,7 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   // Both groups independently trigger attention. Opposing extremes get a stronger
   // visual treatment, but are not trade entries or an inferred direction.
-  const attentionLevel = v => {
-    const c = v.c, nr = v.nr
-    const extreme = n => n != null && Number.isFinite(Number(n)) && (n <= 20 || n >= 80)
-    if (!extreme(c) && !extreme(nr)) return 0
-    if (extreme(c) && extreme(nr) && ((c <= 20 && nr >= 80) || (c >= 80 && nr <= 20))) return 2
-    return 1
-  }
+
   const displayed = [...(showAll ? rows : extremes)].sort((a, b) =>
     attentionLevel(b) - attentionLevel(a) || Number(Boolean(eventsByName[b.name])) - Number(Boolean(eventsByName[a.name])) || a.name.localeCompare(b.name))
   return <section aria-label="New 80/20 Pay Attention Board" className="ie-radar">
@@ -304,76 +383,7 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
         {displayed.map(v => <article key={v.name} className="ie-radar-card" style={{ display: 'flex', flexDirection: 'column', minHeight: 345, ...(attentionLevel(v) ? {
           position: 'relative',
           border: attentionLevel(v) === 2 ? '1px solid rgba(243,191,92,.78)' : '1px solid rgba(213,181,119,.46)',
-          boxShadow: attentionLevel(v) === 2
-            ? '0 0 0 1px rgba(243,191,92,.18), 0 0 26px rgba(220,153,47,.18), inset 0 1px 0 rgba(255,233,172,.16)'
-            : '0 0 16px rgba(210,163,72,.08), inset 0 1px 0 rgba(255,233,172,.08)',
-          backgroundImage: 'linear-gradient(150deg,rgba(255,223,155,.09),transparent 36%)'
-        } : {}) }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: 18, color: '#fff', display: 'flex', alignItems: 'center', gap: 9 }}><AssetIcon name={v.name} size={30} /><span>{v.name}</span></h3>
-            {attentionLevel(v) ? <span aria-label={attentionLevel(v) === 2 ? 'High attention: opposing commercial and non-reportable extremes' : 'Attention: commercial or non-reportable extreme'} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0,
-              borderRadius: 7, padding: '5px 8px', fontSize: 10, fontWeight: 900,
-              letterSpacing: '.07em', color: '#fff1c6',
-              border: '1px solid rgba(255,218,135,.6)',
-              background: 'linear-gradient(180deg,#9d7134 0%,#59401e 48%,#392a18 100%)',
-              boxShadow: 'inset 0 1px 0 rgba(255,240,190,.45),0 2px 10px rgba(214,154,55,.22)'
-            }}><span aria-hidden="true" style={{ fontSize: 15, lineHeight: 1 }}>⚡</span>{attentionLevel(v) === 2 ? 'HIGH ATTENTION' : 'ATTENTION'}</span>
-              : <span style={{ color: '#aeb4ba', fontWeight: 700, fontSize: 11 }}>MONITOR</span>}
-          </div>
-          {eventsByName[v.name] ? (() => {
-            const ev = eventsByName[v.name]
-            const bullish = ev.direction > 0
-            const shortDate = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
-            const label = ev.state === 'developing' ? 'NC ROTATION DEVELOPING'
-              : ev.state === 'paused' ? 'NC ROTATION PAUSED'
-              : ev.state === 'reversed' ? 'NC MOVE REVERSED' : 'NC AGGRESSIVE TURN'
-            return <div style={{ marginTop: 12, padding: '10px 11px', borderRadius: 8, border: '1px solid rgba(107,186,225,.45)', background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))' }}>
-              <div style={{ fontSize: 12, fontWeight: 850, color: bullish ? '#83dbb4' : '#f0a0a6' }}>{bullish ? '▲' : '▼'} {label}</div>
-              <div style={{ fontSize: 12, color: '#d8f1ff', marginTop: 5 }}>{bullish ? 'Bullish' : 'Bearish'} NC movement · started {shortDate} ({ev.weeksAgo} reports ago)</div>
-              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 4 }}>Initial move: {fmt(ev.delta)} contracts · aggression {ev.aggression}th percentile</div>
-              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 3 }}>Since start: {fmt(ev.netMovement)} net · {ev.alignedWeeks}/{ev.observedWeeks} weeks aligned{ev.flip ? ' · net-zero flip' : ''}</div>
-            </div>
-          })() : null}
-          <div style={{ margin: '14px 0', flex: 1 }}>
-            {[['COMMERCIALS', v.c], ['NON-COMMERCIALS', v.nc], ['NON-REPORTABLES', v.nr]].map(([label, value]) => {
-              const n = value == null || !Number.isFinite(Number(value)) ? null : Math.max(0, Math.min(100, Number(value)))
-              const distance = n == null ? null : Math.min(n, 100 - n)
-              const status = distance == null ? 'Unavailable' : distance <= 10 ? 'Deep extreme' : distance <= 20 ? 'Extreme' : distance <= 30 ? 'Approaching' : 'Neutral'
-              // Position direction controls colour: low = red, middle = blue, high = green.
-              // Interpolate through blue so every value has a consistent, readable meaning.
-              const interpolate = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t))
-              const rgb = n == null ? [113, 128, 150] : n <= 50
-                ? interpolate([221, 76, 83], [102, 157, 211], n / 50)
-                : interpolate([102, 157, 211], [43, 190, 119], (n - 50) / 50)
-              const color = 'rgb(' + rgb.join(',') + ')'
-              return <div key={label} style={{ marginBottom: 11 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 5 }}>
-                  <span style={{ color: '#cbd6df', fontSize: 11, fontWeight: 700 }}>{label}</span>
-                  <span style={{ color, fontSize: 12, fontWeight: 700 }}>{n == null ? '—' : n.toFixed(0) + '/100'} · {status}</span>
-                </div>
-                <div role="meter" aria-label={label + ' positioning range index'} aria-valuemin={0} aria-valuemax={100} aria-valuenow={n == null ? undefined : n} aria-valuetext={status} style={{ height: 9, borderRadius: 8, overflow: 'hidden', background: '#283744' }}>
-                  {n != null ? <div style={{ width: n + '%', height: '100%', borderRadius: 8, background: color }} /> : null}
-                </div>
-              </div>
-            })}
-          </div>
-          {[
-            ['Commercial', v.change],
-            ['Non-Commercial', v.ncChange],
-          ].map(([group, value]) => {
-            const n = value == null || value === '' ? null : Number(value)
-            const tone = n == null || !Number.isFinite(n) || n === 0 ? '#aebdcb' : n > 0 ? '#72dfac' : '#f18c97'
-            const direction = n == null || !Number.isFinite(n) || n === 0 ? 'unchanged or unavailable' : n > 0 ? 'net buying' : 'net selling'
-            return <div key={group} style={{ color: '#b8c9d6', fontSize: 12, marginTop: group === 'Commercial' ? 0 : 5 }}>
-              {group} WoW net change: <strong title={group + ' ' + direction} style={{ color: tone, fontVariantNumeric: 'tabular-nums' }}>{fmt(value)}</strong>
-            </div>
-          })}
-          <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><button className="ca-btn ca-btn-primary" type="button" onClick={() => addPlan(v, lookback, latestDate, eventsByName[v.name])}>＋ Add to Plan</button><button className="ca-btn" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button></div>
-        </article>)}
-      </div>}
-    <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>COT range index (0–100), not a statistical percentile rank, for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
+ {displayed.map(v => <PositioningTile key={v.name} tile={v} rotation={eventsByName[v.name]} lookback={lookback} reportDate={latestDate} onAdd={addPlan} />)}primary attention triggers.</p>
     <div style={{ textAlign: 'right', marginTop: 12, fontSize: 10, letterSpacing: 1.3, color: '#717880' }}>POWERED BY <a href="https://www.ztack.co.uk/" target="_blank" rel="noopener noreferrer" style={{ color: '#a6bedc', textDecoration: 'none', fontWeight: 800 }}>ZTACK</a></div>
   </section>
 }
