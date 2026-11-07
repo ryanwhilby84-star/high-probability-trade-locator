@@ -1,6 +1,7 @@
 name: Refresh and publish Institutional Edge data
 on:
   workflow_dispatch:
+  workflow_call:
   schedule:
     # Saturday after the CFTC Friday release; keep production refreshed without a local PC.
     - cron: '0 8 * * 6'
@@ -12,17 +13,19 @@ on:
       - 'web-dashboard/scripts/verifyAttentionSnapshot.mjs'
       - 'scripts/publish_weekly_cot.ps1'
       - '.github/workflows/production-data-release.yml'
+      - 'scripts/validate_cot_release.py'
+      - 'tests/test_cot_release.py'
 
 concurrency:
   group: institutional-edge-data-release
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
-      contents: write
+      contents: read
     env:
       PYTHONPATH: src
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -74,6 +77,9 @@ jobs:
         env:
           HPTL_STAGE_TIMEOUT_S: '900'
           PYTHONUNBUFFERED: '1'
+          HPTL_SKIP_LIVE_FEEDS: '1'
+          HPTL_DISABLE_WATCHDOG: '1'
+          HPTL_SKIP_VALUATION: '1'
         run: python -m hptl.cot.run_update --force --ensure-from-year 2011
       - name: Validate rolling percentile regression tests
         run: |
@@ -85,33 +91,7 @@ jobs:
       - name: Refresh commercial attention
         run: python scripts/run_commercial_attention_engine.py
       - name: Validate release snapshot and freshness
-        run: |
-          python - <<'PY'
-          import json
-          from datetime import date, datetime
-          from pathlib import Path
-          root = Path("web-dashboard/public/data")
-          inspector = json.loads((root / "cot_weekly_inspector_latest.json").read_text())
-          if inspector.get("measure") != "net_positioning_rolling_156_week_percentile":
-              raise SystemExit("FAIL: Weekly Inspector uses incompatible percentile measure")
-          markets = inspector.get("markets") or {}
-          dates = [m["rows"][-1][0] for m in markets.values() if m.get("available") and m.get("rows")]
-          if not dates:
-              raise SystemExit("FAIL: Weekly Inspector contains no available dated markets")
-          latest = date.fromisoformat(max(dates))
-          age = (datetime.now().date() - latest).days
-          print(f"Weekly Inspector latest COT week: {latest}; age: {age} days; markets: {len(dates)}")
-          # Saturday publication must contain the preceding Tuesday report.
-          # The normal CFTC reporting lag is Tuesday as-of, Friday release.
-          from datetime import timedelta
-          today = datetime.now().date()
-          days_since_tuesday = (today.weekday() - 1) % 7
-          expected = today - timedelta(days=days_since_tuesday)
-          if today.weekday() in (1, 2, 3):
-              expected -= timedelta(days=7)
-          if latest != expected:
-              raise SystemExit(f"FAIL: expected COT reporting week {expected}, got {latest}")
-          PY
+        run: python scripts/validate_cot_release.py
       - name: Audit all COT graph nets and 156-week percentiles against one history source
         run: python scripts/audit_cot_chart_percentile_parity.py
       - name: Refresh and validate Seasonality Workstation archive
@@ -323,6 +303,8 @@ jobs:
             web-dashboard/public/data/confluence_history_manifest.json
             web-dashboard/public/data/cot_commercial_attention_latest.json
             web-dashboard/public/data/cot_weekly_inspector_latest.json
+            data/exports/weekly_cot_update_latest.json
+            data/cot_weekly_integrity_gate_latest.json
             web-dashboard/public/data/prices_latest.json
             /tmp/institutional-edge-data-release.zip
           if-no-files-found: warn
