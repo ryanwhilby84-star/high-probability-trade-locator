@@ -368,39 +368,45 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
   </section>
 }
 
-// The attention snapshot already contains the Inspector-derived 3Y/5Y/10Y/15Y/ALL
-// values and its published COT report date. Never substitute the scanner's
-// older selected week for the latest snapshot.
+// Radar and Weekly Inspector consume one canonical published COT file.
+// Never read the legacy attention snapshot: it can lag behind the Inspector.
+function latestInspectorWeek(doc) {
+  const markets = Object.values(doc?.markets || {}).filter(m => m?.available && Array.isArray(m.rows) && m.rows.length)
+  if (!markets.length) throw new Error('Inspector contains no available market histories')
+  const latest = markets.map(m => m.rows[m.rows.length - 1]?.[0])
+  if (latest.some(d => typeof d !== 'string' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(d))) {
+    throw new Error('Inspector contains invalid report dates')
+  }
+  const date = latest[0]
+  if (latest.some(d => d !== date)) throw new Error('Inspector market report dates disagree; Radar disabled until a complete COT export is published')
+  return date
+}
+
 export function CommercialAttentionPanel({ radarEligibleOnly = true }) {
-  const [inspector, setInspector] = React.useState(null)
-  const [state, setState] = React.useState({ doc: null, loading: true, error: null })
+  const [state, setState] = React.useState({ doc: null, inspector: null, loading: true, error: null })
   React.useEffect(() => {
     const controller = new AbortController()
-    setState({ doc: null, loading: true, error: null })
+    setState({ doc: null, inspector: null, loading: true, error: null })
     fetch('/data/cot_weekly_inspector_latest.json', { signal: controller.signal, cache: 'no-store' })
-      .then(r => r.ok ? r.json() : null)
-      .then(doc => { if (!controller.signal.aborted) setInspector(doc) })
-      .catch(() => { if (!controller.signal.aborted) setInspector(null) })
-    fetch('/data/cot_attention_80_20_latest.json', { signal: controller.signal, cache: 'no-store' })
-      .then(r => r.ok ? r.json() : Promise.reject(new Error('Attention snapshot HTTP ' + r.status)))
-      .then(doc => {
-        if (!Array.isArray(doc?.rows) || !doc.latestDate || !doc.rows.length) {
-          throw new Error('Latest attention snapshot has no market readings')
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('Inspector HTTP ' + r.status)))
+      .then(inspector => {
+        const date = latestInspectorWeek(inspector)
+        const doc = attentionForWeek(inspector, date)
+        if (!doc.rows.length || doc.rows.length !== Object.keys(inspector.markets || {}).filter(k => inspector.markets[k]?.available).length) {
+          throw new Error('Inspector market readings incomplete; Radar disabled')
         }
-        if (!controller.signal.aborted) setState({ doc, loading: false, error: null })
+        if (!controller.signal.aborted) setState({ doc, inspector, loading: false, error: null })
       })
-      .catch(error => { if (!controller.signal.aborted) setState({ doc: null, loading: false, error }) })
+      .catch(error => { if (!controller.signal.aborted) setState({ doc: null, inspector: null, loading: false, error }) })
     return () => controller.abort()
   }, [])
   // Fail closed after a weekly release: stale COT must never look current.
-  // CFTC Tuesday observations are generally released Friday; allow until Sunday.
   const last = state.doc?.latestDate ? new Date(state.doc.latestDate + 'T00:00:00Z') : null
-  const today = new Date()
-  const daysOld = last && Number.isFinite(last.getTime()) ? (today.getTime() - last.getTime()) / 86400000 : Infinity
+  const daysOld = last && Number.isFinite(last.getTime()) ? (Date.now() - last.getTime()) / 86400000 : Infinity
   if (!state.loading && state.doc && (daysOld > 12 || daysOld < -2)) return <section role="alert" style={{ border: '2px solid #e48d6a', background: '#3b2023', color: '#fff1e9', padding: 22, borderRadius: 12, margin: '16px 0' }}>
     <h2 style={{ marginTop: 0 }}>⚠ STALE COT DATA — RADAR DISABLED</h2>
-    <p>Published report: <strong>{state.doc.latestDate}</strong>. This is {Math.max(0,Math.floor(daysOld))} days old. Current positioning and rotation signals cannot be trusted.</p>
-    <p>The COT publishing pipeline must regenerate and publish the latest Inspector and Attention snapshot before this Radar is usable.</p>
+    <p>Published report: <strong>{state.doc.latestDate}</strong>. This is {Math.max(0, Math.floor(daysOld))} days old. Current positioning and rotation signals cannot be trusted.</p>
+    <p>The COT publishing pipeline must publish the latest Weekly Inspector before this Radar is usable.</p>
   </section>
-  return <ExtremeAttentionBoard historical={state.doc} inspector={inspector} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
+  return <ExtremeAttentionBoard historical={state.doc} inspector={state.inspector} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
 }
