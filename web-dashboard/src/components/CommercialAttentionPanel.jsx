@@ -5,6 +5,8 @@ import React from 'react'
 import { navigateToCotWorkstation, navigateToInstrument } from '../routing.js'
 import { isRadarEligible } from '../radarEligibility.js'
 import './commercialAttention.css'
+import { savePositioningPlan } from '../data/positioningPlans.js'
+import { navigateToTradePlanner } from '../routing.js'
 
 const fmt = (v) => {
   if (v == null || v === '') return '—'
@@ -230,6 +232,13 @@ function ncRotation(block, snapshotDate, lookback, desired) {
 }
 
 function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loading, errored, error }) {
+  const [savedNotice, setSavedNotice] = React.useState('')
+  const addPlan = (v, lookback, latestDate, rotation) => {
+    try {
+      const item = savePositioningPlan({ market: v.name, reportDate: latestDate, lookback, tile: { ...v }, rotation: rotation || null })
+      setSavedNotice(item.market + ' saved to Positioning Tracker')
+    } catch (error) { setSavedNotice('Could not save: ' + error.message) }
+  }
   const [showAll, setShowAll] = React.useState(true)
   const [lookback, setLookback] = React.useState("3y")
   const { rows, latestDate, eligibleCount } = React.useMemo(() => {
@@ -286,6 +295,7 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
       <button type="button" onClick={() => setShowAll(false)} aria-pressed={!showAll} className="ie-radar-toggle">80/20 alerts ({isLoading ? '…' : extremes.length})</button>
       <button type="button" onClick={() => setShowAll(true)} aria-pressed={showAll} className="ie-radar-toggle">All positioning ({isLoading ? '…' : rows.length})</button>
     </div>
+    {savedNotice ? <div role="status" style={{ padding: 12, marginBottom: 12, borderRadius: 10, background: '#193c36', color: '#b5f2d6', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}><span>✓ {savedNotice}</span><button type="button" className="ca-btn" onClick={navigateToTradePlanner}>Open Planner →</button></div> : null}
     {errored ? <p role="alert" style={{ color: '#d5bd91' }}>Historical COT data could not be loaded. {error?.message || 'Please retry the page.'} The alert count is unavailable, not zero.</p> :
     !historical ? <p style={{ color: '#c6d5e1' }}>Loading historical COT series…</p> :
       !rows.length ? <p style={{ color: '#d5bd91' }}>No eligible historical positioning series with 52+ valid weeks. Historical export or market mapping needs checking ({eligibleCount} candidates).</p> :
@@ -360,7 +370,7 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
             </div>
           })}
           <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
-          <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><button className="ca-btn ca-btn-primary" type="button" onClick={() => addPlan(v, lookback, latestDate, eventsByName[v.name])}>＋ Add to Plan</button><button className="ca-btn" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button></div>
         </article>)}
       </div>}
     <p style={{ color: '#8d949b', fontSize: 11, margin: '15px 0 0' }}>COT range index (0–100), not a statistical percentile rank, for the selected Inspector lookback ({lookback.toUpperCase()}). Extremes are attention triggers, not trade entries. Commercial and Non-Reportable extremes are the primary attention triggers.</p>
