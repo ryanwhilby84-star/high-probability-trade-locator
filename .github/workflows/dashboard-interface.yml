@@ -10,6 +10,7 @@ on:
       - 'web-dashboard/tailwind.config.*'
       - 'web-dashboard/postcss.config.*'
       - 'web-dashboard/vite.ui.config.js'
+      - 'web-dashboard/scripts/verifyLiveCot.mjs'
       - 'scripts/deploy_dashboard_interface.py'
       - '.github/workflows/dashboard-interface.yml'
 
@@ -38,8 +39,14 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci --prefix web-dashboard
+      - name: Verify canonical Radar and Inspector contract
+        run: node --test web-dashboard/src/data/attentionWeek.test.js web-dashboard/src/data/weeklyInspectorStore.test.js web-dashboard/src/workstation/positioningBasis.test.js
       - name: Build interface without rebuilding market data
         working-directory: web-dashboard
         run: npx vite build --config vite.ui.config.js
       - name: Publish interface while preserving production data
         run: python scripts/deploy_dashboard_interface.py
+      - name: Verify live Radar and Inspector readings
+        run: |
+          week=$(python -c 'from scripts.validate_cot_release import expected_week; print(expected_week())')
+          node web-dashboard/scripts/verifyLiveCot.mjs https://institutional.ztack.co.uk "$week"

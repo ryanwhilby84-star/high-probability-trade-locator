@@ -1,3 +1,4 @@
+import { loadWeeklyInspector } from '../data/weeklyInspectorStore.js'
 import ExtremeResearchPanel from '../research/ExtremeResearchPanel.jsx'
 import {attachResearchPrices} from '../research/extremeOutcomes.js'
 import React from 'react'
@@ -17,7 +18,6 @@ import {
 } from '../cot/positioningChartMetrics.js'
 import { useCot3ySeries, resolveCot3yBlock } from '../hooks/useCot3ySeries.js'
 import { COT_3Y_PATH } from '../data/cot3ySeriesStore.js'
-import { reloadCot3ySeries } from '../prices/stores/HistoricalCOTStore.js'
 import { useLivePrice } from '../prices/usePriceStores.js'
 import { useWorkstationOhlc } from './hooks/useWorkstationOhlc.js'
 import { buildPositioningWorkstationSeries } from './data/buildPositioningWorkstationSeries.js'
@@ -226,6 +226,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   const [researchBlock, setResearchBlock] = React.useState(null)
   /** Compact weekly percentile/flow series — merged without clearing selection. */
   const [weeklyInspectorBlock, setWeeklyInspectorBlock] = React.useState(null)
+  const [inspectorError, setInspectorError] = React.useState(null)
   const [weeklyAnalysisBlock, setWeeklyAnalysisBlock] = React.useState(null)
   const [weeklyAnalysisOpen, setWeeklyAnalysisOpen] = React.useState(false)
   const [layerState, setLayerState] = React.useState(DEFAULT_LAYER_STATE)
@@ -500,15 +501,14 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // Percentile/flow series — independent fetch so it cannot wipe markers/selection.
   React.useEffect(() => {
     let cancelled = false
-    fetch('/data/cot_weekly_inspector_latest.json', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : null))
+    loadWeeklyInspector()
       .then((doc) => {
         if (cancelled || !doc) return
         const weeklyInspector = resolveWeeklyInspectorBlock(doc, marketId, matchedKey)
-        if (weeklyInspector) setWeeklyInspectorBlock(weeklyInspector)
+        if (weeklyInspector) { setWeeklyInspectorBlock(weeklyInspector); setInspectorError(null) }
       })
-      .catch(() => {
-        /* keep prior weeklyInspectorBlock */
+      .catch(error => {
+        if (!cancelled) { setWeeklyInspectorBlock(null); setInspectorError(error) }
       })
     return () => {
       cancelled = true
@@ -536,7 +536,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   // The weekly inspector is an independent data source. Do not discard it
   // when the optional research/events payload is unavailable.
   const researchWithInspector = React.useMemo(() => {
-    if (!researchBlock && !weeklyInspectorBlock) return null
+    if (!weeklyInspectorBlock) return null
     return {
       ...(researchBlock || {}),
       ...(weeklyInspectorBlock ? { weekly_inspector: weeklyInspectorBlock } : {}),
@@ -546,13 +546,13 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   const weeklyModel = React.useMemo(
     () =>
       buildWeeklyViewModel({
-        timelineRows,
+        timelineRows: weeklyInspectorBlock ? timelineRows : [],
         researchBlock: researchWithInspector,
         instrument: marketId,
         loadedLatestDate,
         staleView: dataStale,
       }),
-    [timelineRows, researchWithInspector, marketId, loadedLatestDate, dataStale],
+    [timelineRows, researchWithInspector, weeklyInspectorBlock, marketId, loadedLatestDate, dataStale],
   )
 
   const weeklyView = weeklyModel.weeklyView
@@ -796,12 +796,9 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
   }, [goPreset])
 
   const handleReload = React.useCallback(() => {
-    Promise.resolve(reloadCot3ySeries()).finally(() => {
-      const defaultPreset = rangePresetById(POSITIONING_DEFAULT_RANGE_ID)
-      setRangeId(POSITIONING_DEFAULT_RANGE_ID)
-      goHome(defaultPreset.weeks)
-    })
-  }, [goHome])
+    // Reload the whole release, including the session-pinned Inspector snapshot.
+    window.location.reload()
+  }, [])
 
   const drawingDateToTime = React.useCallback(
     (date) => findTimeForDate(timelineRows, date),
@@ -922,6 +919,7 @@ export function CotWorkstation({ marketId, variant = 'default' }) {
         '--ws-price-flex-no-ohlc': WS_PANE_FLEX.priceNoOhlc,
       }}
     >
+      {inspectorError && <p role="alert" className="ws-error-banner">Weekly Inspector unavailable: {inspectorError.message}. Reload to retry.</p>}
       {!isFullscreen && <CotRawLedger marketId={marketId} />}
       <header className="cot-ws-toolbar">
         <div className="cot-ws-toolbar-left">

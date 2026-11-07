@@ -1,3 +1,4 @@
+import { loadWeeklyInspector } from '../data/weeklyInspectorStore.js'
 import React from 'react'
 
 import { buildCotWorkstation } from '../cot/buildCotWorkstation.js'
@@ -51,8 +52,7 @@ function useBasicSelectedWeekLookback(week) {
   React.useEffect(() => {
     if (!marketId) { setInspectorBlock(null); return undefined }
     let cancelled = false
-    fetch('/data/cot_weekly_inspector_latest.json', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : null))
+    loadWeeklyInspector()
       .then((payload) => { if (!cancelled && payload) setInspectorBlock(resolveWeeklyInspectorBlock(payload, marketId)) })
       .catch(() => { if (!cancelled) setInspectorBlock(null) })
     return () => { cancelled = true }
