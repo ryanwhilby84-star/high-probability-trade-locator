@@ -5,6 +5,7 @@ import { getPositioningPlans, updatePositioningPlan, deletePositioningPlan, posi
 import { loadWeeklyInspector } from '../data/weeklyInspectorStore.js'
 import { PlannerScreenshots } from '../components/PlannerScreenshots.jsx'
 import { PositioningTile } from '../components/CommercialAttentionPanel.jsx'
+import '../components/positioningPlanner.css'
 
 const STORAGE = 'institutional-edge.trade-planner.v1'
 const initial = { market: 'Soybeans', side: 'short', entry: '', stop: '', target: '', account: '10000', riskPct: '0.5', notes: '' }
@@ -60,7 +61,7 @@ export function TradePlannerPage({ sidebarClass, onSidebarClass }) {
           const last = timeline.at(-1)
           const tile = p.snapshot?.tile || {}
           const isOpen = expanded === p.id
-          return <article key={p.id} style={{ border: '1px solid #39536b', borderRadius: 14, padding: 16, background: '#192638', marginTop: 12, boxShadow: isOpen ? '0 12px 38px #07131e88' : 'none', transition: 'box-shadow .25s ease' }}>
+          return <article key={p.id} className="ie-plan-arrive" style={{ border: '1px solid #39536b', borderRadius: 14, padding: 16, background: '#192638', marginTop: 12, boxShadow: isOpen ? '0 12px 38px #07131e88' : 'none', transition: 'box-shadow .25s ease' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <div><strong style={{ color: '#f5f8fd', fontSize: 18 }}>{p.market}</strong><div style={{ color: '#a9bed0', fontSize: 12 }}>COT {p.reportDate} · {p.lookback.toUpperCase()} · saved {new Date(p.createdAt).toLocaleString('en-GB')}</div></div>
               <div style={{ display: 'flex', gap: 8 }}><select className="ws-select" aria-label={'Plan status for ' + p.market} value={p.status} onChange={e => { updatePositioningPlan(p.id, { status: e.target.value }); setPositionPlans(getPositioningPlans()) }}>{['Watching','Waiting for Entry','Active','Archived'].map(v => <option key={v}>{v}</option>)}</select><button type="button" className="ws-btn ws-btn-primary" aria-expanded={isOpen} onClick={() => setExpanded(isOpen ? null : p.id)}>{isOpen ? 'Close' : 'Open plan →'}</button></div>
