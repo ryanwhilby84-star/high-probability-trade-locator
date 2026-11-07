@@ -186,23 +186,47 @@ function AttentionCard({ row }) {
 }
 
 
-// Detect factual NC net-zero flips and unusually large week-on-week moves.
-// The comparison baseline is the preceding 3 years of available weekly moves.
-function ncEvent(block, snapshotDate) {
-  const weeks = (block?.rows || []).filter(r => Array.isArray(r) && typeof r[0] === 'string' && r[0] <= snapshotDate && Number.isFinite(r[2]?.[0])).sort((a,b) => a[0].localeCompare(b[0]))
-  if (weeks.length < 2) return null
-  const current = weeks[weeks.length - 1], previous = weeks[weeks.length - 2]
-  // Never show a historic event as if it occurred on the displayed report date.
-  if (current[0] !== snapshotDate) return null
-  const net = current[2][0], prior = previous[2][0], delta = net - prior
-  const flip = (net > 0 && prior < 0) || (net < 0 && prior > 0)
-  const history = weeks.slice(-158, -1)
-  const magnitudes = history.slice(1).map((r,i) => Math.abs(r[2][0] - history[i][2][0])).filter(Number.isFinite).sort((a,b)=>a-b)
-  // At least a year of observations; top decile of the trailing moves.
-  const threshold = magnitudes.length >= 52 ? magnitudes[Math.ceil(magnitudes.length * .9) - 1] : null
-  const significant = threshold != null && threshold > 0 && Math.abs(delta) >= threshold
-  if (!flip && !significant) return null
-  return { flip, significant, net, prior, delta, date: current[0] }
+// Historical, point-in-time NC movement: identify aggressive turns at extremes,
+// remember their onset, and distinguish sustained movement from a one-week reversal.
+function ncRotation(block, snapshotDate, lookback, desired) {
+  const index = { '3y': 4, '5y': 12, '10y': 14, '15y': 13, all: 15 }[lookback]
+  const weeks = (block?.rows || []).filter(r =>
+    Array.isArray(r) && typeof r[0] === 'string' && r[0] <= snapshotDate &&
+    Number.isFinite(r[2]?.[0])
+  ).sort((a,b) => a[0].localeCompare(b[0]))
+  if (weeks.length < 54 || weeks[weeks.length - 1][0] !== snapshotDate) return null
+  const recent = weeks.slice(-9)
+  const events = []
+  for (let i = Math.max(53, weeks.length - 9); i < weeks.length; i++) {
+    const now = weeks[i], prev = weeks[i - 1]
+    const net = now[2][0], prior = prev[2][0], delta = net - prior
+    const baseline = weeks.slice(Math.max(0, i - 157), i).map(r => r[2][0])
+    const moves = baseline.slice(1).map((v,j) => Math.abs(v - baseline[j])).sort((x,y)=>x-y)
+    if (moves.length < 52) continue
+    const aggression = Math.round(100 * moves.filter(v => v <= Math.abs(delta)).length / moves.length)
+    const ncIndex = prev[2]?.[index]
+    const cIndex = prev[1]?.[index], nrIndex = prev[3]?.[index]
+    const ncExtreme = Number.isFinite(ncIndex) && (desired < 0 ? ncIndex >= 80 : ncIndex <= 20)
+    const commercialExtreme = Number.isFinite(cIndex) && (desired < 0 ? cIndex <= 20 : cIndex >= 80)
+    const retailExtreme = Number.isFinite(nrIndex) && (desired < 0 ? nrIndex >= 80 : nrIndex <= 20)
+    if (Math.sign(delta) !== desired || !(ncExtreme && (commercialExtreme || retailExtreme))) continue
+    const flip = (prior > 0 && net < 0) || (prior < 0 && net > 0)
+    if (aggression >= 90 || flip) events.push({ date: now[0], delta, aggression, flip, index: i })
+  }
+  if (!events.length) return null
+  const event = events[0]
+  const last = weeks.length - 1
+  const since = weeks.slice(event.index)
+  const netNow = weeks[last][2][0]
+  const netBefore = weeks[event.index - 1][2][0]
+  const netMovement = netNow - netBefore
+  const alignedWeeks = since.filter((r,j) => Math.sign(r[2][0] - weeks[event.index + j - 1][2][0]) === desired).length
+  const recentMove = weeks[last][2][0] - weeks[last - 1][2][0]
+  const stillAligned = Math.sign(netMovement) === desired
+  return { ...event, weeksAgo: last - event.index, netMovement, alignedWeeks,
+    observedWeeks: since.length, recentMove,
+    state: !stillAligned ? 'reversed' : recentMove * desired <= 0 ? 'paused' : since.length >= 2 && alignedWeeks >= 2 ? 'developing' : 'initial',
+    direction: desired }
 }
 
 function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loading, errored, error }) {
@@ -227,19 +251,12 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
     const keys = Object.keys(markets)
     for (const row of rows) {
       if (!(row.commercialExtreme || row.retailExtreme) || !latestDate) continue
+      const desired = row.commercialExtreme ? (row.c >= 80 ? 1 : -1) : (row.nr >= 80 ? -1 : 1)
       const key = keys.find(k => k.toLowerCase() === row.name.toLowerCase())
-      if (key) {
-        const event = ncEvent(markets[key], latestDate)
-        // Commercial extremes set the directional thesis; if only retail is
-        // extreme, use its contrarian direction. Opposing moves are noise.
-        const desired = row.commercialExtreme
-          ? (row.c >= 80 ? 1 : -1)
-          : (row.nr >= 80 ? -1 : 1)
-        if (event && Math.sign(event.delta) === desired) out[row.name] = event
-      }
+      if (key) out[row.name] = ncRotation(markets[key], latestDate, lookback, desired)
     }
     return out
-  }, [inspector, rows, latestDate])
+  }, [inspector, rows, latestDate, lookback])
   const isLoading = !historical && !errored
   const extremes = rows.filter(v => v.commercialExtreme || v.retailExtreme)
   // Both groups independently trigger attention. Opposing extremes get a stronger
@@ -296,26 +313,16 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
           </div>
           {eventsByName[v.name] ? (() => {
             const ev = eventsByName[v.name]
-            const down = ev.delta < 0
-            const compact = n => {
-              const abs = Math.abs(n)
-              const val = abs >= 1000000 ? (abs / 1000000).toFixed(2) + 'M' : abs >= 1000 ? (abs / 1000).toFixed(1) + 'K' : String(Math.round(abs))
-              return (n < 0 ? '−' : n > 0 ? '+' : '') + val
-            }
-            const headline = ev.flip ? (ev.net < 0 ? 'NC FLIPPED NET SHORT' : 'NC FLIPPED NET LONG')
-              : down ? 'NC NET POSITIONING FELL' : 'NC NET POSITIONING ROSE'
-            const date = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
-            return <div role="status" aria-label={headline + ', weekly change ' + fmt(ev.delta)} style={{
-              marginTop: 12, padding: '10px 11px', borderRadius: 8,
-              border: '1px solid rgba(107,186,225,.4)',
-              background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))'
-            }}>
-              <div style={{ color: down ? '#f0a0a6' : '#83dbb4', fontSize: 12, fontWeight: 850, letterSpacing: '.025em' }}>{down ? '▼' : '▲'} {headline}</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6, marginTop: 5 }}>
-                <strong style={{ color: '#f2f7fc', fontSize: 19, lineHeight: 1.15 }}>{compact(ev.delta)} <span style={{ fontSize: 11, color: '#b6c6d4', fontWeight: 600 }}>this week</span></strong>
-                <span style={{ fontSize: 11, color: '#aebdcb' }}>{date}</span>
-              </div>
-              <div style={{ marginTop: 5, fontSize: 11, color: '#aebdcb' }}>Net: {compact(ev.prior)} → {compact(ev.net)}{ev.flip && ev.significant ? ' · Large move' : ''}</div>
+            const bullish = ev.direction > 0
+            const shortDate = new Date(ev.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+            const label = ev.state === 'developing' ? 'NC ROTATION DEVELOPING'
+              : ev.state === 'paused' ? 'NC ROTATION PAUSED'
+              : ev.state === 'reversed' ? 'NC MOVE REVERSED' : 'NC AGGRESSIVE TURN'
+            return <div style={{ marginTop: 12, padding: '10px 11px', borderRadius: 8, border: '1px solid rgba(107,186,225,.45)', background: 'linear-gradient(130deg,rgba(30,85,122,.35),rgba(21,35,54,.65))' }}>
+              <div style={{ fontSize: 12, fontWeight: 850, color: bullish ? '#83dbb4' : '#f0a0a6' }}>{bullish ? '▲' : '▼'} {label}</div>
+              <div style={{ fontSize: 12, color: '#d8f1ff', marginTop: 5 }}>{bullish ? 'Bullish' : 'Bearish'} NC movement · started {shortDate} ({ev.weeksAgo} reports ago)</div>
+              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 4 }}>Initial move: {fmt(ev.delta)} contracts · aggression {ev.aggression}th percentile</div>
+              <div style={{ fontSize: 11, color: '#aebdcb', marginTop: 3 }}>Since start: {fmt(ev.netMovement)} net · {ev.alignedWeeks}/{ev.observedWeeks} weeks aligned{ev.flip ? ' · net-zero flip' : ''}</div>
             </div>
           })() : null}
           <div style={{ margin: '14px 0', flex: 1 }}>
