@@ -3,6 +3,7 @@ import { AppShell } from '../components/AppShell.jsx'
 import { allInstrumentIds } from '../instrumentRegistry.js'
 import { getPositioningPlans, updatePositioningPlan, deletePositioningPlan, positioningTimeline } from '../data/positioningPlans.js'
 import { loadWeeklyInspector } from '../data/weeklyInspectorStore.js'
+import { PlannerScreenshots } from '../components/PlannerScreenshots.jsx'
 
 const STORAGE = 'institutional-edge.trade-planner.v1'
 const initial = { market: 'Soybeans', side: 'short', entry: '', stop: '', target: '', account: '10000', riskPct: '0.5', notes: '' }
@@ -70,6 +71,7 @@ export function TradePlannerPage({ sidebarClass, onSidebarClass }) {
                 {timeline.length ? <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>{timeline.map(t => <div key={t.date} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, paddingBottom: 8, borderBottom: '1px solid #2a4152', color: '#d8e7f2', fontSize: 12 }}><span>{t.date} · {t.event}</span><span>NC net {t.net?.toLocaleString() ?? '—'} · Δ {t.change?.toLocaleString() ?? '—'} · C {t.c?.toFixed?.(0) ?? '—'} / NC {t.nc?.toFixed?.(0) ?? '—'} / NR {t.nr?.toFixed?.(0) ?? '—'}</span></div>)}</div> : <p style={{ color: '#d2b784', fontSize: 12 }}>Waiting for matching Inspector history. The original snapshot remains saved.</p>}
                 {last ? <p style={{ color: '#9edbc7', fontSize: 12 }}>Latest tracked COT: {last.date} · {last.event}</p> : null}
               </div>
+              <PlannerScreenshots planId={p.id} />
               <label style={{ color: '#d7e5f0', fontSize: 13 }}>Strategic thesis / supply-demand zones / entry conditions<textarea className="ws-input" rows={5} value={p.thesis || ''} onChange={e => { updatePositioningPlan(p.id, { thesis: e.target.value }); setPositionPlans(getPositioningPlans()) }} style={{ display: 'block', width: '100%', marginTop: 8 }} /></label>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}><span style={{ color: '#9db5c5', fontSize: 11 }}>Stored in this browser. Export/backup and cloud sync are needed before relying on this across devices.</span><button className="ws-btn" type="button" onClick={() => { if (window.confirm('Remove this saved positioning plan?')) { deletePositioningPlan(p.id); setPositionPlans(getPositioningPlans()) } }}>Remove plan</button></div>
             </div> : null}
