@@ -374,7 +374,7 @@ function latestInspectorWeek(doc) {
   const markets = Object.values(doc?.markets || {}).filter(m => m?.available && Array.isArray(m.rows) && m.rows.length)
   if (!markets.length) throw new Error('Inspector contains no available market histories')
   const latest = markets.map(m => m.rows[m.rows.length - 1]?.[0])
-  if (latest.some(d => typeof d !== 'string' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(d))) {
+  if (latest.some(d => typeof d !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(d))) {
     throw new Error('Inspector contains invalid report dates')
   }
   const date = latest[0]
