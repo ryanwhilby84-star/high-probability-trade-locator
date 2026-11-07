@@ -348,8 +348,17 @@ function ExtremeAttentionBoard({ historical, inspector, radarEligibleOnly, loadi
               </div>
             })}
           </div>
-          <div style={{ color: '#cfd3d7', fontSize: 12 }}>Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.change)}</strong></div>
-          <div style={{ color: '#b8c9d6', fontSize: 12, marginTop: 5 }}>Non-Commercial WoW net change: <strong style={{ color: '#fff' }}>{fmt(v.ncChange)}</strong></div>
+          {[
+            ['Commercial', v.change],
+            ['Non-Commercial', v.ncChange],
+          ].map(([group, value]) => {
+            const n = value == null || value === '' ? null : Number(value)
+            const tone = n == null || !Number.isFinite(n) || n === 0 ? '#aebdcb' : n > 0 ? '#72dfac' : '#f18c97'
+            const direction = n == null || !Number.isFinite(n) || n === 0 ? 'unchanged or unavailable' : n > 0 ? 'net buying' : 'net selling'
+            return <div key={group} style={{ color: '#b8c9d6', fontSize: 12, marginTop: group === 'Commercial' ? 0 : 5 }}>
+              {group} WoW net change: <strong title={group + ' ' + direction} style={{ color: tone, fontVariantNumeric: 'tabular-nums' }}>{fmt(value)}</strong>
+            </div>
+          })}
           <p style={{ color: '#a4b3c5', fontSize: 12, margin: '9px 0' }}>{v.retailExtreme && !v.commercialExtreme ? 'Non-Reportable extreme: check Commercial alignment and Non-Commercial rotation.' : v.commercialExtreme ? 'Commercial extreme: check Non-Commercial rotation and supply/demand.' : 'Monitor developing positioning; inspect before making a trade decision.'}</p>
           <button className="ca-btn ca-btn-primary" type="button" onClick={() => navigateToCotWorkstation(v.name)}>Open COT Workstation →</button>
         </article>)}
