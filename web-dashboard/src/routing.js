@@ -22,6 +22,7 @@ export function parseRoute() {
     }
   }
 
+  if (parts[0] === 'trade-planner') return { view: 'trade-planner', market: null }
   if (parts[0] === 'journal') return { view: 'journal', market: null }
   if (parts[0] === 'thesis' || parts[0] === 'tracker') return { view: 'thesis', market: null }
   if (parts[0] === 'oanda') return { view: 'oanda', market: null }
@@ -105,6 +106,7 @@ export function navigateToInstrumentValuation(market) {
   navigateToInstrument(market)
 }
 
+export function navigateToTradePlanner() { window.location.hash = '#/trade-planner' }
 export function navigateToJournal() { window.location.hash = '#/journal' }
 export function navigateToThesisTracker() { window.location.hash = '#/thesis' }
 export function navigateToOandaCoverage() { window.location.hash = '#/oanda' }
