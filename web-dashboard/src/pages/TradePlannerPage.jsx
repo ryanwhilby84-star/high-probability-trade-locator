@@ -4,6 +4,7 @@ import { allInstrumentIds } from '../instrumentRegistry.js'
 import { getPositioningPlans, updatePositioningPlan, deletePositioningPlan, positioningTimeline } from '../data/positioningPlans.js'
 import { loadWeeklyInspector } from '../data/weeklyInspectorStore.js'
 import { PlannerScreenshots } from '../components/PlannerScreenshots.jsx'
+import { PositioningTile } from '../components/CommercialAttentionPanel.jsx'
 
 const STORAGE = 'institutional-edge.trade-planner.v1'
 const initial = { market: 'Soybeans', side: 'short', entry: '', stop: '', target: '', account: '10000', riskPct: '0.5', notes: '' }
@@ -47,7 +48,7 @@ export function TradePlannerPage({ sidebarClass, onSidebarClass }) {
   const field = (label, key, type = 'number') => <label style={{ display: 'grid', gap: 5, color: '#cbd6df', fontSize: 12 }}>
     {label}<input className="ws-input" type={type} step={type === 'number' ? 'any' : undefined} value={form[key]} onChange={e => update(key, e.target.value)} />
   </label>
-  return <AppShell title="Trade Planner" subtitle="Plan the location, invalidation, target and risk before placing an order" sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}>
+  return <AppShell title="Positioning Planner" subtitle="Immutable institutional snapshots · research · weekly rotations" sidebarClass={sidebarClass} onSidebarClass={onSidebarClass}>
     <section style={{ maxWidth: 1050, display: 'grid', gap: 18 }}>
       <div style={{ border: '1px solid #385568', borderRadius: 18, padding: 20, background: 'linear-gradient(140deg,#152839,#141c2a 65%,#102b2c)' }}>
         <div style={{ color: '#a8c5df', fontSize: 11, letterSpacing: 2, fontWeight: 800 }}>RESEARCH WORKSPACE</div>
@@ -64,8 +65,7 @@ export function TradePlannerPage({ sidebarClass, onSidebarClass }) {
               <div><strong style={{ color: '#f5f8fd', fontSize: 18 }}>{p.market}</strong><div style={{ color: '#a9bed0', fontSize: 12 }}>COT {p.reportDate} · {p.lookback.toUpperCase()} · saved {new Date(p.createdAt).toLocaleString('en-GB')}</div></div>
               <div style={{ display: 'flex', gap: 8 }}><select className="ws-select" aria-label={'Plan status for ' + p.market} value={p.status} onChange={e => { updatePositioningPlan(p.id, { status: e.target.value }); setPositionPlans(getPositioningPlans()) }}>{['Watching','Waiting for Entry','Active','Archived'].map(v => <option key={v}>{v}</option>)}</select><button type="button" className="ws-btn ws-btn-primary" aria-expanded={isOpen} onClick={() => setExpanded(isOpen ? null : p.id)}>{isOpen ? 'Close' : 'Open plan →'}</button></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8, marginTop: 14 }}>{[['Commercial',tile.c],['Non-commercial',tile.nc],['Non-reportable',tile.nr]].map(([label,value]) => <div key={label} style={{ background: '#101d2c', padding: 10, borderRadius: 10 }}><div style={{ color: '#9cb6c9', fontSize: 11 }}>{label}</div><strong style={{ color: '#e4f0f8', fontSize: 20 }}>{Number.isFinite(value) ? value.toFixed(0) + '/100' : '—'}</strong></div>)}</div>
-            <div style={{ color: '#a7c2d2', fontSize: 12, marginTop: 10 }}>Original weekly changes: Commercial {tile.change ?? '—'} · NC {tile.ncChange ?? '—'} · Original attention: {tile.commercialExtreme || tile.retailExtreme ? '80/20' : 'Monitor'}</div>
+            <div style={{ marginTop: 14, maxWidth: 440 }}><PositioningTile tile={tile} rotation={p.snapshot?.rotation || null} lookback={p.lookback} reportDate={p.reportDate} /></div>
             {isOpen ? <div style={{ marginTop: 18, display: 'grid', gap: 14 }}>
               <div style={{ padding: 14, border: '1px solid #31536a', borderRadius: 12, background: '#102332' }}><strong style={{ color: '#d7e9f6' }}>Weekly positioning behaviour</strong><div style={{ color: '#9fb8c9', fontSize: 12, marginTop: 5 }}>Original snapshot stays fixed; weekly readings are sourced from the validated Inspector dataset.</div>
                 {timeline.length ? <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>{timeline.map(t => <div key={t.date} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8, paddingBottom: 8, borderBottom: '1px solid #2a4152', color: '#d8e7f2', fontSize: 12 }}><span>{t.date} · {t.event}</span><span>NC net {t.net?.toLocaleString() ?? '—'} · Δ {t.change?.toLocaleString() ?? '—'} · C {t.c?.toFixed?.(0) ?? '—'} / NC {t.nc?.toFixed?.(0) ?? '—'} / NR {t.nr?.toFixed?.(0) ?? '—'}</span></div>)}</div> : <p style={{ color: '#d2b784', fontSize: 12 }}>Waiting for matching Inspector history. The original snapshot remains saved.</p>}
@@ -79,7 +79,7 @@ export function TradePlannerPage({ sidebarClass, onSidebarClass }) {
         })}
       </div>
       <div style={{ border: '1px solid #34475a', borderRadius: 12, padding: 20, background: '#17212e' }}>
-        <h2 style={{ color: '#f0f4fa', marginTop: 0 }}>New trade plan</h2>
+        <h2 style={{ color: '#f0f4fa', marginTop: 0 }}>Execution calculator</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))', gap: 14 }}>
           <label style={{ display: 'grid', gap: 5, color: '#cbd6df', fontSize: 12 }}>Market
             <select className="ws-select" value={form.market} onChange={e => update('market',e.target.value)}>
