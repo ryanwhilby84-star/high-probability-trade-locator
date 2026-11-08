@@ -13,6 +13,7 @@ import {
   ROADMAP_METHOD_DESCRIPTION,
   ROADMAP_METHOD_LABEL,
   classifyRoadmapHorizon,
+  calendarRoadmaps,
   defaultSeasonalView,
   resolveRoadmapSeriesSource,
 } from './roadmapView.js'
@@ -68,11 +69,12 @@ function RoadmapForecastPanel({ roadmap }) {
         {ROADMAP_METHOD_DESCRIPTION}
       </p>
       <p className="sws-muted" style={{ fontSize: '0.68rem', marginBottom: '0.55rem' }}>
-        Horizon stats from historical as-of→horizon returns (not from plotted amplitude).
+        {roadmap?.calendar_view ? `Temporary calendar projection from ${roadmap.asof}. Changes below describe the plotted seasonal curve, not historical win probabilities. Price scale uses the last available close (${roadmap.price_reference_date}).` : 'Horizon stats from historical as-of→horizon returns (not from plotted amplitude).'}
       </p>
       {ROADMAP_HORIZON_WEEKS.map((w) => {
         const row = stats[`${w}w`] || {}
-        const direction = classifyRoadmapHorizon(row)
+        const projected = roadmap?.calendar_horizons?.[`${w}w`]
+        const direction = projected?.direction || classifyRoadmapHorizon(row)
         return (
           <div className="sws-stat sws-stat-block" key={w}>
             <span>
@@ -81,13 +83,14 @@ function RoadmapForecastPanel({ roadmap }) {
                 {direction}
               </strong>
             </span>
+            {projected ? <strong>{projected.change_pct == null ? 'Beyond available annual curve' : `Curve change ${fmtRetPct(projected.change_pct)}`} · to {projected.end_date}</strong> : <>
             <strong>
               mean {fmtRetPct(row.mean_pct)} · median {fmtRetPct(row.median_pct)}
             </strong>
             <strong>
               bull {fmtFreq(row.bullish_frequency)} · bear {fmtFreq(row.bearish_frequency)} · n=
               {row.n ?? '—'}
-            </strong>
+            </strong></>}
           </div>
         )
       })}
@@ -292,9 +295,9 @@ export function SeasonalityWorkstation({
   const normalised = payload.normalised_seasonality || payload.seasonality?.normalised
   const pricePath =
     payload.seasonal_price_path || payload.seasonality?.seasonal_price_path || null
-  const roadmap = payload.seasonal_roadmap || payload.seasonality?.seasonal_roadmap || null
+  const publishedRoadmap = payload.seasonal_roadmap || payload.seasonality?.seasonal_roadmap || null
   // Canonical contract: payload.weekly_roadmap (snake_case). Nested seasonality copy is fallback only.
-  const weeklyRoadmap = resolveWeeklyRoadmap(payload)
+  const { roadmap, weekly: weeklyRoadmap } = calendarRoadmaps(publishedRoadmap, resolveWeeklyRoadmap(payload), roadmapSmoothed)
   const advanced = payload.advanced || {}
   const forecast = advanced.price_unit_forecast || payload.seasonality?.forecast || {}
   const modelPath = (forecast.models && forecast.models[model]) || []
@@ -349,7 +352,8 @@ export function SeasonalityWorkstation({
           <Meta label="Instrument" value={payload.instrument_id || marketId} />
           <Meta label="Price series" value={priceId} />
           <Meta label="Exchange" value={payload.exchange || '—'} />
-          <Meta label="Report Date" value={payload.report_date} />
+          <Meta label="Latest price date" value={payload.report_date} />
+          <Meta label="Seasonal projection date" value={roadmap?.asof} />
           <Meta label="Lookback" value={payload.selected_lookback} />
           <Meta label="Sample Size" value={`${payload.sample_size} years`} />
           <Meta label="Methodology" value={activeMethodologyLabel} />
@@ -441,7 +445,7 @@ export function SeasonalityWorkstation({
               <h3>{ROADMAP_METHOD_LABEL}</h3>
               <p className="sws-muted">{ROADMAP_METHOD_DESCRIPTION}</p>
               <p className="sws-muted">
-                Grey ≤ today · Blue &gt; today · price units · anchor{' '}
+                Grey ≤ today · Blue &gt; today · last-close reference scale · anchor{' '}
                 {anchorPrice != null ? Number(anchorPrice).toFixed(3) : '—'} ·{' '}
                 {roadmapSmoothed ? 'SMA(5) series' : 'Unsmoothed series'} ·{' '}
                 {roadMethod.lookback_years ?? 15}Y.
@@ -449,7 +453,7 @@ export function SeasonalityWorkstation({
               <SeasonalRoadmapChart
                 key={`chart-seasonal-roadmap-${roadmapSmoothed ? 'sma5' : 'raw'}`}
                 roadmap={roadmap}
-                anchorDate={payload.anchor?.date || roadmap?.asof}
+                anchorDate={roadmap?.asof || payload.anchor?.date}
                 anchorPrice={anchorPrice}
                 useSmoothed={roadmapSmoothed}
               />
