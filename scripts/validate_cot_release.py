@@ -46,8 +46,19 @@ def validate(inspector, gate, expected):
 def main():
     inspector = json.loads(Path('web-dashboard/public/data/cot_weekly_inspector_latest.json').read_text())
     gate = json.loads(Path('data/cot_weekly_integrity_gate_latest.json').read_text())
-    week = validate(inspector, gate, expected_week())
-    print(f'PASS: all 26 Inspector markets and source integrity checks agree on {week}')
+    # Validate against the actual certified CFTC source week, not an assumed
+    # Friday publication. The CFTC can delay releases (or its annual archives
+    # can lag). Never label a prior report as the expected current week.
+    source_week = gate.get('report_date')
+    if not isinstance(source_week, str) or not source_week:
+        raise ValueError('Missing certified CFTC report date')
+    if source_week > expected_week():
+        raise ValueError('Certified source report date is in the future')
+    week = validate(inspector, gate, source_week)
+    scheduled_week = expected_week()
+    if week < scheduled_week:
+        print(f'::warning title=COT source publication lag::Official source is {week}; expected calendar week is {scheduled_week}. Dashboard must display source week, not imply current positioning.')
+    print(f'PASS: all 26 Inspector markets and source integrity checks agree on certified {week}')
 
 
 if __name__ == '__main__':
