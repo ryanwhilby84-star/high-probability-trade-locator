@@ -7,17 +7,33 @@ from pathlib import Path
 MEASURE = 'net_positioning_rolling_156_week_percentile'
 
 
+# Official CFTC holiday shifts in 2026, mapped from original Friday to Monday.
+# Source: https://www.cftc.gov/MarketReports/CommitmentsofTraders/ReleaseSchedule/index.htm
+# The report still describes the preceding Tuesday, not Monday's positioning.
+_CFTC_HOLIDAY_RELEASES_2026 = {
+    '2026-01-02': '2026-01-05',
+    '2026-06-19': '2026-06-22',
+    '2026-07-03': '2026-07-06',
+    '2026-11-13': '2026-11-16',
+    '2026-11-27': '2026-11-30',
+    '2026-12-25': '2026-12-28',
+}
+
+
 def expected_week(now=None):
     now = now or datetime.now(timezone.utc)
     day = now.date()
     expected = day - timedelta(days=(day.weekday() - 1) % 7)
-    # Tuesday observations are published Friday at 15:30 America/New_York.
+    # Tuesday observations normally publish Friday 15:30 New York time.
+    # Honor the official holiday-adjusted dates; never call unreleased data stale.
     from zoneinfo import ZoneInfo
-    release = datetime.combine(expected + timedelta(days=3), datetime.min.time(), ZoneInfo('America/New_York')).replace(hour=15, minute=30)
+    friday = expected + timedelta(days=3)
+    scheduled = _CFTC_HOLIDAY_RELEASES_2026.get(friday.isoformat(), friday.isoformat())
+    release_day = datetime.fromisoformat(scheduled).date()
+    release = datetime.combine(release_day, datetime.min.time(), ZoneInfo('America/New_York')).replace(hour=15, minute=30)
     if now < release:
         expected -= timedelta(days=7)
     return expected.isoformat()
-
 
 def validate(inspector, gate, expected):
     if inspector.get('engine') != 'weekly_inspector_flow' or inspector.get('measure') != MEASURE:

@@ -40,7 +40,7 @@ jobs:
           python-version: '3.12'
       - run: npm ci --prefix web-dashboard
       - name: Verify canonical Radar and Inspector contract
-        run: node --test web-dashboard/src/data/attentionWeek.test.js web-dashboard/src/data/weeklyInspectorStore.test.js web-dashboard/src/workstation/positioningBasis.test.js
+        run: node --test web-dashboard/src/data/attentionWeek.test.js web-dashboard/src/data/weeklyInspectorStore.test.js web-dashboard/src/workstation/positioningBasis.test.js web-dashboard/src/data/cotReleaseStatus.test.js
       - name: Build interface without rebuilding market data
         working-directory: web-dashboard
         run: npx vite build --config vite.ui.config.js

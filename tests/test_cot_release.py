@@ -35,3 +35,23 @@ def test_partial_release_rejected(fault):
 def test_friday_release_time_and_saturday():
     for stamp, week in [('2026-11-06T20:29:00', '2026-10-27'), ('2026-11-06T20:30:00', '2026-11-03'), ('2026-11-07T08:00:00', '2026-11-03')]:
         assert release.expected_week(datetime.fromisoformat(stamp).replace(tzinfo=timezone.utc)) == week
+
+
+
+def test_november_veterans_day_delayed_release():
+    for stamp, week in [
+        ('2026-11-15T17:11:00', '2026-11-03'),
+        ('2026-11-16T20:29:00', '2026-11-03'),
+        ('2026-11-16T20:30:00', '2026-11-10'),
+        ('2026-11-17T08:00:00', '2026-11-10'),
+    ]:
+        assert release.expected_week(datetime.fromisoformat(stamp).replace(tzinfo=timezone.utc)) == week
+
+
+def test_thanksgiving_delayed_release():
+    for stamp, week in [
+        ('2026-11-29T12:00:00', '2026-11-17'),
+        ('2026-11-30T20:29:00', '2026-11-17'),
+        ('2026-11-30T20:30:00', '2026-11-24'),
+    ]:
+        assert release.expected_week(datetime.fromisoformat(stamp).replace(tzinfo=timezone.utc)) == week
