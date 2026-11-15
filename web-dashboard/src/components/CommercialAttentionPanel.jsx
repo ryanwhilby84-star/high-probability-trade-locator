@@ -1,3 +1,4 @@
+import { cotReleaseStatus } from '../data/cotReleaseStatus.js'
 import { percentileTone } from '../data/percentileTone.js'
 import { AssetIcon } from './AssetIcon.jsx'
 import { attentionForWeek } from '../data/attentionWeek.js'
@@ -373,13 +374,16 @@ export function CommercialAttentionPanel({ radarEligibleOnly = true, inspectorSt
   const { inspector, loading, error } = inspectorState
   const doc = React.useMemo(() => inspector && selectedDate ? attentionForWeek(inspector, selectedDate) : null, [inspector, selectedDate])
   const state = { inspector, loading, error, doc }
-  // Fail closed after a weekly release: stale COT must never look current.
-  const last = latestDate ? new Date(latestDate + 'T00:00:00Z') : null
-  const daysOld = last && Number.isFinite(last.getTime()) ? (Date.now() - last.getTime()) / 86400000 : Infinity
-  if (!state.loading && state.doc && (daysOld > 12 || daysOld < -2)) return <section role="alert" style={{ border: '2px solid #e48d6a', background: '#3b2023', color: '#fff1e9', padding: 22, borderRadius: 12, margin: '16px 0' }}>
-    <h2 style={{ marginTop: 0 }}>⚠ STALE COT DATA — RADAR DISABLED</h2>
-    <p>Published report: <strong>{latestDate}</strong>. This is {Math.max(0, Math.floor(daysOld))} days old. Current positioning and rotation signals cannot be trusted.</p>
-    <p>The COT publishing pipeline must publish the latest Weekly Inspector before this Radar is usable.</p>
-  </section>
-  return <ExtremeAttentionBoard historical={state.doc} inspector={state.inspector} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
+  // Freshness follows the published CFTC calendar, not the age of Tuesday's observations.
+  // Validated historical positioning stays visible even if the next export is late.
+  const publication = cotReleaseStatus(latestDate)
+  return <>
+    {publication.needsRefresh && !state.loading && state.doc ? (
+      <section role="status" style={{ border: '1px solid #c99464', background: '#372b28', color: '#fff1e9', padding: 16, borderRadius: 12, margin: '16px 0' }}>
+        <h2 style={{ marginTop: 0, fontSize: 18 }}>New COT release scheduled — update pending</h2>
+        <p>Showing the last certified COT snapshot from <strong>{latestDate}</strong>. A newer report ({publication.expectedReportDate}) is scheduled for {publication.releaseDate}. Until the validated export updates, treat positioning and rotation as historical.</p>
+      </section>
+    ) : null}
+    <ExtremeAttentionBoard historical={state.doc} inspector={state.inspector} loading={state.loading} errored={Boolean(state.error)} error={state.error} radarEligibleOnly={radarEligibleOnly} />
+  </>
 }

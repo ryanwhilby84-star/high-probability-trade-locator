@@ -4,8 +4,10 @@ on:
   workflow_dispatch:
   workflow_call:
   schedule:
-    # Saturday after the CFTC Friday release; keep production refreshed without a local PC.
+    # Saturday captures normal Friday CFTC publications.
     - cron: '0 8 * * 6'
+    # Tuesday captures Monday releases delayed by US holidays.
+    - cron: '0 8 * * 2'
   push:
     branches: [main]
     paths:
