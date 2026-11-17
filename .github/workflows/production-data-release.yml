@@ -6,8 +6,9 @@ on:
   schedule:
     # Saturday captures normal Friday CFTC publications.
     - cron: '0 8 * * 6'
-    # Tuesday captures Monday releases delayed by US holidays.
-    - cron: '0 8 * * 2'
+    # Tuesday shortly after midnight UTC captures Monday holiday releases (15:30 ET),
+    # without waiting until Tuesday morning. Keep the full validation gates.
+    - cron: '17 0 * * 2'
   push:
     branches: [main]
     paths:
